@@ -1,0 +1,6 @@
+CompileFlags:
+   Compiler: clang
+   Add:
+    - "-Wall -Wextra -Werror -Wmissing-prototypes"
+    - "-xc"
+    - "-I/home/bebou/Documents/code/perso/c/vectors/."
