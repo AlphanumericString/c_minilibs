@@ -6,16 +6,12 @@
 #	include <string.h>
 
 /**
- * Dynamoc generic memory array:
- *
- * A dynamic array inspired by the goat Tsoding.
+ * \brief da struct
+ * \param array pointer holder for the memory
+ * \param nb_e number of elements currently present in the array
+ * \param cap_e number of elements the memory can hold
+ * \param sz_e size of 1 elements (the generic part of the array)
 **/
-
-/// @brief da struct
-/// @param array pointer holder for the memory
-/// @param nb_e number of elements currently present in the array
-/// @param cap_e number of elements the memory can hold
-/// @param sz_e size of 1 elements (the generic part of the array)
 typedef struct s_dynamic_memory_array {
 	void  *array;
 	size_t nb_e;
@@ -93,18 +89,22 @@ void *da_apply_with(t_da *da, void *u_val, void (*func)(void *u_val, void *e_val
 
 // TODO: create
 // dup		+n
+
 // TODO: rm
 // fold		+n
 // filter	+n
 // shrink	+n
 // advance	+n
+
 // TODO: manip
 // reverse	+n
 // sort		+n
 // nswap
+
 // TODO: apply
 // napply_with
 // napply_it
+
 // TODO: getter
 // find
 // nfind_get

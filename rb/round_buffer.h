@@ -4,17 +4,13 @@
 #	include <stdbool.h>
 
 /**
- * Round Buffer Array:
- *
- * A way to handle an array allowing to keep reusing the same space
-**/
-
-/// @brief round buffer struct, rb
-/// @param array the raw buffer pointer
-/// @param nb_max number max of elements in the array
-/// @param i_pos input position
-/// @param o_pos output position
-/// @param sz_e size of elements in the array
+ * \brief round buffer struct, rb
+ * \param array the raw buffer pointer
+ * \param nb_max number max of elements in the array
+ * \param i_pos input position
+ * \param o_pos output position
+ * \param sz_e size of elements in the array
+ **/
 typedef struct s_roundbuffer_array {
 	void  *array;
 	size_t nb_max;

@@ -1,25 +1,16 @@
 #ifndef PRIV_SS
-#	include <strings.h>
 #	include <stdlib.h>
 #	include <stddef.h>
 #	include <stdbool.h>
 
 /**
- * Sparse set structure:
- *
- * array of elements using triks such as swap on destroy but keeping
- *  elements position constant using a middle layer of indexes. This allow us
- *  to do stuff such as swap-destroy to keep delete operation at constant time.
- *  This method also allows us to see the next free index in destroy-add cases
- *  as swap-destroy will also swap values in indexes.
+ * \brief sparse set structure
+ * \param data raw vals storage
+ * \param indexes storage for offsets after swaps and pushes
+ * \param nb_elem number of elements in the array
+ * \param sz_elem size of each elements in the array
+ * \param cappacity max number of elements in the sparse set
 **/
-
-/// @brief sparse set structure
-/// @param data raw vals storage
-/// @param indexes storage for offsets after swaps and pushes
-/// @param nb_elem number of elements in the array
-/// @param sz_elem size of each elements in the array
-/// @param cappacity max number of elements in the sparse set
 typedef struct s_sprase_set {
 	void  *data;
 	uint  *indexes;

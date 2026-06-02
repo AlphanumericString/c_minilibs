@@ -1,7 +1,13 @@
-#include <stdbool.h>
-#include <stddef.h>
+#ifndef PRIV_ILL
 
-// Intrusive node with ONLY next pointer (no prev)
+#	include <stdbool.h>
+#	include <stddef.h>
+
+/**
+ * \brief t_ill struct
+ * \param offset offset of the node in the element
+ * \param next pointer to the next node
+**/
 typedef struct s_ill {
 	size_t        offset;
 	struct s_ill *next;
@@ -98,3 +104,6 @@ t_ill *ill_reverse(t_ill *head);                                   // ok
  * - Write comprehensive tests for them in test_main_ill.c.
  * - Add new .c files to the Makefile.
  */
+
+#	define PRIV_ILL
+#endif // !PRIV_ILL
