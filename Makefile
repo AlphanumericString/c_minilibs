@@ -1,6 +1,6 @@
 # define variable for all modules dir
 MODULES =	ill rb da ss dsu
-D_FILES=	
+D_FILES=
 .DEFAULT_GOAL := all
 BUILD_DIR=build
 CC	=	clang
@@ -15,12 +15,12 @@ $1_OBJ=	$$(patsubst %.c, %.o, $$(addprefix $(BUILD_DIR)/,$$($1_SRC)))
 $1_D=	$$(patsubst %.o, %.d, $$($1_OBJ))
 lib$1.a: $$($1_OBJ)
 	ar rcs $$@ $$^
-test_$1: lib$1.a test_main_$1.c
+test_$1.out: lib$1.a test_main_$1.c
 	$(CC) $(CFLAGS) test_main_$1.c -o $$@ -L. -l$1
 D_FILES	+= $$($1_D)
 LIBNAMES += lib$1.a
 OBJ_ALL += $$($1_OBJ)
-TESTS_ALL += test_$1
+TESTS_ALL += test_$1.out
 $(BUILD_DIR)/$1/%.o: $1/%.c
 	@mkdir -p $(BUILD_DIR)/$1
 	$(CC) $(CFLAGS) -c $$< -o $$@
