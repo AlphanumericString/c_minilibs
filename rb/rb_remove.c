@@ -1,6 +1,12 @@
 #include <string.h>
 #include "./round_buffer.h"
 
+/**
+ * \brief removes n elements
+ * \param rb the round buffer
+ * \param n number of elements to drop
+ * \return true if removes n elements, false otherwise
+ **/
 bool rb_drop(t_rb *rb, size_t n) {
 	if (!rb || !n) return (false);
 	if (n > rb->nb_max ||
@@ -11,6 +17,12 @@ bool rb_drop(t_rb *rb, size_t n) {
 	rb->o_pos = (rb->o_pos + n) % rb->nb_max;
 	return (true);
 }
+/**
+ * \brief return position in array for next elem, if elem_out copies value to it
+ * \param rb the round buffer
+ * \param elem_out pointer where the removed element will be copied (optional)
+ * \return pointer to the element in the buffer
+ **/
 void *rb_peek(t_rb rb, void *elem_out) {
 	unsigned char *pos;
 
@@ -18,6 +30,13 @@ void *rb_peek(t_rb rb, void *elem_out) {
 	if (elem_out) memcpy(elem_out, pos, rb.sz_e);
 	return (pos);
 }
+/**
+ * \brief return position in array for next elems, if elem_out copies values to it
+ * \param rb the round buffer
+ * \param n number of elements to peek
+ * \param elem_out pointer where the elements will be copied (optional)
+ * \return pointer to the first element in the buffer
+ **/
 void *rb_npeek(t_rb rb, size_t n, void *elem_out) {
 	unsigned char *pos;
 	size_t         left_size;
@@ -41,6 +60,12 @@ void *rb_npeek(t_rb rb, size_t n, void *elem_out) {
 	}
 	return (pos);
 }
+/**
+ * \brief returns removed element position, if elem_out copy removed elem to it
+ * \param rb the round buffer
+ * \param elem_out pointer where the removed element will be copied (optional)
+ * \return pointer to the removed element in the buffer
+ **/
 void *rb_pop(t_rb *rb, void *elem_out) {
 	void *return_val;
 
@@ -49,6 +74,13 @@ void *rb_pop(t_rb *rb, void *elem_out) {
 	rb->o_pos  = (rb->o_pos + 1) % rb->nb_max;
 	return (return_val);
 }
+/**
+ * \brief returns first removed element position, if elem_out copy values to it
+ * \param rb the round buffer
+ * \param n number of elements to pop
+ * \param elem_out pointer where the elements will be copied (optional)
+ * \return pointer to the first removed element in the buffer
+ **/
 void *rb_npop(t_rb *rb, size_t n, void *elem_out) {
 	void *return_val;
 
