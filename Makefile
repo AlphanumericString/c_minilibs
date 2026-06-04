@@ -39,8 +39,9 @@ fclean:clean
 	$(RM) $(OBJ_ALL) $(D_FILES) ./*.d
 	$(RM) -rf $(BUILD_DIR) $(DOC_DIR)
 $(DOC_DIR):
-	DOXYGEN_INPUT="$(MODULES)" doxygen Doxyfile
+	DOXYGEN_INPUT="$(MODULES)" doxygen Doxyfile &&	\
+	echo -e "\n\nDocumentation at file:///$(shell pwd)/$(DOC_DIR)/html/index.html\n"
 clean:
 	$(RM) $(LIBNAMES) $(TESTS_ALL)
 re:fclean
-.PHONY: re clean fclean $(DOC_DIR)
+.PHONY: re clean fclean
