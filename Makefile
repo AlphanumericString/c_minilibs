@@ -3,6 +3,7 @@ MODULES =	ill rb da ss dsu
 D_FILES=
 .DEFAULT_GOAL := all
 BUILD_DIR=build
+DOC_DIR=documentation
 CC	=	clang
 CFLAGS = -Wall -Wextra -g3 -MMD -MP
 LIBNAMES=
@@ -36,9 +37,10 @@ tests: $(TESTS_ALL)
 -include:$(D_FILES)
 fclean:clean
 	$(RM) $(OBJ_ALL) $(D_FILES) ./*.d
-	$(RM) -rf $(BUILD_DIR)
-
+	$(RM) -rf $(BUILD_DIR) $(DOC_DIR)
+$(DOC_DIR):
+	DOXYGEN_INPUT="$(MODULES)" doxygen Doxyfile
 clean:
 	$(RM) $(LIBNAMES) $(TESTS_ALL)
 re:fclean
-.PHONY: re clean fclean
+.PHONY: re clean fclean $(DOC_DIR)

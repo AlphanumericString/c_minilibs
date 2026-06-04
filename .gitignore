@@ -3,3 +3,4 @@
 *.o
 *.a
 test_*.out
+documentation
