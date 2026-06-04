@@ -13,6 +13,13 @@ static inline void memnxor(void *a, void *b, size_t n) {
 		s_a[n] ^= s_b[n];
 	return;
 }
+/**
+ * \brief Swap values at index pos_a and pos_b together.
+ * \param ss sparse set to swap values in
+ * \param pos_a position to swap value from
+ * \param pos_b position to swap value to
+ * \return true if opperation succeed
+**/
 bool ss_swap(t_ss *ss, size_t pos_a, size_t pos_b) {
 	unsigned char  sized_buffer[4096];
 	unsigned char *sa;
@@ -27,7 +34,7 @@ bool ss_swap(t_ss *ss, size_t pos_a, size_t pos_b) {
 		memnxor(sa, sb, ss->sz_elem);
 		memnxor(sb, sa, ss->sz_elem);
 		memnxor(sa, sb, ss->sz_elem);
-	} else {
+	} else { // swap with buffer
 		memcpy(sized_buffer, sa, ss->sz_elem);
 		memcpy(sa, sb, ss->sz_elem);
 		memcpy(sb, sized_buffer, ss->sz_elem);

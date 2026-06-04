@@ -1,6 +1,12 @@
 #include <string.h>
 #include "./sparse_set.h"
 
+/**
+ * \brief Append an element elem to the ss.
+ * \param ss ss to add element to
+ * \param elem element to add
+ * \return true if element was added successfully
+**/
 bool  ss_add(t_ss *ss, void *elem){
 	void	*pos;
 
@@ -11,6 +17,13 @@ bool  ss_add(t_ss *ss, void *elem){
 	memcpy(pos, elem, ss->sz_elem);
 	return (true);
 }
+/**
+ * \brief Append nb elements from arr to the ss.
+ * \param ss ss to add elements to
+ * \param arr array to add elements from
+ * \param nb_e number of elements to add
+ * \return true if elements were added successfully
+**/
 bool  ss_add_array(t_ss *ss, void *arr, size_t nb_e) {
 	if (!ss || !ss->data || !ss->indexes || (ss->nb_elem + nb_e) == ss->cappacity)
 		return (false);
