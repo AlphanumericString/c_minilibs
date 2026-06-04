@@ -105,13 +105,14 @@ void *rb_nat(const t_rb *rb, size_t idx, size_t n, void *buff);
 // get
 void *rb_get(const t_rb *rb, t_comparator comp, const void *arg, void *buffer);
 void *rb_nget(const t_rb *rb, size_t n, t_comparator comp, const void *arg, void *buffer);
+// void *rb_getn(const t_rb *rb, size_t n, t_comparator comp, const void *arg, void *buffer);
 
 // find
 void *rb_find(const t_rb *rb, t_comparator c, const void *a);
 
 // Map
-void *rb_map(t_rb *rb, t_duplicator dup, void *out_buff);
-void *rb_nmap(t_rb *rb, size_t n, t_duplicator dup, void *out_buff);
+bool rb_map(t_rb *rb, t_duplicator dup, void *out_buff);
+bool rb_nmap(t_rb *rb, size_t n, t_duplicator dup, void *out_buff);
 
 // grow
 t_rb *rb_grow(t_rb *rb, size_t nb_elem_added); // return a new rb. ALWAYS. or null if alloc fails
@@ -120,21 +121,8 @@ t_rb *rb_grow(t_rb *rb, size_t nb_elem_added); // return a new rb. ALWAYS. or nu
 #	define PRB_SZ_ELEM_DFLT 1024
 
 // TODO:
-
-// implement the following functions:
-// rb_apply.c: rb_apply rb_naplly 
-// rb_filter.c: rb_filter
-// rb_at.c: rb_at rb_nat
-// rb_get.c: rb_get rb_nget
-// rb_find.c: rb_find
-// rb_map.c: rb_map rb_nmap
-// rb_grow.c: rb_grow
-// notes: find gives a pointer to the data array in the struct
-//	whereas get sets the returned value in the out buffer.
-//	in the same way at returns a position in the data array. (position is calculated from start offset)
-//	rb_map always assume enough space in the out_buff.
-//	rb_filter does not fail if theres no destructor pointer present.
-
+// rb_nget -> get's the n elements after first match
+// rb_getn -> get up to n elements that matched
 
 #	define PRIV_RB
 #endif // !PRIV_RB
