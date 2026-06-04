@@ -3,6 +3,44 @@
 #	include <stdbool.h>
 #	include <stddef.h>
 
+#	ifndef T_CALLBACK_DEFINE
+#		define T_CALLBACK_DEFINE
+
+/**
+ * \brief  callback function pointer, true operation successfull, elem is always the node, arg is passed as is from up function
+ * \param  elem pointer to the element
+ * \param  arg  argument passed as is from up function
+ * \return expected to return true on success false otherwise
+**/
+typedef bool  (*t_callback)(void *elem, void *arg);
+
+#	endif
+
+#	ifndef T_COMPARATOR_DEFINE
+#		define T_COMPARATOR_DEFINE
+
+/**
+ * \brief comparator function pointer, <0, 0, >0 for inferior to, equal, superior to
+ * \param elem pointer to the element
+ * \param arg argument passed as is from up function
+ * \return expected to return <0, 0, >0 for inferior to, equal, superior to
+**/
+typedef int   (*t_comparator)(void *elem, void *arg);
+
+#	endif
+
+#	ifndef T_DUPLICATOR_DEFILE
+#		define T_DUPLICATOR_DEFILE
+
+/**
+ * \brief duplication function pointer for datas
+ * \param elem pointer to the duplication target
+ * \return pointer to a valid copy of the data
+**/
+typedef void *(*t_duplicator)(const void *elem);
+
+#	endif
+
 /**
  * \brief t_ill struct
  * \param offset offset of the node in the element
@@ -12,13 +50,6 @@ typedef struct s_ill {
 	size_t        offset;
 	struct s_ill *next;
 } t_ill;
-
-// callback -> true operation successfull, elem is always the node, arg is passed as is from up function
-typedef bool  (*t_callback)(void *elem, void *arg);
-// comparator -> <0, ==0, >0 for less than, equal, superior to.
-typedef int   (*t_comparator)(void *elem, void *arg);
-// duplicator -> deep copy function.
-typedef void *(*t_duplicator)(const void *elem);
 
 // Initialize node (not in any list)
 void  ill_init(t_ill *node, size_t offset);
