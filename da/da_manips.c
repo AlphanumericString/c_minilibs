@@ -12,6 +12,13 @@ static inline void memnxor(void *a, void *b, size_t n) {
 	return;
 }
 
+/**
+ * \brief swap the values in the da at 2 offsets
+ * \param vec pointer to the dynamic array
+ * \param pos_a index of the first element
+ * \param pos_b index of the second element
+ * \return true on success, false on failure
+ */
 bool da_swap(t_da *vec, size_t pos_a, size_t pos_b) {
 	unsigned char  sized_buffer[PVEC_SZ_ELEM_DFLT];
 	unsigned char *sa;

@@ -1,5 +1,11 @@
 #include "./dynamic_array.h"
 
+/**
+ * \brief add an element, if needed grow the da
+ * \param vec pointer to the dynamic array
+ * \param elem pointer to the element to add
+ * \return true if success, false if failure
+ */
 bool da_add(t_da *vec, void *elem) {
 	void *tmp;
 
@@ -16,6 +22,14 @@ bool da_add(t_da *vec, void *elem) {
 	return (true);
 }
 
+/**
+ * \brief add nb_e elements of size sz_e from the array arr, if needed grows the da
+ * \param vec pointer to the dynamic array
+ * \param arr pointer to the array to concatenate
+ * \param nb_e number of elements to add
+ * \param sz_e size of the elements
+ * \return true if success, false if failure
+ */
 bool da_cat_array(t_da *vec, void *arr, size_t nb_e, size_t sz_e) {
 	void  *tmp;
 	size_t new_cap;
