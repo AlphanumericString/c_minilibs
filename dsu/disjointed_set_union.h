@@ -20,58 +20,34 @@ typedef struct s_disjointed_set_union {
 	bool          rp_single_alloc;
 } t_dsu;
 
-// constructors
-
-/* init by allocating both the return and the internals */
+// create
 t_dsu *dsu_new(size_t n);
-/* init by allocating a t_dsu and using provided values */
 t_dsu *dsu_new_from_array(size_t n, int *parents, int *rank);
-/* init by allocating the internals */
 t_dsu *dsu_init(t_dsu *to_init, size_t n);
-/* init t_dsu using provided values (no allocs) */
 t_dsu *dsu_init_from_arrays(t_dsu *to_init, size_t size, int *parent,
                             int *rank);
-/**
- * grow the dsu by N values
- * (warning: will realocate. if you used local buffers durring construction
- * via from_arrays methods do not use).
- *
-**/
+
+// grow
 t_dsu *dsu_grow(t_dsu *to_init, size_t n);
 
-// destructor
-
-/* reset structure to a clean init state */
+// destroy
 void dsu_clr(t_dsu *dsu);
-/* frees internal memory */
 void dsu_destroy(t_dsu *ds);
 
-// getters
-
-/* returns the max depth of the tree */
+// getter
 int    dsu_max_depth(t_dsu dsu);
-/* returns the number of elems in the tree */
 size_t dsu_size(t_dsu dsu);
-/* return the number of distinc separate sets in the dsu */
 size_t dsu_nb_components(t_dsu dsu);
 
 // querry
-
-/* check if 2 node have the same ancestor (uses find so compression) */
 bool   dsu_is_related(t_dsu *ds, size_t x, size_t y);
-/* check if 2 node have the same ancestor (uses strct_find so no compression) */
 bool   dsu_strict_is_related(t_dsu ds, size_t x, size_t y);
-/* check if dsu is valid and w/out errors */
 bool   dsu_validate(t_dsu dsu);
 
 // links
-/* links 2 elements */
 void   dsu_union(t_dsu *ds, size_t x, size_t y);
-/* search parent of x and compress parent */
 size_t dsu_find(t_dsu *ds, size_t x);
-/* ONLY search, no compression */
 size_t dsu_strict_find(t_dsu ds, size_t x);
-/* try to compress all elem sequentially */
 size_t dsu_compress_all(t_dsu *ds);
 
 // TODO:
