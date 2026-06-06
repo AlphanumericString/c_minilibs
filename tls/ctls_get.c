@@ -1,0 +1,34 @@
+#include <pthread.h>
+#include "ctls.h"
+
+/**
+ * \brief try to get the local thread variable s.
+ * \param s the variable to check
+ * \return the adress of the variable in a typesafe wrapper. if !s return NULL
+**/
+t_ctls_typewrap *ctls_get(const char *s) {
+	t_ctlsv *ctls = pthread_getspecific(ctls_key);
+
+	if (!ctls) {
+		ctls = calloc(1, sizeof(*ctls));
+		pthread_setspecific(ctls_key, ctls);
+	}
+	for (size_t i = 0; i < ctls->len; i++) {
+		if (!strcmp(s, ctls->v_name[i]))
+			return (&ctls->vals[i]);
+	}
+	return (NULL);
+}
+
+/**
+ * \brief length of the current ctls array
+ * \return the lenght of the occupied ctls array
+**/
+size_t	ctls_len(void)
+{
+	t_ctlsv	*ctls = pthread_getspecific(ctls_key);
+
+	if (!ctls)
+		return (0);
+	return (ctls->len);
+}
