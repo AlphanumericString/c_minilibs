@@ -7,12 +7,13 @@
 #		define T_CALLBACK_DEFINE
 
 /**
- * \brief  callback function pointer, true operation successfull, elem is always the node, arg is passed as is from up function
+ * \brief  callback function pointer, true operation successfull, elem is always
+ * the node, arg is passed as is from up function
  * \param  elem pointer to the element
  * \param  arg  argument passed as is from up function
  * \return expected to return true on success false otherwise
 **/
-typedef bool  (*t_callback)(void *elem, void *arg);
+typedef bool (*t_callback)(void *elem, void *arg);
 
 #	endif
 
@@ -20,12 +21,13 @@ typedef bool  (*t_callback)(void *elem, void *arg);
 #		define T_COMPARATOR_DEFINE
 
 /**
- * \brief comparator function pointer, <0, 0, >0 for inferior to, equal, superior to
+ * \brief comparator function pointer, <0, 0, >0 for inferior to, equal,
+ * superior to
  * \param elem pointer to the element
  * \param arg argument passed as is from up function
  * \return expected to return <0, 0, >0 for inferior to, equal, superior to
 **/
-typedef int   (*t_comparator)(void *elem, void *arg);
+typedef int (*t_comparator)(void *elem, void *arg);
 
 #	endif
 
@@ -67,8 +69,8 @@ bool ill_is_sorted(t_ill *head, t_comparator comparator);
 bool ill_has(t_ill *head, t_callback matcher, void *arg);
 
 // Insert 'node' before 'anchor' (anchor does move)
-void ill_prepend(t_ill **head, t_ill *anchor, t_ill *node);	// !
-void ill_nprepend(t_ill **head, t_ill *anchor, t_ill *nodes);	// !
+void ill_prepend(t_ill **head, t_ill *anchor, t_ill *node);   // !
+void ill_nprepend(t_ill **head, t_ill *anchor, t_ill *nodes); // !
 // Insert 'node' after 'anchor' (anchor does not move)
 void ill_append(t_ill *anchor, t_ill *node);
 void ill_nappend(t_ill *anchor, t_ill *nodes);
@@ -88,7 +90,7 @@ bool   ill_remove_node(t_ill **head, t_ill *target);
 
 // Find node
 t_ill *ill_find_prev(t_ill *head, t_ill *target);
-t_ill *ill_find(t_ill *head, t_ill *target);      // !
+t_ill *ill_find(t_ill *head, t_ill *target); // !
 // Get elem
 t_ill *ill_get_prev(t_ill *head, t_comparator c, void *arg);
 t_ill *ill_get(t_ill *head, t_comparator c, void *arg);
@@ -97,8 +99,8 @@ t_ill *ill_get(t_ill *head, t_comparator c, void *arg);
 t_ill *ill_get_tail(t_ill *head);
 
 // Get min/max
-void  *ill_get_min(t_ill *head, t_comparator comp);
-void  *ill_get_max(t_ill *head, t_comparator comp);
+void *ill_get_min(t_ill *head, t_comparator comp);
+void *ill_get_max(t_ill *head, t_comparator comp);
 void *ill_get_kth(t_ill *head, size_t k);
 
 // Get length
@@ -107,25 +109,26 @@ size_t ill_nlength(t_ill *head, size_t n);
 size_t ill_match_nb(t_ill *head, t_callback matcher, void *arg);
 
 // Forward iteration macro
-bool  ill_for(t_ill *head, size_t n, t_callback c, void *u_data);
-bool  ill_foreach(t_ill *head, t_callback c, void *u_data);
+bool   ill_for(t_ill *head, size_t n, t_callback c, void *u_data);
+bool   ill_foreach(t_ill *head, t_callback c, void *u_data);
 // reverse
 t_ill *ill_reverse(t_ill *head);
 
 // move
 // if !end_cut cut to the end of list included otherwise stop before end_cut
-void ill_move(t_ill *dest_anchor, t_ill *start_cut, t_ill *end_cut);	// !
+void   ill_move(t_ill *dest_anchor, t_ill *start_cut, t_ill *end_cut); // !
 //- Merges two sorted lists into one.
-void ill_sort(t_ill **head, t_comparator comp);							// !
-t_ill *ill_sorted_merge(t_ill *list1, t_ill *list2, t_comparator comp);	// !
+void   ill_sort(t_ill **head, t_comparator comp);                       // !
+t_ill *ill_sorted_merge(t_ill *list1, t_ill *list2, t_comparator comp); // !
 
 // filter
 // list for tru is returned list of false has sotred in filtered
-t_ill	*ill_filter(t_ill *head, t_callback cb, void *arg, t_ill **filtered);
+t_ill *ill_filter(t_ill *head, t_callback cb, void *arg, t_ill **filtered);
 // remove if aka filter in place. if !free_func no free.
-bool	ill_remove_if(t_ill **head, t_callback condition_cb, void *arg, void (*free_func)(void *elem));
+bool   ill_remove_if(t_ill **head, t_callback condition_cb, void *arg,
+                     void (*free_func)(void *elem));
 // (requirement: list must be sorted)
-void	ill_unique(t_ill *head, t_comparator c); // !
+void   ill_unique(t_ill *head, t_comparator c); // !
 
 /*
  * TODO: Missing classic intrusive list functions to implement
@@ -133,9 +136,10 @@ void	ill_unique(t_ill *head, t_comparator c); // !
  * implement functions with '!' present
  *
  * Plan to tackle:
- * - Create respective .c files for each functional block (e.g. ill_sort.c, ill_splice.c).
+ * - Create respective .c files for each functional block (e.g. ill_sort.c,
+ * ill_splice.c).
  * - Write comprehensive tests for them in test_main_ill.c.
- */
+**/
 
 #	define PRIV_ILL
 #endif // !PRIV_ILL

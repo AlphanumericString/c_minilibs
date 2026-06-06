@@ -1,12 +1,12 @@
 #include <string.h>
 
-#include "./disjointed_set_union.h"
+#include "disjointed_set_union.h"
 
 /**
  * \brief init by allocating both the return and the internals
  * \param n size of the dsu
  * \return the new t_dsu
- */
+**/
 t_dsu *dsu_new(size_t n) {
 	t_dsu *ret;
 	void  *buffer;
@@ -26,7 +26,7 @@ t_dsu *dsu_new(size_t n) {
  * \param to_init the t_dsu to init
  * \param n size of the dsu
  * \return the initialized t_dsu
- */
+**/
 t_dsu *dsu_init(t_dsu *to_init, size_t n) {
 	void *buffer;
 
@@ -43,7 +43,7 @@ t_dsu *dsu_init(t_dsu *to_init, size_t n) {
  * \param parents the parents array
  * \param ranks the ranks array
  * \return the new t_dsu
- */
+**/
 t_dsu *dsu_new_from_array(size_t size, int *parents, int *ranks) {
 	t_dsu *ret;
 
@@ -64,7 +64,7 @@ t_dsu *dsu_new_from_array(size_t size, int *parents, int *ranks) {
  * \param parents the parents array
  * \param ranks the ranks array
  * \return the initialized t_dsu
- */
+**/
 t_dsu *dsu_init_from_arrays(t_dsu *ret, size_t size, int *parents, int *ranks) {
 	if (!ret || !size || !parents || !ranks) return (NULL);
 	ret->rank            = (uint *)ranks;
@@ -77,13 +77,13 @@ t_dsu *dsu_init_from_arrays(t_dsu *ret, size_t size, int *parents, int *ranks) {
 }
 /**
  * \brief grow the dsu by N values
- * 
+ *
  * (warning: will realocate. if you used local buffers durring construction
  * via from_arrays methods do not use).
  * \param dsu the t_dsu to grow
  * \param n the number of values to add
  * \return the grown t_dsu
- */
+**/
 t_dsu *dsu_grow(t_dsu *dsu, size_t n) {
 	void  *replacement_buffer;
 	void  *rank_offset;

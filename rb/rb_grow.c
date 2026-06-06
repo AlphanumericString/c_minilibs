@@ -1,15 +1,16 @@
 #include <stdlib.h>
 #include <string.h>
-#include "./round_buffer.h"
+
+#include "round_buffer.h"
 
 /**
  * \brief grows the round buffer by nb_elem_added elements
  * \param rb the old round buffer
  * \param nb_elem_added number of additional elements
  * \return newly allocated t_rb or NULL if alloc fails
- **/
+**/
 t_rb *rb_grow(t_rb *rb, size_t nb_elem_added) {
-	t_rb *new_rb;
+	t_rb  *new_rb;
 	size_t count;
 	size_t first_part;
 
@@ -25,11 +26,14 @@ t_rb *rb_grow(t_rb *rb, size_t nb_elem_added) {
 	count = rb_size(*rb);
 	if (count > 0) {
 		if (rb->o_pos <= rb->i_pos) {
-			memcpy(new_rb->array, rb->array + (rb->o_pos * rb->sz_e), count * rb->sz_e);
+			memcpy(new_rb->array, rb->array + (rb->o_pos * rb->sz_e),
+			       count * rb->sz_e);
 		} else {
 			first_part = rb->nb_max - rb->o_pos;
-			memcpy(new_rb->array, rb->array + (rb->o_pos * rb->sz_e), first_part * rb->sz_e);
-			memcpy(new_rb->array + (first_part * rb->sz_e), rb->array, rb->i_pos * rb->sz_e);
+			memcpy(new_rb->array, rb->array + (rb->o_pos * rb->sz_e),
+			       first_part * rb->sz_e);
+			memcpy(new_rb->array + (first_part * rb->sz_e), rb->array,
+			       rb->i_pos * rb->sz_e);
 		}
 	}
 	new_rb->o_pos = 0;

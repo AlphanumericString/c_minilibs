@@ -10,7 +10,8 @@
  * \param parent list of ids for the parent of nodes
  * \param rank   rank of node closer to 0 = closer to source
  * \param components number of differnt sets present in the DSU
- * \param rp_single_alloc boolean on whether the rank and parent were allocated from a continuous single alloc
+ * \param rp_single_alloc boolean on whether the rank and parent were allocated
+ * from a continuous single alloc
 **/
 typedef struct s_disjointed_set_union {
 	unsigned int *parent;
@@ -40,9 +41,9 @@ size_t dsu_size(t_dsu dsu);
 size_t dsu_nb_components(t_dsu dsu);
 
 // querry
-bool   dsu_is_related(t_dsu *ds, size_t x, size_t y);
-bool   dsu_strict_is_related(t_dsu ds, size_t x, size_t y);
-bool   dsu_validate(t_dsu dsu);
+bool dsu_is_related(t_dsu *ds, size_t x, size_t y);
+bool dsu_strict_is_related(t_dsu ds, size_t x, size_t y);
+bool dsu_validate(t_dsu dsu);
 
 // links
 void   dsu_union(t_dsu *ds, size_t x, size_t y);

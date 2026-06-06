@@ -48,7 +48,7 @@ typedef void *(*t_duplicator)(const void *elem);
  * \param i_pos input position
  * \param o_pos output position
  * \param sz_e size of elements in the array
- **/
+**/
 typedef struct s_roundbuffer_array {
 	void  *array;
 	size_t nb_max;
@@ -88,8 +88,6 @@ void rb_push(t_rb *rb, const void *data);
 void rb_npush(t_rb *rb, const void *data, size_t nb_elem);
 bool rb_push_safe(t_rb *rb, const void *data);
 bool rb_npush_safe(t_rb *rb, const void *data, size_t nb_elem);
-
-// --- missing
 
 // apply
 bool rb_apply(t_rb *rb, t_callback cb, const void *arg);

@@ -1,4 +1,4 @@
-#include "./sparse_set.h"
+#include "sparse_set.h"
 
 /**
  * \brief Allocate and copy all elements from ss into a new array.

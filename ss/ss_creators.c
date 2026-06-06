@@ -1,4 +1,4 @@
-#include "./sparse_set.h"
+#include "sparse_set.h"
 
 /**
  * \brief Allocates and init a new ss for elements of size sz_elem

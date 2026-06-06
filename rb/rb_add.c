@@ -1,11 +1,12 @@
 #include <string.h>
-#include "./round_buffer.h"
+
+#include "round_buffer.h"
 
 /**
  * \brief add value to rb, if overwrite happens, silently resolve and contiues
  * \param rb the round buffer
  * \param data the element to push
- **/
+**/
 void rb_push(t_rb *rb, const void *data) {
 	if (!rb) return;
 	memcpy(rb->array + (rb->i_pos * rb->sz_e), data, rb->sz_e);
@@ -19,12 +20,12 @@ void rb_push(t_rb *rb, const void *data) {
  * \param rb the round buffer
  * \param data the elements to push
  * \param n number of elements to push
- **/
+**/
 void rb_npush(t_rb *rb, const void *data, size_t n) {
-	if (!rb) return ;
+	if (!rb) return;
 	while (n > rb->nb_max) {
 		data = (unsigned char *)data + (rb->nb_max * rb->sz_e);
-		n -= rb->nb_max;
+		n   -= rb->nb_max;
 	}
 	while (n)
 		rb_push(rb, data);
@@ -34,7 +35,7 @@ void rb_npush(t_rb *rb, const void *data, size_t n) {
  * \param rb the round buffer
  * \param data the element to push
  * \return true on success, false if overwrite would happen
- **/
+**/
 bool rb_push_safe(t_rb *rb, const void *data) {
 	if (!rb) return (false);
 	if ((rb->i_pos + 1) % rb->nb_max == rb->o_pos) return (false);
@@ -46,9 +47,9 @@ bool rb_push_safe(t_rb *rb, const void *data) {
  * \param data the elements to push
  * \param n number of elements to push
  * \return true on success, false if overwrite would happen
- **/
+**/
 bool rb_npush_safe(t_rb *rb, const void *data, size_t n) {
-	size_t i =0;
+	size_t i = 0;
 
 	if (!rb) return (false);
 	if (n > rb->nb_max) return (false);

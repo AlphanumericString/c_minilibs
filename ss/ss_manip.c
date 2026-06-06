@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include "./sparse_set.h"
+#include "sparse_set.h"
 
 static inline void memnxor(void *a, void *b, size_t n) {
 	unsigned char *s_a;

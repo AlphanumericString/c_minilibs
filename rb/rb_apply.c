@@ -1,4 +1,4 @@
-#include "./round_buffer.h"
+#include "round_buffer.h"
 
 /**
  * \brief apply callback to up to n elements
@@ -7,14 +7,14 @@
  * \param cb the callback function
  * \param arg argument for the callback
  * \return false if the callback returns false, true otherwise
- **/
+**/
 bool rb_naplly(t_rb *rb, size_t n, t_callback cb, const void *arg) {
 	size_t i = 0;
 	size_t current_pos;
 	size_t count;
 
 	if (!rb || !cb) return false;
-	
+
 	count = rb_size(*rb);
 	if (n > count) n = count;
 
@@ -34,7 +34,7 @@ bool rb_naplly(t_rb *rb, size_t n, t_callback cb, const void *arg) {
  * \param cb the callback function
  * \param arg argument for the callback
  * \return false if the callback returns false, true otherwise
- **/
+**/
 bool rb_apply(t_rb *rb, t_callback cb, const void *arg) {
 	if (!rb) return false;
 	return rb_naplly(rb, (size_t)-1, cb, arg);

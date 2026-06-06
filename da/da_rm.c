@@ -1,4 +1,4 @@
-#include "./dynamic_array.h"
+#include "dynamic_array.h"
 
 // BUG: bug on the swap
 // need to swap smallest between to_delete and right_gap
@@ -9,7 +9,7 @@
  * \param vec pointer to the dynamic array
  * \param pos index of the element to remove
  * \return true on success, false on failure
- */
+**/
 bool da_rm_order(t_da *vec, size_t pos) {
 	if (!vec) return (false);
 	if (vec->nb_e < pos) return (false);
@@ -25,7 +25,7 @@ bool da_rm_order(t_da *vec, size_t pos) {
  * \param start index of the first element to remove
  * \param end index of the end element (exclusive)
  * \return true on success, false on failure
- */
+**/
 bool da_rms_order(t_da *vec, size_t start, size_t end) {
 	if (end < start) return (false);
 	if (!vec || vec->nb_e < start) return (false);
@@ -43,7 +43,7 @@ bool da_rms_order(t_da *vec, size_t start, size_t end) {
  * \param vec pointer to the dynamic array
  * \param pos index of the element to remove
  * \return true on success, false on failure
- */
+**/
 bool da_rm(t_da *vec, size_t pos) {
 	if (!vec || vec->nb_e < pos) return (false);
 	if (pos != vec->nb_e) da_swap(vec, pos, vec->nb_e - 1);
@@ -57,7 +57,7 @@ bool da_rm(t_da *vec, size_t pos) {
  * \param end index of the end element (exclusive)
  * \warning BUG: da_rms has a gap problem - check tests
  * \return true on success, false on failure
- */
+**/
 bool da_rms(t_da *vec, size_t start, size_t end) {
 	if (end < start) return (false);
 	if (!vec || vec->nb_e < start) return (false);

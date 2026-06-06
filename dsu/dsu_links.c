@@ -5,7 +5,7 @@
  * \param ds the dsu structure
  * \param x first element to link
  * \param y second element to link
- */
+**/
 void dsu_union(t_dsu *ds, size_t x, size_t y) {
 	size_t root_x;
 	size_t root_y;
@@ -37,7 +37,7 @@ void dsu_union(t_dsu *ds, size_t x, size_t y) {
  * \param ds the dsu structure
  * \param x the element to find
  * \return the parent of x
- */
+**/
 size_t dsu_find(t_dsu *ds, size_t x) {
 	if (!ds) return (-1);
 	if (x > ds->size) return (-1);
@@ -52,7 +52,7 @@ size_t dsu_find(t_dsu *ds, size_t x) {
  * \param ds the dsu structure
  * \param x the element to find
  * \return the parent of x
- */
+**/
 size_t dsu_strict_find(t_dsu ds, size_t x) {
 	if (!ds.size || !ds.parent || !ds.rank) return (-1);
 	if (x > ds.size) return (-1);
@@ -65,7 +65,7 @@ size_t dsu_strict_find(t_dsu ds, size_t x) {
  * \brief try to compress all elem sequentially
  * \param ds the dsu structure
  * \return the number of elements processed
- */
+**/
 size_t dsu_compress_all(t_dsu *ds) {
 	size_t x;
 	size_t y;

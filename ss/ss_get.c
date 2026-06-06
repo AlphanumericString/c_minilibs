@@ -1,9 +1,10 @@
 #include <string.h>
 
-#include "./sparse_set.h"
+#include "sparse_set.h"
 
 /**
- * \brief Try to set value elem into the array at pos. True if opperation succeed
+ * \brief Try to set value elem into the array at pos. True if opperation
+ * succeed
  * \param ss sparse set to set value in
  * \param pos position to set value in
  * \param elem value to set
@@ -28,7 +29,8 @@ void *ss_at(t_ss *ss, size_t pos) {
 	return (ss->data + index * ss->sz_elem);
 }
 /**
- * \brief Return offset into the array for index pos, and copy elem to out pointer
+ * \brief Return offset into the array for index pos, and copy elem to out
+ * pointer
  * \param ss sparse set to get value from
  * \param pos position to get value from
  * \param out pointer to copy value to

@@ -1,4 +1,4 @@
-#include "./sparse_set.h"
+#include "sparse_set.h"
 
 /**
  * \brief Clear ss. Does not free sub arrays.

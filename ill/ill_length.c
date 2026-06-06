@@ -4,7 +4,7 @@
  * \brief Calculates the total length of the list.
  * \param head The head of the list.
  * \return The number of nodes in the list.
- */
+**/
 size_t ill_length(t_ill *head) {
 	size_t len = 0;
 	while (head) {
@@ -19,18 +19,17 @@ size_t ill_length(t_ill *head) {
  * \param head The head of the list.
  * \param n The maximum number of nodes to count.
  * \return The bounded length.
- */
+**/
 size_t ill_nlength(t_ill *head, size_t n) {
-    size_t len = 0;
+	size_t len = 0;
 
-    if (!head || !n) return len;
-    while (head && n)
-    {
-        len++;
-        head = head->next;
+	if (!head || !n) return len;
+	while (head && n) {
+		len++;
+		head = head->next;
 		n--;
-    }
-    return len;
+	}
+	return len;
 }
 
 /**
@@ -39,15 +38,13 @@ size_t ill_nlength(t_ill *head, size_t n) {
  * \param matcher The callback used to test elements.
  * \param arg Argument to pass to the matcher.
  * \return The number of matching elements.
- */
+**/
 size_t ill_match_nb(t_ill *head, t_callback matcher, void *arg) {
 	size_t count = 0;
 
 	if (!head || !matcher) return count;
-	while (head)
-	{
-		if (matcher(ill_ntoe(head), arg))
-			count++;
+	while (head) {
+		if (matcher(ill_ntoe(head), arg)) count++;
 		head = head->next;
 	}
 	return count;
