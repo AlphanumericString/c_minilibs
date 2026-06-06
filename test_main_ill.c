@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "./ill/ill.h"
+#include "./ill/intrusive_linked_lists.h"
 
 // EXAMPLE
 

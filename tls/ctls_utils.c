@@ -1,4 +1,4 @@
-#include "ctls.h"
+#include "common_thread_local_storage.h"
 
 void __attribute__((constructor())) init_ctls(void) {
 	pthread_key_create(&ctls_key, free);

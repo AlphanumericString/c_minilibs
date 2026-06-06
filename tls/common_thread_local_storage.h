@@ -25,7 +25,7 @@ enum e_ctls_type {
  * \brief type-sfafe abstraction of base c types.
  * \param type enum of c types.
  * \param value union of different possible interpretation of data.
- **/
+**/
 typedef struct {
 	enum e_ctls_type type;
 	union {
@@ -43,7 +43,7 @@ typedef struct {
  * \param len lenght of the array curently being used.
  * \note if you want to increase TLS_CTLS_CAP it's STRONGLY reccomended to not
  * go over 256
- **/
+**/
 typedef struct s_ctlsv {
 	const char     *v_name[TLS_CTLS_CAP];
 	t_ctls_typewrap vals[TLS_CTLS_CAP];

@@ -1,8 +1,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "tls/ctls.h"
-
+// has to come BEFORE the fast_tls
 struct s_mine {
 	int error;
 	int last_status;
@@ -10,8 +9,9 @@ struct s_mine {
 
 #define TLS_FTLS_STRUCT struct s_mine
 
-#include "tls/ftls.h"
-// #include "tls/vtls.h"
+#include "tls/common_thread_local_storage.h"
+#include "tls/fast_thread_local_storage.h"
+#include "tls/voided_thread_local_storage.h"
 
 static void dump_mine_node(struct s_mine a) {
 	printf("error:%d\tlst_status:%d\n", a.error, a.last_status);

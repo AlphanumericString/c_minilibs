@@ -1,20 +1,20 @@
 #include <string.h>
-#include "ctls.h"
+
+#include "common_thread_local_storage.h"
 
 /**
  * \brief try to remove name from the variables. (works by swap).
  * \param name name of the variable to rm
  * \return true if succeed, false in any ohter case.
 **/
-bool ctls_rm(const char *name)
-{
+bool ctls_rm(const char *name) {
 	t_ctlsv *ctls = pthread_getspecific(ctls_key);
 
-	if (!ctls)
-		return (false);
+	if (!ctls) return (false);
 	for (size_t i = 0; i < ctls->len; i++) {
 		if (!strcmp(name, ctls->v_name[i])) {
-			memcpy(&ctls->vals[i], &ctls->vals[ctls->len - 1], sizeof(t_ctls_typewrap));
+			memcpy(&ctls->vals[i], &ctls->vals[ctls->len - 1],
+			       sizeof(t_ctls_typewrap));
 			ctls->len--;
 			return (true);
 		}

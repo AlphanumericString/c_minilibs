@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "vtls.h"
+#include "voided_thread_local_storage.h"
 
 /**
  * \brief set a new value to existing variable, if not found create a new one

@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "vtls.h"
+#include "voided_thread_local_storage.h"
 
 /**
  * \brief remove the value associated to v_name

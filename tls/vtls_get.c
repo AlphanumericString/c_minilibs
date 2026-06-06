@@ -1,12 +1,12 @@
 #include <string.h>
 
-#include "vtls.h"
+#include "voided_thread_local_storage.h"
 
 /**
  * \brief return the value associated to v_name
  * \param v_name name of the variable to search for
  * \return the value associated to var
- **/
+**/
 void *vtls_get(const char *v_name) {
 	t_vtls_array *vtls = pthread_getspecific(vtls_key);
 	size_t        i    = 0;
@@ -20,7 +20,7 @@ void *vtls_get(const char *v_name) {
 /**
  * \brief return the number of vtls key stored
  * \return 0 if no vtls, otherwise the number of key stored inside
- **/
+**/
 size_t vtls_len(void) {
 	t_vtls_array *vtls = pthread_getspecific(vtls_key);
 

@@ -1,6 +1,4 @@
-#include <iso646.h>
-
-#include "ill.h"
+#include "intrusive_linked_lists.h"
 
 /**
  * \brief Checks if a node is isolated (not pointing to any other node).

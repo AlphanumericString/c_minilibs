@@ -1,6 +1,7 @@
 #include <pthread.h>
 #include <stddef.h>
-#include "ctls.h"
+
+#include "common_thread_local_storage.h"
 
 /**
  * \brief update value in a variable or create it with init_val
