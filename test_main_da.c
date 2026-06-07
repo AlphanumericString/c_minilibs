@@ -15,9 +15,10 @@ void display_function_it(void *data, size_t pos, bool last) {
 	else printf(" }\n");
 	fflush(stdout);
 }
-void display_function(void *data) {
+void display_function(void *data, void *context) {
 	int *data_as_int = (int *)data;
 
+	(void)context;
 	printf("%d ", *data_as_int);
 	fflush(stdout);
 }
@@ -143,7 +144,7 @@ void tests_basics(void) {
 	DISP_VECT_INFOS(vect);
 
 	printf("apply:\n");
-	da_apply(&vect, display_function);
+	da_apply(&vect, NULL, display_function);
 	printf("\n");
 	DISP_VECT_INFOS(vect);
 
