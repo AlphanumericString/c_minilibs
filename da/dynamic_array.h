@@ -5,13 +5,55 @@
 #	include <stdlib.h>
 #	include <string.h>
 
+// comon funct ptr definitions
+
+#	ifndef T_CALLBACK_DEFINE
+#		define T_CALLBACK_DEFINE
+
+/**
+ * \brief  callback function pointer, true operation successfull, elem is always
+ * the node, arg is passed as is from up function
+ * \param  elem pointer to the element
+ * \param  arg  argument passed as is from up function
+ * \return expected to return true on success false otherwise
+ **/
+typedef bool (*t_callback)(void *elem, void *arg);
+
+#	endif
+
+#	ifndef T_COMPARATOR_DEFINE
+#		define T_COMPARATOR_DEFINE
+
+/**
+ * \brief comparator function pointer, <0, 0, >0 for inferior to, equal,
+ * superior to
+ * \param elem pointer to the element
+ * \param arg argument passed as is from up function
+ * \return expected to return <0, 0, >0 for inferior to, equal, superior to
+ **/
+typedef int (*t_comparator)(void *elem, void *arg);
+
+#	endif
+
+#	ifndef T_DUPLICATOR_DEFILE
+#		define T_DUPLICATOR_DEFILE
+
+/**
+ * \brief duplication function pointer for datas
+ * \param elem pointer to the duplication target
+ * \return pointer to a valid copy of the data
+ **/
+typedef void *(*t_duplicator)(const void *elem);
+
+#	endif
+
 /**
  * \brief da struct
  * \param array pointer holder for the memory
  * \param nb_e number of elements currently present in the array
  * \param cap_e number of elements the memory can hold
  * \param sz_e size of 1 elements (the generic part of the array)
-**/
+ **/
 typedef struct s_dynamic_memory_array {
 	void  *array;
 	size_t nb_e;
@@ -25,6 +67,12 @@ t_da *da_ninit(t_da *ret, size_t n, size_t sz_elem);
 t_da *da_from_array(t_da *da, void *array, size_t nb_elem, size_t sz_elem);
 t_da *da_new(size_t sz_elem);
 
+// dup
+t_da da_dup(const t_da *src);
+t_da da_ndup(const t_da *src, size_t n);
+t_da *da_dup_to(t_da *dst, const t_da *src);
+t_da *da_ndup_to(t_da *dst, size_t n, const t_da *src);
+
 // clear
 void da_clr(t_da *ret);
 
@@ -33,7 +81,11 @@ void da_destroy(t_da *ret);
 
 // add
 bool da_add(t_da *da, void *elem);
-bool da_cat_array(t_da *vec, void *arr, size_t nb_e, size_t sz_e);
+bool da_cat_array(t_da *da, void *arr, size_t nb_e, size_t sz_e);
+
+// grow
+bool da_grow(t_da *da);
+bool da_grow_for_size(t_da *da, size_t minimal_free_slots);
 
 // getter
 void *da_at(t_da *da, size_t pos);
@@ -55,10 +107,14 @@ void *da_to_array(t_da *da);
 void *da_to_loc_array(t_da *da, void *arr);
 
 // apply
-bool  da_apply(t_da *da, void (*func)(void *elem));
-bool  da_apply_it(t_da *da, void (*func)(void *elem, size_t pos, bool last));
-void *da_apply_with(t_da *da, void *u_val,
-                    void (*func)(void *u_val, void *e_val));
+void *da_apply(t_da *da, t_callback cb, void *u_data);
+void *da_apply_it(t_da *da,
+                  bool  (*func)(void *elem, void *u_val, size_t pos, bool last),
+                  void *u_val);
+// void *da_napply(t_da *da, size_t n, t_callback c, void *u_data);
+// void *da_napply_it(t_da *da, size_t n,
+//                    bool (*func)(void *elem, void *u_val, size_t pos, bool last),
+//                    void *u_val);
 
 // TODO: create
 // dup		+n
@@ -73,10 +129,6 @@ void *da_apply_with(t_da *da, void *u_val,
 // reverse	+n
 // sort		+n
 // nswap
-
-// TODO: apply
-// napply_with
-// napply_it
 
 // TODO: getter
 // find
