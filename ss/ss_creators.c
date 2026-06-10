@@ -16,7 +16,7 @@ t_ss *ss_new(size_t sz_elem) {
 **/
 t_ss *ss_init(t_ss *ss, size_t sz_elem) {
 	if (!ss || !sz_elem) return (NULL);
-	return (ss_ninit(ss, PSS_NB_ELEM_DFLT, sz_elem));
+	return (ss_ninit(ss, C_MINI_SS_NB_ELEM_DFLT, sz_elem));
 }
 /**
  * \brief Init a given ss for n elements of size sz_elem. Allocates sub arrays

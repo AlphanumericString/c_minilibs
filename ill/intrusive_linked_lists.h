@@ -1,10 +1,10 @@
-#ifndef PRIV_ILL
+#ifndef C_MINI__ILL
 
 #	include <stdbool.h>
 #	include <stddef.h>
 
-#	ifndef T_CALLBACK_DEFINE
-#		define T_CALLBACK_DEFINE
+#	ifndef CMINI_T_CALLBAKC_DEFINE
+#		define CMINI_T_CALLBAKC_DEFINE
 
 /**
  * \brief  callback function pointer, true operation successfull, elem is always
@@ -17,8 +17,8 @@ typedef bool (*t_callback)(void *elem, void *arg);
 
 #	endif
 
-#	ifndef T_COMPARATOR_DEFINE
-#		define T_COMPARATOR_DEFINE
+#	ifndef CMINI_T_COMPARATOR_DEFINE
+#		define CMINI_T_COMPARATOR_DEFINE
 
 /**
  * \brief comparator function pointer, <0, 0, >0 for inferior to, equal,
@@ -31,8 +31,8 @@ typedef int (*t_comparator)(void *elem, void *arg);
 
 #	endif
 
-#	ifndef T_DUPLICATOR_DEFILE
-#		define T_DUPLICATOR_DEFILE
+#	ifndef CMINI_T_DUOLICATOR_DEFINE
+#		define CMINI_T_DUOLICATOR_DEFINE
 
 /**
  * \brief duplication function pointer for datas
@@ -141,5 +141,5 @@ void   ill_unique(t_ill *head, t_comparator c); // !
  * - Write comprehensive tests for them in test_main_ill.c.
 **/
 
-#	define PRIV_ILL
-#endif // !PRIV_ILL
+#	define C_MINI__ILL
+#endif // !C_MINI__ILL

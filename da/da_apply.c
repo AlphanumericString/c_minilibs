@@ -7,9 +7,7 @@
  * \param func function to apply
  * \return true if success, false if failure
  **/
-void *da_apply_it(t_da *da,
-                  bool  (*func)(void *elem, void *u_val, size_t pos, bool last),
-                  void *u_val) {
+void *da_apply_it(t_da *da, t_callback_it func, void *u_val) {
 	size_t i;
 
 	if (!da || !func || !da->nb_e) return (u_val);
@@ -51,17 +49,13 @@ void *da_napply(t_da *da, size_t n, t_callback c, void *u_val) {
 	return (u_val);
 }
 
-void *da_napply_it(t_da *da, size_t n,
-                   bool (*func)(void *elem, void *u_val, size_t pos, bool last),
-                   void *u_val)
-{
+void *da_napply_it(t_da *da, size_t n, t_callback_it func, void *u_val) {
 	size_t i;
 
 	if (!da || !func || !da->nb_e) return (u_val);
 	i = 0;
 	while (i < n) {
-		if (func(da_at(da, i), u_val, i, i + 1 == n) != true)
-			return (u_val);
+		if (func(da_at(da, i), u_val, i, i + 1 == n) != true) return (u_val);
 		i++;
 	}
 	return (u_val);

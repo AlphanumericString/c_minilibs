@@ -1,5 +1,5 @@
-#ifndef TLS_VTLS_H
-#define TLS_VTLS_H
+#ifndef C_MINI__VTLS_H
+#define C_MINI__VTLS_H
 
 #include <pthread.h>
 #include <stdbool.h>
@@ -32,4 +32,4 @@ bool vtls_has(const char *v_name);
 // update / add
 bool vtls_set(const char *v_name, void *v_val, size_t v_size);
 
-#endif // TLS_VTLS_H
+#endif // C_MINI__VTLS_H

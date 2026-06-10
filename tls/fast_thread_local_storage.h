@@ -1,13 +1,13 @@
-#ifndef TLS_FTLS_H
-#define TLS_FTLS_H
+#ifndef C_MINI__FTLS_H
+#define C_MINI__FTLS_H
 
 #include <pthread.h>
 
 // +---------------------------------------------------+
 // | OVERRIDE THIS TO SET YOUR OWN STRUCT NAME INSTEAD |
 // +---------------------------------------------------+
-#ifndef TLS_FTLS_STRUCT
-#	define TLS_FTLS_STRUCT struct s_tls_ftls_node
+#ifndef C_MINI__FTLS_STRUCT
+#	define C_MINI__FTLS_STRUCT struct s_tls_ftls_node
 #endif
 
 /**
@@ -16,7 +16,7 @@
  * \note please override with your own struct (or alternatively, name your own
  * struct s_tls_ftls_node
 **/
-typedef TLS_FTLS_STRUCT t_ftls;
+typedef C_MINI__FTLS_STRUCT t_ftls;
 
 /**
  * \brief key used for the f tls system. mandatory for thread management.
@@ -40,4 +40,4 @@ t_ftls *ftls_get(void) {
 	return (ftls);
 }
 
-#endif // FTLS_H
+#endif // FC_MINI__H

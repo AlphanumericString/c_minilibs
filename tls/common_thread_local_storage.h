@@ -1,5 +1,5 @@
-#ifndef TLS_CTLS_H
-#define TLS_CTLS_H
+#ifndef C_MINI__CTLS_H
+#define C_MINI__CTLS_H
 
 #include <pthread.h>
 #include <stdbool.h>
@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define TLS_CTLS_CAP 16
+#define C_MINI__CTLS_CAP 16
 
 static pthread_key_t tlsv_key;
 static pthread_key_t ctls_key;
@@ -41,12 +41,12 @@ typedef struct {
  * \param v_name array of name for the different entries
  * \param vals array of values for the different entries.
  * \param len lenght of the array curently being used.
- * \note if you want to increase TLS_CTLS_CAP it's STRONGLY reccomended to not
+ * \note if you want to increase the CTLS_CAP it's STRONGLY reccomended to not
  * go over 256
 **/
 typedef struct s_ctlsv {
-	const char     *v_name[TLS_CTLS_CAP];
-	t_ctls_typewrap vals[TLS_CTLS_CAP];
+	const char     *v_name[C_MINI__CTLS_CAP];
+	t_ctls_typewrap vals[C_MINI__CTLS_CAP];
 	size_t          len;
 } t_ctlsv;
 
@@ -66,4 +66,4 @@ size_t           ctls_len(void);
 // utils
 void ctls_dump_typewrap(t_ctls_typewrap t);
 
-#endif // CTLS_H
+#endif // CC_MINI__H

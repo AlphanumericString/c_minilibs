@@ -25,7 +25,7 @@ t_rb *rb_create(t_rb *rb, size_t sz_elem, size_t nb_e) {
  * \return the populated round buffer or NULL on failure
 **/
 t_rb *rb_init(t_rb *rb, size_t sz_elem) {
-	return (rb_create(rb, sz_elem, PRB_NB_ELEM_DFLT));
+	return (rb_create(rb, sz_elem, C_MINI_RB_NB_ELEM_DFLT));
 }
 /**
  * \brief populate rb from given values, does not allocate array

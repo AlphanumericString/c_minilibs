@@ -1,5 +1,5 @@
-#ifndef PRIV_IDL
-#define PRIV_IDL
+#ifndef C_MINI__IDL
+#define C_MINI__IDL
 
 #include <stddef.h>
 
@@ -15,4 +15,4 @@ typedef struct s_idl {
 // ?swap? / ?rm?
 // clear?
 
-#endif
+#endif // !C_MINI__IDL

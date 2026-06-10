@@ -1,4 +1,5 @@
-#ifndef PRIV_DSU
+#ifndef C_MINI__DSU
+#	define C_MINI__DSU
 
 #	include <stddef.h>
 #	include <stdio.h>
@@ -63,5 +64,4 @@ size_t dsu_compress_all(t_dsu *ds);
 //						- add bool undo(t_dsu *ds)
 //							-> true if replayed
 
-#	define PRIV_DSU
-#endif // !PRIV_DSU
+#endif // !C_MINI__DSU

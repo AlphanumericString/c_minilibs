@@ -21,7 +21,7 @@ bool ctls_set(const char *name, t_ctls_typewrap init_val) {
 		if (!strcmp(name, ctls->v_name[i]))
 			return (ctls->vals[i] = init_val, true);
 	}
-	if (i != TLS_CTLS_CAP) {
+	if (i != C_MINI__CTLS_CAP) {
 		ctls->v_name[ctls->len] = name;
 		ctls->vals[ctls->len++] = init_val;
 		return (true);

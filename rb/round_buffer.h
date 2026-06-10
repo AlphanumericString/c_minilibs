@@ -1,10 +1,12 @@
-#ifndef PRIV_RB
+#ifndef C_MINI__RB
+#	define C_MINI__RB
+
 #	include <stdlib.h>
 #	include <stddef.h>
 #	include <stdbool.h>
 
-#	ifndef T_CALLBACK_DEFINE
-#		define T_CALLBACK_DEFINE
+#	ifndef CMINI_T_CALLBAKC_DEFINE
+#		define CMINI_T_CALLBAKC_DEFINE
 
 /**
  * \brief  callback function pointer, true operation successfull, elem is always the node, arg is passed as is from up function
@@ -16,8 +18,8 @@ typedef bool  (*t_callback)(void *elem, void *arg);
 
 #	endif
 
-#	ifndef T_COMPARATOR_DEFINE
-#		define T_COMPARATOR_DEFINE
+#	ifndef CMINI_T_COMPARATOR_DEFINE
+#		define CMINI_T_COMPARATOR_DEFINE
 
 /**
  * \brief comparator function pointer, <0, 0, >0 for inferior to, equal, superior to
@@ -29,8 +31,8 @@ typedef int   (*t_comparator)(void *elem, void *arg);
 
 #	endif
 
-#	ifndef T_DUPLICATOR_DEFILE
-#		define T_DUPLICATOR_DEFILE
+#	ifndef CMINI_T_DUOLICATOR_DEFINE
+#		define CMINI_T_DUOLICATOR_DEFINE
 
 /**
  * \brief duplication function pointer for datas
@@ -115,12 +117,11 @@ bool rb_nmap(t_rb *rb, size_t n, t_duplicator dup, void *out_buff);
 // grow
 t_rb *rb_grow(t_rb *rb, size_t nb_elem_added); // return a new rb. ALWAYS. or null if alloc fails
 
-#	define PRB_NB_ELEM_DFLT 4
-#	define PRB_SZ_ELEM_DFLT 1024
+#	define C_MINI_RB_NB_ELEM_DFLT 4
+#	define C_MINI_RB_SZ_ELEM_DFLT 1024
 
 // TODO:
 // rb_nget -> get's the n elements after first match
 // rb_getn -> get up to n elements that matched
 
-#	define PRIV_RB
-#endif // !PRIV_RB
+#endif // !C_MINI__RB

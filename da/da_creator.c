@@ -23,8 +23,8 @@ t_da *da_init(t_da *ret, size_t sz_elem) {
 	void *data;
 
 	if (!ret) return (NULL);
-	data = (void *)calloc(sz_elem, PVEC_NB_ELEM_DFLT);
-	return (da_from_array(ret, data, PVEC_NB_ELEM_DFLT, sz_elem));
+	data = (void *)calloc(sz_elem, C_MINI_DA__NB_ELEM_DFLT);
+	return (da_from_array(ret, data, C_MINI_DA__NB_ELEM_DFLT, sz_elem));
 }
 
 /**

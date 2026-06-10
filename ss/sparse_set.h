@@ -1,4 +1,6 @@
-#ifndef PRIV_SS
+#ifndef C_MINI__SS
+#	define C_MINI__SS
+
 #	include <stdlib.h>
 #	include <stddef.h>
 #	include <stdbool.h>
@@ -49,8 +51,7 @@ void *ss_fold(t_ss *ss, void *u_val, void (*func)(void *u_val, void *e_val));
 void *ss_to_array(t_ss *ss);
 void *ss_to_loc_array(t_ss *ss, void *arr);
 
-#	define PSS_SZ_ELEM_DFLT 1024
-#	define PSS_NB_ELEM_DFLT 4
+#	define C_MINI_SS_SZ_ELEM_DFLT 1024
+#	define C_MINI_SS_NB_ELEM_DFLT 4
 
-#	define PRIV_SS
-#endif // !PRIV_SS
+#endif // !C_MINI__SS

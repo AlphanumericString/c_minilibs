@@ -1,4 +1,4 @@
-#ifndef PRIV_DA
+#ifndef C_MINI__DA
 
 #	include <stdbool.h>
 #	include <stddef.h>
@@ -7,8 +7,8 @@
 
 // comon funct ptr definitions
 
-#	ifndef T_CALLBACK_DEFINE
-#		define T_CALLBACK_DEFINE
+#	ifndef CMINI_T_CALLBAKC_DEFINE
+#		define CMINI_T_CALLBAKC_DEFINE
 
 /**
  * \brief  callback function pointer, true operation successfull, elem is always
@@ -21,8 +21,24 @@ typedef bool (*t_callback)(void *elem, void *arg);
 
 #	endif
 
-#	ifndef T_COMPARATOR_DEFINE
-#		define T_COMPARATOR_DEFINE
+#	ifndef CMINI_T_CALLBAKC_IT_DEFINE
+#		define CMINI_T_CALLBAKC_IT_DEFINE
+
+/**
+ * \brief  callback function pointer, true operation successfull, elem is always
+ * the node, arg is passed as is from up function
+ * \param  elem pointer to the element
+ * \param  arg  argument passed as is from up function
+ * \param  pos  position of the elem in the sub array backing
+ * \param  last boolean on wheter or not this is the last element of the call
+ * \return expected to return true on success false otherwise
+ **/
+typedef bool (*t_callback_it)(void *elem, void *arg, size_t pos, bool last);
+
+#	endif // CMINI_T_CALLBAKC_IT
+
+#	ifndef CMINI_T_COMPARATOR_DEFINE
+#		define CMINI_T_COMPARATOR_DEFINE
 
 /**
  * \brief comparator function pointer, <0, 0, >0 for inferior to, equal,
@@ -35,8 +51,8 @@ typedef int (*t_comparator)(void *elem, void *arg);
 
 #	endif
 
-#	ifndef T_DUPLICATOR_DEFILE
-#		define T_DUPLICATOR_DEFILE
+#	ifndef CMINI_T_DUOLICATOR_DEFINE
+#		define CMINI_T_DUOLICATOR_DEFINE
 
 /**
  * \brief duplication function pointer for datas
@@ -46,6 +62,13 @@ typedef int (*t_comparator)(void *elem, void *arg);
 typedef void *(*t_duplicator)(const void *elem);
 
 #	endif
+
+#	ifndef CMINI_T_MERGER_DEFINE
+#		define CMINI_T_MERGER_DEFINE
+
+typedef void *(*t_merger)(void *elem, void *arg);
+
+#	endif // CMINI_T_MERGER_DEFINE
 
 /**
  * \brief da struct
@@ -68,8 +91,8 @@ t_da *da_from_array(t_da *da, void *array, size_t nb_elem, size_t sz_elem);
 t_da *da_new(size_t sz_elem);
 
 // dup
-t_da da_dup(const t_da *src);
-t_da da_ndup(const t_da *src, size_t n);
+t_da  da_dup(const t_da *src);
+t_da  da_ndup(const t_da *src, size_t n);
 t_da *da_dup_to(t_da *dst, const t_da *src);
 t_da *da_ndup_to(t_da *dst, size_t n, const t_da *src);
 
@@ -138,8 +161,8 @@ void *da_apply_it(t_da *da,
 // TODO: BUGS:
 //	fix bug on rms (gap problem)
 
-#	define PVEC_SZ_ELEM_DFLT 1024
-#	define PVEC_NB_ELEM_DFLT 4
+#	define C_MINI_DA__SZ_ELEM_DFLT 1024
+#	define C_MINI_DA__NB_ELEM_DFLT 4
 
-#	define PRIV_DA
-#endif // !PRIV_DA
+#	define C_MINI__DA
+#endif // !C_MINI__DA

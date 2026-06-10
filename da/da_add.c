@@ -5,14 +5,10 @@
  * \param da pointer to the dynamic array
  * \param elem pointer to the element to add
  * \return true if success, false if failure
-**/
+ **/
 bool da_add(t_da *da, void *elem) {
-	void *tmp;
-
 	if (!da || !elem || !da->array || !da->cap_e) return (false);
-	if ((da->nb_e + 1) > da->cap_e) {
-		da_grow(da);
-	}
+	if ((da->nb_e + 1) > da->cap_e) da_grow(da);
 	memcpy(da_at(da, da->nb_e), elem, da->sz_e);
 	da->nb_e++;
 	return (true);
@@ -26,7 +22,7 @@ bool da_add(t_da *da, void *elem) {
  * \param nb_e number of elements to add
  * \param sz_e size of the elements
  * \return true if success, false if failure
-**/
+ **/
 bool da_cat_array(t_da *da, void *arr, size_t nb_e, size_t sz_e) {
 	void  *tmp;
 	size_t new_cap;
