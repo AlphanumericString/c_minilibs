@@ -47,7 +47,7 @@ typedef bool (*t_callback_it)(void *elem, void *arg, size_t pos, bool last);
  * \param arg argument passed as is from up function
  * \return expected to return <0, 0, >0 for inferior to, equal, superior to
  **/
-typedef int (*t_comparator)(void *elem, void *arg);
+typedef int (*t_comparator)(const void *elem, const void *arg);
 
 #	endif
 
@@ -110,14 +110,23 @@ bool da_cat_array(t_da *da, void *arr, size_t nb_e, size_t sz_e);
 bool da_grow(t_da *da);
 bool da_grow_for_size(t_da *da, size_t minimal_free_slots);
 
-// getter
+// shrink
+bool da_shrink(t_da *da);
+bool da_shrink_min(t_da *da, size_t keep_n);
+
+// get
 void *da_at(t_da *da, size_t pos);
-bool  da_set(t_da *da, size_t pos, void *elem);
 bool  da_get(t_da *da, size_t pos, void *elem);
+bool  da_nget(t_da *da, size_t n, size_t pos, void *out_buffer);
 void *da_array(t_da *da);
+
+// set
+bool da_set(t_da *da, size_t pos, void *elem);
+bool da_nset(t_da *da, size_t n, size_t pos, void *elems);
 
 // swap
 bool da_swap(t_da *da, size_t pos_a, size_t pos_b);
+bool da_nswap(t_da *da, size_t n, size_t pos_a, size_t pos_b);
 
 // rm
 bool da_rm_order(t_da *da, size_t pos);
@@ -131,38 +140,47 @@ void *da_to_loc_array(t_da *da, void *arr);
 
 // apply
 void *da_apply(t_da *da, t_callback cb, void *u_data);
-void *da_apply_it(t_da *da,
-                  bool  (*func)(void *elem, void *u_val, size_t pos, bool last),
-                  void *u_val);
-// void *da_napply(t_da *da, size_t n, t_callback c, void *u_data);
-// void *da_napply_it(t_da *da, size_t n,
-//                    bool (*func)(void *elem, void *u_val, size_t pos, bool last),
-//                    void *u_val);
+void *da_napply(t_da *da, size_t n, t_callback c, void *u_data);
+void *da_apply_it(t_da *da, t_callback_it func, void *u_val);
+void *da_napply_it(t_da *da, size_t n, t_callback_it func, void *u_val);
 
-// TODO: create
-// dup		+n
+// fold
+void *da_fold(t_da *da, t_merger c, void *u_start_val);
+void *da_nfold(t_da *da, size_t n, t_merger c, void *u_start_val);
+void *da_reduce(t_da *da, t_merger m);
+void *da_nreduce(t_da *da, size_t n, t_merger m);
 
-// TODO: rm
-// fold		+n
-// filter	+n
-// shrink	+n
-// advance	+n
+// filter
+bool da_filter(t_da *da, t_callback c, void *u_data, t_callback deletor);
+bool da_nfilter(t_da *da, size_t n, t_callback c, void *u_data,
+                t_callback deletor);
+bool da_filter_out(t_da *da, t_callback c, void *u_data, t_callback deletor);
+bool da_nfilter_out(t_da *da, size_t n, t_callback c, void *u_data,
+                    t_callback deletor);
 
-// TODO: manip
-// reverse	+n
-// sort		+n
-// nswap
+// advance
+bool da_advance(t_da *da, size_t n, t_callback deletor, void *u_data);
 
-// TODO: getter
+// reverse
+void da_reverse(t_da *da);
+void da_nreverse(t_da *da, size_t n);
+void da_b_nreverse(t_da *da, size_t n);
+
 // find
-// nfind_get
-// nget
+void *da_find(t_da *da, t_callback c, void *u_data);
+void *da_nfind(t_da *da, size_t n, t_callback c, void *u_data);
+bool  da_find_get(t_da *da, t_callback c, void *u_data, void *out_buffer);
 
-// TODO: BUGS:
-//	fix bug on rms (gap problem)
+// sort
+bool da_sort(t_da *da, t_comparator c);
+bool da_nsort(t_da *da, size_t n, t_comparator c);
+
+// BUG:
+// fix bug on rms (gap problem)
 
 #	define C_MINI_DA__SZ_ELEM_DFLT 1024
 #	define C_MINI_DA__NB_ELEM_DFLT 4
+#	define C_MINI_DA__GROWTH       1.5
 
 #	define C_MINI__DA
 #endif // !C_MINI__DA

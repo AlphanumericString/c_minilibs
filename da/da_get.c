@@ -1,41 +1,36 @@
 #include "dynamic_array.h"
 
 /**
- * \brief get element at offset pos respecting the size of elements
+ * \brief get element at offset pos respecting the size of elements and copies
+ * it at elem
  * \param vec pointer to the dynamic array
  * \param pos index of the element
- * \return pointer to the element at the specified position
-**/
-void *da_at(t_da *vec, size_t pos) {
-	if (!vec || pos > vec->nb_e) return (NULL);
-	return ((char *)vec->array + vec->sz_e * pos);
-}
-
-/**
- * \brief set element at offset pos respecting the size of elements
- * \param vec pointer to the dynamic array
- * \param pos index where the element should be set
- * \param elem pointer to the element to set
+ * \param out_buffer pointer where the element will be copied
  * \return true on success, false on failure
 **/
-bool da_set(t_da *vec, size_t pos, void *elem) {
+bool da_get(t_da *vec, size_t pos, void *out_buffer) {
 	if (!vec || pos >= vec->nb_e) return (false);
-	return (memcpy(vec->array + vec->sz_e * pos, elem, vec->sz_e), true);
+	if (!out_buffer) return (false);
+	return (memcpy(out_buffer, da_at(vec, pos), vec->sz_e), true);
 }
 
 /**
  * \brief get element at offset pos respecting the size of elements and copies
  * it at elem
- * \param vec pointer to the dynamic array
+ * \param da pointer to the dynamic array
+ * \param n number of copied elements
  * \param pos index of the element
- * \param elem pointer where the element will be copied
+ * \param out_buffer pointer where the element will be copied
  * \return true on success, false on failure
 **/
-bool da_get(t_da *vec, size_t pos, void *elem) {
-	if (!vec || pos >= vec->nb_e) return (false);
-	if (!elem) return (false);
-	return (memcpy(elem, da_at(vec, pos), vec->sz_e), true);
+bool  da_nget(t_da *da, size_t n, size_t pos, void *out_buffer)
+{
+	if (!da || pos >= da->nb_e) return (false);
+	if (!out_buffer) return (false);
+	if (!n) return (true);
+	return (memcpy(out_buffer, da_at(da, pos), da->sz_e * n), true);
 }
+
 /**
  * \brief get the raw inner array of the da
  * \param da pointer to the dynamic array

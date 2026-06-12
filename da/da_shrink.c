@@ -1,0 +1,33 @@
+#include <stdbool.h>
+#include <string.h>
+
+#include "dynamic_array.h"
+
+/**
+ * \brief shrink the capacity of the dynamic array to fit its elements exactly
+ * \param da pointer to the dynamic array
+ * \return true on success, false otherwise
+ **/
+bool da_shrink(t_da *da) {
+	return (da_shrink_min(da, 0));
+}
+
+/**
+ * \brief shrink the capacity of the dynamic array trying to keep a minimum
+ * number of free elements
+ * \param da pointer to the dynamic array
+ * \param keep_n minimum number of extra capacity elements to keep
+ * \return true on success, false otherwise
+ **/
+bool da_shrink_min(t_da *da, size_t keep_n) {
+	void *tmp;
+
+	if ((da->nb_e + keep_n) >= da->cap_e) return (true);
+	tmp = calloc(da->sz_e, (da->nb_e + keep_n));
+	if (!tmp) return (false);
+	memcpy(tmp, da->array, da->nb_e * da->sz_e);
+	free(da->array);
+	da->array = tmp;
+	da->cap_e = da->nb_e + keep_n;
+	return (true);
+}

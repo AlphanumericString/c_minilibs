@@ -24,15 +24,9 @@ bool da_add(t_da *da, void *elem) {
  * \return true if success, false if failure
  **/
 bool da_cat_array(t_da *da, void *arr, size_t nb_e, size_t sz_e) {
-	void  *tmp;
-	size_t new_cap;
-
 	if (!arr || !da || !sz_e || !da->array) return (false);
 	if (sz_e != da->sz_e) return (false);
-	new_cap = da->cap_e;
-	while ((da->nb_e + nb_e) > da->cap_e) {
-		da_grow(da);
-	}
+	if ((da->nb_e + nb_e) > da->cap_e) da_grow_for_size(da, nb_e);
 	memcpy(da_at(da, da->nb_e), arr, da->sz_e * nb_e);
 	da->nb_e += nb_e;
 	return (true);
