@@ -1,163 +1,742 @@
+#include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include "./da/dynamic_array.h"
 
-#define DISP_VECT_INFOS(v)                                                     \
-	printf(".data\t%p\n.sz_e\t%zu\n.capp_e\t%zu\n.nb_e\t%zu\n\n", v.array,     \
-	       v.sz_e, v.cap_e, v.nb_e)
+#define ASSERT_DA_STATE(da, sz, cap, nb)                                       \
+	do {                                                                       \
+		assert((da).sz_e == (sz));                                             \
+		assert((da).cap_e == (cap));                                           \
+		assert((da).nb_e == (nb));                                             \
+		assert((da).array != NULL);                                            \
+	} while (0);
 
-void display_function_it(void *data, size_t pos, bool last) {
-	int *data_as_int = (int *)data;
-
-	if (pos == 0) printf("{");
-	printf(" %d", *data_as_int);
-	if (!last) printf(",");
-	else printf(" }\n");
-	fflush(stdout);
+// Helper callbacks
+bool cb_true(void *elem, void *arg) {
+	(void)elem;
+	(void)arg;
+	return true;
 }
-void display_function(void *data, void *context) {
-	int *data_as_int = (int *)data;
-
-	(void)context;
-	printf("%d ", *data_as_int);
-	fflush(stdout);
+bool cb_false(void *elem, void *arg) {
+	(void)elem;
+	(void)arg;
+	return false;
 }
-
-int test_rm(void) {
-	printf("====\n");
-	printf("====\n");
-	printf("RM_!ORDER\n");
-	printf("====\n");
-	printf("====\n");
-	t_da vect2;
-	int arr1[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};
-	int arr2[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};
-
-	da_init(&vect2, sizeof(int));
-	da_cat_array(&vect2, arr2, sizeof(arr2) / sizeof(arr2[0]), sizeof(arr2[0]));
-	da_apply_it(&vect2, display_function_it);
-
-	printf("====\n");
-	for (size_t pos = rand() % vect2.nb_e; vect2.nb_e > 2;
-	     pos        = rand() % vect2.nb_e) {
-		printf("rm @ pos %zu\n", pos);
-		da_rm(&vect2, pos);
-		da_apply_it(&vect2, display_function_it);
-	}
-	printf("====\n");
-	da_cat_array(&vect2, arr2, sizeof(arr2) / sizeof(arr2[0]), sizeof(arr2[0]));
-	da_apply_it(&vect2, display_function_it);
-	printf("rm from @ %zu to %zu\n", 4ul, 6ul);
-	da_rms(&vect2, 4, 6);
-	da_apply_it(&vect2, display_function_it);
-
-	da_destroy(&vect2);
-	DISP_VECT_INFOS(vect2);
-
-	da_init(&vect2, sizeof(int));
-	da_cat_array(&vect2, arr1, sizeof(arr1) / sizeof(arr1[0]), sizeof(arr1[0]));
-	DISP_VECT_INFOS(vect2);
-	da_apply_it(&vect2, display_function_it);
-	printf("rm from @ %zu to %zu\n", vect2.nb_e - 4, vect2.nb_e - 1);
-	da_rms(&vect2, vect2.nb_e - 4, vect2.nb_e - 1);
-	DISP_VECT_INFOS(vect2);
-	da_apply_it(&vect2, display_function_it);
-	da_destroy(&vect2);
-	return (0);
+bool cb_it_true(void *elem, void *arg, size_t pos, bool last) {
+	(void)elem;
+	(void)arg;
+	(void)pos;
+	(void)last;
+	return true;
 }
 
-int test_rm_order(void) {
-	printf("====\n");
-	printf("====\n");
-	printf("RM_ORDER\n");
-	printf("====\n");
-	printf("====\n");
-	t_da dyn_arr3;
-	int arr2[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17};
-
-	da_init(&dyn_arr3, sizeof(int));
-	da_cat_array(&dyn_arr3, arr2, sizeof(arr2) / sizeof(arr2[0]),
-	             sizeof(arr2[0]));
-	da_apply_it(&dyn_arr3, display_function_it);
-
-	printf("====\n");
-	for (size_t pos = rand() % dyn_arr3.nb_e; dyn_arr3.nb_e > 2;
-	     pos        = rand() % dyn_arr3.nb_e) {
-		printf("rm @ pos %zu\n", pos);
-		da_rm_order(&dyn_arr3, pos);
-		da_apply_it(&dyn_arr3, display_function_it);
-	}
-	printf("====\n");
-	da_cat_array(&dyn_arr3, arr2, sizeof(arr2) / sizeof(arr2[0]),
-	             sizeof(arr2[0]));
-	da_apply_it(&dyn_arr3, display_function_it);
-	printf("rm from @ %zu to %zu\n", 4ul, 6ul);
-	da_rms_order(&dyn_arr3, 4, 6);
-	da_apply_it(&dyn_arr3, display_function_it);
-	da_destroy(&dyn_arr3);
-	DISP_VECT_INFOS(dyn_arr3);
-	return (0);
+bool cb_deletor(void *elem, void *arg) {
+	(void)elem;
+	(void)arg;
+	return (true);
+}
+void *cb_merger(void *elem, void *arg) {
+	*(int *)arg += *(int *)elem;
+	return arg;
+}
+int cb_cmp(const void *a, const void *b) {
+	return (*(int *)a - *(int *)b);
 }
 
-void tests_basics(void) {
-	t_da vect  = {0};
-	int  y     = -1;
-	int  x     = 324;
-	int  arr[] = {243, 432523, 2234523};
+// create
+void test_da_init(void) {
+	t_da da;
 
-	printf("base:\n");
-	DISP_VECT_INFOS(vect);
+	da_init(&da, sizeof(int));
+	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 0);
 
-	printf("init:\n");
-	da_init(&vect, sizeof(int));
-	DISP_VECT_INFOS(vect);
+	da_destroy(&da);
+}
+void test_da_ninit(void) {
+	t_da da;
 
-	printf("add:\n");
-	da_add(&vect, &x);
-	DISP_VECT_INFOS(vect);
+	da_ninit(&da, 10, sizeof(int));
+	ASSERT_DA_STATE(da, sizeof(int), 10, 0);
 
-	printf("y = %d\n", y);
-	printf("get:\n");
-	da_get(&vect, 0, &y);
-	printf("y = %d\n", y);
-	DISP_VECT_INFOS(vect);
+	da_destroy(&da);
+}
+void test_da_from_array(void) {
+	t_da da;
+	int *arr = calloc(5, sizeof(int));
 
-	{
-		printf("clr:\n");
-		da_clr(&vect);
-		DISP_VECT_INFOS(vect);
+	da_from_array(&da, arr, 5, sizeof(int));
+	ASSERT_DA_STATE(da, sizeof(int), 5, 0);
+	assert(da.array == arr);
 
-		y = -1;
-		printf("y = %d\n", y);
-		printf("get:\n");
-		da_get(&vect, 0, &y);
-		printf("y = %d\n", y);
-		DISP_VECT_INFOS(vect);
+	da_destroy(&da);
+}
+void test_da_new(void) {
 
-		printf("destroy:\n");
-		da_destroy(&vect);
-		DISP_VECT_INFOS(vect);
-	}
+	t_da *da = da_new(sizeof(int));
+	ASSERT_DA_STATE(*da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 0);
 
-	printf("cat_array:\n");
-	da_cat_array(&vect, arr, sizeof(arr) / sizeof(arr[0]), sizeof(arr[0]));
-	DISP_VECT_INFOS(vect);
+	da_destroy(da);
+	free(da);
+}
 
-	printf("apply:\n");
-	da_apply(&vect, NULL, display_function);
-	printf("\n");
-	DISP_VECT_INFOS(vect);
+// dup
+void test_da_dup(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
 
-	printf("apply_it:\n");
-	da_apply_it(&vect, display_function_it);
-	DISP_VECT_INFOS(vect);
+	t_da dup = da_dup(&da);
+	ASSERT_DA_STATE(dup, da.sz_e, da.nb_e, da.nb_e);
+	assert(*(int *)da_at(&dup, 0) == *(int *)da_at(&da, 0));
 
-	printf("destroy:\n");
-	da_destroy(&vect);
-	DISP_VECT_INFOS(vect);
+	da_destroy(&da);
+	da_destroy(&dup);
+}
+void test_da_ndup(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	a = 2;
+	da_add(&da, &a);
+	a = 3;
+	da_add(&da, &a);
+
+	t_da dup = da_ndup(&da, 2);
+	ASSERT_DA_STATE(dup, da.sz_e, 2, 2);
+	assert(*(int *)da_at(&dup, 0) == *(int *)da_at(&da, 0));
+	assert(*(int *)da_at(&dup, 1) == *(int *)da_at(&da, 1));
+
+	da_destroy(&da);
+	da_destroy(&dup);
+}
+void test_da_dup_to(void) {
+	t_da da, dst;
+	da_init(&da, sizeof(int));
+	da_init(&dst, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+
+	da_dup_to(&dst, &da);
+	ASSERT_DA_STATE(dst, da.sz_e, C_MINI_DA__NB_ELEM_DFLT, da.nb_e);
+	assert(*(int *)da_at(&da, 0) == *(int *)da_at(&dst, 0));
+
+	da_destroy(&da);
+	da_destroy(&dst);
+}
+void test_da_ndup_to(void) {
+	t_da da, dst;
+	da_init(&da, sizeof(int));
+	da_init(&dst, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	a = 2;
+	da_add(&da, &a);
+	a = 3;
+	da_add(&da, &a);
+
+	da_ndup_to(&dst, 2, &da);
+	ASSERT_DA_STATE(dst, da.sz_e, C_MINI_DA__NB_ELEM_DFLT, 2);
+	assert(*(int *)da_at(&dst, 0) == *(int *)da_at(&da, 0));
+	assert(*(int *)da_at(&dst, 1) == *(int *)da_at(&da, 1));
+
+	da_destroy(&da);
+	da_destroy(&dst);
+}
+
+// clear
+void test_da_clr(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	a = 2;
+	da_add(&da, &a);
+	a = 3;
+	da_add(&da, &a);
+	size_t sz  = da.sz_e;
+	size_t cap = da.cap_e;
+	void  *arr = da.array;
+
+	da_clr(&da);
+	ASSERT_DA_STATE(da, sz, cap, 0);
+	assert(da.array == arr);
+
+	da_destroy(&da);
+}
+
+// destroy
+void test_da_destroy(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+
+	da_destroy(&da);
+	assert(da.sz_e == 0);
+	assert(da.cap_e == 0);
+	assert(da.nb_e == 0);
+	assert(da.array == NULL);
+}
+
+// add
+void test_da_add(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 5;
+
+	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 0);
+	da_add(&da, &a);
+	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 1);
+	assert(*(int *)(da.array) == a);
+
+	da_destroy(&da);
+}
+void test_da_cat_array(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int arr[] = {1, 2, 3};
+	da_cat_array(&da, arr, 3, sizeof(int));
+	da_destroy(&da);
+}
+
+// grow
+void test_da_grow(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+
+	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 0);
+	da_grow(&da);
+	ASSERT_DA_STATE(da, sizeof(int),
+	                C_MINI_DA__NB_ELEM_DFLT * C_MINI_DA__GROWTH, 0);
+
+	da_destroy(&da);
+}
+void test_da_grow_for_size(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+
+	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 0);
+	da_grow_for_size(&da, 20);
+	assert(da.cap_e >= 20);
+	assert(da.sz_e == sizeof(int));
+	assert(da.nb_e == 0);
+	assert(da.array != NULL);
+
+	da_destroy(&da);
+}
+
+// shrink
+void test_da_shrink(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+
+	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 0);
+	da_shrink(&da);
+	ASSERT_DA_STATE(da, sizeof(int), 0, 0);
+
+	da_destroy(&da);
+}
+void test_da_shrink_min(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+
+	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 0);
+	da_shrink_min(&da, 5);
+	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 0);
+
+	da_destroy(&da);
+}
+
+// get
+void test_da_at(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+
+	assert(*(int *)da_at(&da, 0) == 1);
+
+	da_destroy(&da);
+}
+void test_da_get(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1, out;
+	da_add(&da, &a);
+
+	da_get(&da, 0, &out);
+	assert(out == 1);
+
+	da_destroy(&da);
+}
+void test_da_nget(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1, out;
+	int buff[2];
+	da_add(&da, &a);
+	a = 2;
+	da_add(&da, &a);
+	a = 3;
+	da_add(&da, &a);
+
+	da_nget(&da, 1, 0, &out);
+	assert(out == 1);
+	da_nget(&da, 2, 0, &buff);
+	assert(buff[0] == 1);
+	assert(buff[1] == 2);
+
+	da_destroy(&da);
+}
+void test_da_array(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+
+	assert(da_array(&da) == da.array);
+
+	da_destroy(&da);
+}
+
+// set
+void test_da_set(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	int b = 2;
+	da_set(&da, 0, &b);
+
+	assert(*(int *)da_at(&da, 0) == 2);
+
+	da_destroy(&da);
+}
+void test_da_nset(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	a = 2;
+	da_add(&da, &a);
+	a = 3;
+	da_add(&da, &a);
+
+	int b       = 2;
+	int buff[2] = {3, 4};
+	da_nset(&da, 1, 0, &b);
+	assert(*(int *)da_at(&da, 0) == 2);
+	da_nset(&da, 2, 0, &buff);
+	assert(*(int *)da_at(&da, 0) == 3);
+	assert(*(int *)da_at(&da, 1) == 4);
+
+	da_destroy(&da);
+}
+
+// swap
+void test_da_swap(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1, b = 2;
+	da_add(&da, &a);
+	da_add(&da, &b);
+
+	da_swap(&da, 0, 1);
+	assert(*(int *)da_at(&da, 0) == 2);
+	assert(*(int *)da_at(&da, 1) == 1);
+
+	da_destroy(&da);
+}
+void test_da_nswap(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	a = 2;
+	da_add(&da, &a);
+	a = 3;
+	da_add(&da, &a);
+	a = 4;
+	da_add(&da, &a);
+	a = 5;
+	da_add(&da, &a);
+
+	da_nswap(&da, 1, 0, 1); // 2 1 3 4 5
+	assert(*(int *)da_at(&da, 0) == 2);
+	assert(*(int *)da_at(&da, 1) == 1);
+	assert(*(int *)da_at(&da, 2) == 3);
+	assert(*(int *)da_at(&da, 3) == 4);
+	da_nswap(&da, 2, 0, 2); // 3 4 2 1 5
+	assert(*(int *)da_at(&da, 0) == 3);
+	assert(*(int *)da_at(&da, 1) == 4);
+	assert(*(int *)da_at(&da, 2) == 2);
+	assert(*(int *)da_at(&da, 3) == 1);
+
+	da_destroy(&da);
+}
+
+// rm
+void test_da_rm_order(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	a = 2;
+	da_add(&da, &a);
+	a = 3;
+	da_add(&da, &a);
+	a = 4;
+	da_add(&da, &a);
+	a = 5;
+	da_add(&da, &a);
+
+	da_rm_order(&da, 0);
+	assert(*(int *)da_at(&da, 0) == 2);
+	assert(*(int *)da_at(&da, 1) == 3);
+	assert(*(int *)da_at(&da, 2) == 4);
+	assert(*(int *)da_at(&da, 3) == 5);
+
+	da_destroy(&da);
+}
+void test_da_rms_order(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	a = 2;
+	da_add(&da, &a);
+	a = 3;
+	da_add(&da, &a);
+	a = 4;
+	da_add(&da, &a);
+	a = 5;
+	da_add(&da, &a);
+
+	da_rms_order(&da, 0, 1);
+	assert(da.nb_e == 4);
+	assert(*(int *)da_at(&da, 0) == 2);
+	assert(*(int *)da_at(&da, 1) == 3);
+	assert(*(int *)da_at(&da, 2) == 4);
+	assert(*(int *)da_at(&da, 3) == 5);
+	da_rms_order(&da, 1, 3);
+	assert(da.nb_e == 2);
+	assert(*(int *)da_at(&da, 0) == 2);
+	assert(*(int *)da_at(&da, 1) == 5);
+	da_rms_order(&da, 1, -1);
+	assert(da.nb_e == 1);
+	assert(*(int *)da_at(&da, 0) == 2);
+
+	da_destroy(&da);
+}
+void test_da_rm(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	a = 2;
+	da_add(&da, &a);
+	a = 3;
+	da_add(&da, &a);
+	a = 4;
+	da_add(&da, &a);
+	a = 5;
+	da_add(&da, &a);
+
+	da_rm(&da, 0);
+	assert(da.nb_e == 4);
+	assert(*(int *)da_at(&da, 0) != 1);
+
+	da_destroy(&da);
+}
+void test_da_rms(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	a = 2;
+	da_add(&da, &a);
+	a = 3;
+	da_add(&da, &a);
+	a = 4;
+	da_add(&da, &a);
+	a = 5;
+	da_add(&da, &a);
+
+	da_rms(&da, 0, 1);
+	assert(da.nb_e == 4);
+	assert(*(int *)da_at(&da, 0) != 1);
+	da_rms(&da, 0, 2);
+	assert(da.nb_e == 2);
+	da_rms(&da, 0, -1);
+	assert(da.nb_e == 0);
+
+	da_destroy(&da);
+}
+
+// convert
+void test_da_to_array(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	void *arr = da_to_array(&da);
+	free(arr);
+	da_destroy(&da);
+}
+void test_da_to_loc_array(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	int arr[1];
+	da_to_loc_array(&da, arr);
+	da_destroy(&da);
+}
+
+// apply
+void test_da_apply(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	da_apply(&da, cb_true, NULL);
+	da_destroy(&da);
+}
+void test_da_napply(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	da_napply(&da, 1, cb_true, NULL);
+	da_destroy(&da);
+}
+void test_da_apply_it(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	da_apply_it(&da, cb_it_true, NULL);
+	da_destroy(&da);
+}
+void test_da_napply_it(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	da_napply_it(&da, 1, cb_it_true, NULL);
+	da_destroy(&da);
+}
+
+// fold
+void test_da_fold(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1, sum = 0;
+	da_add(&da, &a);
+	da_fold(&da, cb_merger, &sum);
+	da_destroy(&da);
+}
+void test_da_nfold(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1, sum = 0;
+	da_add(&da, &a);
+	da_nfold(&da, 1, cb_merger, &sum);
+	da_destroy(&da);
+}
+void test_da_reduce(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	void *res = da_reduce(&da, cb_merger);
+	free(res);
+	da_destroy(&da);
+}
+void test_da_nreduce(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	void *res = da_nreduce(&da, 1, cb_merger);
+	free(res);
+	da_destroy(&da);
+}
+
+// filter
+void test_da_filter(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	da_filter(&da, cb_true, NULL, cb_deletor);
+	da_destroy(&da);
+}
+void test_da_nfilter(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	da_nfilter(&da, 1, cb_true, NULL, cb_deletor);
+	da_destroy(&da);
+}
+void test_da_filter_out(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	da_filter_out(&da, cb_true, NULL, cb_deletor);
+	da_destroy(&da);
+}
+void test_da_nfilter_out(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	da_nfilter_out(&da, 1, cb_true, NULL, cb_deletor);
+	da_destroy(&da);
+}
+
+// advance
+void test_da_advance(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1, b = 2;
+	da_add(&da, &a);
+	da_add(&da, &b);
+	da_advance(&da, 1, cb_deletor, NULL);
+	da_destroy(&da);
+}
+
+// reverse
+void test_da_reverse(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1, b = 2;
+	da_add(&da, &a);
+	da_add(&da, &b);
+	da_reverse(&da);
+	da_destroy(&da);
+}
+void test_da_nreverse(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1, b = 2;
+	da_add(&da, &a);
+	da_add(&da, &b);
+	da_nreverse(&da, 2);
+	da_destroy(&da);
+}
+void test_da_b_nreverse(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1, b = 2;
+	da_add(&da, &a);
+	da_add(&da, &b);
+	da_b_nreverse(&da, 2);
+	da_destroy(&da);
+}
+
+// find
+void test_da_find(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	da_find(&da, cb_true, NULL);
+	da_destroy(&da);
+}
+void test_da_nfind(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1;
+	da_add(&da, &a);
+	da_nfind(&da, 1, cb_true, NULL);
+	da_destroy(&da);
+}
+void test_da_find_get(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 1, out;
+	da_add(&da, &a);
+	da_find_get(&da, cb_true, NULL, &out);
+	da_destroy(&da);
+}
+
+// sort
+void test_da_sort(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 2, b = 1;
+	da_add(&da, &a);
+	da_add(&da, &b);
+	da_sort(&da, cb_cmp);
+	da_destroy(&da);
+}
+void test_da_nsort(void) {
+	t_da da;
+	da_init(&da, sizeof(int));
+	int a = 2, b = 1;
+	da_add(&da, &a);
+	da_add(&da, &b);
+	da_nsort(&da, 2, cb_cmp);
+	da_destroy(&da);
 }
 
 int main(void) {
-	test_rm();
-	test_rm_order();
+	test_da_init();
+	test_da_ninit();
+	test_da_from_array();
+	test_da_new();
+	test_da_dup();
+	test_da_ndup();
+	test_da_dup_to();
+	test_da_ndup_to();
+	test_da_clr();
+	test_da_destroy();
+	test_da_add();
+	test_da_cat_array();
+	test_da_grow();
+	test_da_grow_for_size();
+	test_da_shrink();
+	test_da_shrink_min();
+	test_da_at();
+	test_da_get();
+	test_da_nget();
+	test_da_array();
+	test_da_set();
+	test_da_nset();
+	test_da_swap();
+	test_da_nswap();
+	test_da_rm_order();
+	test_da_rms_order();
+	test_da_rm();
+	test_da_rms();
+	test_da_to_array();
+	test_da_to_loc_array();
+	test_da_apply();
+	test_da_napply();
+	test_da_apply_it();
+	test_da_napply_it();
+	test_da_fold();
+	test_da_nfold();
+	test_da_reduce();
+	test_da_nreduce();
+	test_da_filter();
+	test_da_nfilter();
+	test_da_filter_out();
+	test_da_nfilter_out();
+	test_da_advance();
+	test_da_reverse();
+	test_da_nreverse();
+	test_da_b_nreverse();
+	test_da_find();
+	test_da_nfind();
+	test_da_find_get();
+	test_da_sort();
+	test_da_nsort();
+
+	printf("All da tests completed successfully.\n");
+	return 0;
 }
