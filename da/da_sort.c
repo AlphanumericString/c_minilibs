@@ -22,5 +22,5 @@ bool da_nsort(t_da *da, size_t n, t_comparator c) {
 	if (!c) return (false);
 	if (n > da->nb_e) n = da->nb_e;
 	if (n < 2) return (true);
-	return (qsort(da->array, da->nb_e, da->sz_e, c), true);
+	return (qsort(da->array, n, da->sz_e, c), true);
 }

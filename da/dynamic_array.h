@@ -167,9 +167,9 @@ void da_nreverse(t_da *da, size_t n);
 void da_b_nreverse(t_da *da, size_t n);
 
 // find
-void *da_find(t_da *da, t_callback c, void *u_data);
-void *da_nfind(t_da *da, size_t n, t_callback c, void *u_data);
-bool  da_find_get(t_da *da, t_callback c, void *u_data, void *out_buffer);
+void *da_find(t_da *da, t_comparator c, void *u_data);
+void *da_nfind(t_da *da, size_t n, t_comparator c, void *u_data);
+bool  da_find_get(t_da *da, t_comparator c, void *u_data, void *out_buffer);
 
 // sort
 bool da_sort(t_da *da, t_comparator c);

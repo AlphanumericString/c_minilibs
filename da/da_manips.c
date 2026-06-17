@@ -14,7 +14,7 @@ static inline void memnxor(void *a, void *b, size_t n) {
 
 /**
  * \brief swap the values in the da at 2 offsets
- * \param vec pointer to the dynamic array
+ * \param da pointer to the dynamic array
  * \param pos_a index of the first element
  * \param pos_b index of the second element
  * \return true on success, false on failure
