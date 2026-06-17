@@ -4,6 +4,7 @@ D_FILES=
 .DEFAULT_GOAL := all
 BUILD_DIR=build
 DOC_DIR=documentation
+TST_DIR=tests
 CC	=	clang
 CFLAGS = -Wall -Wextra -g3 -MMD -MP
 LIBNAMES=
@@ -12,12 +13,14 @@ TESTS_ALL=
 
 define module_template
 $1_SRC=	$$(shell find $1 -name '*.c')
+$1_TSRC=	$$(shell find $(TST_DIR)/$1_tests -name '*.c')
 $1_OBJ=	$$(patsubst %.c, %.o, $$(addprefix $(BUILD_DIR)/,$$($1_SRC)))
+$1_TOBJ=$$(patsubst %.c, %.o, $$(addprefix $(BUILD_DIR)/,$$($1_TSRC)))
 $1_D=	$$(patsubst %.o, %.d, $$($1_OBJ))
 lib$1.a: $$($1_OBJ)
 	ar rcs $$@ $$^
-test_$1.out: lib$1.a test_main_$1.c
-	$(CC) $(CFLAGS) test_main_$1.c -o $$@ -L. -l$1
+test_$1.out: lib$1.a $$($1_TOBJ)
+	$(CC) $(CFLAGS) $$($1_TOBJ) -o $$@ -L. -l$1
 D_FILES	+= $$($1_D)
 LIBNAMES += lib$1.a
 OBJ_ALL += $$($1_OBJ)
@@ -25,6 +28,9 @@ TESTS_ALL += test_$1.out
 $(BUILD_DIR)/$1/%.o: $1/%.c
 	@mkdir -p $$(dir $$@)
 	$(CC) $(CFLAGS) -c $$< -o $$@
+$(BUILD_DIR)/$(TST_DIR)/$1_tests/%.o: $(TST_DIR)/$1_tests/%.c
+	@mkdir -p $$(dir $$@)
+	$(CC) $(CFLAGS)  -I. -c $$< -o $$@
 endef
 
 $(foreach mod,$(MODULES),$(eval $(call module_template,$(mod))))

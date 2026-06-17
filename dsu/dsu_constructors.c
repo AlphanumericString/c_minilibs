@@ -2,6 +2,8 @@
 
 #include "disjointed_set_union.h"
 
+// NOTE: rp_single_alloc -> are arrays rank + parents using 1 alloc.
+
 /**
  * \brief init by allocating both the return and the internals
  * \param n size of the dsu
