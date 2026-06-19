@@ -11,7 +11,7 @@ OBJ_ALL=
 TESTS_ALL=
 
 define module_template
-$1_SRC=	$(wildcard $1/*.c)
+$1_SRC=	$$(shell find $1 -name '*.c')
 $1_OBJ=	$$(patsubst %.c, %.o, $$(addprefix $(BUILD_DIR)/,$$($1_SRC)))
 $1_D=	$$(patsubst %.o, %.d, $$($1_OBJ))
 lib$1.a: $$($1_OBJ)
@@ -23,7 +23,7 @@ LIBNAMES += lib$1.a
 OBJ_ALL += $$($1_OBJ)
 TESTS_ALL += test_$1.out
 $(BUILD_DIR)/$1/%.o: $1/%.c
-	@mkdir -p $(BUILD_DIR)/$1
+	@mkdir -p $$(dir $$@)
 	$(CC) $(CFLAGS) -c $$< -o $$@
 endef
 
