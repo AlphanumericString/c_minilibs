@@ -1,0 +1,85 @@
+#ifndef RB_TESTS_H
+#define RB_TESTS_H
+
+#include <assert.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "../../rb/round_buffer.h"
+
+#define ASSERT_RB_STATE(rb, sz, max, i, o)                                     \
+	do {                                                                       \
+		assert((rb).sz_e == (sz));                                             \
+		assert((rb).nb_max == (max));                                          \
+		assert((rb).i_pos == (i));                                             \
+		assert((rb).o_pos == (o));                                             \
+		assert((rb).array != NULL);                                            \
+	} while (0);
+
+// Helper callbacks
+bool  cb_true(void *elem, void *arg);
+bool  cb_false(void *elem, void *arg);
+bool  cb_add_one(void *elem, void *arg);
+bool  cb_dump_int(void *elem, void *arg);
+int   cb_cmp(void *a, void *b);
+void *cb_dup(const void *elem);
+void  cb_destroy(void *elem);
+
+// init
+void test_rb_create(void);
+void test_rb_init(void);
+void test_rb_from_array(void);
+void test_rb_new(void);
+
+// delete
+void test_rb_destroy(void);
+void test_rb_clr(void);
+
+// getters
+void test_rb_full(void);
+void test_rb_empty(void);
+void test_rb_size(void);
+void test_rb_cappacity(void);
+void test_rb_free(void);
+
+// remove
+void test_rb_drop(void);
+void test_rb_pop(void);
+void test_rb_npop(void);
+void test_rb_peek(void);
+void test_rb_npeek(void);
+
+// add
+void test_rb_push(void);
+void test_rb_npush(void);
+void test_rb_push_safe(void);
+void test_rb_npush_safe(void);
+
+// apply
+void test_rb_apply(void);
+void test_rb_naplly(void);
+
+// filter
+void test_rb_filter(void);
+
+// access
+void test_rb_at(void);
+void test_rb_nat(void);
+
+// get
+void test_rb_get(void);
+void test_rb_nget(void);
+
+// find
+void test_rb_find(void);
+
+// Map
+void test_rb_map(void);
+void test_rb_nmap(void);
+
+// grow
+void test_rb_grow(void);
+
+#endif // !RB_TESTS_H

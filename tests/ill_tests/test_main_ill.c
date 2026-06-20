@@ -15,6 +15,7 @@ void ill_main(void) {
 	test_ill_length();
 	test_ill_apply();
 	test_ill_reverse();
+
 	printf("All ILL tests completed successfully.\n");
 }
 
@@ -30,12 +31,14 @@ void idl_main(void) {
 	test_idl_length();
 	test_idl_apply();
 	test_idl_reverse();
+
 	printf("All IDL tests completed successfully.\n");
 }
 
 int main(void) {
 	ill_main();
 	idl_main();
+
 	printf("All intrusive lists tests completed successfully.\n");
 	return (EXIT_SUCCESS);
 }
