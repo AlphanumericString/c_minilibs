@@ -1,0 +1,34 @@
+#include "ill_tests.h"
+
+void test_idl_reverse(void) {
+	t_test_dnode n1, n2, n3;
+	t_idl       *head = NULL;
+
+	idl_init(&n1.dnode, offsetof(t_test_dnode, dnode));
+	idl_init(&n2.dnode, offsetof(t_test_dnode, dnode));
+	idl_init(&n3.dnode, offsetof(t_test_dnode, dnode));
+
+	idl_push_back(&head, &n1.dnode);
+	idl_push_back(&head, &n2.dnode);
+	idl_push_back(&head, &n3.dnode);
+
+	t_idl *reversed = idl_reverse(head);
+	assert(reversed == &n3.dnode);
+	assert(n3.dnode.next == &n2.dnode);
+	assert(n3.dnode.prev == NULL);
+	assert(n2.dnode.next == &n1.dnode);
+	assert(n2.dnode.prev == &n3.dnode);
+	assert(n1.dnode.next == NULL);
+	assert(n1.dnode.prev == &n2.dnode);
+
+	t_idl *reversed_back = idl_reverse(reversed);
+	assert(reversed_back == &n1.dnode);
+	assert(n1.dnode.next == &n2.dnode);
+	assert(n1.dnode.prev == NULL);
+	assert(n2.dnode.next == &n3.dnode);
+	assert(n2.dnode.prev == &n1.dnode);
+	assert(n3.dnode.next == NULL);
+	assert(n3.dnode.prev == &n2.dnode);
+
+	assert(idl_reverse(NULL) == NULL);
+}
