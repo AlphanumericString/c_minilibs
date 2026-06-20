@@ -6,18 +6,17 @@
  * \return The new head of the reversed list.
 **/
 t_idl *idl_reverse(t_idl *head) {
-	t_idl *prev;
+	t_idl *temp;
 	t_idl *curr;
-	t_idl *nxt;
 
 	if (!head) return (NULL);
-	prev = NULL;
 	curr = head;
 	while (curr) {
-		nxt        = curr->next;
-		curr->next = prev;
-		prev       = curr;
-		curr       = nxt;
+		temp       = curr->prev;
+		curr->prev = curr->next;
+		curr->next = temp;
+		head       = curr;
+		curr       = curr->prev;
 	}
-	return (prev);
+	return (head);
 }

@@ -6,7 +6,7 @@
  * \return true if isolated, false otherwise.
 **/
 bool idl_is_isolated(t_idl *node) {
-	return node->next == NULL;
+	return node->next == NULL && node->prev == NULL;
 }
 
 /**

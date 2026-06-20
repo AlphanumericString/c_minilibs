@@ -6,7 +6,9 @@
  * \param node The node to insert.
  **/
 void idl_append(t_idl *anchor, t_idl *node) {
-	node->next   = anchor->next;
+	node->next = anchor->next;
+	if (anchor->next) anchor->next->prev = node;
+	node->prev = anchor;
 	anchor->next = node;
 }
 /**
@@ -15,18 +17,21 @@ void idl_append(t_idl *anchor, t_idl *node) {
  * \param nodes The head of the list of nodes to insert.
  **/
 void idl_nappend(t_idl *anchor, t_idl *nodes) {
-	idl_get_tail(nodes)->next = anchor->next;
-	anchor->next              = nodes;
+	t_idl *tail = idl_get_tail(nodes);
+	tail->next = anchor->next;
+	if (anchor->next) anchor->next->prev = tail;
+	anchor->next = nodes;
+	nodes->prev = anchor;
 }
 
 void idl_prepend(t_idl *anchor, t_idl *node) {
 	if (!anchor) return;
-	t_idl *t;
+	t_idl *t = anchor->prev;
 
-	t            = anchor->prev;
-	node->next   = anchor;
+	node->next = anchor;
 	anchor->prev = node;
-	node->prev   = t;
+	node->prev = t;
+	if (t) t->next = node;
 }
 void idl_nprepend(t_idl *anchor, t_idl *nodes) {
 	t_idl *t;
@@ -36,7 +41,8 @@ void idl_nprepend(t_idl *anchor, t_idl *nodes) {
 	ln = idl_get_tail(nodes);
 	t  = anchor->prev;
 
-	ln->next     = anchor;
+	ln->next = anchor;
 	anchor->prev = ln;
-	nodes->prev  = t;
+	nodes->prev = t;
+	if (t) t->next = nodes;
 }

@@ -9,9 +9,11 @@ t_idl *idl_pop(t_idl **head) {
 	t_idl *to_remove;
 
 	if (!*head) return NULL;
-	to_remove       = *head;
-	*head           = (*head)->next;
+	to_remove = *head;
+	*head = (*head)->next;
+	if (*head) (*head)->prev = NULL;
 	to_remove->next = NULL;
+	to_remove->prev = NULL;
 	return to_remove;
 }
 /**
@@ -20,14 +22,14 @@ t_idl *idl_pop(t_idl **head) {
  * \return The removed tail node, or NULL if the list was empty.
 **/
 t_idl *idl_pop_back(t_idl **head) {
-	t_idl *to_remove;
 	t_idl *ret;
 
-	if (!(*head)->next) return (idl_pop(head));
-	to_remove = *head;
-	while (to_remove->next->next)
-		to_remove = to_remove->next;
-	ret             = to_remove->next;
-	to_remove->next = NULL;
-	return (ret);
+	if (!*head) return NULL;
+	if (!(*head)->next) return idl_pop(head);
+	
+	ret = idl_get_tail(*head);
+	if (ret->prev) ret->prev->next = NULL;
+	ret->next = NULL;
+	ret->prev = NULL;
+	return ret;
 }

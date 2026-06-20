@@ -9,9 +9,11 @@ t_idl *idl_remove_after(t_idl *prev) {
 	t_idl *to_remove;
 
 	if (!prev || !prev->next) return NULL;
-	to_remove       = prev->next;
-	prev->next      = to_remove->next;
+	to_remove = prev->next;
+	prev->next = to_remove->next;
+	if (to_remove->next) to_remove->next->prev = prev;
 	to_remove->next = NULL;
+	to_remove->prev = NULL;
 	return to_remove;
 }
 
@@ -22,19 +24,21 @@ t_idl *idl_remove_after(t_idl *prev) {
  * \return true if the node was successfully removed, false otherwise.
 **/
 bool idl_remove_node(t_idl **head, t_idl *target) {
-	t_idl *prev;
-
 	if (!*head || !target) return (false);
 	if (*head == target) {
-		*head        = target->next;
+		*head = target->next;
+		if (*head) (*head)->prev = NULL;
 		target->next = NULL;
+		target->prev = NULL;
 		return (true);
 	}
-	prev = idl_find(*head, target);
-	if (prev) {
-		prev->next   = target->next;
-		target->next = NULL;
-		return (true);
-	}
-	return (false);
+	
+	t_idl *curr = idl_find(*head, target);
+	if (!curr) return (false);
+	
+	if (target->prev) target->prev->next = target->next;
+	if (target->next) target->next->prev = target->prev;
+	target->next = NULL;
+	target->prev = NULL;
+	return (true);
 }

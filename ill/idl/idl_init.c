@@ -22,11 +22,13 @@ void idl_init(t_idl *node, size_t offset) {
 void *idl_copy(const t_idl *head, t_duplicator d) {
 	t_idl	*ret;
 	void	*elem;
+	void    *nh = NULL;
 
 	ret = NULL;
 	for (; head; head = head->next) {
 		elem = d(idl_ntoe(head));
-		if (!elem) return (ret);
+		if (!elem) return (nh);
+		if (!nh) nh = elem;
 		if (ret)
 			ret->next = idl_eton(elem, head->offset);
 		idl_eton(elem, head->offset)->offset = head->offset;
@@ -34,5 +36,5 @@ void *idl_copy(const t_idl *head, t_duplicator d) {
 		idl_eton(elem, head->offset)->next = NULL;
 		ret = idl_eton(elem, head->offset);
 	}
-	return (ret);
+	return (nh);
 }

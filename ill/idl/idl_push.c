@@ -8,7 +8,9 @@
 **/
 t_idl *idl_push(t_idl **head, t_idl *node) {
 	node->next = *head;
-	*head      = node;
+	node->prev = NULL;
+	if (*head) (*head)->prev = node;
+	*head = node;
 	return (*head);
 }
 /**
@@ -18,8 +20,11 @@ t_idl *idl_push(t_idl **head, t_idl *node) {
  * \return The new head of the list.
 **/
 t_idl *idl_npush(t_idl **head, t_idl *nodes) {
-	idl_get_tail(nodes)->next = *head;
-	*head                     = nodes;
+	t_idl *tail = idl_get_tail(nodes);
+	tail->next = *head;
+	if (*head) (*head)->prev = tail;
+	nodes->prev = NULL;
+	*head = nodes;
 	return (*head);
 }
 /**
@@ -30,8 +35,10 @@ t_idl *idl_npush(t_idl **head, t_idl *nodes) {
 **/
 t_idl *idl_push_back(t_idl **head, t_idl *node) {
 	if (!*head) return idl_push(head, node);
-	idl_get_tail(*head)->next = node;
-	node->next                = NULL;
+	t_idl *tail = idl_get_tail(*head);
+	tail->next = node;
+	node->prev = tail;
+	node->next = NULL;
 	return (*head);
 }
 
