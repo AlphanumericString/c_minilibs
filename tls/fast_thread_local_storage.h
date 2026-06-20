@@ -2,6 +2,7 @@
 #define C_MINI__FTLS_H
 
 #include <pthread.h>
+#include <stdlib.h>
 
 // +---------------------------------------------------+
 // | OVERRIDE THIS TO SET YOUR OWN STRUCT NAME INSTEAD |

@@ -7,7 +7,7 @@ struct s_mine {
 	int last_status;
 };
 
-#define TLS_FTLS_STRUCT struct s_mine
+#define C_MINI__FTLS_STRUCT struct s_mine
 
 #include "tls/common_thread_local_storage.h"
 #include "tls/fast_thread_local_storage.h"
