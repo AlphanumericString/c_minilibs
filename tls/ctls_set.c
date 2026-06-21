@@ -1,5 +1,6 @@
 #include <pthread.h>
 #include <stddef.h>
+#include <string.h>
 
 #include "common_thread_local_storage.h"
 
@@ -23,7 +24,8 @@ bool ctls_set(const char *name, t_ctls_typewrap init_val) {
 	}
 	if (i != C_MINI__CTLS_CAP) {
 		ctls->v_name[ctls->len] = name;
-		ctls->vals[ctls->len++] = init_val;
+		ctls->vals[ctls->len] = init_val;
+		ctls->len += 1;
 		return (true);
 	}
 	return (false);

@@ -6,7 +6,8 @@ BUILD_DIR=build
 DOC_DIR=documentation
 TST_DIR=tests
 CC	=	clang
-CFLAGS = -Wall -Wextra -g3 -MMD -MP
+CFLAGS = -Wall -Wextra -MMD -MP -g3
+TFLAGS = -g3
 LIBNAMES=
 OBJ_ALL=
 TESTS_ALL=
@@ -30,19 +31,20 @@ $(BUILD_DIR)/$1/%.o: $1/%.c
 	$(CC) $(CFLAGS) -c $$< -o $$@
 $(BUILD_DIR)/$(TST_DIR)/$1_tests/%.o: $(TST_DIR)/$1_tests/%.c
 	@mkdir -p $$(dir $$@)
-	$(CC) $(CFLAGS)  -I. -c $$< -o $$@
+	$(CC) $(CFLAGS) $(TFLAGS) -I. -c $$< -o $$@
 endef
 
 $(foreach mod,$(MODULES),$(eval $(call module_template,$(mod))))
 
 all: $(LIBNAMES)
 tests: $(TESTS_ALL)
+tests_run: $(TESTS_ALL)
 	@for t in $^; do \
 		./$$t; \
 	done
+
 -include:$(D_FILES)
 fclean:clean
-	$(RM) $(OBJ_ALL) $(D_FILES) ./*.d
 	$(RM) -rf $(BUILD_DIR) $(DOC_DIR)
 $(DOC_DIR):
 	DOXYGEN_INPUT="$(MODULES)" doxygen Doxyfile &&	\

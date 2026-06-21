@@ -15,7 +15,9 @@ t_ctls_typewrap *ctls_get(const char *s) {
 		pthread_setspecific(ctls_key, ctls);
 	}
 	for (size_t i = 0; i < ctls->len; i++) {
-		if (!strcmp(s, ctls->v_name[i])) return (&ctls->vals[i]);
+		if (!strcmp(s, ctls->v_name[i])) {
+			return (&ctls->vals[i]);
+		}
 	}
 	return (NULL);
 }

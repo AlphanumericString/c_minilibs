@@ -8,10 +8,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define C_MINI__CTLS_CAP 16
+#ifndef C_MINI__CTLS_CAP
+#	define C_MINI__CTLS_CAP 16
+#endif
 
-static pthread_key_t tlsv_key;
-static pthread_key_t ctls_key;
+extern pthread_key_t ctls_key;
 
 enum e_ctls_type {
 	CTLS_NONE = 0,
@@ -25,7 +26,7 @@ enum e_ctls_type {
  * \brief type-sfafe abstraction of base c types.
  * \param type enum of c types.
  * \param value union of different possible interpretation of data.
-**/
+ **/
 typedef struct {
 	enum e_ctls_type type;
 	union {
@@ -38,14 +39,14 @@ typedef struct {
 
 /**
  * \brief the array of C-type Thread Local Storage. Fast but limited to c-types.
- * \param v_name array of name for the different entries
+ * \param v_name array of name for the different entries.
  * \param vals array of values for the different entries.
  * \param len lenght of the array curently being used.
  * \note if you want to increase the CTLS_CAP it's STRONGLY reccomended to not
  * go over 256
-**/
+ **/
 typedef struct s_ctlsv {
-	const char     *v_name[C_MINI__CTLS_CAP];
+	const char      *v_name[C_MINI__CTLS_CAP];
 	t_ctls_typewrap vals[C_MINI__CTLS_CAP];
 	size_t          len;
 } t_ctlsv;
@@ -64,6 +65,6 @@ t_ctls_typewrap *ctls_get(const char *name);
 size_t           ctls_len(void);
 
 // utils
-void ctls_dump_typewrap(t_ctls_typewrap t);
+void ctls_dump_typewrap(t_ctls_typewrap t, int fd);
 
 #endif // CC_MINI__H

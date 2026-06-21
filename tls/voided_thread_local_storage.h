@@ -17,7 +17,7 @@ typedef struct s_tlsv_array {
 	size_t  cap;
 } t_vtls_array;
 
-static pthread_key_t vtls_key;
+extern pthread_key_t vtls_key;
 
 // remove
 bool vtls_rm(const char *v_name);
