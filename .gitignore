@@ -4,3 +4,5 @@
 *.a
 test_*.out
 documentation
+*.json
+.cache
