@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -9,10 +10,11 @@
  * \param v_val the value of the variable
  * \param v_size the size of the value
  * \return true if value was added to the vtls, false in any other case
-**/
+ **/
 bool vtls_set(const char *v_name, void *v_val, size_t v_size) {
 	t_vtls_array *vtls = pthread_getspecific(vtls_key);
 	size_t        i    = 0;
+	t_vtls       *grow;
 
 	if (!v_name) return (false);
 	if (!vtls) {
@@ -26,8 +28,10 @@ bool vtls_set(const char *v_name, void *v_val, size_t v_size) {
 	}
 	if (vtls->len == vtls->cap) { // grow
 		i = vtls->cap;
-		if (!realloc(vtls->data, sizeof(t_vtls) * (!i ? 16 : i) * 2))
+		grow = realloc(vtls->data, sizeof(t_vtls) * (!i ? 16 : i) * 2);
+		if (!grow)
 			return (false);
+		vtls->data = grow;
 		vtls->cap = (!i ? 16 : i) * 2;
 	}
 	vtls->data[vtls->len++] =

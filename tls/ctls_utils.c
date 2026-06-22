@@ -1,9 +1,22 @@
+#include <pthread.h>
+
 #include "common_thread_local_storage.h"
 
 pthread_key_t ctls_key;
 
-void __attribute__((constructor())) init_ctls(void) {
-	pthread_key_create(&ctls_key, free);
+static void __attribute__((destructor())) destroy_ctls(void) {
+	t_ctlsv *ctls = pthread_getspecific(ctls_key);
+
+	if (ctls) free(ctls);
+	pthread_key_delete(ctls_key);
+}
+
+static void free_non_null(void *a) {
+	if (a) free(a);
+}
+
+static void __attribute__((constructor())) init_ctls(void) {
+	pthread_key_create(&ctls_key, free_non_null);
 }
 
 /**

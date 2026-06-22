@@ -30,8 +30,22 @@ t_ftls *ftls_get(void);
 
 pthread_key_t ftls_key;
 
+static void __attribute__((destructor())) ftls_dtor(void)
+{
+	void *p = pthread_getspecific(ftls_key);
+
+	if (!p) return;
+	free(p);
+	pthread_key_delete(ftls_key);
+}
+
+static void ftls_cleanup(void *p)
+{
+	if (!p) return;
+    free(p);
+}
 void __attribute__((constructor())) init_ftls(void) {
-	pthread_key_create(&ftls_key, free);
+	pthread_key_create(&ftls_key, ftls_cleanup);
 }
 
 /**
