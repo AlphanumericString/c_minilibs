@@ -17,7 +17,8 @@ $1_SRC=	$$(shell find $1 -name '*.c')
 $1_TSRC=	$$(shell find $(TST_DIR)/$1_tests -name '*.c')
 $1_OBJ=	$$(patsubst %.c, %.o, $$(addprefix $(BUILD_DIR)/,$$($1_SRC)))
 $1_TOBJ=$$(patsubst %.c, %.o, $$(addprefix $(BUILD_DIR)/,$$($1_TSRC)))
-$1_D=	$$(patsubst %.o, %.d, $$($1_OBJ))
+$1_D=	$$(patsubst %.o, %.d, $$($1_OBJ)) \
+		$$(patsubst %.o, %.d, $$($1_TOBJ))
 lib$1.a: $$($1_OBJ)
 	ar rcs $$@ $$^
 test_$1.out: lib$1.a $$($1_TOBJ)
