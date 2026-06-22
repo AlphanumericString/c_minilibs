@@ -19,8 +19,8 @@ int main(void) {
 	test_rb_npeek();
 	test_rb_push();
 	test_rb_npush();
-	// test_rb_push_safe();
-	// test_rb_npush_safe();
+	test_rb_push_safe();
+	test_rb_npush_safe();
 	test_rb_apply();
 	test_rb_naplly();
 	test_rb_filter();

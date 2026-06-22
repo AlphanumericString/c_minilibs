@@ -4,7 +4,7 @@
 #include "round_buffer.h"
 
 /**
- * \brief grows the round buffer by nb_elem_added elements
+ * \brief duplicates the round buffer with nb_elem_added new empty slots
  * \param rb the old round buffer
  * \param nb_elem_added number of additional elements
  * \return newly allocated t_rb or NULL if alloc fails
@@ -17,12 +17,8 @@ t_rb *rb_grow(t_rb *rb, size_t nb_elem_added) {
 	if (!rb) return NULL;
 	new_rb = malloc(sizeof(t_rb));
 	if (!new_rb) return NULL;
-
-	if (!rb_create(new_rb, rb->sz_e, rb->nb_max + nb_elem_added)) {
-		free(new_rb);
-		return NULL;
-	}
-
+	if (!rb_create(new_rb, rb->sz_e, rb->nb_max + nb_elem_added))
+		return (free(new_rb), NULL);
 	count = rb_size(*rb);
 	if (count > 0) {
 		if (rb->o_pos <= rb->i_pos) {
@@ -38,5 +34,6 @@ t_rb *rb_grow(t_rb *rb, size_t nb_elem_added) {
 	}
 	new_rb->o_pos = 0;
 	new_rb->i_pos = count;
+	new_rb->count = count;
 	return new_rb;
 }

@@ -47,7 +47,7 @@ void *rb_nget(const t_rb *rb, size_t n, t_comparator comp, const void *arg,
 	while (i < count) {
 		elem = rb->array + (pos * rb->sz_e);
 		if (comp(elem, (void *)arg) == 0) {
-			if (rb_nat(rb, i, n, buffer)) return buffer;
+			if (rb_nat(*rb, i, n, buffer)) return buffer;
 			return NULL;
 		}
 		pos = (pos + 1) % rb->nb_max;

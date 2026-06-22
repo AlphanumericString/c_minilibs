@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "round_buffer.h"
 
 /**
@@ -17,4 +19,5 @@ void rb_clr(t_rb *rb) {
 	if (!rb) return;
 	rb->o_pos = 0;
 	rb->i_pos = rb->o_pos;
+	rb->count = 0;
 }

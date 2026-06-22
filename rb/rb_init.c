@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "round_buffer.h"
 
 /**
@@ -15,6 +17,7 @@ t_rb *rb_create(t_rb *rb, size_t sz_elem, size_t nb_e) {
 	rb->nb_max = nb_e;
 	rb->o_pos  = 0;
 	rb->i_pos  = 0;
+	rb->count  = 0;
 	return (rb);
 }
 /**
@@ -41,6 +44,7 @@ t_rb *rb_from_array(t_rb *rb, void *array, size_t nb_elem, size_t sz_elem) {
 	rb->sz_e   = sz_elem;
 	rb->nb_max = nb_elem;
 	rb->array  = array;
+	rb->count  = 0;
 	return (rb);
 }
 /**

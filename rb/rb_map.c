@@ -7,10 +7,10 @@
  * \param rb the round buffer
  * \param n maximum number of elements to map
  * \param dup the duplicator function
- * \param out_buff array where the duplicated elements are copied
+ * \param out_buff array where the adress of the duplicated elements are copied
  * \return true on success, false if an element couldn't be duplicated
 **/
-bool rb_nmap(t_rb *rb, size_t n, t_duplicator dup, void *out_buff) {
+bool rb_nmap(t_rb *rb, size_t n, t_duplicator dup, void **out_buff) {
 	size_t i = 0;
 	size_t pos;
 	size_t count;
@@ -27,11 +27,12 @@ bool rb_nmap(t_rb *rb, size_t n, t_duplicator dup, void *out_buff) {
 		elem     = rb->array + (pos * rb->sz_e);
 		dup_elem = dup(elem);
 		if (dup_elem)
-			memcpy((unsigned char *)out_buff + (i * rb->sz_e), dup_elem,
-			       rb->sz_e);
+			memcpy(((unsigned char *)out_buff) + (i * sizeof(void *)),
+			       &dup_elem, sizeof(void *));
 		else {
-			bzero((unsigned char *)out_buff + (i * rb->sz_e), rb->sz_e);
-			return (false);
+			return (bzero(((unsigned char *)out_buff) + (i * sizeof(void *)),
+			              sizeof(void *)),
+			        false);
 		}
 		pos = (pos + 1) % rb->nb_max;
 		i++;
@@ -43,10 +44,10 @@ bool rb_nmap(t_rb *rb, size_t n, t_duplicator dup, void *out_buff) {
  * \brief apply duplicator to all elements and store in out_buff
  * \param rb the round buffer
  * \param dup the duplicator function
- * \param out_buff array where the duplicated elements are copied
+ * \param out_buff array where the adress of the duplicated elements are copied
  * \return true on success, false if an element couldn't be duplicated
 **/
-bool rb_map(t_rb *rb, t_duplicator dup, void *out_buff) {
+bool rb_map(t_rb *rb, t_duplicator dup, void **out_buff) {
 	if (!rb || !dup || !out_buff) return (false);
 	return (rb_nmap(rb, (size_t)-1, dup, out_buff));
 }

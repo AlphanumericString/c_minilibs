@@ -11,12 +11,10 @@
 bool rb_naplly(t_rb *rb, size_t n, t_callback cb, const void *arg) {
 	size_t i = 0;
 	size_t current_pos;
-	size_t count;
 
 	if (!rb || !cb) return false;
 
-	count = rb_size(*rb);
-	if (n > count) n = count;
+	if (n > rb_size(*rb)) n = rb_size(*rb);
 
 	current_pos = rb->o_pos;
 	while (i < n) {

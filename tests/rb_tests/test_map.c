@@ -8,7 +8,8 @@ void test_rb_map(void) {
 	rb_init(&rb, sizeof(int));
 	rb_npush(&rb, arr, 3);
 
-	assert(rb_map(&rb, cb_dup, out) == true);
+	assert(rb_map(&rb, cb_dup, (void **)out) == true);
+
 	assert(out[0] != NULL);
 	assert(*out[0] == 1);
 	assert(out[2] != NULL);
@@ -28,7 +29,7 @@ void test_rb_nmap(void) {
 	rb_init(&rb, sizeof(int));
 	rb_npush(&rb, arr, 3);
 
-	assert(rb_nmap(&rb, 2, cb_dup, out) == true);
+	assert(rb_nmap(&rb, 2, cb_dup, (void **)out) == true);
 	assert(out[0] != NULL);
 	assert(*out[0] == 1);
 	assert(out[1] != NULL);

@@ -1,38 +1,39 @@
 #ifndef C_MINI__RB
-#	define C_MINI__RB
+#define C_MINI__RB
 
-#	include <stdlib.h>
-#	include <stddef.h>
-#	include <stdbool.h>
+#include <stdbool.h>
+#include <stddef.h>
 
-#	ifndef CMINI_T_CALLBAKC_DEFINE
-#		define CMINI_T_CALLBAKC_DEFINE
+#ifndef CMINI_T_CALLBAKC_DEFINE
+#	define CMINI_T_CALLBAKC_DEFINE
 
 /**
- * \brief  callback function pointer, true operation successfull, elem is always the node, arg is passed as is from up function
+ * \brief  callback function pointer, true operation successfull, elem is always
+ * the node, arg is passed as is from up function
  * \param  elem pointer to the element
  * \param  arg  argument passed as is from up function
  * \return expected to return true on success false otherwise
 **/
-typedef bool  (*t_callback)(void *elem, void *arg);
+typedef bool (*t_callback)(void *elem, void *arg);
 
-#	endif
+#endif
 
-#	ifndef CMINI_T_COMPARATOR_DEFINE
-#		define CMINI_T_COMPARATOR_DEFINE
+#ifndef CMINI_T_COMPARATOR_DEFINE
+#	define CMINI_T_COMPARATOR_DEFINE
 
 /**
- * \brief comparator function pointer, <0, 0, >0 for inferior to, equal, superior to
+ * \brief comparator function pointer, <0, 0, >0 for inferior to, equal,
+ * superior to
  * \param elem pointer to the element
  * \param arg argument passed as is from up function
  * \return expected to return <0, 0, >0 for inferior to, equal, superior to
 **/
-typedef int   (*t_comparator)(void *elem, void *arg);
+typedef int (*t_comparator)(void *elem, void *arg);
 
-#	endif
+#endif
 
-#	ifndef CMINI_T_DUOLICATOR_DEFINE
-#		define CMINI_T_DUOLICATOR_DEFINE
+#ifndef CMINI_T_DUOLICATOR_DEFINE
+#	define CMINI_T_DUOLICATOR_DEFINE
 
 /**
  * \brief duplication function pointer for datas
@@ -41,7 +42,7 @@ typedef int   (*t_comparator)(void *elem, void *arg);
 **/
 typedef void *(*t_duplicator)(const void *elem);
 
-#	endif
+#endif
 
 /**
  * \brief round buffer struct, rb
@@ -54,11 +55,12 @@ typedef void *(*t_duplicator)(const void *elem);
 typedef struct s_roundbuffer_array {
 	void  *array;
 	size_t nb_max;
+	size_t sz_e;
+	size_t count;
 
 	size_t i_pos;
 	size_t o_pos;
 
-	size_t sz_e;
 } t_rb;
 
 // init
@@ -96,29 +98,34 @@ bool rb_apply(t_rb *rb, t_callback cb, const void *arg);
 bool rb_naplly(t_rb *rb, size_t n, t_callback cb, const void *arg);
 
 // filter
-bool rb_filter(t_rb *rb, t_callback cb, const void *arg, void (*destroyer)(void *elem));
+bool rb_filter(t_rb *rb, t_callback cb, const void *arg,
+               void (*destroyer)(void *elem));
 
 // access
-void *rb_at(const t_rb *rb, size_t idx);
-void *rb_nat(const t_rb *rb, size_t idx, size_t n, void *buff);
+void *rb_at(t_rb rb, size_t idx);
+void *rb_nat(t_rb rb, size_t idx, size_t n, void *buff);
 
 // get
 void *rb_get(const t_rb *rb, t_comparator comp, const void *arg, void *buffer);
-void *rb_nget(const t_rb *rb, size_t n, t_comparator comp, const void *arg, void *buffer);
-// void *rb_getn(const t_rb *rb, size_t n, t_comparator comp, const void *arg, void *buffer);
+void *rb_nget(const t_rb *rb, size_t n, t_comparator comp, const void *arg,
+              void *buffer);
+// void *rb_getn(const t_rb *rb, size_t n, t_comparator comp, const void *arg,
+// void *buffer);
 
 // find
 void *rb_find(const t_rb *rb, t_comparator c, const void *a);
 
 // Map
-bool rb_map(t_rb *rb, t_duplicator dup, void *out_buff);
-bool rb_nmap(t_rb *rb, size_t n, t_duplicator dup, void *out_buff);
+bool rb_map(t_rb *rb, t_duplicator dup, void **out_buff);
+bool rb_nmap(t_rb *rb, size_t n, t_duplicator dup, void **out_buff);
 
 // grow
-t_rb *rb_grow(t_rb *rb, size_t nb_elem_added); // return a new rb. ALWAYS. or null if alloc fails
+t_rb *rb_grow(
+    t_rb  *rb,
+    size_t nb_elem_added); // return a new rb. ALWAYS. or null if alloc fails
 
-#	define C_MINI_RB_NB_ELEM_DFLT 4
-#	define C_MINI_RB_SZ_ELEM_DFLT 1024
+#define C_MINI_RB_NB_ELEM_DFLT 4
+#define C_MINI_RB_SZ_ELEM_DFLT 1024
 
 // TODO:
 // rb_nget -> get's the n elements after first match

@@ -38,6 +38,7 @@ bool rb_filter(t_rb *rb, t_callback cb, const void *arg,
 			write_pos = (write_pos + 1) % rb->nb_max;
 		} else {
 			destroyer(elem);
+			rb->count--;
 		}
 		read_pos = (read_pos + 1) % rb->nb_max;
 		i++;
