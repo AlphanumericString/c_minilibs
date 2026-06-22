@@ -1,5 +1,4 @@
-#ifndef RB_TESTS_H
-#define RB_TESTS_H
+#pragma once
 
 #include <assert.h>
 #include <stdbool.h>
@@ -81,5 +80,3 @@ void test_rb_nmap(void);
 
 // grow
 void test_rb_grow(void);
-
-#endif // !RB_TESTS_H

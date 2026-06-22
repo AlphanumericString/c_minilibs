@@ -1,5 +1,4 @@
-#ifndef CMINI_TESTS_ILL
-#define CMINI_TESTS_ILL
+#pragma once
 
 #include <assert.h>
 
@@ -48,5 +47,3 @@ void test_idl_length(void);
 void test_idl_ntoe(void);
 void test_idl_reverse(void);
 void test_idl_rm(void);
-
-#endif // CMINI_TESTS_ILL

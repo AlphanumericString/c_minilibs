@@ -1,3 +1,5 @@
+#pragma once
+
 #include <assert.h>
 
 #include "../../dsu/disjointed_set_union.h"
