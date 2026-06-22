@@ -20,6 +20,7 @@ void *ctls_dummy_increment(void *a) {
 		assert(ctls_get("a")->value.l > 0);
 		sleep(2);
 	}
+	ctls_rm("a");
 	return (NULL);
 }
 
@@ -37,6 +38,7 @@ void *ctls_dummy_decrement(void *a) {
 		assert(ctls_get("a")->value.l < 0);
 		sleep(1);
 	}
+	ctls_rm("a");
 	return (NULL);
 }
 

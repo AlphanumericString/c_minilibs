@@ -1,3 +1,4 @@
+#include <pthread.h>
 #include <stdlib.h>
 
 #define C_MINI__FTLS_GET
@@ -92,5 +93,6 @@ int main(void) { // key setup done at constructor time
 	ctls_tests();
 	ftls_tests();
 	vtls_tests();
+	printf("All TLS tests completed successfully.\n");
 	return (EXIT_SUCCESS);
 }
