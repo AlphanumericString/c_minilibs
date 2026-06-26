@@ -133,5 +133,8 @@ t_idl *idl_reverse(t_idl *head);
 // // (requirement: list must be sorted)
 // void   idl_unique(t_idl *head, t_comparator c); // !
 
+// TODO: idl_[n][push|pop][_back]_elem : take elem as node w offset
+// annoying for users to have to do the convertions
+
 #	define C_MINI__IDL
 #endif // !C_MINI__IDL
