@@ -1,4 +1,6 @@
+#include <bits/types/struct_timeval.h>
 #include <stddef.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -21,44 +23,78 @@ size_t hash_djb2(const void *key, size_t size) {
 	return (hash);
 }
 
-int cache_put_kv(t_lruc *c, t_keyCache kv) {
-	t_keyCache    *node = NULL;
-	struct timeval tmp;
-	size_t         pos;
+static int insert_with_ttl_regards(t_keyCache kv, t_keyCache *node, t_lruc *c) {
+	struct timespec tmp;
+	t_keyCache     *it = NULL;
 
-	pos = hash_djb2(node->key, node->k_len);
-	for (; pos < c->nb && c->h_arr[pos]; pos = (pos + 1) % c->nb) {
-		if (!memcmp(c->h_arr[pos]->key, kv.key,
-		            MAX(c->h_arr[pos]->k_len, kv.k_len)))
-			break;
+	clock_gettime(CLOCK_MONOTONIC, &tmp);
+
+	// ttl was specifed - we check where to insert in linkedlist
+	kv.time = (struct timespec){
+	    .tv_sec  = kv.time.tv_sec + tmp.tv_sec,
+	    .tv_nsec = kv.time.tv_nsec + tmp.tv_nsec,
+	};
+
+	if (kv.time.tv_nsec >= 1000000000L) {
+		++kv.time.tv_sec;
+		kv.time.tv_nsec -= 1000000000L;
 	}
-	if (c->h_arr[pos] && !memcmp(c->h_arr[pos]->key, kv.key,
-	                             MAX(c->h_arr[pos]->k_len,
-	                                 kv.k_len))) { // update value
-		node = c->h_arr[pos];
+	*node = kv;
+	if (c->nb == 1) {
+		cache_link_node(c, node);
+	} else if (distance_ms(kv.time, c->tail->time) < 0) { // is kv.time shorter?
+		DBG("shorter");
+		node->prev = c->tail;
+		node->next = NULL;
+		c->tail    = node;
+	} else if (distance_ms(kv.time, c->head->time) > 0) { // is kv.time longer?
+		DBG("longer");
+		node->next = c->head;
+		node->prev = NULL;
+		c->head    = node;
+	} else {
+		DBG("search");
+		it = c->head;
+		while (distance_ms(kv.time, it->time) < 0)
+			it = it->next;
+		node->prev = it->prev;
+		node->next = it;
+		it->prev   = node;
+	}
+	return (0);
+}
+
+int cache_put_kv(t_lruc *c, t_keyCache kv) {
+	t_keyCache *node = NULL;
+	size_t      pos;
+
+	if (!kv.key) return (-1);
+	if (kv.k_len == (size_t)-1) kv.k_len = strlen(kv.key);
+	node = cache_search_keyinhash(c, kv.key, kv.k_len, &pos);
+	if (node != NULL && node->k_len == kv.k_len &&
+	    !memcmp(node->key, kv.key, kv.k_len)) { // update value
+		LOG(LRU_LOG_UPDATEVAL, kv.key, kv.k_len);
 		cache_unlink_node(c, node);
-	} else if (c->nb < c->cap) {
+	} else if (!node && c->nb < c->cap) { // new node
+		LOG(LRU_LOG_CREATEVAL, kv.key, kv.k_len);
 		node = calloc(sizeof(t_keyCache), 1);
 		if (!node) return (-1);
 		c->h_arr[pos] = node;
 		c->nb++;
 	} else { // re-use cache tail node (LRU) since cachce is full
+		LOG(LRU_LOG_CREATEVAL, kv.key, kv.k_len);
+		LOG(LRU_LOG_DELETEVAL, c->tail->key, c->tail->k_len);
 		node = c->tail;
+		if (c->dtor) c->dtor(c->tail->value);
 		cache_unlink_node(c, node);
 	}
-	tmp = kv.time;
-	gettimeofday(&kv.time, NULL);
-	kv.time.tv_sec += tmp.tv_sec + ((kv.time.tv_usec + tmp.tv_usec) / 1000000);
-	kv.time.tv_usec = (kv.time.tv_usec + tmp.tv_usec) % 1000000;
-	*node           = kv;
-	cache_link_node(c, node);
-	return (0);
+	return (insert_with_ttl_regards(kv, node, c));
 }
 int cache_put(t_lruc *cache, const void *key, size_t key_len, void *value) {
 	return (cache_put_kv(cache, (t_keyCache){.key   = (void *)key,
 	                                         .k_len = key_len,
 	                                         .value = value,
-	                                         .time  = (struct timeval){0},
+	                                         .time  = (struct timespec){0},
 	                                         .next  = NULL,
 	                                         .prev  = NULL}));
 }
@@ -72,7 +108,8 @@ int cache_put_ttl(t_lruc *cache, const void *key, size_t key_len, void *value,
 	        .key   = (void *)key,
 	        .k_len = key_len,
 	        .value = value,
-	        .time  = (struct timeval){.tv_sec = 0, .tv_usec = ttl_ms * 1000},
+	        .time  = (struct timespec){.tv_sec  = ttl_ms / 1000,
+	                                   .tv_nsec = (ttl_ms % 1000) * 1000000},
 	        .next  = NULL,
 	        .prev  = NULL
     }));

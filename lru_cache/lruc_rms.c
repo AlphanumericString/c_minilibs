@@ -10,16 +10,20 @@ void cache_clear(t_lruc *c) {
 	t_keyCache *nxt;
 
 	if (!c || !c->nb || !c->cap) return;
-	if ((c->cap / c->nb) >= 10) // less than 10% filled
+	if ((c->cap / c->nb) >= 10) { // less than 10% filled
+		LOG(LRU_LOG_LFREE);
 		for (t_keyCache *node = c->head; node; node = nxt) {
 			if (c->dtor) c->dtor(node->value);
+			LOG(LRU_LOG_DELETEVAL, node->key, node->k_len);
 			nxt = node->next;
 			free(node);
 		}
-	else {
+	} else {
+		LOG(LRU_LOG_HFREE);
 		for (size_t i = 0; i < c->cap; i++) {
 			if (!c->h_arr[i]) continue;
 			if (c->dtor) c->dtor(c->h_arr[i]->value);
+			LOG(LRU_LOG_DELETEVAL, c->h_arr[i]->key, c->h_arr[i]->k_len);
 			free(c->h_arr[i]);
 		}
 	}
@@ -34,19 +38,13 @@ int cache_remove(t_lruc *c, const void *key, size_t key_len) {
 	size_t      pos;
 
 	if (!c || !c->head || !c->nb) return (-1);
-	pos = hash_djb2(key, key_len);
-	for (; pos < c->nb && c->h_arr[pos]; pos = (pos + 1) % c->nb) {
-		if (!memcmp(c->h_arr[pos]->key, key,
-		            MAX(c->h_arr[pos]->k_len, key_len)))
-			break;
-	}
-	if (!c->h_arr[pos] || memcmp(c->h_arr[pos]->key, key, key_len) != 0)
-		return (-1);
-	node = c->h_arr[pos];
+	node = cache_search_keyinhash(c, key, key_len, &pos);
+	if (!node || memcmp(node->key, key, key_len) != 0) return (-1);
 	cache_unlink_node(c, node);
-	if (c->dtor) c->dtor(node);
+	if (c->dtor) c->dtor(node->value);
+	LOG(LRU_LOG_DELETEVAL, node->key, node->k_len);
 	free(node);
 	c->h_arr[pos] = NULL;
 	c->nb--;
-	return (true);
+	return (0);
 }
