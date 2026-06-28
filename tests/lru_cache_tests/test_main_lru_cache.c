@@ -39,6 +39,8 @@ int main() {
 	// foreach
 	LOG("");
 	test_lruc_foreach();
+	test_lruc_foreach_ru_ordered();
+	test_lruc_foreach_ttl_ordered();
 
 	printf("All lru cache test passed\n");
 	return (EXIT_SUCCESS);

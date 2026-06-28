@@ -45,3 +45,65 @@ void test_lruc_foreach(void) {
 	cache_destroy(&c);
 	return;
 }
+
+static bool record_order_cb(t_keyvalue *value, void *u_val) {
+	char **order = u_val;
+	int i = 0;
+	while (order[i] != NULL) i++;
+	order[i] = value->key;
+	return true;
+}
+
+void test_lruc_foreach_ru_ordered(void) {
+	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
+	void       *v1, *v2, *v3, *v4;
+	t_lruc      c;
+	char       *order[5] = {NULL};
+
+	v1 = strdup("1");
+	v2 = strdup("2");
+	v3 = strdup("3");
+	v4 = strdup("4");
+	cache_init(&c, 4, free);
+	cache_put(&c, k1, strlen(k1), v1);
+	cache_put(&c, k2, strlen(k2), v2);
+	cache_put(&c, k3, strlen(k3), v3);
+	cache_put(&c, k4, strlen(k4), v4);
+
+	cache_foreach_ru_ordered(&c, record_order_cb, order);
+	
+	assert(strcmp(order[0], k4) == 0);
+	assert(strcmp(order[1], k3) == 0);
+	assert(strcmp(order[2], k2) == 0);
+	assert(strcmp(order[3], k1) == 0);
+	assert(order[4] == NULL);
+
+	cache_destroy(&c);
+}
+
+void test_lruc_foreach_ttl_ordered(void) {
+	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
+	void       *v1, *v2, *v3, *v4;
+	t_lruc      c;
+	char       *order[5] = {NULL};
+
+	v1 = strdup("1");
+	v2 = strdup("2");
+	v3 = strdup("3");
+	v4 = strdup("4");
+	cache_init(&c, 4, free);
+	cache_put_ttl(&c, k1, strlen(k1), v1, 400);
+	cache_put_ttl(&c, k2, strlen(k2), v2, 100);
+	cache_put_ttl(&c, k3, strlen(k3), v3, 300);
+	cache_put_ttl(&c, k4, strlen(k4), v4, 200);
+
+	cache_foreach_ttl_ordered(&c, record_order_cb, order);
+	
+	assert(strcmp(order[0], k1) == 0);
+	assert(strcmp(order[1], k3) == 0);
+	assert(strcmp(order[2], k4) == 0);
+	assert(strcmp(order[3], k2) == 0);
+	assert(order[4] == NULL);
+
+	cache_destroy(&c);
+}

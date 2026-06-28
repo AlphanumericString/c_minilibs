@@ -37,3 +37,5 @@ void test_lruc_stats(void);
 
 // foreach
 void test_lruc_foreach(void);
+void test_lruc_foreach_ru_ordered(void);
+void test_lruc_foreach_ttl_ordered(void);

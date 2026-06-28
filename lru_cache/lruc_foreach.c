@@ -16,6 +16,6 @@ void cache_foreach_ru_ordered(t_lruc *c, t_kvcallback fn, void *user_data) {
 		fn(&it->kv, user_data);
 }
 void cache_foreach_ttl_ordered(t_lruc *c, t_kvcallback fn, void *user_data) {
-	for (t_lruc_keynode *it = c->TTL_Max; it; it = it->lru_next)
+	for (t_lruc_keynode *it = c->TTL_Max; it; it = it->ttl_next)
 		fn(&it->kv, user_data);
 }

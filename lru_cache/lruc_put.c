@@ -61,7 +61,7 @@ static int insert_with_ttl_regards(t_lruc_keynode kv, t_lruc_keynode *node,
 	} else {
 		it = c->TTL_Max;
 		while (distance_ms(kv.time, it->time) < 0)
-			it = it->lru_next;
+			it = it->ttl_next;
 		assert(it != NULL);
 		if (it->ttl_prev) it->ttl_prev->ttl_next = node;
 		node->ttl_prev = it->ttl_prev;
