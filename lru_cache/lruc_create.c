@@ -1,20 +1,24 @@
 #include <limits.h>
 #include <stdlib.h>
+#include <strings.h>
 
+#define C_MINI__LRU_INTERNAL
 #include "least_recently_used_cache.h"
 
 t_lruc *cache_init(t_lruc *cache, size_t cap, void (*dtor)(void *)) {
-	cache->h_arr = calloc(sizeof(t_keyCache *), cap);
+	if (!cache) {
+		LOG("Fail : No Cache given");
+		return (cache);
+	}
+	bzero(cache, sizeof(*cache));
+	cache->h_arr = calloc(sizeof(t_lruc_keynode *), cap);
 	if (!cache->h_arr) {
 		LOG("Allocation error");
 		return (NULL);
 	}
 	cache->cap      = cap;
-	cache->nb       = 0;
-	cache->ttl_glob = LONG_MAX, cache->stats = (cstats_t){0};
+	cache->ttl_glob = LONG_MAX, cache->stats = (t_lruc_stats){0};
 	cache->dtor = dtor;
-	cache->head = NULL;
-	cache->tail = NULL;
 	LOG("Success");
 	return (cache);
 }

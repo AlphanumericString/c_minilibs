@@ -12,11 +12,6 @@ uint64_t cache_misses(const t_lruc *cache) {
 uint64_t cache_expired(const t_lruc *cache) {
 	return (cache->stats.expired);
 }
-cstats_t cache_stats(const t_lruc *cache) {
+t_lruc_stats cache_stats(const t_lruc *cache) {
 	return (cache->stats);
 }
-#ifdef C_MINI__TESTS
-void	cache_setvalue_dump(t_lruc *c, void (*value_dumper)(void *)){
-	c->value_printer = value_dumper;
-}
-#endif

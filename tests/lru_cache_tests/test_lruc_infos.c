@@ -1,5 +1,4 @@
 #include <assert.h>
-#include <lru_cache/least_recently_used_cache.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -86,23 +85,20 @@ void test_lruc_expired(void) {
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
 
-	v1 = calloc(42, 1);
-	v2 = calloc(42, 1);
-	v3 = calloc(42, 1);
-	v4 = calloc(42, 1);
+	v1 = strdup("value 1");
+	v2 = strdup("value 2");
+	v3 = strdup("value 3");
+	v4 = strdup("value 4");
 	cache_init(&c, 4, free);
 	cache_setttl(&c, 200);
 	cache_put(&c, k1, strlen(k1), v1);
 	cache_put(&c, k2, strlen(k2), v2);
 	cache_put_ttl(&c, k3, strlen(k3), v3, 3000);
 	cache_put(&c, k4, strlen(k4), v4);
-	DBG("k1 %p, k2 %p, k3 %p, k4 %p", k1, k2, k3, k4);
-	DBG("c.head.key %p", c.head->key);
-	DBG("c.tail.key %p", c.tail->key);
-	assert(c.head->key == k3);
+	assert(c.MRU->kv.key == k4);
+	assert(c.TTL_Max->kv.key == k3);
 	sleep(1);
 	cache_cleanup(&c);
-	DBG("c.nb %zu\n", c.nb);
 	assert(cache_has(&c, k1, strlen(k1)) == false);
 	assert(cache_has(&c, k2, strlen(k2)) == false);
 	assert(cache_has(&c, k3, strlen(k3)) == true);
@@ -114,9 +110,9 @@ void test_lruc_expired(void) {
 }
 
 void test_lruc_stats(void) {
-	t_lruc      c;
-	cstats_t    st;
-	const char *k1 = "titi", *k2 = "toto", *k3 = "tutu";
+	t_lruc        c;
+	t_lruc_stats st;
+	const char   *k1 = "titi", *k2 = "toto", *k3 = "tutu";
 
 	cache_init(&c, 4, free);
 	assert(c.nb == 0);

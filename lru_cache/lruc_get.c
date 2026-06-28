@@ -1,53 +1,54 @@
-#include <stddef.h>
-#include <stdio.h>
+#include <bits/time.h>
+#include <bits/types/struct_timeval.h>
 #include <string.h>
+#include <time.h>
 
-#define C_MINI__LRU_UTILS
+#define C_MINI__LRU_INTERNAL
 #include "least_recently_used_cache.h"
-
-t_keyCache *cache_search_keyinlist(const t_lruc *c, const void *key, size_t key_len) {
-	t_keyCache *node;
-
-	node = c->head;
-	for (node = c->head; node; node = node->next)
-		if (node->k_len == key_len && memcmp(key, node->key, key_len) == 0)
-			return (node);
-	return (NULL);
-}
-
-t_keyCache *cache_search_keyinhash(const t_lruc *c, const void *key, size_t key_len,
-                            size_t *_out) {
-	size_t i;
-	size_t it;
-
-	if (!_out) _out = &it;
-	it = hash_djb2(key, key_len) % c->cap;
-	for (i = 0; i < c->cap && c->h_arr[it]; it = (it + 1) % c->cap, i++) {
-		if (c->h_arr[it]->k_len == key_len &&
-		    !memcmp(c->h_arr[it]->key, key, key_len)) {
-			return (*_out = it, c->h_arr[it]);
-		}
-	}
-	return (*_out = it, NULL);
-}
 
 // search
 // -> hit -> set as head
-void *cache_get(t_lruc *c, const void *key, size_t key_len) {
-	t_keyCache *node;
-	size_t      pos;
+void *cache_get_lru(t_lruc *c, const void *key, size_t key_len) {
+	t_lruc_keynode *node;
+	size_t          pos;
 
-	if (!c || !c->head || !c->nb) return (NULL);
+	if (!c || !c->MRU || !c->nb) return (NULL);
 	node = cache_search_keyinhash(c, key, key_len, &pos);
-	if (!node || memcmp(node->key, key, key_len) != 0) {
+	if (!node || memcmp(node->kv.key, key, key_len) != 0) {
 		c->stats.misses++;
-		LOG(LRU_LOG_MISS, c->stats.misses, key, key_len);
+		LOG(C_MINI__LRU_LOG_MISS_LRU, c->stats.misses, key, key_len);
 		return (NULL);
 	}
 	cache_unlink_node(c, node);
-	node->next = c->head;
+	node->lru_next = c->MRU;
 	c->stats.hit++;
-	c->head = node;
-	LOG(LRU_LOG_HIT, c->stats.hit, key, key_len);
-	return (c->h_arr[pos]->value);
+	c->MRU = node;
+	LOG(C_MINI__LRU_LOG_HIT, c->stats.hit, key, key_len);
+	return (c->h_arr[pos]->kv.value);
+}
+void *cache_get(t_lruc *c, const void *key, size_t key_len) {
+	struct timespec now;
+	t_lruc_keynode *node;
+	size_t          pos;
+
+	if (!c || !c->MRU || !c->nb) return (NULL);
+	clock_gettime(CLOCK_MONOTONIC, &now);
+	node = cache_search_keyinhash(c, key, key_len, &pos);
+	if (!node || memcmp(node->kv.key, key, key_len) != 0) {
+		c->stats.misses++;
+		LOG(C_MINI__LRU_LOG_MISS_LRU, c->stats.misses, key, key_len);
+		return (NULL);
+	}
+	if (distance_ms(now, node->time) >= c->ttl_glob) {
+		c->stats.misses++;
+		LOG(C_MINI__LRU_LOG_MISS_TTL, c->stats.misses, key, key_len,
+		    distance_ms(now, node->time));
+		return (NULL);
+	}
+	cache_unlink_node(c, node);
+	node->lru_next = c->MRU;
+	c->stats.hit++;
+	c->MRU = node;
+	LOG(C_MINI__LRU_LOG_HIT, c->stats.hit, key, key_len);
+	return (c->h_arr[pos]->kv.value);
 }

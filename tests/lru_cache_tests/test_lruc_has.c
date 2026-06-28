@@ -8,7 +8,7 @@
 void test_lruc_has(void) {
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
-	t_lruc c;
+	t_lruc      c;
 
 	v1 = strdup("toto_1");
 	v2 = strdup("toto_2");

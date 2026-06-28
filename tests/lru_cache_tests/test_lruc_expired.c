@@ -1,6 +1,5 @@
 #include <assert.h>
 #include <bits/types/struct_timeval.h>
-#include <lru_cache/least_recently_used_cache.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
