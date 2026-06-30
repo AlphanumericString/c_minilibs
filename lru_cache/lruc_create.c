@@ -18,12 +18,12 @@ t_lruc *cache_init(t_lruc *cache, size_t cap, void (*dtor)(void *)) {
 		return (cache);
 	}
 	bzero(cache, sizeof(*cache));
-	cache->h_arr = calloc(sizeof(t_lruc_keynode *), cap);
-	if (!cache->h_arr) {
+	cache->buckets = calloc(sizeof(t_lruc_keynode *), cap);
+	if (!cache->buckets) {
 		LOG(C_MINI__LRU_LOG_EALLOC);
 		return (NULL);
 	}
-	cache->cap      = cap;
+	cache->buckets_nb      = cap;
 	cache->ttl_glob = LONG_MAX, cache->stats = (t_lruc_stats){0};
 	cache->dtor = dtor;
 	LOG(C_MINI__LRU_LOG_SUCCESS);
@@ -62,9 +62,9 @@ void cache_destroy(t_lruc *cache) {
 		return;
 	}
 	cache_clear(cache);
-	free(cache->h_arr);
-	cache->cap   = 0;
-	cache->h_arr = NULL;
+	free(cache->buckets);
+	cache->buckets_nb   = 0;
+	cache->buckets = NULL;
 	LOG(C_MINI__LRU_LOG_SUCCESS);
 }
 void cache_free(t_lruc *cache) {

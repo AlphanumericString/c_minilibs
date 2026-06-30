@@ -6,7 +6,7 @@
  * @return size of the cache
  **/
 size_t cache_size(const t_lruc *cache) {
-	return (cache->nb);
+	return (cache->node_in_use);
 }
 /**
  * @brief Get the number of hits

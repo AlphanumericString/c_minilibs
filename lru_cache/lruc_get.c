@@ -20,19 +20,20 @@ void *cache_get_lru(t_lruc *c, const void *key, size_t key_len) {
 	t_lruc_keynode *node;
 	size_t          pos;
 
-	if (!c || !c->MRU || !c->nb) return (NULL);
+	if (!c || !c->MRU || !c->node_in_use) return (NULL);
 	node = cache_search_keyinhash(c, key, key_len, &pos);
-	if (!node || memcmp(node->kv.key, key, key_len) != 0) {
+	if (!node ||
+	    is_key_eq(node->kv.key, node->kv.k_len, key, key_len) == false) {
 		c->stats.misses++;
 		LOG(C_MINI__LRU_LOG_MISS_LRU, c->stats.misses, key, key_len);
 		return (NULL);
 	}
-	cache_unlink_node(c, node);
+	pop_lruc(c, node);
 	node->lru_next = c->MRU;
 	c->stats.hit++;
 	c->MRU = node;
 	LOG(C_MINI__LRU_LOG_HIT, c->stats.hit, key, key_len);
-	return (c->h_arr[pos]->kv.value);
+	return (c->buckets[pos]->kv.value);
 }
 /**
  * @brief Get a key from the cache with TTL
@@ -47,7 +48,7 @@ void *cache_get(t_lruc *c, const void *key, size_t key_len) {
 	t_lruc_keynode *node;
 	size_t          pos;
 
-	if (!c || !c->MRU || !c->nb) {
+	if (!c || !c->MRU || !c->node_in_use) {
 		LOG(C_MINI__LRU_LOG_EARG);
 		return (NULL);
 	}
@@ -57,7 +58,8 @@ void *cache_get(t_lruc *c, const void *key, size_t key_len) {
 	}
 	now_uint = now.tv_sec * 1000ULL + now.tv_nsec / 1000000ULL;
 	node     = cache_search_keyinhash(c, key, key_len, &pos);
-	if (!node || memcmp(node->kv.key, key, key_len) != 0) {
+	if (!node ||
+	    is_key_eq(node->kv.key, node->kv.k_len, key, key_len) == false) {
 		c->stats.misses++;
 		LOG(C_MINI__LRU_LOG_MISS_LRU, c->stats.misses, key, key_len);
 		return (NULL);
@@ -73,5 +75,5 @@ void *cache_get(t_lruc *c, const void *key, size_t key_len) {
 	c->stats.hit++;
 	c->MRU = node;
 	LOG(C_MINI__LRU_LOG_HIT, c->stats.hit, key, key_len);
-	return (c->h_arr[pos]->kv.value);
+	return (node->kv.value);
 }

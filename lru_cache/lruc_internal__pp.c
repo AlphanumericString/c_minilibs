@@ -1,3 +1,4 @@
+#include <string.h>
 #define C_MINI__LRU_INTERNAL
 #include "least_recently_used_cache.h"
 
@@ -40,4 +41,22 @@ t_lruc_keynode *pop_ttl(t_lruc *c, t_lruc_keynode *n) {
 	n->ttl_prev = NULL;
 	n->ttl_next = NULL;
 	return (n);
+}
+void push_hash(t_lruc *c, t_lruc_keynode *n, size_t hash) {
+	n->hash_next = NULL;
+	if (c->buckets[hash] != n)
+		n->hash_next = c->buckets[hash];
+	c->buckets[hash] = n;
+}
+t_lruc_keynode *pop_hash(t_lruc *c, t_lruc_keynode *n, size_t hash) {
+	t_lruc_keynode *prev = NULL;
+	t_lruc_keynode *it;
+
+	for (it = c->buckets[hash]; it; prev = it, it = it->hash_next)
+		if (is_key_eq(it->kv.key, it->kv.k_len, n->kv.key, n->kv.k_len) == true)
+			break;
+	if (prev) prev->hash_next = it->hash_next;
+	if (c->buckets[hash] == n) c->buckets[hash] = n->hash_next;
+	n->hash_next = NULL;
+	return (it);
 }

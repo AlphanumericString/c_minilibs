@@ -20,11 +20,11 @@ void test_lruc_clear(void) {
 
 		assert(c.LRU == NULL);
 		assert(c.MRU == NULL);
-		assert(c.nb == 0);
-		assert(c.cap == 2);
+		assert(c.node_in_use == 0);
+		assert(c.buckets_nb == 2);
 		assert(c.dtor == blank);
 
-		assert(memcmp(c.h_arr, empty_buff, sizeof(t_lruc_keynode *) * 2) == 0);
+		assert(memcmp(c.buckets, empty_buff, sizeof(t_lruc_keynode *) * 2) == 0);
 		cache_destroy(&c);
 	}
 	{ // test for low% fill
@@ -34,10 +34,10 @@ void test_lruc_clear(void) {
 
 		assert(c.LRU == NULL);
 		assert(c.MRU == NULL);
-		assert(c.nb == 0);
-		assert(c.cap == 32);
+		assert(c.node_in_use == 0);
+		assert(c.buckets_nb == 32);
 
-		assert(memcmp(c.h_arr, empty_buff, sizeof(t_lruc_keynode *) * (32)) == 0);
+		assert(memcmp(c.buckets, empty_buff, sizeof(t_lruc_keynode *) * (32)) == 0);
 		cache_destroy(&c);
 	}
 	return;

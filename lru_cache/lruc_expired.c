@@ -32,8 +32,7 @@ bool cache_isexpired(t_lruc *c, const void *key, size_t key_len) {
 	now_uint = timeto64(now);
 	if (c->ttl_glob == LONG_MAX) return (false);
 	node = cache_search_keyinhash(c, key, key_len, &offset);
-	if (!node || node->kv.k_len != key_len ||
-	    memcmp(node->kv.key, key, key_len) != 0)
+	if (!node || is_key_eq(node->kv.key, node->kv.k_len, key, key_len) == false)
 		return (false);
 	return ((node->time + c->ttl_glob) < (now_uint));
 }
@@ -59,10 +58,10 @@ void cache_cleanup(t_lruc *c) {
 		                       &pos);
 		LOG(C_MINI__LRU_LOG_EVICTION, c->TTL_Min->kv.key,
 		    c->TTL_Min->time - now_uint, c->ttl_glob);
+		pop_hash(c, c->TTL_Min, pos);
 		pop_lruc(c, c->TTL_Min);
 		free(pop_ttl(c, c->TTL_Min));
-		c->h_arr[pos] = NULL;
-		c->nb--;
+		c->node_in_use--;
 		c->stats.expired++;
 	}
 }

@@ -13,7 +13,8 @@ int main(void);
 
 bool dmp_kv(t_keyvalue *kv, void *u) {
 	(void)u;
-	// LOG("kv(%p) (%p %p)", kv, kv->key, kv->value);
+	LOG("kv(%p .key %p) (k:\"%s\" v:\"%s\")", kv, kv->key, (char *)kv->key,
+	    (char *)kv->value);
 	(void)kv;
 	return (true);
 }
@@ -28,20 +29,12 @@ void test_lruc_put_kv(void) {
 	cache_init(&c, 2, NULL);
 
 	kv1 = (t_keyvalue){.key = NULL, .k_len = 0, .value = (void *)0xDEADBEEF};
-	DBG_POS;
 	assert(cache_put_kv(&c, kv1) != 0);
 	kv1.key = key;
-	DBG_POS;
-	DBG("kv.key %p key %p kv.k_len %zd (%zd)", kv1.key, key, kv1.k_len,
-	    strlen(key));
 	assert(cache_put_kv(&c, kv1) != 0);
 	kv1.k_len = strlen(key);
-	DBG_POS;
-	DBG("kv.key %p key %p kv.k_len %zd (%zd)", kv1.key, key, kv1.k_len,
-	    strlen(key));
 	assert(cache_put_kv(&c, kv1) == 0);
 	kv_in_cache = cache_search_keyinhash(&c, key, strlen(key), NULL);
-	DBG_POS;
 	assert(kv_in_cache);
 	assert(kv_in_cache->kv.k_len == strlen(key));
 
@@ -50,16 +43,19 @@ void test_lruc_put_kv(void) {
 }
 void test_lruc_put(void) {
 	t_lruc      c;
-	const char *key1 = "toto";
-	const char *key2 = "titi";
-	const char *key3 = "tutu";
+	const char *key1   = "toto";
+	const char *key2   = "titi";
+	const char *key3   = "tutu";
+	void       *value1 = "1";
+	void       *value2 = "2";
+	void       *value3 = "3";
 
 	cache_init(&c, 2, NULL);
-	assert(cache_put(&c, key1, strlen(key1), (void *)0xDEAD) == 0);
+	assert(cache_put(&c, key1, strlen(key1), value1) == 0);
 	cache_foreach_ru_ordered(&c, dmp_kv, NULL);
-	assert(cache_put(&c, key2, strlen(key2), (void *)0xCADE) == 0);
+	assert(cache_put(&c, key2, strlen(key2), value2) == 0);
 	cache_foreach_ru_ordered(&c, dmp_kv, NULL);
-	assert(cache_put(&c, key3, strlen(key3), (void *)0xCAFE) == 0);
+	assert(cache_put(&c, key3, strlen(key3), value3) == 0);
 	cache_foreach_ru_ordered(&c, dmp_kv, NULL);
 	assert(cache_has(&c, key1, strlen(key1)) == false);
 	assert(cache_has(&c, key2, strlen(key2)) == true);

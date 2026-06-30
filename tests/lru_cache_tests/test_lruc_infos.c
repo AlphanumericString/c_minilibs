@@ -11,7 +11,7 @@ void test_lruc_size(void) {
 	const char *k1 = "titi", *k2 = "toto", *k3 = "tutu";
 
 	cache_init(&c, 4, free);
-	assert(c.nb == 0);
+	assert(c.node_in_use == 0);
 	assert(cache_size(&c) == 0);
 	cache_put(&c, k1, strlen(k1), strdup("pique sous"));
 	assert(cache_size(&c) == 1);
@@ -32,7 +32,7 @@ void test_lruc_hits(void) {
 	const char *k1 = "titi", *k2 = "toto", *k3 = "tutu";
 
 	cache_init(&c, 4, free);
-	assert(c.nb == 0);
+	assert(c.node_in_use == 0);
 	assert(cache_hits(&c) == 0);
 	cache_put(&c, k1, strlen(k1), strdup("pique sous"));
 	cache_put(&c, k2, strlen(k2), strdup("gontrant du bonheur"));
@@ -58,7 +58,7 @@ void test_lruc_misses(void) {
 	const char *k1 = "titi", *k2 = "toto", *k3 = "tutu";
 
 	cache_init(&c, 4, free);
-	assert(c.nb == 0);
+	assert(c.node_in_use == 0);
 	assert(cache_hits(&c) == 0);
 	cache_put(&c, k1, strlen(k1), strdup("pique sous"));
 	cache_put(&c, k2, strlen(k2), strdup("gontrant du bonheur"));
@@ -115,7 +115,7 @@ void test_lruc_stats(void) {
 	const char   *k1 = "titi", *k2 = "toto", *k3 = "tutu";
 
 	cache_init(&c, 4, free);
-	assert(c.nb == 0);
+	assert(c.node_in_use == 0);
 	st = cache_stats(&c);
 	assert(st.misses == 0 && st.hit == 0 && st.expired == 0);
 	cache_put(&c, k1, strlen(k1), strdup("pique sous"));

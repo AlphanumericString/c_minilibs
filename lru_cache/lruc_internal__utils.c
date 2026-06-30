@@ -29,28 +29,28 @@ t_lruc_keynode *cache_search_keyinlist(const t_lruc *c, const void *key,
  **/
 t_lruc_keynode *cache_search_keyinhash(const t_lruc *c, const void *key,
                                        size_t key_len, size_t *_out) {
-	size_t i;
-	size_t it;
+	size_t          hash;
+	t_lruc_keynode *node;
 
-	if (!_out) _out = &it;
-	it = hash_djb2(key, key_len) % c->cap;
-	for (i = 0; i < c->cap && c->h_arr[it]; it = (it + 1) % c->cap, i++) {
-		if (c->h_arr[it]->kv.k_len == key_len &&
-		    !memcmp(c->h_arr[it]->kv.key, key, key_len)) {
-			return (*_out = it, c->h_arr[it]);
-		}
-	}
-	return (*_out = it, NULL);
+	if (!_out) _out = &hash;
+	hash = hash_djb2(key, key_len) % c->buckets_nb;
+	node = c->buckets[hash];
+	for (; node; node = node->hash_next)
+		if (is_key_eq(node->kv.key, node->kv.k_len, key, key_len))
+			return (*_out = hash, node);
+	return (*_out = hash, NULL);
 }
 
 /**
  * @brief Unlink a node from the cache
  * @param c cache pointer
  * @param n node to unlink
+ * @param h hash of the node
  **/
-void cache_unlink_node(t_lruc *c, t_lruc_keynode *n) {
+void cache_unlink_node(t_lruc *c, t_lruc_keynode *n, size_t h) {
 	pop_lruc(c, n);
 	pop_ttl(c, n);
+	pop_hash(c, n, h);
 }
 // Very fast, but not very good
 // see http://www.cse.yorku.ca/~oz/hash.html
@@ -73,4 +73,8 @@ size_t hash_djb2(const void *key, size_t size) {
 }
 uint64_t timeto64(struct timespec t) {
 	return (t.tv_sec * 1000ULL + t.tv_nsec / 1000000ULL);
+}
+
+bool is_key_eq(const void *k1, size_t k1_len, const void *k2, size_t k2_len) {
+	return (k1_len == k2_len && memcmp(k1, k2, k2_len) == 0);
 }

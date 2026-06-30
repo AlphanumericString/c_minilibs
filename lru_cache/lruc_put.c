@@ -16,12 +16,13 @@
  * internal function
  **/
 static int insert_with_ttl_regards(t_lruc_keynode kv, t_lruc_keynode *node,
-                                   t_lruc *c) {
+                                   t_lruc *c, size_t h_pos) {
 	t_lruc_keynode *it = NULL;
 
 	*node = kv;
 	push_lruc(c, node);
-	if (c->nb == 1) {
+	push_hash(c, node, h_pos);
+	if (c->node_in_use == 1) {
 		c->TTL_Max = node;
 		c->TTL_Min = node;
 	} else if (kv.time <= c->TTL_Min->time) {
@@ -51,24 +52,26 @@ static int insert_with_ttl_regards(t_lruc_keynode kv, t_lruc_keynode *node,
 static int cache_put_internal(t_lruc *c, t_lruc_keynode to_add) {
 	struct timespec now;
 	t_lruc_keynode *node = NULL;
-	size_t          pos;
+	size_t          hash_pos;
 
 	if (!c || !to_add.kv.key || to_add.kv.k_len <= 0 ||
 	    to_add.kv.k_len == (size_t)-1) {
 		LOG(C_MINI__LRU_LOG_EARG);
 		return (-1);
 	}
-	node = cache_search_keyinhash(c, to_add.kv.key, to_add.kv.k_len, &pos);
-	if (node != NULL && node->kv.k_len == to_add.kv.k_len &&
-	    !memcmp(node->kv.key, to_add.kv.key, to_add.kv.k_len)) { // update value
+	node = cache_search_keyinhash(c, to_add.kv.key, to_add.kv.k_len, &hash_pos);
+	if (node != NULL && is_key_eq(node->kv.key, node->kv.k_len, to_add.kv.key,
+	                              to_add.kv.k_len)) { // update value
 		LOG(C_MINI__LRU_LOG_UPDATEVAL, to_add.kv.key, to_add.kv.k_len);
-		cache_unlink_node(c, node);
-	} else if (!node && c->nb < c->cap) { // new node
+		cache_unlink_node(c, node, hash_pos);
+	} else if (!node && c->node_in_use < c->buckets_nb) { // new node
 		LOG(C_MINI__LRU_LOG_CREATEVAL, to_add.kv.key, to_add.kv.k_len);
 		node = calloc(sizeof(t_lruc_keynode), 1);
-		if (!node) return (-1);
-		c->h_arr[pos] = node;
-		c->nb++;
+		if (!node) {
+			LOG(C_MINI__LRU_LOG_EALLOC);
+			return (-1);
+		}
+		c->node_in_use++;
 	} else { // re-use cache tail node (LRU) since cachce is full
 		if (clock_gettime(CLOCK_MONOTONIC, &now) == -1 ||
 		    c->TTL_Min->time <= timeto64(now) + c->ttl_glob)
@@ -77,9 +80,9 @@ static int cache_put_internal(t_lruc *c, t_lruc_keynode to_add) {
 		LOG(C_MINI__LRU_LOG_CREATEVAL, to_add.kv.key, to_add.kv.k_len);
 		LOG(C_MINI__LRU_LOG_DELETEVAL, node->kv.key, node->kv.k_len);
 		if (c->dtor) c->dtor(c->LRU->kv.value);
-		cache_unlink_node(c, node);
+		cache_unlink_node(c, node, hash_pos);
 	}
-	return (insert_with_ttl_regards(to_add, node, c));
+	return (insert_with_ttl_regards(to_add, node, c, hash_pos));
 }
 /**
  * @brief Put a key-value pair into the cache
