@@ -8,21 +8,21 @@
 #include "lru_cache_tests.h"
 
 void test_lruc_isexpired(void) {
-	t_lruc      cache;
-	const char *key1 = "zod";
+	t_lruc      c;
+	const char *k1 = "zod";
 	void       *v1;
 
-	cache_init(&cache, 4, free);
-	assert(cache_isexpired(&cache, key1, strlen(key1)) == false);
-	cache_setttl(&cache, 200);
-	assert(cache_isexpired(&cache, key1, strlen(key1)) == false);
+	cache_init(&c, 4, free);
+	assert(cache_isexpired(&c, k1, strlen(k1)) == false);
+	cache_setttl(&c, 200);
+	assert(cache_isexpired(&c, k1, strlen(k1)) == false);
 	v1 = calloc(42, 1);
-	cache_put(&cache, key1, strlen(key1), v1);
-	assert(cache_has(&cache, key1, strlen(key1)) == true);
-	assert(cache_isexpired(&cache, key1, strlen(key1)) == false);
+	cache_put(&c, k1, strlen(k1), v1);
+	assert(cache_has(&c, k1, strlen(k1)) == true);
+	assert(cache_isexpired(&c, k1, strlen(k1)) == false);
 	sleep(1);
-	assert(cache_isexpired(&cache, key1, strlen(key1)) == true);
-	cache_destroy(&cache);
+	assert(cache_isexpired(&c, k1, strlen(k1)) == true);
+	cache_destroy(&c);
 
 	return;
 }
@@ -31,10 +31,10 @@ void test_lruc_cleanup(void) {
 	const char *key1 = "abc", *key2 = "def", *key3 = "ghi", *key4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
 
-	v1 = calloc(42, 1);
-	v2 = calloc(42, 1);
-	v3 = calloc(42, 1);
-	v4 = calloc(42, 1);
+	v1 = strdup("value_1");
+	v2 = strdup("value_2");
+	v3 = strdup("value_3");
+	v4 = strdup("value_4");
 	cache_init(&c, 4, free);
 	cache_setttl(&c, 200);
 	cache_put(&c, key1, strlen(key1), v1);

@@ -23,6 +23,7 @@ VALGRIND_OPT= --leak-check=full --show-leak-kinds=all --track-fds=yes \
         --trace-children=yes --track-origins=yes --read-var-info=yes \
         --show-reachable=yes --undef-value-errors=yes
 
+
 define module_template
 $1_SRC=	$$(shell find $1 -name '*.c')
 $1_TSRC=	$$(shell find $(TST_DIR)/$1_tests -name '*.c')

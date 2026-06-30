@@ -10,46 +10,44 @@
 #ifdef C_MINI__TESTS
 #	include <stdio.h>
 
-#	ifndef LOG
-#		define LOG(fmt, ...)                                                  \
-			do {                                                               \
-				printf("\e[33m[LOG]\e[0m: %s: " fmt "\n",                      \
-				       __func__ __VA_OPT__(, ) __VA_ARGS__);                   \
-				fflush(stdout);                                                \
-			} while (0);
-#	endif // !LOG
+#	define DBG(fmt, ...)                                                      \
+		do {                                                                   \
+			printf("\e[33;5m[DBG]\e[0m: %s: " fmt "\n",                        \
+			       __func__ __VA_OPT__(, ) __VA_ARGS__);                       \
+			fflush(stdout);                                                    \
+		} while (0)
 
-#	ifndef DBG
-#		define DBG(fmt, ...)                                                  \
-			do {                                                               \
-				printf("\e[36;1m[DBG]\e[0m: %s: " fmt "\n",                    \
-				       __func__ __VA_OPT__(, ) __VA_ARGS__);                   \
-				fflush(stdout);                                                \
-			} while (0);
-#	endif // !DBG
+#	define LOG(fmt, ...)                                                      \
+		do {                                                                   \
+			printf("\e[32m[LOG]\e[0m: %s: " fmt "\n",                          \
+			       __func__ __VA_OPT__(, ) __VA_ARGS__);                       \
+			fflush(stdout);                                                    \
+		} while (0)
 
-#	ifndef DBG_POS
-#		define DBG_POS                                                        \
-			do {                                                               \
-				printf("\e[34;0m[PATH]\e[0m: %s:%d %s\n", __FILE__, __LINE__,  \
-				       __FUNCTION__);                                          \
-				fflush(stdout);                                                \
-			} while (0);
-#	endif // !DBG_POS
+#	define DBG_POS                                                            \
+		do {                                                                   \
+			DBG(" %s:%d \e[33;4m[PATH]\e[0m", __FILE__, __LINE__);             \
+			fflush(stdout);                                                    \
+		} while (0)
 
-#	define C_MINI__LRU_LOG_EVICTION                                           \
-		"Eviction: key=%p reason:ttl, delta (%ld) >= ttl (%ld)"
-#	define C_MINI__LRU_LOG_UPDATE   "Update ttl: %ld->%ld)"
-#	define C_MINI__LRU_LOG_HIT      "Hit: hit=%zu, key:%p, key_len:%zu"
-#	define C_MINI__LRU_LOG_MISS_LRU "LRU-Miss: miss=%zu, key:%p, key_len:%zu"
-#	define C_MINI__LRU_LOG_MISS_TTL                                           \
-		"TTL-Miss: miss=%zu, key:%p, key_len:%zu delta(%ld)"
-#	define C_MINI__LRU_LOG_UPDATEVAL "Update: key:%p, key_len:%zu"
-#	define C_MINI__LRU_LOG_CREATEVAL "Create: key:%p, key_len:%zu"
-#	define C_MINI__LRU_LOG_DELETEVAL "Delete: key:%p, key_len:%zu"
-#	define C_MINI__LRU_LOG_FAST_FREE "Fast free via list started"
-#	define C_MINI__LRU_LOG_LFREE     "Cleanup via list started"
-#	define C_MINI__LRU_LOG_HFREE     "Cleanup via hash started"
+#define C_MINI__LRU_LOG_SUCCESS  "Success"
+#define C_MINI__LRU_LOG_EARG     "Bad arguments"
+#define C_MINI__LRU_LOG_EALLOC   "Allocation faillure"
+#define C_MINI__LRU_LOG_ECLOCK   "Clock error"
+#define C_MINI__LRU_LOG_FAILLURE "Faillure"
+#define C_MINI__LRU_LOG_EVICTION                                               \
+	"Eviction: key=%p reason:ttl, delta (%ld) >= ttl (%ld)"
+#define C_MINI__LRU_LOG_UPDATE   "Update ttl: %ld->%ld)"
+#define C_MINI__LRU_LOG_HIT      "Hit: hit=%zu, key:%p, key_len:%zu"
+#define C_MINI__LRU_LOG_MISS_LRU "LRU-Miss: miss=%zu, key:%p, key_len:%zu"
+#define C_MINI__LRU_LOG_MISS_TTL                                               \
+	"TTL-Miss: miss=%zu, key:%p, key_len:%zu delta(%ld)"
+#define C_MINI__LRU_LOG_UPDATEVAL "Update: key:%p, key_len:%zu"
+#define C_MINI__LRU_LOG_CREATEVAL "Create: key:%p, key_len:%zu"
+#define C_MINI__LRU_LOG_DELETEVAL "Delete: key:%p, key_len:%zu"
+#define C_MINI__LRU_LOG_FAST_FREE "Fast free via list started"
+#define C_MINI__LRU_LOG_LFREE     "Cleanup via list started"
+#define C_MINI__LRU_LOG_HFREE     "Cleanup via hash started"
 
 #else // || C_MINI__TESTS
 
@@ -74,9 +72,9 @@ typedef struct {
 } t_lruc_stats;
 
 typedef struct {
-	void  *key;
-	void  *value;
-	size_t k_len;
+	const void *key;
+	void       *value;
+	size_t      k_len;
 } t_keyvalue;
 
 #ifdef C_MINI__LRU_INTERNAL
@@ -84,7 +82,7 @@ typedef struct {
 typedef struct s_keycache {
 	t_keyvalue kv;
 
-	struct timespec time; // time of emition
+	uint64_t time; // time of emition
 
 	struct s_keycache *ttl_prev;
 	struct s_keycache *ttl_next;
@@ -105,7 +103,7 @@ typedef struct {
 
 	t_lruc_keynode *TTL_Max;  // TTL head
 	t_lruc_keynode *TTL_Min;  // TTL tail
-	long            ttl_glob; // TTL window
+	uint64_t        ttl_glob; // TTL window
 
 	void         (*dtor)(void *); //
 	t_lruc_stats stats;
@@ -125,7 +123,7 @@ typedef struct {
 	void *TTL_Min;  // TTL tail
 	long  ttl_glob; // TTL window
 
-	void         (*dtor)(void *); //
+	void         (*dtor)(void *);
 	t_lruc_stats stats;
 } t_lruc;
 
@@ -149,12 +147,12 @@ typedef bool (*t_kvcallback)(t_keyvalue *elem, void *arg);
 t_lruc *cache_create(size_t capacity, void (*free_er)(void *));
 t_lruc *cache_init(t_lruc *cache, size_t cappacity, void (*free_er)(void *));
 void    cache_destroy(t_lruc *cache); // destroy sub-ressources not cache itself
-size_t  hash_djb2(const void *key, size_t size);
+void    cache_free(t_lruc *cache); // destroy cache itself
 
 // put
 int cache_put_kv(t_lruc *cache, t_keyvalue kv);
-int cache_put(t_lruc *cache, const void *key, size_t key_len, void *value);
-int cache_put_ttl(t_lruc *cache, const void *key, size_t key_len, void *value,
+int cache_put(t_lruc *cache, const void *key, size_t key_len, const void *value);
+int cache_put_ttl(t_lruc *cache, const void *key, size_t key_len, const void *value,
                   uint64_t ttl_ms);
 
 // get
@@ -171,7 +169,7 @@ bool cache_has(const t_lruc *cache, const void *key, size_t key_len);
 bool cache_isexpired(t_lruc *cache, const void *key,
                      size_t key_len); //  is key in the cache and expired?
 void cache_cleanup(t_lruc *cache);    // call dtor on all expired elements
-void cache_setttl(t_lruc *cache, long ttl);
+void cache_setttl(t_lruc *cache, long ttl_ms); // set default ttl fo keys
 
 // infos
 size_t       cache_size(const t_lruc *cache);
@@ -181,13 +179,15 @@ uint64_t     cache_expired(const t_lruc *cache);
 t_lruc_stats cache_stats(const t_lruc *cache);
 
 // foreach
-void cache_foreach(t_lruc *cache, t_kvcallback fn, void *user_data);
-void cache_foreach_ru_ordered(t_lruc *c, t_kvcallback fn, void *user_data);
-void cache_foreach_ttl_ordered(t_lruc *c, t_kvcallback fn, void *user_data);
+void cache_foreach(const t_lruc *cache, t_kvcallback fn, void *user_data);
+void cache_foreach_ru_ordered(const t_lruc *c, t_kvcallback fn, void *user_data);
+void cache_foreach_ttl_ordered(const t_lruc *c, t_kvcallback fn, void *user_data);
 
 #ifdef C_MINI__LRU_INTERNAL
-void cache_unlink_node(t_lruc *c, t_lruc_keynode *node);
-long distance_ms(struct timespec a, struct timespec b);
+uint64_t timeto64(struct timespec t);
+void     cache_unlink_node(t_lruc *c, t_lruc_keynode *node);
+
+size_t hash_djb2(const void *key, size_t size);
 
 t_lruc_keynode *cache_search_keyinhash(const t_lruc *c, const void *key,
                                        size_t key_len, size_t *_pos);

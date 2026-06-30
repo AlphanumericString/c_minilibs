@@ -1,5 +1,6 @@
 #include <bits/time.h>
 #include <bits/types/struct_timeval.h>
+#include <stdint.h>
 #include <string.h>
 #include <time.h>
 
@@ -42,24 +43,32 @@ void *cache_get_lru(t_lruc *c, const void *key, size_t key_len) {
  **/
 void *cache_get(t_lruc *c, const void *key, size_t key_len) {
 	struct timespec now;
+	uint64_t        now_uint;
 	t_lruc_keynode *node;
 	size_t          pos;
 
-	if (!c || !c->MRU || !c->nb) return (NULL);
-	clock_gettime(CLOCK_MONOTONIC, &now);
-	node = cache_search_keyinhash(c, key, key_len, &pos);
+	if (!c || !c->MRU || !c->nb) {
+		LOG(C_MINI__LRU_LOG_EARG);
+		return (NULL);
+	}
+	if (clock_gettime(CLOCK_MONOTONIC, &now) != 0) {
+		LOG(C_MINI__LRU_LOG_ECLOCK);
+		return (NULL);
+	}
+	now_uint = now.tv_sec * 1000ULL + now.tv_nsec / 1000000ULL;
+	node     = cache_search_keyinhash(c, key, key_len, &pos);
 	if (!node || memcmp(node->kv.key, key, key_len) != 0) {
 		c->stats.misses++;
 		LOG(C_MINI__LRU_LOG_MISS_LRU, c->stats.misses, key, key_len);
 		return (NULL);
 	}
-	if (distance_ms(now, node->time) >= c->ttl_glob) {
+	if (node->time >= now_uint + c->ttl_glob) {
 		c->stats.misses++;
 		LOG(C_MINI__LRU_LOG_MISS_TTL, c->stats.misses, key, key_len,
-		    distance_ms(now, node->time));
+		    now_uint + node->time);
 		return (NULL);
 	}
-	cache_unlink_node(c, node);
+	pop_lruc(c, node);
 	node->lru_next = c->MRU;
 	c->stats.hit++;
 	c->MRU = node;

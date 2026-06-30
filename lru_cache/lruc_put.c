@@ -2,6 +2,7 @@
 #include <bits/time.h>
 #include <bits/types/struct_timeval.h>
 #include <stddef.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,66 +11,30 @@
 #define C_MINI__LRU_INTERNAL
 #include "least_recently_used_cache.h"
 
-#define MAX(a, b) ((a) > (b)) ? (a) : (b)
-
-// Very fast, but not very good
-// see http://www.cse.yorku.ca/~oz/hash.html
-// See ft_hash_sdbm or ft_hash_fnv1a for less collisions prone hash functions
-/**
- * @brief Hash a key using djb2 algorithm
- * @param key key to hash
- * @param size key size
- * @return hash value
- **/
-size_t hash_djb2(const void *key, size_t size) {
-	unsigned char *str;
-	size_t         hash;
-
-	hash = 5381;
-	str  = (unsigned char *)key;
-	while (size--)
-		hash = (hash << 5) + hash + str[size];
-	return (hash);
-}
-static struct timespec add_times(struct timespec a, struct timespec b) {
-	a = (struct timespec){
-	    .tv_sec  = a.tv_sec + b.tv_sec,
-	    .tv_nsec = a.tv_nsec + b.tv_nsec,
-	};
-
-	if (a.tv_nsec >= 1000000000L) {
-		++a.tv_sec;
-		a.tv_nsec -= 1000000000L;
-	}
-	return (a);
-}
 /**
  * Insert a key-value pair into the cache in lru and ttl
  * internal function
  **/
 static int insert_with_ttl_regards(t_lruc_keynode kv, t_lruc_keynode *node,
                                    t_lruc *c) {
-	struct timespec tmp;
 	t_lruc_keynode *it = NULL;
 
-	clock_gettime(CLOCK_MONOTONIC, &tmp);
-	kv.time = add_times(kv.time, tmp);
-	*node   = kv;
+	*node = kv;
 	push_lruc(c, node);
 	if (c->nb == 1) {
 		c->TTL_Max = node;
 		c->TTL_Min = node;
-	} else if (distance_ms(kv.time, c->TTL_Min->time) <= 0) {
+	} else if (kv.time <= c->TTL_Min->time) {
 		c->TTL_Min->ttl_next = node;
 		node->ttl_prev       = c->TTL_Min;
 		c->TTL_Min           = node;
-	} else if (distance_ms(kv.time, c->TTL_Max->time) >= 0) {
+	} else if (kv.time >= c->TTL_Max->time) {
 		c->TTL_Max->ttl_prev = node;
 		node->ttl_next       = c->TTL_Max;
 		c->TTL_Max           = node;
 	} else {
 		it = c->TTL_Max;
-		while (distance_ms(kv.time, it->time) < 0)
+		while (kv.time < it->time)
 			it = it->ttl_next;
 		assert(it != NULL);
 		if (it->ttl_prev) it->ttl_prev->ttl_next = node;
@@ -88,8 +53,11 @@ static int cache_put_internal(t_lruc *c, t_lruc_keynode to_add) {
 	t_lruc_keynode *node = NULL;
 	size_t          pos;
 
-	if (!to_add.kv.key) return (-1);
-	if (to_add.kv.k_len == (size_t)-1) to_add.kv.k_len = strlen(to_add.kv.key);
+	if (!c || !to_add.kv.key || to_add.kv.k_len <= 0 ||
+	    to_add.kv.k_len == (size_t)-1) {
+		LOG(C_MINI__LRU_LOG_EARG);
+		return (-1);
+	}
 	node = cache_search_keyinhash(c, to_add.kv.key, to_add.kv.k_len, &pos);
 	if (node != NULL && node->kv.k_len == to_add.kv.k_len &&
 	    !memcmp(node->kv.key, to_add.kv.key, to_add.kv.k_len)) { // update value
@@ -102,9 +70,10 @@ static int cache_put_internal(t_lruc *c, t_lruc_keynode to_add) {
 		c->h_arr[pos] = node;
 		c->nb++;
 	} else { // re-use cache tail node (LRU) since cachce is full
-		clock_gettime(CLOCK_MONOTONIC, &now);
-		node = (distance_ms(now, c->TTL_Min->time) >= c->ttl_glob) ? c->TTL_Min
-		                                                           : c->LRU;
+		if (clock_gettime(CLOCK_MONOTONIC, &now) == -1 ||
+		    c->TTL_Min->time <= timeto64(now) + c->ttl_glob)
+			node = c->LRU;
+		else node = c->TTL_Min;
 		LOG(C_MINI__LRU_LOG_CREATEVAL, to_add.kv.key, to_add.kv.k_len);
 		LOG(C_MINI__LRU_LOG_DELETEVAL, node->kv.key, node->kv.k_len);
 		if (c->dtor) c->dtor(c->LRU->kv.value);
@@ -119,12 +88,20 @@ static int cache_put_internal(t_lruc *c, t_lruc_keynode to_add) {
  * @return 0 on success, -1 on failure
  **/
 int cache_put_kv(t_lruc *c, t_keyvalue kv) {
-	return (cache_put_internal(c, (t_lruc_keynode){.kv   = kv,
-	                                               .time = (struct timespec){0},
-	                                               .lru_next = 0,
-	                                               .ttl_next = 0,
-	                                               .ttl_prev = 0,
-	                                               .lru_prev = 0}));
+	struct timespec now;
+
+	if (clock_gettime(CLOCK_MONOTONIC, &now) != 0) {
+		LOG(C_MINI__LRU_LOG_ECLOCK);
+		return (-1);
+	}
+	return (
+	    cache_put_internal(c, (t_lruc_keynode){.kv   = kv,
+	                                           .time = now.tv_sec * 1000ULL +
+	                                                   now.tv_nsec / 1000000ULL,
+	                                           .lru_next = 0,
+	                                           .ttl_next = 0,
+	                                           .ttl_prev = 0,
+	                                           .lru_prev = 0}));
 }
 /**
  * @brief Put a key-value pair into the cache
@@ -134,20 +111,27 @@ int cache_put_kv(t_lruc *c, t_keyvalue kv) {
  * @param value value to put
  * @return 0 on success, -1 on failure
  **/
-int cache_put(t_lruc *cache, const void *key, size_t key_len, void *value) {
-	return (cache_put_internal(cache, (t_lruc_keynode){
-	                                      .kv = (t_keyvalue){.key = (void *)key,
-	                                                         .k_len = key_len,
-	                                                         .value = value},
-	                                      .time     = (struct timespec){0},
-	                                      .lru_next = NULL,
-	                                      .lru_prev = NULL,
-	                                      .ttl_next = NULL,
-	                                      .ttl_prev = NULL
+int cache_put(t_lruc *cache, const void *key, size_t key_len,
+              const void *value) {
+	struct timespec now;
+
+	if (clock_gettime(CLOCK_MONOTONIC, &now) != 0) {
+		LOG(C_MINI__LRU_LOG_ECLOCK);
+		return (-1);
+	}
+	return (cache_put_internal(
+	    cache, (t_lruc_keynode){
+	               .kv       = (t_keyvalue){.key   = (void *)key,
+	                                        .k_len = key_len,
+	                                        .value = (void *)value},
+	               .time     = now.tv_sec * 1000ULL + now.tv_nsec / 1000000ULL,
+	               .lru_next = NULL,
+	               .lru_prev = NULL,
+	               .ttl_next = NULL,
+	               .ttl_prev = NULL
     }));
 }
 
-// puts a key in the cache and add ttl_ms more ms to the cache validity period
 /**
  * @brief Put a key-value pair into the cache with a time to live
  * @param cache cache pointer
@@ -157,16 +141,21 @@ int cache_put(t_lruc *cache, const void *key, size_t key_len, void *value) {
  * @param ttl_ms time to live in milliseconds
  * @return 0 on success, -1 on failure
  **/
-int cache_put_ttl(t_lruc *cache, const void *key, size_t key_len, void *value,
-                  uint64_t ttl_ms) {
+int cache_put_ttl(t_lruc *cache, const void *key, size_t key_len,
+                  const void *value, uint64_t ttl_ms) {
+	struct timespec now;
+
+	if (clock_gettime(CLOCK_MONOTONIC, &now) != 0) {
+		LOG(C_MINI__LRU_LOG_ECLOCK);
+		return (-1);
+	}
 	return (cache_put_internal(
 	    cache,
 	    (t_lruc_keynode){
-	        .kv       = (t_keyvalue){.key   = (void *)key,
-	                                 .k_len = key_len,
-	                                 .value = value},
-	        .time     = (struct timespec){.tv_sec  = ttl_ms / 1000,
-                                     .tv_nsec = (ttl_ms % 1000) * 1000000},
+	        .kv   = (t_keyvalue){.key   = (void *)key,
+	                             .k_len = key_len,
+	                             .value = (void *)value},
+	        .time = now.tv_sec * 1000ULL + now.tv_nsec / 1000000ULL + ttl_ms,
 	        .lru_next = NULL,
 	        .lru_prev = NULL,
 	        .ttl_next = NULL,

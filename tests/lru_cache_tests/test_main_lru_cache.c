@@ -9,6 +9,8 @@ int main() {
 	test_lruc_create();
 	test_lruc_init();
 	test_lruc_destroy();
+	// test_lruc_free();
+	// put
 	LOG("");
 	LOG("Put");
 	test_lruc_put_kv();

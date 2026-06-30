@@ -52,19 +52,25 @@ void cache_unlink_node(t_lruc *c, t_lruc_keynode *n) {
 	pop_lruc(c, n);
 	pop_ttl(c, n);
 }
+// Very fast, but not very good
+// see http://www.cse.yorku.ca/~oz/hash.html
+// See ft_hash_sdbm or ft_hash_fnv1a for less collisions prone hash functions
 /**
- * @brief Calculate the distance in milliseconds between two times
- * @param a first time
- * @param b second time
- * @return distance in milliseconds
+ * @brief Hash a key using djb2 algorithm
+ * @param key key to hash
+ * @param size key size
+ * @return hash value
  **/
-long distance_ms(struct timespec a, struct timespec b) {
-	time_t sec  = a.tv_sec - b.tv_sec;
-	long   nsec = a.tv_nsec - b.tv_nsec;
+size_t hash_djb2(const void *key, size_t size) {
+	unsigned char *str;
+	size_t         hash;
 
-	if (nsec < 0) {
-		sec--;
-		nsec += 1000000000L;
-	}
-	return sec * 1000 + nsec / 1000000;
+	hash = 5381;
+	str  = (unsigned char *)key;
+	while (size--)
+		hash = (hash << 5) + hash + str[size];
+	return (hash);
+}
+uint64_t timeto64(struct timespec t) {
+	return (t.tv_sec * 1000ULL + t.tv_nsec / 1000000ULL);
 }

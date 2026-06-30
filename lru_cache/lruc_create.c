@@ -14,19 +14,19 @@
  **/
 t_lruc *cache_init(t_lruc *cache, size_t cap, void (*dtor)(void *)) {
 	if (!cache) {
-		LOG("Fail : No Cache given");
+		LOG(C_MINI__LRU_LOG_EARG);
 		return (cache);
 	}
 	bzero(cache, sizeof(*cache));
 	cache->h_arr = calloc(sizeof(t_lruc_keynode *), cap);
 	if (!cache->h_arr) {
-		LOG("Allocation error");
+		LOG(C_MINI__LRU_LOG_EALLOC);
 		return (NULL);
 	}
 	cache->cap      = cap;
 	cache->ttl_glob = LONG_MAX, cache->stats = (t_lruc_stats){0};
 	cache->dtor = dtor;
-	LOG("Success");
+	LOG(C_MINI__LRU_LOG_SUCCESS);
 	return (cache);
 }
 
@@ -41,15 +41,15 @@ t_lruc *cache_create(size_t cap, void (*dtor)(void *)) {
 
 	ret = malloc(sizeof(*ret));
 	if (!ret) {
-		LOG("allocation error (main)");
+		LOG(C_MINI__LRU_LOG_EALLOC);
 		return (NULL);
 	}
 	if (cache_init(ret, cap, dtor) == NULL) {
-		LOG("allocation error (hash)");
+		LOG(C_MINI__LRU_LOG_EALLOC);
 		free(ret);
 		ret = NULL;
 	}
-	LOG("Success");
+	LOG(C_MINI__LRU_LOG_SUCCESS);
 	return (ret);
 }
 /**
@@ -57,10 +57,22 @@ t_lruc *cache_create(size_t cap, void (*dtor)(void *)) {
  * @param cache pointer to the cache
  **/
 void cache_destroy(t_lruc *cache) {
-	if (!cache) return;
+	if (!cache) {
+		LOG(C_MINI__LRU_LOG_EARG);
+		return;
+	}
 	cache_clear(cache);
 	free(cache->h_arr);
 	cache->cap   = 0;
 	cache->h_arr = NULL;
-	LOG("Success");
+	LOG(C_MINI__LRU_LOG_SUCCESS);
+}
+void cache_free(t_lruc *cache) {
+	if (!cache) {
+		LOG(C_MINI__LRU_LOG_EARG);
+		return;
+	}
+	cache_destroy(cache);
+	free(cache);
+	LOG(C_MINI__LRU_LOG_SUCCESS);
 }

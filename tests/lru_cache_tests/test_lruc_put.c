@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <bits/time.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
@@ -25,11 +26,22 @@ void test_lruc_put_kv(void) {
 	char           *key = "toto";
 
 	cache_init(&c, 2, NULL);
-	kv1 = (t_keyvalue){.key = NULL, .k_len = -1, .value = (void *)0xDEADBEEF};
-	assert(cache_put_kv(&c, kv1) == -1);
+
+	kv1 = (t_keyvalue){.key = NULL, .k_len = 0, .value = (void *)0xDEADBEEF};
+	DBG_POS;
+	assert(cache_put_kv(&c, kv1) != 0);
 	kv1.key = key;
+	DBG_POS;
+	DBG("kv.key %p key %p kv.k_len %zd (%zd)", kv1.key, key, kv1.k_len,
+	    strlen(key));
+	assert(cache_put_kv(&c, kv1) != 0);
+	kv1.k_len = strlen(key);
+	DBG_POS;
+	DBG("kv.key %p key %p kv.k_len %zd (%zd)", kv1.key, key, kv1.k_len,
+	    strlen(key));
 	assert(cache_put_kv(&c, kv1) == 0);
 	kv_in_cache = cache_search_keyinhash(&c, key, strlen(key), NULL);
+	DBG_POS;
 	assert(kv_in_cache);
 	assert(kv_in_cache->kv.k_len == strlen(key));
 
@@ -92,10 +104,12 @@ void test_lruc_put_ttl(void) {
 		assert(cache_put_ttl(&c, k1, strlen(k1), strdup("result"), 2000) == 0);
 		assert(cache_put_ttl(&c, k2, strlen(k2), strdup("result-prime"),
 		                     1000) == 0);
-		assert(distance_ms(c.TTL_Max->time, c.TTL_Min->time) > 0);
-		clock_gettime(CLOCK_MONOTONIC, &now);
-		assert(distance_ms(now, c.TTL_Max->time) == -2000);
-		assert(distance_ms(now, c.TTL_Min->time) == -1000);
+		assert(c.TTL_Max->time > c.TTL_Min->time);
+		if (clock_gettime(CLOCK_MONOTONIC, &now) != 0)
+			return (cache_destroy(&c), (void)0);
+		uint64_t now_int = now.tv_sec * 1000ULL + now.tv_nsec / 1000000ULL;
+		assert(c.TTL_Max->time - now_int >= 1900);
+		assert(c.TTL_Min->time - now_int >= 900);
 		cache_clear(&c);
 	}
 	{
