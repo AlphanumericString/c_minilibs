@@ -11,6 +11,9 @@ TFLAGS=
 LIBNAMES=
 OBJ_ALL=
 TESTS_ALL=
+VALGRIND_OPT= --leak-check=full --show-leak-kinds=all --track-fds=yes \
+        --trace-children=yes --track-origins=yes --read-var-info=yes \
+        --show-reachable=yes --undef-value-errors=yes
 
 define module_template
 $1_SRC=	$$(shell find $1 -name '*.c')
@@ -41,7 +44,7 @@ all: $(LIBNAMES)
 tests: $(TESTS_ALL)
 tests_run: $(TESTS_ALL)
 	@for t in $^; do \
-		./$$t; \
+		valgrind $(VALGRIND_OPT) -q ./$$t; \
 	done
 
 -include:$(D_FILES)

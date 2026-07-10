@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "dynamic_array.h"
 
 // BUG: bug on the swap

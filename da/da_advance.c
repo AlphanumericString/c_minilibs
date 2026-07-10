@@ -9,7 +9,7 @@
  * \param deletor callback to delete removed elements
  * \param u_data user data for deletor
  * \return true on success, false otherwise
- **/
+**/
 bool da_advance(t_da *da, size_t n, t_callback deletor, void *u_data) {
 	if (!da) return (false);
 	if (n >= da->nb_e) return (da_apply(da, deletor, u_data), da_clr(da), true);

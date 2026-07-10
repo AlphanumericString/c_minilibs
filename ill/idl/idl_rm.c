@@ -9,7 +9,7 @@ t_idl *idl_remove_after(t_idl *prev) {
 	t_idl *to_remove;
 
 	if (!prev || !prev->next) return NULL;
-	to_remove = prev->next;
+	to_remove  = prev->next;
 	prev->next = to_remove->next;
 	if (to_remove->next) to_remove->next->prev = prev;
 	to_remove->next = NULL;
@@ -32,10 +32,10 @@ bool idl_remove_node(t_idl **head, t_idl *target) {
 		target->prev = NULL;
 		return (true);
 	}
-	
+
 	t_idl *curr = idl_find(*head, target);
 	if (!curr) return (false);
-	
+
 	if (target->prev) target->prev->next = target->next;
 	if (target->next) target->next->prev = target->prev;
 	target->next = NULL;

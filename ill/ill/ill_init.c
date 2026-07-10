@@ -34,7 +34,7 @@ void *ill_copy(const t_ill *head, t_duplicator d) {
 	e_curr = d(ill_ntoe(head));
 	nh     = e_curr;
 	if (!e_curr) return (NULL);
-	prv = ill_eton(e_curr, offset);
+	prv  = ill_eton(e_curr, offset);
 	head = head->next;
 	while (head) {
 		e_curr = d(ill_ntoe(head));

@@ -5,6 +5,52 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#ifdef C_MINI__TEST
+#	include <stdio.h>
+
+#	ifndef LOG
+#		define LOG(fmt, ...)                                                  \
+			do {                                                               \
+				printf("\e[33m[LOG]\e[0m: %s: " fmt "\n",                      \
+				       __func__ __VA_OPT__(, ) __VA_ARGS__);                   \
+				fflush(stdout);                                                \
+			} while (0);
+#	endif // !LOG
+
+#	ifndef DBG
+#		define DBG(fmt, ...)                                                  \
+			do {                                                               \
+				printf("\e[36;1m[DBG]\e[0m: %s: " fmt "\n",                    \
+				       __func__ __VA_OPT__(, ) __VA_ARGS__);                   \
+				fflush(stdout);                                                \
+			} while (0);
+#	endif // !DBG
+
+#	ifndef DBG_POS
+#		define DBG_POS                                                        \
+			do {                                                               \
+				printf("\e[34;0m[PATH]\e[0m: %s:%d %s\n", __FILE__, __LINE__,  \
+				       __FUNCTION__);                                          \
+				fflush(stdout);                                                \
+			} while (0);
+#	endif // !DBG_POS
+
+#else // || C_MINI_TEST
+
+#	ifndef LOG
+#		define LOG(fmt, ...) (void)0;
+#	endif // !LOG
+
+#	ifndef DBG
+#		define DBG(fmt, ...) (void)0;
+#	endif // !DBG
+
+#	ifndef DBG_POS
+#		define DBG_POS (void)0;
+#	endif // !DBG_POS
+
+#endif // !C_MINI__TEST
+
 typedef struct s_tlsv {
 	const char *v_name;
 	void       *var;    // mem ptr to var
@@ -23,7 +69,7 @@ extern pthread_key_t vtls_key;
 bool vtls_rm(const char *v_name);
 
 // get
-void *vtls_get(const char *v_name);
+void  *vtls_get(const char *v_name);
 size_t vtls_len(void);
 
 // querry

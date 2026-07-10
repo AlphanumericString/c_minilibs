@@ -49,4 +49,3 @@ bool idl_for(t_idl *head, size_t n, t_callback c, void *u_data) {
 	}
 	return (cb);
 }
-

@@ -1,5 +1,5 @@
 #include <assert.h>
-#include <tls/common_thread_local_storage.h>
+
 #include "tls_tests.h"
 
 void test_ctls_get(void) {

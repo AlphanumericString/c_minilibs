@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include "rb_tests.h"
 
 static bool cb_is_even(void *elem, void *arg) {

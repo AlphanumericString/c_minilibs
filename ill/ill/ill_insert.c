@@ -16,5 +16,5 @@ void ill_append(t_ill *anchor, t_ill *node) {
 **/
 void ill_nappend(t_ill *anchor, t_ill *nodes) {
 	ill_get_tail(nodes)->next = anchor->next;
-	anchor->next = nodes;
+	anchor->next              = nodes;
 }

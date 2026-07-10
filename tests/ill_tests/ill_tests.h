@@ -2,8 +2,9 @@
 
 #include <assert.h>
 
-#include "../../ill/idl/intrusive_doubly_linked.h"
-#include "../../ill/ill/intrusive_linked_lists.h"
+#define C_MINI__TESTS
+#include "ill/idl/intrusive_doubly_linked.h"
+#include "ill/ill/intrusive_linked_lists.h"
 
 // --- Structs for testing ---
 typedef struct s_test_node {

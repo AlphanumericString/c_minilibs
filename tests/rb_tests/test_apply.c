@@ -1,4 +1,5 @@
-#include <rb/round_buffer.h>
+#include <assert.h>
+
 #include "rb_tests.h"
 
 void test_rb_apply(void) {
@@ -9,9 +10,9 @@ void test_rb_apply(void) {
 	rb_npush(&rb, arr, 3);
 
 	assert(rb_apply(&rb, cb_add_one, NULL) == true);
-	assert(*(int*)rb_at(rb, 0) == 2);
-	assert(*(int*)rb_at(rb, 1) == 3);
-	assert(*(int*)rb_at(rb, 2) == 4);
+	assert(*(int *)rb_at(rb, 0) == 2);
+	assert(*(int *)rb_at(rb, 1) == 3);
+	assert(*(int *)rb_at(rb, 2) == 4);
 
 	rb_destroy(&rb);
 }

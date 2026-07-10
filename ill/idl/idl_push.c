@@ -21,10 +21,10 @@ t_idl *idl_push(t_idl **head, t_idl *node) {
 **/
 t_idl *idl_npush(t_idl **head, t_idl *nodes) {
 	t_idl *tail = idl_get_tail(nodes);
-	tail->next = *head;
+	tail->next  = *head;
 	if (*head) (*head)->prev = tail;
 	nodes->prev = NULL;
-	*head = nodes;
+	*head       = nodes;
 	return (*head);
 }
 /**
@@ -36,9 +36,8 @@ t_idl *idl_npush(t_idl **head, t_idl *nodes) {
 t_idl *idl_push_back(t_idl **head, t_idl *node) {
 	if (!*head) return idl_push(head, node);
 	t_idl *tail = idl_get_tail(*head);
-	tail->next = node;
-	node->prev = tail;
-	node->next = NULL;
+	tail->next  = node;
+	node->prev  = tail;
+	node->next  = NULL;
 	return (*head);
 }
-

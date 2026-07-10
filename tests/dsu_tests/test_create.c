@@ -13,7 +13,7 @@ void test_dsu_new(void) {
 	assert(dsu->rank != NULL);
 	assert(dsu->components == 32);
 
-	dsu_destroy(dsu);
+	dsu_free(dsu);
 }
 void test_dsu_new_from_array(void) {}
 void test_dsu_init(void) {}

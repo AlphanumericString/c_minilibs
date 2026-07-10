@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "dynamic_array.h"
@@ -7,7 +8,7 @@
  * \brief shrink the capacity of the dynamic array to fit its elements exactly
  * \param da pointer to the dynamic array
  * \return true on success, false otherwise
- **/
+**/
 bool da_shrink(t_da *da) {
 	return (da_shrink_min(da, 0));
 }
@@ -18,7 +19,7 @@ bool da_shrink(t_da *da) {
  * \param da pointer to the dynamic array
  * \param keep_n minimum number of extra capacity elements to keep
  * \return true on success, false otherwise
- **/
+**/
 bool da_shrink_min(t_da *da, size_t keep_n) {
 	void *tmp;
 

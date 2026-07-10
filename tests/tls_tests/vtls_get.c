@@ -1,5 +1,4 @@
 #include <assert.h>
-#include <tls/voided_thread_local_storage.h>
 
 #include "tls_tests.h"
 

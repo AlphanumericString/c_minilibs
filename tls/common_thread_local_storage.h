@@ -8,6 +8,52 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef C_MINI__TEST
+#	include <stdio.h>
+
+#	ifndef LOG
+#		define LOG(fmt, ...)                                                  \
+			do {                                                               \
+				printf("\e[33m[LOG]\e[0m: %s: " fmt "\n",                      \
+				       __func__ __VA_OPT__(, ) __VA_ARGS__);                   \
+				fflush(stdout);                                                \
+			} while (0);
+#	endif // !LOG
+
+#	ifndef DBG
+#		define DBG(fmt, ...)                                                  \
+			do {                                                               \
+				printf("\e[36;1m[DBG]\e[0m: %s: " fmt "\n",                    \
+				       __func__ __VA_OPT__(, ) __VA_ARGS__);                   \
+				fflush(stdout);                                                \
+			} while (0);
+#	endif // !DBG
+
+#	ifndef DBG_POS
+#		define DBG_POS                                                        \
+			do {                                                               \
+				printf("\e[34;0m[PATH]\e[0m: %s:%d %s\n", __FILE__, __LINE__,  \
+				       __FUNCTION__);                                          \
+				fflush(stdout);                                                \
+			} while (0);
+#	endif // !DBG_POS
+
+#else // || C_MINI_TEST
+
+#	ifndef LOG
+#		define LOG(fmt, ...) (void)0;
+#	endif // !LOG
+
+#	ifndef DBG
+#		define DBG(fmt, ...) (void)0;
+#	endif // !DBG
+
+#	ifndef DBG_POS
+#		define DBG_POS (void)0;
+#	endif // !DBG_POS
+
+#endif // !C_MINI__TEST
+
 #ifndef C_MINI__CTLS_CAP
 #	define C_MINI__CTLS_CAP 16
 #endif
@@ -26,7 +72,7 @@ enum e_ctls_type {
  * \brief type-sfafe abstraction of base c types.
  * \param type enum of c types.
  * \param value union of different possible interpretation of data.
- **/
+**/
 typedef struct {
 	enum e_ctls_type type;
 	union {
@@ -44,9 +90,9 @@ typedef struct {
  * \param len lenght of the array curently being used.
  * \note if you want to increase the CTLS_CAP it's STRONGLY reccomended to not
  * go over 256
- **/
+**/
 typedef struct s_ctlsv {
-	const char      *v_name[C_MINI__CTLS_CAP];
+	const char     *v_name[C_MINI__CTLS_CAP];
 	t_ctls_typewrap vals[C_MINI__CTLS_CAP];
 	size_t          len;
 } t_ctlsv;

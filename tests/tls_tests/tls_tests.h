@@ -7,7 +7,7 @@ struct s_mine {
 };
 
 #define C_MINI__FTLS_STRUCT struct s_mine
-
+#define C_MINI__TESTS
 #include "tls/common_thread_local_storage.h"
 #include "tls/fast_thread_local_storage.h"
 #include "tls/voided_thread_local_storage.h"
@@ -30,19 +30,19 @@ void test_ctls_has(void);
 void test_ctls_set(void);
 // get
 void test_ctls_get(void);
-void  test_ctls_len(void);
+void test_ctls_len(void);
 // utils
 void test_ctls_dump_typewrap(void);
 
 // thread spearation check
-void	test_ctls_separate(void);
+void test_ctls_separate(void);
 
 // +----+
 // |FTLS|---------<ftls>
 // +----+
 
-void	test_ftls_get(void);
-void	test_ftls_separate(void);
+void test_ftls_get(void);
+void test_ftls_separate(void);
 
 // +----+
 // |VTLS|---------<vtls>

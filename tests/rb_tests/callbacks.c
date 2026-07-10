@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "rb_tests.h"
 
 bool cb_true(void *elem, void *arg) {

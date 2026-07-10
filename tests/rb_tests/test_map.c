@@ -1,3 +1,6 @@
+#include <assert.h>
+#include <stdlib.h>
+
 #include "rb_tests.h"
 
 void test_rb_map(void) {

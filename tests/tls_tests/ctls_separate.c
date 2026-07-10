@@ -1,7 +1,6 @@
 #include <assert.h>
 #include <pthread.h>
 #include <stddef.h>
-#include <tls/common_thread_local_storage.h>
 #include <unistd.h>
 
 #include "tls_tests.h"

@@ -10,7 +10,7 @@
  * \param v_val the value of the variable
  * \param v_size the size of the value
  * \return true if value was added to the vtls, false in any other case
- **/
+**/
 bool vtls_set(const char *v_name, void *v_val, size_t v_size) {
 	t_vtls_array *vtls = pthread_getspecific(vtls_key);
 	size_t        i    = 0;
@@ -27,12 +27,11 @@ bool vtls_set(const char *v_name, void *v_val, size_t v_size) {
 			return (memcpy(&vtls->data[i].var, v_val, v_size), true);
 	}
 	if (vtls->len == vtls->cap) { // grow
-		i = vtls->cap;
+		i    = vtls->cap;
 		grow = realloc(vtls->data, sizeof(t_vtls) * (!i ? 16 : i) * 2);
-		if (!grow)
-			return (false);
+		if (!grow) return (false);
 		vtls->data = grow;
-		vtls->cap = (!i ? 16 : i) * 2;
+		vtls->cap  = (!i ? 16 : i) * 2;
 	}
 	vtls->data[vtls->len++] =
 	    (t_vtls){.var = v_val, .size_e = v_size, .v_name = v_name};

@@ -2,8 +2,52 @@
 
 #	include <stdbool.h>
 #	include <stddef.h>
-#	include <stdlib.h>
-#	include <string.h>
+
+#	ifdef C_MINI__TEST
+#		include <stdio.h>
+
+#		ifndef LOG
+#			define LOG(fmt, ...)                                              \
+				do {                                                           \
+					printf("\e[33m[LOG]\e[0m: %s: " fmt "\n",                  \
+					       __func__ __VA_OPT__(, ) __VA_ARGS__);               \
+					fflush(stdout);                                            \
+				} while (0);
+#		endif // !LOG
+
+#		ifndef DBG
+#			define DBG(fmt, ...)                                              \
+				do {                                                           \
+					printf("\e[36;1m[DBG]\e[0m: %s: " fmt "\n",                \
+					       __func__ __VA_OPT__(, ) __VA_ARGS__);               \
+					fflush(stdout);                                            \
+				} while (0);
+#		endif // !DBG
+
+#		ifndef DBG_POS
+#			define DBG_POS                                                    \
+				do {                                                           \
+					printf("\e[34;0m[PATH]\e[0m: %s:%d %s\n", __FILE__,        \
+					       __LINE__, __FUNCTION__);                            \
+					fflush(stdout);                                            \
+				} while (0);
+#		endif // !DBG_POS
+
+#	else // || C_MINI_TEST
+
+#		ifndef LOG
+#			define LOG(fmt, ...) (void)0;
+#		endif // !LOG
+
+#		ifndef DBG
+#			define DBG(fmt, ...) (void)0;
+#		endif // !DBG
+
+#		ifndef DBG_POS
+#			define DBG_POS (void)0;
+#		endif // !DBG_POS
+
+#	endif // !C_MINI__TEST
 
 // comon funct ptr definitions
 
@@ -16,7 +60,7 @@
  * \param  elem pointer to the element
  * \param  arg  argument passed as is from up function
  * \return expected to return true on success false otherwise
- **/
+**/
 typedef bool (*t_callback)(void *elem, void *arg);
 
 #	endif
@@ -32,7 +76,7 @@ typedef bool (*t_callback)(void *elem, void *arg);
  * \param  pos  position of the elem in the sub array backing
  * \param  last boolean on wheter or not this is the last element of the call
  * \return expected to return true on success false otherwise
- **/
+**/
 typedef bool (*t_callback_it)(void *elem, void *arg, size_t pos, bool last);
 
 #	endif // CMINI_T_CALLBAKC_IT
@@ -46,7 +90,7 @@ typedef bool (*t_callback_it)(void *elem, void *arg, size_t pos, bool last);
  * \param elem pointer to the element
  * \param arg argument passed as is from up function
  * \return expected to return <0, 0, >0 for inferior to, equal, superior to
- **/
+**/
 typedef int (*t_comparator)(const void *elem, const void *arg);
 
 #	endif
@@ -58,7 +102,7 @@ typedef int (*t_comparator)(const void *elem, const void *arg);
  * \brief duplication function pointer for datas
  * \param elem pointer to the duplication target
  * \return pointer to a valid copy of the data
- **/
+**/
 typedef void *(*t_duplicator)(const void *elem);
 
 #	endif
@@ -76,7 +120,7 @@ typedef void *(*t_merger)(void *elem, void *arg);
  * \param nb_e number of elements currently present in the array
  * \param cap_e number of elements the memory can hold
  * \param sz_e size of 1 elements (the generic part of the array)
- **/
+**/
 typedef struct s_dynamic_memory_array {
 	void  *array;
 	size_t nb_e;

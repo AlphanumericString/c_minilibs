@@ -23,7 +23,7 @@ static void __attribute__((constructor())) init_ctls(void) {
  * \brief dumps the value contained in a type-safe wrapper
  * \param t the type to dump the value of
  * \note this dumps the value directly to console and is viewed as a debug tool
- **/
+**/
 void ctls_dump_typewrap(t_ctls_typewrap t, int fd) {
 	switch (t.type) {
 	case CTLS_INT:

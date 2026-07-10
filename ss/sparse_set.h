@@ -1,9 +1,55 @@
 #ifndef C_MINI__SS
-#	define C_MINI__SS
+#define C_MINI__SS
 
-#	include <stdlib.h>
-#	include <stddef.h>
-#	include <stdbool.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdlib.h>
+
+#ifdef C_MINI__TEST
+#	include <stdio.h>
+
+#	ifndef LOG
+#		define LOG(fmt, ...)                                                  \
+			do {                                                               \
+				printf("\e[33m[LOG]\e[0m: %s: " fmt "\n",                      \
+				       __func__ __VA_OPT__(, ) __VA_ARGS__);                   \
+				fflush(stdout);                                                \
+			} while (0);
+#	endif // !LOG
+
+#	ifndef DBG
+#		define DBG(fmt, ...)                                                  \
+			do {                                                               \
+				printf("\e[36;1m[DBG]\e[0m: %s: " fmt "\n",                    \
+				       __func__ __VA_OPT__(, ) __VA_ARGS__);                   \
+				fflush(stdout);                                                \
+			} while (0);
+#	endif // !DBG
+
+#	ifndef DBG_POS
+#		define DBG_POS                                                        \
+			do {                                                               \
+				printf("\e[34;0m[PATH]\e[0m: %s:%d %s\n", __FILE__, __LINE__,  \
+				       __FUNCTION__);                                          \
+				fflush(stdout);                                                \
+			} while (0);
+#	endif // !DBG_POS
+
+#else // || C_MINI_TEST
+
+#	ifndef LOG
+#		define LOG(fmt, ...) (void)0;
+#	endif // !LOG
+
+#	ifndef DBG
+#		define DBG(fmt, ...) (void)0;
+#	endif // !DBG
+
+#	ifndef DBG_POS
+#		define DBG_POS (void)0;
+#	endif // !DBG_POS
+
+#endif // !C_MINI__TEST
 
 /**
  * \brief sparse set structure
@@ -51,7 +97,7 @@ void *ss_fold(t_ss *ss, void *u_val, void (*func)(void *u_val, void *e_val));
 void *ss_to_array(t_ss *ss);
 void *ss_to_loc_array(t_ss *ss, void *arr);
 
-#	define C_MINI_SS_SZ_ELEM_DFLT 1024
-#	define C_MINI_SS_NB_ELEM_DFLT 4
+#define C_MINI_SS_SZ_ELEM_DFLT 1024
+#define C_MINI_SS_NB_ELEM_DFLT 4
 
 #endif // !C_MINI__SS

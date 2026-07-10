@@ -5,43 +5,67 @@
 #include <stdint.h>
 #include <time.h>
 
-#define C_MINI__LRU_LOG_EVICTION                                               \
-	"Eviction: key=%p reason:ttl, delta (%ld) >= ttl (%ld)"
-#define C_MINI__LRU_LOG_UPDATE   "Update ttl: %ld->%ld)"
-#define C_MINI__LRU_LOG_HIT      "Hit: hit=%zu, key:%p, key_len:%zu"
-#define C_MINI__LRU_LOG_MISS_LRU "LRU-Miss: miss=%zu, key:%p, key_len:%zu"
-#define C_MINI__LRU_LOG_MISS_TTL                                               \
-	"TTL-Miss: miss=%zu, key:%p, key_len:%zu delta(%ld)"
-#define C_MINI__LRU_LOG_UPDATEVAL "Update: key:%p, key_len:%zu"
-#define C_MINI__LRU_LOG_CREATEVAL "Create: key:%p, key_len:%zu"
-#define C_MINI__LRU_LOG_DELETEVAL "Delete: key:%p, key_len:%zu"
-#define C_MINI__LRU_LOG_FAST_FREE "Fast free via list started"
-#define C_MINI__LRU_LOG_LFREE     "Cleanup via list started"
-#define C_MINI__LRU_LOG_HFREE     "Cleanup via hash started"
-
 #define C_MINI__LRU_HASH_SKIP 10
 
-#ifdef C_MINI__TESTS
-
+#ifdef C_MINI__TEST
 #	include <stdio.h>
 
-#	define DBG(fmt, ...)                                                      \
-		printf("\e[33;5m[DBG]\e[0m: %s: " fmt "\n",                            \
-		       __func__ __VA_OPT__(, ) __VA_ARGS__)
-#	define LOG(fmt, ...)                                                      \
-		printf("\e[32m[LOG]\e[0m: %s: " fmt "\n",                              \
-		       __func__ __VA_OPT__(, ) __VA_ARGS__);
-#	define DBG_POS                                                            \
-		do {                                                                   \
-			DBG(" %s:%d \e[33;4m[PATH]\e[0m", __FILE__, __LINE__);             \
-		} while (0)
-#else
+#	ifndef LOG
+#		define LOG(fmt, ...)                                                  \
+			do {                                                               \
+				printf("\e[33m[LOG]\e[0m: %s: " fmt "\n",                      \
+				       __func__ __VA_OPT__(, ) __VA_ARGS__);                   \
+				fflush(stdout);                                                \
+			} while (0);
+#	endif // !LOG
 
-#	define DBG(fmt, ...) (void)fmt;
-#	define LOG(fmt, ...) (void)fmt;
-#	define DBG_POS       (void);
+#	ifndef DBG
+#		define DBG(fmt, ...)                                                  \
+			do {                                                               \
+				printf("\e[36;1m[DBG]\e[0m: %s: " fmt "\n",                    \
+				       __func__ __VA_OPT__(, ) __VA_ARGS__);                   \
+				fflush(stdout);                                                \
+			} while (0);
+#	endif // !DBG
 
-#endif // C_MINI__TESTS
+#	ifndef DBG_POS
+#		define DBG_POS                                                        \
+			do {                                                               \
+				printf("\e[34;0m[PATH]\e[0m: %s:%d %s\n", __FILE__, __LINE__,  \
+				       __FUNCTION__);                                          \
+				fflush(stdout);                                                \
+			} while (0);
+#	endif // !DBG_POS
+
+#	define C_MINI__LRU_LOG_EVICTION                                           \
+		"Eviction: key=%p reason:ttl, delta (%ld) >= ttl (%ld)"
+#	define C_MINI__LRU_LOG_UPDATE   "Update ttl: %ld->%ld)"
+#	define C_MINI__LRU_LOG_HIT      "Hit: hit=%zu, key:%p, key_len:%zu"
+#	define C_MINI__LRU_LOG_MISS_LRU "LRU-Miss: miss=%zu, key:%p, key_len:%zu"
+#	define C_MINI__LRU_LOG_MISS_TTL                                           \
+		"TTL-Miss: miss=%zu, key:%p, key_len:%zu delta(%ld)"
+#	define C_MINI__LRU_LOG_UPDATEVAL "Update: key:%p, key_len:%zu"
+#	define C_MINI__LRU_LOG_CREATEVAL "Create: key:%p, key_len:%zu"
+#	define C_MINI__LRU_LOG_DELETEVAL "Delete: key:%p, key_len:%zu"
+#	define C_MINI__LRU_LOG_FAST_FREE "Fast free via list started"
+#	define C_MINI__LRU_LOG_LFREE     "Cleanup via list started"
+#	define C_MINI__LRU_LOG_HFREE     "Cleanup via hash started"
+
+#else // || C_MINI_TEST
+
+#	ifndef LOG
+#		define LOG(fmt, ...) (void)0;
+#	endif // !LOG
+
+#	ifndef DBG
+#		define DBG(fmt, ...) (void)0;
+#	endif // !DBG
+
+#	ifndef DBG_POS
+#		define DBG_POS (void)0;
+#	endif // !DBG_POS
+
+#endif // !C_MINI__TEST
 
 typedef struct {
 	size_t misses;
@@ -116,7 +140,7 @@ typedef struct {
  * \param  elem pointer to the element
  * \param  arg  argument passed as is from up function
  * \return expected to return true on success false otherwise
- **/
+**/
 typedef bool (*t_kvcallback)(t_keyvalue *elem, void *arg);
 
 #endif // CMINI__T_CALLBAKC_DEFINE

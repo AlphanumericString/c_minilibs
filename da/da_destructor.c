@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "dynamic_array.h"
 
 /**

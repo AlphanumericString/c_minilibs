@@ -1,4 +1,7 @@
+#include <assert.h>
 #include <rb/round_buffer.h>
+#include <stdlib.h>
+
 #include "rb_tests.h"
 
 void test_rb_grow(void) {
@@ -14,5 +17,6 @@ void test_rb_grow(void) {
 	assert(rb.nb_max == 2);
 
 	rb_destroy(&rb);
-	rb_destroy(p); free(p);
+	rb_destroy(p);
+	free(p);
 }

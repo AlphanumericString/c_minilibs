@@ -1,3 +1,5 @@
+#include <string.h>
+
 #include "dynamic_array.h"
 
 /**
@@ -23,8 +25,7 @@ bool da_get(t_da *vec, size_t pos, void *out_buffer) {
  * \param out_buffer pointer where the element will be copied
  * \return true on success, false on failure
 **/
-bool  da_nget(t_da *da, size_t n, size_t pos, void *out_buffer)
-{
+bool da_nget(t_da *da, size_t n, size_t pos, void *out_buffer) {
 	if (!da || pos >= da->nb_e) return (false);
 	if (!out_buffer) return (false);
 	if (!n) return (true);

@@ -1,12 +1,9 @@
 #pragma once
 
-#include <assert.h>
 #include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-#include "../../rb/round_buffer.h"
+#define C_MINI__TESTS
+#include "rb/round_buffer.h"
 
 #define ASSERT_RB_STATE(rb, sz, max, i, o)                                     \
 	do {                                                                       \

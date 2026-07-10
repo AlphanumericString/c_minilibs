@@ -1,6 +1,5 @@
 #include <assert.h>
 #include <stddef.h>
-#include <tls/common_thread_local_storage.h>
 
 #include "tls_tests.h"
 
@@ -19,7 +18,7 @@ void test_ctls_set(void) {
 	assert(ctls_set(names[i], val) != true);
 	assert(ctls_len() == C_MINI__CTLS_CAP);
 	val.value.l = '+';
-	val.type = CTLS_LONG;
+	val.type    = CTLS_LONG;
 	ctls_set(names[3], val);
 	assert(ctls_get(names[2])->type == CTLS_INT);
 	assert(ctls_get(names[3])->type == CTLS_LONG);

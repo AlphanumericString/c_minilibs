@@ -3,6 +3,52 @@
 #	include <stdbool.h>
 #	include <stddef.h>
 
+#	ifdef C_MINI__TEST
+#		include <stdio.h>
+
+#		ifndef LOG
+#			define LOG(fmt, ...)                                              \
+				do {                                                           \
+					printf("\e[33m[LOG]\e[0m: %s: " fmt "\n",                  \
+					       __func__ __VA_OPT__(, ) __VA_ARGS__);               \
+					fflush(stdout);                                            \
+				} while (0);
+#		endif // !LOG
+
+#		ifndef DBG
+#			define DBG(fmt, ...)                                              \
+				do {                                                           \
+					printf("\e[36;1m[DBG]\e[0m: %s: " fmt "\n",                \
+					       __func__ __VA_OPT__(, ) __VA_ARGS__);               \
+					fflush(stdout);                                            \
+				} while (0);
+#		endif // !DBG
+
+#		ifndef DBG_POS
+#			define DBG_POS                                                    \
+				do {                                                           \
+					printf("\e[34;0m[PATH]\e[0m: %s:%d %s\n", __FILE__,        \
+					       __LINE__, __FUNCTION__);                            \
+					fflush(stdout);                                            \
+				} while (0);
+#		endif // !DBG_POS
+
+#	else // || C_MINI_TEST
+
+#		ifndef LOG
+#			define LOG(fmt, ...) (void)0;
+#		endif // !LOG
+
+#		ifndef DBG
+#			define DBG(fmt, ...) (void)0;
+#		endif // !DBG
+
+#		ifndef DBG_POS
+#			define DBG_POS (void)0;
+#		endif // !DBG_POS
+
+#	endif // !C_MINI__TEST
+
 #	ifndef CMINI_T_CALLBAKC_DEFINE
 #		define CMINI_T_CALLBAKC_DEFINE
 
@@ -12,7 +58,7 @@
  * \param  elem pointer to the element
  * \param  arg  argument passed as is from up function
  * \return expected to return true on success false otherwise
- **/
+**/
 typedef bool (*t_callback)(void *elem, void *arg);
 
 #	endif
@@ -26,7 +72,7 @@ typedef bool (*t_callback)(void *elem, void *arg);
  * \param elem pointer to the element
  * \param arg argument passed as is from up function
  * \return expected to return <0, 0, >0 for inferior to, equal, superior to
- **/
+**/
 typedef int (*t_comparator)(void *elem, void *arg);
 
 #	endif
@@ -38,7 +84,7 @@ typedef int (*t_comparator)(void *elem, void *arg);
  * \brief duplication function pointer for datas
  * \param elem pointer to the duplication target
  * \return pointer to a valid copy of the data
- **/
+**/
 typedef void *(*t_duplicator)(const void *elem);
 
 #	endif
@@ -47,7 +93,7 @@ typedef void *(*t_duplicator)(const void *elem);
  * \brief t_ill struct
  * \param offset offset of the node in the element
  * \param next pointer to the next node
- **/
+**/
 typedef struct s_ill {
 	size_t        offset;
 	struct s_ill *next;

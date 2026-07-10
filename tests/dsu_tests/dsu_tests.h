@@ -2,7 +2,8 @@
 
 #include <assert.h>
 
-#include "../../dsu/disjointed_set_union.h"
+#define C_MINI__TESTS
+#include "dsu/disjointed_set_union.h"
 
 #define DISP_DSU(dsu)                                                          \
 	do {                                                                       \
@@ -12,8 +13,8 @@
 		       "\t.parent:%p\n"                                                \
 		       "\t.rank:%p\n"                                                  \
 		       "\t.nb_set:%zu\n",                                              \
-		       (dsu).size, (dsu).rp_single_alloc ? "true" : "no", (dsu).parent,   \
-		       (dsu).rank, (dsu).components);                                  \
+		       (dsu).size, (dsu).rp_single_alloc ? "true" : "no",              \
+		       (dsu).parent, (dsu).rank, (dsu).components);                    \
 		if (!(dsu).parent || !(dsu).rank) {                                    \
 			printf("\tparents - or - rank missing\n");                         \
 			break;                                                             \

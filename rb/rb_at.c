@@ -44,8 +44,7 @@ void *rb_nat(t_rb rb, size_t idx, size_t n, void *buff) {
 	} else {
 		first_chunk  = rb.nb_max - start_pos;
 		second_chunk = n - first_chunk;
-		memcpy(buff, rb.array + (start_pos * rb.sz_e),
-		       first_chunk * rb.sz_e);
+		memcpy(buff, rb.array + (start_pos * rb.sz_e), first_chunk * rb.sz_e);
 		memcpy(buff + (first_chunk * rb.sz_e), rb.array,
 		       second_chunk * rb.sz_e);
 	}

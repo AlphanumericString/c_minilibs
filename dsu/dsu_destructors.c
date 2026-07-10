@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "disjointed_set_union.h"
 
 /**
@@ -24,4 +26,13 @@ void dsu_clr(t_dsu *dsu) {
 		dsu->rank[i++] = 0;
 	}
 	dsu->components = dsu->size;
+}
+/**
+ * \brief cleans up the structurre and then free's it
+ * \param the dsu to clean
+**/
+void dsu_free(t_dsu *ds) {
+	if (!ds) return;
+	dsu_destroy(ds);
+	free(ds);
 }

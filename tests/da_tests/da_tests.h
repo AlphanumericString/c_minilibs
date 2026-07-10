@@ -6,7 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../../da/dynamic_array.h"
+#define C_MINI__TESTS
+#include "da/dynamic_array.h"
 
 #define ASSERT_DA_STATE(da, sz, cap, nb)                                       \
 	do {                                                                       \

@@ -1,4 +1,5 @@
 #include <assert.h>
+
 #include "rb_tests.h"
 
 void test_rb_destroy(void) {

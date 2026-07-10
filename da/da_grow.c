@@ -1,10 +1,13 @@
+#include <stdlib.h>
+#include <string.h>
+
 #include "dynamic_array.h"
 
 /**
  * \brief grow the capacity of the dynamic array
  * \param da pointer to the dynamic array
  * \return true on success, false otherwise
- **/
+**/
 bool da_grow(t_da *da) {
 	size_t new_size;
 	void  *tmp;
@@ -24,11 +27,12 @@ bool da_grow(t_da *da) {
 }
 
 /**
- * \brief grow the capacity of the dynamic array to ensure a minimum number of free elements
+ * \brief grow the capacity of the dynamic array to ensure a minimum number of
+ * free elements
  * \param da pointer to the dynamic array
  * \param minimal_free_elems minimum number of free elements to guarantee
  * \return true on success, false otherwise
- **/
+**/
 bool da_grow_for_size(t_da *da, size_t minimal_free_elems) {
 	size_t new_size;
 	void  *tmp;
@@ -44,7 +48,7 @@ bool da_grow_for_size(t_da *da, size_t minimal_free_elems) {
 		memcpy(tmp, da->array, da->nb_e * da->sz_e);
 		free(da->array);
 	}
-	da->array  = tmp;
+	da->array = tmp;
 	da->cap_e = new_size;
 	return (true);
 }

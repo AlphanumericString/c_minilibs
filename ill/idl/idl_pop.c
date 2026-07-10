@@ -10,7 +10,7 @@ t_idl *idl_pop(t_idl **head) {
 
 	if (!*head) return NULL;
 	to_remove = *head;
-	*head = (*head)->next;
+	*head     = (*head)->next;
 	if (*head) (*head)->prev = NULL;
 	to_remove->next = NULL;
 	to_remove->prev = NULL;
@@ -26,7 +26,7 @@ t_idl *idl_pop_back(t_idl **head) {
 
 	if (!*head) return NULL;
 	if (!(*head)->next) return idl_pop(head);
-	
+
 	ret = idl_get_tail(*head);
 	if (ret->prev) ret->prev->next = NULL;
 	ret->next = NULL;

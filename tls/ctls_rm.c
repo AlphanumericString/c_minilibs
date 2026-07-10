@@ -6,7 +6,7 @@
  * \brief try to remove name from the variables. (works by swap).
  * \param name name of the variable to rm
  * \return true if succeed, false in any ohter case.
- **/
+**/
 bool ctls_rm(const char *name) {
 	t_ctlsv *ctls = pthread_getspecific(ctls_key);
 
@@ -14,9 +14,9 @@ bool ctls_rm(const char *name) {
 	for (size_t i = 0; i < ctls->len; i++) {
 		if (!strcmp(name, ctls->v_name[i])) {
 			memcpy(&ctls->v_name[i], &ctls->v_name[ctls->len - 1],
-				   sizeof(char *));
+			       sizeof(char *));
 			memcpy(&ctls->vals[i], &ctls->vals[ctls->len - 1],
-				   sizeof(t_ctls_typewrap));
+			       sizeof(t_ctls_typewrap));
 			ctls->len--;
 			return (true);
 		}

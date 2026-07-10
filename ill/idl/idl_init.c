@@ -4,7 +4,7 @@
  * \brief Initializes a node with the given offset.
  * \param node The node to initialize.
  * \param offset The offset of the node within its container structure.
- **/
+**/
 void idl_init(t_idl *node, size_t offset) {
 	node->next   = NULL;
 	node->prev   = NULL;
@@ -18,23 +18,22 @@ void idl_init(t_idl *node, size_t offset) {
  * \param d The duplicator function used to copy each element.
  * \return A pointer to the head of the new copied list's first element, or NULL
  * on failure.
- **/
+**/
 void *idl_copy(const t_idl *head, t_duplicator d) {
-	t_idl	*ret;
-	void	*elem;
-	void    *nh = NULL;
+	t_idl *ret;
+	void  *elem;
+	void  *nh = NULL;
 
 	ret = NULL;
 	for (; head; head = head->next) {
 		elem = d(idl_ntoe(head));
 		if (!elem) return (nh);
 		if (!nh) nh = elem;
-		if (ret)
-			ret->next = idl_eton(elem, head->offset);
+		if (ret) ret->next = idl_eton(elem, head->offset);
 		idl_eton(elem, head->offset)->offset = head->offset;
-		idl_eton(elem, head->offset)->prev = ret;
-		idl_eton(elem, head->offset)->next = NULL;
-		ret = idl_eton(elem, head->offset);
+		idl_eton(elem, head->offset)->prev   = ret;
+		idl_eton(elem, head->offset)->next   = NULL;
+		ret                                  = idl_eton(elem, head->offset);
 	}
 	return (nh);
 }
