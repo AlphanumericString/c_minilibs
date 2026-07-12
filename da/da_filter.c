@@ -11,9 +11,12 @@
  * \param deletor callback to delete removed elements
  * \return true on success, false otherwise
  * \note filter might not keep order to keep order use n variant
-**/
+ **/
 bool da_filter(t_da *da, t_callback c, void *u_data, t_callback deletor) {
-	if (!c || !da || !da->nb_e) return (false);
+	if (!c || !da || !da->nb_e) {
+		LOG(C_MINI__DA_LOG_EARG);
+		return (false);
+	}
 	for (size_t i = 0; i < da->nb_e; i++) {
 		if (!c(da_at(da, i), u_data)) {
 			if (deletor) deletor(da_at(da, i), u_data);
@@ -32,10 +35,13 @@ bool da_filter(t_da *da, t_callback c, void *u_data, t_callback deletor) {
  * \param u_data user data for callback
  * \param deletor callback to delete removed elements
  * \return true on success, false otherwise
-**/
+ **/
 bool da_nfilter(t_da *da, size_t n, t_callback c, void *u_data,
                 t_callback deletor) {
-	if (!c || !da || !da->nb_e) return (false);
+	if (!c || !da || !da->nb_e) {
+		LOG(C_MINI__DA_LOG_EARG);
+		return (false);
+	}
 	if (!n) return (true);
 	if (n > da->nb_e) n = da->nb_e;
 	for (size_t i = 0; i < n; i++) {
@@ -57,9 +63,12 @@ bool da_nfilter(t_da *da, size_t n, t_callback c, void *u_data,
  * \param deletor callback to delete removed elements
  * \return true on success, false otherwise
  * \note filter might not keep order to keep order use n variant
-**/
+ **/
 bool da_filter_out(t_da *da, t_callback c, void *u_data, t_callback deletor) {
-	if (!c || !da || !da->nb_e) return (false);
+	if (!c || !da || !da->nb_e) {
+		LOG(C_MINI__DA_LOG_EARG);
+		return (false);
+	}
 	for (size_t i = 0; i < da->nb_e; i++) {
 		if (c(da_at(da, i), u_data)) {
 			if (deletor) deletor(da_at(da, i), u_data);
@@ -78,10 +87,13 @@ bool da_filter_out(t_da *da, t_callback c, void *u_data, t_callback deletor) {
  * \param u_data user data for callback
  * \param deletor callback to delete removed elements
  * \return true on success, false otherwise
-**/
+ **/
 bool da_nfilter_out(t_da *da, size_t n, t_callback c, void *u_data,
                     t_callback deletor) {
-	if (!c || !da || !da->nb_e) return (false);
+	if (!c || !da || !da->nb_e) {
+		LOG(C_MINI__DA_LOG_EARG);
+		return (false);
+	}
 	if (!n) return (true);
 	if (n > da->nb_e) n = da->nb_e;
 	for (size_t i = 0; i < n; i++) {

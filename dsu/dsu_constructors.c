@@ -9,19 +9,30 @@
  * \brief init by allocating both the return and the internals
  * \param n size of the dsu
  * \return the new t_dsu
-**/
+ **/
 t_dsu *dsu_new(size_t n) {
 	t_dsu *ret;
 	void  *buffer;
 
-	if (!n) return (NULL);
+	if (!n) {
+		LOG(C_MINI__DSU_LOG_EARG);
+		return (NULL);
+	}
 	ret = malloc(sizeof(*ret));
-	if (!ret) return (NULL);
+	if (!ret) {
+		LOG(C_MINI__DSU_LOG_EALLOC);
+		return (NULL);
+	}
 	*ret   = (t_dsu){0};
 	buffer = malloc(sizeof(int) * n * 2);
-	if (!buffer) return (free(ret), NULL);
+	if (!buffer) {
+		free(ret);
+		LOG(C_MINI__DSU_LOG_EALLOC);
+		return (NULL);
+	}
 	dsu_init_from_arrays(ret, n, buffer, buffer + n * sizeof(int));
 	ret->rp_single_alloc = true;
+	LOG("New DSU (dsu:%p, size:%zu)", ret, n);
 	return (ret);
 }
 /**
@@ -29,15 +40,22 @@ t_dsu *dsu_new(size_t n) {
  * \param to_init the t_dsu to init
  * \param n size of the dsu
  * \return the initialized t_dsu
-**/
+ **/
 t_dsu *dsu_init(t_dsu *to_init, size_t n) {
 	void *buffer;
 
-	if (!n || !to_init) return (NULL);
+	if (!n || !to_init) {
+		LOG(C_MINI__DSU_LOG_EARG);
+		return (NULL);
+	}
 	buffer = calloc(sizeof(int), n * 2);
-	if (!buffer) return (NULL);
+	if (!buffer) {
+		LOG(C_MINI__DSU_LOG_EALLOC);
+		return (NULL);
+	}
 	dsu_init_from_arrays(to_init, n, buffer, buffer + n * sizeof(int));
 	to_init->rp_single_alloc = true;
+	LOG("New DSU (dsu:%p, size:%zu)", to_init, n);
 	return (to_init);
 }
 /**
@@ -46,18 +64,25 @@ t_dsu *dsu_init(t_dsu *to_init, size_t n) {
  * \param parents the parents array
  * \param ranks the ranks array
  * \return the new t_dsu
-**/
+ **/
 t_dsu *dsu_new_from_array(size_t size, int *parents, int *ranks) {
 	t_dsu *ret;
 
-	if (!size || !parents || !ranks) return (NULL);
+	if (!size || !parents || !ranks) {
+		LOG(C_MINI__DSU_LOG_EARG);
+		return (NULL);
+	}
 	ret = malloc(sizeof(t_dsu));
-	if (!ret) return (NULL);
+	if (!ret) {
+		LOG(C_MINI__DSU_LOG_EALLOC);
+		return (NULL);
+	}
 	ret->rank            = (uint *)ranks;
 	ret->parent          = (uint *)parents;
 	ret->size            = size;
 	ret->rp_single_alloc = false;
 	dsu_clr(ret);
+	LOG("New DSU (dsu:%p, size:%zu)", ret, size);
 	return (ret);
 }
 /**
@@ -67,15 +92,19 @@ t_dsu *dsu_new_from_array(size_t size, int *parents, int *ranks) {
  * \param parents the parents array
  * \param ranks the ranks array
  * \return the initialized t_dsu
-**/
+ **/
 t_dsu *dsu_init_from_arrays(t_dsu *ret, size_t size, int *parents, int *ranks) {
-	if (!ret || !size || !parents || !ranks) return (NULL);
+	if (!ret || !size || !parents || !ranks) {
+		LOG(C_MINI__DSU_LOG_EARG);
+		return (NULL);
+	}
 	ret->rank            = (uint *)ranks;
 	ret->parent          = (uint *)parents;
 	ret->size            = size;
 	ret->components      = size;
 	ret->rp_single_alloc = false;
 	dsu_clr(ret);
+	LOG("New DSU (dsu:%p, size:%zu)", ret, size);
 	return (ret);
 }
 /**
@@ -86,16 +115,22 @@ t_dsu *dsu_init_from_arrays(t_dsu *ret, size_t size, int *parents, int *ranks) {
  * \param dsu the t_dsu to grow
  * \param n the number of values to add
  * \return the grown t_dsu
-**/
+ **/
 t_dsu *dsu_grow(t_dsu *dsu, size_t n) {
 	void  *replacement_buffer;
 	void  *rank_offset;
 	size_t i;
 
-	if (!dsu || !n) return (dsu);
+	if (!dsu || !n) {
+		LOG(C_MINI__DSU_LOG_EARG);
+		return (dsu);
+	}
 	if (!dsu->size || !dsu->rank || !dsu->parent) return (dsu);
 	replacement_buffer = malloc(sizeof(int) * (dsu->size + n) * 2);
-	if (!replacement_buffer) return (dsu);
+	if (!replacement_buffer) {
+		LOG(C_MINI__DSU_LOG_EALLOC);
+		return (dsu);
+	}
 	rank_offset = replacement_buffer + (dsu->size + n) * sizeof(int);
 	memcpy(replacement_buffer, dsu->parent, dsu->size * sizeof(int));
 	memcpy(rank_offset, dsu->rank, dsu->size * sizeof(int));
@@ -109,6 +144,7 @@ t_dsu *dsu_grow(t_dsu *dsu, size_t n) {
 		dsu->parent[i + dsu->size] = i + dsu->size;
 		dsu->rank[i++ + dsu->size] = 0;
 	}
+	LOG("Grow DSU (dsu:%p, size:%zu -> %zu)", dsu, dsu->size, dsu->size + n);
 	dsu->size       += n;
 	dsu->components += n;
 	return (dsu);

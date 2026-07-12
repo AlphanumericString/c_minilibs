@@ -7,22 +7,26 @@
  * \param cb the callback function
  * \param arg argument for the callback
  * \return false if the callback returns false, true otherwise
-**/
+ **/
 bool rb_naplly(t_rb *rb, size_t n, t_callback cb, const void *arg) {
 	size_t i = 0;
 	size_t current_pos;
 
-	if (!rb || !cb) return false;
-
+	if (!rb || !cb) {
+		LOG(C_MINI__RB_LOG_EARG);
+		return false;
+	}
 	if (n > rb_size(*rb)) n = rb_size(*rb);
-
 	current_pos = rb->o_pos;
 	while (i < n) {
-		if (!cb(rb->array + (current_pos * rb->sz_e), (void *)arg))
+		if (!cb(rb->array + (current_pos * rb->sz_e), (void *)arg)) {
+			LOG(C_MINI__RB_LOG_ECB);
 			return false;
+		}
 		current_pos = (current_pos + 1) % rb->nb_max;
 		i++;
 	}
+	LOG(C_MINI__RB_LOG_SUCCESS);
 	return true;
 }
 
@@ -32,8 +36,19 @@ bool rb_naplly(t_rb *rb, size_t n, t_callback cb, const void *arg) {
  * \param cb the callback function
  * \param arg argument for the callback
  * \return false if the callback returns false, true otherwise
-**/
+ **/
 bool rb_apply(t_rb *rb, t_callback cb, const void *arg) {
-	if (!rb) return false;
-	return rb_naplly(rb, (size_t)-1, cb, arg);
+	bool r;
+
+	if (!rb || !cb) {
+		LOG(C_MINI__RB_LOG_EARG);
+		return false;
+	}
+	r = rb_naplly(rb, (size_t)-1, cb, arg);
+	if (!r) {
+		LOG(C_MINI__RB_LOG_FAIL);
+		return (r);
+	}
+	LOG(C_MINI__RB_LOG_SUCCESS);
+	return (r);
 }

@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#ifdef C_MINI__TEST
+#ifdef C_MINI__TESTS
 #	include <stdio.h>
 
 #	ifndef LOG
@@ -35,7 +35,7 @@
 			} while (0);
 #	endif // !DBG_POS
 
-#else // || C_MINI_TEST
+#else // || C_MINI__TESTS
 
 #	ifndef LOG
 #		define LOG(fmt, ...) (void)0;
@@ -49,7 +49,7 @@
 #		define DBG_POS (void)0;
 #	endif // !DBG_POS
 
-#endif // !C_MINI__TEST
+#endif // !C_MINI__TESTS
 
 typedef struct s_tlsv {
 	const char *v_name;

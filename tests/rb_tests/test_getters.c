@@ -55,14 +55,14 @@ void test_rb_cappacity(void) {
 	rb_destroy(&rb);
 }
 
-void test_rb_free(void) {
+void test_rb_remaining_space(void) {
 	t_rb rb  = {0};
 	int  val = 42;
 	rb_create(&rb, sizeof(int), 10);
 
-	assert(rb_free(rb) == 10);
+	assert(rb_remaining_space(rb) == 10);
 	rb_push(&rb, &val);
-	assert(rb_free(rb) == 9);
+	assert(rb_remaining_space(rb) == 9);
 
 	rb_destroy(&rb);
 }

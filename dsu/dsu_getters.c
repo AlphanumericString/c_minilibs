@@ -4,7 +4,7 @@
  * \brief returns the max depth of the tree
  * \param dsu the dsu to query
  * \return the max depth
-**/
+ **/
 int dsu_max_depth(t_dsu dsu) {
 	unsigned int max = 0;
 	size_t       i   = 0;
@@ -12,21 +12,24 @@ int dsu_max_depth(t_dsu dsu) {
 	while (i < dsu.size) {
 		if (dsu.rank[i++] > max) max = dsu.rank[i - 1];
 	}
+	LOG(C_MINI__DSU_LOG_SUCCESS);
 	return (max);
 }
 /**
  * \brief returns the number of elems in the tree
  * \param dsu the dsu to query
  * \return the number of elems
-**/
+ **/
 size_t dsu_size(t_dsu dsu) {
+	LOG(C_MINI__DSU_LOG_SUCCESS);
 	return (dsu.size);
 }
 /**
  * \brief return the number of distinc separate sets in the dsu
  * \param dsu the dsu to query
  * \return the number of components
-**/
+ **/
 size_t dsu_nb_components(t_dsu dsu) {
+	LOG(C_MINI__DSU_LOG_SUCCESS);
 	return (dsu.components);
 }

@@ -8,9 +8,7 @@ void test_da_at(void) {
 	da_init(&da, sizeof(int));
 	a = 1;
 	da_add(&da, &a);
-
 	assert(*(int *)da_at(&da, 0) == 1);
-
 	da_destroy(&da);
 }
 void test_da_get(void) {

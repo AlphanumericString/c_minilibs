@@ -2,7 +2,6 @@
 
 #include <stdbool.h>
 
-#define C_MINI__TESTS
 #include "rb/round_buffer.h"
 
 #define ASSERT_RB_STATE(rb, sz, max, i, o)                                     \
@@ -38,7 +37,7 @@ void test_rb_full(void);
 void test_rb_empty(void);
 void test_rb_size(void);
 void test_rb_cappacity(void);
-void test_rb_free(void);
+void test_rb_remaining_space(void);
 
 // remove
 void test_rb_drop(void);

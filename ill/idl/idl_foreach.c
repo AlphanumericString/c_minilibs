@@ -7,21 +7,26 @@
  * \param c The callback function to apply.
  * \param u_data User data to pass to the callback.
  * \return true if the callback returned true for all elements, false otherwise.
-**/
+ **/
 bool idl_foreach(t_idl *head, t_callback c, void *u_data) {
 	t_idl *curr;
 	t_idl *nxt;
-	bool   cb;
 
-	if (!c || !head) return (false);
+	if (!c || !head) {
+		LOG(C_MINI__IDL_LOG_EARG);
+		return (false);
+	}
 	curr = head;
-	cb   = true;
-	while (curr && cb) {
-		nxt  = curr->next;
-		cb   = c(idl_ntoe(curr), u_data);
+	while (curr) {
+		nxt = curr->next;
+		if (!c(idl_ntoe(curr), u_data)) {
+			LOG(C_MINI__IDL_LOG_ECB);
+			return (false);
+		}
 		curr = nxt;
 	}
-	return (cb);
+	LOG(C_MINI__IDL_LOG_SUCCESS);
+	return (true);
 }
 
 /**
@@ -32,20 +37,25 @@ bool idl_foreach(t_idl *head, t_callback c, void *u_data) {
  * \param u_data User data to pass to the callback.
  * \return true if the callback returned true for all processed elements, false
  * otherwise.
-**/
+ **/
 bool idl_for(t_idl *head, size_t n, t_callback c, void *u_data) {
 	t_idl *curr;
 	t_idl *nxt;
-	bool   cb;
 
-	if (!c || !head) return (false);
+	if (!c || !head) {
+		LOG(C_MINI__IDL_LOG_EARG);
+		return (false);
+	}
 	curr = head;
-	cb   = true;
-	while (curr && cb && n) {
-		nxt  = curr->next;
-		cb   = c(idl_ntoe(curr), u_data);
+	while (curr && n) {
+		nxt = curr->next;
+		if (!c(idl_ntoe(curr), u_data)) {
+			LOG(C_MINI__IDL_LOG_ECB);
+			return (false);
+		}
 		curr = nxt;
 		n--;
 	}
-	return (cb);
+	LOG(C_MINI__IDL_LOG_SUCCESS);
+	return (true);
 }

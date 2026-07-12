@@ -6,16 +6,23 @@
  * \param target The target node to find the predecessor for.
  * \return A pointer to the predecessor node, or NULL if not found or if target
  * is head.
-**/
+ **/
 t_idl *idl_find_prev(t_idl *head, t_idl *target) {
 	t_idl *curr;
 
-	if (!head || head == target) return NULL;
+	if (!head || !target || head == target) {
+		LOG(C_MINI__IDL_LOG_EARG);
+		return NULL;
+	}
 	curr = head;
 	while (curr->next && curr->next != target)
 		curr = curr->next;
-
-	return curr->next == target ? curr : NULL;
+	if (!curr->next) {
+		LOG(C_MINI__IDL_LOG_FAIL);
+		return (NULL);
+	}
+	LOG(C_MINI__IDL_LOG_SUCCESS);
+	return curr;
 }
 
 /**
@@ -23,16 +30,22 @@ t_idl *idl_find_prev(t_idl *head, t_idl *target) {
  * \param head The head of the list.
  * \param target The target node to find.
  * \return A pointer to the target node if found, or NULL otherwise.
-**/
+ **/
 t_idl *idl_find(t_idl *head, t_idl *target) {
 	t_idl *curr;
 
-	if (!head || !target) return NULL;
-
-	curr = head;
-	while (curr && curr != target) {
-		curr = curr->next;
+	if (!head || !target) {
+		LOG(C_MINI__IDL_LOG_EARG);
+		return NULL;
 	}
+	curr = head;
+	while (curr && curr != target)
+		curr = curr->next;
+	if (!curr) {
+		LOG(C_MINI__IDL_LOG_FAIL);
+		return (NULL);
+	}
+	LOG(C_MINI__IDL_LOG_SUCCESS);
 	return curr;
 }
 
@@ -43,17 +56,24 @@ t_idl *idl_find(t_idl *head, t_idl *target) {
  * \param arg The argument to pass to the comparator.
  * \return A pointer to the preceding node of the matched element, or NULL if
  * not found.
-**/
+ **/
 t_idl *idl_get_prev(t_idl *head, t_comparator c, void *arg) {
 	t_idl *curr;
 
-	if (!head || !c) return NULL;
+	if (!head || !c) {
+		LOG(C_MINI__IDL_LOG_EARG);
+		return NULL;
+	}
 	curr = head;
 	while (curr->next) {
-		if (c(idl_ntoe(curr->next), arg) == 0) return curr;
+		if (c(idl_ntoe(curr->next), arg) == 0) {
+			LOG(C_MINI__IDL_LOG_SUCCESS);
+			return curr;
+		}
 		curr = curr->next;
 	}
-	return NULL;
+	LOG(C_MINI__IDL_LOG_FAIL);
+	return (NULL);
 }
 
 /**
@@ -62,15 +82,22 @@ t_idl *idl_get_prev(t_idl *head, t_comparator c, void *arg) {
  * \param c The comparator function used for matching.
  * \param arg The argument to pass to the comparator.
  * \return A pointer to the matched node, or NULL if not found.
-**/
+ **/
 t_idl *idl_get(t_idl *head, t_comparator c, void *arg) {
 	t_idl *curr;
 
-	if (!head || !c) return NULL;
+	if (!head || !c) {
+		LOG(C_MINI__IDL_LOG_EARG);
+		return NULL;
+	}
 	curr = head;
 	while (curr) {
-		if (c(idl_ntoe(curr), arg) == 0) return curr;
+		if (c(idl_ntoe(curr), arg) == 0) {
+			LOG(C_MINI__IDL_LOG_SUCCESS);
+			return curr;
+		}
 		curr = curr->next;
 	}
+	LOG(C_MINI__IDL_LOG_FAIL);
 	return NULL;
 }

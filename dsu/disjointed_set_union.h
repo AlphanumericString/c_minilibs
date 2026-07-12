@@ -4,7 +4,7 @@
 #	include <stddef.h>
 #	include <stdbool.h>
 
-#	ifdef C_MINI__TEST
+#	ifdef C_MINI__TESTS
 #		include <stdio.h>
 
 #		ifndef LOG
@@ -34,7 +34,13 @@
 				} while (0);
 #		endif // !DBG_POS
 
-#	else // || C_MINI_TEST
+#define C_MINI__DSU_LOG_EARG    "Bad arguments."
+#define C_MINI__DSU_LOG_EALLOC  "Allocation faillure."
+#define C_MINI__DSU_LOG_FAIL    "Faillure"
+
+#define C_MINI__DSU_LOG_SUCCESS "Success"
+
+#	else // || C_MINI__TESTS
 
 #		ifndef LOG
 #			define LOG(fmt, ...) (void)0;
@@ -48,7 +54,7 @@
 #			define DBG_POS (void)0;
 #		endif // !DBG_POS
 
-#	endif // !C_MINI__TEST
+#	endif // !C_MINI__TESTS
 
 /**
  * \brief dsu struct

@@ -3,7 +3,7 @@
 #	include <stdbool.h>
 #	include <stddef.h>
 
-#	ifdef C_MINI__TEST
+#	ifdef C_MINI__TESTS
 #		include <stdio.h>
 
 #		ifndef LOG
@@ -33,7 +33,34 @@
 				} while (0);
 #		endif // !DBG_POS
 
-#	else // || C_MINI_TEST
+#define C_MINI__DA_LOG_EARG   "Bad arguments."
+#define C_MINI__DA_LOG_EALLOC "Allocation faillure."
+#define C_MINI__DA_LOG_GETFAIL "get Faillure"
+#define C_MINI__DA_LOG_FINDFAIL "find Faillure"
+
+#define C_MINI__DA_LOG_SUCCESS "Success"
+#define C_MINI__DA_LOG_CLR "Clear (nb elems: %zu -> 0)"
+#define C_MINI__DA_LOG_ADD "Add (elem:%p pos:%zu)"
+#define C_MINI__DA_LOG_GROWTH "Growth (arr:%p -> %p, cap:%zu -> %zu)"
+#define C_MINI__DA_LOG_SHRINK "Shrink (arr:%p -> %p, cap:%zu -> %zu)"
+#define C_MINI__DA_LOG_CATARR "Add (elems:%p nb_e:%zu -> %zu)"
+#define C_MINI__DA_LOG_GET "Get (pos:%zu)"
+#define C_MINI__DA_LOG_SWAP "Swap (nb:%zu, pos1:%zu, pos2:%zu)"
+#define C_MINI__DA_LOG_RM "Remove (pos:%zu, nb del:%zu, nb_e:%zu -> %zu)"
+#define C_MINI__DA_LOG_CONV "Convert (ret:%p)"
+#define C_MINI__DA_LOG_APPLY "Apply (applied on %zu elements)"
+#define C_MINI__DA_LOG_REDUCE "Reduce (ptr:%p)"
+#define C_MINI__DA_LOG_FOLD "Fold (ptr:%p)"
+#define C_MINI__DA_LOG_REV "Reverse (all)"
+#define C_MINI__DA_LOG_REVF "Reverse (first n:%zu)"
+#define C_MINI__DA_LOG_REVB "Reverse (last n:%zu)"
+#define C_MINI__DA_LOG_SORT "Sort (all)"
+#define C_MINI__DA_LOG_NSORT "Sort (first n:%zu)"
+#define C_MINI__DA_LOG_FINDGET	"Get (elem found:%p, out:%p)"
+#define C_MINI__DA_LOG_FIND "Find (at:%zu, e:%p)"
+#define C_MINI__DA_LOG_SET "Set (pos:%zu, n:%zu, e:%p)"
+
+#	else // || C_MINI__TESTS
 
 #		ifndef LOG
 #			define LOG(fmt, ...) (void)0;
@@ -47,7 +74,7 @@
 #			define DBG_POS (void)0;
 #		endif // !DBG_POS
 
-#	endif // !C_MINI__TEST
+#	endif // !C_MINI__TESTS
 
 // comon funct ptr definitions
 
@@ -60,7 +87,7 @@
  * \param  elem pointer to the element
  * \param  arg  argument passed as is from up function
  * \return expected to return true on success false otherwise
-**/
+ **/
 typedef bool (*t_callback)(void *elem, void *arg);
 
 #	endif
@@ -76,7 +103,7 @@ typedef bool (*t_callback)(void *elem, void *arg);
  * \param  pos  position of the elem in the sub array backing
  * \param  last boolean on wheter or not this is the last element of the call
  * \return expected to return true on success false otherwise
-**/
+ **/
 typedef bool (*t_callback_it)(void *elem, void *arg, size_t pos, bool last);
 
 #	endif // CMINI_T_CALLBAKC_IT
@@ -90,7 +117,7 @@ typedef bool (*t_callback_it)(void *elem, void *arg, size_t pos, bool last);
  * \param elem pointer to the element
  * \param arg argument passed as is from up function
  * \return expected to return <0, 0, >0 for inferior to, equal, superior to
-**/
+ **/
 typedef int (*t_comparator)(const void *elem, const void *arg);
 
 #	endif
@@ -102,7 +129,7 @@ typedef int (*t_comparator)(const void *elem, const void *arg);
  * \brief duplication function pointer for datas
  * \param elem pointer to the duplication target
  * \return pointer to a valid copy of the data
-**/
+ **/
 typedef void *(*t_duplicator)(const void *elem);
 
 #	endif
@@ -120,7 +147,7 @@ typedef void *(*t_merger)(void *elem, void *arg);
  * \param nb_e number of elements currently present in the array
  * \param cap_e number of elements the memory can hold
  * \param sz_e size of 1 elements (the generic part of the array)
-**/
+ **/
 typedef struct s_dynamic_memory_array {
 	void  *array;
 	size_t nb_e;
@@ -145,6 +172,7 @@ void da_clr(t_da *ret);
 
 // destroy
 void da_destroy(t_da *ret);
+void da_free(t_da *ret);
 
 // add
 bool da_add(t_da *da, void *elem);

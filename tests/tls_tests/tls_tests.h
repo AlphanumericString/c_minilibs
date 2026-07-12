@@ -7,7 +7,6 @@ struct s_mine {
 };
 
 #define C_MINI__FTLS_STRUCT struct s_mine
-#define C_MINI__TESTS
 #include "tls/common_thread_local_storage.h"
 #include "tls/fast_thread_local_storage.h"
 #include "tls/voided_thread_local_storage.h"

@@ -1,6 +1,5 @@
 #pragma once
 
-#define C_MINI__TESTS
 #include "hp/heap.h"
 
 // create

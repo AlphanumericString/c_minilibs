@@ -8,17 +8,25 @@
  * \param rb the old round buffer
  * \param nb_elem_added number of additional elements
  * \return newly allocated t_rb or NULL if alloc fails
-**/
+ **/
 t_rb *rb_grow(t_rb *rb, size_t nb_elem_added) {
 	t_rb  *new_rb;
 	size_t count;
 	size_t first_part;
 
-	if (!rb) return NULL;
+	if (!rb) {
+		LOG(C_MINI__RB_LOG_EARG);
+		return NULL;
+	}
 	new_rb = malloc(sizeof(t_rb));
-	if (!new_rb) return NULL;
-	if (!rb_create(new_rb, rb->sz_e, rb->nb_max + nb_elem_added))
+	if (!new_rb) {
+		LOG(C_MINI__RB_LOG_EALLOC);
+		return NULL;
+	}
+	if (!rb_create(new_rb, rb->sz_e, rb->nb_max + nb_elem_added)) {
+		LOG(C_MINI__RB_LOG_EALLOC);
 		return (free(new_rb), NULL);
+	}
 	count = rb_size(*rb);
 	if (count > 0) {
 		if (rb->o_pos <= rb->i_pos) {
@@ -35,5 +43,6 @@ t_rb *rb_grow(t_rb *rb, size_t nb_elem_added) {
 	new_rb->o_pos = 0;
 	new_rb->i_pos = count;
 	new_rb->count = count;
+	LOG(C_MINI__RB_LOG_SUCCESS);
 	return new_rb;
 }

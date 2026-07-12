@@ -12,9 +12,11 @@ void test_dsu_new(void) {
 	assert(dsu->parent != NULL);
 	assert(dsu->rank != NULL);
 	assert(dsu->components == 32);
-
 	dsu_free(dsu);
 }
-void test_dsu_new_from_array(void) {}
-void test_dsu_init(void) {}
-void test_dsu_init_from_arrays(void) {}
+void test_dsu_new_from_array(void) {
+}
+void test_dsu_init(void) {
+}
+void test_dsu_init_from_arrays(void) {
+}

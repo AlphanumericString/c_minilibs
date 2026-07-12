@@ -4,12 +4,15 @@
  * \brief Reverses the order of nodes in the list.
  * \param head The head of the list.
  * \return The new head of the reversed list.
-**/
+ **/
 t_idl *idl_reverse(t_idl *head) {
 	t_idl *temp;
 	t_idl *curr;
 
-	if (!head) return (NULL);
+	if (!head) {
+		LOG(C_MINI__IDL_LOG_EARG);
+		return (NULL);
+	}
 	curr = head;
 	while (curr) {
 		temp       = curr->prev;
@@ -18,5 +21,6 @@ t_idl *idl_reverse(t_idl *head) {
 		head       = curr;
 		curr       = curr->prev;
 	}
+	LOG(C_MINI__IDL_LOG_SUCCESS);
 	return (head);
 }

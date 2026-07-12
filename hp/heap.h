@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#	ifdef C_MINI__TEST
+#	ifdef C_MINI__TESTS
 #		include <stdio.h>
 
 #		ifndef LOG
@@ -46,7 +46,7 @@
 #	define C_MINI__HP_LOG_EARG    "Bad arguments"
 #	define C_MINI__HP_LOG_EALLOC  "Allocation failed"
 
-#	else // || C_MINI_TEST
+#	else // || C_MINI__TESTS
 
 #		ifndef LOG
 #			define LOG(fmt, ...) (void)0;
@@ -60,7 +60,7 @@
 #			define DBG_POS (void)0;
 #		endif // !DBG_POS
 
-#	endif // !C_MINI__TEST
+#	endif // !C_MINI__TESTS
 
 #ifndef CMINI_T_COMPARATOR_DEFINE
 #	define CMINI_T_COMPARATOR_DEFINE

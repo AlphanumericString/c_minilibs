@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#ifdef C_MINI__TEST
+#ifdef C_MINI__TESTS
 #	include <stdio.h>
 
 #	ifndef LOG
@@ -34,7 +34,14 @@
 			} while (0);
 #	endif // !DBG_POS
 
-#else // || C_MINI_TEST
+#define C_MINI__RB_LOG_EARG		"Bad arguments."
+#define C_MINI__RB_LOG_ESPACE	"Not enough space."
+#define C_MINI__RB_LOG_EALLOC	"Allocation Fail."
+#define C_MINI__RB_LOG_ECB		"Callback failed."
+#define C_MINI__RB_LOG_FAIL		"Faillure"
+#define C_MINI__RB_LOG_SUCCESS	"Success"
+
+#else // || C_MINI__TESTS
 
 #	ifndef LOG
 #		define LOG(fmt, ...) (void)0;
@@ -48,7 +55,7 @@
 #		define DBG_POS (void)0;
 #	endif // !DBG_POS
 
-#endif // !C_MINI__TEST
+#endif // !C_MINI__TESTS
 
 #ifndef CMINI_T_CALLBAKC_DEFINE
 #	define CMINI_T_CALLBAKC_DEFINE
@@ -124,7 +131,7 @@ bool   rb_full(t_rb rb);
 bool   rb_empty(t_rb rb);
 size_t rb_size(t_rb rb);
 size_t rb_cappacity(t_rb rb);
-size_t rb_free(t_rb rb);
+size_t rb_remaining_space(t_rb rb);
 
 // remove
 bool  rb_drop(t_rb *rb, size_t n);

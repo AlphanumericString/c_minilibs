@@ -7,7 +7,7 @@
 
 #define C_MINI__LRU_HASH_SKIP 10
 
-#ifdef C_MINI__TEST
+#ifdef C_MINI__TESTS
 #	include <stdio.h>
 
 #	ifndef LOG
@@ -51,7 +51,7 @@
 #	define C_MINI__LRU_LOG_LFREE     "Cleanup via list started"
 #	define C_MINI__LRU_LOG_HFREE     "Cleanup via hash started"
 
-#else // || C_MINI_TEST
+#else // || C_MINI__TESTS
 
 #	ifndef LOG
 #		define LOG(fmt, ...) (void)0;
@@ -65,7 +65,7 @@
 #		define DBG_POS (void)0;
 #	endif // !DBG_POS
 
-#endif // !C_MINI__TEST
+#endif // !C_MINI__TESTS
 
 typedef struct {
 	size_t misses;

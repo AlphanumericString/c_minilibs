@@ -8,7 +8,6 @@ void test_da_find(void) {
 
 	da_init(&da, sizeof(int));
 	da_cat_array(&da, (int *)arr_5, 5, sizeof(int));
-
 	p = da_find(&da, cb_cmp, &value);
 	assert(p != NULL);
 	assert(*(int *)p == 1);
@@ -21,7 +20,6 @@ void test_da_find(void) {
 	value = 42;
 	p     = da_find(&da, cb_cmp, &value);
 	assert(p == NULL);
-
 	da_destroy(&da);
 }
 void test_da_nfind(void) {

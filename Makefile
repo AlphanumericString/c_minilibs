@@ -7,6 +7,14 @@ DOC_DIR=documentation
 TST_DIR=tests
 CC	=	clang
 CFLAGS = -Wall -Wextra -MMD -MP
+
+DEBUG_LVL	?= 0
+ifeq ($(DEBUG_LVL), 0)
+	CFLAGS := $(CFLAGS)
+else
+	CFLAGS += -g3 -DC_MINI__TESTS
+endif
+
 TFLAGS=
 LIBNAMES=
 OBJ_ALL=
@@ -51,8 +59,8 @@ tests_run: $(TESTS_ALL)
 fclean:clean
 	$(RM) -rf $(BUILD_DIR) $(DOC_DIR)
 $(DOC_DIR):
-	DOXYGEN_INPUT="$(MODULES)" doxygen Doxyfile &&	\
-	echo -e "\n\nDocumentation at file:///$(shell pwd)/$(DOC_DIR)/html/index.html\n"
+	@DOXYGEN_INPUT="$(MODULES)" doxygen Doxyfile 1> /dev/null &&	\
+	echo -e "\nDocumentation at file:///$(shell pwd)/$(DOC_DIR)/html/index.html\n"
 clean:
 	$(RM) $(LIBNAMES) $(TESTS_ALL)
 re:fclean

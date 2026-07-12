@@ -7,9 +7,15 @@
  * \param da pointer to the dynamic array
  * \param c comparator function
  * \return true on success, false otherwise
-**/
+ **/
 bool da_sort(t_da *da, t_comparator c) {
-	return (da_nsort(da, -1, c));
+	if (!da || !c) {
+		LOG(C_MINI__DA_LOG_EARG);
+		return (false);
+	}
+	da_nsort(da, -1, c);
+	LOG(C_MINI__DA_LOG_SORT);
+	return (true);
 }
 
 /**
@@ -19,10 +25,18 @@ bool da_sort(t_da *da, t_comparator c) {
  * \param n number of elements to sort
  * \param c comparator function
  * \return true on success, false otherwise
-**/
+ **/
 bool da_nsort(t_da *da, size_t n, t_comparator c) {
-	if (!c) return (false);
+	if (!da || !c) {
+		LOG(C_MINI__DA_LOG_EARG);
+		return (false);
+	}
 	if (n > da->nb_e) n = da->nb_e;
-	if (n < 2) return (true);
-	return (qsort(da->array, n, da->sz_e, c), true);
+	if (n < 2) {
+		LOG(C_MINI__DA_LOG_NSORT, n);
+		return (true);
+	}
+	qsort(da->array, n, da->sz_e, c);
+	LOG(C_MINI__DA_LOG_NSORT, n);
+	return (true);
 }

@@ -1,6 +1,5 @@
 #pragma once
 
-#define C_MINI__TESTS
 #define C_MINI__LRU_INTERNAL // internal for testing purposes
 #include "lru_cache/least_recently_used_cache.h"
 

@@ -7,8 +7,12 @@
  * \param func function to apply
  * \param u_val user argument passed to the function
  * \return true if success, false if failure
-**/
+ **/
 void *da_apply_it(t_da *da, t_callback_it func, void *u_val) {
+	if (!da || !da->nb_e || !func) {
+		LOG(C_MINI__DA_LOG_EARG);
+		return (u_val);
+	}
 	return (da_napply_it(da, -1, func, u_val));
 }
 
@@ -19,8 +23,12 @@ void *da_apply_it(t_da *da, t_callback_it func, void *u_val) {
  * \param u_val user argument passed to the function
  * \param cb function to apply
  * \return the user argument (u_val)
-**/
+ **/
 void *da_apply(t_da *da, t_callback cb, void *u_val) {
+	if (!da || !da->nb_e || !cb) {
+		LOG(C_MINI__DA_LOG_EARG);
+		return (u_val);
+	}
 	return (da_napply(da, -1, cb, u_val));
 }
 
@@ -31,16 +39,23 @@ void *da_apply(t_da *da, t_callback cb, void *u_val) {
  * \param c function to apply
  * \param u_val user argument passed to the function
  * \return the user argument (u_val)
-**/
+ **/
 void *da_napply(t_da *da, size_t n, t_callback c, void *u_val) {
 	size_t i;
 
-	if (!da || !da->nb_e || !c || !n) return (u_val);
+	if (!da || !da->nb_e || !c || !n) {
+		LOG(C_MINI__DA_LOG_EARG);
+		return (u_val);
+	}
 	if (n > da->nb_e) n = da->nb_e;
 	i = 0;
 	while (n--) {
-		if (c(da_at(da, i++), u_val) != true) return (u_val);
+		if (c(da_at(da, i++), u_val) != true) {
+			LOG(C_MINI__DA_LOG_APPLY, i);
+			return (u_val);
+		}
 	}
+	LOG(C_MINI__DA_LOG_APPLY, i);
 	return (u_val);
 }
 
@@ -52,16 +67,23 @@ void *da_napply(t_da *da, size_t n, t_callback c, void *u_val) {
  * \param func function to apply
  * \param u_val user argument passed to the function
  * \return the user argument (u_val)
-**/
+ **/
 void *da_napply_it(t_da *da, size_t n, t_callback_it func, void *u_val) {
 	size_t i;
 
-	if (!da || !func || !da->nb_e) return (u_val);
+	if (!da || !func || !da->nb_e) {
+		LOG(C_MINI__DA_LOG_EARG);
+		return (u_val);
+	}
 	if (n > da->nb_e) n = da->nb_e;
 	i = 0;
 	while (i < n) {
-		if (func(da_at(da, i), u_val, i, i + 1 == n) != true) return (u_val);
+		if (func(da_at(da, i), u_val, i, i + 1 == n) != true) {
+			LOG(C_MINI__DA_LOG_APPLY, i);
+			return (u_val);
+		}
 		i++;
 	}
+	LOG(C_MINI__DA_LOG_APPLY, i);
 	return (u_val);
 }

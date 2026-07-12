@@ -4,40 +4,40 @@
 #include "lru_cache_tests.h"
 
 int main() {
-	// create
 	LOG("");
+	LOG("Create");
 	test_lruc_create();
 	test_lruc_init();
 	test_lruc_destroy();
-	// put
 	LOG("");
+	LOG("Put");
 	test_lruc_put_kv();
 	test_lruc_put();
 	test_lruc_put_ttl();
-	// get
 	LOG("");
+	LOG("Get");
 	test_lruc_get();
-	// rms
 	LOG("");
+	LOG("Rm");
 	test_lruc_clear();
 	test_lruc_remove();
-	// has
 	LOG("");
+	LOG("Has");
 	test_lruc_has();
-	// expired
 	LOG("");
+	LOG("Expired");
 	test_lruc_isexpired();
 	test_lruc_cleanup();
 	test_lruc_setttl();
-	// infos
 	LOG("");
+	LOG("Info");
 	test_lruc_expired();
 	test_lruc_size();
 	test_lruc_hits();
 	test_lruc_misses();
 	test_lruc_stats();
-	// foreach
 	LOG("");
+	LOG("Foreach");
 	test_lruc_foreach();
 	test_lruc_foreach_ru_ordered();
 	test_lruc_foreach_ttl_ordered();

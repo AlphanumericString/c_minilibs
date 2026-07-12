@@ -9,11 +9,18 @@
  * \param c callback to test elements
  * \param u_data user data for callback
  * \return pointer to the found element, or NULL if not found
-**/
+ **/
 void *da_find(t_da *da, t_comparator c, void *u_data) {
-	if (!c) return (NULL);
+	if (!da || !c) {
+		LOG(C_MINI__DA_LOG_EARG);
+		return (NULL);
+	}
 	for (size_t i = 0; i < da->nb_e; i++)
-		if (c(da_at(da, i), u_data) == 0) return (da_at(da, i));
+		if (c(da_at(da, i), u_data) == 0) {
+			LOG(C_MINI__DA_LOG_FIND, i, da_at(da, i));
+			return (da_at(da, i));
+		}
+	LOG(C_MINI__DA_LOG_FINDFAIL);
 	return (NULL);
 }
 
@@ -24,12 +31,19 @@ void *da_find(t_da *da, t_comparator c, void *u_data) {
  * \param c callback to test elements
  * \param u_data user data for callback
  * \return pointer to the found element, or NULL if not found
-**/
+ **/
 void *da_nfind(t_da *da, size_t n, t_comparator c, void *u_data) {
-	if (!c) return (NULL);
+	if (!da || !c) {
+		LOG(C_MINI__DA_LOG_EARG);
+		return (NULL);
+	}
 	if (n > da->nb_e) n = da->nb_e;
 	for (size_t i = 0; i < n; i++)
-		if (c(da_at(da, i), u_data) == 0) return (da_at(da, i));
+		if (c(da_at(da, i), u_data) == 0) {
+			LOG(C_MINI__DA_LOG_FIND, i, da_at(da, i));
+			return (da_at(da, i));
+		}
+	LOG(C_MINI__DA_LOG_FINDFAIL);
 	return (NULL);
 }
 
@@ -40,11 +54,20 @@ void *da_nfind(t_da *da, size_t n, t_comparator c, void *u_data) {
  * \param u_data user data for callback
  * \param out_buffer buffer to copy the found element to
  * \return true if found and copied, false otherwise
-**/
+ **/
 bool da_find_get(t_da *da, t_comparator c, void *u_data, void *out_buffer) {
-	if (!c || !out_buffer) return (false);
-	for (size_t i = 0; i < da->nb_e; i++)
-		if (c(da_at(da, i), u_data) == 0)
-			return (memcpy(out_buffer, da_at(da, i), da->sz_e), true);
+	void *elem;
+
+	if (!da || !c || !out_buffer) {
+		LOG(C_MINI__DA_LOG_EARG);
+		return (false);
+	}
+	elem = da_find(da, c, u_data);
+	if (elem) {
+		memcpy(out_buffer, elem, da->sz_e);
+		LOG(C_MINI__DA_LOG_FINDGET, elem, out_buffer);
+		return (true);
+	}
+	LOG(C_MINI__DA_LOG_GETFAIL);
 	return (false);
 }

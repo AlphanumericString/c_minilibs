@@ -6,7 +6,6 @@ void test_da_init(void) {
 
 	da_init(&da, sizeof(int));
 	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 0);
-
 	da_destroy(&da);
 }
 void test_da_ninit(void) {
@@ -14,7 +13,6 @@ void test_da_ninit(void) {
 
 	da_ninit(&da, 10, sizeof(int));
 	ASSERT_DA_STATE(da, sizeof(int), 10, 0);
-
 	da_destroy(&da);
 }
 void test_da_from_array(void) {
@@ -24,7 +22,6 @@ void test_da_from_array(void) {
 	da_from_array(&da, arr, 5, sizeof(int));
 	ASSERT_DA_STATE(da, sizeof(int), 5, 0);
 	assert(da.array == arr);
-
 	da_destroy(&da);
 }
 void test_da_new(void) {
@@ -32,8 +29,6 @@ void test_da_new(void) {
 	t_da *da = da_new(sizeof(int));
 
 	ASSERT_DA_STATE(*da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 0);
-
-	da_destroy(da);
-	free(da);
+	da_free(da);
 }
 

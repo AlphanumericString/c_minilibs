@@ -6,7 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define C_MINI__TESTS
 #include "da/dynamic_array.h"
 
 #define ASSERT_DA_STATE(da, sz, cap, nb)                                       \
@@ -50,6 +49,7 @@ void test_da_clr(void);
 
 // destroy
 void test_da_destroy(void);
+void test_da_free(void);
 
 // add
 void test_da_add(void);

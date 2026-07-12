@@ -11,14 +11,20 @@
  * \param buffer out buffer where the found element will be copied
  * \return pointer to the out buffer if found, NULL otherwise
  * \warning rb_get assume that buffer is always correctly sized.
-**/
+ **/
 void *rb_get(const t_rb *rb, t_comparator comp, const void *arg, void *buffer) {
 	void *elem;
 
-	if (!rb || !comp || !buffer) return NULL;
-
+	if (!rb || !comp || !buffer) {
+		LOG(C_MINI__RB_LOG_EARG);
+		return NULL;
+	}
 	elem = rb_find(rb, comp, arg);
-	if (elem) return (memcpy(buffer, elem, rb->sz_e));
+	if (elem) {
+		LOG(C_MINI__RB_LOG_SUCCESS);
+		return (memcpy(buffer, elem, rb->sz_e));
+	}
+	LOG(C_MINI__RB_LOG_FAIL);
 	return NULL;
 }
 
@@ -32,7 +38,7 @@ void *rb_get(const t_rb *rb, t_comparator comp, const void *arg, void *buffer) {
  * \param buffer out buffer where the elements will be copied
  * \return pointer to the out buffer if match found, NULL otherwise
  * \warning rb_get assume that buffer is always correctly sized.
-**/
+ **/
 void *rb_nget(const t_rb *rb, size_t n, t_comparator comp, const void *arg,
               void *buffer) {
 	size_t i = 0;
@@ -40,18 +46,26 @@ void *rb_nget(const t_rb *rb, size_t n, t_comparator comp, const void *arg,
 	size_t count;
 	void  *elem;
 
-	if (!rb || !comp || !buffer || !n) return NULL;
+	if (!rb || !comp || !buffer || !n) {
+		LOG(C_MINI__RB_LOG_EARG);
+		return NULL;
+	}
 
 	count = rb_size(*rb);
 	pos   = rb->o_pos;
 	while (i < count) {
 		elem = rb->array + (pos * rb->sz_e);
 		if (comp(elem, (void *)arg) == 0) {
-			if (rb_nat(*rb, i, n, buffer)) return buffer;
+			if (rb_nat(*rb, i, n, buffer)) {
+				LOG(C_MINI__RB_LOG_SUCCESS);
+				return buffer;
+			}
+			LOG(C_MINI__RB_LOG_FAIL);
 			return NULL;
 		}
 		pos = (pos + 1) % rb->nb_max;
 		i++;
 	}
+	LOG(C_MINI__RB_LOG_FAIL);
 	return NULL;
 }

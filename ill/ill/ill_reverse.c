@@ -4,13 +4,16 @@
  * \brief Reverses the order of nodes in the list.
  * \param head The head of the list.
  * \return The new head of the reversed list.
-**/
+ **/
 t_ill *ill_reverse(t_ill *head) {
 	t_ill *prev;
 	t_ill *curr;
 	t_ill *nxt;
 
-	if (!head) return (NULL);
+	if (!head) {
+		LOG(C_MINI__ILL_LOG_EARG);
+		return (NULL);
+	}
 	prev = NULL;
 	curr = head;
 	while (curr) {
@@ -19,5 +22,6 @@ t_ill *ill_reverse(t_ill *head) {
 		prev       = curr;
 		curr       = nxt;
 	}
+	LOG(C_MINI__ILL_LOG_SUCCESS);
 	return (prev);
 }

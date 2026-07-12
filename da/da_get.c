@@ -9,10 +9,13 @@
  * \param pos index of the element
  * \param out_buffer pointer where the element will be copied
  * \return true on success, false on failure
-**/
+ **/
 bool da_get(t_da *vec, size_t pos, void *out_buffer) {
-	if (!vec || pos >= vec->nb_e) return (false);
-	if (!out_buffer) return (false);
+	if (!vec || pos >= vec->nb_e || !out_buffer) {
+		LOG(C_MINI__DA_LOG_EARG);
+		return (false);
+	}
+	LOG(C_MINI__DA_LOG_GET, pos);
 	return (memcpy(out_buffer, da_at(vec, pos), vec->sz_e), true);
 }
 
@@ -24,10 +27,13 @@ bool da_get(t_da *vec, size_t pos, void *out_buffer) {
  * \param pos index of the element
  * \param out_buffer pointer where the element will be copied
  * \return true on success, false on failure
-**/
+ **/
 bool da_nget(t_da *da, size_t n, size_t pos, void *out_buffer) {
-	if (!da || pos >= da->nb_e) return (false);
-	if (!out_buffer) return (false);
+	if (!da || pos >= da->nb_e || !out_buffer) {
+		LOG(C_MINI__DA_LOG_EARG);
+		return (false);
+	}
+	LOG(C_MINI__DA_LOG_GET, pos);
 	if (!n) return (true);
 	return (memcpy(out_buffer, da_at(da, pos), da->sz_e * n), true);
 }
@@ -36,8 +42,12 @@ bool da_nget(t_da *da, size_t n, size_t pos, void *out_buffer) {
  * \brief get the raw inner array of the da
  * \param da pointer to the dynamic array
  * \return pointer to the raw inner array
-**/
+ **/
 void *da_array(t_da *da) {
-	if (!da) return (NULL);
+	if (!da) {
+		LOG(C_MINI__DA_LOG_EARG);
+		return (NULL);
+	}
+	LOG(C_MINI__DA_LOG_SUCCESS);
 	return (da->array);
 }

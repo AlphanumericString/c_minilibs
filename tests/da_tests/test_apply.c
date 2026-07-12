@@ -7,7 +7,6 @@ void test_da_apply(void) {
 
 	da_init(&da, sizeof(int));
 	da_add(&da, &a);
-
 	assert(*(int *)da_at(&da, 0) == 1);
 	assert(da_apply(&da, cb_true, NULL) == NULL);
 	assert(*(int *)da_at(&da, 0) == 1);

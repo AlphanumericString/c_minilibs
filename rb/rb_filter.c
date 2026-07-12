@@ -14,7 +14,7 @@ static void blank(void *a) {
  * \param arg argument for the callback
  * \param destroyer optional function to destroy removed elements
  * \return true on success, false otherwise
-**/
+ **/
 bool rb_filter(t_rb *rb, t_callback cb, const void *arg,
                void (*destroyer)(void *elem)) {
 	size_t read_pos;
@@ -23,7 +23,10 @@ bool rb_filter(t_rb *rb, t_callback cb, const void *arg,
 	size_t i = 0;
 	void  *elem;
 
-	if (!rb || !cb) return false;
+	if (!rb || !cb) {
+		LOG(C_MINI__RB_LOG_EARG);
+		return false;
+	}
 	if (!destroyer) destroyer = blank;
 
 	count     = rb_size(*rb);
@@ -44,5 +47,6 @@ bool rb_filter(t_rb *rb, t_callback cb, const void *arg,
 		i++;
 	}
 	rb->i_pos = write_pos;
+	LOG(C_MINI__RB_LOG_SUCCESS);
 	return true;
 }

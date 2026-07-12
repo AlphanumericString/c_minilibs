@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#ifdef C_MINI__TEST
+#ifdef C_MINI__TESTS
 #	include <stdio.h>
 
 #	ifndef LOG
@@ -38,7 +38,7 @@
 			} while (0);
 #	endif // !DBG_POS
 
-#else // || C_MINI_TEST
+#else // || C_MINI__TESTS
 
 #	ifndef LOG
 #		define LOG(fmt, ...) (void)0;
@@ -52,7 +52,7 @@
 #		define DBG_POS (void)0;
 #	endif // !DBG_POS
 
-#endif // !C_MINI__TEST
+#endif // !C_MINI__TESTS
 
 #ifndef C_MINI__CTLS_CAP
 #	define C_MINI__CTLS_CAP 16

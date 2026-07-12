@@ -7,12 +7,16 @@
  * \param da pointer to the dynamic array
  * \param elem pointer to the element to add
  * \return true if success, false if failure
-**/
+ **/
 bool da_add(t_da *da, void *elem) {
-	if (!da || !elem || !da->array || !da->cap_e) return (false);
+	if (!da || !elem || !da->array || !da->cap_e) {
+		LOG(C_MINI__DA_LOG_EARG);
+		return (false);
+	}
 	if ((da->nb_e + 1) > da->cap_e) da_grow(da);
-	memcpy(da_at(da, da->nb_e), elem, da->sz_e);
 	da->nb_e++;
+	memcpy(da_at(da, da->nb_e - 1), elem, da->sz_e);
+	LOG(C_MINI__DA_LOG_ADD, elem, da->nb_e);
 	return (true);
 }
 
@@ -24,12 +28,15 @@ bool da_add(t_da *da, void *elem) {
  * \param nb_e number of elements to add
  * \param sz_e size of the elements
  * \return true if success, false if failure
-**/
+ **/
 bool da_cat_array(t_da *da, void *arr, size_t nb_e, size_t sz_e) {
-	if (!arr || !da || !sz_e || !da->array) return (false);
-	if (sz_e != da->sz_e) return (false);
+	if (!arr || !da || !sz_e || !da->array || sz_e != da->sz_e) {
+		LOG(C_MINI__DA_LOG_EARG);
+		return (false);
+	}
 	if ((da->nb_e + nb_e) > da->cap_e) da_grow_for_size(da, nb_e);
-	memcpy(da_at(da, da->nb_e), arr, da->sz_e * nb_e);
 	da->nb_e += nb_e;
+	memcpy(da_at(da, da->nb_e - nb_e), arr, da->sz_e * nb_e);
+	LOG(C_MINI__DA_LOG_CATARR, arr, da->nb_e - nb_e, da->nb_e);
 	return (true);
 }

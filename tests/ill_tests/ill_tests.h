@@ -2,7 +2,6 @@
 
 #include <assert.h>
 
-#define C_MINI__TESTS
 #include "ill/idl/intrusive_doubly_linked.h"
 #include "ill/ill/intrusive_linked_lists.h"
 

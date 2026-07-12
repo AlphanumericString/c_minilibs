@@ -7,15 +7,18 @@
  * \param rb the round buffer
  * \param idx the index from o_pos
  * \return pointer to the element in the data array, or NULL if out of bounds
-**/
+ **/
 void *rb_at(t_rb rb, size_t idx) {
 	size_t pos;
 
-	if (idx >= rb_size(rb)) return NULL;
+	if (idx >= rb_size(rb)) {
+		LOG(C_MINI__RB_LOG_EARG);
+		return NULL;
+	}
 	pos = (rb.o_pos + idx) % rb.nb_max;
+	LOG(C_MINI__RB_LOG_SUCCESS);
 	return rb.array + (pos * rb.sz_e);
 }
-
 /**
  * \brief return position in array for element at index and copies up to n
  * elements
@@ -26,18 +29,19 @@ void *rb_at(t_rb rb, size_t idx) {
  * \return pointer to the first element in the data array, or NULL on error
  * \warning rb_nat MAKES NO PROMISES that the returned adress is contigous on n.
  * \warning rb_nat assume that buff is always correctly sized.
-**/
+ **/
 void *rb_nat(t_rb rb, size_t idx, size_t n, void *buff) {
 	size_t start_pos;
 	size_t count;
 	size_t first_chunk;
 	size_t second_chunk;
 
-	if (idx >= rb_size(rb) || !n || !buff) return NULL;
-
+	if (idx >= rb_size(rb) || !n || !buff) {
+		LOG(C_MINI__RB_LOG_EARG);
+		return NULL;
+	}
 	count = rb_size(rb) - idx;
 	if (n > count) n = count;
-
 	start_pos = (rb.o_pos + idx) % rb.nb_max;
 	if (start_pos + n <= rb.nb_max) {
 		memcpy(buff, rb.array + (start_pos * rb.sz_e), n * rb.sz_e);
@@ -48,5 +52,6 @@ void *rb_nat(t_rb rb, size_t idx, size_t n, void *buff) {
 		memcpy(buff + (first_chunk * rb.sz_e), rb.array,
 		       second_chunk * rb.sz_e);
 	}
+	LOG(C_MINI__RB_LOG_SUCCESS);
 	return rb.array + (start_pos * rb.sz_e);
 }

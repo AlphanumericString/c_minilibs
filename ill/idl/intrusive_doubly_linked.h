@@ -3,7 +3,7 @@
 #	include <stdbool.h>
 #	include <stddef.h>
 
-#	ifdef C_MINI__TEST
+#	ifdef C_MINI__TESTS
 #		include <stdio.h>
 
 #		ifndef LOG
@@ -33,7 +33,13 @@
 				} while (0);
 #		endif // !DBG_POS
 
-#	else // || C_MINI_TEST
+#define C_MINI__IDL_LOG_EARG	"Bad arguments."
+#define C_MINI__IDL_LOG_EALLOC	"Allocation Fail."
+#define C_MINI__IDL_LOG_ECB		"Callback Fail."
+#define C_MINI__IDL_LOG_FAIL	"Faillure"
+#define C_MINI__IDL_LOG_SUCCESS	"Success"
+
+#	else // || C_MINI__TESTS
 
 #		ifndef LOG
 #			define LOG(fmt, ...) (void)0;
@@ -47,7 +53,7 @@
 #			define DBG_POS (void)0;
 #		endif // !DBG_POS
 
-#	endif // !C_MINI__TEST
+#	endif // !C_MINI__TESTS
 
 #	ifndef CMINI_T_CALLBAKC_DEFINE
 #		define CMINI_T_CALLBAKC_DEFINE

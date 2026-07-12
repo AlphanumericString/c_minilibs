@@ -8,14 +8,12 @@ void test_da_fold(void) {
 
 	da_init(&da, sizeof(int));
 	da_add(&da, &a);
-
 	da_fold(&da, cb_merger, &sum);
 	assert(sum == 1);
 	da_cat_array(&da, (int *)arr_2_5, 4, sizeof(int));
 	sum = 0;
 	da_fold(&da, cb_merger, &sum);
 	assert(sum == (1 + 2 + 3 + 4 + 5));
-
 	da_destroy(&da);
 }
 void test_da_nfold(void) {
@@ -25,7 +23,6 @@ void test_da_nfold(void) {
 
 	da_init(&da, sizeof(int));
 	da_add(&da, &a);
-
 	da_nfold(&da, 1, cb_merger, &sum);
 	assert(sum == 1);
 	da_cat_array(&da, (int *)arr_2_5, 4, sizeof(int));
@@ -38,7 +35,6 @@ void test_da_nfold(void) {
 	sum = 42;
 	da_nfold(&da, -1, cb_merger, &sum);
 	assert(sum == (42 + (1 + 2 + 3 + 4 + 5)));
-
 	da_destroy(&da);
 }
 void test_da_reduce(void) {
@@ -48,7 +44,6 @@ void test_da_reduce(void) {
 
 	da_init(&da, sizeof(int));
 	da_add(&da, &a);
-
 	res = da_reduce(&da, cb_merger);
 	assert(res != NULL);
 	assert(*res == 1);
@@ -58,7 +53,6 @@ void test_da_reduce(void) {
 	assert(res != NULL);
 	assert(*res == (1 + 2 + 3 + 4 + 5));
 	free(res);
-
 	da_destroy(&da);
 }
 void test_da_nreduce(void) {
@@ -68,7 +62,6 @@ void test_da_nreduce(void) {
 
 	da_init(&da, sizeof(int));
 	da_add(&da, &a);
-
 	res = da_nreduce(&da, 1, cb_merger);
 	assert(res != NULL);
 	assert(*res == 1);
@@ -82,6 +75,5 @@ void test_da_nreduce(void) {
 	assert(res != NULL);
 	assert(*res == (1 + 2 + 3 + 4 + 5));
 	free(res);
-
 	da_destroy(&da);
 }

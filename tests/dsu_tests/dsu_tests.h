@@ -2,7 +2,6 @@
 
 #include <assert.h>
 
-#define C_MINI__TESTS
 #include "dsu/disjointed_set_union.h"
 
 #define DISP_DSU(dsu)                                                          \
