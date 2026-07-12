@@ -67,6 +67,10 @@ void cache_destroy(t_lruc *cache) {
 	cache->buckets = NULL;
 	LOG(C_MINI__LRU_LOG_SUCCESS);
 }
+/**
+ * @brief Destroy internal and cache itself is freed
+ * @param cache the cache to free.
+**/
 void cache_free(t_lruc *cache) {
 	if (!cache) {
 		LOG(C_MINI__LRU_LOG_EARG);

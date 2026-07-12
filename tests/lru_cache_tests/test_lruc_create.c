@@ -14,9 +14,9 @@ void test_lruc_create(void) {
 	assert(memcmp(&lru->stats, &cmp, sizeof(t_lruc_stats)) == 0);
 	assert(lru->MRU == NULL);
 	assert(lru->LRU == NULL);
-	assert(lru->cap == 3);
+	assert(lru->buckets_nb == 3);
 	assert(lru->dtor == (void *)0xDEADBEEF);
-	assert(lru->h_arr != NULL);
+	assert(lru->buckets != NULL);
 	cache_destroy(lru);
 	free(lru);
 }
@@ -28,20 +28,19 @@ void test_lruc_init(void) {
 	assert(memcmp(&lru.stats, &cmp, sizeof(t_lruc_stats)) == 0);
 	assert(lru.MRU == NULL);
 	assert(lru.LRU == NULL);
-	assert(lru.cap == 3);
+	assert(lru.buckets_nb == 3);
 	assert(lru.dtor == (void *)0xDEADBEEF);
-	assert(lru.h_arr != NULL);
+	assert(lru.buckets != NULL);
 	cache_destroy(&lru);
 }
 void test_lruc_destroy(void) {
 	t_lruc lru;
 
 	cache_init(&lru, 3, (void *)0xDEADBEEF);
-	assert(lru.cap == 3);
+	assert(lru.buckets_nb == 3);
 	assert(lru.dtor == (void *)0xDEADBEEF);
-	assert(lru.h_arr != NULL);
+	assert(lru.buckets != NULL);
 	cache_destroy(&lru);
-	assert(lru.h_arr == NULL);
-	assert(lru.cap == 0);
-	assert(lru.cap == 0);
+	assert(lru.buckets == NULL);
+	assert(lru.buckets_nb == 0);
 }
