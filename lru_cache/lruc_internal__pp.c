@@ -1,6 +1,11 @@
 #define C_MINI__LRU_INTERNAL
 #include "least_recently_used_cache.h"
 
+/**
+ * @brief Push a node to the cache
+ * @param c cache pointer
+ * @param node node to push
+ **/
 void push_lruc(t_lruc *c, t_lruc_keynode *node) {
 	node->lru_next = c->MRU;
 	if (c->MRU) c->MRU->lru_prev = node;
@@ -8,6 +13,11 @@ void push_lruc(t_lruc *c, t_lruc_keynode *node) {
 	c->MRU         = node;
 	node->lru_prev = NULL;
 }
+/**
+ * @brief Pop a node from the cache
+ * @param c cache pointer
+ * @param n node to pop
+ **/
 t_lruc_keynode *pop_lruc(t_lruc *c, t_lruc_keynode *n) {
 	if (n == c->MRU) c->MRU = c->MRU->lru_next;
 	if (n == c->LRU) c->LRU = c->LRU->lru_prev;
@@ -17,6 +27,11 @@ t_lruc_keynode *pop_lruc(t_lruc *c, t_lruc_keynode *n) {
 	n->lru_next = NULL;
 	return (n);
 }
+/**
+ * @brief Pop a node from the cache based on TTL
+ * @param c cache pointer
+ * @param n node to pop
+ **/
 t_lruc_keynode *pop_ttl(t_lruc *c, t_lruc_keynode *n) {
 	if (n == c->TTL_Min) c->TTL_Min = n->ttl_prev;
 	if (n == c->TTL_Max) c->TTL_Max = n->ttl_next;

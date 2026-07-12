@@ -2,6 +2,12 @@
 
 #include "heap.h"
 
+/**
+ * @brief Create and init a heap
+ * @param nb_elems max number of elements
+ * @param cmp comparator function
+ * @return t_heap* or NULL if failed
+ **/
 t_heap *hp_create(size_t nb_elems, t_comparator cmp) {
 	t_heap *hp = malloc(sizeof(t_heap));
 
@@ -17,6 +23,13 @@ t_heap *hp_create(size_t nb_elems, t_comparator cmp) {
 	return (hp);
 }
 
+/**
+ * @brief Init a heap
+ * @param hp heap pointer
+ * @param nb_elems max number of elements
+ * @param cmp comparator function
+ * @return t_heap* or NULL if failed
+ **/
 t_heap *hp_init(t_heap *hp, size_t nb_elems, t_comparator cmp) {
 	if (!hp) {
 		LOG(C_MINI__HP_LOG_EARG);

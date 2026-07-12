@@ -8,6 +8,13 @@
 
 // search
 // -> hit -> set as head
+/**
+ * @brief Get a key from the cache
+ * @param c cache pointer
+ * @param key key to get
+ * @param key_len key length
+ * @return pointer to the value
+ **/
 void *cache_get_lru(t_lruc *c, const void *key, size_t key_len) {
 	t_lruc_keynode *node;
 	size_t          pos;
@@ -26,6 +33,13 @@ void *cache_get_lru(t_lruc *c, const void *key, size_t key_len) {
 	LOG(C_MINI__LRU_LOG_HIT, c->stats.hit, key, key_len);
 	return (c->h_arr[pos]->kv.value);
 }
+/**
+ * @brief Get a key from the cache with TTL
+ * @param c cache pointer
+ * @param key key to get
+ * @param key_len key length
+ * @return pointer to the value
+ **/
 void *cache_get(t_lruc *c, const void *key, size_t key_len) {
 	struct timespec now;
 	t_lruc_keynode *node;

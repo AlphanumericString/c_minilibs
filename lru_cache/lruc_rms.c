@@ -6,6 +6,10 @@
 #define C_MINI__LRU_INTERNAL
 #include "least_recently_used_cache.h"
 
+/**
+ * @brief Clear the cache
+ * @param c cache pointer
+ **/
 void cache_clear(t_lruc *c) {
 	t_lruc_keynode *nxt;
 
@@ -36,6 +40,13 @@ void cache_clear(t_lruc *c) {
 	c->nb      = 0;
 	c->stats   = (t_lruc_stats){0};
 }
+/**
+ * @brief Remove a key from the cache
+ * @param c cache pointer
+ * @param key key to remove
+ * @param key_len key length
+ * @return 0 on success, -1 on failure
+ **/
 int cache_remove(t_lruc *c, const void *key, size_t key_len) {
 	t_lruc_keynode *node;
 	size_t          pos;

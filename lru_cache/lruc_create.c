@@ -5,6 +5,13 @@
 #define C_MINI__LRU_INTERNAL
 #include "least_recently_used_cache.h"
 
+/**
+ * @brief Initialize a cache
+ * @param cache pointer to the cache
+ * @param cap capacity of the cache
+ * @param dtor destructor function
+ * @return pointer to the cache
+ **/
 t_lruc *cache_init(t_lruc *cache, size_t cap, void (*dtor)(void *)) {
 	if (!cache) {
 		LOG("Fail : No Cache given");
@@ -23,6 +30,12 @@ t_lruc *cache_init(t_lruc *cache, size_t cap, void (*dtor)(void *)) {
 	return (cache);
 }
 
+/**
+ * @brief Create a new cache
+ * @param cap capacity of the cache
+ * @param dtor destructor function
+ * @return pointer to the new cache
+ **/
 t_lruc *cache_create(size_t cap, void (*dtor)(void *)) {
 	t_lruc *ret;
 
@@ -39,6 +52,10 @@ t_lruc *cache_create(size_t cap, void (*dtor)(void *)) {
 	LOG("Success");
 	return (ret);
 }
+/**
+ * @brief Destroy a cache
+ * @param cache pointer to the cache
+ **/
 void cache_destroy(t_lruc *cache) {
 	if (!cache) return;
 	cache_clear(cache);

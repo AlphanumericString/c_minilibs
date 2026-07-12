@@ -2,6 +2,13 @@
 #define C_MINI__LRU_INTERNAL
 #include "least_recently_used_cache.h"
 
+/**
+ * @brief Search for a key in the cache list
+ * @param c cache pointer
+ * @param key key to search for
+ * @param key_len key length
+ * @return pointer to the key node if found, NULL otherwise
+ **/
 t_lruc_keynode *cache_search_keyinlist(const t_lruc *c, const void *key,
                                        size_t key_len) {
 	t_lruc_keynode *node;
@@ -12,7 +19,14 @@ t_lruc_keynode *cache_search_keyinlist(const t_lruc *c, const void *key,
 			return (node);
 	return (NULL);
 }
-
+/**
+ * @brief Search for a key in the cache hash table
+ * @param c cache pointer
+ * @param key key to search for
+ * @param key_len key length
+ * @param _out pointer to store the index of the key
+ * @return pointer to the key node if found, NULL otherwise
+ **/
 t_lruc_keynode *cache_search_keyinhash(const t_lruc *c, const void *key,
                                        size_t key_len, size_t *_out) {
 	size_t i;
@@ -29,11 +43,21 @@ t_lruc_keynode *cache_search_keyinhash(const t_lruc *c, const void *key,
 	return (*_out = it, NULL);
 }
 
+/**
+ * @brief Unlink a node from the cache
+ * @param c cache pointer
+ * @param n node to unlink
+ **/
 void cache_unlink_node(t_lruc *c, t_lruc_keynode *n) {
 	pop_lruc(c, n);
 	pop_ttl(c, n);
 }
-
+/**
+ * @brief Calculate the distance in milliseconds between two times
+ * @param a first time
+ * @param b second time
+ * @return distance in milliseconds
+ **/
 long distance_ms(struct timespec a, struct timespec b) {
 	time_t sec  = a.tv_sec - b.tv_sec;
 	long   nsec = a.tv_nsec - b.tv_nsec;

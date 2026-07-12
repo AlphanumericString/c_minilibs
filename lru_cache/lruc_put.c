@@ -15,6 +15,12 @@
 // Very fast, but not very good
 // see http://www.cse.yorku.ca/~oz/hash.html
 // See ft_hash_sdbm or ft_hash_fnv1a for less collisions prone hash functions
+/**
+ * @brief Hash a key using djb2 algorithm
+ * @param key key to hash
+ * @param size key size
+ * @return hash value
+ **/
 size_t hash_djb2(const void *key, size_t size) {
 	unsigned char *str;
 	size_t         hash;
@@ -25,7 +31,6 @@ size_t hash_djb2(const void *key, size_t size) {
 		hash = (hash << 5) + hash + str[size];
 	return (hash);
 }
-
 static struct timespec add_times(struct timespec a, struct timespec b) {
 	a = (struct timespec){
 	    .tv_sec  = a.tv_sec + b.tv_sec,
@@ -38,6 +43,10 @@ static struct timespec add_times(struct timespec a, struct timespec b) {
 	}
 	return (a);
 }
+/**
+ * Insert a key-value pair into the cache in lru and ttl
+ * internal function
+ **/
 static int insert_with_ttl_regards(t_lruc_keynode kv, t_lruc_keynode *node,
                                    t_lruc *c) {
 	struct timespec tmp;
@@ -70,6 +79,10 @@ static int insert_with_ttl_regards(t_lruc_keynode kv, t_lruc_keynode *node,
 	}
 	return (0);
 }
+/**
+ * Put a key-value pair into the cache (constructor + node choice)
+ * internal function
+ **/
 static int cache_put_internal(t_lruc *c, t_lruc_keynode to_add) {
 	struct timespec now;
 	t_lruc_keynode *node = NULL;
@@ -99,6 +112,12 @@ static int cache_put_internal(t_lruc *c, t_lruc_keynode to_add) {
 	}
 	return (insert_with_ttl_regards(to_add, node, c));
 }
+/**
+ * @brief Put a key-value pair into the cache
+ * @param c cache pointer
+ * @param kv key-value pair
+ * @return 0 on success, -1 on failure
+ **/
 int cache_put_kv(t_lruc *c, t_keyvalue kv) {
 	return (cache_put_internal(c, (t_lruc_keynode){.kv   = kv,
 	                                               .time = (struct timespec){0},
@@ -107,6 +126,14 @@ int cache_put_kv(t_lruc *c, t_keyvalue kv) {
 	                                               .ttl_prev = 0,
 	                                               .lru_prev = 0}));
 }
+/**
+ * @brief Put a key-value pair into the cache
+ * @param cache cache pointer
+ * @param key key to put
+ * @param key_len key length
+ * @param value value to put
+ * @return 0 on success, -1 on failure
+ **/
 int cache_put(t_lruc *cache, const void *key, size_t key_len, void *value) {
 	return (cache_put_internal(cache, (t_lruc_keynode){
 	                                      .kv = (t_keyvalue){.key = (void *)key,
@@ -121,6 +148,15 @@ int cache_put(t_lruc *cache, const void *key, size_t key_len, void *value) {
 }
 
 // puts a key in the cache and add ttl_ms more ms to the cache validity period
+/**
+ * @brief Put a key-value pair into the cache with a time to live
+ * @param cache cache pointer
+ * @param key key to put
+ * @param key_len key length
+ * @param value value to put
+ * @param ttl_ms time to live in milliseconds
+ * @return 0 on success, -1 on failure
+ **/
 int cache_put_ttl(t_lruc *cache, const void *key, size_t key_len, void *value,
                   uint64_t ttl_ms) {
 	return (cache_put_internal(

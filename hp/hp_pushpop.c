@@ -44,6 +44,11 @@ static void heap_down(t_heap *h, size_t idx, bool max) {
 	}
 }
 
+/**
+ * @brief Push an element into the heap
+ * @param h heap pointer
+ * @param e element to push
+ **/
 void hp_min_push(t_heap *h, void *e) {
 	if (!h || !e) {
 		LOG(C_MINI__HP_LOG_EARG);
@@ -54,6 +59,11 @@ void hp_min_push(t_heap *h, void *e) {
 	heap_up(h, h->nb - 1, false);
 	LOG(C_MINI__HP_LOG_PUSH, e, h, h->nb, h->capacity);
 }
+/**
+ * @brief Push an element into the heap
+ * @param h heap pointer
+ * @param e element to push
+ **/
 void hp_max_push(t_heap *h, void *e) {
 	if (!h || !e) {
 		LOG(C_MINI__HP_LOG_EARG);
@@ -65,6 +75,11 @@ void hp_max_push(t_heap *h, void *e) {
 	LOG(C_MINI__HP_LOG_PUSH, e, h, h->nb, h->capacity);
 }
 
+/**
+ * @brief Pop the minimum element from the heap
+ * @param h heap pointer
+ * @return minimum element
+ **/
 void *hp_min_pop(t_heap *h) {
 	void *root;
 
@@ -79,6 +94,11 @@ void *hp_min_pop(t_heap *h) {
 	LOG(C_MINI__HP_LOG_POP, root, h, h->nb, h->capacity);
 	return (root);
 }
+/**
+ * @brief Pop the maximum element from the heap
+ * @param h heap pointer
+ * @return maximum element
+ **/
 void *hp_max_pop(t_heap *h) {
 	void *root;
 
@@ -94,6 +114,12 @@ void *hp_max_pop(t_heap *h) {
 	return (root);
 }
 
+/**
+ * @brief Remove an element from the heap
+ * @param h heap pointer
+ * @param n index of the element to remove
+ * @return element removed
+ **/
 void *hp_min_rm(t_heap *h, size_t n) {
 	if (!h) {
 		LOG(C_MINI__HP_LOG_EARG);
@@ -105,6 +131,12 @@ void *hp_min_rm(t_heap *h, size_t n) {
 	heap_down(h, n, false);
 	return (hp_min_pop(h));
 }
+/**
+ * @brief Remove an element from the heap
+ * @param h heap pointer
+ * @param n index of the element to remove
+ * @return element removed
+ **/
 void *hp_max_rm(t_heap *h, size_t n) {
 	if (!h) {
 		LOG(C_MINI__HP_LOG_EARG);
