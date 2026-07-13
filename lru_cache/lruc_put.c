@@ -15,8 +15,8 @@ static int insert_with_ttl_regards(t_lruc_keynode kv, t_lruc_keynode *node,
 	t_lruc_keynode *it = NULL;
 
 	*node = kv;
-	lruc_i_push_lru(c, node);
-	lruc_i_push_hash(c, node, h_pos);
+	lruci_push_lru(c, node);
+	lruci_push_hash(c, node, h_pos);
 	if (c->node_in_use == 1) {
 		c->TTL_Max = node;
 		c->TTL_Min = node;
@@ -54,13 +54,12 @@ static int cache_put_internal(t_lruc *c, t_lruc_keynode to_add) {
 		LOG(C_MINI__LRUC_LOG_EARG);
 		return (-1);
 	}
-	node =
-	    lruc_i_search_keyinhash(c, to_add.kv.key, to_add.kv.k_len, &hash_pos);
-	if (node != NULL &&
-	    lruc_i_is_key_eq(node->kv.key, node->kv.k_len, to_add.kv.key,
-	                     to_add.kv.k_len)) { // update value
+	node = lruci_keyinhash(c, to_add.kv.key, to_add.kv.k_len, &hash_pos);
+	if (node != NULL && lruci_key_eq(node->kv.key, node->kv.k_len,
+	                                 to_add.kv.key, to_add.kv.k_len)) {
+		// update value
 		LOG(C_MINI__LRUC_LOG_UPDATEVAL, to_add.kv.key, to_add.kv.k_len);
-		lruc_i_unlink_node(c, node, hash_pos);
+		lruci_unlink_node(c, node, hash_pos);
 	} else if (!node && c->node_in_use < c->buckets_nb) { // new node
 		LOG(C_MINI__LRUC_LOG_CREATEVAL, to_add.kv.key, to_add.kv.k_len);
 		node = calloc(sizeof(t_lruc_keynode), 1);
@@ -71,13 +70,13 @@ static int cache_put_internal(t_lruc *c, t_lruc_keynode to_add) {
 		c->node_in_use++;
 	} else { // re-use cache tail node (LRU) since cachce is full
 		if (clock_gettime(CLOCK_MONOTONIC, &now) == -1 ||
-		    c->TTL_Min->time <= lruc_i_timeto64(now) + c->ttl_glob)
+		    c->TTL_Min->time <= lruci_timeto64(now) + c->ttl_glob)
 			node = c->LRU;
 		else node = c->TTL_Min;
 		LOG(C_MINI__LRUC_LOG_CREATEVAL, to_add.kv.key, to_add.kv.k_len);
 		LOG(C_MINI__LRUC_LOG_DELETEVAL, node->kv.key, node->kv.k_len);
 		if (c->dtor) c->dtor(c->LRU->kv.value);
-		lruc_i_unlink_node(c, node, hash_pos);
+		lruci_unlink_node(c, node, hash_pos);
 	}
 	return (insert_with_ttl_regards(to_add, node, c, hash_pos));
 }

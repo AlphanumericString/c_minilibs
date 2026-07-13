@@ -55,11 +55,11 @@ int lruc_remove(t_lruc *c, const void *key, size_t key_len) {
 	size_t          pos;
 
 	if (!c || !c->MRU || !c->node_in_use) return (-1);
-	node = lruc_i_search_keyinhash(c, key, key_len, &pos);
+	node = lruci_keyinhash(c, key, key_len, &pos);
 	if (!node ||
-	    lruc_i_is_key_eq(node->kv.key, node->kv.k_len, key, key_len) == false)
+	    lruci_key_eq(node->kv.key, node->kv.k_len, key, key_len) == false)
 		return (-1);
-	lruc_i_unlink_node(c, node, pos);
+	lruci_unlink_node(c, node, pos);
 	if (c->dtor) c->dtor(node->kv.value);
 	LOG(C_MINI__LRUC_LOG_DELETEVAL, node->kv.key, node->kv.k_len);
 	free(node);

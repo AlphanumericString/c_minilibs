@@ -29,11 +29,11 @@ bool lruc_isexpired(t_lruc *c, const void *key, size_t key_len) {
 		LOG(C_MINI__LRUC_LOG_ECLOCK);
 		return (false);
 	}
-	now_uint = lruc_i_timeto64(now);
+	now_uint = lruci_timeto64(now);
 	if (c->ttl_glob == LONG_MAX) return (false);
-	node = lruc_i_search_keyinhash(c, key, key_len, &offset);
+	node = lruci_keyinhash(c, key, key_len, &offset);
 	if (!node ||
-	    lruc_i_is_key_eq(node->kv.key, node->kv.k_len, key, key_len) == false)
+	    lruci_key_eq(node->kv.key, node->kv.k_len, key, key_len) == false)
 		return (false);
 	return ((node->time + c->ttl_glob) < (now_uint));
 }
@@ -55,13 +55,12 @@ void lruc_cleanup(t_lruc *c) {
 	now_uint = now.tv_sec * 1000ULL + now.tv_nsec / 1000000ULL;
 	while (c->TTL_Min && (c->TTL_Min->time + c->ttl_glob) < now_uint) {
 		if (c->dtor) c->dtor(c->TTL_Min->kv.value);
-		lruc_i_search_keyinhash(c, c->TTL_Min->kv.key, c->TTL_Min->kv.k_len,
-		                        &pos);
+		lruci_keyinhash(c, c->TTL_Min->kv.key, c->TTL_Min->kv.k_len, &pos);
 		LOG(C_MINI__LRUC_LOG_EVICTION, c->TTL_Min->kv.key,
 		    c->TTL_Min->time - now_uint, c->ttl_glob);
-		lruc_i_pop_hash(c, c->TTL_Min, pos);
-		lruc_i_pop_lru(c, c->TTL_Min);
-		free(lruc_i_pop_ttl(c, c->TTL_Min));
+		lruci_pop_hash(c, c->TTL_Min, pos);
+		lruci_pop_lru(c, c->TTL_Min);
+		free(lruci_pop_ttl(c, c->TTL_Min));
 		c->node_in_use--;
 		c->stats.expired++;
 	}

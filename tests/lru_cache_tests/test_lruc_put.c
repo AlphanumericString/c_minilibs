@@ -34,7 +34,7 @@ void test_lruc_put_kv(void) {
 	assert(lruc_put_kv(&c, kv1) != 0);
 	kv1.k_len = strlen(key);
 	assert(lruc_put_kv(&c, kv1) == 0);
-	kv_in_cache = lruc_i_search_keyinhash(&c, key, strlen(key), NULL);
+	kv_in_cache = lruci_keyinhash(&c, key, strlen(key), NULL);
 	assert(kv_in_cache);
 	assert(kv_in_cache->kv.k_len == strlen(key));
 

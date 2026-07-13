@@ -21,14 +21,14 @@ void *cache_get_lru(t_lruc *c, const void *key, size_t key_len) {
 	size_t          pos;
 
 	if (!c || !c->MRU || !c->node_in_use) return (NULL);
-	node = lruc_i_search_keyinhash(c, key, key_len, &pos);
+	node = lruci_keyinhash(c, key, key_len, &pos);
 	if (!node ||
-	    lruc_i_is_key_eq(node->kv.key, node->kv.k_len, key, key_len) == false) {
+	    lruci_key_eq(node->kv.key, node->kv.k_len, key, key_len) == false) {
 		c->stats.misses++;
 		LOG(C_MINI__LRUC_LOG_MISS_LRU, c->stats.misses, key, key_len);
 		return (NULL);
 	}
-	lruc_i_pop_lru(c, node);
+	lruci_pop_lru(c, node);
 	node->lru_next = c->MRU;
 	c->stats.hit++;
 	c->MRU = node;
@@ -57,9 +57,9 @@ void *lruc_get(t_lruc *c, const void *key, size_t key_len) {
 		return (NULL);
 	}
 	now_uint = now.tv_sec * 1000ULL + now.tv_nsec / 1000000ULL;
-	node     = lruc_i_search_keyinhash(c, key, key_len, &pos);
+	node     = lruci_keyinhash(c, key, key_len, &pos);
 	if (!node ||
-	    lruc_i_is_key_eq(node->kv.key, node->kv.k_len, key, key_len) == false) {
+	    lruci_key_eq(node->kv.key, node->kv.k_len, key, key_len) == false) {
 		c->stats.misses++;
 		LOG(C_MINI__LRUC_LOG_MISS_LRU, c->stats.misses, key, key_len);
 		return (NULL);
@@ -70,7 +70,7 @@ void *lruc_get(t_lruc *c, const void *key, size_t key_len) {
 		    now_uint + node->time);
 		return (NULL);
 	}
-	lruc_i_pop_lru(c, node);
+	lruci_pop_lru(c, node);
 	node->lru_next = c->MRU;
 	c->stats.hit++;
 	c->MRU = node;

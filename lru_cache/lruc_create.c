@@ -23,6 +23,11 @@ t_lruc *lruc_init(t_lruc *cache, size_t cap, void (*dtor)(void *)) {
 		LOG(C_MINI__LRUC_LOG_EALLOC);
 		return (NULL);
 	}
+	cache->heap = calloc(sizeof(t_lruc_keynode *), cap);
+	if (!cache->buckets) {
+		LOG(C_MINI__LRUC_LOG_EALLOC);
+		return (free(cache->buckets), NULL);
+	}
 	cache->buckets_nb = cap;
 	cache->ttl_glob = LONG_MAX, cache->stats = (t_lruc_stats){0};
 	cache->dtor = dtor;
@@ -63,6 +68,8 @@ void lruc_destroy(t_lruc *cache) {
 	}
 	lruc_clear(cache);
 	free(cache->buckets);
+	free(cache->heap);
+	cache->heap       = NULL;
 	cache->buckets_nb = 0;
 	cache->buckets    = NULL;
 	LOG(C_MINI__LRUC_LOG_SUCCESS);

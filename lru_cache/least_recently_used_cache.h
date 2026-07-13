@@ -8,6 +8,7 @@
 // TODO: use a C_MINI__LRU_SATURATION to define max average load per buckets
 // right now : 1. meaning for x buckets max x nodes active.
 
+#define C_MINI__LRUC_INTERNAL
 #define C_MINI__LRUC_HASH_SKIP 10
 
 #ifdef C_MINI__TESTS
@@ -193,22 +194,22 @@ void lruc_foreach_ttl_ordered(const t_lruc *c, t_kvcallback fn,
                                void *user_data);
 
 #ifdef C_MINI__LRUC_INTERNAL
-uint64_t lruc_i_timeto64(struct timespec t);
-bool     lruc_i_is_key_eq(const void *k1, size_t k1_len, const void *k2, size_t k2_len);
-void     lruc_i_unlink_node(t_lruc *c, t_lruc_keynode *node, size_t hash);
+uint64_t lruci_timeto64(struct timespec t);
+bool     lruci_key_eq(const void *k1, size_t k1_len, const void *k2, size_t k2_len);
+void     lruci_unlink_node(t_lruc *c, t_lruc_keynode *node, size_t hash);
 
-size_t lruc_i_hash_djb2(const void *key, size_t size);
+size_t lruci_hash_djb2(const void *key, size_t size);
 
-t_lruc_keynode *lruc_i_search_keyinhash(const t_lruc *c, const void *key,
+t_lruc_keynode *lruci_keyinhash(const t_lruc *c, const void *key,
                                        size_t key_len, size_t *_pos);
-t_lruc_keynode *lruc_i_search_keyinlist(const t_lruc *c, const void *key,
+t_lruc_keynode *lruci_keyinlist(const t_lruc *c, const void *key,
                                        size_t key_len);
 
-void            lruc_i_push_lru(t_lruc *c, t_lruc_keynode *node);
-t_lruc_keynode *lruc_i_pop_lru(t_lruc *c, t_lruc_keynode *node);
-t_lruc_keynode *lruc_i_pop_ttl(t_lruc *c, t_lruc_keynode *n);
-t_lruc_keynode *lruc_i_pop_hash(t_lruc *c, t_lruc_keynode *n, size_t hash);
-void lruc_i_push_hash(t_lruc *c, t_lruc_keynode *n, size_t hash);
+void            lruci_push_lru(t_lruc *c, t_lruc_keynode *node);
+t_lruc_keynode *lruci_pop_lru(t_lruc *c, t_lruc_keynode *node);
+t_lruc_keynode *lruci_pop_ttl(t_lruc *c, t_lruc_keynode *n);
+t_lruc_keynode *lruci_pop_hash(t_lruc *c, t_lruc_keynode *n, size_t hash);
+void lruci_push_hash(t_lruc *c, t_lruc_keynode *n, size_t hash);
 
 #endif // !C_MINI__LRUC_INTERNAL
 
