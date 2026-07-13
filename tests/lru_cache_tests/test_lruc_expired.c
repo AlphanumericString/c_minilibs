@@ -12,17 +12,17 @@ void test_lruc_isexpired(void) {
 	const char *k1 = "zod";
 	void       *v1;
 
-	cache_init(&c, 4, free);
-	assert(cache_isexpired(&c, k1, strlen(k1)) == false);
-	cache_setttl(&c, 200);
-	assert(cache_isexpired(&c, k1, strlen(k1)) == false);
+	lruc_init(&c, 4, free);
+	assert(lruc_isexpired(&c, k1, strlen(k1)) == false);
+	lruc_setttl(&c, 200);
+	assert(lruc_isexpired(&c, k1, strlen(k1)) == false);
 	v1 = calloc(42, 1);
-	cache_put(&c, k1, strlen(k1), v1);
-	assert(cache_has(&c, k1, strlen(k1)) == true);
-	assert(cache_isexpired(&c, k1, strlen(k1)) == false);
+	lruc_put(&c, k1, strlen(k1), v1);
+	assert(lruc_has(&c, k1, strlen(k1)) == true);
+	assert(lruc_isexpired(&c, k1, strlen(k1)) == false);
 	sleep(1);
-	assert(cache_isexpired(&c, k1, strlen(k1)) == true);
-	cache_destroy(&c);
+	assert(lruc_isexpired(&c, k1, strlen(k1)) == true);
+	lruc_destroy(&c);
 
 	return;
 }
@@ -35,31 +35,31 @@ void test_lruc_cleanup(void) {
 	v2 = strdup("value_2");
 	v3 = strdup("value_3");
 	v4 = strdup("value_4");
-	cache_init(&c, 4, free);
-	cache_setttl(&c, 200);
-	cache_put(&c, key1, strlen(key1), v1);
-	cache_put(&c, key2, strlen(key2), v2);
-	cache_put(&c, key3, strlen(key3), v3);
-	cache_put(&c, key4, strlen(key4), v4);
+	lruc_init(&c, 4, free);
+	lruc_setttl(&c, 200);
+	lruc_put(&c, key1, strlen(key1), v1);
+	lruc_put(&c, key2, strlen(key2), v2);
+	lruc_put(&c, key3, strlen(key3), v3);
+	lruc_put(&c, key4, strlen(key4), v4);
 	sleep(1);
-	cache_cleanup(&c);
-	assert(cache_has(&c, key1, strlen(key1)) == false);
-	assert(cache_has(&c, key2, strlen(key2)) == false);
-	assert(cache_has(&c, key3, strlen(key3)) == false);
-	assert(cache_has(&c, key4, strlen(key4)) == false);
-	cache_destroy(&c);
+	lruc_cleanup(&c);
+	assert(lruc_has(&c, key1, strlen(key1)) == false);
+	assert(lruc_has(&c, key2, strlen(key2)) == false);
+	assert(lruc_has(&c, key3, strlen(key3)) == false);
+	assert(lruc_has(&c, key4, strlen(key4)) == false);
+	lruc_destroy(&c);
 	return;
 }
 void test_lruc_setttl(void) {
 	t_lruc cache;
 
-	cache_init(&cache, 4, free);
-	cache_setttl(&cache, 200);
+	lruc_init(&cache, 4, free);
+	lruc_setttl(&cache, 200);
 	assert(cache.ttl_glob == 200);
-	cache_setttl(&cache, 3000);
+	lruc_setttl(&cache, 3000);
 	assert(cache.ttl_glob == 3000);
-	cache_setttl(&cache, 300000);
+	lruc_setttl(&cache, 300000);
 	assert(cache.ttl_glob == 300000);
-	cache_destroy(&cache);
+	lruc_destroy(&cache);
 	return;
 }

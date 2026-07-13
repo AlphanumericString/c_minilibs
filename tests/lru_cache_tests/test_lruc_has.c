@@ -15,18 +15,18 @@ void test_lruc_has(void) {
 	v3 = strdup("toto_3");
 	v4 = strdup("toto_4");
 
-	cache_init(&c, 2, free);
-	cache_put(&c, k1, strlen(k1), v1);
-	cache_put(&c, k2, strlen(k2), v2);
-	cache_put(&c, k3, strlen(k3), v3);
-	cache_put(&c, k4, strlen(k4), v4);
-	assert(cache_has(&c, k1, strlen(k1)) == false);
-	assert(cache_has(&c, k2, strlen(k2)) == false);
-	assert(cache_has(&c, k3, strlen(k3)) != false);
-	assert(cache_has(&c, k4, strlen(k4)) != false);
-	assert(cache_has(&c, k3, strlen(k3)) == true);
-	assert(cache_has(&c, k4, strlen(k4)) == true);
+	lruc_init(&c, 2, free);
+	lruc_put(&c, k1, strlen(k1), v1);
+	lruc_put(&c, k2, strlen(k2), v2);
+	lruc_put(&c, k3, strlen(k3), v3);
+	lruc_put(&c, k4, strlen(k4), v4);
+	assert(lruc_has(&c, k1, strlen(k1)) == false);
+	assert(lruc_has(&c, k2, strlen(k2)) == false);
+	assert(lruc_has(&c, k3, strlen(k3)) != false);
+	assert(lruc_has(&c, k4, strlen(k4)) != false);
+	assert(lruc_has(&c, k3, strlen(k3)) == true);
+	assert(lruc_has(&c, k4, strlen(k4)) == true);
 
-	cache_destroy(&c);
+	lruc_destroy(&c);
 	return;
 }

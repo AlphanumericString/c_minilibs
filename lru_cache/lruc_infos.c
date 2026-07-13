@@ -5,7 +5,7 @@
  * @param cache cache pointer
  * @return size of the cache
  **/
-size_t cache_size(const t_lruc *cache) {
+size_t lruc_size(const t_lruc *cache) {
 	return (cache->node_in_use);
 }
 /**
@@ -13,7 +13,7 @@ size_t cache_size(const t_lruc *cache) {
  * @param cache cache pointer
  * @return number of hits
  **/
-uint64_t cache_hits(const t_lruc *cache) {
+uint64_t lruc_hits(const t_lruc *cache) {
 	return (cache->stats.hit);
 }
 /**
@@ -21,7 +21,7 @@ uint64_t cache_hits(const t_lruc *cache) {
  * @param cache cache pointer
  * @return number of misses
  **/
-uint64_t cache_misses(const t_lruc *cache) {
+uint64_t lruc_misses(const t_lruc *cache) {
 	return (cache->stats.misses);
 }
 /**
@@ -29,7 +29,7 @@ uint64_t cache_misses(const t_lruc *cache) {
  * @param cache cache pointer
  * @return number of expired elements
  **/
-uint64_t cache_expired(const t_lruc *cache) {
+uint64_t lruc_expired(const t_lruc *cache) {
 	return (cache->stats.expired);
 }
 /**
@@ -37,6 +37,6 @@ uint64_t cache_expired(const t_lruc *cache) {
  * @param cache cache pointer
  * @return statistics of the cache
  **/
-t_lruc_stats cache_stats(const t_lruc *cache) {
+t_lruc_stats lruc_stats(const t_lruc *cache) {
 	return (cache->stats);
 }

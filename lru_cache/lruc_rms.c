@@ -3,44 +3,45 @@
 #include <string.h>
 #include <strings.h>
 
-#define C_MINI__LRU_INTERNAL
+#define C_MINI__LRUC_INTERNAL
 #include "least_recently_used_cache.h"
 
 /**
  * @brief Clear the cache
  * @param c cache pointer
  **/
-void cache_clear(t_lruc *c) {
+void lruc_clear(t_lruc *c) {
 	t_lruc_keynode *nxt;
 
 	if (!c || !c->node_in_use || !c->buckets_nb) return;
-	if ((c->buckets_nb / c->node_in_use) >= C_MINI__LRU_HASH_SKIP) { // less than 10% filled
-		LOG(C_MINI__LRU_LOG_LFREE);
+	if ((c->buckets_nb / c->node_in_use) >=
+	    C_MINI__LRUC_HASH_SKIP) { // less than 10% filled
+		LOG(C_MINI__LRUC_LOG_LFREE);
 		for (t_lruc_keynode *node = c->MRU; node; node = nxt) {
 			if (c->dtor) c->dtor(node->kv.value);
-			LOG(C_MINI__LRU_LOG_DELETEVAL, node->kv.key, node->kv.k_len);
+			LOG(C_MINI__LRUC_LOG_DELETEVAL, node->kv.key, node->kv.k_len);
 			nxt = node->lru_next;
 			free(node);
 		}
 	} else {
-		LOG(C_MINI__LRU_LOG_HFREE);
+		LOG(C_MINI__LRUC_LOG_HFREE);
 		for (size_t i = 0; i < c->buckets_nb; i++) {
 			if (!c->buckets[i]) continue;
 			for (t_lruc_keynode *node = c->buckets[i]; node; node = nxt) {
 				if (c->dtor) c->dtor(node->kv.value);
-				LOG(C_MINI__LRU_LOG_DELETEVAL, node->kv.key, node->kv.k_len);
+				LOG(C_MINI__LRUC_LOG_DELETEVAL, node->kv.key, node->kv.k_len);
 				nxt = node->hash_next;
 				free(node);
 			}
 		}
 	}
 	bzero(c->buckets, sizeof(typeof(*c->buckets)) * c->buckets_nb);
-	c->LRU     = NULL;
-	c->MRU     = NULL;
-	c->TTL_Min = NULL;
-	c->TTL_Max = NULL;
-	c->node_in_use      = 0;
-	c->stats   = (t_lruc_stats){0};
+	c->LRU         = NULL;
+	c->MRU         = NULL;
+	c->TTL_Min     = NULL;
+	c->TTL_Max     = NULL;
+	c->node_in_use = 0;
+	c->stats       = (t_lruc_stats){0};
 }
 /**
  * @brief Remove a key from the cache
@@ -49,17 +50,18 @@ void cache_clear(t_lruc *c) {
  * @param key_len key length
  * @return 0 on success, -1 on failure
  **/
-int cache_remove(t_lruc *c, const void *key, size_t key_len) {
+int lruc_remove(t_lruc *c, const void *key, size_t key_len) {
 	t_lruc_keynode *node;
 	size_t          pos;
 
 	if (!c || !c->MRU || !c->node_in_use) return (-1);
-	node = cache_search_keyinhash(c, key, key_len, &pos);
-	if (!node || is_key_eq(node->kv.key, node->kv.k_len, key, key_len) == false)
+	node = lruc_i_search_keyinhash(c, key, key_len, &pos);
+	if (!node ||
+	    lruc_i_is_key_eq(node->kv.key, node->kv.k_len, key, key_len) == false)
 		return (-1);
-	cache_unlink_node(c, node, pos);
+	lruc_i_unlink_node(c, node, pos);
 	if (c->dtor) c->dtor(node->kv.value);
-	LOG(C_MINI__LRU_LOG_DELETEVAL, node->kv.key, node->kv.k_len);
+	LOG(C_MINI__LRUC_LOG_DELETEVAL, node->kv.key, node->kv.k_len);
 	free(node);
 	c->node_in_use--;
 	return (0);
