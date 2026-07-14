@@ -1,5 +1,6 @@
 #include <bits/time.h>
 #include <bits/types/struct_timeval.h>
+#include <limits.h>
 #include <stdint.h>
 #include <string.h>
 #include <time.h>
@@ -16,7 +17,7 @@
  * @param key_len key length
  * @return pointer to the value
  **/
-void *cache_get_lru(t_lruc *c, const void *key, size_t key_len) {
+void *lruc_get_lru(t_lruc *c, const void *key, size_t key_len) {
 	t_lruc_keynode *node;
 	size_t          pos;
 
@@ -28,12 +29,12 @@ void *cache_get_lru(t_lruc *c, const void *key, size_t key_len) {
 		LOG(C_MINI__LRUC_LOG_MISS_LRU, c->stats.misses, key, key_len);
 		return (NULL);
 	}
-	lruci_pop_lru(c, node);
+	lruci_lru_pop(c, node);
 	node->lru_next = c->MRU;
 	c->stats.hit++;
 	c->MRU = node;
 	LOG(C_MINI__LRUC_LOG_HIT, c->stats.hit, key, key_len);
-	return (c->buckets[pos]->kv.value);
+	return (node->kv.value);
 }
 /**
  * @brief Get a key from the cache with TTL
@@ -52,6 +53,8 @@ void *lruc_get(t_lruc *c, const void *key, size_t key_len) {
 		LOG(C_MINI__LRUC_LOG_EARG);
 		return (NULL);
 	}
+	if (c->ttl_glob == (uint64_t)C_MINI__LRUC_TTL_DFLT)
+		return (lruc_get_lru(c, key, key_len));
 	if (clock_gettime(CLOCK_MONOTONIC, &now) != 0) {
 		LOG(C_MINI__LRUC_LOG_ECLOCK);
 		return (NULL);
@@ -64,13 +67,13 @@ void *lruc_get(t_lruc *c, const void *key, size_t key_len) {
 		LOG(C_MINI__LRUC_LOG_MISS_LRU, c->stats.misses, key, key_len);
 		return (NULL);
 	}
-	if (node->time >= now_uint + c->ttl_glob) {
+	if ((node->time + c->ttl_glob) < now_uint) {
 		c->stats.misses++;
 		LOG(C_MINI__LRUC_LOG_MISS_TTL, c->stats.misses, key, key_len,
 		    now_uint + node->time);
 		return (NULL);
 	}
-	lruci_pop_lru(c, node);
+	lruci_lru_pop(c, node);
 	node->lru_next = c->MRU;
 	c->stats.hit++;
 	c->MRU = node;

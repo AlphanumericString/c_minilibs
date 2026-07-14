@@ -23,7 +23,6 @@ void test_lruc_size(void) {
 	assert(lruc_size(&c) == 2);
 	lruc_clear(&c);
 	assert(lruc_size(&c) == 0);
-
 	lruc_destroy(&c);
 	return;
 }
@@ -96,7 +95,6 @@ void test_lruc_expired(void) {
 	lruc_put_ttl(&c, k3, strlen(k3), v3, 3000);
 	lruc_put(&c, k4, strlen(k4), v4);
 	assert(c.MRU->kv.key == k4);
-	assert(c.TTL_Max->kv.key == k3);
 	sleep(1);
 	lruc_cleanup(&c);
 	assert(lruc_has(&c, k1, strlen(k1)) == false);
@@ -104,7 +102,6 @@ void test_lruc_expired(void) {
 	assert(lruc_has(&c, k3, strlen(k3)) == true);
 	assert(lruc_has(&c, k4, strlen(k4)) == false);
 	assert(lruc_expired(&c) == 3);
-
 	lruc_destroy(&c);
 	return;
 }
@@ -139,7 +136,6 @@ void test_lruc_stats(void) {
 	lruc_clear(&c);
 	st = lruc_stats(&c);
 	assert(st.misses == 0 && st.hit == 0 && st.expired == 0);
-
 	lruc_destroy(&c);
 	return;
 }

@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/cdefs.h>
+#include <unistd.h>
 
 #include "lru_cache_tests.h"
 
@@ -9,8 +11,6 @@ int main() {
 	test_lruc_create();
 	test_lruc_init();
 	test_lruc_destroy();
-	// test_lruc_free();
-	// put
 	LOG("");
 	LOG("Put");
 	test_lruc_put_kv();

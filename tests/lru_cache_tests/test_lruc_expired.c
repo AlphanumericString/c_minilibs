@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <bits/types/struct_timeval.h>
+#include <limits.h>
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
@@ -13,17 +14,17 @@ void test_lruc_isexpired(void) {
 	void       *v1;
 
 	lruc_init(&c, 4, free);
-	assert(lruc_isexpired(&c, k1, strlen(k1)) == false);
 	lruc_setttl(&c, 200);
+	assert(lruc_has(&c, k1, strlen(k1)) == false);
 	assert(lruc_isexpired(&c, k1, strlen(k1)) == false);
-	v1 = calloc(42, 1);
+	v1 = strdup("should not leak");
 	lruc_put(&c, k1, strlen(k1), v1);
 	assert(lruc_has(&c, k1, strlen(k1)) == true);
 	assert(lruc_isexpired(&c, k1, strlen(k1)) == false);
 	sleep(1);
+	assert(lruc_has(&c, k1, strlen(k1)) == true);
 	assert(lruc_isexpired(&c, k1, strlen(k1)) == true);
 	lruc_destroy(&c);
-
 	return;
 }
 void test_lruc_cleanup(void) {
@@ -42,11 +43,20 @@ void test_lruc_cleanup(void) {
 	lruc_put(&c, key3, strlen(key3), v3);
 	lruc_put(&c, key4, strlen(key4), v4);
 	sleep(1);
+	assert(lruc_has(&c, key1, strlen(key1)) == true);
+	assert(lruc_has(&c, key2, strlen(key2)) == true);
+	assert(lruc_has(&c, key3, strlen(key3)) == true);
+	assert(lruc_has(&c, key4, strlen(key4)) == true);
+	assert(lruc_isexpired(&c, key1, strlen(key1)) == true);
+	assert(lruc_isexpired(&c, key2, strlen(key2)) == true);
+	assert(lruc_isexpired(&c, key3, strlen(key3)) == true);
+	assert(lruc_isexpired(&c, key4, strlen(key4)) == true);
 	lruc_cleanup(&c);
 	assert(lruc_has(&c, key1, strlen(key1)) == false);
 	assert(lruc_has(&c, key2, strlen(key2)) == false);
 	assert(lruc_has(&c, key3, strlen(key3)) == false);
 	assert(lruc_has(&c, key4, strlen(key4)) == false);
+	assert(lruc_expired(&c) == 4);
 	lruc_destroy(&c);
 	return;
 }
@@ -54,6 +64,7 @@ void test_lruc_setttl(void) {
 	t_lruc cache;
 
 	lruc_init(&cache, 4, free);
+	assert(cache.ttl_glob == LONG_MAX);
 	lruc_setttl(&cache, 200);
 	assert(cache.ttl_glob == 200);
 	lruc_setttl(&cache, 3000);

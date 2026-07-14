@@ -42,10 +42,12 @@ void lruc_foreach_ru_ordered(const t_lruc *c, t_kvcallback fn,
  **/
 void lruc_foreach_ttl_ordered(const t_lruc *c, t_kvcallback fn,
                               void *user_data) {
+	size_t i;
 	if (!c || !fn) {
 		LOG(C_MINI__LRUC_LOG_EARG);
 		return;
 	}
-	for (t_lruc_keynode *it = c->TTL_Max; it; it = it->ttl_next)
-		fn(&it->kv, user_data);
+	i = 0;
+	for (i = 0; i < c->node_in_use; i++)
+		fn(&(c->minHeap[i]->kv), user_data);
 }

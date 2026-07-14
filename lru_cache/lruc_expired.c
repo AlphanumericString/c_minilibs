@@ -44,7 +44,6 @@ bool lruc_isexpired(t_lruc *c, const void *key, size_t key_len) {
  * @param c cache pointer
  **/
 void lruc_cleanup(t_lruc *c) {
-	size_t          pos;
 	struct timespec now;
 	uint64_t        now_uint;
 
@@ -53,19 +52,16 @@ void lruc_cleanup(t_lruc *c) {
 		return;
 	}
 	now_uint = now.tv_sec * 1000ULL + now.tv_nsec / 1000000ULL;
-	while (c->TTL_Min && (c->TTL_Min->time + c->ttl_glob) < now_uint) {
-		if (c->dtor) c->dtor(c->TTL_Min->kv.value);
-		lruci_keyinhash(c, c->TTL_Min->kv.key, c->TTL_Min->kv.k_len, &pos);
-		LOG(C_MINI__LRUC_LOG_EVICTION, c->TTL_Min->kv.key,
-		    c->TTL_Min->time - now_uint, c->ttl_glob);
-		lruci_pop_hash(c, c->TTL_Min, pos);
-		lruci_pop_lru(c, c->TTL_Min);
-		free(lruci_pop_ttl(c, c->TTL_Min));
-		c->node_in_use--;
+	while (c->minHeap[0] && (c->minHeap[0]->time + c->ttl_glob) < now_uint) {
+		if (c->dtor) c->dtor(c->minHeap[0]->kv.value);
+		lruci_lru_pop(c, c->minHeap[0]);
+		lruci_hsh_pop(
+		    c, c->minHeap[0],
+		    lruci_hash_djb2(c->minHeap[0]->kv.key, c->minHeap[0]->kv.k_len));
+		free(lruci_hp_pop(c));
 		c->stats.expired++;
 	}
 }
-
 /**
  * @brief Set the time to live default for the cache
  * @param cache cache pointer

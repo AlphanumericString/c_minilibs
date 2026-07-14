@@ -18,19 +18,18 @@ t_lruc *lruc_init(t_lruc *cache, size_t cap, void (*dtor)(void *)) {
 		return (cache);
 	}
 	bzero(cache, sizeof(*cache));
-	cache->buckets = calloc(sizeof(t_lruc_keynode *), cap);
+	bzero(&cache->stats, sizeof(cache->stats));
+	cache->buckets = calloc(sizeof(t_lruc_keynode *), cap * 2);
 	if (!cache->buckets) {
 		LOG(C_MINI__LRUC_LOG_EALLOC);
 		return (NULL);
 	}
-	cache->heap = calloc(sizeof(t_lruc_keynode *), cap);
-	if (!cache->buckets) {
-		LOG(C_MINI__LRUC_LOG_EALLOC);
-		return (free(cache->buckets), NULL);
-	}
+	cache->minHeap = cache->buckets + cap;
+	bzero(cache->minHeap, sizeof(t_lruc_keynode *) * cap);
 	cache->buckets_nb = cap;
-	cache->ttl_glob = LONG_MAX, cache->stats = (t_lruc_stats){0};
-	cache->dtor = dtor;
+	cache->ttl_glob   = (uint64_t)C_MINI__LRUC_TTL_DFLT;
+	cache->stats      = (t_lruc_stats){0};
+	cache->dtor       = dtor;
 	LOG(C_MINI__LRUC_LOG_SUCCESS);
 	return (cache);
 }
@@ -68,10 +67,9 @@ void lruc_destroy(t_lruc *cache) {
 	}
 	lruc_clear(cache);
 	free(cache->buckets);
-	free(cache->heap);
-	cache->heap       = NULL;
 	cache->buckets_nb = 0;
 	cache->buckets    = NULL;
+	cache->minHeap    = NULL;
 	LOG(C_MINI__LRUC_LOG_SUCCESS);
 }
 /**

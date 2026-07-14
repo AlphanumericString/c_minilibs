@@ -65,4 +65,5 @@ $(DOC_DIR):
 clean:
 	$(RM) $(LIBNAMES) $(TESTS_ALL)
 re:fclean
+	make all
 .PHONY: re clean fclean

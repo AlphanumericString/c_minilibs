@@ -14,7 +14,6 @@ void test_lruc_has(void) {
 	v2 = strdup("toto_2");
 	v3 = strdup("toto_3");
 	v4 = strdup("toto_4");
-
 	lruc_init(&c, 2, free);
 	lruc_put(&c, k1, strlen(k1), v1);
 	lruc_put(&c, k2, strlen(k2), v2);
@@ -26,7 +25,6 @@ void test_lruc_has(void) {
 	assert(lruc_has(&c, k4, strlen(k4)) != false);
 	assert(lruc_has(&c, k3, strlen(k3)) == true);
 	assert(lruc_has(&c, k4, strlen(k4)) == true);
-
 	lruc_destroy(&c);
 	return;
 }

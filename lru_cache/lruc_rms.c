@@ -36,10 +36,9 @@ void lruc_clear(t_lruc *c) {
 		}
 	}
 	bzero(c->buckets, sizeof(typeof(*c->buckets)) * c->buckets_nb);
+	bzero(c->minHeap, sizeof(typeof(*c->minHeap)) * c->buckets_nb);
 	c->LRU         = NULL;
 	c->MRU         = NULL;
-	c->TTL_Min     = NULL;
-	c->TTL_Max     = NULL;
 	c->node_in_use = 0;
 	c->stats       = (t_lruc_stats){0};
 }

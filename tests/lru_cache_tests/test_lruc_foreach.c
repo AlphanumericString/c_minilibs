@@ -41,7 +41,6 @@ void test_lruc_foreach(void) {
 	lruc_foreach(&c, NULL, to_add);
 	assert(lruc_get(&c, k1, strlen(k1)) != NULL);
 	assert(strcmp(lruc_get(&c, k1, strlen(k1)), "zod_toto_1") == 0);
-
 	lruc_destroy(&c);
 	return;
 }
@@ -70,15 +69,12 @@ void test_lruc_foreach_ru_ordered(void) {
 	lruc_put(&c, k2, strlen(k2), v2);
 	lruc_put(&c, k3, strlen(k3), v3);
 	lruc_put(&c, k4, strlen(k4), v4);
-
 	lruc_foreach_ru_ordered(&c, record_order_cb, order);
-
 	assert(strcmp(order[0], k4) == 0);
 	assert(strcmp(order[1], k3) == 0);
 	assert(strcmp(order[2], k2) == 0);
 	assert(strcmp(order[3], k1) == 0);
 	assert(order[4] == NULL);
-
 	lruc_destroy(&c);
 }
 
@@ -97,14 +93,11 @@ void test_lruc_foreach_ttl_ordered(void) {
 	lruc_put_ttl(&c, k2, strlen(k2), v2, 100);
 	lruc_put_ttl(&c, k3, strlen(k3), v3, 300);
 	lruc_put_ttl(&c, k4, strlen(k4), v4, 200);
-
 	lruc_foreach_ttl_ordered(&c, record_order_cb, order);
-
-	assert(strcmp(order[0], k1) == 0);
-	assert(strcmp(order[1], k3) == 0);
-	assert(strcmp(order[2], k4) == 0);
-	assert(strcmp(order[3], k2) == 0);
+	assert(strcmp(order[0], k2) == 0);
+	assert(strcmp(order[1], k4) == 0);
+	assert(strcmp(order[2], k3) == 0);
+	assert(strcmp(order[3], k1) == 0);
 	assert(order[4] == NULL);
-
 	lruc_destroy(&c);
 }

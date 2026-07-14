@@ -1,3 +1,5 @@
+#include <stdint.h>
+#include <stdio.h>
 #include <string.h>
 
 #define C_MINI__LRUC_INTERNAL
@@ -11,7 +13,7 @@
  * @return pointer to the key node if found, NULL otherwise
  **/
 t_lruc_keynode *lruci_keyinlist(const t_lruc *c, const void *key,
-                                        size_t key_len) {
+                                size_t key_len) {
 	t_lruc_keynode *node;
 
 	for (node = c->MRU; node; node = node->lru_next)
@@ -29,7 +31,7 @@ t_lruc_keynode *lruci_keyinlist(const t_lruc *c, const void *key,
  * @return pointer to the key node if found, NULL otherwise
  **/
 t_lruc_keynode *lruci_keyinhash(const t_lruc *c, const void *key,
-                                        size_t key_len, size_t *_out) {
+                                size_t key_len, size_t *_out) {
 	size_t          hash;
 	t_lruc_keynode *node;
 
@@ -49,9 +51,14 @@ t_lruc_keynode *lruci_keyinhash(const t_lruc *c, const void *key,
  * @param h hash of the node
  **/
 void lruci_unlink_node(t_lruc *c, t_lruc_keynode *n, size_t h) {
-	lruci_pop_lru(c, n);
-	lruci_pop_ttl(c, n);
-	lruci_pop_hash(c, n, h);
+	lruci_lru_pop(c, n);
+	lruci_hsh_pop(c, n, h);
+	if (c->minHeap[0] == n) {
+		lruci_hp_pop(c);
+	} else {
+		lruci_hp_pop_nth(c, n->heap_index);
+	}
+	c->node_in_use++;
 }
 // Very fast, but not very good
 // see http://www.cse.yorku.ca/~oz/hash.html
@@ -92,6 +99,12 @@ uint64_t lruci_timeto64(struct timespec t) {
  * boiler plate at every checks
  **/
 bool lruci_key_eq(const void *k1, size_t k1_len, const void *k2,
-                      size_t k2_len) {
+                  size_t k2_len) {
 	return (k1_len == k2_len && memcmp(k1, k2, k2_len) == 0);
+}
+uint64_t lruci_timenow(void) {
+	struct timespec t;
+
+	if (clock_gettime(CLOCK_MONOTONIC, &t) != 0) return (-1);
+	return (lruci_timeto64(t));
 }
