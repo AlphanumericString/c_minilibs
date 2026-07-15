@@ -6,3 +6,8 @@ test_*.out
 documentation
 *.json
 .cache
+*gcno
+*gcna
+*profdata
+*profraw
+coverage/*
