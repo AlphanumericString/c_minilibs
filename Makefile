@@ -65,19 +65,18 @@ D_FILES	+= $$($1_D)
 LIBNAMES += lib$1.a
 OBJ_ALL += $$($1_OBJ)
 TESTS_ALL += test_$1.out
-$(BUILD_DIR)/$(TST_DIR)/$1/%.o: $1/%.c
-	@mkdir -p $$(dir $$@)
-	$(CC) $(CFLAGS) $(TFLAGS) -c $$< -o $$@
+
 $(BUILD_DIR)/$1/%.o: $(TST_DIR)/$1/%.c
 	@mkdir -p $$(dir $$@)
 	$(CC) $(CFLAGS) -I. -c $$< -o $$@
+
+$(BUILD_DIR)/$(TST_DIR)/$1/%.o: $1/%.c
+	@mkdir -p $$(dir $$@)
+	$(CC) $(CFLAGS) $(TFLAGS) -c $$< -o $$@
 $(BUILD_DIR)/$(TST_DIR)/$1_tests/%.o: $(TST_DIR)/$1_tests/%.c
 	@mkdir -p $$(dir $$@)
 	$(CC) $(CFLAGS) $(TFLAGS) -I. -c $$< -o $$@
 endef
-
-
-
 
 $(foreach mod,$(MODULES),$(eval $(call module_template,$(mod))))
 
@@ -88,17 +87,19 @@ tests_run: $(TESTS_ALL)
 		valgrind $(VALGRIND_OPT) -q ./$$t; \
 	done
 $(COV_DIR): $(TESTS_ALL)
-	mkdir $(COV_DIR)
+	@mkdir -p $(COV_DIR)
 	@for t in $^; do \
-		LLVM_PROFILE_FILE=$$t.profraw ./$$t 1> /dev/null ; \
+		LLVM_PROFILE_FILE=./$(BUILD_DIR)/$$t.profraw ./$$t 1> /dev/null ; \
 	done
-	@$(PRD) merge -sparse $(addsuffix .profraw, $(TESTS_ALL)) -o merged.profdata
+	@$(PRD) merge -sparse \
+		$(addsuffix .profraw, $(addprefix ./$(BUILD_DIR)/, $(TESTS_ALL))) \
+		-o merged.profdata
 	@$(COV) show -format=html									\
-	-instr-profile=merged.profdata	\
+	-instr-profile=merged.profdata								\
 	-ignore-filename-regex=$(TST_DIR)/*							\
 	--show-branches=count	--show-directory-coverage			\
-	-output-dir=$(COV_DIR) $(addprefix -object=, $(TESTS_ALL))	&&
-	rm -rf *.profdata *.profraw
+	-output-dir=$(COV_DIR) $(addprefix -object=, $(TESTS_ALL))	&& \
+	rm -rf merged.profdata
 
 -include:$(D_FILES)
 fclean:clean
