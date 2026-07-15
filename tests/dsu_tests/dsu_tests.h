@@ -2,25 +2,28 @@
 
 #include <assert.h>
 
+#ifndef C_MINI__TESTS
+#	define C_MINI__TESTS
+#endif
 #include "dsu/disjointed_set_union.h"
 
 #define DISP_DSU(dsu)                                                          \
 	do {                                                                       \
-		printf("DSU INFO\n"                                                    \
-		       "\t.size:%zu\n"                                                 \
-		       "\t.single_alloc:%s\n"                                          \
-		       "\t.parent:%p\n"                                                \
-		       "\t.rank:%p\n"                                                  \
-		       "\t.nb_set:%zu\n",                                              \
-		       (dsu).size, (dsu).rp_single_alloc ? "true" : "no",              \
-		       (dsu).parent, (dsu).rank, (dsu).components);                    \
+		DBG("DSU INFO\n"                                                       \
+		    "\t.size:%zu\n"                                                    \
+		    "\t.single_alloc:%s\n"                                             \
+		    "\t.parent:%p\n"                                                   \
+		    "\t.rank:%p\n"                                                     \
+		    "\t.nb_set:%zu\n",                                                 \
+		    (dsu).size, (dsu).rp_single_alloc ? "true" : "no", (dsu).parent,   \
+		    (dsu).rank, (dsu).components);                                     \
 		if (!(dsu).parent || !(dsu).rank) {                                    \
-			printf("\tparents - or - rank missing\n");                         \
+			DBG("\tparents - or - rank missing\n");                            \
 			break;                                                             \
 		}                                                                      \
-		printf("\t%8s | %-8s\n", "parent", "rank");                            \
+		DBG("\t%8s | %-8s\n", "parent", "rank");                               \
 		for (size_t i = 0; i < (dsu).size; i++)                                \
-			printf("\t%8d | %-8d\n", (dsu).parent[i], (dsu).rank[i]);          \
+			DBG("\t%8d | %-8d\n", (dsu).parent[i], (dsu).rank[i]);             \
 	} while (0)
 
 // create
@@ -35,6 +38,7 @@ void test_dsu_grow(void);
 // destroy
 void test_dsu_clr(void);
 void test_dsu_destroy(void);
+void test_dsu_free(void);
 
 // getter
 void test_dsu_max_depth(void);

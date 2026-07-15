@@ -23,15 +23,15 @@ void dsu_union(t_dsu *ds, size_t x, size_t y) {
 	}
 	ds->components--;
 	if (ds->rank[root_x] < ds->rank[root_y]) {
-		ds->parent[x] = root_y;
+		ds->parent[root_x] = root_y;
 	} else if (ds->rank[root_x] > ds->rank[root_y]) {
-		ds->parent[y] = root_x;
+		ds->parent[root_y] = root_x;
 	} else {
 		if (x < y) {
-			ds->parent[y] = root_x;
+			ds->parent[root_y] = root_x;
 			ds->rank[root_x]++;
 		} else {
-			ds->parent[x] = root_y;
+			ds->parent[root_x] = root_y;
 			ds->rank[root_y]++;
 		}
 	}
