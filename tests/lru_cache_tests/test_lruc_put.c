@@ -85,8 +85,8 @@ void test_lruc_put_ttl(void) {
 	}
 	{ // expiration check
 		lruc_setttl(&c, 0);
-		assert(lruc_put_ttl(&c, k1, strlen(k1), strdup("result"), 2000) == 0);
-		assert(lruc_put_ttl(&c, k2, strlen(k2), strdup("other"), 1000) == 0);
+		assert(lruc_put_ttl(&c, k1, strlen(k1), strdup("result"), 1900) == 0);
+		assert(lruc_put_ttl(&c, k2, strlen(k2), strdup("other"), 900) == 0);
 		assert(lruc_isexpired(&c, k1, strlen(k1)) == false);
 		assert(lruc_isexpired(&c, k2, strlen(k2)) == false);
 		sleep(1);
