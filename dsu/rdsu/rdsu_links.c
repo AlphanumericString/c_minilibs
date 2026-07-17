@@ -10,6 +10,7 @@
 void rdsu_union(t_rdsu *ds, size_t x, size_t y) {
 	uint16_t root_x;
 	uint16_t root_y;
+	bool     dbg;
 
 	if (!ds || y == x || x > ds->size || y > ds->size) {
 		LOG(C_MINI__RDSU_LOG_EARG);
@@ -24,24 +25,27 @@ void rdsu_union(t_rdsu *ds, size_t x, size_t y) {
 	}
 	ds->components--;
 	if (ds->rank[root_x] < ds->rank[root_y]) {
-		rdsui_push_rewind(ds, root_x, ds->parent[root_x], RDSU_LOG_PARENT);
+		dbg = rdsui_push_rewind(ds, root_x, ds->parent[root_x], (uint16_t)0,
+		                        RDSU_LOG_PARENT);
 		ds->parent[root_x] = root_y;
 	} else if (ds->rank[root_x] > ds->rank[root_y]) {
-		rdsui_push_rewind(ds, root_y, ds->parent[root_y], RDSU_LOG_PARENT);
+		dbg = rdsui_push_rewind(ds, root_y, ds->parent[root_y], (uint16_t)0,
+		                        RDSU_LOG_PARENT);
 		ds->parent[root_y] = root_x;
 	} else {
 		if (x < y) {
-			rdsui_push_rewind(ds, root_y, ds->parent[root_y], RDSU_LOG_PARENT);
-			rdsui_push_rewind(ds, root_x, ds->rank[root_x], RDSU_LOG_RANK);
+			dbg = rdsui_push_rewind(ds, root_y, ds->parent[root_y],
+			                        (uint16_t)root_x, RDSU_LOG_RANK);
 			ds->parent[root_y] = root_x;
 			ds->rank[root_x]++;
 		} else {
-			rdsui_push_rewind(ds, root_x, ds->parent[root_x], RDSU_LOG_PARENT);
-			rdsui_push_rewind(ds, root_y, ds->rank[root_y], RDSU_LOG_RANK);
+			dbg = rdsui_push_rewind(ds, root_x, ds->parent[root_x],
+			                        (uint16_t)root_y, RDSU_LOG_RANK);
 			ds->parent[root_x] = root_y;
 			ds->rank[root_y]++;
 		}
 	}
+	DBG("rdsui_push : %s", dbg ? "true" : "false");
 	LOG("Link (r1:%zu, r2:%zu, components:%zu -> %zu)", x, y,
 	    ds->components + 1, ds->components);
 	return;

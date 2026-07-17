@@ -66,7 +66,7 @@ LIBNAMES += lib$1.a
 OBJ_ALL += $$($1_OBJ)
 TESTS_ALL += test_$1.out
 
-$(BUILD_DIR)/$1/%.o: $(TST_DIR)/$1/%.c
+$(BUILD_DIR)/$1/%.o: $1/%.c
 	@mkdir -p $$(dir $$@)
 	$(CC) $(CFLAGS) -I. -c $$< -o $$@
 

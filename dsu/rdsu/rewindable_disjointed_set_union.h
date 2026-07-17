@@ -73,10 +73,8 @@ typedef struct s_rdsu_log {
 
 	enum s_rdsu_log_type type;
 	uint16_t             elem;
-	union {
-		uint16_t r; // rank
-		uint16_t p; // parent
-	} value;
+	uint16_t             p;
+	uint16_t             r;
 } t_rdsu_log;
 
 #else // || C_MINI__RDSU_INTERNAL
@@ -84,12 +82,10 @@ typedef struct s_rdsu_log {
 typedef struct s_rdsu_log {
 	struct s_rdsu_log *nxt;
 
-	int type;
-	int elem;
-	union {
-		int rank;
-		int parent;
-	} log_info;
+	int      type;
+	uint16_t elem;
+	uint16_t r;
+	uint16_t p;
 } t_rdsu_log;
 
 #endif // !C_MINI__RDSU_INTERNAL
@@ -150,8 +146,8 @@ void        rdsu_rewind_clear(t_rdsu *rdsu);
 
 #ifdef C_MINI__RDSU_INTERNAL
 
-bool        rdsui_push_rewind(t_rdsu *rdsu, size_t elem, size_t value,
-                              enum s_rdsu_log_type type);
+bool rdsui_push_rewind(t_rdsu *rdsu, size_t elem, uint16_t value, uint16_t rank,
+                       enum s_rdsu_log_type type);
 t_rdsu_log *rdsui_peek_rewind(const t_rdsu *rdsu);
 t_rdsu_log *rdsui_pop_rewind(t_rdsu *rdsu);
 

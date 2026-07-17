@@ -1,23 +1,29 @@
 #include <stddef.h>
+#include <stdint.h>
 #include <stdlib.h>
 #define C_MINI__RDSU_INTERNAL
 #include "rewindable_disjointed_set_union.h"
 
 // usefull log check
 static inline bool is_log_valid(const t_rdsu *rdsu, const t_rdsu_log *log) {
-	return (rdsu && log && rdsu->size > log->elem &&
-	        rdsu->size > log->value.p &&
+	return (rdsu && log && rdsu->size > log->elem && rdsu->size > log->p &&
 	        (log->type == RDSU_LOG_RANK || log->type == RDSU_LOG_PARENT));
 }
 
 // simple stack handling
-bool rdsui_push_rewind(t_rdsu *rdsu, size_t elem, size_t value,
+bool rdsui_push_rewind(t_rdsu *rdsu, size_t elem, uint16_t value, uint16_t rank,
                        enum s_rdsu_log_type type) {
+	DBG_POS;
 	t_rdsu_log *entry;
 	t_rdsu_log  tentative_entry;
 
-	tentative_entry = (t_rdsu_log){
-	    .type = type, .elem = elem, .value.p = value, .nxt = rdsu->change_log};
+	tentative_entry = (t_rdsu_log){.type = type,
+	                               .elem = elem,
+	                               .p    = value,
+	                               .r    = rank,
+	                               .nxt  = rdsu->change_log};
+	DBG("is_log_valid ? %s",
+	    is_log_valid(rdsu, &tentative_entry) ? "true" : "false");
 	if (is_log_valid(rdsu, &tentative_entry) == false) return (false);
 	if (type != RDSU_LOG_RANK && type != RDSU_LOG_PARENT) return (false);
 	entry = calloc(sizeof(*entry), 1);
@@ -45,17 +51,11 @@ t_rdsu_log *rdsui_pop_rewind(t_rdsu *rdsu) {
 static bool execute_rewind(t_rdsu *rdsu, t_rdsu_log lg) {
 
 	if (is_log_valid(rdsu, &lg) == false) return (false);
-	switch (lg.type) {
-	case (RDSU_LOG_RANK):
-		rdsu->rank[lg.elem] = lg.value.r;
-		break;
-	case (RDSU_LOG_PARENT):
-		rdsu->parent[lg.elem] = lg.value.p;
-		rdsu->components++;
-		break;
-	default:
-		return (false); // error
+	rdsu->parent[lg.elem] = lg.p;
+	if (lg.type == RDSU_LOG_RANK) {
+		rdsu->rank[lg.r]--;
 	}
+	rdsu->components++;
 	return (true);
 }
 
@@ -90,29 +90,18 @@ bool rdsu_rewind(t_rdsu *rdsu) {
 		LOG(C_MINI__RDSU_LOG_EARG);
 		return (false);
 	}
-	entry = rdsui_pop_rewind(rdsu);
 	if (!entry) {
 		LOG(C_MINI__RDSU_LOG_ELOG);
 		return (false);
 	}
 	ret = execute_rewind(rdsu, *entry);
+	free(entry);
 	if (ret == false) {
 		LOG(C_MINI__RDSU_LOG_ELC);
 		return (ret);
 	}
-	if (entry->type == RDSU_LOG_RANK) {
-		free(entry);
-		entry = rdsui_pop_rewind(rdsu);
-		if (!entry) return (ret);
-		ret = execute_rewind(rdsu, *entry);
-	}
-	free(entry);
-	if (ret == true) {
-		LOG(C_MINI__RDSU_LOG_SUCCESS);
-		return (true);
-	}
-	LOG(C_MINI__RDSU_LOG_ELC);
-	return (false);
+	LOG(C_MINI__RDSU_LOG_SUCCESS);
+	return (true);
 }
 /**
  * \brief allow someone to rewind up to a specific state using a log pointer
