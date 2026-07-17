@@ -1,39 +1,97 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "dsu_tests.h"
+#include "cdsu_tests.h"
+#include "rdsu_tests.h"
+
+int cdsu_main_tests() {
+	LOG("");
+	LOG("Create");
+	test_cdsu_new();
+	test_cdsu_new_from_array();
+	test_cdsu_init();
+	test_cdsu_init_from_arrays();
+	LOG("");
+	LOG("Delete");
+	test_cdsu_clr();
+	test_cdsu_destroy();
+	test_cdsu_free();
+	LOG("");
+	LOG("Infos");
+	test_cdsu_max_depth();
+	test_cdsu_size();
+	test_cdsu_nb_components();
+	LOG("");
+	LOG("Grow");
+	test_cdsu_grow();
+	LOG("");
+	LOG("Links (union + compress)");
+	test_cdsu_strict_find();
+	test_cdsu_find();
+	test_cdsu_compress_all();
+	test_cdsu_union();
+	LOG("");
+	LOG("Querry");
+	test_cdsu_validate();
+	test_cdsu_is_related();
+	test_cdsu_strict_is_related();
+
+	printf("All cdsu tests completed successfully.\n");
+	return (EXIT_SUCCESS);
+}
+int rdsu_main_tests() {
+	LOG("");
+	LOG("Create");
+	test_rdsu_new();
+	test_rdsu_new_from_array();
+	test_rdsu_init();
+	test_rdsu_init_from_arrays();
+	LOG("");
+	LOG("Delete");
+	test_rdsu_clr();
+	test_rdsu_destroy();
+	test_rdsu_free();
+	LOG("");
+	LOG("Infos");
+	test_rdsu_max_depth();
+	test_rdsu_size();
+	test_rdsu_nb_components();
+	LOG("");
+	LOG("Grow");
+	test_rdsu_grow();
+	LOG("");
+	LOG("Links (union + compress)");
+	test_rdsu_find();
+	test_rdsu_compress_all();
+	test_rdsu_union();
+	LOG("");
+	LOG("Querry");
+	test_rdsu_validate();
+	test_rdsu_is_related();
+	LOG("");
+	LOG("Rewind");
+	test_rdsu_save_state();
+	test_rdsu_rewind();
+	test_rdsu_rewind_to_state();
+	test_rdsu_rewind_clear();
+
+	printf("All rdsu tests completed successfully.\n");
+	return (EXIT_SUCCESS);
+}
 
 int main(void) {
 	LOG("");
-	LOG("Create");
-	test_dsu_new();
-	test_dsu_new_from_array();
-	test_dsu_init();
-	test_dsu_init_from_arrays();
 	LOG("");
-	LOG("Delete");
-	test_dsu_clr();
-	test_dsu_destroy();
-	test_dsu_free();
+	LOG("\t\tCDSU");
 	LOG("");
-	LOG("Infos");
-	test_dsu_max_depth();
-	test_dsu_size();
-	test_dsu_nb_components();
 	LOG("");
-	LOG("Grow");
-	test_dsu_grow();
+	cdsu_main_tests();
 	LOG("");
-	LOG("Links (union + compress)");
-	test_dsu_strict_find();
-	test_dsu_find();
-	test_dsu_compress_all();
-	test_dsu_union();
 	LOG("");
-	LOG("Querry");
-	test_dsu_validate();
-	test_dsu_is_related();
-	test_dsu_strict_is_related();
+	LOG("\t\tRDSU");
+	LOG("");
+	LOG("");
+	rdsu_main_tests();
 
 	printf("All dsu tests completed successfully.\n");
 	return (EXIT_SUCCESS);
