@@ -12,7 +12,7 @@
  * \param dtor destructor function
  * \return pointer to the cache
  * \ingroup lruc
- **/
+**/
 t_lruc *lruc_init(t_lruc *cache, size_t cap, void (*dtor)(void *)) {
 	if (!cache) {
 		LOG(C_MINI__LRUC_LOG_EARG);
@@ -41,7 +41,7 @@ t_lruc *lruc_init(t_lruc *cache, size_t cap, void (*dtor)(void *)) {
  * \param dtor destructor function
  * \return pointer to the new cache
  * \ingroup lruc
- **/
+**/
 t_lruc *lruc_create(size_t cap, void (*dtor)(void *)) {
 	t_lruc *ret;
 
@@ -62,7 +62,7 @@ t_lruc *lruc_create(size_t cap, void (*dtor)(void *)) {
  * \brief Destroy a cache
  * \param cache pointer to the cache
  * \ingroup lruc
- **/
+**/
 void lruc_destroy(t_lruc *cache) {
 	if (!cache) {
 		LOG(C_MINI__LRUC_LOG_EARG);
@@ -79,7 +79,7 @@ void lruc_destroy(t_lruc *cache) {
  * \brief Destroy internal and cache itself is freed
  * \param cache the cache to free.
  * \ingroup lruc
- **/
+**/
 void lruc_free(t_lruc *cache) {
 	if (!cache) {
 		LOG(C_MINI__LRUC_LOG_EARG);

@@ -5,7 +5,7 @@
  * \param anchor The node after which to insert (must be in a list).
  * \param node The node to insert.
  * \ingroup idl
- **/
+**/
 void idl_append(t_idl *anchor, t_idl *node) {
 	if (!anchor || !node) {
 		LOG(C_MINI__IDL_LOG_EARG);
@@ -22,7 +22,7 @@ void idl_append(t_idl *anchor, t_idl *node) {
  * \param anchor The node after which to insert.
  * \param nodes The head of the list of nodes to insert.
  * \ingroup idl
- **/
+**/
 void idl_nappend(t_idl *anchor, t_idl *nodes) {
 	if (!anchor || !nodes) {
 		LOG(C_MINI__IDL_LOG_EARG);
@@ -41,7 +41,7 @@ void idl_nappend(t_idl *anchor, t_idl *nodes) {
  * \param anchor The node before which to insert.
  * \param node The node to insert.
  * \ingroup idl
- **/
+**/
 void idl_prepend(t_idl *anchor, t_idl *node) {
 	if (!anchor || !node) {
 		LOG(C_MINI__IDL_LOG_EARG);
@@ -60,7 +60,7 @@ void idl_prepend(t_idl *anchor, t_idl *node) {
  * \param anchor The node before which to insert.
  * \param nodes The head of the list of nodes to insert.
  * \ingroup idl
- **/
+**/
 void idl_nprepend(t_idl *anchor, t_idl *nodes) {
 	t_idl *anchor_prev;
 	t_idl *last_node;

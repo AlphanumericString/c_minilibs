@@ -9,7 +9,7 @@
  * \param u_start_val starting value
  * \return the folded value
  * \ingroup da
- **/
+**/
 void *da_fold(t_da *da, t_merger m, void *u_start_val) {
 	if (!da || !m || !u_start_val) {
 		LOG(C_MINI__DA_LOG_EARG);
@@ -26,7 +26,7 @@ void *da_fold(t_da *da, t_merger m, void *u_start_val) {
  * \param u_start_val starting value
  * \return the folded value
  * \ingroup da
- **/
+**/
 void *da_nfold(t_da *da, size_t n, t_merger m, void *u_start_val) {
 	if (!da || !m || !u_start_val) {
 		LOG(C_MINI__DA_LOG_EARG);
@@ -45,7 +45,7 @@ void *da_nfold(t_da *da, size_t n, t_merger m, void *u_start_val) {
  * \param m merger function
  * \return the reduced value
  * \ingroup da
- **/
+**/
 void *da_reduce(t_da *da, t_merger m) {
 	void *r;
 
@@ -70,7 +70,7 @@ void *da_reduce(t_da *da, t_merger m) {
  * \param m merger function
  * \return the reduced value
  * \ingroup da
- **/
+**/
 void *da_nreduce(t_da *da, size_t n, t_merger m) {
 	void *bag;
 

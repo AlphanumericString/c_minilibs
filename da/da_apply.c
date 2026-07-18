@@ -8,7 +8,7 @@
  * \param u_val user argument passed to the function
  * \return true if success, false if failure
  * \ingroup da
- **/
+**/
 void *da_apply_it(t_da *da, t_callback_it func, void *u_val) {
 	if (!da || !da->nb_e || !func) {
 		LOG(C_MINI__DA_LOG_EARG);
@@ -25,7 +25,7 @@ void *da_apply_it(t_da *da, t_callback_it func, void *u_val) {
  * \param cb function to apply
  * \return the user argument (u_val)
  * \ingroup da
- **/
+**/
 void *da_apply(t_da *da, t_callback cb, void *u_val) {
 	if (!da || !da->nb_e || !cb) {
 		LOG(C_MINI__DA_LOG_EARG);
@@ -42,7 +42,7 @@ void *da_apply(t_da *da, t_callback cb, void *u_val) {
  * \param u_val user argument passed to the function
  * \return the user argument (u_val)
  * \ingroup da
- **/
+**/
 void *da_napply(t_da *da, size_t n, t_callback c, void *u_val) {
 	size_t i;
 
@@ -71,7 +71,7 @@ void *da_napply(t_da *da, size_t n, t_callback c, void *u_val) {
  * \param u_val user argument passed to the function
  * \return the user argument (u_val)
  * \ingroup da
- **/
+**/
 void *da_napply_it(t_da *da, size_t n, t_callback_it func, void *u_val) {
 	size_t i;
 

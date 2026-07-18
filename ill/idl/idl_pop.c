@@ -5,7 +5,7 @@
  * \param head Pointer to the head of the list.
  * \return The removed head node, or NULL if the list was empty.
  * \ingroup idl
- **/
+**/
 t_idl *idl_pop(t_idl **head) {
 	t_idl *to_remove;
 
@@ -26,7 +26,7 @@ t_idl *idl_pop(t_idl **head) {
  * \param head Pointer to the head of the list.
  * \return The removed tail node, or NULL if the list was empty.
  * \ingroup idl
- **/
+**/
 t_idl *idl_pop_back(t_idl **head) {
 	t_idl *ret;
 

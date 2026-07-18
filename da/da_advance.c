@@ -10,7 +10,7 @@
  * \param u_data user data for deletor
  * \return true on success, false otherwise
  * \ingroup da
- **/
+**/
 bool da_advance(t_da *da, size_t n, t_callback deletor, void *u_data) {
 	if (!da) {
 		LOG(C_MINI__DA_LOG_EARG);

@@ -5,7 +5,7 @@
  * \param cdsu the cdsu to query
  * \return the max depth
  * \ingroup cdsu
- **/
+**/
 int cdsu_max_depth(t_cdsu cdsu) {
 	unsigned int max = 0;
 	size_t       i   = 0;
@@ -21,7 +21,7 @@ int cdsu_max_depth(t_cdsu cdsu) {
  * \param cdsu the cdsu to query
  * \return the number of elems
  * \ingroup cdsu
- **/
+**/
 size_t cdsu_size(t_cdsu cdsu) {
 	LOG(C_MINI__CDSU_LOG_SUCCESS);
 	return (cdsu.size);
@@ -31,7 +31,7 @@ size_t cdsu_size(t_cdsu cdsu) {
  * \param cdsu the cdsu to query
  * \return the number of components
  * \ingroup cdsu
- **/
+**/
 size_t cdsu_nb_components(t_cdsu cdsu) {
 	LOG(C_MINI__CDSU_LOG_SUCCESS);
 	return (cdsu.components);

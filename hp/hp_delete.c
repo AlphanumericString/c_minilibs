@@ -6,7 +6,7 @@
  * \brief Delete a heap internal structure
  * \param hp heap pointer
  * \ingroup hp
- **/
+**/
 void hp_delete(t_heap *hp) {
 	if (!hp) {
 		LOG(C_MINI__HP_LOG_EARG);
@@ -21,7 +21,7 @@ void hp_delete(t_heap *hp) {
  * \brief Delete a heap and free its memory (internal and external)
  * \param hp heap pointer
  * \ingroup hp
- **/
+**/
 void hp_free(t_heap *hp) {
 	if (!hp) {
 		LOG(C_MINI__HP_LOG_EARG);
@@ -36,7 +36,7 @@ void hp_free(t_heap *hp) {
  * \brief Clear a heap
  * \param hp heap pointer
  * \ingroup hp
- **/
+**/
 void hp_clear(t_heap *hp) {
 	if (!hp) {
 		LOG(C_MINI__HP_LOG_EARG);

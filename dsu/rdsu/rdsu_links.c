@@ -7,7 +7,7 @@
  * \param x first element to link
  * \param y second element to link
  * \ingroup rdsu
- **/
+**/
 void rdsu_union(t_rdsu *ds, size_t x, size_t y) {
 	uint16_t root_x;
 	uint16_t root_y;
@@ -57,7 +57,7 @@ void rdsu_union(t_rdsu *ds, size_t x, size_t y) {
  * \param x the element to find
  * \return the parent of x
  * \ingroup rdsu
- **/
+**/
 uint16_t rdsu_find(t_rdsu *ds, size_t x) {
 	if (!ds->size || !ds->parent || !ds->rank || x > ds->size) {
 		LOG(C_MINI__RDSU_LOG_EARG);
@@ -75,7 +75,7 @@ uint16_t rdsu_find(t_rdsu *ds, size_t x) {
  * \return the number of elements processed
  * \note invalidates all rdsu log entries
  * \ingroup rdsu
- **/
+**/
 size_t rdsu_compress_all(t_rdsu *ds) {
 	size_t x;
 	size_t y;

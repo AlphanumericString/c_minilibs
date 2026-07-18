@@ -5,7 +5,7 @@
  * \param node The node to check.
  * \return true if isolated, false otherwise.
  * \ingroup ill
- **/
+**/
 bool ill_is_isolated(t_ill *node) {
 	if (!node) {
 		LOG(C_MINI__ILL_LOG_EARG);
@@ -21,7 +21,7 @@ bool ill_is_isolated(t_ill *node) {
  * \param head The head of the list.
  * \return true if a cycle is detected, false otherwise.
  * \ingroup ill
- **/
+**/
 bool ill_is_circular(t_ill *head) {
 	t_ill *fast;
 	t_ill *slow;
@@ -52,7 +52,7 @@ bool ill_is_circular(t_ill *head) {
  * \param comparator The comparator function.
  * \return true if the list is sorted, false otherwise.
  * \ingroup ill
- **/
+**/
 bool ill_is_sorted(t_ill *head, t_comparator comparator) {
 	void *p;
 	int   prev;
@@ -85,7 +85,7 @@ bool ill_is_sorted(t_ill *head, t_comparator comparator) {
  * \param arg Argument to pass to the matcher.
  * \return true if at least one element matches, false otherwise.
  * \ingroup ill
- **/
+**/
 bool ill_has(t_ill *head, t_callback matcher, void *arg) {
 	if (!head || !matcher) {
 		LOG(C_MINI__ILL_LOG_EARG);

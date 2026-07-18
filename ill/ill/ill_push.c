@@ -6,7 +6,7 @@
  * \param node The node to insert.
  * \return The new head of the list.
  * \ingroup ill
- **/
+**/
 t_ill *ill_push(t_ill **head, t_ill *node) {
 	if (!head) {
 		LOG(C_MINI__ILL_LOG_EARG);
@@ -23,7 +23,7 @@ t_ill *ill_push(t_ill **head, t_ill *node) {
  * \param nodes The head of the list of nodes to insert.
  * \return The new head of the list.
  * \ingroup ill
- **/
+**/
 t_ill *ill_npush(t_ill **head, t_ill *nodes) {
 	if (!head) {
 		LOG(C_MINI__ILL_LOG_EARG);
@@ -40,7 +40,7 @@ t_ill *ill_npush(t_ill **head, t_ill *nodes) {
  * \param node The node to insert.
  * \return The head of the list.
  * \ingroup ill
- **/
+**/
 t_ill *ill_push_back(t_ill **head, t_ill *node) {
 	if (!head) {
 		LOG(C_MINI__ILL_LOG_EARG);

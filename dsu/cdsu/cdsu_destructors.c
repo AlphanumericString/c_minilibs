@@ -6,7 +6,7 @@
  * \brief frees internal memory
  * \param ds the cdsu to destroy
  * \ingroup cdsu
- **/
+**/
 void cdsu_destroy(t_cdsu *ds) {
 	if (!ds) {
 		LOG(C_MINI__CDSU_LOG_EARG);
@@ -21,7 +21,7 @@ void cdsu_destroy(t_cdsu *ds) {
  * \brief reset structure to a clean init state
  * \param cdsu the cdsu to clear
  * \ingroup cdsu
- **/
+**/
 void cdsu_clr(t_cdsu *cdsu) {
 	size_t i;
 
@@ -41,7 +41,7 @@ void cdsu_clr(t_cdsu *cdsu) {
  * \brief cleans up the structurre and then free's it
  * \param ds the cdsu to clean
  * \ingroup cdsu
- **/
+**/
 void cdsu_free(t_cdsu *ds) {
 	if (!ds) {
 		LOG(C_MINI__CDSU_LOG_EARG);

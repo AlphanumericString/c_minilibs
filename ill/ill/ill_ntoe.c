@@ -5,7 +5,7 @@
  * \param node The intrusive node.
  * \return A pointer to the user's element structure.
  * \ingroup ill
- **/
+**/
 void *ill_ntoe(const t_ill *node) {
 	if (!node) {
 		LOG(C_MINI__ILL_LOG_EARG);
@@ -20,7 +20,7 @@ void *ill_ntoe(const t_ill *node) {
  * \param offset The offset of the node within the structure.
  * \return A pointer to the intrusive node.
  * \ingroup ill
- **/
+**/
 t_ill *ill_eton(void *e, size_t offset) {
 	if (!e) {
 		LOG(C_MINI__ILL_LOG_EARG);

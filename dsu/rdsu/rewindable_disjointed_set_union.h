@@ -94,7 +94,7 @@ typedef struct s_rdsu_log {
  * \param p the previous parent value
  * \param r the rank that was modified if there was a rank change
  * \ingroup rdsu
- **/
+**/
 typedef struct s_rdsu_log {
 	struct s_rdsu_log *nxt;
 
@@ -115,7 +115,7 @@ typedef struct s_rdsu_log {
  * from a continuous single alloc
  * \param change_log the stack of entries/changes in the rdsu
  * \ingroup rdsu
- **/
+**/
 typedef struct s_rewindable_disjointed_set_union {
 	uint16_t *parent;
 	uint16_t *rank;

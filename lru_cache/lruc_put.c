@@ -62,7 +62,7 @@ static int cache_put_internal(t_lruc *c, t_lruc_keynode to_add) {
  * \param kv key-value pair
  * \return 0 on success, -1 on failure
  * \ingroup lruc
- **/
+**/
 int lruc_put_kv(t_lruc *c, t_keyvalue kv) {
 	uint64_t now;
 
@@ -89,7 +89,7 @@ int lruc_put_kv(t_lruc *c, t_keyvalue kv) {
  * \param value value to put
  * \return 0 on success, -1 on failure
  * \ingroup lruc
- **/
+**/
 int lruc_put(t_lruc *cache, const void *key, size_t key_len,
              const void *value) {
 	uint64_t now;
@@ -121,7 +121,7 @@ int lruc_put(t_lruc *cache, const void *key, size_t key_len,
  * \param ttl_ms time to live in milliseconds
  * \return 0 on success, -1 on failure
  * \ingroup lruc
- **/
+**/
 int lruc_put_ttl(t_lruc *cache, const void *key, size_t key_len,
                  const void *value, uint64_t ttl_ms) {
 	uint64_t now;

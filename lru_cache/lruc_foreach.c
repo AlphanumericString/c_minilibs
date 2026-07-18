@@ -9,7 +9,7 @@
  * \param fn callback function
  * \param user_data user data
  * \ingroup lruc
- **/
+**/
 void lruc_foreach(const t_lruc *c, t_kvcallback fn, void *user_data) {
 	if (!c || !fn) {
 		LOG(C_MINI__LRUC_LOG_EARG);
@@ -25,7 +25,7 @@ void lruc_foreach(const t_lruc *c, t_kvcallback fn, void *user_data) {
  * \param fn callback function
  * \param user_data user data
  * \ingroup lruc
- **/
+**/
 void lruc_foreach_ru_ordered(const t_lruc *c, t_kvcallback fn,
                              void *user_data) {
 	if (!c || !fn) {
@@ -42,7 +42,7 @@ void lruc_foreach_ru_ordered(const t_lruc *c, t_kvcallback fn,
  * \param fn callback function
  * \param user_data user data
  * \ingroup lruc
- **/
+**/
 void lruc_foreach_ttl_ordered(const t_lruc *c, t_kvcallback fn,
                               void *user_data) {
 	size_t i;

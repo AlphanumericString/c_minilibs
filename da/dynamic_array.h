@@ -92,7 +92,7 @@
  * \param  elem pointer to the element
  * \param  arg  argument passed as is from up function
  * \return expected to return true on success false otherwise
- **/
+**/
 typedef bool (*t_callback)(void *elem, void *arg);
 
 #	endif
@@ -108,7 +108,7 @@ typedef bool (*t_callback)(void *elem, void *arg);
  * \param  pos  position of the elem in the sub array backing
  * \param  last boolean on wheter or not this is the last element of the call
  * \return expected to return true on success false otherwise
- **/
+**/
 typedef bool (*t_callback_it)(void *elem, void *arg, size_t pos, bool last);
 
 #	endif // CMINI_T_CALLBAKC_IT
@@ -122,7 +122,7 @@ typedef bool (*t_callback_it)(void *elem, void *arg, size_t pos, bool last);
  * \param elem pointer to the element
  * \param arg argument passed as is from up function
  * \return expected to return <0, 0, >0 for inferior to, equal, superior to
- **/
+**/
 typedef int (*t_comparator)(const void *elem, const void *arg);
 
 #	endif
@@ -134,7 +134,7 @@ typedef int (*t_comparator)(const void *elem, const void *arg);
  * \brief duplication function pointer for datas
  * \param elem pointer to the duplication target
  * \return pointer to a valid copy of the data
- **/
+**/
 typedef void *(*t_duplicator)(const void *elem);
 
 #	endif
@@ -153,7 +153,7 @@ typedef void *(*t_merger)(void *elem, void *arg);
  * \param cap_e number of elements the memory can hold
  * \param sz_e size of 1 elements (the generic part of the array)
  * \ingroup da
- **/
+**/
 typedef struct s_dynamic_memory_array {
 	void  *array;
 	size_t nb_e;

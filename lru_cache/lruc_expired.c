@@ -19,7 +19,7 @@
  * \param key_len key length
  * \return true if key is expired, false otherwise
  * \ingroup lruc
- **/
+**/
 bool lruc_isexpired(t_lruc *c, const void *key, size_t key_len) {
 	size_t          offset;
 	t_lruc_keynode *node;
@@ -44,7 +44,7 @@ bool lruc_isexpired(t_lruc *c, const void *key, size_t key_len) {
  * \brief Clean up expired elements
  * \param c cache pointer
  * \ingroup lruc
- **/
+**/
 void lruc_cleanup(t_lruc *c) {
 	struct timespec now;
 	uint64_t        now_uint;
@@ -69,7 +69,7 @@ void lruc_cleanup(t_lruc *c) {
  * \param cache cache pointer
  * \param ttl time to live
  * \ingroup lruc
- **/
+**/
 void lruc_setttl(t_lruc *cache, long ttl) {
 	LOG(C_MINI__LRUC_LOG_UPDATE, cache->ttl_glob, ttl);
 	cache->ttl_glob = ttl;

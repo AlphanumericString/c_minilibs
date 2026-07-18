@@ -7,7 +7,7 @@
  * \param y second element
  * \return true if related, false otherwise
  * \ingroup rdsu
- **/
+**/
 bool rdsu_is_related(t_rdsu *ds, size_t x, size_t y) {
 	return (rdsu_find(ds, x) == rdsu_find(ds, y));
 }
@@ -16,7 +16,7 @@ bool rdsu_is_related(t_rdsu *ds, size_t x, size_t y) {
  * \param rdsu the rdsu structure
  * \return true if valid, false otherwise
  * \ingroup rdsu
- **/
+**/
 bool rdsu_validate(t_rdsu rdsu) {
 	size_t       i;
 	size_t       size_div_2;

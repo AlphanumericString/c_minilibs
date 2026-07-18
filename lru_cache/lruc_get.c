@@ -17,7 +17,7 @@
  * \param key_len key length
  * \return pointer to the value
  * \ingroup lruc
- **/
+**/
 void *lruc_get_lru(t_lruc *c, const void *key, size_t key_len) {
 	t_lruc_keynode *node;
 	size_t          pos;
@@ -44,7 +44,7 @@ void *lruc_get_lru(t_lruc *c, const void *key, size_t key_len) {
  * \param key_len key length
  * \return pointer to the value
  * \ingroup lruc
- **/
+**/
 void *lruc_get(t_lruc *c, const void *key, size_t key_len) {
 	struct timespec now;
 	uint64_t        now_uint;

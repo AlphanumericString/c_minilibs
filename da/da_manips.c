@@ -21,7 +21,7 @@ static inline void memnxor(void *a, void *b, size_t n) {
  * \param pos_b index of the second element
  * \return true on success, false on failure
  * \ingroup da
- **/
+**/
 bool da_swap(t_da *da, size_t pos_a, size_t pos_b) {
 	unsigned char  sized_buffer[C_MINI_DA__SZ_ELEM_DFLT];
 	unsigned char *sa;
@@ -54,7 +54,7 @@ bool da_swap(t_da *da, size_t pos_a, size_t pos_b) {
  * \param pos_b index of the second position
  * \return true on success, false otherwise
  * \ingroup da
- **/
+**/
 bool da_nswap(t_da *da, size_t n, size_t pos_a, size_t pos_b) {
 	unsigned char  sized_buffer[C_MINI_DA__SZ_ELEM_DFLT];
 	unsigned char *sa;

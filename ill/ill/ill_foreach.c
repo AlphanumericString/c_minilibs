@@ -8,7 +8,7 @@
  * \param u_data User data to pass to the callback.
  * \return true if the callback returned true for all elements, false otherwise.
  * \ingroup ill
- **/
+**/
 bool ill_foreach(t_ill *head, t_callback c, void *u_data) {
 	t_ill *curr;
 	t_ill *nxt;
@@ -39,7 +39,7 @@ bool ill_foreach(t_ill *head, t_callback c, void *u_data) {
  * \return true if the callback returned true for all processed elements, false
  * otherwise.
  * \ingroup ill
- **/
+**/
 bool ill_for(t_ill *head, size_t n, t_callback c, void *u_data) {
 	t_ill *curr;
 	t_ill *nxt;

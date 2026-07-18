@@ -10,7 +10,7 @@
  * \param u_data user data for callback
  * \return pointer to the found element, or NULL if not found
  * \ingroup da
- **/
+**/
 void *da_find(t_da *da, t_comparator c, void *u_data) {
 	if (!da || !c) {
 		LOG(C_MINI__DA_LOG_EARG);
@@ -33,7 +33,7 @@ void *da_find(t_da *da, t_comparator c, void *u_data) {
  * \param u_data user data for callback
  * \return pointer to the found element, or NULL if not found
  * \ingroup da
- **/
+**/
 void *da_nfind(t_da *da, size_t n, t_comparator c, void *u_data) {
 	if (!da || !c) {
 		LOG(C_MINI__DA_LOG_EARG);
@@ -57,7 +57,7 @@ void *da_nfind(t_da *da, size_t n, t_comparator c, void *u_data) {
  * \param out_buffer buffer to copy the found element to
  * \return true if found and copied, false otherwise
  * \ingroup da
- **/
+**/
 bool da_find_get(t_da *da, t_comparator c, void *u_data, void *out_buffer) {
 	void *elem;
 

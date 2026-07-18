@@ -5,7 +5,7 @@
  * \param head The head of the list.
  * \return A pointer to the last node in the list, or NULL if the list is empty.
  * \ingroup ill
- **/
+**/
 t_ill *ill_get_tail(t_ill *head) {
 	if (!head) {
 		LOG(C_MINI__ILL_LOG_EARG);

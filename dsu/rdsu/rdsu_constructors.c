@@ -9,7 +9,7 @@
  * \param n size of the rdsu
  * \return the new t_rdsu
  * \ingroup rdsu
- **/
+**/
 t_rdsu *rdsu_new(size_t n) {
 	t_rdsu *ret;
 	void   *buffer;
@@ -41,7 +41,7 @@ t_rdsu *rdsu_new(size_t n) {
  * \param n size of the rdsu
  * \return the initialized t_rdsu
  * \ingroup rdsu
- **/
+**/
 t_rdsu *rdsu_init(t_rdsu *to_init, size_t n) {
 	void *buffer;
 
@@ -66,7 +66,7 @@ t_rdsu *rdsu_init(t_rdsu *to_init, size_t n) {
  * \param ranks the ranks array
  * \return the new t_rdsu
  * \ingroup rdsu
- **/
+**/
 t_rdsu *rdsu_new_from_array(size_t size, uint16_t *parents, uint16_t *ranks) {
 	t_rdsu *ret;
 
@@ -97,7 +97,7 @@ t_rdsu *rdsu_new_from_array(size_t size, uint16_t *parents, uint16_t *ranks) {
  * \param ranks the ranks array
  * \return the initialized t_rdsu
  * \ingroup rdsu
- **/
+**/
 t_rdsu *rdsu_init_from_arrays(t_rdsu *ret, size_t size, uint16_t *parents,
                               uint16_t *ranks) {
 	if (!ret || !size || !parents || !ranks) {
@@ -123,7 +123,7 @@ t_rdsu *rdsu_init_from_arrays(t_rdsu *ret, size_t size, uint16_t *parents,
  * \param n the number of values to add
  * \return the grown t_rdsu
  * \ingroup rdsu
- **/
+**/
 t_rdsu *rdsu_grow(t_rdsu *rdsu, size_t n) {
 	void  *replacement_buffer;
 	void  *rank_offset;

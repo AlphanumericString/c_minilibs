@@ -68,7 +68,7 @@
  * \param rp_single_alloc boolean on whether the rank and parent were allocated
  * from a continuous single alloc
  * \ingroup cdsu
- **/
+**/
 typedef struct s_compact_disjointed_set_union {
 	unsigned int *parent;
 	unsigned int *rank;

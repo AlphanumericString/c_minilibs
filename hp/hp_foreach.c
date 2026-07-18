@@ -7,7 +7,7 @@
  * \param u_arg user argument
  * \return true if all callbacks returned true, false otherwise
  * \ingroup hp
- **/
+**/
 bool hp_foreach(t_heap *h, t_callback cb, void *u_arg) {
 	if (!h) {
 		LOG(C_MINI__HP_LOG_EARG);
@@ -60,7 +60,7 @@ static bool hp_internal_infix(t_heap *h, size_t i, t_callback cb, void *u) {
  * \param u_arg user argument
  * \return true if all callbacks returned true, false otherwise
  * \ingroup hp
- **/
+**/
 bool hp_foreach_in(t_heap *h, t_callback cb, void *u_arg) {
 	bool r;
 
@@ -80,7 +80,7 @@ bool hp_foreach_in(t_heap *h, t_callback cb, void *u_arg) {
  * \param u_arg user argument
  * \return true if all callbacks returned true, false otherwise
  * \ingroup hp
- **/
+**/
 bool hp_foreach_pre(t_heap *h, t_callback cb, void *u_arg) {
 	bool r;
 
@@ -100,7 +100,7 @@ bool hp_foreach_pre(t_heap *h, t_callback cb, void *u_arg) {
  * \param u_arg user argument
  * \return true if all callbacks returned true, false otherwise
  * \ingroup hp
- **/
+**/
 bool hp_foreach_post(t_heap *h, t_callback cb, void *u_arg) {
 	bool r;
 

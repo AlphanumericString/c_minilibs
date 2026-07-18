@@ -10,7 +10,7 @@
  * \brief Clear the cache
  * \param c cache pointer
  * \ingroup lruc
- **/
+**/
 void lruc_clear(t_lruc *c) {
 	t_lruc_keynode *nxt;
 
@@ -50,7 +50,7 @@ void lruc_clear(t_lruc *c) {
  * \param key_len key length
  * \return 0 on success, -1 on failure
  * \ingroup lruc
- **/
+**/
 int lruc_remove(t_lruc *c, const void *key, size_t key_len) {
 	t_lruc_keynode *node;
 	size_t          pos;

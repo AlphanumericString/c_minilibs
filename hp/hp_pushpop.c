@@ -49,7 +49,7 @@ static void heap_down(t_heap *h, size_t idx, bool max) {
  * \param h heap pointer
  * \param e element to push
  * \ingroup hp
- **/
+**/
 void hp_min_push(t_heap *h, void *e) {
 	if (!h || !e) {
 		LOG(C_MINI__HP_LOG_EARG);
@@ -65,7 +65,7 @@ void hp_min_push(t_heap *h, void *e) {
  * \param h heap pointer
  * \param e element to push
  * \ingroup hp
- **/
+**/
 void hp_max_push(t_heap *h, void *e) {
 	if (!h || !e) {
 		LOG(C_MINI__HP_LOG_EARG);
@@ -82,7 +82,7 @@ void hp_max_push(t_heap *h, void *e) {
  * \param h heap pointer
  * \return minimum element
  * \ingroup hp
- **/
+**/
 void *hp_min_pop(t_heap *h) {
 	void *root;
 
@@ -102,7 +102,7 @@ void *hp_min_pop(t_heap *h) {
  * \param h heap pointer
  * \return maximum element
  * \ingroup hp
- **/
+**/
 void *hp_max_pop(t_heap *h) {
 	void *root;
 
@@ -124,7 +124,7 @@ void *hp_max_pop(t_heap *h) {
  * \param n index of the element to remove
  * \return element removed
  * \ingroup hp
- **/
+**/
 void *hp_min_rm(t_heap *h, size_t n) {
 	if (!h) {
 		LOG(C_MINI__HP_LOG_EARG);
@@ -142,7 +142,7 @@ void *hp_min_rm(t_heap *h, size_t n) {
  * \param n index of the element to remove
  * \return element removed
  * \ingroup hp
- **/
+**/
 void *hp_max_rm(t_heap *h, size_t n) {
 	if (!h) {
 		LOG(C_MINI__HP_LOG_EARG);

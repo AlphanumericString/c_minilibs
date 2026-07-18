@@ -7,7 +7,7 @@
  * \param sz_elem size of 1 element
  * \return pointer to the new dynamic array
  * \ingroup da
- **/
+**/
 t_da *da_new(size_t sz_elem) {
 	t_da *ret;
 
@@ -32,7 +32,7 @@ t_da *da_new(size_t sz_elem) {
  * \param sz_elem size of 1 element
  * \return pointer to the initialized dynamic array
  * \ingroup da
- **/
+**/
 t_da *da_init(t_da *ret, size_t sz_elem) {
 	void *data;
 
@@ -57,7 +57,7 @@ t_da *da_init(t_da *ret, size_t sz_elem) {
  * \param sz_elem size of 1 element
  * \return pointer to the initialized dynamic array
  * \ingroup da
- **/
+**/
 t_da *da_ninit(t_da *ret, size_t n, size_t sz_elem) {
 	void *data;
 
@@ -86,7 +86,7 @@ t_da *da_ninit(t_da *ret, size_t n, size_t sz_elem) {
  * rb/round_buffers. If you want to copy values try da_cat_array.
  * \return pointer to the initialized dynamic array
  * \ingroup da
- **/
+**/
 t_da *da_from_array(t_da *ret, void *data, size_t nb_elem, size_t sz_elem) {
 	if (!ret || !data) {
 		LOG(C_MINI__DA_LOG_EARG);

@@ -5,7 +5,7 @@
  * \param prev The node preceding the one to be removed.
  * \return The removed node, or NULL if 'prev' has no next node.
  * \ingroup idl
- **/
+**/
 t_idl *idl_remove_after(t_idl *prev) {
 	t_idl *to_remove;
 
@@ -28,7 +28,7 @@ t_idl *idl_remove_after(t_idl *prev) {
  * \param target The node to remove.
  * \return true if the node was successfully removed, false otherwise.
  * \ingroup idl
- **/
+**/
 bool idl_remove_node(t_idl **head, t_idl *target) {
 	if (!head || !target || !*head) {
 		LOG(C_MINI__IDL_LOG_EARG);

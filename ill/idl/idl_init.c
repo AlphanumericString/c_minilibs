@@ -5,7 +5,7 @@
  * \param node The node to initialize.
  * \param offset The offset of the node within its container structure.
  * \ingroup idl
- **/
+**/
 void idl_init(t_idl *node, size_t offset) {
 	if (!node) {
 		LOG(C_MINI__IDL_LOG_EARG);
@@ -25,7 +25,7 @@ void idl_init(t_idl *node, size_t offset) {
  * \return A pointer to the head of the new copied list's first element, or NULL
  * on failure.
  * \ingroup idl
- **/
+**/
 void *idl_copy(const t_idl *head, t_duplicator d) {
 	t_idl *ret;
 	void  *elem;

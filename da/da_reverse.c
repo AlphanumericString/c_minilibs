@@ -6,7 +6,7 @@
  * \brief reverse the order of elements in the dynamic array
  * \param da pointer to the dynamic array
  * \ingroup da
- **/
+**/
 void da_reverse(t_da *da) {
 	return (da_nreverse(da, -1));
 }
@@ -16,7 +16,7 @@ void da_reverse(t_da *da) {
  * \param da pointer to the dynamic array
  * \param n number of elements to reverse
  * \ingroup da
- **/
+**/
 void da_nreverse(t_da *da, size_t n) {
 	size_t i;
 
@@ -42,7 +42,7 @@ void da_nreverse(t_da *da, size_t n) {
  * \param da pointer to the dynamic array
  * \param n number of elements to reverse
  * \ingroup da
- **/
+**/
 void da_b_nreverse(t_da *da, size_t n) {
 	size_t i;
 	size_t m;

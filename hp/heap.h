@@ -71,7 +71,7 @@
  * \param elem pointer to the element
  * \param arg argument passed as is from up function
  * \return expected to return <0, 0, >0 for inferior to, equal, superior to
- **/
+**/
 typedef int (*t_comparator)(const void *elem, const void *arg);
 
 #endif
@@ -85,13 +85,13 @@ typedef int (*t_comparator)(const void *elem, const void *arg);
  * \param  elem pointer to the element
  * \param  arg  argument passed as is from up function
  * \return expected to return true on success false otherwise
- **/
+**/
 typedef bool (*t_callback)(void *elem, void *arg);
 
 #endif
 /**
  * \defgroup hp Heap
- **/
+**/
 
 /**
  * \brief heap structure
@@ -100,7 +100,7 @@ typedef bool (*t_callback)(void *elem, void *arg);
  * \param elems reference to the elements as void pointers
  * \param cmp comparator fuction
  * \ingroup hp
- **/
+**/
 typedef struct s_heap {
 	size_t       nb;
 	size_t       capacity;

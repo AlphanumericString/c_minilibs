@@ -5,7 +5,7 @@
  * \param head The head of the list.
  * \return The new head of the reversed list.
  * \ingroup ill
- **/
+**/
 t_ill *ill_reverse(t_ill *head) {
 	t_ill *prev;
 	t_ill *curr;

@@ -97,7 +97,7 @@ typedef void *(*t_duplicator)(const void *elem);
 
 /**
  * \defgroup idl Intrsive Doubly-linked Lists
- **/
+**/
 
 /**
  * \brief t_idll struct

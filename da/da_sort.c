@@ -8,7 +8,7 @@
  * \param c comparator function
  * \return true on success, false otherwise
  * \ingroup da
- **/
+**/
 bool da_sort(t_da *da, t_comparator c) {
 	if (!da || !c) {
 		LOG(C_MINI__DA_LOG_EARG);
@@ -27,7 +27,7 @@ bool da_sort(t_da *da, t_comparator c) {
  * \param c comparator function
  * \return true on success, false otherwise
  * \ingroup da
- **/
+**/
 bool da_nsort(t_da *da, size_t n, t_comparator c) {
 	if (!da || !c) {
 		LOG(C_MINI__DA_LOG_EARG);

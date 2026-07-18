@@ -8,7 +8,7 @@
  * \param da pointer to the dynamic array
  * \return true on success, false otherwise
  * \ingroup da
- **/
+**/
 bool da_grow(t_da *da) {
 	size_t new_size;
 	void  *tmp;
@@ -41,7 +41,7 @@ bool da_grow(t_da *da) {
  * \param minimal_free_elems minimum number of free elements to guarantee
  * \return true on success, false otherwise
  * \ingroup da
- **/
+**/
 bool da_grow_for_size(t_da *da, size_t minimal_free_elems) {
 	size_t new_size;
 	void  *tmp;

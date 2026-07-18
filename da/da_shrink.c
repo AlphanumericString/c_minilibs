@@ -9,7 +9,7 @@
  * \param da pointer to the dynamic array
  * \return true on success, false otherwise
  * \ingroup da
- **/
+**/
 bool da_shrink(t_da *da) {
 	bool r;
 
@@ -33,7 +33,7 @@ bool da_shrink(t_da *da) {
  * \param keep_n minimum number of extra capacity elements to keep
  * \return true on success, false otherwise
  * \ingroup da
- **/
+**/
 bool da_shrink_min(t_da *da, size_t keep_n) {
 	void *tmp;
 

@@ -5,7 +5,7 @@
  * \param node The node to initialize.
  * \param offset The offset of the node within its container structure.
  * \ingroup ill
- **/
+**/
 void ill_init(t_ill *node, size_t offset) {
 	if (!node) {
 		LOG(C_MINI__ILL_LOG_EARG);
@@ -29,7 +29,7 @@ static void setup_chain(t_ill *to_setup, t_ill *nxt, size_t offset) {
  * \return A pointer to the head of the new copied list's first element, or NULL
  * on failure.
  * \ingroup ill
- **/
+**/
 void *ill_copy(const t_ill *head, t_duplicator dupper) {
 	size_t offset;
 	void  *e_curr;

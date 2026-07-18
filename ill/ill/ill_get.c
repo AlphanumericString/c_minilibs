@@ -6,7 +6,7 @@
  * \param c The comparator function used to determine the minimum.
  * \return A pointer to the minimum element, or NULL if the list is empty.
  * \ingroup ill
- **/
+**/
 void *ill_get_min(t_ill *head, t_comparator c) {
 	t_ill *curr;
 	t_ill *min;
@@ -31,7 +31,7 @@ void *ill_get_min(t_ill *head, t_comparator c) {
  * \param c The comparator function used to determine the maximum.
  * \return A pointer to the maximum element, or NULL if the list is empty.
  * \ingroup ill
- **/
+**/
 void *ill_get_max(t_ill *head, t_comparator c) {
 	t_ill *curr;
 	t_ill *max;
@@ -56,7 +56,7 @@ void *ill_get_max(t_ill *head, t_comparator c) {
  * \param k The index of the element to retrieve.
  * \return A pointer to the k-th element, or NULL if the index is out of bounds.
  * \ingroup ill
- **/
+**/
 void *ill_get_kth(t_ill *head, size_t k) {
 	t_ill *curr;
 
