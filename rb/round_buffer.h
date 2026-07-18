@@ -34,12 +34,12 @@
 			} while (0);
 #	endif // !DBG_POS
 
-#define C_MINI__RB_LOG_EARG		"Bad arguments."
-#define C_MINI__RB_LOG_ESPACE	"Not enough space."
-#define C_MINI__RB_LOG_EALLOC	"Allocation Fail."
-#define C_MINI__RB_LOG_ECB		"Callback failed."
-#define C_MINI__RB_LOG_FAIL		"Faillure"
-#define C_MINI__RB_LOG_SUCCESS	"Success"
+#	define C_MINI__RB_LOG_EARG    "Bad arguments."
+#	define C_MINI__RB_LOG_ESPACE  "Not enough space."
+#	define C_MINI__RB_LOG_EALLOC  "Allocation Fail."
+#	define C_MINI__RB_LOG_ECB     "Callback failed."
+#	define C_MINI__RB_LOG_FAIL    "Failure"
+#	define C_MINI__RB_LOG_SUCCESS "Success"
 
 #else // || C_MINI__TESTS
 
@@ -61,8 +61,8 @@
  * \defgroup rb Round Buffer
 **/
 
-#ifndef CMINI_T_CALLBAKC_DEFINE
-#	define CMINI_T_CALLBAKC_DEFINE
+#ifndef C_MINI__T_CALLBACK
+#	define C_MINI__T_CALLBACK
 
 /**
  * \brief  callback function pointer, true operation successfull, elem is always
@@ -75,8 +75,8 @@ typedef bool (*t_callback)(void *elem, void *arg);
 
 #endif
 
-#ifndef CMINI_T_COMPARATOR_DEFINE
-#	define CMINI_T_COMPARATOR_DEFINE
+#ifndef C_MINI__T_COMPARATOR
+#	define C_MINI__T_COMPARATOR
 
 /**
  * \brief comparator function pointer, <0, 0, >0 for inferior to, equal,
@@ -89,8 +89,8 @@ typedef int (*t_comparator)(void *elem, void *arg);
 
 #endif
 
-#ifndef CMINI_T_DUOLICATOR_DEFINE
-#	define CMINI_T_DUOLICATOR_DEFINE
+#ifndef C_MINI__T_DUPLICATOR
+#	define C_MINI__T_DUPLICATOR
 
 /**
  * \brief duplication function pointer for datas
@@ -135,7 +135,7 @@ void rb_clr(t_rb *rb);
 bool   rb_full(t_rb rb);
 bool   rb_empty(t_rb rb);
 size_t rb_size(t_rb rb);
-size_t rb_cappacity(t_rb rb);
+size_t rb_capacity(t_rb rb);
 size_t rb_remaining_space(t_rb rb);
 
 // remove

@@ -49,7 +49,7 @@
 
 #endif // !C_MINI__TESTS
 /**
-* \defgroup ftls Fast Thread Local Storage
+ * \defgroup ftls Fast Thread Local Storage
 **/
 
 // +---------------------------------------------------+
@@ -67,11 +67,13 @@
 **/
 typedef C_MINI__FTLS_STRUCT t_ftls;
 
+#ifdef C_MINI__INTERNAL
 /**
  * \brief key used for the f tls system. mandatory for thread management.
  * \ingroup ftls
 **/
 extern pthread_key_t ftls_key;
+#endif // C_MINI__INTERNAL
 
 t_ftls *ftls_get(void);
 

@@ -1,4 +1,4 @@
-#define C_MINI__LRUC_INTERNAL
+#define C_MINI__INTERNAL
 #include "least_recently_used_cache.h"
 
 typedef bool (*Comparator)(t_lruc_keynode a, t_lruc_keynode b);

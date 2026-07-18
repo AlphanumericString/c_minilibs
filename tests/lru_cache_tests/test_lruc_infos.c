@@ -107,9 +107,9 @@ void test_lruc_expired(void) {
 }
 
 void test_lruc_stats(void) {
-	t_lruc        c;
+	t_lruc       c;
 	t_lruc_stats st;
-	const char   *k1 = "titi", *k2 = "toto", *k3 = "tutu";
+	const char  *k1 = "titi", *k2 = "toto", *k3 = "tutu";
 
 	lruc_init(&c, 4, free);
 	assert(c.node_in_use == 0);

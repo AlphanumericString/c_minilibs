@@ -52,4 +52,3 @@ void test_da_ndup_to(void) {
 	da_destroy(&da);
 	da_destroy(&dst);
 }
-

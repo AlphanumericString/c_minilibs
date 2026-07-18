@@ -31,4 +31,3 @@ void test_da_nsort(void) {
 	assert(*(int *)da_at(&da, 2) == 3);
 	da_destroy(&da);
 }
-

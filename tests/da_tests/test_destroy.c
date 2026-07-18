@@ -1,4 +1,5 @@
 #include <da/dynamic_array.h>
+
 #include "da_tests.h"
 
 // destroy
@@ -21,7 +22,7 @@ void test_da_free(void) {
 
 	da = da_new(sizeof(int));
 	da_free(da);
-	da = malloc(sizeof(t_da));
+	da  = malloc(sizeof(t_da));
 	*da = (t_da){0};
 	da_free(da);
 }

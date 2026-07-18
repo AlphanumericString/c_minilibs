@@ -30,9 +30,9 @@
 
 #	define C_MINI__LRUC_LOG_SUCCESS  "Success"
 #	define C_MINI__LRUC_LOG_EARG     "Bad arguments"
-#	define C_MINI__LRUC_LOG_EALLOC   "Allocation faillure"
+#	define C_MINI__LRUC_LOG_EALLOC   "Allocation failure"
 #	define C_MINI__LRUC_LOG_ECLOCK   "Clock error"
-#	define C_MINI__LRUC_LOG_FAILLURE "Faillure"
+#	define C_MINI__LRUC_LOG_FAILLURE "Failure"
 #	define C_MINI__LRUC_LOG_EVICTION                                          \
 		"Eviction: key=%p delta (%ld) >= ttl (%ld)"
 #	define C_MINI__LRUC_LOG_UPDATE   "Update ttl: %ld->%ld"
@@ -85,7 +85,7 @@ typedef struct {
 /**
  * \brief the key value pair that enters in the cache
  * \param key pointer to key
- * \param k_len lenght to read from at pointer key
+ * \param k_len length to read from at pointer key
  * \param value stored value in associated to key
  * \ingroup lruc
 **/
@@ -95,7 +95,7 @@ typedef struct {
 	size_t      k_len;
 } t_keyvalue;
 
-#ifdef C_MINI__LRUC_INTERNAL
+#ifdef C_MINI__INTERNAL
 
 #	define C_MINI__LRUC_HASH_SKIP 10
 #	define C_MINI__LRUC_TTL_DFLT  LONG_MAX
@@ -104,7 +104,7 @@ typedef struct {
  * \brief [INTERNAL] [MAY CHANGE]
  * \param kv the key-value pair of the node
  * \param time the time of emission of the node
- * \param hash_next next value associated with the same hash (colision
+ * \param hash_next next value associated with the same hash (collision
  * resolution)
  * \param heap_index index of the node in the TTL ordered minHeap
  * \param lru_prev prev value in the recency queue of values (MRU to LRU)
@@ -144,7 +144,7 @@ typedef struct {
  * \param buckets_nb number of bucket (also used as max numbr of entries to
  * limit over-crowding in cache)
  * \param node_in_use number of entries currently present in the cache
- * \param buckets array of nodes indexed via hash value, colision resolved at
+ * \param buckets array of nodes indexed via hash value, collision resolved at
  * node level
  * \param minHeap heap ordered nodes using the TTL (faster insert/remove)
  * \param MRU direct pointer to Most Recently Used node
@@ -190,7 +190,7 @@ typedef bool (*t_kvcallback)(t_keyvalue *elem, void *arg);
 
 // create
 t_lruc *lruc_create(size_t capacity, void (*free_er)(void *));
-t_lruc *lruc_init(t_lruc *cache, size_t cappacity, void (*free_er)(void *));
+t_lruc *lruc_init(t_lruc *cache, size_t capacity, void (*free_er)(void *));
 void    lruc_destroy(t_lruc *cache);
 void    lruc_free(t_lruc *cache);
 
@@ -228,7 +228,7 @@ void lruc_foreach(const t_lruc *cache, t_kvcallback fn, void *u_data);
 void lruc_foreach_ru_ordered(const t_lruc *c, t_kvcallback fn, void *u_data);
 void lruc_foreach_ttl_ordered(const t_lruc *c, t_kvcallback fn, void *u_data);
 
-#ifdef C_MINI__LRUC_INTERNAL
+#ifdef C_MINI__INTERNAL
 uint64_t lruci_timeto64(struct timespec t);
 uint64_t lruci_timenow(void);
 bool lruci_key_eq(const void *k1, size_t k1_len, const void *k2, size_t k2_len);
@@ -251,6 +251,6 @@ void            lruci_hp_push(t_lruc *c, t_lruc_keynode *value);
 t_lruc_keynode *lruci_hp_pop(t_lruc *c);
 t_lruc_keynode *lruci_hp_pop_nth(t_lruc *c, size_t n);
 
-#endif // !C_MINI__LRUC_INTERNAL
+#endif // !C_MINI__INTERNAL
 
 #endif // !C_MINI__LRUC

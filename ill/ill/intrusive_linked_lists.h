@@ -33,11 +33,11 @@
 				} while (0);
 #		endif // !DBG_POS
 
-#define C_MINI__ILL_LOG_EARG	"Bad arguments."
-#define C_MINI__ILL_LOG_EALLOC	"Allocation Fail."
-#define C_MINI__ILL_LOG_ECB		"Callback failed."
-#define C_MINI__ILL_LOG_FAIL	"Faillure"
-#define C_MINI__ILL_LOG_SUCCESS	"Success"
+#		define C_MINI__ILL_LOG_EARG    "Bad arguments."
+#		define C_MINI__ILL_LOG_EALLOC  "Allocation Fail."
+#		define C_MINI__ILL_LOG_ECB     "Callback failed."
+#		define C_MINI__ILL_LOG_FAIL    "Failure"
+#		define C_MINI__ILL_LOG_SUCCESS "Success"
 
 #	else // || C_MINI__TESTS
 
@@ -55,8 +55,8 @@
 
 #	endif // !C_MINI__TESTS
 
-#	ifndef CMINI_T_CALLBAKC_DEFINE
-#		define CMINI_T_CALLBAKC_DEFINE
+#	ifndef C_MINI__T_CALLBACK
+#		define C_MINI__T_CALLBACK
 
 /**
  * \brief  callback function pointer, true operation successfull, elem is always
@@ -69,8 +69,8 @@ typedef bool (*t_callback)(void *elem, void *arg);
 
 #	endif
 
-#	ifndef CMINI_T_COMPARATOR_DEFINE
-#		define CMINI_T_COMPARATOR_DEFINE
+#	ifndef C_MINI__T_COMPARATOR
+#		define C_MINI__T_COMPARATOR
 
 /**
  * \brief comparator function pointer, <0, 0, >0 for inferior to, equal,
@@ -83,8 +83,8 @@ typedef int (*t_comparator)(void *elem, void *arg);
 
 #	endif
 
-#	ifndef CMINI_T_DUOLICATOR_DEFINE
-#		define CMINI_T_DUOLICATOR_DEFINE
+#	ifndef C_MINI__T_DUPLICATOR
+#		define C_MINI__T_DUPLICATOR
 
 /**
  * \brief duplication function pointer for datas

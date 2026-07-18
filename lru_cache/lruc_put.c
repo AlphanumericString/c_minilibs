@@ -3,7 +3,7 @@
 #include <string.h>
 #include <time.h>
 
-#define C_MINI__LRUC_INTERNAL
+#define C_MINI__INTERNAL
 #include "least_recently_used_cache.h"
 
 // Insert a key-value pair into the cache in lru and ttl internals

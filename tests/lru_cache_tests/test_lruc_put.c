@@ -78,7 +78,7 @@ void test_lruc_put_ttl(void) {
 		assert(lruc_put_ttl(&c, k1, strlen(k1), strdup("result"), 2000) == 0);
 		assert(lruc_put_ttl(&c, k2, strlen(k2), strdup("other"), 1000) == 0);
 		uint64_t now_int = lruci_timenow();
-		assert(now_int != (uint64_t)-1); // time setup failed?
+		assert(now_int != (uint64_t)-1);             // time setup failed?
 		assert(c.minHeap[0]->time - now_int >= 900); // 100 ms leeway
 		assert(c.minHeap[c.node_in_use - 1]->time - now_int >= 1900); // 100 ms
 		lruc_clear(&c);

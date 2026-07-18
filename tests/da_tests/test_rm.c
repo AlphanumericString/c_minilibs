@@ -1,4 +1,5 @@
 #include <da/dynamic_array.h>
+
 #include "da_tests.h"
 
 // rm
@@ -47,10 +48,9 @@ void test_da_rms_order(void) {
 	assert(da.nb_e == 1);
 	assert(*(int *)da_at(&da, 0) == 2);
 	da_clr(&da);
-	da_cat_array(&da, (int*)arr_5, 5, sizeof(int));
+	da_cat_array(&da, (int *)arr_5, 5, sizeof(int));
 	da_rms_order(&da, 1, -1);
 	assert(da.nb_e == 1);
-
 
 	da_destroy(&da);
 }

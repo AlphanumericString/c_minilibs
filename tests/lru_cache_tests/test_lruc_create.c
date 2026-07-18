@@ -6,7 +6,7 @@
 #include "lru_cache_tests.h"
 
 void test_lruc_create(void) {
-	t_lruc            *lru;
+	t_lruc                  *lru;
 	const typeof(lru->stats) cmp = (typeof(lru->stats)){0};
 
 	lru = lruc_create(3, (void *)0xDEADBEEF);

@@ -48,9 +48,9 @@ void idl_prepend(t_idl *anchor, t_idl *node) {
 		return;
 	}
 	t_idl *anchor_prev = anchor->prev;
-	node->next   = anchor;
-	anchor->prev = node;
-	node->prev   = anchor_prev;
+	node->next         = anchor;
+	anchor->prev       = node;
+	node->prev         = anchor_prev;
 	if (anchor_prev) anchor_prev->next = node;
 	LOG(C_MINI__IDL_LOG_SUCCESS);
 }

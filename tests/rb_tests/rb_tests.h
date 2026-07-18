@@ -36,7 +36,7 @@ void test_rb_clr(void);
 void test_rb_full(void);
 void test_rb_empty(void);
 void test_rb_size(void);
-void test_rb_cappacity(void);
+void test_rb_capacity(void);
 void test_rb_remaining_space(void);
 
 // remove

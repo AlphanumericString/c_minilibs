@@ -31,4 +31,3 @@ void test_da_new(void) {
 	ASSERT_DA_STATE(*da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 0);
 	da_free(da);
 }
-

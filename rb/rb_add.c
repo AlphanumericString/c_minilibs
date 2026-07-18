@@ -51,7 +51,7 @@ bool rb_push_safe(t_rb *rb, const void *data) {
 		LOG(C_MINI__RB_LOG_EARG);
 		return (false);
 	}
-	if (rb_size(*rb) == rb_cappacity(*rb)) {
+	if (rb_size(*rb) == rb_capacity(*rb)) {
 		LOG(C_MINI__RB_LOG_ESPACE);
 		return (false);
 	}
@@ -74,7 +74,7 @@ bool rb_npush_safe(t_rb *rb, const void *data, size_t n) {
 		LOG(C_MINI__RB_LOG_EARG);
 		return (false);
 	}
-	if (rb_size(*rb) + n == rb_cappacity(*rb)) {
+	if (rb_size(*rb) + n == rb_capacity(*rb)) {
 		LOG(C_MINI__RB_LOG_ESPACE);
 		return (false);
 	}

@@ -62,14 +62,16 @@
 #	define C_MINI__CTLS_CAP 16
 #endif
 
+#ifdef C_MINI__INTERNAL
 /**
- * 
+ *
  * \ingroup ctls
 **/
 extern pthread_key_t ctls_key;
+#endif // C_MINI__INTERNAL
 
 /**
- * 
+ *
  * \ingroup ctls
 **/
 enum e_ctls_type {
@@ -96,11 +98,12 @@ typedef struct {
 	} value;
 } t_ctls_typewrap;
 
+#ifdef C_MINI__INTERNAL
 /**
  * \brief the array of C-type Thread Local Storage. Fast but limited to c-types.
  * \param v_name array of name for the different entries.
  * \param vals array of values for the different entries.
- * \param len lenght of the array curently being used.
+ * \param len length of the array currently being used.
  * \note if you want to increase the CTLS_CAP it's STRONGLY reccomended to not
  * go over 256
  * \ingroup ctls
@@ -110,6 +113,7 @@ typedef struct s_ctlsv {
 	t_ctls_typewrap vals[C_MINI__CTLS_CAP];
 	size_t          len;
 } t_ctlsv;
+#endif // C_MINI__INTERNAL
 
 // remove
 bool ctls_rm(const char *name);

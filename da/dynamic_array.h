@@ -33,32 +33,33 @@
 				} while (0);
 #		endif // !DBG_POS
 
-#define C_MINI__DA_LOG_EARG   "Bad arguments."
-#define C_MINI__DA_LOG_EALLOC "Allocation faillure."
-#define C_MINI__DA_LOG_GETFAIL "get Faillure"
-#define C_MINI__DA_LOG_FINDFAIL "find Faillure"
+#		define C_MINI__DA_LOG_EARG     "Bad arguments."
+#		define C_MINI__DA_LOG_EALLOC   "Allocation failure."
+#		define C_MINI__DA_LOG_GETFAIL  "get Failure"
+#		define C_MINI__DA_LOG_FINDFAIL "find Failure"
 
-#define C_MINI__DA_LOG_SUCCESS "Success"
-#define C_MINI__DA_LOG_CLR "Clear (nb elems: %zu -> 0)"
-#define C_MINI__DA_LOG_ADD "Add (elem:%p pos:%zu)"
-#define C_MINI__DA_LOG_GROWTH "Growth (arr:%p -> %p, cap:%zu -> %zu)"
-#define C_MINI__DA_LOG_SHRINK "Shrink (arr:%p -> %p, cap:%zu -> %zu)"
-#define C_MINI__DA_LOG_CATARR "Add (elems:%p nb_e:%zu -> %zu)"
-#define C_MINI__DA_LOG_GET "Get (pos:%zu)"
-#define C_MINI__DA_LOG_SWAP "Swap (nb:%zu, pos1:%zu, pos2:%zu)"
-#define C_MINI__DA_LOG_RM "Remove (pos:%zu, nb del:%zu, nb_e:%zu -> %zu)"
-#define C_MINI__DA_LOG_CONV "Convert (ret:%p)"
-#define C_MINI__DA_LOG_APPLY "Apply (applied on %zu elements)"
-#define C_MINI__DA_LOG_REDUCE "Reduce (ptr:%p)"
-#define C_MINI__DA_LOG_FOLD "Fold (ptr:%p)"
-#define C_MINI__DA_LOG_REV "Reverse (all)"
-#define C_MINI__DA_LOG_REVF "Reverse (first n:%zu)"
-#define C_MINI__DA_LOG_REVB "Reverse (last n:%zu)"
-#define C_MINI__DA_LOG_SORT "Sort (all)"
-#define C_MINI__DA_LOG_NSORT "Sort (first n:%zu)"
-#define C_MINI__DA_LOG_FINDGET	"Get (elem found:%p, out:%p)"
-#define C_MINI__DA_LOG_FIND "Find (at:%zu, e:%p)"
-#define C_MINI__DA_LOG_SET "Set (pos:%zu, n:%zu, e:%p)"
+#		define C_MINI__DA_LOG_SUCCESS "Success"
+#		define C_MINI__DA_LOG_CLR     "Clear (nb elems: %zu -> 0)"
+#		define C_MINI__DA_LOG_ADD     "Add (elem:%p pos:%zu)"
+#		define C_MINI__DA_LOG_GROWTH  "Growth (arr:%p -> %p, cap:%zu -> %zu)"
+#		define C_MINI__DA_LOG_SHRINK  "Shrink (arr:%p -> %p, cap:%zu -> %zu)"
+#		define C_MINI__DA_LOG_CATARR  "Add (elems:%p nb_e:%zu -> %zu)"
+#		define C_MINI__DA_LOG_GET     "Get (pos:%zu)"
+#		define C_MINI__DA_LOG_SWAP    "Swap (nb:%zu, pos1:%zu, pos2:%zu)"
+#		define C_MINI__DA_LOG_RM                                              \
+			"Remove (pos:%zu, nb del:%zu, nb_e:%zu -> %zu)"
+#		define C_MINI__DA_LOG_CONV    "Convert (ret:%p)"
+#		define C_MINI__DA_LOG_APPLY   "Apply (applied on %zu elements)"
+#		define C_MINI__DA_LOG_REDUCE  "Reduce (ptr:%p)"
+#		define C_MINI__DA_LOG_FOLD    "Fold (ptr:%p)"
+#		define C_MINI__DA_LOG_REV     "Reverse (all)"
+#		define C_MINI__DA_LOG_REVF    "Reverse (first n:%zu)"
+#		define C_MINI__DA_LOG_REVB    "Reverse (last n:%zu)"
+#		define C_MINI__DA_LOG_SORT    "Sort (all)"
+#		define C_MINI__DA_LOG_NSORT   "Sort (first n:%zu)"
+#		define C_MINI__DA_LOG_FINDGET "Get (elem found:%p, out:%p)"
+#		define C_MINI__DA_LOG_FIND    "Find (at:%zu, e:%p)"
+#		define C_MINI__DA_LOG_SET     "Set (pos:%zu, n:%zu, e:%p)"
 
 #	else // || C_MINI__TESTS
 
@@ -78,13 +79,12 @@
 
 // comon funct ptr definitions
 
-#	ifndef CMINI_T_CALLBAKC_DEFINE
-#		define CMINI_T_CALLBAKC_DEFINE
+#	ifndef C_MINI__T_CALLBACK
+#		define C_MINI__T_CALLBACK
 
 /**
  * \defgroup da Dynamic array
 **/
-
 
 /**
  * \brief  callback function pointer, true operation successfull, elem is always
@@ -97,8 +97,8 @@ typedef bool (*t_callback)(void *elem, void *arg);
 
 #	endif
 
-#	ifndef CMINI_T_CALLBAKC_IT_DEFINE
-#		define CMINI_T_CALLBAKC_IT_DEFINE
+#	ifndef C_MINI__T_CALLBACK_IT
+#		define C_MINI__T_CALLBACK_IT
 
 /**
  * \brief  callback function pointer, true operation successfull, elem is always
@@ -106,15 +106,15 @@ typedef bool (*t_callback)(void *elem, void *arg);
  * \param  elem pointer to the element
  * \param  arg  argument passed as is from up function
  * \param  pos  position of the elem in the sub array backing
- * \param  last boolean on wheter or not this is the last element of the call
+ * \param  last boolean on whether or not this is the last element of the call
  * \return expected to return true on success false otherwise
 **/
 typedef bool (*t_callback_it)(void *elem, void *arg, size_t pos, bool last);
 
-#	endif // CMINI_T_CALLBAKC_IT
+#	endif // C_MINI__T_CALLBACK_IT
 
-#	ifndef CMINI_T_COMPARATOR_DEFINE
-#		define CMINI_T_COMPARATOR_DEFINE
+#	ifndef C_MINI__T_COMPARATOR
+#		define C_MINI__T_COMPARATOR
 
 /**
  * \brief comparator function pointer, <0, 0, >0 for inferior to, equal,
@@ -127,8 +127,8 @@ typedef int (*t_comparator)(const void *elem, const void *arg);
 
 #	endif
 
-#	ifndef CMINI_T_DUOLICATOR_DEFINE
-#		define CMINI_T_DUOLICATOR_DEFINE
+#	ifndef C_MINI__T_DUPLICATOR
+#		define C_MINI__T_DUPLICATOR
 
 /**
  * \brief duplication function pointer for datas
@@ -139,12 +139,12 @@ typedef void *(*t_duplicator)(const void *elem);
 
 #	endif
 
-#	ifndef CMINI_T_MERGER_DEFINE
-#		define CMINI_T_MERGER_DEFINE
+#	ifndef C_MINI__T_MERGER
+#		define C_MINI__T_MERGER
 
 typedef void *(*t_merger)(void *elem, void *arg);
 
-#	endif // CMINI_T_MERGER_DEFINE
+#	endif // C_MINI__T_MERGER
 
 /**
  * \brief da struct

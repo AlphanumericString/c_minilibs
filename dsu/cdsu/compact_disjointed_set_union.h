@@ -35,8 +35,8 @@
 #	endif // !DBG_POS
 
 #	define C_MINI__CDSU_LOG_EARG   "Bad arguments."
-#	define C_MINI__CDSU_LOG_EALLOC "Allocation faillure."
-#	define C_MINI__CDSU_LOG_FAIL   "Faillure"
+#	define C_MINI__CDSU_LOG_EALLOC "Allocation failure."
+#	define C_MINI__CDSU_LOG_FAIL   "Failure"
 
 #	define C_MINI__CDSU_LOG_SUCCESS "Success"
 

@@ -1,3 +1,4 @@
+#define C_MINI__INTERNAL
 #include <pthread.h>
 #include <stddef.h>
 #include <string.h>

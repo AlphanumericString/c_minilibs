@@ -1,3 +1,4 @@
+#define C_MINI__INTERNAL
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

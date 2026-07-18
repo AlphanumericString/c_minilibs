@@ -36,7 +36,7 @@ size_t rb_size(t_rb rb) {
  * \return the maximum capacity
  * \ingroup rb
 **/
-size_t rb_cappacity(t_rb rb) {
+size_t rb_capacity(t_rb rb) {
 	LOG(C_MINI__RB_LOG_SUCCESS);
 	return (rb.nb_max);
 }
@@ -48,5 +48,5 @@ size_t rb_cappacity(t_rb rb) {
 **/
 size_t rb_remaining_space(t_rb rb) {
 	LOG(C_MINI__RB_LOG_SUCCESS);
-	return (rb_cappacity(rb) - rb_size(rb));
+	return (rb_capacity(rb) - rb_size(rb));
 }

@@ -1,3 +1,4 @@
+#define C_MINI__INTERNAL
 #include <pthread.h>
 
 #include "common_thread_local_storage.h"
@@ -25,7 +26,7 @@ t_ctls_typewrap *ctls_get(const char *s) {
 
 /**
  * \brief length of the current ctls array
- * \return the lenght of the occupied ctls array
+ * \return the length of the occupied ctls array
  * \ingroup ctls
 **/
 size_t ctls_len(void) {

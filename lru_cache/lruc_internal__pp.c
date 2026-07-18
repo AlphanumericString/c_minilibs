@@ -1,5 +1,5 @@
 #include <string.h>
-#define C_MINI__LRUC_INTERNAL
+#define C_MINI__INTERNAL
 #include "least_recently_used_cache.h"
 
 void lruci_lru_push(t_lruc *c, t_lruc_keynode *node) {

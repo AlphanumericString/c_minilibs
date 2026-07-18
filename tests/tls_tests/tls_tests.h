@@ -6,6 +6,7 @@ struct s_mine {
 	int value_b;
 };
 
+#define C_MINI__INTERNAL
 #define C_MINI__FTLS_STRUCT struct s_mine
 #include "tls/common_thread_local_storage.h"
 #include "tls/fast_thread_local_storage.h"

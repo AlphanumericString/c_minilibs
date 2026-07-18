@@ -45,12 +45,12 @@ void test_rb_size(void) {
 	rb_destroy(&rb);
 }
 
-void test_rb_cappacity(void) {
+void test_rb_capacity(void) {
 	t_rb rb = {0};
 
 	rb_create(&rb, sizeof(int), 10);
 
-	assert(rb_cappacity(rb) == 10);
+	assert(rb_capacity(rb) == 10);
 
 	rb_destroy(&rb);
 }

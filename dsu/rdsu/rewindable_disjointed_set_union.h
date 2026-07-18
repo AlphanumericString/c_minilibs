@@ -36,11 +36,11 @@
 #	endif // !DBG_POS
 
 #	define C_MINI__RDSU_LOG_EARG   "Bad arguments."
-#	define C_MINI__RDSU_LOG_EALLOC "Allocation faillure."
+#	define C_MINI__RDSU_LOG_EALLOC "Allocation failure."
 #	define C_MINI__RDSU_LOG_ELOG   "No log to replay."
 #	define C_MINI__RDSU_LOG_ELUN   "Unknown log."
 #	define C_MINI__RDSU_LOG_ELC    "Log corruption."
-#	define C_MINI__RDSU_LOG_FAIL   "Faillure."
+#	define C_MINI__RDSU_LOG_FAIL   "Failure."
 
 #	define C_MINI__RDSU_LOG_SUCCESS "Success."
 

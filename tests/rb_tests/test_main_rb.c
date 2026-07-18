@@ -19,7 +19,7 @@ int main(void) {
 	test_rb_full();
 	test_rb_empty();
 	test_rb_size();
-	test_rb_cappacity();
+	test_rb_capacity();
 	test_rb_remaining_space();
 	LOG("");
 	LOG("Rm");

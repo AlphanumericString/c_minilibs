@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define C_MINI__LRUC_INTERNAL
+#define C_MINI__INTERNAL
 #include "least_recently_used_cache.h"
 
 t_lruc_keynode *lruci_keyinlist(const t_lruc *c, const void *key,

@@ -32,7 +32,7 @@ void test_da_add(void) {
 }
 void test_da_cat_array(void) {
 	t_da da;
-	int  arr[] = {1, 2, 3};
+	int  arr[]  = {1, 2, 3};
 	int  arr2[] = {4, 5, 6};
 
 	da_init(&da, sizeof(int));

@@ -36,7 +36,7 @@
 
 // log messages standardization
 #	define C_MINI__HP_LOG_CLR     "Clear Heap"
-#	define C_MINI__HP_LOG_SUCCESS "Succes"
+#	define C_MINI__HP_LOG_SUCCESS "Success"
 #	define C_MINI__HP_LOG_STATUS  "Heap(%p), {nb:%zu, cap:%zu}"
 #	define C_MINI__HP_LOG_POP     "Pop (return:%p)\t" C_MINI__HP_LOG_STATUS
 #	define C_MINI__HP_LOG_PUSH    "Push (elem:%p)\t" C_MINI__HP_LOG_STATUS
@@ -62,8 +62,8 @@
 
 #endif // !C_MINI__TESTS
 
-#ifndef CMINI_T_COMPARATOR_DEFINE
-#	define CMINI_T_COMPARATOR_DEFINE
+#ifndef C_MINI__T_COMPARATOR
+#	define C_MINI__T_COMPARATOR
 
 /**
  * \brief comparator function pointer, <0, 0, >0 for inferior to, equal,
@@ -76,8 +76,8 @@ typedef int (*t_comparator)(const void *elem, const void *arg);
 
 #endif
 
-#ifndef CMINI_T_CALLBAKC_DEFINE
-#	define CMINI_T_CALLBAKC_DEFINE
+#ifndef C_MINI__T_CALLBACK
+#	define C_MINI__T_CALLBACK
 
 /**
  * \brief  callback function pointer, true operation successfull, elem is always
@@ -95,8 +95,8 @@ typedef bool (*t_callback)(void *elem, void *arg);
 
 /**
  * \brief heap structure
- * \param nb the number of elements curently present in the heap
- * \param capacity max numer of elements in the heap
+ * \param nb the number of elements currently present in the heap
+ * \param capacity max number of elements in the heap
  * \param elems reference to the elements as void pointers
  * \param cmp comparator fuction
  * \ingroup hp
