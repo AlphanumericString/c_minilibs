@@ -60,12 +60,19 @@
 
 #endif // !C_MINI__TESTS
 
+/**
+ * \defgroup rdsu Rewindable DSU (Disjointed Set Union)
+**/
+
 #ifdef C_MINI__RDSU_INTERNAL
 
+/**
+ * @brief [INTERNAL] [DO NOT USE] the log type enum
+ * \ingroup rdsu
+**/
 enum s_rdsu_log_type {
 	RDSU_LOG_RANK,
 	RDSU_LOG_PARENT,
-	//	RDSU_LOG_SAVEPOINT // optimized as reference to log elem so no need
 };
 
 typedef struct s_rdsu_log {
@@ -79,6 +86,15 @@ typedef struct s_rdsu_log {
 
 #else // || C_MINI__RDSU_INTERNAL
 
+/**
+ * \brief the structure of a log entry in the rdsu
+ * \param nxt pointer to next entry in the stack of log
+ * \param type the type of entry (enum abstracted as int to not clutter LSP)
+ * \param elem the elem whoms't we changed the parent of
+ * \param p the previous parent value
+ * \param r the rank that was modified if there was a rank change
+ * \ingroup rdsu
+ **/
 typedef struct s_rdsu_log {
 	struct s_rdsu_log *nxt;
 
@@ -91,12 +107,14 @@ typedef struct s_rdsu_log {
 #endif // !C_MINI__RDSU_INTERNAL
 
 /**
- * \brief dsu struct
+ * \brief rdsu struct
  * \param parent list of ids for the parent of nodes
  * \param rank   rank of node closer to 0 = closer to source
- * \param components number of differnt sets present in the DSU
+ * \param components number of differnt sets present in the RDSU
  * \param rp_single_alloc boolean on whether the rank and parent were allocated
  * from a continuous single alloc
+ * \param change_log the stack of entries/changes in the rdsu
+ * \ingroup rdsu
  **/
 typedef struct s_rewindable_disjointed_set_union {
 	uint16_t *parent;

@@ -3,10 +3,11 @@
 #include "heap.h"
 
 /**
- * @brief Create and init a heap
- * @param nb_elems max number of elements
- * @param cmp comparator function
- * @return t_heap* or NULL if failed
+ * \brief Create and init a heap
+ * \param nb_elems max number of elements
+ * \param cmp comparator function
+ * \return t_heap* or NULL if failed
+ * \ingroup hp
  **/
 t_heap *hp_create(size_t nb_elems, t_comparator cmp) {
 	t_heap *hp = malloc(sizeof(t_heap));
@@ -24,11 +25,12 @@ t_heap *hp_create(size_t nb_elems, t_comparator cmp) {
 }
 
 /**
- * @brief Init a heap
- * @param hp heap pointer
- * @param nb_elems max number of elements
- * @param cmp comparator function
- * @return t_heap* or NULL if failed
+ * \brief Init a heap
+ * \param hp heap pointer
+ * \param nb_elems max number of elements
+ * \param cmp comparator function
+ * \return t_heap* or NULL if failed
+ * \ingroup hp
  **/
 t_heap *hp_init(t_heap *hp, size_t nb_elems, t_comparator cmp) {
 	if (!hp) {

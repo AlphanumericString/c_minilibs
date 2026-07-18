@@ -13,11 +13,12 @@
 // expired
 // expired-> is key in the cache and expired?
 /**
- * @brief Check if a key is expired
- * @param c cache pointer
- * @param key key to check
- * @param key_len key length
- * @return true if key is expired, false otherwise
+ * \brief Check if a key is expired
+ * \param c cache pointer
+ * \param key key to check
+ * \param key_len key length
+ * \return true if key is expired, false otherwise
+ * \ingroup lruc
  **/
 bool lruc_isexpired(t_lruc *c, const void *key, size_t key_len) {
 	size_t          offset;
@@ -40,8 +41,9 @@ bool lruc_isexpired(t_lruc *c, const void *key, size_t key_len) {
 
 // cleanup -> call dtor on all expired elements
 /**
- * @brief Clean up expired elements
- * @param c cache pointer
+ * \brief Clean up expired elements
+ * \param c cache pointer
+ * \ingroup lruc
  **/
 void lruc_cleanup(t_lruc *c) {
 	struct timespec now;
@@ -63,9 +65,10 @@ void lruc_cleanup(t_lruc *c) {
 	}
 }
 /**
- * @brief Set the time to live default for the cache
- * @param cache cache pointer
- * @param ttl time to live
+ * \brief Set the time to live default for the cache
+ * \param cache cache pointer
+ * \param ttl time to live
+ * \ingroup lruc
  **/
 void lruc_setttl(t_lruc *cache, long ttl) {
 	LOG(C_MINI__LRUC_LOG_UPDATE, cache->ttl_glob, ttl);

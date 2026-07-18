@@ -11,11 +11,12 @@
 // search
 // -> hit -> set as head
 /**
- * @brief Get a key from the cache
- * @param c cache pointer
- * @param key key to get
- * @param key_len key length
- * @return pointer to the value
+ * \brief Get a key from the cache
+ * \param c cache pointer
+ * \param key key to get
+ * \param key_len key length
+ * \return pointer to the value
+ * \ingroup lruc
  **/
 void *lruc_get_lru(t_lruc *c, const void *key, size_t key_len) {
 	t_lruc_keynode *node;
@@ -37,11 +38,12 @@ void *lruc_get_lru(t_lruc *c, const void *key, size_t key_len) {
 	return (node->kv.value);
 }
 /**
- * @brief Get a key from the cache with TTL
- * @param c cache pointer
- * @param key key to get
- * @param key_len key length
- * @return pointer to the value
+ * \brief Get a key from the cache with TTL
+ * \param c cache pointer
+ * \param key key to get
+ * \param key_len key length
+ * \return pointer to the value
+ * \ingroup lruc
  **/
 void *lruc_get(t_lruc *c, const void *key, size_t key_len) {
 	struct timespec now;

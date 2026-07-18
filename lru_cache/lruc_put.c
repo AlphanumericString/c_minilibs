@@ -6,10 +6,7 @@
 #define C_MINI__LRUC_INTERNAL
 #include "least_recently_used_cache.h"
 
-/**
- * Insert a key-value pair into the cache in lru and ttl
- * internal function
- **/
+// Insert a key-value pair into the cache in lru and ttl internals
 static int insert_with_ttl_regards(t_lruc_keynode kv, t_lruc_keynode *node,
                                    t_lruc *c, size_t h_pos) {
 	*node = kv;
@@ -19,10 +16,7 @@ static int insert_with_ttl_regards(t_lruc_keynode kv, t_lruc_keynode *node,
 	lruci_hp_push(c, node);
 	return (0);
 }
-/**
- * Put a key-value pair into the cache (constructor + node choice)
- * internal function
- **/
+// Put a key-value pair into the cache (constructor + node choice)
 static int cache_put_internal(t_lruc *c, t_lruc_keynode to_add) {
 	const uint64_t  now  = lruci_timenow();
 	t_lruc_keynode *node = NULL;
@@ -63,10 +57,11 @@ static int cache_put_internal(t_lruc *c, t_lruc_keynode to_add) {
 	return (insert_with_ttl_regards(to_add, node, c, hash_pos));
 }
 /**
- * @brief Put a key-value pair into the cache
- * @param c cache pointer
- * @param kv key-value pair
- * @return 0 on success, -1 on failure
+ * \brief Put a key-value pair into the cache
+ * \param c cache pointer
+ * \param kv key-value pair
+ * \return 0 on success, -1 on failure
+ * \ingroup lruc
  **/
 int lruc_put_kv(t_lruc *c, t_keyvalue kv) {
 	uint64_t now;
@@ -87,12 +82,13 @@ int lruc_put_kv(t_lruc *c, t_keyvalue kv) {
 }
 
 /**
- * @brief Put a key-value pair into the cache
- * @param cache cache pointer
- * @param key key to put
- * @param key_len key length
- * @param value value to put
- * @return 0 on success, -1 on failure
+ * \brief Put a key-value pair into the cache
+ * \param cache cache pointer
+ * \param key key to put
+ * \param key_len key length
+ * \param value value to put
+ * \return 0 on success, -1 on failure
+ * \ingroup lruc
  **/
 int lruc_put(t_lruc *cache, const void *key, size_t key_len,
              const void *value) {
@@ -117,13 +113,14 @@ int lruc_put(t_lruc *cache, const void *key, size_t key_len,
 }
 
 /**
- * @brief Put a key-value pair into the cache with a time to live
- * @param cache cache pointer
- * @param key key to put
- * @param key_len key length
- * @param value value to put
- * @param ttl_ms time to live in milliseconds
- * @return 0 on success, -1 on failure
+ * \brief Put a key-value pair into the cache with a time to live
+ * \param cache cache pointer
+ * \param key key to put
+ * \param key_len key length
+ * \param value value to put
+ * \param ttl_ms time to live in milliseconds
+ * \return 0 on success, -1 on failure
+ * \ingroup lruc
  **/
 int lruc_put_ttl(t_lruc *cache, const void *key, size_t key_len,
                  const void *value, uint64_t ttl_ms) {

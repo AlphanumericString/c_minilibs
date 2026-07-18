@@ -5,6 +5,7 @@
 /**
  * \brief clear - memory is reusable and only set 0
  * \param ret pointer to the dynamic array
+ * \ingroup da
  **/
 void da_clr(t_da *ret) {
 	if (!ret) {
@@ -17,6 +18,7 @@ void da_clr(t_da *ret) {
 /**
  * \brief reset the da and free the memory in it
  * \param ret pointer to the dynamic array
+ * \ingroup da
  **/
 void da_destroy(t_da *ret) {
 	if (!ret) {
@@ -33,6 +35,7 @@ void da_destroy(t_da *ret) {
 /**
  * \brief destroy and free the da
  * \param da pointer to the dynamic array
+ * \ingroup da
  **/
 void da_free(t_da *da) {
 	if (!da) {

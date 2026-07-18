@@ -1,5 +1,5 @@
-#ifndef C_MINI__VTLS_H
-#define C_MINI__VTLS_H
+#ifndef C_MINI__VTLS
+#define C_MINI__VTLS
 
 #include <pthread.h>
 #include <stdbool.h>
@@ -51,12 +51,30 @@
 
 #endif // !C_MINI__TESTS
 
-typedef struct s_tlsv {
+/**
+ * \defgroup vtls Voided-type Thread Local Storage
+**/
+
+/**
+ * \brief the vtls key-value structure
+ * \param v_name the name of the variable
+ * \param var the value to associate the name with
+ * \param size_e the size of the data to save
+ * \ingroup vtls
+**/
+typedef struct s_vtls {
 	const char *v_name;
 	void       *var;    // mem ptr to var
 	size_t      size_e; // len of memory of var
 } t_vtls;
 
+/**
+ * \brief the vtls key-value structure
+ * \param data the array of key-values
+ * \param len the lenght of current key-value
+ * \param cap maximum number of elements
+ * \ingroup vtls
+**/
 typedef struct s_tlsv_array {
 	t_vtls *data;
 	size_t  len;
@@ -78,4 +96,4 @@ bool vtls_has(const char *v_name);
 // update / add
 bool vtls_set(const char *v_name, void *v_val, size_t v_size);
 
-#endif // C_MINI__VTLS_H
+#endif // C_MINI__VTLS

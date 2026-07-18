@@ -6,6 +6,7 @@
  * \param x first element
  * \param y second element
  * \return true if related, false otherwise
+ * \ingroup cdsu
  **/
 bool cdsu_is_related(t_cdsu *ds, size_t x, size_t y) {
 	return (cdsu_find(ds, x) == cdsu_find(ds, y));
@@ -17,6 +18,7 @@ bool cdsu_is_related(t_cdsu *ds, size_t x, size_t y) {
  * \param x first element
  * \param y second element
  * \return true if related, false otherwise
+ * \ingroup cdsu
  **/
 bool cdsu_strict_is_related(t_cdsu ds, size_t x, size_t y) {
 	return (cdsu_strict_find(ds, x) == cdsu_strict_find(ds, y));
@@ -25,6 +27,7 @@ bool cdsu_strict_is_related(t_cdsu ds, size_t x, size_t y) {
  * \brief check if cdsu is valid and w/out errors
  * \param cdsu the cdsu structure
  * \return true if valid, false otherwise
+ * \ingroup cdsu
  **/
 bool cdsu_validate(t_cdsu cdsu) {
 	size_t       i;

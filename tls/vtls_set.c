@@ -10,6 +10,7 @@
  * \param v_val the value of the variable
  * \param v_size the size of the value
  * \return true if value was added to the vtls, false in any other case
+ * \ingroup vtls
 **/
 bool vtls_set(const char *v_name, void *v_val, size_t v_size) {
 	t_vtls_array *vtls = pthread_getspecific(vtls_key);

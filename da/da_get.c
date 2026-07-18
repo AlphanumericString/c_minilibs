@@ -9,6 +9,7 @@
  * \param pos index of the element
  * \param out_buffer pointer where the element will be copied
  * \return true on success, false on failure
+ * \ingroup da
  **/
 bool da_get(t_da *vec, size_t pos, void *out_buffer) {
 	if (!vec || pos >= vec->nb_e || !out_buffer) {
@@ -27,6 +28,7 @@ bool da_get(t_da *vec, size_t pos, void *out_buffer) {
  * \param pos index of the element
  * \param out_buffer pointer where the element will be copied
  * \return true on success, false on failure
+ * \ingroup da
  **/
 bool da_nget(t_da *da, size_t n, size_t pos, void *out_buffer) {
 	if (!da || pos >= da->nb_e || !out_buffer) {
@@ -42,6 +44,7 @@ bool da_nget(t_da *da, size_t n, size_t pos, void *out_buffer) {
  * \brief get the raw inner array of the da
  * \param da pointer to the dynamic array
  * \return pointer to the raw inner array
+ * \ingroup da
  **/
 void *da_array(t_da *da) {
 	if (!da) {

@@ -9,7 +9,8 @@
  * \param dup the duplicator function
  * \param out_buff array where the adress of the duplicated elements are copied
  * \return true on success, false if an element couldn't be duplicated
- **/
+ * \ingroup rb
+**/
 bool rb_nmap(t_rb *rb, size_t n, t_duplicator dup, void **out_buff) {
 	size_t i = 0;
 	size_t pos;
@@ -51,7 +52,8 @@ bool rb_nmap(t_rb *rb, size_t n, t_duplicator dup, void **out_buff) {
  * \param dup the duplicator function
  * \param out_buff array where the adress of the duplicated elements are copied
  * \return true on success, false if an element couldn't be duplicated
- **/
+ * \ingroup rb
+**/
 bool rb_map(t_rb *rb, t_duplicator dup, void **out_buff) {
 	bool r;
 

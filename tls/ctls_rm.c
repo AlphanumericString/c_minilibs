@@ -6,6 +6,7 @@
  * \brief try to remove name from the variables. (works by swap).
  * \param name name of the variable to rm
  * \return true if succeed, false in any ohter case.
+ * \ingroup ctls
 **/
 bool ctls_rm(const char *name) {
 	t_ctlsv *ctls = pthread_getspecific(ctls_key);

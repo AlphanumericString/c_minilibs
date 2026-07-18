@@ -7,6 +7,7 @@
  * \brief init by allocating both the return and the internals
  * \param n size of the cdsu
  * \return the new t_cdsu
+ * \ingroup cdsu
  **/
 t_cdsu *cdsu_new(size_t n) {
 	t_cdsu *ret;
@@ -38,6 +39,7 @@ t_cdsu *cdsu_new(size_t n) {
  * \param to_init the t_cdsu to init
  * \param n size of the cdsu
  * \return the initialized t_cdsu
+ * \ingroup cdsu
  **/
 t_cdsu *cdsu_init(t_cdsu *to_init, size_t n) {
 	void *buffer;
@@ -62,6 +64,7 @@ t_cdsu *cdsu_init(t_cdsu *to_init, size_t n) {
  * \param parents the parents array
  * \param ranks the ranks array
  * \return the new t_cdsu
+ * \ingroup cdsu
  **/
 t_cdsu *cdsu_new_from_array(size_t size, int *parents, int *ranks) {
 	t_cdsu *ret;
@@ -91,6 +94,7 @@ t_cdsu *cdsu_new_from_array(size_t size, int *parents, int *ranks) {
  * \param parents the parents array
  * \param ranks the ranks array
  * \return the initialized t_cdsu
+ * \ingroup cdsu
  **/
 t_cdsu *cdsu_init_from_arrays(t_cdsu *ret, size_t size, int *parents,
                               int *ranks) {
@@ -115,6 +119,7 @@ t_cdsu *cdsu_init_from_arrays(t_cdsu *ret, size_t size, int *parents,
  * \param cdsu the t_cdsu to grow
  * \param n the number of values to add
  * \return the grown t_cdsu
+ * \ingroup cdsu
  **/
 t_cdsu *cdsu_grow(t_cdsu *cdsu, size_t n) {
 	void  *replacement_buffer;

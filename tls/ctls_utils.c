@@ -24,6 +24,7 @@ static void __attribute__((constructor())) init_ctls(void) {
  * \param t the type to dump the value of
  * \param fd the filedescriptor where to output
  * \note this dumps the value directly to fd and is viewed as a debug tool
+ * \ingroup ctls
 **/
 void ctls_dump_typewrap(t_ctls_typewrap t, int fd) {
 	switch (t.type) {

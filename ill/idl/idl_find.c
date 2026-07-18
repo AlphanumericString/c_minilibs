@@ -6,6 +6,7 @@
  * \param target The target node to find the predecessor for.
  * \return A pointer to the predecessor node, or NULL if not found or if target
  * is head.
+ * \ingroup idl
  **/
 t_idl *idl_find_prev(t_idl *head, t_idl *target) {
 	t_idl *curr;
@@ -30,6 +31,7 @@ t_idl *idl_find_prev(t_idl *head, t_idl *target) {
  * \param head The head of the list.
  * \param target The target node to find.
  * \return A pointer to the target node if found, or NULL otherwise.
+ * \ingroup idl
  **/
 t_idl *idl_find(t_idl *head, t_idl *target) {
 	t_idl *curr;
@@ -56,6 +58,7 @@ t_idl *idl_find(t_idl *head, t_idl *target) {
  * \param arg The argument to pass to the comparator.
  * \return A pointer to the preceding node of the matched element, or NULL if
  * not found.
+ * \ingroup idl
  **/
 t_idl *idl_get_prev(t_idl *head, t_comparator c, void *arg) {
 	t_idl *curr;
@@ -82,6 +85,7 @@ t_idl *idl_get_prev(t_idl *head, t_comparator c, void *arg) {
  * \param c The comparator function used for matching.
  * \param arg The argument to pass to the comparator.
  * \return A pointer to the matched node, or NULL if not found.
+ * \ingroup idl
  **/
 t_idl *idl_get(t_idl *head, t_comparator c, void *arg) {
 	t_idl *curr;

@@ -82,6 +82,11 @@
 #		define CMINI_T_CALLBAKC_DEFINE
 
 /**
+ * \defgroup da Dynamic array
+**/
+
+
+/**
  * \brief  callback function pointer, true operation successfull, elem is always
  * the node, arg is passed as is from up function
  * \param  elem pointer to the element
@@ -147,6 +152,7 @@ typedef void *(*t_merger)(void *elem, void *arg);
  * \param nb_e number of elements currently present in the array
  * \param cap_e number of elements the memory can hold
  * \param sz_e size of 1 elements (the generic part of the array)
+ * \ingroup da
  **/
 typedef struct s_dynamic_memory_array {
 	void  *array;

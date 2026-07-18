@@ -1,11 +1,12 @@
 #include "heap.h"
 
 /**
- * @brief For each element in the heap, apply a callback
- * @param h heap pointer
- * @param cb callback function
- * @param u_arg user argument
- * @return true if all callbacks returned true, false otherwise
+ * \brief For each element in the heap, apply a callback
+ * \param h heap pointer
+ * \param cb callback function
+ * \param u_arg user argument
+ * \return true if all callbacks returned true, false otherwise
+ * \ingroup hp
  **/
 bool hp_foreach(t_heap *h, t_callback cb, void *u_arg) {
 	if (!h) {
@@ -53,11 +54,12 @@ static bool hp_internal_infix(t_heap *h, size_t i, t_callback cb, void *u) {
 }
 
 /**
- * @brief Apply a callback to each element in the heap (infix)
- * @param h heap pointer
- * @param cb callback function
- * @param u_arg user argument
- * @return true if all callbacks returned true, false otherwise
+ * \brief Apply a callback to each element in the heap (infix)
+ * \param h heap pointer
+ * \param cb callback function
+ * \param u_arg user argument
+ * \return true if all callbacks returned true, false otherwise
+ * \ingroup hp
  **/
 bool hp_foreach_in(t_heap *h, t_callback cb, void *u_arg) {
 	bool r;
@@ -72,11 +74,12 @@ bool hp_foreach_in(t_heap *h, t_callback cb, void *u_arg) {
 	return (true);
 }
 /**
- * @brief Apply a callback to each element in the heap (prefix)
- * @param h heap pointer
- * @param cb callback function
- * @param u_arg user argument
- * @return true if all callbacks returned true, false otherwise
+ * \brief Apply a callback to each element in the heap (prefix)
+ * \param h heap pointer
+ * \param cb callback function
+ * \param u_arg user argument
+ * \return true if all callbacks returned true, false otherwise
+ * \ingroup hp
  **/
 bool hp_foreach_pre(t_heap *h, t_callback cb, void *u_arg) {
 	bool r;
@@ -91,11 +94,12 @@ bool hp_foreach_pre(t_heap *h, t_callback cb, void *u_arg) {
 	return (true);
 }
 /**
- * @brief Apply a callback to each element in the heap (postfix)
- * @param h heap pointer
- * @param cb callback function
- * @param u_arg user argument
- * @return true if all callbacks returned true, false otherwise
+ * \brief Apply a callback to each element in the heap (postfix)
+ * \param h heap pointer
+ * \param cb callback function
+ * \param u_arg user argument
+ * \return true if all callbacks returned true, false otherwise
+ * \ingroup hp
  **/
 bool hp_foreach_post(t_heap *h, t_callback cb, void *u_arg) {
 	bool r;

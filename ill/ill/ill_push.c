@@ -5,6 +5,7 @@
  * \param head Pointer to the head of the list.
  * \param node The node to insert.
  * \return The new head of the list.
+ * \ingroup ill
  **/
 t_ill *ill_push(t_ill **head, t_ill *node) {
 	if (!head) {
@@ -21,6 +22,7 @@ t_ill *ill_push(t_ill **head, t_ill *node) {
  * \param head Pointer to the head of the list.
  * \param nodes The head of the list of nodes to insert.
  * \return The new head of the list.
+ * \ingroup ill
  **/
 t_ill *ill_npush(t_ill **head, t_ill *nodes) {
 	if (!head) {
@@ -37,6 +39,7 @@ t_ill *ill_npush(t_ill **head, t_ill *nodes) {
  * \param head Pointer to the head of the list.
  * \param node The node to insert.
  * \return The head of the list.
+ * \ingroup ill
  **/
 t_ill *ill_push_back(t_ill **head, t_ill *node) {
 	if (!head) {

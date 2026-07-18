@@ -11,6 +11,7 @@
  * \param deletor callback to delete removed elements
  * \return true on success, false otherwise
  * \note filter might not keep order to keep order use n variant
+ * \ingroup da
  **/
 bool da_filter(t_da *da, t_callback c, void *u_data, t_callback deletor) {
 	if (!c || !da || !da->nb_e) {
@@ -35,6 +36,7 @@ bool da_filter(t_da *da, t_callback c, void *u_data, t_callback deletor) {
  * \param u_data user data for callback
  * \param deletor callback to delete removed elements
  * \return true on success, false otherwise
+ * \ingroup da
  **/
 bool da_nfilter(t_da *da, size_t n, t_callback c, void *u_data,
                 t_callback deletor) {
@@ -63,6 +65,7 @@ bool da_nfilter(t_da *da, size_t n, t_callback c, void *u_data,
  * \param deletor callback to delete removed elements
  * \return true on success, false otherwise
  * \note filter might not keep order to keep order use n variant
+ * \ingroup da
  **/
 bool da_filter_out(t_da *da, t_callback c, void *u_data, t_callback deletor) {
 	if (!c || !da || !da->nb_e) {
@@ -87,6 +90,7 @@ bool da_filter_out(t_da *da, t_callback c, void *u_data, t_callback deletor) {
  * \param u_data user data for callback
  * \param deletor callback to delete removed elements
  * \return true on success, false otherwise
+ * \ingroup da
  **/
 bool da_nfilter_out(t_da *da, size_t n, t_callback c, void *u_data,
                     t_callback deletor) {

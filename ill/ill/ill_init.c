@@ -4,6 +4,7 @@
  * \brief Initializes a node with the given offset.
  * \param node The node to initialize.
  * \param offset The offset of the node within its container structure.
+ * \ingroup ill
  **/
 void ill_init(t_ill *node, size_t offset) {
 	if (!node) {
@@ -27,6 +28,7 @@ static void setup_chain(t_ill *to_setup, t_ill *nxt, size_t offset) {
  * \param dupper The duplicator function used to copy each element.
  * \return A pointer to the head of the new copied list's first element, or NULL
  * on failure.
+ * \ingroup ill
  **/
 void *ill_copy(const t_ill *head, t_duplicator dupper) {
 	size_t offset;

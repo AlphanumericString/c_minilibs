@@ -5,7 +5,8 @@
 /**
  * \brief clears inner buffer and reset to 0 all inner fields. does not free rb
  * \param rb the round buffer to destroy
- **/
+ * \ingroup rb
+**/
 void rb_destroy(t_rb *rb) {
 	if (!rb) {
 		LOG(C_MINI__RB_LOG_EARG);
@@ -18,7 +19,8 @@ void rb_destroy(t_rb *rb) {
 /**
  * \brief reset i_pos and o_pos, effectively setting all buffer as ok o push to
  * \param rb the round buffer to clear
- **/
+ * \ingroup rb
+**/
 void rb_clr(t_rb *rb) {
 	if (!rb) {
 		LOG(C_MINI__RB_LOG_EARG);
@@ -32,7 +34,8 @@ void rb_clr(t_rb *rb) {
 /**
  * \brief free's the rb inner and outer
  * \param rb the round buffer to free
- **/
+ * \ingroup rb
+**/
 void rb_free(t_rb *rb) {
 	if (!rb) {
 		LOG(C_MINI__RB_LOG_EARG);

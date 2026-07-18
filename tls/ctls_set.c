@@ -9,6 +9,7 @@
  * \param name the name of the variable to search for
  * \param init_val the value to set in type-safe wrapper
  * \return true if success, false otherwise
+ * \ingroup ctls
 **/
 bool ctls_set(const char *name, t_ctls_typewrap init_val) {
 	t_ctlsv *ctls = pthread_getspecific(ctls_key);

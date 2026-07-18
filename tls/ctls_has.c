@@ -4,6 +4,7 @@
  * \brief check whether the local thread variable has s.
  * \param s the variable to check
  * \return true if exist no otherwise
+ * \ingroup ctls
 **/
 bool ctls_has(const char *s) {
 	t_ctlsv *ctls = pthread_getspecific(ctls_key);

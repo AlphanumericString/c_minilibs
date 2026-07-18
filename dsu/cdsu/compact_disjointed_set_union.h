@@ -57,12 +57,17 @@
 #endif // !C_MINI__TESTS
 
 /**
- * \brief dsu struct
+ * \defgroup cdsu Compact DSU (disjointed set union)
+**/
+
+/**
+ * \brief cdsu struct
  * \param parent list of ids for the parent of nodes
  * \param rank   rank of node closer to 0 = closer to source
  * \param components number of differnt sets present in the DSU
  * \param rp_single_alloc boolean on whether the rank and parent were allocated
  * from a continuous single alloc
+ * \ingroup cdsu
  **/
 typedef struct s_compact_disjointed_set_union {
 	unsigned int *parent;

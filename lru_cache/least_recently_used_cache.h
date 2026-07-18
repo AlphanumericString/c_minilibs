@@ -1,5 +1,5 @@
-#ifndef C_MINI__LRUC_H
-#define C_MINI__LRUC_H
+#ifndef C_MINI__LRUC
+#define C_MINI__LRUC
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -28,25 +28,26 @@
 			fflush(stdout);                                                    \
 		} while (0)
 
-#define C_MINI__LRUC_LOG_SUCCESS  "Success"
-#define C_MINI__LRUC_LOG_EARG     "Bad arguments"
-#define C_MINI__LRUC_LOG_EALLOC   "Allocation faillure"
-#define C_MINI__LRUC_LOG_ECLOCK   "Clock error"
-#define C_MINI__LRUC_LOG_FAILLURE "Faillure"
-#define C_MINI__LRUC_LOG_EVICTION "Eviction: key=%p delta (%ld) >= ttl (%ld)"
-#define C_MINI__LRUC_LOG_UPDATE   "Update ttl: %ld->%ld"
-#define C_MINI__LRUC_LOG_HIT      "Hit: hit=%zu, key:%p, key_len:%zu"
-#define C_MINI__LRUC_LOG_MISS_LRU "LRU-Miss: miss=%zu, key:%p, key_len:%zu"
-#define C_MINI__LRUC_LOG_MISS_TTL                                              \
-	"TTL-Miss: miss=%zu, key:%p, key_len:%zu delta(%ld)"
-#define C_MINI__LRUC_LOG_UPDATEVAL "Update: key:%p, key_len:%zu"
-#define C_MINI__LRUC_LOG_CREATEVAL "Create: key:%p, key_len:%zu"
-#define C_MINI__LRUC_LOG_DELETEVAL "Delete: key:%p, key_len:%zu"
-#define C_MINI__LRUC_LOG_FAST_FREE "Fast free via list started"
-#define C_MINI__LRUC_LOG_LFREE     "Cleanup via list started"
-#define C_MINI__LRUC_LOG_HFREE     "Cleanup via hash started"
-#define C_MINI__LRUC_LOG_NODE_LRU  "Node replace from lru ordering"
-#define C_MINI__LRUC_LOG_NODE_MINH "Node replace from MinHeap ordering"
+#	define C_MINI__LRUC_LOG_SUCCESS  "Success"
+#	define C_MINI__LRUC_LOG_EARG     "Bad arguments"
+#	define C_MINI__LRUC_LOG_EALLOC   "Allocation faillure"
+#	define C_MINI__LRUC_LOG_ECLOCK   "Clock error"
+#	define C_MINI__LRUC_LOG_FAILLURE "Faillure"
+#	define C_MINI__LRUC_LOG_EVICTION                                          \
+		"Eviction: key=%p delta (%ld) >= ttl (%ld)"
+#	define C_MINI__LRUC_LOG_UPDATE   "Update ttl: %ld->%ld"
+#	define C_MINI__LRUC_LOG_HIT      "Hit: hit=%zu, key:%p, key_len:%zu"
+#	define C_MINI__LRUC_LOG_MISS_LRU "LRU-Miss: miss=%zu, key:%p, key_len:%zu"
+#	define C_MINI__LRUC_LOG_MISS_TTL                                          \
+		"TTL-Miss: miss=%zu, key:%p, key_len:%zu delta(%ld)"
+#	define C_MINI__LRUC_LOG_UPDATEVAL "Update: key:%p, key_len:%zu"
+#	define C_MINI__LRUC_LOG_CREATEVAL "Create: key:%p, key_len:%zu"
+#	define C_MINI__LRUC_LOG_DELETEVAL "Delete: key:%p, key_len:%zu"
+#	define C_MINI__LRUC_LOG_FAST_FREE "Fast free via list started"
+#	define C_MINI__LRUC_LOG_LFREE     "Cleanup via list started"
+#	define C_MINI__LRUC_LOG_HFREE     "Cleanup via hash started"
+#	define C_MINI__LRUC_LOG_NODE_LRU  "Node replace from lru ordering"
+#	define C_MINI__LRUC_LOG_NODE_MINH "Node replace from MinHeap ordering"
 
 #else // || C_MINI__TESTS
 
@@ -64,12 +65,30 @@
 
 #endif // !C_MINI__TESTS
 
+/**
+ * \defgroup lruc Least Recently Used Cache (with ttl support)
+ **/
+
+/**
+ * \brief stats format for the cache
+ * \param misses number of misses
+ * \param hit number of hit (aka found)
+ * \param expired number of expired key/value pairs (aka misses due to time)
+ * \ingroup lruc
+ **/
 typedef struct {
 	size_t misses;
 	size_t hit;
 	size_t expired;
 } t_lruc_stats;
 
+/**
+ * \brief the key value pair that enters in the cache
+ * \param key pointer to key
+ * \param k_len lenght to read from at pointer key
+ * \param value stored value in associated to key
+ * \ingroup lruc
+ **/
 typedef struct {
 	const void *key;
 	void       *value;
@@ -81,17 +100,26 @@ typedef struct {
 #	define C_MINI__LRUC_HASH_SKIP 10
 #	define C_MINI__LRUC_TTL_DFLT  LONG_MAX
 
+/**
+ * \brief [INTERNAL] [MAY CHANGE]
+ * \param kv the key-value pair of the node
+ * \param time the time of emission of the node
+ * \param hash_next next value associated with the same hash (colision
+ * resolution)
+ * \param heap_index index of the node in the TTL ordered minHeap
+ * \param lru_prev prev value in the recency queue of values (MRU to LRU)
+ * \param lru_next next value in the recency queue of values (MRU to LRU)
+ * \note in ifdef statement in order to not polute LSP but do not depend on this
+ * interface. it MAY CHANGE AT ANY MOMEMENT WHITHOUT ANY NOTICE.
+ * \ingroup lruc
+ **/
 typedef struct s_keycache {
-	t_keyvalue kv;
-
-	uint64_t time; // time of emition
-
+	t_keyvalue         kv;
+	uint64_t           time;
 	struct s_keycache *hash_next;
 	size_t             heap_index;
-
 	struct s_keycache *lru_prev;
 	struct s_keycache *lru_next;
-
 } t_lruc_keynode;
 
 typedef struct {
@@ -111,6 +139,24 @@ typedef struct {
 
 #else
 
+/**
+ * \brief the lru-cache global structure
+ * \param buckets_nb number of bucket (also used as max numbr of entries to
+ * limit over-crowding in cache)
+ * \param node_in_use number of entries currently present in the cache
+ * \param buckets array of nodes indexed via hash value, colision resolved at
+ * node level
+ * \param minHeap heap ordered nodes using the TTL (faster insert/remove)
+ * \param MRU direct pointer to Most Recently Used node
+ * \param LRU direct pointer to Least Recently Used node
+ * \param ttl_glob default ttl grace period for elements (default LONG_MAX aka
+ * inf)
+ * \param dtor destructor for stored values. Does not get called on keys. Not
+ * mandatory to set.
+ * \param stats statistics of the lru-cache (see t_lruc_stats for more
+ * precisions)
+ * \ingroup lruc
+ **/
 typedef struct {
 	size_t buckets_nb;
 	size_t node_in_use;
@@ -145,8 +191,8 @@ typedef bool (*t_kvcallback)(t_keyvalue *elem, void *arg);
 // create
 t_lruc *lruc_create(size_t capacity, void (*free_er)(void *));
 t_lruc *lruc_init(t_lruc *cache, size_t cappacity, void (*free_er)(void *));
-void    lruc_destroy(t_lruc *cache); // destroy sub-ressources not cache itself
-void    lruc_free(t_lruc *cache);    // destroy cache itself
+void    lruc_destroy(t_lruc *cache);
+void    lruc_free(t_lruc *cache);
 
 // put
 int lruc_put_kv(t_lruc *cache, t_keyvalue kv);
@@ -159,17 +205,16 @@ void *lruc_get(t_lruc *cache, const void *key, size_t key_len);
 void *lruc_get_lru(t_lruc *cache, const void *key, size_t key_len);
 
 // rms
-void lruc_clear(t_lruc *cache); // clear sub ressources
+void lruc_clear(t_lruc *cache);
 int  lruc_remove(t_lruc *cache, const void *key, size_t key_len);
 
 // has
 bool lruc_has(const t_lruc *cache, const void *key, size_t key_len);
 
 // expired
-bool lruc_isexpired(t_lruc *cache, const void *key,
-                    size_t key_len); //  is key in the cache and expired?
-void lruc_cleanup(t_lruc *cache);    // call dtor on all expired elements
-void lruc_setttl(t_lruc *cache, long ttl_ms); // set default ttl fo keys
+bool lruc_isexpired(t_lruc *cache, const void *key, size_t key_len);
+void lruc_cleanup(t_lruc *cache);
+void lruc_setttl(t_lruc *cache, long ttl_ms);
 
 // infos
 size_t       lruc_size(const t_lruc *cache);
@@ -179,10 +224,9 @@ uint64_t     lruc_expired(const t_lruc *cache);
 t_lruc_stats lruc_stats(const t_lruc *cache);
 
 // foreach
-void lruc_foreach(const t_lruc *cache, t_kvcallback fn, void *user_data);
-void lruc_foreach_ru_ordered(const t_lruc *c, t_kvcallback fn, void *user_data);
-void lruc_foreach_ttl_ordered(const t_lruc *c, t_kvcallback fn,
-                              void *user_data);
+void lruc_foreach(const t_lruc *cache, t_kvcallback fn, void *u_data);
+void lruc_foreach_ru_ordered(const t_lruc *c, t_kvcallback fn, void *u_data);
+void lruc_foreach_ttl_ordered(const t_lruc *c, t_kvcallback fn, void *u_data);
 
 #ifdef C_MINI__LRUC_INTERNAL
 uint64_t lruci_timeto64(struct timespec t);
@@ -209,4 +253,4 @@ t_lruc_keynode *lruci_hp_pop_nth(t_lruc *c, size_t n);
 
 #endif // !C_MINI__LRUC_INTERNAL
 
-#endif // !C_MINI__LRUC_H
+#endif // !C_MINI__LRUC

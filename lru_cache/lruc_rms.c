@@ -7,8 +7,9 @@
 #include "least_recently_used_cache.h"
 
 /**
- * @brief Clear the cache
- * @param c cache pointer
+ * \brief Clear the cache
+ * \param c cache pointer
+ * \ingroup lruc
  **/
 void lruc_clear(t_lruc *c) {
 	t_lruc_keynode *nxt;
@@ -43,11 +44,12 @@ void lruc_clear(t_lruc *c) {
 	c->stats       = (t_lruc_stats){0};
 }
 /**
- * @brief Remove a key from the cache
- * @param c cache pointer
- * @param key key to remove
- * @param key_len key length
- * @return 0 on success, -1 on failure
+ * \brief Remove a key from the cache
+ * \param c cache pointer
+ * \param key key to remove
+ * \param key_len key length
+ * \return 0 on success, -1 on failure
+ * \ingroup lruc
  **/
 int lruc_remove(t_lruc *c, const void *key, size_t key_len) {
 	t_lruc_keynode *node;

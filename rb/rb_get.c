@@ -11,7 +11,8 @@
  * \param buffer out buffer where the found element will be copied
  * \return pointer to the out buffer if found, NULL otherwise
  * \warning rb_get assume that buffer is always correctly sized.
- **/
+ * \ingroup rb
+**/
 void *rb_get(const t_rb *rb, t_comparator comp, const void *arg, void *buffer) {
 	void *elem;
 
@@ -38,7 +39,8 @@ void *rb_get(const t_rb *rb, t_comparator comp, const void *arg, void *buffer) {
  * \param buffer out buffer where the elements will be copied
  * \return pointer to the out buffer if match found, NULL otherwise
  * \warning rb_get assume that buffer is always correctly sized.
- **/
+ * \ingroup rb
+**/
 void *rb_nget(const t_rb *rb, size_t n, t_comparator comp, const void *arg,
               void *buffer) {
 	size_t i = 0;

@@ -96,10 +96,15 @@ typedef void *(*t_duplicator)(const void *elem);
 #	endif
 
 /**
+ * \defgroup idl Intrsive Doubly-linked Lists
+ **/
+
+/**
  * \brief t_idll struct
  * \param offset offset of the node in the element
  * \param next pointer to the next node
  * \param prev pointer to the next node
+ * \ingroup idl
 **/
 typedef struct s_idl {
 	struct s_idl *prev;

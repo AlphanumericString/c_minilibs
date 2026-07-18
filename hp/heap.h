@@ -4,35 +4,35 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#	ifdef C_MINI__TESTS
-#		include <stdio.h>
+#ifdef C_MINI__TESTS
+#	include <stdio.h>
 
-#		ifndef LOG
-#			define LOG(fmt, ...)                                              \
-				do {                                                           \
-					printf("\e[33m[LOG]\e[0m: %s: " fmt "\n",                  \
-					       __func__ __VA_OPT__(, ) __VA_ARGS__);               \
-					fflush(stdout);                                            \
-				} while (0);
-#		endif // !LOG
+#	ifndef LOG
+#		define LOG(fmt, ...)                                                  \
+			do {                                                               \
+				printf("\e[33m[LOG]\e[0m: %s: " fmt "\n",                      \
+				       __func__ __VA_OPT__(, ) __VA_ARGS__);                   \
+				fflush(stdout);                                                \
+			} while (0);
+#	endif // !LOG
 
-#		ifndef DBG
-#			define DBG(fmt, ...)                                              \
-				do {                                                           \
-					printf("\e[36;1m[DBG]\e[0m: %s: " fmt "\n",                \
-					       __func__ __VA_OPT__(, ) __VA_ARGS__);               \
-					fflush(stdout);                                            \
-				} while (0);
-#		endif // !DBG
+#	ifndef DBG
+#		define DBG(fmt, ...)                                                  \
+			do {                                                               \
+				printf("\e[36;1m[DBG]\e[0m: %s: " fmt "\n",                    \
+				       __func__ __VA_OPT__(, ) __VA_ARGS__);                   \
+				fflush(stdout);                                                \
+			} while (0);
+#	endif // !DBG
 
-#		ifndef DBG_POS
-#			define DBG_POS                                                    \
-				do {                                                           \
-					printf("\e[34;0m[PATH]\e[0m: %s:%d %s\n", __FILE__,        \
-					       __LINE__, __FUNCTION__);                            \
-					fflush(stdout);                                            \
-				} while (0);
-#		endif // !DBG_POS
+#	ifndef DBG_POS
+#		define DBG_POS                                                        \
+			do {                                                               \
+				printf("\e[34;0m[PATH]\e[0m: %s:%d %s\n", __FILE__, __LINE__,  \
+				       __FUNCTION__);                                          \
+				fflush(stdout);                                                \
+			} while (0);
+#	endif // !DBG_POS
 
 // log messages standardization
 #	define C_MINI__HP_LOG_CLR     "Clear Heap"
@@ -46,21 +46,21 @@
 #	define C_MINI__HP_LOG_EARG    "Bad arguments"
 #	define C_MINI__HP_LOG_EALLOC  "Allocation failed"
 
-#	else // || C_MINI__TESTS
+#else // || C_MINI__TESTS
 
-#		ifndef LOG
-#			define LOG(fmt, ...) (void)0;
-#		endif // !LOG
+#	ifndef LOG
+#		define LOG(fmt, ...) (void)0;
+#	endif // !LOG
 
-#		ifndef DBG
-#			define DBG(fmt, ...) (void)0;
-#		endif // !DBG
+#	ifndef DBG
+#		define DBG(fmt, ...) (void)0;
+#	endif // !DBG
 
-#		ifndef DBG_POS
-#			define DBG_POS (void)0;
-#		endif // !DBG_POS
+#	ifndef DBG_POS
+#		define DBG_POS (void)0;
+#	endif // !DBG_POS
 
-#	endif // !C_MINI__TESTS
+#endif // !C_MINI__TESTS
 
 #ifndef CMINI_T_COMPARATOR_DEFINE
 #	define CMINI_T_COMPARATOR_DEFINE
@@ -71,7 +71,7 @@
  * \param elem pointer to the element
  * \param arg argument passed as is from up function
  * \return expected to return <0, 0, >0 for inferior to, equal, superior to
-**/
+ **/
 typedef int (*t_comparator)(const void *elem, const void *arg);
 
 #endif
@@ -85,11 +85,22 @@ typedef int (*t_comparator)(const void *elem, const void *arg);
  * \param  elem pointer to the element
  * \param  arg  argument passed as is from up function
  * \return expected to return true on success false otherwise
-**/
+ **/
 typedef bool (*t_callback)(void *elem, void *arg);
 
 #endif
+/**
+ * \defgroup hp Heap
+ **/
 
+/**
+ * \brief heap structure
+ * \param nb the number of elements curently present in the heap
+ * \param capacity max numer of elements in the heap
+ * \param elems reference to the elements as void pointers
+ * \param cmp comparator fuction
+ * \ingroup hp
+ **/
 typedef struct s_heap {
 	size_t       nb;
 	size_t       capacity;

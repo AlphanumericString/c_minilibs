@@ -45,9 +45,10 @@ static void heap_down(t_heap *h, size_t idx, bool max) {
 }
 
 /**
- * @brief Push an element into the heap
- * @param h heap pointer
- * @param e element to push
+ * \brief Push an element into the heap
+ * \param h heap pointer
+ * \param e element to push
+ * \ingroup hp
  **/
 void hp_min_push(t_heap *h, void *e) {
 	if (!h || !e) {
@@ -60,9 +61,10 @@ void hp_min_push(t_heap *h, void *e) {
 	LOG(C_MINI__HP_LOG_PUSH, e, h, h->nb, h->capacity);
 }
 /**
- * @brief Push an element into the heap
- * @param h heap pointer
- * @param e element to push
+ * \brief Push an element into the heap
+ * \param h heap pointer
+ * \param e element to push
+ * \ingroup hp
  **/
 void hp_max_push(t_heap *h, void *e) {
 	if (!h || !e) {
@@ -76,9 +78,10 @@ void hp_max_push(t_heap *h, void *e) {
 }
 
 /**
- * @brief Pop the minimum element from the heap
- * @param h heap pointer
- * @return minimum element
+ * \brief Pop the minimum element from the heap
+ * \param h heap pointer
+ * \return minimum element
+ * \ingroup hp
  **/
 void *hp_min_pop(t_heap *h) {
 	void *root;
@@ -95,9 +98,10 @@ void *hp_min_pop(t_heap *h) {
 	return (root);
 }
 /**
- * @brief Pop the maximum element from the heap
- * @param h heap pointer
- * @return maximum element
+ * \brief Pop the maximum element from the heap
+ * \param h heap pointer
+ * \return maximum element
+ * \ingroup hp
  **/
 void *hp_max_pop(t_heap *h) {
 	void *root;
@@ -115,10 +119,11 @@ void *hp_max_pop(t_heap *h) {
 }
 
 /**
- * @brief Remove an element from the heap
- * @param h heap pointer
- * @param n index of the element to remove
- * @return element removed
+ * \brief Remove an element from the heap
+ * \param h heap pointer
+ * \param n index of the element to remove
+ * \return element removed
+ * \ingroup hp
  **/
 void *hp_min_rm(t_heap *h, size_t n) {
 	if (!h) {
@@ -132,10 +137,11 @@ void *hp_min_rm(t_heap *h, size_t n) {
 	return (hp_min_pop(h));
 }
 /**
- * @brief Remove an element from the heap
- * @param h heap pointer
- * @param n index of the element to remove
- * @return element removed
+ * \brief Remove an element from the heap
+ * \param h heap pointer
+ * \param n index of the element to remove
+ * \return element removed
+ * \ingroup hp
  **/
 void *hp_max_rm(t_heap *h, size_t n) {
 	if (!h) {

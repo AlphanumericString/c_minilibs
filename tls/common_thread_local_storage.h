@@ -1,5 +1,5 @@
-#ifndef C_MINI__CTLS_H
-#define C_MINI__CTLS_H
+#ifndef C_MINI__CTLS
+#define C_MINI__CTLS
 
 #include <pthread.h>
 #include <stdbool.h>
@@ -54,12 +54,24 @@
 
 #endif // !C_MINI__TESTS
 
+/**
+ * \defgroup ctls C-types Thread Local Storage
+ **/
+
 #ifndef C_MINI__CTLS_CAP
 #	define C_MINI__CTLS_CAP 16
 #endif
 
+/**
+ * 
+ * \ingroup ctls
+ **/
 extern pthread_key_t ctls_key;
 
+/**
+ * 
+ * \ingroup ctls
+ **/
 enum e_ctls_type {
 	CTLS_NONE = 0,
 	CTLS_CHAR,
@@ -72,7 +84,8 @@ enum e_ctls_type {
  * \brief type-sfafe abstraction of base c types.
  * \param type enum of c types.
  * \param value union of different possible interpretation of data.
-**/
+ * \ingroup ctls
+ **/
 typedef struct {
 	enum e_ctls_type type;
 	union {
@@ -90,7 +103,8 @@ typedef struct {
  * \param len lenght of the array curently being used.
  * \note if you want to increase the CTLS_CAP it's STRONGLY reccomended to not
  * go over 256
-**/
+ * \ingroup ctls
+ **/
 typedef struct s_ctlsv {
 	const char     *v_name[C_MINI__CTLS_CAP];
 	t_ctls_typewrap vals[C_MINI__CTLS_CAP];
@@ -113,4 +127,4 @@ size_t           ctls_len(void);
 // utils
 void ctls_dump_typewrap(t_ctls_typewrap t, int fd);
 
-#endif // CC_MINI__H
+#endif // !C_MINI__CTLS

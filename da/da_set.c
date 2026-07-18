@@ -8,6 +8,7 @@
  * \param pos index where the element should be set
  * \param elem pointer to the value of element to set
  * \return true on success, false on failure
+ * \ingroup da
  **/
 bool da_set(t_da *vec, size_t pos, void *elem) {
 	if (!vec || pos >= vec->nb_e) {
@@ -26,6 +27,7 @@ bool da_set(t_da *vec, size_t pos, void *elem) {
  * \param pos index where the element should be set
  * \param elems pointer to the value of elements to set
  * \return true on success, false on failure
+ * \ingroup da
  **/
 bool da_nset(t_da *da, size_t n, size_t pos, void *elems) {
 	if (!da || (pos + n) >= da->nb_e) {

@@ -7,6 +7,7 @@
  * \param da pointer to the dynamic array
  * \param c comparator function
  * \return true on success, false otherwise
+ * \ingroup da
  **/
 bool da_sort(t_da *da, t_comparator c) {
 	if (!da || !c) {
@@ -25,6 +26,7 @@ bool da_sort(t_da *da, t_comparator c) {
  * \param n number of elements to sort
  * \param c comparator function
  * \return true on success, false otherwise
+ * \ingroup da
  **/
 bool da_nsort(t_da *da, size_t n, t_comparator c) {
 	if (!da || !c) {

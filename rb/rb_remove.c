@@ -7,7 +7,8 @@
  * \param rb the round buffer
  * \param n number of elements to drop
  * \return true if removes n elements, false otherwise
- **/
+ * \ingroup rb
+**/
 bool rb_drop(t_rb *rb, size_t n) {
 	if (!rb || !n) {
 		LOG(C_MINI__RB_LOG_EARG);
@@ -28,7 +29,8 @@ bool rb_drop(t_rb *rb, size_t n) {
  * \param rb the round buffer
  * \param elem_out pointer where the removed element will be copied (optional)
  * \return pointer to the element in the buffer
- **/
+ * \ingroup rb
+**/
 void *rb_peek(t_rb rb, void *elem_out) {
 	unsigned char *pos;
 
@@ -51,7 +53,8 @@ void *rb_peek(t_rb rb, void *elem_out) {
  * \param n number of elements to peek
  * \param elem_out pointer where the elements will be copied (optional)
  * \return pointer to the first element in the buffer
- **/
+ * \ingroup rb
+**/
 void *rb_npeek(t_rb rb, size_t n, void *elem_out) {
 	unsigned char *pos;
 	size_t         left_size;
@@ -85,7 +88,8 @@ void *rb_npeek(t_rb rb, size_t n, void *elem_out) {
  * \param rb the round buffer
  * \param elem_out pointer where the removed element will be copied (optional)
  * \return pointer to the removed element in the buffer
- **/
+ * \ingroup rb
+**/
 void *rb_pop(t_rb *rb, void *elem_out) {
 	void *return_val;
 
@@ -105,7 +109,8 @@ void *rb_pop(t_rb *rb, void *elem_out) {
  * \param n number of elements to pop
  * \param elem_out pointer where the elements will be copied (optional)
  * \return pointer to the first removed element in the buffer
- **/
+ * \ingroup rb
+**/
 void *rb_npop(t_rb *rb, size_t n, void *elem_out) {
 	void *return_val;
 

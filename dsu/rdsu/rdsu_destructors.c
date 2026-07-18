@@ -5,6 +5,7 @@
 /**
  * \brief frees internal memory
  * \param ds the rdsu to destroy
+ * \ingroup rdsu
  **/
 void rdsu_destroy(t_rdsu *ds) {
 	if (!ds) {
@@ -20,6 +21,7 @@ void rdsu_destroy(t_rdsu *ds) {
 /**
  * \brief reset structure to a clean init state
  * \param rdsu the rdsu to clear
+ * \ingroup rdsu
  **/
 void rdsu_clr(t_rdsu *rdsu) {
 	size_t i;
@@ -40,6 +42,7 @@ void rdsu_clr(t_rdsu *rdsu) {
 /**
  * \brief cleans up the structurre and then free's it
  * \param ds the rdsu to clean
+ * \ingroup rdsu
  **/
 void rdsu_free(t_rdsu *ds) {
 	if (!ds) {

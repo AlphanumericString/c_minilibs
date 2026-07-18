@@ -4,10 +4,11 @@
 #include "least_recently_used_cache.h"
 
 /**
- * @brief Iterate over the cache
- * @param c cache pointer
- * @param fn callback function
- * @param user_data user data
+ * \brief Iterate over the cache
+ * \param c cache pointer
+ * \param fn callback function
+ * \param user_data user data
+ * \ingroup lruc
  **/
 void lruc_foreach(const t_lruc *c, t_kvcallback fn, void *user_data) {
 	if (!c || !fn) {
@@ -19,10 +20,11 @@ void lruc_foreach(const t_lruc *c, t_kvcallback fn, void *user_data) {
 			fn(&c->buckets[i]->kv, user_data);
 }
 /**
- * @brief Iterate over the cache in LRU order
- * @param c cache pointer
- * @param fn callback function
- * @param user_data user data
+ * \brief Iterate over the cache in LRU order
+ * \param c cache pointer
+ * \param fn callback function
+ * \param user_data user data
+ * \ingroup lruc
  **/
 void lruc_foreach_ru_ordered(const t_lruc *c, t_kvcallback fn,
                              void *user_data) {
@@ -35,10 +37,11 @@ void lruc_foreach_ru_ordered(const t_lruc *c, t_kvcallback fn,
 	}
 }
 /**
- * @brief Iterate over the cache in TTL order
- * @param c cache pointer
- * @param fn callback function
- * @param user_data user data
+ * \brief Iterate over the cache in TTL order
+ * \param c cache pointer
+ * \param fn callback function
+ * \param user_data user data
+ * \ingroup lruc
  **/
 void lruc_foreach_ttl_ordered(const t_lruc *c, t_kvcallback fn,
                               void *user_data) {

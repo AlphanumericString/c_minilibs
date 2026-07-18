@@ -65,6 +65,7 @@ static bool execute_rewind(t_rdsu *rdsu, t_rdsu_log lg) {
  * \param rdsu the rdsu to save the state of
  * \return the current log pointer (can be null if no logs). If bad parameters
  * are given (eg: null rdsu) returns null.
+ * \ingroup rdsu
  **/
 t_rdsu_log *rdsu_save_state(t_rdsu *rdsu) {
 	t_rdsu_log *r;
@@ -81,6 +82,7 @@ t_rdsu_log *rdsu_save_state(t_rdsu *rdsu) {
  * \brief this function allows one to rewind a rdsu to a previous state.
  * \param rdsu the rdsu to rewind
  * \return true if the opperation was successful otherwise false.
+ * \ingroup rdsu
  **/
 bool rdsu_rewind(t_rdsu *rdsu) {
 	t_rdsu_log *entry = rdsui_pop_rewind(rdsu);
@@ -110,6 +112,7 @@ bool rdsu_rewind(t_rdsu *rdsu) {
  * \return true if the opperation was successfull, false otherwise
  * \note as log is a linked list it's implicitely trusted that lg is part of the
  * log, in case this is false it'll rewind up to null and return false.
+ * \ingroup rdsu
  **/
 bool rdsu_rewind_to_state(t_rdsu *rdsu, t_rdsu_log *lg) {
 	t_rdsu_log *entry;
@@ -143,6 +146,7 @@ bool rdsu_rewind_to_state(t_rdsu *rdsu, t_rdsu_log *lg) {
 /**
  * \brief clear the list of entries in the rdsu rewind log
  * \param rdsu the rdsu to clear the log off
+ * \ingroup rdsu
  **/
 void rdsu_rewind_clear(t_rdsu *rdsu) {
 	if (!rdsu) {

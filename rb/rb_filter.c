@@ -14,7 +14,8 @@ static void blank(void *a) {
  * \param arg argument for the callback
  * \param destroyer optional function to destroy removed elements
  * \return true on success, false otherwise
- **/
+ * \ingroup rb
+**/
 bool rb_filter(t_rb *rb, t_callback cb, const void *arg,
                void (*destroyer)(void *elem)) {
 	size_t read_pos;

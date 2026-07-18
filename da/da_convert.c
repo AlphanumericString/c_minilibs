@@ -7,6 +7,7 @@
  * \brief convert to array (doesn't free da)
  * \param vec pointer to the dynamic array
  * \return newly allocated array with elements, or NULL on failure
+ * \ingroup da
  **/
 void *da_to_array(t_da *vec) {
 	void *data;
@@ -29,6 +30,7 @@ void *da_to_array(t_da *vec) {
  * \param vec pointer to the dynamic array
  * \param arr target array where elements will be copied
  * \return pointer to the target array (arr), or NULL on failure
+ * \ingroup da
  **/
 void *da_to_loc_array(t_da *vec, void *arr) {
 	if (!vec || !arr) {

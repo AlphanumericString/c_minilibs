@@ -6,7 +6,8 @@
  * \param c the comparator function
  * \param a argument for the comparator
  * \return pointer to the element in the data array, or NULL if not found
- **/
+ * \ingroup rb
+**/
 void *rb_find(const t_rb *rb, t_comparator c, const void *a) {
 	size_t i = 0;
 	size_t pos;

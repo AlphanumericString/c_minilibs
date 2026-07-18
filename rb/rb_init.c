@@ -8,7 +8,8 @@
  * \param sz_elem size of each element
  * \param nb_e number of elements
  * \return the populated round buffer or NULL on failure
- **/
+ * \ingroup rb
+**/
 t_rb *rb_create(t_rb *rb, size_t sz_elem, size_t nb_e) {
 	if (!rb || !sz_elem || !nb_e) {
 		LOG(C_MINI__RB_LOG_EARG);
@@ -33,7 +34,8 @@ t_rb *rb_create(t_rb *rb, size_t sz_elem, size_t nb_e) {
  * \param rb the round buffer to populate
  * \param sz_elem size of each element
  * \return the populated round buffer or NULL on failure
- **/
+ * \ingroup rb
+**/
 t_rb *rb_init(t_rb *rb, size_t sz_elem) {
 	t_rb *ret;
 
@@ -52,7 +54,8 @@ t_rb *rb_init(t_rb *rb, size_t sz_elem) {
  * \param nb_elem number of elements the array can hold
  * \param sz_elem size of each element
  * \return the populated round buffer
- **/
+ * \ingroup rb
+**/
 t_rb *rb_from_array(t_rb *rb, void *array, size_t nb_elem, size_t sz_elem) {
 	if (!rb) {
 		LOG(C_MINI__RB_LOG_EARG);
@@ -71,7 +74,8 @@ t_rb *rb_from_array(t_rb *rb, void *array, size_t nb_elem, size_t sz_elem) {
  * \brief allocate a new rb and populate it with default nb_e and given sz_e
  * \param sz_elem size of each element
  * \return the newly allocated round buffer or NULL on failure
- **/
+ * \ingroup rb
+**/
 t_rb *rb_new(size_t sz_elem) {
 	t_rb *ret;
 	if (!sz_elem) {

@@ -4,6 +4,7 @@
  * \brief Checks if a node is isolated (not pointing to any other node).
  * \param node The node to check.
  * \return true if isolated, false otherwise.
+ * \ingroup idl
  **/
 bool idl_is_isolated(t_idl *node) {
 	if (!node) {
@@ -19,6 +20,7 @@ bool idl_is_isolated(t_idl *node) {
  * algorithm.
  * \param head The head of the list.
  * \return true if a cycle is detected, false otherwise.
+ * \ingroup idl
  **/
 bool idl_is_circular(t_idl *head) {
 	t_idl *fast;
@@ -49,6 +51,7 @@ bool idl_is_circular(t_idl *head) {
  * \param head The head of the list.
  * \param comparator The comparator function.
  * \return true if the list is sorted, false otherwise.
+ * \ingroup idl
  **/
 bool idl_is_sorted(t_idl *head, t_comparator comparator) {
 	void *p;
@@ -82,6 +85,7 @@ bool idl_is_sorted(t_idl *head, t_comparator comparator) {
  * \param matcher The callback used to test elements.
  * \param arg Argument to pass to the matcher.
  * \return true if at least one element matches, false otherwise.
+ * \ingroup idl
  **/
 bool idl_has(t_idl *head, t_callback matcher, void *arg) {
 	if (!head || !matcher) {

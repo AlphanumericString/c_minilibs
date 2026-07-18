@@ -1,5 +1,5 @@
-#ifndef C_MINI__FTLS_H
-#define C_MINI__FTLS_H
+#ifndef C_MINI__FTLS
+#define C_MINI__FTLS
 
 #include <pthread.h>
 
@@ -48,6 +48,9 @@
 #	endif // !DBG_POS
 
 #endif // !C_MINI__TESTS
+/**
+* \defgroup ftls Fast Thread Local Storage
+**/
 
 // +---------------------------------------------------+
 // | OVERRIDE THIS TO SET YOUR OWN STRUCT NAME INSTEAD |
@@ -66,6 +69,7 @@ typedef C_MINI__FTLS_STRUCT t_ftls;
 
 /**
  * \brief key used for the f tls system. mandatory for thread management.
+ * \ingroup ftls
 **/
 extern pthread_key_t ftls_key;
 
@@ -88,6 +92,11 @@ static void ftls_cleanup(void *p) {
 	if (!p) return;
 	free(p);
 }
+/**
+ * \brief init the Thread Local Storage structure.
+ * \note check the tests for an example.
+ * \ingroup ftls
+**/
 void __attribute__((constructor())) init_ftls(void) {
 	pthread_key_create(&ftls_key, ftls_cleanup);
 }
@@ -96,6 +105,7 @@ void __attribute__((constructor())) init_ftls(void) {
  * \brief return the Thread Local Storage structure we attached.
  * \return the struct attached to the tls, null is alloc fails.
  * \note check the tests for an example.
+ * \ingroup ftls
 **/
 t_ftls *ftls_get(void) {
 	t_ftls *ftls = pthread_getspecific(ftls_key);
@@ -106,6 +116,6 @@ t_ftls *ftls_get(void) {
 	}
 	return (ftls);
 }
-#endif // C_MINI__FTLS_GET
+#endif // !C_MINI__FTLS_GET
 
-#endif // FC_MINI__H
+#endif // !C_MINI__FTLS

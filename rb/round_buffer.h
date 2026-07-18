@@ -57,6 +57,10 @@
 
 #endif // !C_MINI__TESTS
 
+/**
+ * \defgroup rb Round Buffer
+**/
+
 #ifndef CMINI_T_CALLBAKC_DEFINE
 #	define CMINI_T_CALLBAKC_DEFINE
 
@@ -104,6 +108,7 @@ typedef void *(*t_duplicator)(const void *elem);
  * \param i_pos input position
  * \param o_pos output position
  * \param sz_e size of elements in the array
+ * \ingroup rb
 **/
 typedef struct s_roundbuffer_array {
 	void  *array;

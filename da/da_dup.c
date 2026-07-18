@@ -7,6 +7,7 @@
  * \brief duplicate a dynamic array
  * \param src pointer to the source dynamic array
  * \return the duplicated dynamic array
+ * \ingroup da
  **/
 t_da da_dup(const t_da *src) {
 	t_da r;
@@ -29,6 +30,7 @@ t_da da_dup(const t_da *src) {
  * \param src pointer to the source dynamic array
  * \param n number of elements to duplicate
  * \return the duplicated dynamic array
+ * \ingroup da
  **/
 t_da da_ndup(const t_da *src, size_t n) {
 	t_da ret = {.array = NULL, .nb_e = 0, .cap_e = 0, .sz_e = 0};
@@ -50,6 +52,7 @@ t_da da_ndup(const t_da *src, size_t n) {
  * \param dst pointer to the destination dynamic array
  * \param src pointer to the source dynamic array
  * \return pointer to the destination dynamic array
+ * \ingroup da
  **/
 t_da *da_dup_to(t_da *dst, const t_da *src) {
 	t_da *ret;
@@ -73,6 +76,7 @@ t_da *da_dup_to(t_da *dst, const t_da *src) {
  * \param n number of elements to duplicate
  * \param src pointer to the source dynamic array
  * \return pointer to the destination dynamic array
+ * \ingroup da
  **/
 t_da *da_ndup_to(t_da *dst, size_t n, const t_da *src) {
 	void *pos;

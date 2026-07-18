@@ -6,11 +6,12 @@
 #include "least_recently_used_cache.h"
 
 /**
- * @brief Initialize a cache
- * @param cache pointer to the cache
- * @param cap capacity of the cache
- * @param dtor destructor function
- * @return pointer to the cache
+ * \brief Initialize a cache
+ * \param cache pointer to the cache
+ * \param cap capacity of the cache
+ * \param dtor destructor function
+ * \return pointer to the cache
+ * \ingroup lruc
  **/
 t_lruc *lruc_init(t_lruc *cache, size_t cap, void (*dtor)(void *)) {
 	if (!cache) {
@@ -35,10 +36,11 @@ t_lruc *lruc_init(t_lruc *cache, size_t cap, void (*dtor)(void *)) {
 }
 
 /**
- * @brief Create a new cache
- * @param cap capacity of the cache
- * @param dtor destructor function
- * @return pointer to the new cache
+ * \brief Create a new cache
+ * \param cap capacity of the cache
+ * \param dtor destructor function
+ * \return pointer to the new cache
+ * \ingroup lruc
  **/
 t_lruc *lruc_create(size_t cap, void (*dtor)(void *)) {
 	t_lruc *ret;
@@ -57,8 +59,9 @@ t_lruc *lruc_create(size_t cap, void (*dtor)(void *)) {
 	return (ret);
 }
 /**
- * @brief Destroy a cache
- * @param cache pointer to the cache
+ * \brief Destroy a cache
+ * \param cache pointer to the cache
+ * \ingroup lruc
  **/
 void lruc_destroy(t_lruc *cache) {
 	if (!cache) {
@@ -73,8 +76,9 @@ void lruc_destroy(t_lruc *cache) {
 	LOG(C_MINI__LRUC_LOG_SUCCESS);
 }
 /**
- * @brief Destroy internal and cache itself is freed
- * @param cache the cache to free.
+ * \brief Destroy internal and cache itself is freed
+ * \param cache the cache to free.
+ * \ingroup lruc
  **/
 void lruc_free(t_lruc *cache) {
 	if (!cache) {

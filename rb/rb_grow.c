@@ -8,7 +8,8 @@
  * \param rb the old round buffer
  * \param nb_elem_added number of additional elements
  * \return newly allocated t_rb or NULL if alloc fails
- **/
+ * \ingroup rb
+**/
 t_rb *rb_grow(t_rb *rb, size_t nb_elem_added) {
 	t_rb  *new_rb;
 	size_t count;
