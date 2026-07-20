@@ -1,6 +1,7 @@
+#include <assert.h>
+
 #include "da_tests.h"
 
-// find
 void test_da_find(void) {
 	t_da  da;
 	void *p;

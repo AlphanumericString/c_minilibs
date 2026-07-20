@@ -1,19 +1,15 @@
-#include <stddef.h>
-#include <stdint.h>
 #include <stdlib.h>
+
 #define C_MINI__RDSU_INTERNAL
 #include "rewindable_disjointed_set_union.h"
 
-// usefull log check
 static inline bool is_log_valid(const t_rdsu *rdsu, const t_rdsu_log *log) {
 	return (rdsu && log && rdsu->size > log->elem && rdsu->size > log->p &&
 	        (log->type == RDSU_LOG_RANK || log->type == RDSU_LOG_PARENT));
 }
 
-// simple stack handling
 bool rdsui_push_rewind(t_rdsu *rdsu, size_t elem, uint16_t value, uint16_t rank,
                        enum s_rdsu_log_type type) {
-	DBG_POS;
 	t_rdsu_log *entry;
 	t_rdsu_log  tentative_entry;
 
@@ -22,8 +18,6 @@ bool rdsui_push_rewind(t_rdsu *rdsu, size_t elem, uint16_t value, uint16_t rank,
 	                               .p    = value,
 	                               .r    = rank,
 	                               .nxt  = rdsu->change_log};
-	DBG("is_log_valid ? %s",
-	    is_log_valid(rdsu, &tentative_entry) ? "true" : "false");
 	if (is_log_valid(rdsu, &tentative_entry) == false) return (false);
 	if (type != RDSU_LOG_RANK && type != RDSU_LOG_PARENT) return (false);
 	entry = calloc(sizeof(*entry), 1);
@@ -45,9 +39,7 @@ t_rdsu_log *rdsui_pop_rewind(t_rdsu *rdsu) {
 	ret->nxt         = NULL;
 	return (ret);
 }
-// end
 
-// rewind util functions
 static bool execute_rewind(t_rdsu *rdsu, t_rdsu_log lg) {
 
 	if (is_log_valid(rdsu, &lg) == false) return (false);
@@ -59,7 +51,6 @@ static bool execute_rewind(t_rdsu *rdsu, t_rdsu_log lg) {
 	return (true);
 }
 
-//	-- exposed api
 /**
  * \brief this function allows to save the state of the dsu via a log pointer
  * \param rdsu the rdsu to save the state of

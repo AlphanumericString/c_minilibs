@@ -8,8 +8,6 @@
 #define C_MINI__INTERNAL
 #include "least_recently_used_cache.h"
 
-// search
-// -> hit -> set as head
 /**
  * \brief Get a key from the cache
  * \param c cache pointer
@@ -45,9 +43,8 @@ void *lruc_get_lru(t_lruc *c, const void *key, size_t key_len) {
  * \return pointer to the value
  * \ingroup lruc
 **/
-void *lruc_get(t_lruc *c, const void *key, size_t key_len) {
-	struct timespec now;
-	uint64_t        now_uint;
+void *lruc_get(t_lruc *c, const void *key, size_t len) {
+	uint64_t        now;
 	t_lruc_keynode *node;
 	size_t          pos;
 
@@ -56,29 +53,29 @@ void *lruc_get(t_lruc *c, const void *key, size_t key_len) {
 		return (NULL);
 	}
 	if (c->ttl_glob == (uint64_t)C_MINI__LRUC_TTL_DFLT)
-		return (lruc_get_lru(c, key, key_len));
-	if (clock_gettime(CLOCK_MONOTONIC, &now) != 0) {
+		return (lruc_get_lru(c, key, len));
+	now = lruci_timenow();
+	if (now == (uint64_t)-1) {
 		LOG(C_MINI__LRUC_LOG_ECLOCK);
 		return (NULL);
 	}
-	now_uint = now.tv_sec * 1000ULL + now.tv_nsec / 1000000ULL;
-	node     = lruci_keyinhash(c, key, key_len, &pos);
+	node = lruci_keyinhash(c, key, len, &pos);
 	if (!node ||
-	    lruci_key_eq(node->kv.key, node->kv.k_len, key, key_len) == false) {
+	    lruci_key_eq(node->kv.key, node->kv.k_len, key, len) == false) {
 		c->stats.misses++;
-		LOG(C_MINI__LRUC_LOG_MISS_LRU, c->stats.misses, key, key_len);
+		LOG(C_MINI__LRUC_LOG_MISS_LRU, c->stats.misses, key, len);
 		return (NULL);
 	}
-	if ((node->time + c->ttl_glob) < now_uint) {
+	if ((node->time + c->ttl_glob) < now) {
 		c->stats.misses++;
-		LOG(C_MINI__LRUC_LOG_MISS_TTL, c->stats.misses, key, key_len,
-		    now_uint + node->time);
+		LOG(C_MINI__LRUC_LOG_MISS_TTL, c->stats.misses, key, len,
+		    now + node->time);
 		return (NULL);
 	}
 	lruci_lru_pop(c, node);
-	node->lru_next = c->MRU;
 	c->stats.hit++;
-	c->MRU = node;
-	LOG(C_MINI__LRUC_LOG_HIT, c->stats.hit, key, key_len);
+	node->lru_next = c->MRU;
+	c->MRU         = node;
+	LOG(C_MINI__LRUC_LOG_HIT, c->stats.hit, key, len);
 	return (node->kv.value);
 }

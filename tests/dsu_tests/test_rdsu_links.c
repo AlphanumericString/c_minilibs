@@ -1,6 +1,7 @@
+#include <assert.h>
+
 #include "rdsu_tests.h"
 
-// links
 void test_rdsu_union(void) {
 	t_rdsu *rdsu = rdsu_new(5);
 
@@ -37,12 +38,10 @@ void test_rdsu_compress_all(void) {
 	rdsu_union(rdsu, 0, 1);
 	rdsu_union(rdsu, 1, 2);
 	rdsu_union(rdsu, 2, 3);
-	// Create a long uncompressed chain to test compress_all
 	rdsu->parent[0] = 1;
 	rdsu->parent[1] = 2;
 	rdsu->parent[2] = 3;
 	rdsu->parent[3] = 3;
-	// Path halving will make parent[0]=2, parent[1]=3, parent[2]=3
 	assert(rdsu->change_log != NULL);
 	assert(rdsu_compress_all(rdsu) == 5);
 	assert(rdsu->change_log == NULL);

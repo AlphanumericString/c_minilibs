@@ -127,36 +127,29 @@ typedef struct s_rewindable_disjointed_set_union {
 	t_rdsu_log *change_log;
 } t_rdsu;
 
-// create
 t_rdsu *rdsu_new(size_t n);
 t_rdsu *rdsu_new_from_array(size_t n, uint16_t *parents, uint16_t *rank);
 t_rdsu *rdsu_init(t_rdsu *to_init, size_t n);
 t_rdsu *rdsu_init_from_arrays(t_rdsu *to_init, size_t size, uint16_t *parent,
                               uint16_t *rank);
 
-// grow
 t_rdsu *rdsu_grow(t_rdsu *to_init, size_t n);
 
-// destroy
 void rdsu_clr(t_rdsu *dsu);
 void rdsu_destroy(t_rdsu *ds);
 void rdsu_free(t_rdsu *ds);
 
-// getter
 int    rdsu_max_depth(t_rdsu dsu);
 size_t rdsu_size(t_rdsu dsu);
 size_t rdsu_nb_components(t_rdsu dsu);
 
-// querry
 bool rdsu_is_related(t_rdsu *ds, size_t x, size_t y);
 bool rdsu_validate(t_rdsu dsu);
 
-// links
 void     rdsu_union(t_rdsu *ds, size_t x, size_t y);
 uint16_t rdsu_find(t_rdsu *ds, size_t x);
 size_t   rdsu_compress_all(t_rdsu *ds);
 
-// rewind
 t_rdsu_log *rdsu_save_state(t_rdsu *rdsu);
 bool        rdsu_rewind(t_rdsu *rdsu);
 bool        rdsu_rewind_to_state(t_rdsu *rdsu, t_rdsu_log *lg);

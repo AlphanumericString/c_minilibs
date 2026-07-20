@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include "ill_tests.h"
 
 static bool add_val(void *elem, void *arg) {

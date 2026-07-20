@@ -10,8 +10,6 @@
 #define C_MINI__INTERNAL
 #include "least_recently_used_cache.h"
 
-// expired
-// expired-> is key in the cache and expired?
 /**
  * \brief Check if a key is expired
  * \param c cache pointer
@@ -39,7 +37,6 @@ bool lruc_isexpired(t_lruc *c, const void *key, size_t key_len) {
 	return ((node->time + c->ttl_glob) < (now_uint));
 }
 
-// cleanup -> call dtor on all expired elements
 /**
  * \brief Clean up expired elements
  * \param c cache pointer

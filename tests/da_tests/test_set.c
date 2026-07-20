@@ -1,6 +1,7 @@
+#include <assert.h>
+
 #include "da_tests.h"
 
-// set
 void test_da_set(void) {
 	t_da da;
 	int  a = 1;

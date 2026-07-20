@@ -1,8 +1,8 @@
+#include <assert.h>
 #include <stdlib.h>
 
 #include "cdsu_tests.h"
 
-// create
 void test_cdsu_new(void) {
 	t_cdsu *cdsu;
 

@@ -53,8 +53,8 @@ void *ill_copy(const t_ill *head, t_duplicator dupper) {
 		e_curr = dupper(ill_ntoe(head));
 		if (!e_curr) {
 			LOG(C_MINI__ILL_LOG_EALLOC);
-			break; // TODO: maybe a clearlist here from new_head if fail on
-			       // dupper?
+			// TODO: maybe a clearlist here from new_head if fail on dupper?
+			break;
 		}
 		setup_chain(prv, ill_eton(e_curr, offset), offset);
 		prv  = prv->next;

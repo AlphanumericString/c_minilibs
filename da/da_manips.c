@@ -33,7 +33,7 @@ bool da_swap(t_da *da, size_t pos_a, size_t pos_b) {
 	}
 	sa = da_at(da, pos_a);
 	sb = da_at(da, pos_b);
-	if (da->sz_e > C_MINI_DA__SZ_ELEM_DFLT) { // swap with xor
+	if (da->sz_e > C_MINI_DA__SZ_ELEM_DFLT) {
 		memnxor(sa, sb, da->sz_e);
 		memnxor(sb, sa, da->sz_e);
 		memnxor(sa, sb, da->sz_e);
@@ -70,7 +70,7 @@ bool da_nswap(t_da *da, size_t n, size_t pos_a, size_t pos_b) {
 	}
 	sa = da_at(da, pos_a);
 	sb = da_at(da, pos_b);
-	if (da->sz_e * n > C_MINI_DA__SZ_ELEM_DFLT) { // swap with xor
+	if (da->sz_e * n > C_MINI_DA__SZ_ELEM_DFLT) {
 		memnxor(sa, sb, da->sz_e * n);
 		memnxor(sb, sa, da->sz_e * n);
 		memnxor(sa, sb, da->sz_e * n);

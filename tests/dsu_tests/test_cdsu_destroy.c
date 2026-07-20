@@ -1,6 +1,7 @@
+#include <assert.h>
+
 #include "cdsu_tests.h"
 
-// destroy
 void test_cdsu_clr(void) {
 	t_cdsu *cdsu     = cdsu_new(10);
 	cdsu->parent[0]  = 5;
@@ -26,5 +27,5 @@ void test_cdsu_free(void) {
 	t_cdsu *d = cdsu_new(10);
 
 	assert(d != NULL);
-	cdsu_free(d); // check w valgrind or other leakcheck tool
+	cdsu_free(d);
 }

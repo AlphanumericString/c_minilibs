@@ -28,7 +28,7 @@ bool vtls_set(const char *v_name, void *v_val, size_t v_size) {
 		if (!strcmp(vtls->data[i].v_name, v_name))
 			return (memcpy(&vtls->data[i].var, v_val, v_size), true);
 	}
-	if (vtls->len == vtls->cap) { // grow
+	if (vtls->len == vtls->cap) {
 		i    = vtls->cap;
 		grow = realloc(vtls->data, sizeof(t_vtls) * (!i ? 16 : i) * 2);
 		if (!grow) return (false);

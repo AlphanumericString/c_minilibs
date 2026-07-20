@@ -4,7 +4,6 @@
 
 #include "lru_cache_tests.h"
 
-// has
 void test_lruc_has(void) {
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;

@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include "ill_tests.h"
 
 static int cmp_val(void *elem, void *arg) {

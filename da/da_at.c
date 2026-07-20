@@ -12,6 +12,5 @@ void *da_at(t_da *vec, size_t pos) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (NULL);
 	}
-	//	LOG(C_MINI__DA_LOG_SUCCESS); too spammy
 	return ((char *)vec->array + vec->sz_e * pos);
 }

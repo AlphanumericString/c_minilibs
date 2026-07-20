@@ -1,9 +1,9 @@
+#include <assert.h>
 #include <stdint.h>
 #include <stdlib.h>
 
 #include "rdsu_tests.h"
 
-// create
 void test_rdsu_new(void) {
 	t_rdsu *rd;
 

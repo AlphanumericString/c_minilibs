@@ -2,7 +2,6 @@
 
 #include "tls_tests.h"
 
-// querry
 void test_vtls_has(void) {
 	assert(vtls_has("a") == false);
 	assert(vtls_has("b") == false);

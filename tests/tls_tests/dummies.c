@@ -6,7 +6,6 @@ void dump_mine_node(struct s_mine a) {
 	printf("value_a:%d\tvalue_b:%d\n", a.value_a, a.value_b);
 }
 
-// tries to get ftls set random(0-9) lst_status if lst_status == 0, error+=1
 void *ftls_dummy(void *__arg) {
 	char   *thrd_name = (char *)__arg;
 	size_t  i         = 15;

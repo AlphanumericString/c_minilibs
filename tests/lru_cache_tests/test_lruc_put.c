@@ -1,14 +1,11 @@
 #include <assert.h>
-#include <bits/time.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/time.h>
 #include <unistd.h>
 
 #include "lru_cache_tests.h"
 
-// put
 void test_lruc_put_kv(void) {
 	t_lruc          c;
 	t_keyvalue      kv1;
@@ -59,7 +56,7 @@ void test_lruc_put_ttl(void) {
 	const char *k2 = "squalala";
 
 	lruc_init(&c, 2, free);
-	{ // order
+	{
 		assert(lruc_put_ttl(&c, k2, strlen(k2), strdup("other"), 1000) == 0);
 		assert(lruc_put_ttl(&c, k1, strlen(k1), strdup("result"), 2000) == 0);
 		assert(c.MRU->kv.key == k1);
@@ -67,23 +64,23 @@ void test_lruc_put_ttl(void) {
 		lruc_clear(&c);
 		assert(lruc_put_ttl(&c, k1, strlen(k1), strdup("result"), 2000) == 0);
 		assert(lruc_put_ttl(&c, k2, strlen(k2), strdup("other"), 1000) == 0);
-		assert(c.MRU->kv.key == k2); // lru ordering
+		assert(c.MRU->kv.key == k2);
 		assert(c.LRU->kv.key == k1);
-		assert(c.minHeap[0]->kv.key == k2); // TTL ordering
-		assert(c.minHeap[1]->kv.key == k1); // TTL ordering
+		assert(c.minHeap[0]->kv.key == k2);
+		assert(c.minHeap[1]->kv.key == k1);
 		lruc_clear(&c);
 	}
-	{ // distances
+	{
 		lruc_setttl(&c, 10);
 		assert(lruc_put_ttl(&c, k1, strlen(k1), strdup("result"), 2000) == 0);
 		assert(lruc_put_ttl(&c, k2, strlen(k2), strdup("other"), 1000) == 0);
 		uint64_t now_int = lruci_timenow();
-		assert(now_int != (uint64_t)-1);             // time setup failed?
-		assert(c.minHeap[0]->time - now_int >= 900); // 100 ms leeway
-		assert(c.minHeap[c.node_in_use - 1]->time - now_int >= 1900); // 100 ms
+		assert(now_int != (uint64_t)-1);
+		assert(c.minHeap[0]->time - now_int >= 900);
+		assert(c.minHeap[c.node_in_use - 1]->time - now_int >= 1900);
 		lruc_clear(&c);
 	}
-	{ // expiration check
+	{
 		lruc_setttl(&c, 0);
 		assert(lruc_put_ttl(&c, k1, strlen(k1), strdup("result"), 1900) == 0);
 		assert(lruc_put_ttl(&c, k2, strlen(k2), strdup("other"), 900) == 0);

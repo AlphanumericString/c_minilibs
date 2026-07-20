@@ -125,15 +125,15 @@ typedef struct s_keycache {
 typedef struct {
 	size_t           buckets_nb;
 	size_t           node_in_use;
-	t_lruc_keynode **buckets; // allocated nodes ordered via hash for lookup
-	t_lruc_keynode **minHeap; // ttl minheap
+	t_lruc_keynode **buckets;
+	t_lruc_keynode **minHeap;
 
-	t_lruc_keynode *MRU; // MRU
-	t_lruc_keynode *LRU; // LRU
+	t_lruc_keynode *MRU;
+	t_lruc_keynode *LRU;
 
-	uint64_t ttl_glob; // TTL window
+	uint64_t ttl_glob;
 
-	void         (*dtor)(void *); //
+	void         (*dtor)(void *);
 	t_lruc_stats stats;
 } t_lruc;
 
@@ -160,13 +160,13 @@ typedef struct {
 typedef struct {
 	size_t buckets_nb;
 	size_t node_in_use;
-	void **buckets; // allocated nodes ordered via hash for lookup
-	void **minHeap; // allocated nodes ordered in minheap via ttl
+	void **buckets;
+	void **minHeap;
 
-	void *MRU; // MRU
-	void *LRU; // LRU
+	void *MRU;
+	void *LRU;
 
-	long ttl_glob; // TTL window
+	long ttl_glob;
 
 	void         (*dtor)(void *);
 	t_lruc_stats stats;
@@ -188,42 +188,34 @@ typedef bool (*t_kvcallback)(t_keyvalue *elem, void *arg);
 
 #endif // CMINI__T_CALLBAKC_DEFINE
 
-// create
 t_lruc *lruc_create(size_t capacity, void (*free_er)(void *));
 t_lruc *lruc_init(t_lruc *cache, size_t capacity, void (*free_er)(void *));
 void    lruc_destroy(t_lruc *cache);
 void    lruc_free(t_lruc *cache);
 
-// put
 int lruc_put_kv(t_lruc *cache, t_keyvalue kv);
 int lruc_put(t_lruc *cache, const void *key, size_t key_len, const void *value);
 int lruc_put_ttl(t_lruc *cache, const void *key, size_t key_len,
                  const void *value, uint64_t ttl_ms);
 
-// get
 void *lruc_get(t_lruc *cache, const void *key, size_t key_len);
 void *lruc_get_lru(t_lruc *cache, const void *key, size_t key_len);
 
-// rms
 void lruc_clear(t_lruc *cache);
 int  lruc_remove(t_lruc *cache, const void *key, size_t key_len);
 
-// has
 bool lruc_has(const t_lruc *cache, const void *key, size_t key_len);
 
-// expired
 bool lruc_isexpired(t_lruc *cache, const void *key, size_t key_len);
 void lruc_cleanup(t_lruc *cache);
 void lruc_setttl(t_lruc *cache, long ttl_ms);
 
-// infos
 size_t       lruc_size(const t_lruc *cache);
 uint64_t     lruc_hits(const t_lruc *cache);
 uint64_t     lruc_misses(const t_lruc *cache);
 uint64_t     lruc_expired(const t_lruc *cache);
 t_lruc_stats lruc_stats(const t_lruc *cache);
 
-// foreach
 void lruc_foreach(const t_lruc *cache, t_kvcallback fn, void *u_data);
 void lruc_foreach_ru_ordered(const t_lruc *c, t_kvcallback fn, void *u_data);
 void lruc_foreach_ttl_ordered(const t_lruc *c, t_kvcallback fn, void *u_data);
@@ -232,6 +224,7 @@ void lruc_foreach_ttl_ordered(const t_lruc *c, t_kvcallback fn, void *u_data);
 uint64_t lruci_timeto64(struct timespec t);
 uint64_t lruci_timenow(void);
 bool lruci_key_eq(const void *k1, size_t k1_len, const void *k2, size_t k2_len);
+bool lruci_key_eqn(t_lruc_keynode *node_1, t_lruc_keynode *node_2);
 void lruci_unlink_node(t_lruc *c, t_lruc_keynode *node, size_t hash);
 
 size_t lruci_hash_djb2(const void *key, size_t size);

@@ -1,5 +1,4 @@
 #include <assert.h>
-#include <stddef.h>
 
 #include "hp_tests.h"
 
@@ -9,7 +8,6 @@ static int cmp_rawptr(const void *a, const void *b) {
 	return (0);
 }
 
-// create
 void test_hp_create(void) {
 	t_heap *h;
 

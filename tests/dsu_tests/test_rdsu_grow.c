@@ -1,6 +1,7 @@
+#include <assert.h>
+
 #include "rdsu_tests.h"
 
-// grow
 void test_rdsu_grow(void) {
 	t_rdsu *rdsu = rdsu_new(5);
 

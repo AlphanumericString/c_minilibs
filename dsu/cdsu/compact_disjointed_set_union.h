@@ -78,32 +78,26 @@ typedef struct s_compact_disjointed_set_union {
 	bool   rp_single_alloc;
 } t_cdsu;
 
-// create
 t_cdsu *cdsu_new(size_t n);
 t_cdsu *cdsu_new_from_array(size_t n, int *parents, int *rank);
 t_cdsu *cdsu_init(t_cdsu *to_init, size_t n);
 t_cdsu *cdsu_init_from_arrays(t_cdsu *to_init, size_t size, int *parent,
                               int *rank);
 
-// grow
 t_cdsu *cdsu_grow(t_cdsu *to_init, size_t n);
 
-// destroy
 void cdsu_clr(t_cdsu *dsu);
 void cdsu_destroy(t_cdsu *ds);
 void cdsu_free(t_cdsu *ds);
 
-// getter
 int    cdsu_max_depth(t_cdsu dsu);
 size_t cdsu_size(t_cdsu dsu);
 size_t cdsu_nb_components(t_cdsu dsu);
 
-// querry
 bool cdsu_is_related(t_cdsu *ds, size_t x, size_t y);
 bool cdsu_strict_is_related(t_cdsu ds, size_t x, size_t y);
 bool cdsu_validate(t_cdsu dsu);
 
-// links
 void   cdsu_union(t_cdsu *ds, size_t x, size_t y);
 size_t cdsu_find(t_cdsu *ds, size_t x);
 size_t cdsu_strict_find(t_cdsu ds, size_t x);

@@ -53,7 +53,6 @@ static void lruci_hp_down(t_lruc *c, size_t index) {
 	}
 }
 
-// Push a value into the heap
 void lruci_hp_push(t_lruc *c, t_lruc_keynode *value) {
 	c->minHeap[c->node_in_use]             = value;
 	c->minHeap[c->node_in_use]->heap_index = c->node_in_use;
@@ -61,7 +60,6 @@ void lruci_hp_push(t_lruc *c, t_lruc_keynode *value) {
 	c->node_in_use++;
 }
 
-// Pop the root value from the heap
 t_lruc_keynode *lruci_hp_pop(t_lruc *c) {
 	t_lruc_keynode *root_value = NULL;
 

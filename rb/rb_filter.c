@@ -2,7 +2,6 @@
 
 #include "round_buffer.h"
 
-// blank function to reduce branching at exec
 static void blank(void *a) {
 	(void)a;
 }

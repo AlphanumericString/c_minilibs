@@ -1,8 +1,7 @@
-#include <stddef.h>
+#include <assert.h>
 
 #include "da_tests.h"
 
-// grow
 void test_da_grow(void) {
 	t_da         da;
 	const size_t dflt_size   = C_MINI_DA__NB_ELEM_DFLT;

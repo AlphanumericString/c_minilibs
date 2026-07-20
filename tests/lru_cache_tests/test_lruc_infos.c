@@ -5,7 +5,6 @@
 
 #include "lru_cache_tests.h"
 
-// infos
 void test_lruc_size(void) {
 	t_lruc      c;
 	const char *k1 = "titi", *k2 = "toto", *k3 = "tutu";

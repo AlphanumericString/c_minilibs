@@ -1,6 +1,7 @@
+#include <assert.h>
+
 #include "da_tests.h"
 
-// shrink
 void test_da_shrink(void) {
 	t_da da;
 

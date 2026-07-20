@@ -30,11 +30,11 @@ bool ss_swap(t_ss *ss, size_t pos_a, size_t pos_b) {
 	sa = ss_at(ss, pos_a);
 	sb = ss_at(ss, pos_b);
 	if (!sa || !sb) return (false);
-	if (ss->sz_elem > 4096) { // swap with xor
+	if (ss->sz_elem > 4096) {
 		memnxor(sa, sb, ss->sz_elem);
 		memnxor(sb, sa, ss->sz_elem);
 		memnxor(sa, sb, ss->sz_elem);
-	} else { // swap with buffer
+	} else {
 		memcpy(sized_buffer, sa, ss->sz_elem);
 		memcpy(sa, sb, ss->sz_elem);
 		memcpy(sb, sized_buffer, ss->sz_elem);

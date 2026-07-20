@@ -1,6 +1,7 @@
+#include <assert.h>
+
 #include "cdsu_tests.h"
 
-// links
 void test_cdsu_union(void) {
 	t_cdsu *cdsu = cdsu_new(5);
 
@@ -37,13 +38,11 @@ void test_cdsu_compress_all(void) {
 	cdsu_union(cdsu, 1, 2);
 	cdsu_union(cdsu, 2, 3);
 
-	// Create a long uncompressed chain to test compress_all
 	cdsu->parent[0] = 1;
 	cdsu->parent[1] = 2;
 	cdsu->parent[2] = 3;
 	cdsu->parent[3] = 3;
 
-	// Path halving will make parent[0]=2, parent[1]=3, parent[2]=3
 	assert(cdsu_compress_all(cdsu) == 5);
 	assert(cdsu->parent[0] == 2);
 	assert(cdsu->parent[1] == 3);

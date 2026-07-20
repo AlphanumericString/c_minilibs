@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include "ill_tests.h"
 
 static bool is_even(void *elem, void *arg) {

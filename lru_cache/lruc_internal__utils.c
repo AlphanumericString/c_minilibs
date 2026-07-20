@@ -52,6 +52,10 @@ size_t lruci_hash_djb2(const void *key, size_t size) {
 uint64_t lruci_timeto64(struct timespec t) {
 	return (t.tv_sec * 1000ULL + t.tv_nsec / 1000000ULL);
 }
+bool lruci_key_eqn(t_lruc_keynode *node_1, t_lruc_keynode *node_2) {
+	return (lruci_key_eq(node_1->kv.key, node_1->kv.k_len, node_2->kv.key,
+	                     node_2->kv.k_len));
+}
 bool lruci_key_eq(const void *k1, size_t k1_len, const void *k2,
                   size_t k2_len) {
 	return (k1_len == k2_len && memcmp(k1, k2, k2_len) == 0);

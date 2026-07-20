@@ -1,6 +1,7 @@
+#include <assert.h>
+
 #include "da_tests.h"
 
-// filter
 void test_da_filter(void) {
 	t_da da;
 	int  a     = 1;

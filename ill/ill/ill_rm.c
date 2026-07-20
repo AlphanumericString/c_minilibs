@@ -34,15 +34,12 @@ bool ill_remove_node(t_ill **head, t_ill *target) {
 		LOG(C_MINI__ILL_LOG_EARG);
 		return false;
 	}
-	// If removing head
 	if (*head == target) {
 		*head        = target->next;
 		target->next = NULL;
 		LOG(C_MINI__ILL_LOG_SUCCESS);
 		return true;
 	}
-	prev = NULL;
-	// Find predecessor
 	prev = ill_find_prev(*head, target);
 	if (prev) {
 		prev->next   = target->next;

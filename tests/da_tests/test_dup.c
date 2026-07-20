@@ -1,6 +1,7 @@
+#include <assert.h>
+
 #include "da_tests.h"
 
-// dup
 void test_da_dup(void) {
 	t_da da, dup;
 

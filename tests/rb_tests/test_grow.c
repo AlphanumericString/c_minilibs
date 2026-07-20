@@ -1,5 +1,4 @@
 #include <assert.h>
-#include <rb/round_buffer.h>
 #include <stdlib.h>
 
 #include "rb_tests.h"

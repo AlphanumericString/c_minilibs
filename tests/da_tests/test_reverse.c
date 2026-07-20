@@ -1,6 +1,7 @@
+#include <assert.h>
+
 #include "da_tests.h"
 
-// reverse
 void test_da_reverse(void) {
 	t_da da;
 

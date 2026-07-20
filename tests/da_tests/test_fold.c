@@ -1,6 +1,8 @@
+#include <assert.h>
+#include <stdlib.h>
+
 #include "da_tests.h"
 
-// fold
 void test_da_fold(void) {
 	t_da da;
 	int  sum = 0;

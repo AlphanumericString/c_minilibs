@@ -7,7 +7,6 @@ void blank(void *t) {
 	(void)t;
 }
 
-// rms
 void test_lruc_clear(void) {
 	t_lruc c;
 	char   empty_buff[sizeof(t_lruc_keynode *) * 32] = {0};
@@ -25,7 +24,7 @@ void test_lruc_clear(void) {
 		assert(!memcmp(c.buckets, empty_buff, sizeof(t_lruc_keynode *) * 2));
 		lruc_destroy(&c);
 	}
-	{ // test for low% fill
+	{
 		lruc_init(&c, 32, NULL);
 		lruc_put(&c, test_lruc_clear, sizeof(test_lruc_clear), "his address");
 		lruc_clear(&c);

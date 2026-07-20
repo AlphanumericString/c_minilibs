@@ -34,7 +34,6 @@
 			} while (0);
 #	endif // !DBG_POS
 
-// log messages standardization
 #	define C_MINI__HP_LOG_CLR     "Clear Heap"
 #	define C_MINI__HP_LOG_SUCCESS "Success"
 #	define C_MINI__HP_LOG_STATUS  "Heap(%p), {nb:%zu, cap:%zu}"
@@ -129,4 +128,4 @@ bool hp_foreach_in(t_heap *h, t_callback cb, void *u_arg);
 bool hp_foreach_pre(t_heap *h, t_callback cb, void *u_arg);
 bool hp_foreach_post(t_heap *h, t_callback cb, void *u_arg);
 
-#endif // C_MINI__HP
+#endif // !C_MINI__HP

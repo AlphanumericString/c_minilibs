@@ -1,6 +1,7 @@
+#include <assert.h>
+
 #include "da_tests.h"
 
-// sort
 void test_da_sort(void) {
 	t_da da;
 

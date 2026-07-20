@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #include "ill_tests.h"
 
 void test_ill_insert(void) {

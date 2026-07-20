@@ -1,6 +1,7 @@
+#include <assert.h>
+
 #include "da_tests.h"
 
-// swap
 void test_da_swap(void) {
 	t_da da;
 

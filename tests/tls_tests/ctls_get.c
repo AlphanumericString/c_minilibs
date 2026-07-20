@@ -7,7 +7,6 @@ void test_ctls_get(void) {
 
 	val.value.i = 42;
 	val.type    = CTLS_INT;
-
 	ctls_set("a", val);
 	assert(ctls_get("a") != NULL);
 	assert(ctls_get("a")->type == CTLS_INT);
@@ -21,7 +20,6 @@ void test_ctls_len(void) {
 
 	val.value.i = 42;
 	val.type    = CTLS_INT;
-
 	assert(ctls_len() == 0);
 	ctls_set("a", val);
 	assert(ctls_len() != 0);

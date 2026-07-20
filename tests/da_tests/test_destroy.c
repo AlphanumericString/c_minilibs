@@ -1,8 +1,8 @@
-#include <da/dynamic_array.h>
+#include <assert.h>
+#include <stdlib.h>
 
 #include "da_tests.h"
 
-// destroy
 void test_da_destroy(void) {
 	t_da da;
 
@@ -16,7 +16,6 @@ void test_da_destroy(void) {
 	assert(da.array == NULL);
 }
 
-// check via valgrind
 void test_da_free(void) {
 	t_da *da;
 

@@ -7,13 +7,11 @@ void test_ctls_has(void) {
 
 	val.value.i = 42;
 	val.type    = CTLS_INT;
-
 	ctls_set("a", val);
 	assert(ctls_has("a") == true);
 	ctls_rm("a");
 	assert(ctls_get("a") == false);
 	assert(ctls_get("b") == false);
-
 	ctls_set("a", val);
 	ctls_set("b", val);
 	assert(ctls_has("a") == true);

@@ -1,3 +1,5 @@
+#include <assert.h>
+
 #define C_MINI__RDSU_INTERNAL
 #include "rdsu_tests.h"
 

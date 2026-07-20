@@ -2,7 +2,6 @@
 
 #include "tls_tests.h"
 
-// get
 void test_vtls_get(void) {
 	assert(vtls_get("a") == NULL);
 	vtls_set("a", (void *)0xDEAD, sizeof(void *));

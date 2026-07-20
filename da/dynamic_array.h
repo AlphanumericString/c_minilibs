@@ -77,8 +77,6 @@
 
 #	endif // !C_MINI__TESTS
 
-// comon funct ptr definitions
-
 #	ifndef C_MINI__T_CALLBACK
 #		define C_MINI__T_CALLBACK
 
@@ -161,74 +159,59 @@ typedef struct s_dynamic_memory_array {
 	size_t sz_e;
 } t_da;
 
-// create
 t_da *da_init(t_da *ret, size_t sz_elem);
 t_da *da_ninit(t_da *ret, size_t n, size_t sz_elem);
 t_da *da_from_array(t_da *da, void *array, size_t nb_elem, size_t sz_elem);
 t_da *da_new(size_t sz_elem);
 
-// dup
 t_da  da_dup(const t_da *src);
 t_da  da_ndup(const t_da *src, size_t n);
 t_da *da_dup_to(t_da *dst, const t_da *src);
 t_da *da_ndup_to(t_da *dst, size_t n, const t_da *src);
 
-// clear
 void da_clr(t_da *ret);
 
-// destroy
 void da_destroy(t_da *ret);
 void da_free(t_da *ret);
 
-// add
 bool da_add(t_da *da, void *elem);
 bool da_cat_array(t_da *da, void *arr, size_t nb_e, size_t sz_e);
 
-// grow
 bool da_grow(t_da *da);
 bool da_grow_for_size(t_da *da, size_t minimal_free_slots);
 
-// shrink
 bool da_shrink(t_da *da);
 bool da_shrink_min(t_da *da, size_t keep_n);
 
-// get
 void *da_at(t_da *da, size_t pos);
 bool  da_get(t_da *da, size_t pos, void *elem);
 bool  da_nget(t_da *da, size_t n, size_t pos, void *out_buffer);
 void *da_array(t_da *da);
 
-// set
 bool da_set(t_da *da, size_t pos, void *elem);
 bool da_nset(t_da *da, size_t n, size_t pos, void *elems);
 
-// swap
 bool da_swap(t_da *da, size_t pos_a, size_t pos_b);
 bool da_nswap(t_da *da, size_t n, size_t pos_a, size_t pos_b);
 
-// rm
 bool da_rm_order(t_da *da, size_t pos);
 bool da_rms_order(t_da *da, size_t start, size_t end);
 bool da_rm(t_da *da, size_t pos);
 bool da_rms(t_da *da, size_t start, size_t end);
 
-// convert
 void *da_to_array(t_da *da);
 void *da_to_loc_array(t_da *da, void *arr);
 
-// apply
 void *da_apply(t_da *da, t_callback cb, void *u_data);
 void *da_napply(t_da *da, size_t n, t_callback c, void *u_data);
 void *da_apply_it(t_da *da, t_callback_it func, void *u_val);
 void *da_napply_it(t_da *da, size_t n, t_callback_it func, void *u_val);
 
-// fold
 void *da_fold(t_da *da, t_merger c, void *u_start_val);
 void *da_nfold(t_da *da, size_t n, t_merger c, void *u_start_val);
 void *da_reduce(t_da *da, t_merger m);
 void *da_nreduce(t_da *da, size_t n, t_merger m);
 
-// filter
 bool da_filter(t_da *da, t_callback c, void *u_data, t_callback deletor);
 bool da_nfilter(t_da *da, size_t n, t_callback c, void *u_data,
                 t_callback deletor);
@@ -236,20 +219,16 @@ bool da_filter_out(t_da *da, t_callback c, void *u_data, t_callback deletor);
 bool da_nfilter_out(t_da *da, size_t n, t_callback c, void *u_data,
                     t_callback deletor);
 
-// advance
 bool da_advance(t_da *da, size_t n, t_callback deletor, void *u_data);
 
-// reverse
 void da_reverse(t_da *da);
 void da_nreverse(t_da *da, size_t n);
 void da_b_nreverse(t_da *da, size_t n);
 
-// find
 void *da_find(t_da *da, t_comparator c, void *u_data);
 void *da_nfind(t_da *da, size_t n, t_comparator c, void *u_data);
 bool  da_find_get(t_da *da, t_comparator c, void *u_data, void *out_buffer);
 
-// sort
 bool da_sort(t_da *da, t_comparator c);
 bool da_nsort(t_da *da, size_t n, t_comparator c);
 

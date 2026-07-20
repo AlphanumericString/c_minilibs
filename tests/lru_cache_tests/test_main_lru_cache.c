@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/cdefs.h>
 #include <unistd.h>
 
 #include "lru_cache_tests.h"

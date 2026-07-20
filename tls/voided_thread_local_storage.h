@@ -59,14 +59,14 @@
 /**
  * \brief the vtls key-value structure
  * \param v_name the name of the variable
- * \param var the value to associate the name with
+ * \param var the value to associate the name with, (memory ptr)
  * \param size_e the size of the data to save
  * \ingroup vtls
 **/
 typedef struct s_vtls {
 	const char *v_name;
-	void       *var;    // mem ptr to var
-	size_t      size_e; // len of memory of var
+	void       *var;
+	size_t      size_e;
 } t_vtls;
 
 /**
@@ -85,17 +85,13 @@ typedef struct s_tlsv_array {
 extern pthread_key_t vtls_key;
 #endif // C_MINI__INTERNAL
 
-// remove
 bool vtls_rm(const char *v_name);
 
-// get
 void  *vtls_get(const char *v_name);
 size_t vtls_len(void);
 
-// querry
 bool vtls_has(const char *v_name);
 
-// update / add
 bool vtls_set(const char *v_name, void *v_val, size_t v_size);
 
 #endif // C_MINI__VTLS

@@ -2,7 +2,6 @@
 
 #include "tls_tests.h"
 
-// remove
 void test_vtls_rm(void) {
 	void *a = (void *)0xDEAD;
 

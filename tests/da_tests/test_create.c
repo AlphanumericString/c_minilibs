@@ -1,6 +1,8 @@
+#include <assert.h>
+#include <stdlib.h>
+
 #include "da_tests.h"
 
-// create
 void test_da_init(void) {
 	t_da da;
 

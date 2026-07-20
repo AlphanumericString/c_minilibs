@@ -4,7 +4,6 @@
 
 #include "lru_cache_tests.h"
 
-// get
 void test_lruc_get(void) {
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;

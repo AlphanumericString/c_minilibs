@@ -8,7 +8,6 @@ static int cmp_rawptr(const void *a, const void *b) {
 	return (0);
 }
 
-// delete
 void test_hp_clear(void) {
 	t_heap hp;
 

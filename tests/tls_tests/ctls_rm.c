@@ -7,12 +7,10 @@ void test_ctls_rm(void) {
 
 	val.value.i = 42;
 	val.type    = CTLS_INT;
-
 	ctls_set("a", val);
 	assert(ctls_get("a") != NULL);
 	ctls_rm("a");
 	assert(ctls_get("a") == NULL);
-
 	ctls_set("a", val);
 	ctls_set("b", val);
 	ctls_rm("a");

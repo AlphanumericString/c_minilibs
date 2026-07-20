@@ -1,5 +1,4 @@
 #include <assert.h>
-#include <lru_cache/least_recently_used_cache.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -21,7 +20,6 @@ static bool forward_stradd_cache(t_keyvalue *value, void *u_val) {
 	return (true);
 }
 
-// foreach
 void test_lruc_foreach(void) {
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;

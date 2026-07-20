@@ -1,6 +1,7 @@
+#include <assert.h>
+
 #include "da_tests.h"
 
-// clear
 void test_da_clr(void) {
 	t_da   da;
 	size_t sz;

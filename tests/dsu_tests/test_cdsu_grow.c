@@ -1,6 +1,7 @@
+#include <assert.h>
+
 #include "cdsu_tests.h"
 
-// grow
 void test_cdsu_grow(void) {
 	t_cdsu *cdsu = cdsu_new(5);
 

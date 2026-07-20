@@ -1,7 +1,8 @@
 #pragma once
 
-#include <assert.h>
-
+#ifndef C_MINI__TESTS
+#	define C_MINI__TESTS
+#endif
 #include "ill/idl/intrusive_doubly_linked.h"
 #include "ill/ill/intrusive_linked_lists.h"
 
@@ -17,10 +18,6 @@ typedef struct s_test_dnode {
 	int   value;
 	t_idl dnode;
 } t_test_dnode;
-
-// --- Main runners ---
-void ill_main(void);
-void idl_main(void);
 
 // --- ILL tests ---
 void test_ill_apply(void);

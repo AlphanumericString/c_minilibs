@@ -1,6 +1,7 @@
+#include <assert.h>
+
 #include "da_tests.h"
 
-// advance
 void test_da_advance(void) {
 	t_da da;
 

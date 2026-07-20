@@ -57,7 +57,7 @@ static int vtls_tests(void) {
 	return (EXIT_SUCCESS);
 }
 
-int main(void) { // key setup done at constructor time
+int main(void) {
 	LOG("");
 	LOG("");
 	LOG("\t\tCTLS");

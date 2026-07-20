@@ -1,8 +1,7 @@
-#include <da/dynamic_array.h>
+#include <assert.h>
 
 #include "da_tests.h"
 
-// rm
 void test_da_rm_order(void) {
 	t_da da;
 

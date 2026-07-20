@@ -1,5 +1,3 @@
-#include <stddef.h>
-
 #include "heap.h"
 
 static void heap_swap(t_heap *h, size_t pos1, size_t pos2) {

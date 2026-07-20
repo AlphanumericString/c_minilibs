@@ -1,6 +1,8 @@
+#include <assert.h>
+#include <stdlib.h>
+
 #include "da_tests.h"
 
-// convert
 void test_da_to_array(void) {
 	t_da da;
 	int *arr;

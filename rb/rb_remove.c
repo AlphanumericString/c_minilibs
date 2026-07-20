@@ -125,16 +125,3 @@ void *rb_npop(t_rb *rb, size_t n, void *elem_out) {
 	LOG(C_MINI__RB_LOG_SUCCESS);
 	return (return_val);
 }
-
-// // NOTE:
-// // (rb.o_pos - rb.nb_max + n) > rb.i_pos)
-// // calc with arr=[i_pos 0 1 o_pos] n=2
-// // o_pos - 4 + 2 > 0 ?
-// // 3-4+2 > 0
-// // 1 > 0
-// static bool would_cross(t_rb rb, size_t n) {
-// 	if ((rb.o_pos < rb.i_pos && (rb.o_pos + n) > rb.i_pos) ||
-// 	    (rb.o_pos > rb.i_pos && (rb.o_pos - rb.nb_max + n) > rb.i_pos))
-// 		return (true);
-// 	return (false);
-// }

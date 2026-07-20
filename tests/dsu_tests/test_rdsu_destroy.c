@@ -1,6 +1,7 @@
+#include <assert.h>
+
 #include "rdsu_tests.h"
 
-// destroy
 void test_rdsu_clr(void) {
 	t_rdsu *rdsu = rdsu_new(10);
 

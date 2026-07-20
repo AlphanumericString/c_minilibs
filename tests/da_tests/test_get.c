@@ -1,6 +1,7 @@
+#include <assert.h>
+
 #include "da_tests.h"
 
-// get
 void test_da_at(void) {
 	t_da da;
 	int  a;

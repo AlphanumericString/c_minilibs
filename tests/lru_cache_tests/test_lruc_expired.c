@@ -1,7 +1,5 @@
 #include <assert.h>
-#include <bits/types/struct_timeval.h>
 #include <limits.h>
-#include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>

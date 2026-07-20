@@ -64,14 +64,12 @@
 
 #ifdef C_MINI__INTERNAL
 /**
- *
  * \ingroup ctls
 **/
 extern pthread_key_t ctls_key;
 #endif // C_MINI__INTERNAL
 
 /**
- *
  * \ingroup ctls
 **/
 enum e_ctls_type {
@@ -115,20 +113,11 @@ typedef struct s_ctlsv {
 } t_ctlsv;
 #endif // C_MINI__INTERNAL
 
-// remove
-bool ctls_rm(const char *name);
-
-// querry
-bool ctls_has(const char *name);
-
-// update / add
-bool ctls_set(const char *name, t_ctls_typewrap init_val);
-
-// get
+bool             ctls_rm(const char *name);
+bool             ctls_has(const char *name);
+bool             ctls_set(const char *name, t_ctls_typewrap init_val);
 t_ctls_typewrap *ctls_get(const char *name);
 size_t           ctls_len(void);
-
-// utils
-void ctls_dump_typewrap(t_ctls_typewrap t, int fd);
+void             ctls_dump_typewrap(t_ctls_typewrap t, int fd);
 
 #endif // !C_MINI__CTLS

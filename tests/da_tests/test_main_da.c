@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "da_tests.h"
 
 const int arr_3[]   = {1, 2, 3};

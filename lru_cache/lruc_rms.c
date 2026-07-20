@@ -15,8 +15,7 @@ void lruc_clear(t_lruc *c) {
 	t_lruc_keynode *nxt;
 
 	if (!c || !c->node_in_use || !c->buckets_nb) return;
-	if ((c->buckets_nb / c->node_in_use) >=
-	    C_MINI__LRUC_HASH_SKIP) { // less than 10% filled
+	if ((c->buckets_nb / c->node_in_use) >= C_MINI__LRUC_HASH_SKIP) {
 		LOG(C_MINI__LRUC_LOG_LFREE);
 		for (t_lruc_keynode *node = c->MRU; node; node = nxt) {
 			if (c->dtor) c->dtor(node->kv.value);
