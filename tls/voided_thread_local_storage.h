@@ -53,9 +53,9 @@
 
 /**
  * \defgroup vtls Voided-type Thread Local Storage
-**/
+ **/
 
-#ifdef C_MINI__INTERNAL
+#ifdef C_MINI__VTLS_INTERNAL
 #	ifndef C_MINI__VTLS_START_SIZE
 
 #		ifdef C_MINI__TESTS
@@ -72,7 +72,7 @@
  * \param var the value to associate the name with, (memory ptr)
  * \param size_e the size of the data to save
  * \ingroup vtls
-**/
+ **/
 typedef struct s_vtls {
 	const char *v_name;
 	void       *var;
@@ -85,7 +85,7 @@ typedef struct s_vtls {
  * \param len the length of current key-value
  * \param cap maximum number of elements
  * \ingroup vtls
-**/
+ **/
 typedef struct s_tlsv_array {
 	t_vtls *data;
 	size_t  len;
@@ -93,8 +93,7 @@ typedef struct s_tlsv_array {
 } t_vtls_array;
 
 extern pthread_key_t vtls_key;
-
-#endif // C_MINI__INTERNAL
+#endif // C_MINI__VTLS_INTERNAL
 
 bool vtls_rm(const char *v_name);
 

@@ -3,7 +3,7 @@
 #include <string.h>
 #include <time.h>
 
-#define C_MINI__INTERNAL
+#define C_MINI__LRUC_INTERNAL
 #include "least_recently_used_cache.h"
 
 static inline void lruci_hsh_push(t_lruc *c, t_lruc_keynode *n, size_t hash) {

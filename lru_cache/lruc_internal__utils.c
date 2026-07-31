@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#define C_MINI__INTERNAL
+#define C_MINI__LRUC_INTERNAL
 #include "least_recently_used_cache.h"
 
 // is node in list of keys of lruc

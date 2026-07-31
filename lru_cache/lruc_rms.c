@@ -3,7 +3,7 @@
 #include <string.h>
 #include <strings.h>
 
-#define C_MINI__INTERNAL
+#define C_MINI__LRUC_INTERNAL
 #include "least_recently_used_cache.h"
 
 static inline void clear_node(t_lruc_keynode *node, t_lruc_keynode **nxt,

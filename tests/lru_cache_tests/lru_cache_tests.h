@@ -1,6 +1,6 @@
 #pragma once
 
-#define C_MINI__INTERNAL
+#define C_MINI__LRUC_INTERNAL
 
 #ifndef C_MINI__TESTS
 #	define C_MINI__TESTS

@@ -56,24 +56,22 @@
 
 /**
  * \defgroup ctls C-types Thread Local Storage
-**/
+ **/
 
 #ifndef C_MINI__CTLS_CAP
 #	define C_MINI__CTLS_CAP 16
 #endif
 
-#ifdef C_MINI__INTERNAL
-
+#ifdef C_MINI__CTLS_INTERNAL
 /**
  * \ingroup ctls
-**/
+ **/
 extern pthread_key_t ctls_key;
-
-#endif // C_MINI__INTERNAL
+#endif // C_MINI__CTLS_INTERNAL
 
 /**
  * \ingroup ctls
-**/
+ **/
 enum e_ctls_type {
 	CTLS_CHAR = 0,
 	CTLS_INT,
@@ -86,7 +84,7 @@ enum e_ctls_type {
  * \param type enum of c types.
  * \param value union of different possible interpretation of data.
  * \ingroup ctls
-**/
+ **/
 typedef struct {
 	enum e_ctls_type type;
 	union {
@@ -97,7 +95,7 @@ typedef struct {
 	} value;
 } t_ctls_typewrap;
 
-#ifdef C_MINI__INTERNAL
+#ifdef C_MINI__CTLS_INTERNAL
 /**
  * \brief the array of C-type Thread Local Storage. Fast but limited to c-types.
  * \param v_name array of name for the different entries.
@@ -106,14 +104,13 @@ typedef struct {
  * \note if you want to increase the CTLS_CAP it's STRONGLY reccomended to not
  * go over 256
  * \ingroup ctls
-**/
+ **/
 typedef struct s_ctlsv {
 	const char     *v_name[C_MINI__CTLS_CAP];
 	t_ctls_typewrap vals[C_MINI__CTLS_CAP];
 	size_t          len;
 } t_ctlsv;
-
-#endif // C_MINI__INTERNAL
+#endif // C_MINI__CTLS_INTERNAL
 
 bool             ctls_rm(const char *name);
 bool             ctls_has(const char *name);

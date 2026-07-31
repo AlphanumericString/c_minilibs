@@ -100,7 +100,7 @@ typedef struct {
 	size_t      k_len;
 } t_keyvalue;
 
-#ifdef C_MINI__INTERNAL
+#ifdef C_MINI__LRUC_INTERNAL
 
 #	define C_MINI__LRUC_HASH_SKIP 10
 #	define C_MINI__LRUC_TTL_DFLT  LONG_MAX
@@ -142,7 +142,7 @@ typedef struct {
 	t_lruc_stats stats;
 } t_lruc;
 
-#else
+#else // || C_MINI__LRU_INTERNAL
 
 /**
  * \brief the lru-cache global structure
@@ -177,7 +177,7 @@ typedef struct {
 	t_lruc_stats stats;
 } t_lruc;
 
-#endif // C_MINI__LRU_INTERNAL
+#endif // !C_MINI__LRU_INTERNAL
 
 #ifndef CMINI__T_KVCALLBACK_DEFINE
 #	define CMINI__T_KVCALLBACK_DEFINE
@@ -226,7 +226,7 @@ void lruc_foreach(const t_lruc *cache, t_kvcallback fn, void *u_data);
 void lruc_foreach_ru_ordered(const t_lruc *c, t_kvcallback fn, void *u_data);
 void lruc_foreach_ttl_ordered(const t_lruc *c, t_kvcallback fn, void *u_data);
 
-#ifdef C_MINI__INTERNAL
+#ifdef C_MINI__LRUC_INTERNAL
 uint64_t lruci_timeto64(struct timespec t);
 uint64_t lruci_timenow(void);
 bool lruci_key_eq(const void *k1, size_t k1_len, const void *k2, size_t k2_len);
@@ -249,7 +249,7 @@ void            lruci_hp_push(t_lruc *c, t_lruc_keynode *value);
 t_lruc_keynode *lruci_hp_pop(t_lruc *c);
 t_lruc_keynode *lruci_hp_pop_nth(t_lruc *c, size_t n);
 
-#endif // !C_MINI__INTERNAL
+#endif // !C_MINI__LRUC_INTERNAL
 
 // TODO: add `bool lruci_is_valid(const t_lruc *c);`
 

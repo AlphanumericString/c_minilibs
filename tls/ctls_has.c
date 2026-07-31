@@ -1,4 +1,4 @@
-#define C_MINI__INTERNAL
+#define C_MINI__CTLS_INTERNAL
 #include "common_thread_local_storage.h"
 
 /**

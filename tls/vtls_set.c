@@ -1,4 +1,4 @@
-#define C_MINI__INTERNAL
+#define C_MINI__VTLS_INTERNAL
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

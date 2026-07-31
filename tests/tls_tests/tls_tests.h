@@ -9,7 +9,11 @@ struct s_mine {
 #ifndef C_MINI__TESTS
 #	define C_MINI__TESTS
 #endif
-#define C_MINI__INTERNAL
+
+#define C_MINI__CTLS_INTERNAL
+#define C_MINI__FTLS_INTERNAL
+#define C_MINI__VTLS_INTERNAL
+
 #define C_MINI__FTLS_STRUCT struct s_mine
 #include "tls/common_thread_local_storage.h"
 #include "tls/fast_thread_local_storage.h"
@@ -22,6 +26,7 @@ void *ftls_dummy(void *__arg);
 // +----+
 // |CTLS|---------<ctls>
 // +----+
+
 void test_ctls_rm(void);
 void test_ctls_has(void);
 void test_ctls_set(void);

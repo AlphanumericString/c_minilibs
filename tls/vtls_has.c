@@ -1,4 +1,4 @@
-#define C_MINI__INTERNAL
+#define C_MINI__VTLS_INTERNAL
 #include <string.h>
 
 #include "voided_thread_local_storage.h"

@@ -5,7 +5,7 @@
 #include <string.h>
 #include <time.h>
 
-#define C_MINI__INTERNAL
+#define C_MINI__LRUC_INTERNAL
 #include "least_recently_used_cache.h"
 
 /**
@@ -39,7 +39,7 @@ void *lruc_get_lru(t_lruc *c, const void *key, size_t key_len) {
  * \brief Get a key from the cache with TTL
  * \param c cache pointer
  * \param key key to get
- * \param key_len key length
+ * \param len key length
  * \return pointer to the value
  * \ingroup lruc
 **/
