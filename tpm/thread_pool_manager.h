@@ -20,12 +20,27 @@
 #endif
 
 // -- batches
+// #ifndef TPM_BATCH_MAX_SIZE
+// #	define TPM_BATCH_MAX_SIZE 255 // max batch size 255
+// #endif
+// #ifndef TPM_BATCH_DEFAULT_SIZE
+// #	define TPM_BATCH_DEFAULT_SIZE 16 // default
+// #endif
 
-#ifndef TPM_BATCH_MAX_SIZE
-#	define TPM_BATCH_MAX_SIZE 255 // max batch size 255
+// // -- Thread locacl job caching
+// #ifndef C_MINI__TPM_THRD_JOBS_CACHE
+// #	define C_MINI__TPM_THRD_JOBS_CACHE 8
+// #endif // !C_MINI__TPM_THRD_JOBS_CACHE
+
+// -- heartbeat
+// HEARTBEAT_RYTHM -> wake every X secend even without jobs to send info to main
+// thread abt state HBM_Inactive -> maximal number of hearbeats without jobs
+//		before thread gets recalled
+#ifndef C_MINI__TPM_HEARTBEAT_RYTHM
+#	define C_MINI__TPM_HEARTBEAT_RYTHM 2
 #endif
-#ifndef TPM_BATCH_DEFAULT_SIZE
-#	define TPM_BATCH_DEFAULT_SIZE 16 // default
+#ifndef C_MINI__TPM_HBM_INACTIVE
+#	define C_MINI__TPM_HBM_INACTIVE 16
 #endif
 
 // -- checks
@@ -37,60 +52,62 @@
 typedef struct s_tpm_base_job {
 	void *(*func)(void *);
 	void *arg;
-	union {
-		struct {
-			char reccuring : 1;
-			// 7 fields left
-		} detail;
-		uint8_t condensed;
+	struct s_job_infos {
+		bool  reccuring;
+		void *(*then_function)(void *);
 	} infos;
 } t_tpm_base_job;
 
+// -- > split for batching later ...
+//	-> batching size + other infos abt it stored here
+//	-> keeps job struct clean
 typedef struct s_tpm_job {
 	t_tpm_base_job job;
 
 	struct s_tpm_job *next;
 	struct s_tpm_job *prev;
-} t_tpm_job;
+} t_tpm_job_container;
 
 // -- jobs
 #ifndef C_MINI__TPM_MAX_JOBS
-#	define C_MINI__TPM_MAX_JOBS C_MINI__TPM_PAGE_SIZE / sizeof(t_tpm_job)
+#	define C_MINI__TPM_MAX_JOBS                                               \
+		C_MINI__TPM_PAGE_SIZE / sizeof(t_tpm_job_container)
 #endif // !C_MINI__TPM_MAX_JOBS
 
 #ifndef C_MINI__TPM_NB_JOBS
 #	define C_MINI__TPM_NB_JOBS C_MINI__TPM_MAX_JOBS
 #endif // !C_MINI__TPM_NB_JOBS
 
-typedef struct s_tpm_thread_internal {
-	t_tpm_job  job[C_MINI__TPM_NB_JOBS];
-	atomic_int nb_jobs;
+typedef struct s_thread_pool_manager t_tpm;
 
-	pthread_t trd;
+typedef struct s_tpm_thread_internal {
+	t_tpm_job_container job[C_MINI__TPM_NB_JOBS];
+	atomic_int          nb_jobs;
+
+	t_tpm    *pool;
+	pthread_t id_absolute;
+	size_t    id_sequential;
 } t_tpm_thread_internal;
 
-typedef struct {
-	size_t total_jobs_completed;
-	size_t total_jobs_failed;
-	// ... to be determined
-} t_tpm_stats;
-
-typedef union {
-	uint8_t num_threads;
-	bool    shutting_down;
-} t_tpm_internal;
-
-typedef struct {
-	t_tpm_thread_internal trd_ids[C_MINI__TPM_NB_JOBS]; // threads
+typedef struct s_thread_pool_manager {
+	t_tpm_thread_internal threads[C_MINI__TPM_NB_JOBS]; // threads
 	atomic_int            nb_threads;
 
-	t_tpm_job      *q_start;
-	t_tpm_job      *q_end;
-	pthread_mutex_t q_lock;
-	pthread_cond_t  q_cond; // sleep / wakeup
+	t_tpm_job_container *q_start;
+	t_tpm_job_container *q_end;
+	pthread_mutex_t      q_lock;
+	pthread_cond_t       q_cond; // sleep / wakeup
 
-	t_tpm_internal internal_val;
-	t_tpm_stats    stats;
+	struct s_tpm_internal {
+		uint8_t num_threads;
+		bool    shutting_down;
+		bool    queue_closed;
+	} internal_val;
+	struct s_tpm_stats {
+		size_t total_jobs_completed;
+		size_t total_jobs_failed;
+		// ... to be determined
+	} stats;
 } t_tpm;
 
 #ifdef C_MINI__TESTS
@@ -132,7 +149,7 @@ extern pthread_mutex_t console_lock;
 
 #	define C_MINI__TPM_LOG_ETHREADS "Thread error."
 #	define C_MINI__TPM_LOG_EARG     "Bad arguments."
-#	define C_MINI__TPM_LOG_ECLOCK   "Clock function faillure."
+#	define C_MINI__TPM_LOG_ECLOCK   "Clock faillure."
 #	define C_MINI__TPM_LOG_ESPACE   "Not enough space."
 #	define C_MINI__TPM_LOG_EALLOC   "Allocation Fail."
 #	define C_MINI__TPM_LOG_ECB      "Callback failed."
@@ -140,6 +157,7 @@ extern pthread_mutex_t console_lock;
 #	define C_MINI__TPM_LOG_SUCCESS  "Success."
 #	define C_MINI__TPM_LOG_ETODO    "Not yet implemented."
 
+#	define C_MINI__TPM_LOG_TRD_INFO "Thread#%lu : %s"
 #else // || C_MINI__TESTS
 
 #	ifndef LOG
@@ -159,22 +177,32 @@ extern pthread_mutex_t console_lock;
 // create
 t_tpm *tpm_new(size_t nb_thread);
 t_tpm *tpm_init(t_tpm *tpm, size_t nb_thread);
+
 // delete
-void   tpm_delete(t_tpm *tpm);
-void   tpm_free(t_tpm *tpm);
+void tpm_delete(t_tpm *tpm, void (*delete_func)(void *));
+void tpm_free(t_tpm *tpm, void (*delete_func)(void *));
+void tpm_clear_job_list(t_tpm_job_container *head, void (*arg_freeer)(void *));
+
 // add
-void   tpm_add_job(t_tpm *tpm, void *(fun)(void *arg), void *arg);
-void   tpm_add_reccuring_job(t_tpm *tpm, void *(fun)(void *), void *arg);
-void tpm_add_jobs(t_tpm *tpm, size_t nb, void *(*funs)(void *arg), void **args);
+void tpm_add_job(t_tpm *tpm, void *(fun)(void *arg), void *arg);
+void tpm_add_reccuring_job(t_tpm *tpm, void *(fun)(void *), void *arg);
+void tpm_add_batch(t_tpm *tpm, size_t nb, void *(fun)(void *arg), void **args);
+
 // info
-t_tpm_stats tpm_get_stats(t_tpm *tpm);
-int         tpm_get_nbthread(const t_tpm *tpm);
+struct s_tpm_stats tpm_get_stats(t_tpm *tpm);
+int                tpm_get_nbthread(const t_tpm *tpm);
+
 // directing
-bool        tpm_stop(t_tpm *tpm);
+bool tpm_stop(t_tpm *tpm);
+bool tpm_wait_end(t_tpm *tpm);
 
 #ifdef C_MINI__TPM_INTERNAL
 
 void *tpmi_worker(void *tpm);
+void  tpmi_job_push(t_tpm_job_container *to_push, t_tpm_job_container **head,
+                    t_tpm_job_container **tail, bool queu_down);
+
+t_tpm_job_container tpmi_job_pop(t_tpm *tpm);
 
 #endif // C_MINI__TPM_INTERNAL
 

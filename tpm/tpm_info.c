@@ -2,13 +2,13 @@
 
 #include "thread_pool_manager.h"
 
-t_tpm_stats tpm_get_stats(t_tpm *tpm) {
-	t_tpm_stats r;
+struct s_tpm_stats tpm_get_stats(t_tpm *tpm) {
+	struct s_tpm_stats r;
 
 	if (!tpm) {
 		LOG(C_MINI__TPM_LOG_EARG);
-		return (
-		    (t_tpm_stats){.total_jobs_failed = -1, .total_jobs_completed = -1});
+		return ((struct s_tpm_stats){.total_jobs_failed    = -1,
+		                             .total_jobs_completed = -1});
 	}
 	pthread_mutex_lock(&tpm->q_lock);
 	r = tpm->stats;

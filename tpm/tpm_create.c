@@ -20,10 +20,9 @@ t_tpm *tpm_new(size_t nb) {
 		return (NULL);
 	}
 	tpm_init(ret, nb);
-	LOG("Ask == Got ?: %zu == %d", nb, ret->nb_threads);
 	if (atomic_load(&ret->nb_threads) == -1) {
 		free(ret);
-		LOG("No thread initialized, Unknown error.");
+		LOG("Thread Initialization Failed.");
 		return (NULL);
 	}
 	return (ret);
@@ -42,12 +41,14 @@ t_tpm *tpm_init(t_tpm *tpm, size_t nb_thread) {
 	tpm->q_cond = (typeof(tpm->q_cond))PTHREAD_COND_INITIALIZER;
 
 	for (size_t i = 0; i < nb_thread; i++) {
-		if (pthread_create(&(tpm->trd_ids[i].trd), NULL, &tpmi_worker, tpm) !=
-		    0) {
+		tpm->threads[i].pool          = tpm;
+		tpm->threads[i].id_sequential = i;
+		if (pthread_create(&(tpm->threads[i].id_absolute), NULL, &tpmi_worker,
+		                   &tpm->threads[i])) {
 			LOG("PTHREAD_CREATE FAIL: %s", strerror(errno));
-			pthread_mutex_unlock(&tpm->q_lock);
 			tpm_stop(tpm);
-			for (size_t j = 0; j < i; pthread_cancel(tpm->trd_ids[j++].trd))
+			for (size_t j = 0; j < i;
+			     pthread_cancel(tpm->threads[j++].id_absolute))
 				;
 			LOG(C_MINI__TPM_LOG_ETHREADS);
 			atomic_store(&tpm->nb_threads, -1);

@@ -1,7 +1,7 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+// #include <time.h>
 #include <unistd.h>
 
 #include "./tpm/thread_pool_manager.h"
@@ -9,21 +9,23 @@
 /* Example 1: Simple job processing */
 
 // #include "tpm/claudius/threadpool.h"
-// typedef struct {
-// 	int id;
-// 	int value;
-// } work_item_t;
-//
-// void process_work(void *arg) {
-// 	work_item_t *item = (work_item_t *)arg;
-// 	printf("[Worker] Processing item %d (value=%d)\n", item->id, item->value);
-//
-// 	/* Simulate work */
-// 	usleep(100000); /* 100ms */
-//
-// 	printf("[Worker] Completed item %d\n", item->id);
-// 	free(item);
-// }
+
+typedef struct {
+	int id;
+	int value;
+} work_item_t;
+
+void *process_work(void *arg) {
+	work_item_t *item = (work_item_t *)arg;
+	DBG("[Worker] Processing item %d (value=%d)\n", item->id, item->value);
+
+	/* Simulate work */
+	usleep(100000); /* 100ms */
+
+	DBG("[Worker] Completed item %d\n", item->id);
+	free(item);
+	return (NULL);
+}
 //
 // void example_simple(void) {
 // 	printf("=== Example 1: Simple Job Processing ===\n\n");
@@ -201,12 +203,41 @@
 // 	printf("Example 3 complete.\n\n");
 // }
 //
-int main(void) {
-	t_tpm *t = tpm_new(4);
 
-	sleep(5);
+int main(void) {
+	t_tpm       *t = tpm_new(4);
+	work_item_t *item_batch[20];
+
+	for (int i = 0; i < 20; i++) {
+		work_item_t *item = malloc(sizeof(work_item_t));
+		if (!item) {
+			DBG("Memory allocation failed\n");
+			break;
+		}
+		item->id    = i;
+		item->value = i * 100;
+		tpm_add_job(t, process_work, item);
+	}
+	tpm_wait_end(t);
+	LOG("===========");
+	LOG("===========");
+	LOG("===========");
 	LOG("marker here");
+	LOG("===========");
+	LOG("===========");
+	LOG("===========");
+	for (int i = 0; i < 20; i++) {
+		item_batch[i] = malloc(sizeof(work_item_t));
+		if (!item_batch[i]) {
+			DBG("Memory allocation failed\n");
+			break;
+		}
+		item_batch[i]->id    = i + 20;
+		item_batch[i]->value = (i + 20) * 100;
+	}
+	tpm_add_batch(t, 20, process_work, (void **)item_batch);
+	tpm_wait_end(t);
+
 	tpm_free(t);
-	exit(1);
 	return 0;
 }
