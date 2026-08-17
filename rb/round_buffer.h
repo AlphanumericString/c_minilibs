@@ -16,49 +16,11 @@
 #	define C_MINI__RB_LOG_SUCCESS C_MINI__LOG_SUCCESS
 #endif
 
+#include "common_base/fptr.h"
+
 /**
  * \defgroup rb Round Buffer
-**/
-
-#ifndef C_MINI__T_CALLBACK
-#	define C_MINI__T_CALLBACK
-
-/**
- * \brief  callback function pointer, true operation successfull, elem is always
- * the node, arg is passed as is from up function
- * \param  elem pointer to the element
- * \param  arg  argument passed as is from up function
- * \return expected to return true on success false otherwise
-**/
-typedef bool (*t_callback)(void *elem, void *arg);
-
-#endif
-
-#ifndef C_MINI__T_COMPARATOR
-#	define C_MINI__T_COMPARATOR
-
-/**
- * \brief comparator function pointer, <0, 0, >0 for inferior to, equal,
- * superior to
- * \param elem pointer to the element
- * \param arg argument passed as is from up function
- * \return expected to return <0, 0, >0 for inferior to, equal, superior to
-**/
-typedef int (*t_comparator)(void *elem, void *arg);
-
-#endif
-
-#ifndef C_MINI__T_DUPLICATOR
-#	define C_MINI__T_DUPLICATOR
-
-/**
- * \brief duplication function pointer for datas
- * \param elem pointer to the duplication target
- * \return pointer to a valid copy of the data
-**/
-typedef void *(*t_duplicator)(const void *elem);
-
-#endif
+ **/
 
 /**
  * \brief round buffer struct, rb
@@ -68,7 +30,7 @@ typedef void *(*t_duplicator)(const void *elem);
  * \param o_pos output position (expert head)
  * \param sz_e size of elements in the array
  * \ingroup rb
-**/
+ **/
 typedef struct s_roundbuffer_array {
 	void  *array;
 	size_t nb_max;

@@ -1,90 +1,29 @@
 #ifndef C_MINI__DA
+#define C_MINI__DA
 
-#	include <stdbool.h>
-#	include <stddef.h>
+#include <stdbool.h>
+#include <stddef.h>
 
-#	include "common_base/log.h"
-#	ifdef C_MINI__TESTS
+#include "common_base/log.h"
+#ifdef C_MINI__TESTS
 
-#		define C_MINI__DA_LOG_EARG     C_MINI__LOG_EARG
-#		define C_MINI__DA_LOG_EALLOC   C_MINI__LOG_EALLOC
-#		define C_MINI__DA_LOG_GETFAIL  C_MINI__LOG_F_PREFIX "get."
-#		define C_MINI__DA_LOG_FINDFAIL C_MINI__LOG_F_PREFIX "find."
+#	define C_MINI__DA_LOG_EARG     C_MINI__LOG_EARG
+#	define C_MINI__DA_LOG_EALLOC   C_MINI__LOG_EALLOC
+#	define C_MINI__DA_LOG_GETFAIL  C_MINI__LOG_F_PREFIX "get."
+#	define C_MINI__DA_LOG_FINDFAIL C_MINI__LOG_F_PREFIX "find."
 
-#		define C_MINI__DA_LOG_SUCCESS C_MINI__LOG_SUCCESS
-#		define C_MINI__DA_LOG_SWAP    "Swap (nb:%zu, pos1:%zu, pos2:%zu)"
-#		define C_MINI__DA_LOG_GROWTH  "Growth (arr:%p -> %p, cap:%zu -> %zu)"
-#		define C_MINI__DA_LOG_RM                                              \
-			"Remove (pos:%zu, nb del:%zu, nb_e:%zu -> %zu)"
+#	define C_MINI__DA_LOG_SUCCESS C_MINI__LOG_SUCCESS
+#	define C_MINI__DA_LOG_SWAP    "Swap (nb:%zu, pos1:%zu, pos2:%zu)"
+#	define C_MINI__DA_LOG_GROWTH  "Growth (arr:%p -> %p, cap:%zu -> %zu)"
+#	define C_MINI__DA_LOG_RM      "Remove (pos:%zu, nb del:%zu, nb_e:%zu -> %zu)"
 
-#	endif // !C_MINI__TESTS
+#endif // !C_MINI__TESTS
 
-#	ifndef C_MINI__T_CALLBACK
-#		define C_MINI__T_CALLBACK
+#include "common_base/fptr.h"
 
 /**
  * \defgroup da Dynamic array
  **/
-
-/**
- * \brief  callback function pointer, true operation successfull, elem is always
- * the node, arg is passed as is from up function
- * \param  elem pointer to the element
- * \param  arg  argument passed as is from up function
- * \return expected to return true on success false otherwise
- **/
-typedef bool (*t_callback)(void *elem, void *arg);
-
-#	endif
-
-#	ifndef C_MINI__T_CALLBACK_IT
-#		define C_MINI__T_CALLBACK_IT
-
-/**
- * \brief  callback function pointer, true operation successfull, elem is always
- * the node, arg is passed as is from up function
- * \param  elem pointer to the element
- * \param  arg  argument passed as is from up function
- * \param  pos  position of the elem in the sub array backing
- * \param  last boolean on whether or not this is the last element of the call
- * \return expected to return true on success false otherwise
- **/
-typedef bool (*t_callback_it)(void *elem, void *arg, size_t pos, bool last);
-
-#	endif // C_MINI__T_CALLBACK_IT
-
-#	ifndef C_MINI__T_COMPARATOR
-#		define C_MINI__T_COMPARATOR
-
-/**
- * \brief comparator function pointer, <0, 0, >0 for inferior to, equal,
- * superior to
- * \param elem pointer to the element
- * \param arg argument passed as is from up function
- * \return expected to return <0, 0, >0 for inferior to, equal, superior to
- **/
-typedef int (*t_comparator)(const void *elem, const void *arg);
-
-#	endif
-
-#	ifndef C_MINI__T_DUPLICATOR
-#		define C_MINI__T_DUPLICATOR
-
-/**
- * \brief duplication function pointer for datas
- * \param elem pointer to the duplication target
- * \return pointer to a valid copy of the data
- **/
-typedef void *(*t_duplicator)(const void *elem);
-
-#	endif
-
-#	ifndef C_MINI__T_MERGER
-#		define C_MINI__T_MERGER
-
-typedef void *(*t_merger)(void *elem, void *arg);
-
-#	endif // C_MINI__T_MERGER
 
 /**
  * \brief da struct
@@ -184,9 +123,8 @@ bool da_is_full(const t_da *da);
 // TODO:
 // fix nget return -> int [-1 err, 0+ nb elem copied]
 
-#	define C_MINI_DA__SZ_ELEM_DFLT 1024
-#	define C_MINI_DA__NB_ELEM_DFLT 4
-#	define C_MINI_DA__GROWTH       1.5
+#define C_MINI_DA__SZ_ELEM_DFLT 1024
+#define C_MINI_DA__NB_ELEM_DFLT 4
+#define C_MINI_DA__GROWTH       1.5
 
-#	define C_MINI__DA
 #endif // !C_MINI__DA

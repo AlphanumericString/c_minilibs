@@ -18,7 +18,7 @@ bool  cb_true(void *elem, void *arg);
 bool  cb_false(void *elem, void *arg);
 bool  cb_add_one(void *elem, void *arg);
 bool  cb_dump_int(void *elem, void *arg);
-int   cb_cmp(void *a, void *b);
+int   cb_cmp(const void *a, const void *b);
 void *cb_dup(const void *elem);
 void *cb_dup_fail3(const void *elem);
 void  cb_destroy(void *elem);

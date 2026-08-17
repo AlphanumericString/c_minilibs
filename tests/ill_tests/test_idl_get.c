@@ -2,13 +2,13 @@
 
 #include "ill_tests.h"
 
-static int cmp_val(void *elem, void *arg) {
+static int cmp_val(const void *elem, const void *arg) {
 	t_test_dnode *n   = (t_test_dnode *)elem;
 	int           val = *(int *)arg;
 	return n->value - val;
 }
 
-static int cmp_min_max(void *elem1, void *elem2) {
+static int cmp_min_max(const void *elem1, const void *elem2) {
 	t_test_dnode *n1 = (t_test_dnode *)elem1;
 	t_test_dnode *n2 = (t_test_dnode *)elem2;
 	return n1->value - n2->value;

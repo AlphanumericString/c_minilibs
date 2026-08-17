@@ -35,36 +35,11 @@
 
 #endif // !C_MINI__TESTS
 
-#ifndef C_MINI__T_COMPARATOR
-#	define C_MINI__T_COMPARATOR
+#include "common_base/fptr.h"
 
-/**
- * \brief comparator function pointer, <0, 0, >0 for inferior to, equal,
- * superior to
- * \param elem pointer to the element
- * \param arg argument passed as is from up function
- * \return expected to return <0, 0, >0 for inferior to, equal, superior to
-**/
-typedef int (*t_comparator)(const void *elem, const void *arg);
-
-#endif
-
-#ifndef C_MINI__T_CALLBACK
-#	define C_MINI__T_CALLBACK
-
-/**
- * \brief  callback function pointer, true operation successfull, elem is always
- * the node, arg is passed as is from up function
- * \param  elem pointer to the element
- * \param  arg  argument passed as is from up function
- * \return expected to return true on success false otherwise
-**/
-typedef bool (*t_callback)(void *elem, void *arg);
-
-#endif
 /**
  * \defgroup hp Heap
-**/
+ **/
 
 /**
  * \brief heap structure
@@ -73,7 +48,7 @@ typedef bool (*t_callback)(void *elem, void *arg);
  * \param elems reference to the elements as void pointers
  * \param cmp comparator fuction
  * \ingroup hp
-**/
+ **/
 typedef struct s_heap {
 	size_t       nb;
 	size_t       capacity;

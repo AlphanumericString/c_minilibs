@@ -29,49 +29,11 @@
 
 #	endif // !C_MINI__TESTS
 
-#	ifndef C_MINI__T_CALLBACK
-#		define C_MINI__T_CALLBACK
-
-/**
- * \brief  callback function pointer, true operation successfull, elem is always
- * the node, arg is passed as is from up function
- * \param  elem pointer to the element
- * \param  arg  argument passed as is from up function
- * \return expected to return true on success false otherwise
-**/
-typedef bool (*t_callback)(void *elem, void *arg);
-
-#	endif
-
-#	ifndef C_MINI__T_COMPARATOR
-#		define C_MINI__T_COMPARATOR
-
-/**
- * \brief comparator function pointer, <0, 0, >0 for inferior to, equal,
- * superior to
- * \param elem pointer to the element
- * \param arg argument passed as is from up function
- * \return expected to return <0, 0, >0 for inferior to, equal, superior to
-**/
-typedef int (*t_comparator)(void *elem, void *arg);
-
-#	endif
-
-#	ifndef C_MINI__T_DUPLICATOR
-#		define C_MINI__T_DUPLICATOR
-
-/**
- * \brief duplication function pointer for datas
- * \param elem pointer to the duplication target
- * \return pointer to a valid copy of the data
-**/
-typedef void *(*t_duplicator)(const void *elem);
-
-#	endif
+#	include "common_base/fptr.h"
 
 /**
  * \defgroup idl Intrsive Doubly-linked Lists
-**/
+ **/
 
 /**
  * \brief t_idll struct
@@ -79,7 +41,7 @@ typedef void *(*t_duplicator)(const void *elem);
  * \param next pointer to the next node
  * \param prev pointer to the next node
  * \ingroup idl
-**/
+ **/
 typedef struct s_idl {
 	struct s_idl *prev;
 	struct s_idl *next;

@@ -26,7 +26,7 @@ bool cb_add_one(void *elem, void *arg) {
 	return true;
 }
 
-int cb_cmp(void *a, void *b) {
+int cb_cmp(const void *a, const void *b) {
 	return *(int *)a - *(int *)b;
 }
 

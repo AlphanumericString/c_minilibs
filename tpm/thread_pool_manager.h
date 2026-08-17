@@ -7,6 +7,26 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#define C_MINI__LOG_THREADSAFE
+#include "common_base/log.h"
+
+#ifdef C_MINI__TESTS
+#	define C_MINI__TPM_LOG_ETODO    C_MINI__LOG_ETODO
+#	define C_MINI__TPM_LOG_FAIL     C_MINI__LOG_FAIL
+#	define C_MINI__TPM_LOG_EARG     C_MINI__LOG_EARG
+#	define C_MINI__TPM_LOG_EALLOC   C_MINI__LOG_EALLOC
+#	define C_MINI__TPM_LOG_ETHREADS C_MINI__LOG_F_PREFIX "Thread error."
+#	define C_MINI__TPM_LOG_ECLOCK   C_MINI__LOG_F_PREFIX "Clock."
+#	define C_MINI__TPM_LOG_ESPACE   C_MINI__LOG_F_PREFIX "Not enough space."
+#	define C_MINI__TPM_LOG_ECB      C_MINI__LOG_F_PREFIX "Callback."
+#	define C_MINI__TPM_LOG_EDOWN    C_MINI__LOG_F_PREFIX "Shutdown."
+
+#	define C_MINI__TPM_LOG_SUCCESS C_MINI__LOG_SUCCESS
+
+#	define C_MINI__TPM_LOG_TRD_INFO "Thread#%lu : %s"
+
+#endif // !C_MINI__TESTS
+
 // BASE DEFINES
 
 // -- constants
@@ -119,26 +139,6 @@ typedef struct s_thread_pool_manager {
 		// ... to be determined
 	} stats;
 } t_tpm;
-
-#define C_MINI__LOG_THREADSAFE
-#include "common_base/log.h"
-
-#ifdef C_MINI__TESTS
-#	define C_MINI__TPM_LOG_ETODO    C_MINI__LOG_ETODO
-#	define C_MINI__TPM_LOG_FAIL     C_MINI__LOG_FAIL
-#	define C_MINI__TPM_LOG_EARG     C_MINI__LOG_EARG
-#	define C_MINI__TPM_LOG_EALLOC   C_MINI__LOG_EALLOC
-#	define C_MINI__TPM_LOG_ETHREADS C_MINI__LOG_F_PREFIX "Thread error."
-#	define C_MINI__TPM_LOG_ECLOCK   C_MINI__LOG_F_PREFIX "Clock."
-#	define C_MINI__TPM_LOG_ESPACE   C_MINI__LOG_F_PREFIX "Not enough space."
-#	define C_MINI__TPM_LOG_ECB      C_MINI__LOG_F_PREFIX "Callback."
-#	define C_MINI__TPM_LOG_EDOWN    C_MINI__LOG_F_PREFIX "Shutdown."
-
-#	define C_MINI__TPM_LOG_SUCCESS C_MINI__LOG_SUCCESS
-
-#	define C_MINI__TPM_LOG_TRD_INFO "Thread#%lu : %s"
-
-#endif // !C_MINI__TESTS
 
 // TODO: (non-ordered)
 //
