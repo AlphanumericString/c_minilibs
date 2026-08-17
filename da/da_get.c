@@ -10,13 +10,13 @@
  * \param out_elem pointer where the element will be copied
  * \return true on success, false on failure
  * \ingroup da
-**/
+ **/
 bool da_get(const t_da *da, size_t pos, void *out_elem) {
 	if (!da_is_valid(da) || pos >= da->nb_e || !out_elem) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (false);
 	}
-	LOG(C_MINI__DA_LOG_GET, pos);
+	LOG(C_MINI__DA_LOG_SUCCESS);
 	return (memcpy(out_elem, da_at(da, pos), da->sz_e), true);
 }
 /**
@@ -28,13 +28,13 @@ bool da_get(const t_da *da, size_t pos, void *out_elem) {
  * \param out_buffer pointer where the element will be copied
  * \return true on success, false on failure
  * \ingroup da
-**/
+ **/
 bool da_nget(const t_da *da, size_t n, size_t pos, void *out_buffer) {
 	if (!da_is_valid(da) || pos >= da->nb_e || !out_buffer) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (false);
 	}
-	LOG(C_MINI__DA_LOG_GET, pos);
+	LOG(C_MINI__DA_LOG_SUCCESS);
 	if (!n) return (true);
 	if (pos + n > da->nb_e) {
 		DBG("n updated: n (%zu -> %zu)", n, (size_t)(da->nb_e - pos));
@@ -48,7 +48,7 @@ bool da_nget(const t_da *da, size_t n, size_t pos, void *out_buffer) {
  * \param da pointer to the dynamic array
  * \return pointer to the raw inner array or null on faillure
  * \ingroup da
-**/
+ **/
 void *da_array(const t_da *da) {
 	if (!da) {
 		LOG(C_MINI__DA_LOG_EARG);

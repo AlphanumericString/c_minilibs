@@ -5,64 +5,35 @@
 #include <stdint.h>
 #include <time.h>
 
+#include "common_base/log.h"
+
 #ifdef C_MINI__TESTS
-#	include <stdio.h>
 
-#	define DBG(fmt, ...)                                                      \
-		do {                                                                   \
-			printf("\e[36;1m[DBG]\e[0m: %s: " fmt "\n",                        \
-			       __func__ __VA_OPT__(, ) __VA_ARGS__);                       \
-			fflush(stdout);                                                    \
-		} while (0)
+#	define C_MINI__LRUC_LOG_SUCCESS C_MINI__LOG_SUCCESS
 
-#	define LOG(fmt, ...)                                                      \
-		do {                                                                   \
-			printf("\e[32m[LOG]\e[0m: %s: " fmt "\n",                          \
-			       __func__ __VA_OPT__(, ) __VA_ARGS__);                       \
-			fflush(stdout);                                                    \
-		} while (0)
-
-#	define DBG_POS                                                            \
-		do {                                                                   \
-			DBG(" %s:%d \e[33;4m[PATH]\e[0m", __FILE__, __LINE__);             \
-			fflush(stdout);                                                    \
-		} while (0)
-
-#	define C_MINI__LRUC_LOG_SUCCESS  "Success"
-#	define C_MINI__LRUC_LOG_ENODEU   "Unknown node"
-#	define C_MINI__LRUC_LOG_EARG     "Bad arguments"
-#	define C_MINI__LRUC_LOG_EALLOC   "Allocation failure"
-#	define C_MINI__LRUC_LOG_ECLOCK   "Clock error"
-#	define C_MINI__LRUC_LOG_FAILLURE "Failure"
+#	define C_MINI__LRUC_LOG_FAILLURE C_MINI__LOG_FAIL
+#	define C_MINI__LRUC_LOG_EARG     C_MINI__LOG_F_PREFIX "Bad arguments."
+#	define C_MINI__LRUC_LOG_EALLOC   C_MINI__LOG_F_PREFIX "Allocation failure."
+#	define C_MINI__LRUC_LOG_ECLOCK   C_MINI__LOG_F_PREFIX "Clock error."
+#	define C_MINI__LRUC_LOG_ENODEU   C_MINI__LOG_F_PREFIX "Unknown node"
 #	define C_MINI__LRUC_LOG_EVICTION                                          \
 		"Eviction: key=%p delta (%ld) >= ttl (%ld)"
-#	define C_MINI__LRUC_LOG_UPDATE   "Update ttl: %ld->%ld"
-#	define C_MINI__LRUC_LOG_HIT      "Hit: hit=%zu, key:%p, key_len:%zu"
-#	define C_MINI__LRUC_LOG_MISS_LRU "LRU-Miss: miss=%zu, key:%p, key_len:%zu"
+#	define C_MINI__LRUC_LOG_UPDATE "Update ttl: %ld->%ld"
+#	define C_MINI__LRUC_LOG_HIT    "Hit: hit=%zu, key:%p, key_len:%zu"
+#	define C_MINI__LRUC_LOG_MISS_LRU                                          \
+		C_MINI__LOG_F_PREFIX "LRU-Miss: miss=%zu, key:%p, key_len:%zu"
 #	define C_MINI__LRUC_LOG_MISS_TTL                                          \
+		C_MINI__LOG_F_PREFIX                                                   \
 		"TTL-Miss: miss=%zu, key:%p, key_len:%zu delta(%ld)"
 #	define C_MINI__LRUC_LOG_UPDATEVAL "Update: key:%p, key_len:%zu"
 #	define C_MINI__LRUC_LOG_CREATEVAL "Create: key:%p, key_len:%zu"
 #	define C_MINI__LRUC_LOG_DELETEVAL "Delete: key:%p, key_len:%zu"
+
 #	define C_MINI__LRUC_LOG_FAST_FREE "Fast free via list started"
 #	define C_MINI__LRUC_LOG_LFREE     "Cleanup via list started"
 #	define C_MINI__LRUC_LOG_HFREE     "Cleanup via hash started"
 #	define C_MINI__LRUC_LOG_NODE_LRU  "Node replace from lru ordering"
 #	define C_MINI__LRUC_LOG_NODE_MINH "Node replace from MinHeap ordering"
-
-#else // || C_MINI__TESTS
-
-#	ifndef LOG
-#		define LOG(fmt, ...) (void)0;
-#	endif // !LOG
-
-#	ifndef DBG
-#		define DBG(fmt, ...) (void)0;
-#	endif // !DBG
-
-#	ifndef DBG_POS
-#		define DBG_POS (void)0;
-#	endif // !DBG_POS
 
 #endif // !C_MINI__TESTS
 
@@ -72,7 +43,7 @@
 
 /**
  * \defgroup lruc Least Recently Used Cache (with ttl support)
-**/
+ **/
 
 /**
  * \brief stats format for the cache
@@ -80,7 +51,7 @@
  * \param hit number of hit (aka found)
  * \param expired number of expired key/value pairs (aka misses due to time)
  * \ingroup lruc
-**/
+ **/
 typedef struct {
 	size_t misses;
 	size_t hit;
@@ -93,7 +64,7 @@ typedef struct {
  * \param k_len length to read from at pointer key
  * \param value stored value in associated to key
  * \ingroup lruc
-**/
+ **/
 typedef struct {
 	const void *key;
 	void       *value;
@@ -117,7 +88,7 @@ typedef struct {
  * \note in ifdef statement in order to not polute LSP but do not depend on this
  * interface. it MAY CHANGE AT ANY MOMEMENT WHITHOUT ANY NOTICE.
  * \ingroup lruc
-**/
+ **/
 typedef struct s_keycache {
 	t_keyvalue         kv;
 	uint64_t           time;
@@ -161,7 +132,7 @@ typedef struct {
  * \param stats statistics of the lru-cache (see t_lruc_stats for more
  * precisions)
  * \ingroup lruc
-**/
+ **/
 typedef struct {
 	size_t buckets_nb;
 	size_t node_nb;
@@ -188,7 +159,7 @@ typedef struct {
  * \param  elem pointer to the element
  * \param  arg  argument passed as is from up function
  * \return expected to return true on success false otherwise
-**/
+ **/
 typedef bool (*t_kvcallback)(t_keyvalue *elem, void *arg);
 
 #endif // CMINI__T_CALLBAKC_DEFINE

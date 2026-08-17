@@ -17,7 +17,7 @@ bool da_add(t_da *da, void *elem) {
 	if ((da->nb_e + 1) > da->cap_e) da_grow(da);
 	da->nb_e++;
 	memcpy(da_at(da, da->nb_e - 1), elem, da->sz_e);
-	LOG(C_MINI__DA_LOG_ADD, elem, da->nb_e);
+	LOG(C_MINI__DA_LOG_SUCCESS);
 	return (true);
 }
 /**
@@ -38,6 +38,6 @@ bool da_cat_array(t_da *da, void *arr, size_t nb_e, size_t sz_e) {
 	if ((da->nb_e + nb_e) > da->cap_e) da_grow_for_size(da, nb_e);
 	da->nb_e += nb_e;
 	memcpy(da_at(da, da->nb_e - nb_e), arr, da->sz_e * nb_e);
-	LOG(C_MINI__DA_LOG_CATARR, arr, da->nb_e - nb_e, da->nb_e);
+	LOG(C_MINI__DA_LOG_SUCCESS);
 	return (true);
 }

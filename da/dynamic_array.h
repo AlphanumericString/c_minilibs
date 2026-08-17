@@ -3,76 +3,19 @@
 #	include <stdbool.h>
 #	include <stddef.h>
 
+#	include "common_base/log.h"
 #	ifdef C_MINI__TESTS
-#		include <stdio.h>
 
-#		ifndef LOG
-#			define LOG(fmt, ...)                                              \
-				do {                                                           \
-					printf("\e[33m[LOG]\e[0m: %s: " fmt "\n",                  \
-					       __func__ __VA_OPT__(, ) __VA_ARGS__);               \
-					fflush(stdout);                                            \
-				} while (0);
-#		endif // !LOG
+#		define C_MINI__DA_LOG_EARG     C_MINI__LOG_EARG
+#		define C_MINI__DA_LOG_EALLOC   C_MINI__LOG_EALLOC
+#		define C_MINI__DA_LOG_GETFAIL  C_MINI__LOG_F_PREFIX "get."
+#		define C_MINI__DA_LOG_FINDFAIL C_MINI__LOG_F_PREFIX "find."
 
-#		ifndef DBG
-#			define DBG(fmt, ...)                                              \
-				do {                                                           \
-					printf("\e[36;1m[DBG]\e[0m: %s: " fmt "\n",                \
-					       __func__ __VA_OPT__(, ) __VA_ARGS__);               \
-					fflush(stdout);                                            \
-				} while (0);
-#		endif // !DBG
-
-#		ifndef DBG_POS
-#			define DBG_POS                                                    \
-				do {                                                           \
-					printf("\e[34;0m[PATH]\e[0m: %s:%d %s\n", __FILE__,        \
-					       __LINE__, __FUNCTION__);                            \
-					fflush(stdout);                                            \
-				} while (0);
-#		endif // !DBG_POS
-
-#		define C_MINI__DA_LOG_EARG     "Bad arguments."
-#		define C_MINI__DA_LOG_EALLOC   "Allocation failure."
-#		define C_MINI__DA_LOG_GETFAIL  "get Failure"
-#		define C_MINI__DA_LOG_FINDFAIL "find Failure"
-
-#		define C_MINI__DA_LOG_SUCCESS "Success"
-#		define C_MINI__DA_LOG_CLR     "Clear (nb elems=%zu->0)"
-#		define C_MINI__DA_LOG_ADD     "Add (elem=%p, pos=%zu)"
-#		define C_MINI__DA_LOG_GROWTH  "Growth (arr=%p->%p, cap=%zu->%zu)"
-#		define C_MINI__DA_LOG_SHRINK  "Shrink (arr=%p->%p, cap=%zu->%zu)"
-#		define C_MINI__DA_LOG_CATARR  "Add (elems=%p nb_e=%zu->%zu)"
-#		define C_MINI__DA_LOG_GET     "Get (pos=%zu)"
-#		define C_MINI__DA_LOG_SWAP    "Swap (nb=%zu, pos1=%zu, pos2=%zu)"
-#		define C_MINI__DA_LOG_RM      "Remove (pos=%zu, nb del=%zu, nb_e=%zu->%zu)"
-#		define C_MINI__DA_LOG_CONV    "Convert (ret=%p)"
-#		define C_MINI__DA_LOG_APPLY   "Apply (applied on %zu elements)"
-#		define C_MINI__DA_LOG_REDUCE  "Reduce (ptr=%p)"
-#		define C_MINI__DA_LOG_FOLD    "Fold (ptr=%p)"
-#		define C_MINI__DA_LOG_REV     "Reverse (all)"
-#		define C_MINI__DA_LOG_REVF    "Reverse (first=%zu)"
-#		define C_MINI__DA_LOG_REVB    "Reverse (last n=%zu)"
-#		define C_MINI__DA_LOG_SORT    "Sort (all)"
-#		define C_MINI__DA_LOG_NSORT   "Sort (first=%zu)"
-#		define C_MINI__DA_LOG_FINDGET "Get (found=%p, out=%p)"
-#		define C_MINI__DA_LOG_FIND    "Find (at=%zu, e=%p)"
-#		define C_MINI__DA_LOG_SET     "Set (pos=%zu, n=%zu, e=%p)"
-
-#	else // || C_MINI__TESTS
-
-#		ifndef LOG
-#			define LOG(fmt, ...) (void)0;
-#		endif // !LOG
-
-#		ifndef DBG
-#			define DBG(fmt, ...) (void)0;
-#		endif // !DBG
-
-#		ifndef DBG_POS
-#			define DBG_POS (void)0;
-#		endif // !DBG_POS
+#		define C_MINI__DA_LOG_SUCCESS C_MINI__LOG_SUCCESS
+#		define C_MINI__DA_LOG_SWAP    "Swap (nb:%zu, pos1:%zu, pos2:%zu)"
+#		define C_MINI__DA_LOG_GROWTH  "Growth (arr:%p -> %p, cap:%zu -> %zu)"
+#		define C_MINI__DA_LOG_RM                                              \
+			"Remove (pos:%zu, nb del:%zu, nb_e:%zu -> %zu)"
 
 #	endif // !C_MINI__TESTS
 
@@ -81,7 +24,7 @@
 
 /**
  * \defgroup da Dynamic array
-**/
+ **/
 
 /**
  * \brief  callback function pointer, true operation successfull, elem is always
@@ -89,7 +32,7 @@
  * \param  elem pointer to the element
  * \param  arg  argument passed as is from up function
  * \return expected to return true on success false otherwise
-**/
+ **/
 typedef bool (*t_callback)(void *elem, void *arg);
 
 #	endif
@@ -105,7 +48,7 @@ typedef bool (*t_callback)(void *elem, void *arg);
  * \param  pos  position of the elem in the sub array backing
  * \param  last boolean on whether or not this is the last element of the call
  * \return expected to return true on success false otherwise
-**/
+ **/
 typedef bool (*t_callback_it)(void *elem, void *arg, size_t pos, bool last);
 
 #	endif // C_MINI__T_CALLBACK_IT
@@ -119,7 +62,7 @@ typedef bool (*t_callback_it)(void *elem, void *arg, size_t pos, bool last);
  * \param elem pointer to the element
  * \param arg argument passed as is from up function
  * \return expected to return <0, 0, >0 for inferior to, equal, superior to
-**/
+ **/
 typedef int (*t_comparator)(const void *elem, const void *arg);
 
 #	endif
@@ -131,7 +74,7 @@ typedef int (*t_comparator)(const void *elem, const void *arg);
  * \brief duplication function pointer for datas
  * \param elem pointer to the duplication target
  * \return pointer to a valid copy of the data
-**/
+ **/
 typedef void *(*t_duplicator)(const void *elem);
 
 #	endif
@@ -150,7 +93,7 @@ typedef void *(*t_merger)(void *elem, void *arg);
  * \param cap_e number of elements the memory can hold
  * \param sz_e size of 1 elements (the generic part of the array)
  * \ingroup da
-**/
+ **/
 typedef struct s_dynamic_memory_array {
 	void  *array;
 	size_t nb_e;

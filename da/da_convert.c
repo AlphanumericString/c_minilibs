@@ -10,7 +10,7 @@
  * \note Warning, the data array is NOT the array of the da itself but a shallow
  * copy. *YOU* need to free it.
  * \ingroup da
-**/
+ **/
 void *da_to_array(const t_da *da) {
 	void *data;
 
@@ -24,7 +24,7 @@ void *da_to_array(const t_da *da) {
 		return (NULL);
 	}
 	da_to_loc_array(da, data);
-	LOG(C_MINI__DA_LOG_CONV, data);
+	LOG(C_MINI__DA_LOG_SUCCESS);
 	return (data);
 }
 /**
@@ -33,13 +33,13 @@ void *da_to_array(const t_da *da) {
  * \param arr target array where elements will be copied
  * \return pointer to the target array (arr), or NULL on failure
  * \ingroup da
-**/
+ **/
 void *da_to_loc_array(const t_da *da, void *arr) {
 	if (!da_is_valid(da) || !arr) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (NULL);
 	};
 	memcpy(arr, da->array, da->sz_e * da->nb_e);
-	LOG(C_MINI__DA_LOG_CONV, arr);
+	LOG(C_MINI__DA_LOG_SUCCESS);
 	return (arr);
 }

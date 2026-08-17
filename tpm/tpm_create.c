@@ -37,12 +37,14 @@ t_tpm *tpm_init(t_tpm *tpm, size_t nb_thread) {
 
 	*tpm = (t_tpm){0};
 	atomic_store(&tpm->nb_threads, nb_thread);
-	tpm->q_lock = (typeof(tpm->q_lock))PTHREAD_MUTEX_INITIALIZER;
-	tpm->q_cond = (typeof(tpm->q_cond))PTHREAD_COND_INITIALIZER;
+	tpm->q_lock = (pthread_mutex_t)PTHREAD_MUTEX_INITIALIZER;
+	tpm->q_cond = (pthread_cond_t)PTHREAD_COND_INITIALIZER;
 
 	for (size_t i = 0; i < nb_thread; i++) {
 		tpm->threads[i].pool          = tpm;
 		tpm->threads[i].id_sequential = i;
+		tpm->threads[i].job_cache_lock =
+		    (pthread_mutex_t)PTHREAD_MUTEX_INITIALIZER;
 		if (pthread_create(&(tpm->threads[i].id_absolute), NULL, &tpmi_worker,
 		                   &tpm->threads[i])) {
 			LOG("PTHREAD_CREATE FAIL: %s", strerror(errno));

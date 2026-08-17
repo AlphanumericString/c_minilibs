@@ -3,51 +3,8 @@
 
 #include <pthread.h>
 
-#ifdef C_MINI__TESTS
-#	include <stdio.h>
+#include "common_base/log.h"
 
-#	ifndef LOG
-#		define LOG(fmt, ...)                                                  \
-			do {                                                               \
-				printf("\e[33m[LOG]\e[0m: %s: " fmt "\n",                      \
-				       __func__ __VA_OPT__(, ) __VA_ARGS__);                   \
-				fflush(stdout);                                                \
-			} while (0);
-#	endif // !LOG
-
-#	ifndef DBG
-#		define DBG(fmt, ...)                                                  \
-			do {                                                               \
-				printf("\e[36;1m[DBG]\e[0m: %s: " fmt "\n",                    \
-				       __func__ __VA_OPT__(, ) __VA_ARGS__);                   \
-				fflush(stdout);                                                \
-			} while (0);
-#	endif // !DBG
-
-#	ifndef DBG_POS
-#		define DBG_POS                                                        \
-			do {                                                               \
-				printf("\e[34;0m[PATH]\e[0m: %s:%d %s\n", __FILE__, __LINE__,  \
-				       __FUNCTION__);                                          \
-				fflush(stdout);                                                \
-			} while (0);
-#	endif // !DBG_POS
-
-#else // || C_MINI__TESTS
-
-#	ifndef LOG
-#		define LOG(fmt, ...) (void)0;
-#	endif // !LOG
-
-#	ifndef DBG
-#		define DBG(fmt, ...) (void)0;
-#	endif // !DBG
-
-#	ifndef DBG_POS
-#		define DBG_POS (void)0;
-#	endif // !DBG_POS
-
-#endif // !C_MINI__TESTS
 /**
  * \defgroup ftls Fast Thread Local Storage
 **/
@@ -67,7 +24,7 @@
 **/
 typedef C_MINI__FTLS_STRUCT t_ftls;
 
-#if defined (C_MINI__FTLS_INTERNAL) || defined (C_MINI__FTLS_GET)
+#if defined(C_MINI__FTLS_INTERNAL) || defined(C_MINI__FTLS_GET)
 /**
  * \brief key used for the f tls system. mandatory for thread management.
  * \ingroup ftls

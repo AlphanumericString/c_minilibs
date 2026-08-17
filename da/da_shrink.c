@@ -20,9 +20,9 @@ bool da_shrink(t_da *da) {
 	r = da_shrink_min(da, 0);
 	if (!r) {
 		LOG(C_MINI__DA_LOG_EALLOC);
-	} else {
-		LOG(C_MINI__DA_LOG_SUCCESS);
+		return (NULL);
 	}
+	LOG(C_MINI__DA_LOG_SUCCESS);
 	return (r);
 }
 /**
@@ -42,7 +42,7 @@ bool da_shrink_min(t_da *da, size_t keep_n) {
 		return (false);
 	}
 	if ((da->nb_e + keep_n) >= da->cap_e) {
-		LOG(C_MINI__DA_LOG_SHRINK, da->array, da->array, da->cap_e, da->cap_e);
+		LOG(C_MINI__DA_LOG_SUCCESS);
 		return (true);
 	}
 	tmp = calloc(da->sz_e, (da->nb_e + keep_n));
@@ -52,8 +52,8 @@ bool da_shrink_min(t_da *da, size_t keep_n) {
 	}
 	memcpy(tmp, da->array, da->nb_e * da->sz_e);
 	free(da->array);
-	LOG(C_MINI__DA_LOG_SHRINK, da->array, tmp, da->cap_e, da->nb_e + keep_n);
 	da->array = tmp;
 	da->cap_e = da->nb_e + keep_n;
+	LOG(C_MINI__DA_LOG_SUCCESS);
 	return (true);
 }

@@ -12,7 +12,7 @@ void da_clr(t_da *ret) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return;
 	}
-	LOG(C_MINI__DA_LOG_CLR, ret->nb_e);
+	LOG(C_MINI__DA_LOG_SUCCESS);
 	ret->nb_e = 0;
 }
 /**

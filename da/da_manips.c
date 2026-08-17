@@ -38,7 +38,8 @@ bool da_swap(t_da *da, size_t pos_a, size_t pos_b) {
 		memcpy(sa, sb, da->sz_e);
 		memcpy(sb, sized_buffer, da->sz_e);
 	}
-	LOG(C_MINI__DA_LOG_SWAP, 1UL, pos_a, pos_b);
+	//	LOG(C_MINI__DA_LOG_SWAP, 1UL, pos_a, pos_b);
+	LOG(C_MINI__DA_LOG_SUCCESS);
 	return (true);
 }
 /**
@@ -74,6 +75,7 @@ bool da_nswap(t_da *da, size_t n, size_t pos_a, size_t pos_b) {
 		memcpy(sa, sb, da->sz_e * n);
 		memcpy(sb, sized_buffer, da->sz_e * n);
 	}
-	LOG(C_MINI__DA_LOG_SWAP, n, pos_a, pos_b);
+	// LOG(C_MINI__DA_LOG_SWAP, n, pos_a, pos_b);
+	LOG(C_MINI__DA_LOG_SUCCESS);
 	return (true);
 }

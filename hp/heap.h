@@ -5,45 +5,19 @@
 #include <stddef.h>
 
 #ifdef C_MINI__TESTS
-#	include <stdio.h>
+#	include "common_base/log.h"
 
-#	ifndef LOG
-#		define LOG(fmt, ...)                                                  \
-			do {                                                               \
-				printf("\e[33m[LOG]\e[0m: %s: " fmt "\n",                      \
-				       __func__ __VA_OPT__(, ) __VA_ARGS__);                   \
-				fflush(stdout);                                                \
-			} while (0);
-#	endif // !LOG
-
-#	ifndef DBG
-#		define DBG(fmt, ...)                                                  \
-			do {                                                               \
-				printf("\e[36;1m[DBG]\e[0m: %s: " fmt "\n",                    \
-				       __func__ __VA_OPT__(, ) __VA_ARGS__);                   \
-				fflush(stdout);                                                \
-			} while (0);
-#	endif // !DBG
-
-#	ifndef DBG_POS
-#		define DBG_POS                                                        \
-			do {                                                               \
-				printf("\e[34;0m[PATH]\e[0m: %s:%d %s\n", __FILE__, __LINE__,  \
-				       __FUNCTION__);                                          \
-				fflush(stdout);                                                \
-			} while (0);
-#	endif // !DBG_POS
-
+#	define C_MINI__HP_LOG_SUCCESS C_MINI__LOG_SUCCESS
 #	define C_MINI__HP_LOG_CLR     "Clear Heap"
-#	define C_MINI__HP_LOG_SUCCESS "Success"
 #	define C_MINI__HP_LOG_STATUS  "Heap(%p), {nb:%zu, cap:%zu}"
 #	define C_MINI__HP_LOG_POP     "Pop (return:%p)\t" C_MINI__HP_LOG_STATUS
 #	define C_MINI__HP_LOG_PUSH    "Push (elem:%p)\t" C_MINI__HP_LOG_STATUS
 #	define C_MINI__HP_LOG_SWAP    "Swap (%zu, %zu)"
 
-#	define C_MINI__HP_LOG_CB_FAIL "Callback failed. (element %zu)"
-#	define C_MINI__HP_LOG_EARG    "Bad arguments"
-#	define C_MINI__HP_LOG_EALLOC  "Allocation failed"
+#	define C_MINI__HP_LOG_CB_FAIL                                             \
+		C_MINI__LOG_F_PREFIX "Callback failed. (element %zu)"
+#	define C_MINI__HP_LOG_EARG   C_MINI__LOG_EARG
+#	define C_MINI__HP_LOG_EALLOC C_MINI__LOG_EALLOC
 
 #else // || C_MINI__TESTS
 

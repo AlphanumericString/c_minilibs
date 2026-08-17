@@ -4,10 +4,10 @@
 
 #include "thread_pool_manager.h"
 
-void tpm_delete(t_tpm *tpm, void (*delete_func)(void *)) {
-	void                *val;
-	size_t               nb;
-	t_tpm_job_container *nxt;
+void tpm_delete(t_tpm *tpm, t_call cleanup) {
+	void     *val;
+	size_t    nb;
+	t_tpm_jc *nxt;
 
 	if (!tpm) {
 		LOG(C_MINI__TPM_LOG_EARG);
@@ -23,9 +23,9 @@ void tpm_delete(t_tpm *tpm, void (*delete_func)(void *)) {
 		pthread_join(tpm->threads[i].id_absolute, &val);
 		(void)val;
 	}
-	for (t_tpm_job_container *jc = tpm->q_start; jc; jc = nxt) {
+	for (t_tpm_jc *jc = tpm->q_start; jc; jc = nxt) {
 		nxt = jc->next;
-		if (delete_func) delete_func(jc->job.arg);
+		if (cleanup) cleanup(jc->job.arg);
 		free(jc);
 	}
 
@@ -34,11 +34,11 @@ void tpm_delete(t_tpm *tpm, void (*delete_func)(void *)) {
 	return;
 }
 
-void tpm_free(t_tpm *tpm, void (*delete_func)(void *)) {
+void tpm_free(t_tpm *tpm, t_call cleanup) {
 	if (!tpm) {
 		LOG(C_MINI__TPM_LOG_EARG);
 		return;
 	}
-	tpm_delete(tpm, delete_func);
+	tpm_delete(tpm, cleanup);
 	free(tpm);
 }

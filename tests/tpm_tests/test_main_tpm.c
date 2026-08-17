@@ -1,7 +1,5 @@
 #include <pthread.h>
-#include <stdio.h>
 #include <stdlib.h>
-// #include <time.h>
 #include <unistd.h>
 
 #include "./tpm/thread_pool_manager.h"
@@ -16,16 +14,62 @@ typedef struct {
 } work_item_t;
 
 void *process_work(void *arg) {
-	work_item_t *item = (work_item_t *)arg;
-	DBG("[Worker] Processing item %d (value=%d)\n", item->id, item->value);
+	work_item_t *item   = (work_item_t *)arg;
+	size_t       one_ms = 1000; // 1ms;
+	size_t       ms;            // 100ms
 
-	/* Simulate work */
-	usleep(100000); /* 100ms */
+	/* Simulate work randomness */
+	if (item->id % 2) ms = 1000 * one_ms;      // 1.0s
+	else if (item->id % 3) ms = 3000 * one_ms; // 3.0s
+	else ms = 100 * one_ms;                    // 0.1s
+	DBG("[Worker] Processing item %d (value=%d) {estimate:%zums (%.2f s)}",
+	    item->id, item->value, ms / one_ms, (float)(ms / one_ms) / 1000);
 
-	DBG("[Worker] Completed item %d\n", item->id);
+	usleep(ms);
+
+	DBG("[Worker] Completed item %d", item->id);
 	free(item);
 	return (NULL);
 }
+
+int main(void) {
+	t_tpm       *t = tpm_new(4);
+	work_item_t *item_batch[20];
+
+	for (int i = 0; i < 20; i++) {
+		work_item_t *item = malloc(sizeof(work_item_t));
+		if (!item) {
+			DBG("Memory allocation failed\n");
+			break;
+		}
+		item->id    = i;
+		item->value = i * 100;
+		tpm_add_job(t, process_work, item);
+	}
+	tpm_wait_end(t);
+	LOG("===========");
+	LOG("===========");
+	LOG("===========");
+	LOG("marker here");
+	LOG("===========");
+	LOG("===========");
+	LOG("===========");
+	for (int i = 0; i < 20; i++) {
+		item_batch[i] = malloc(sizeof(work_item_t));
+		if (!item_batch[i]) {
+			DBG("Memory allocation failed\n");
+			break;
+		}
+		item_batch[i]->id    = i + 20;
+		item_batch[i]->value = (i + 20) * 100;
+	}
+	tpm_add_batch(t, 20, process_work, (void **)item_batch);
+	tpm_wait_end(t);
+
+	tpm_free(t, free);
+	return 0;
+}
+
 //
 // void example_simple(void) {
 // 	printf("=== Example 1: Simple Job Processing ===\n\n");
@@ -203,41 +247,3 @@ void *process_work(void *arg) {
 // 	printf("Example 3 complete.\n\n");
 // }
 //
-
-int main(void) {
-	t_tpm       *t = tpm_new(4);
-	work_item_t *item_batch[20];
-
-	for (int i = 0; i < 20; i++) {
-		work_item_t *item = malloc(sizeof(work_item_t));
-		if (!item) {
-			DBG("Memory allocation failed\n");
-			break;
-		}
-		item->id    = i;
-		item->value = i * 100;
-		tpm_add_job(t, process_work, item);
-	}
-	tpm_wait_end(t);
-	LOG("===========");
-	LOG("===========");
-	LOG("===========");
-	LOG("marker here");
-	LOG("===========");
-	LOG("===========");
-	LOG("===========");
-	for (int i = 0; i < 20; i++) {
-		item_batch[i] = malloc(sizeof(work_item_t));
-		if (!item_batch[i]) {
-			DBG("Memory allocation failed\n");
-			break;
-		}
-		item_batch[i]->id    = i + 20;
-		item_batch[i]->value = (i + 20) * 100;
-	}
-	tpm_add_batch(t, 20, process_work, (void **)item_batch);
-	tpm_wait_end(t);
-
-	tpm_free(t);
-	return 0;
-}

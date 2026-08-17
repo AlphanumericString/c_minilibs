@@ -4,55 +4,14 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#include "common_base/log.h"
 #ifdef C_MINI__TESTS
-#	include <stdio.h>
 
-#	ifndef LOG
-#		define LOG(fmt, ...)                                                  \
-			do {                                                               \
-				printf("\e[33m[LOG]\e[0m: %s: " fmt "\n",                      \
-				       __func__ __VA_OPT__(, ) __VA_ARGS__);                   \
-				fflush(stdout);                                                \
-			} while (0);
-#	endif // !LOG
+#	define C_MINI__CDSU_LOG_EARG   C_MINI__LOG_EARG
+#	define C_MINI__CDSU_LOG_EALLOC C_MINI__LOG_EALLOC
+#	define C_MINI__CDSU_LOG_FAIL   C_MINI__LOG_FAIL
 
-#	ifndef DBG
-#		define DBG(fmt, ...)                                                  \
-			do {                                                               \
-				printf("\e[36;1m[DBG]\e[0m: %s: " fmt "\n",                    \
-				       __func__ __VA_OPT__(, ) __VA_ARGS__);                   \
-				fflush(stdout);                                                \
-			} while (0);
-#	endif // !DBG
-
-#	ifndef DBG_POS
-#		define DBG_POS                                                        \
-			do {                                                               \
-				printf("\e[34;0m[PATH]\e[0m: %s:%d %s\n", __FILE__, __LINE__,  \
-				       __FUNCTION__);                                          \
-				fflush(stdout);                                                \
-			} while (0);
-#	endif // !DBG_POS
-
-#	define C_MINI__CDSU_LOG_EARG   "Bad arguments."
-#	define C_MINI__CDSU_LOG_EALLOC "Allocation failure."
-#	define C_MINI__CDSU_LOG_FAIL   "Failure"
-
-#	define C_MINI__CDSU_LOG_SUCCESS "Success"
-
-#else // || C_MINI__TESTS
-
-#	ifndef LOG
-#		define LOG(fmt, ...) (void)0;
-#	endif // !LOG
-
-#	ifndef DBG
-#		define DBG(fmt, ...) (void)0;
-#	endif // !DBG
-
-#	ifndef DBG_POS
-#		define DBG_POS (void)0;
-#	endif // !DBG_POS
+#	define C_MINI__CDSU_LOG_SUCCESS C_MINI__LOG_SUCCESS
 
 #endif // !C_MINI__TESTS
 

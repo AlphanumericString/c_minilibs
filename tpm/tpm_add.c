@@ -1,39 +1,42 @@
 #include <assert.h>
 #include <pthread.h>
 #include <stddef.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #define C_MINI__TPM_INTERNAL
 #include "thread_pool_manager.h"
 
-void disp_chain(t_tpm_job_container *head) {
+#define CL     C_MINI__TPM_THRD_JOBS_CACHE
+#define t_cont t_tpm_jc
+
+// dbg
+void disp_chain(t_cont *head) {
 	DBG("disp chain from %p", head);
 	DBG("previous\tit\tnext");
-	for (t_tpm_job_container *it = head; it; it = it->next) {
+	for (t_cont *it = head; it; it = it->next) {
 		DBG("%p\t%p\t%p", it->prev, it, it->next);
 	}
 }
 
-static t_tpm_job_container *create_job(void *(func)(void *), void *a) {
-	t_tpm_job_container *container;
+static t_cont *create_job(t_work w_func, void *a) {
+	t_cont *container;
 
 	container = malloc(sizeof(*container));
 	if (!container) return (NULL);
-	container->job = (t_tpm_base_job){
-	    .func  = func,
-	    .arg   = a,
-	    .infos = {.then_function = NULL, .reccuring = false}
-    };
+	container->job =
+	    (t_tpm_job){.func = w_func, .arg = a, .infos = {.reccuring = false}};
 	container->next = NULL;
 	container->prev = NULL;
 	return (container);
 }
-void tpmi_job_push(t_tpm_job_container *to_push, t_tpm_job_container **head,
-                   t_tpm_job_container **tail, bool queue_down) {
+
+bool tpmi_job_push(t_cont *to_push, t_cont **head, t_cont **tail,
+                   bool queue_down) {
 	assert(!(*head == NULL ^ *tail == NULL));
 	if (queue_down == true) {
-		LOG("Queue Down : refused");
-		return;
+		LOG(C_MINI__TPM_LOG_EDOWN);
+		return (false);
 	}
 	to_push->next = *head;
 	to_push->prev = NULL;
@@ -43,106 +46,147 @@ void tpmi_job_push(t_tpm_job_container *to_push, t_tpm_job_container **head,
 		*tail = to_push;
 	}
 	*head = to_push;
+	return (true);
+}
+t_cont tpmi_job_pop(t_tpm *tpm) {
+	t_cont *node;
+	t_cont  ret;
+
+	if (!tpm->q_end) {
+		LOG(C_MINI__TPM_LOG_EARG);
+		return ((t_cont){0});
+	}
+	node       = tpm->q_end;
+	tpm->q_end = tpm->q_end->prev;
+	if (node == tpm->q_start) tpm->q_start = NULL;
+	// node->prev = NULL;
+	// node->next = NULL;
+	ret = *node;
+	if (node->job.infos.reccuring == true) {
+		LOG("recuring job, re-pushing:%p", node);
+		tpmi_job_push(node, &tpm->q_start, &tpm->q_end,
+		              tpm->internal_val.queue_closed);
+	} else {
+		free(node);
+	}
+	return (ret);
 }
 
-void tpm_add_job(t_tpm *tpm, void *(func)(void *arg), void *arg) {
-	t_tpm_job_container *j;
+int tpmi_job_thrd_cache_pop(t_tpm *tpm, t_cont *buffer[CL], size_t start) {
+	size_t  i = start;
+	t_cont *it;
 
-	if (!tpm || !func) {
+	if (!tpm || !buffer) {
 		LOG(C_MINI__TPM_LOG_EARG);
-		return;
+		return (-1);
 	}
-	j = create_job(func, arg);
+	it = tpm->q_start;
+	for (; i < CL && it; i++) {
+		buffer[i] = it;
+		it        = it->next;
+	}
+	if (!it || !it->next) {
+		tpm->q_start = NULL;
+		tpm->q_end   = NULL;
+	} else {
+		it->next->prev = NULL;
+		tpm->q_start   = it->next;
+	}
+	LOG("Success: nb jobs taken:%zu", i - start);
+	return (i - start);
+}
+
+t_cont *tpm_add_job(t_tpm *tpm, t_work work, void *arg) {
+	t_cont *j;
+	bool    r;
+
+	if (!tpm || !work) {
+		LOG(C_MINI__TPM_LOG_EARG);
+		return (NULL);
+	}
+	j = create_job(work, arg);
 	if (!j) {
 		LOG(C_MINI__TPM_LOG_EALLOC);
-		return;
+		return (NULL);
 	}
 	pthread_mutex_lock(&tpm->q_lock);
-	tpmi_job_push(j, &tpm->q_start, &tpm->q_end,
-	              tpm->internal_val.queue_closed);
+	r = tpmi_job_push(j, &tpm->q_start, &tpm->q_end,
+	                  tpm->internal_val.queue_closed);
 	pthread_mutex_unlock(&tpm->q_lock);
+	if (!r) return (free(j), NULL);
 	pthread_cond_signal(&tpm->q_cond);
 	LOG(C_MINI__TPM_LOG_SUCCESS);
-	return;
+	return (j);
 }
-void tpm_add_reccuring_job(t_tpm *tpm, void *(func)(void *), void *arg) {
-	t_tpm_job_container *j;
+t_cont *tpm_add_reccuring_job(t_tpm *tpm, t_work work, void *arg) {
+	t_cont *j;
+	bool    r;
 
-	if (!tpm || !func) {
+	if (!tpm || !work) {
 		LOG(C_MINI__TPM_LOG_EARG);
-		return;
+		return (NULL);
 	}
-	j = create_job(func, arg);
+	j = create_job(work, arg);
 	if (!j) {
 		LOG(C_MINI__TPM_LOG_EALLOC);
-		return;
+		return (NULL);
 	}
 	j->job.infos.reccuring = true;
 	pthread_mutex_lock(&tpm->q_lock);
-	tpmi_job_push(j, &tpm->q_start, &tpm->q_end,
-	              tpm->internal_val.queue_closed);
+	r = tpmi_job_push(j, &tpm->q_start, &tpm->q_end,
+	                  tpm->internal_val.queue_closed);
 	pthread_mutex_unlock(&tpm->q_lock);
+	if (!r) return (free(j), NULL);
 	pthread_cond_signal(&tpm->q_cond);
 	LOG(C_MINI__TPM_LOG_SUCCESS);
-	return;
+	return (j);
 }
+t_cont *tpm_add_batch(t_tpm *tpm, size_t nb, t_work work, void **args) {
+	t_cont *local_head;
+	t_cont *it;
+	bool    shuttingdown;
 
-void tpm_clear_job_list(t_tpm_job_container *head, void (*arg_freeer)(void *)) {
-	for (t_tpm_job_container *nxt; head; head = nxt) {
-		nxt = head->next;
-		if (arg_freeer) arg_freeer(head->job.arg);
-		free(head);
-	}
-}
-
-void tpm_add_batch(t_tpm *tpm, size_t nb, void *(func)(void *arg),
-                   void **args) {
-	t_tpm_job_container *local_head;
-	t_tpm_job_container *it;
-
-	if (!tpm || !func || !args) {
+	if (!tpm || !work || !args) {
 		LOG(C_MINI__TPM_LOG_EARG);
-		return;
+		return (NULL);
 	}
 	if (!nb) {
 		LOG(C_MINI__TPM_LOG_SUCCESS);
-		return;
+		return (NULL);
 	}
-	local_head = create_job(func, args[0]);
+	pthread_mutex_lock(&tpm->q_lock);
+	shuttingdown = tpm->internal_val.shutting_down;
+	pthread_mutex_unlock(&tpm->q_lock);
+	if (shuttingdown) {
+		LOG(C_MINI__TPM_LOG_EDOWN);
+		return (NULL);
+	}
+	local_head = create_job(work, args[0]);
 	it         = local_head;
 	for (size_t i = 1; i < nb; i++) {
-		it->next = create_job(func, args[i]);
+		it->next = create_job(work, args[i]);
 		if (!it->next) {
 			LOG(C_MINI__TPM_LOG_EALLOC);
 			tpm_clear_job_list(local_head, NULL);
-			return;
+			return (NULL);
 		}
 		it->next->prev = it;
 		it             = it->next;
 	}
+
 	pthread_mutex_lock(&tpm->q_lock);
+	it->next = tpm->q_start;
+	if (tpm->q_start) tpm->q_start->prev = it->next;
+	if (!tpm->q_end) tpm->q_end = it;
 	tpm->q_start = local_head;
-	tpm->q_end   = it;
 	pthread_mutex_unlock(&tpm->q_lock);
-	return;
+	return (NULL);
 }
 
-t_tpm_job_container tpmi_job_pop(t_tpm *tpm) {
-	t_tpm_job_container *ret;
-
-	if (!tpm->q_end) {
-		LOG(C_MINI__TPM_LOG_EARG);
-		return ((t_tpm_job_container){0});
+void tpm_clear_job_list(t_cont *head, t_call cleanup) {
+	for (t_cont *nxt; head; head = nxt) {
+		nxt = head->next;
+		if (cleanup) cleanup(head->job.arg);
+		free(head);
 	}
-	ret        = tpm->q_end;
-	tpm->q_end = tpm->q_end->prev;
-	if (ret == tpm->q_start) tpm->q_start = NULL;
-	ret->prev = NULL;
-	ret->next = NULL;
-	if (ret->job.infos.reccuring == true) {
-		LOG("recuring job, re-pushing:%p", ret);
-		tpmi_job_push(ret, &tpm->q_start, &tpm->q_end,
-		              tpm->internal_val.queue_closed);
-	}
-	return (*ret);
 }
