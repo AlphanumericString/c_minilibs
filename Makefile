@@ -1,5 +1,5 @@
 # define variable for all modules dir
-MODULES			= ill rb da ss dsu tls lru_cache hp
+MODULES			= ill rb da ss dsu tls lru_cache hp sptr
 D_FILES			=
 .DEFAULT_GOAL	:= all
 BUILD_DIR		= build
