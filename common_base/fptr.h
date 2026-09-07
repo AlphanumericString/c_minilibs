@@ -1,5 +1,5 @@
-#ifndef C_MINI__FPTR
-#define C_MINI__FPTR
+#ifndef C_MINI__COMMON_FPTR
+#define C_MINI__COMMON_FPTR
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -48,6 +48,18 @@ typedef int (*t_comparator)(const void *elem, const void *arg);
 
 #endif // T_COMPARATOR
 
+#ifndef C_MINI__T_DTOR
+#	define C_MINI__T_DTOR
+
+/**
+ * \brief duplication function pointer for datas
+ * \param elem pointer to the duplication target
+ * \return pointer to a valid copy of the data
+ **/
+typedef void (*t_dtor)(void *elem);
+
+#endif // !C_MINI__T_DTOR
+
 #ifndef C_MINI__T_DUPLICATOR
 #	define C_MINI__T_DUPLICATOR
 
@@ -58,13 +70,13 @@ typedef int (*t_comparator)(const void *elem, const void *arg);
  **/
 typedef void *(*t_duplicator)(const void *elem);
 
-#endif
+#endif // !C_MINI__T_DUPLICATOR
 
 #ifndef C_MINI__T_MERGER
 #	define C_MINI__T_MERGER
 
 typedef void *(*t_merger)(void *elem, void *arg);
 
-#endif // C_MINI__T_MERGER
+#endif // !C_MINI__T_MERGER
 
-#endif // !C_MINI__FPTR
+#endif // !C_MINI__COMMON_FPTR
