@@ -24,13 +24,13 @@ static void sptr_dump_box(int fd, const t_smartbox *box) {
 	if (box) {
 		printf(" {\n");
 		depth++;
-		if (box->type == SPTR_SHARED || box->type == SPTR_UNIQ) typ = box->type;
+		if (box->type == SPTR_SHRD || box->type == SPTR_UNIQ) typ = box->type;
 		else typ = 0;
 		put_with_offset(fd, "type:%s\n", type[typ]);
 		put_with_offset(fd, "strong_nb:%zu\n", box->sc);
 		put_with_offset(fd, "weak_nb:%zu\n", box->wc);
 		put_with_offset(fd, "data:%p\n", box->raw);
-		put_with_offset(fd, "free-er:%p\n", box->closure);
+		put_with_offset(fd, "free-er:%p\n", box->dtor);
 		depth--;
 		put_with_offset(fd, "}\n", NULL);
 	} else {
@@ -38,6 +38,12 @@ static void sptr_dump_box(int fd, const t_smartbox *box) {
 	}
 }
 
+/**
+ * \brief dumps info about the sptr at given filedescriptor \a fd
+ * \param fd filedescriptor to write info to
+ * \param t the smart pointer to describe
+ * \ingroup sptr
+ **/
 void sptr_dump(int fd, const t_sptr *t) {
 	char *stre[] = {
 	    "UNK",
@@ -53,7 +59,7 @@ void sptr_dump(int fd, const t_sptr *t) {
 		put_with_offset(fd, "nil\n", NULL);
 		depth--;
 	} else {
-		if (t->smart_strength == SPTR_WEAK || t->smart_strength == SPTR_STRONG)
+		if (t->smart_strength == SPTR_W || t->smart_strength == SPTR_S)
 			str = t->smart_strength;
 		else str = 0;
 		put_with_offset(fd, "strength:%s\n", stre[str]);

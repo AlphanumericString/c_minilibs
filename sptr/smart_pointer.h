@@ -52,16 +52,47 @@
 
 #endif
 
-typedef enum { SPTR_WEAK = 1, SPTR_STRONG = 2 } e_ptrstr;
-typedef enum { SPTR_SHARED = 1, SPTR_UNIQ = 2 } e_ptrtype;
+/**
+ * \defgroup sptr Smart PoinTeR
+ **/
+
+/**
+ * \brief enum for the strength of the smart pointer
+ * \note starts at 1 to identify error/uninitialized via 0
+ * \ingroup sptr
+ **/
+typedef enum { SPTR_W = 1, SPTR_S = 2 } e_ptrstr;
+
+/**
+ * \brief enum for the type of the smart pointer
+ * \note starts at 1 to identify error/uninitialized via 0
+ * \ingroup sptr
+ **/
+typedef enum { SPTR_SHRD = 1, SPTR_UNIQ = 2 } e_ptrtype;
+
+/**
+ * \brief internal structure for smart pointers
+ * \param raw pointer value encapsulated in the smart pointer
+ * \param closure function to call when free'ing the value
+ * \param wc WeakCount number of elements with a view on the box
+ * \param sc StrongCount number of elements "owning" the value
+ * \param type whether the sptr is shared or uniq
+ * \ingroup sptr
+ **/
 typedef struct s_box {
 	void     *raw;
-	void      (*closure)(void *);
+	void      (*dtor)(void *);
 	size_t    wc;
 	size_t    sc;
 	e_ptrtype type;
 } t_smartbox;
 
+/**
+ * \brief internal structure for smart pointers
+ * \param smart_strength strength of the sptr itself
+ * \param box address to the controling object box
+ * \ingroup sptr
+ **/
 typedef struct {
 	e_ptrstr    smart_strength;
 	t_smartbox *box;
@@ -73,14 +104,28 @@ t_sptr sptr_make_shared_fromsptr(t_sptr *smart_ptr, void (*free)(void *));
 t_sptr sptr_make_uniq_v(void *raw_ptr, void (*free)(void *));
 t_sptr sptr_make_uniq_fromsptr(t_sptr *smart_ptr, void (*free)(void *));
 
-#define sptr_make_shared(pointer, free_func)                                   \
+/**
+ * \def sptr_make_shared(pointer, closure)
+ * \brief _generic macro to re-direct to [..]shared_v and [..]shared_fromsptr
+ * \param pointer either a t_sptr* or anything else
+ * \param closure closure to call when free'ing pointer
+ * \ingroup sptr
+ **/
+#define sptr_make_shared(pointer, closure)                                     \
 	_Generic((pointer),                                                        \
 	    t_sptr *: sptr_make_shared_fromsptr,                                   \
-	    default: sptr_make_shared_v)(pointer, free_func)
-#define sptr_make_uniq(pointer, free_func)                                     \
+	    default: sptr_make_shared_v)(pointer, closure)
+/**
+ * \def sptr_make_uniq(pointer, closure)
+ * \brief _generic macro to re-direct to [..]uniq_v and [..]uniq_fromsptr
+ * \param pointer either a t_sptr* or anything else
+ * \param closure closure to call when free'ing pointer
+ * \ingroup sptr
+ **/
+#define sptr_make_uniq(pointer, closure)                                       \
 	_Generic((pointer),                                                        \
 	    t_sptr *: sptr_make_uniq_fromsptr,                                     \
-	    default: sptr_make_uniq_v)(pointer, free_func)
+	    default: sptr_make_uniq_v)(pointer, closure)
 
 bool sptr_delete(t_sptr *sptr);
 
@@ -91,7 +136,7 @@ t_sptr sptr_strongcopy(t_sptr *sptr);
 void  *sptr_get(const t_sptr *sptr);
 size_t sptr_get_wc(const t_sptr *sptr);
 size_t sptr_get_sc(const t_sptr *sptr);
-void   (*sptr_get_closure(const t_sptr *s))(void *);
+void   (*sptr_get_dtor(const t_sptr *s))(void *);
 
 bool sptr_weaken(t_sptr *sptr);
 bool sptr_strengthen(t_sptr *sptr);

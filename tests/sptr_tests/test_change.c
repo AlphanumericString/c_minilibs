@@ -12,18 +12,18 @@ void test_sptr_strengthen(void) {
 
 	a = sptr_make_shared((void *)0xDEAD, NULL);
 	b = sptr_make_shared(&a, NULL);
-	assert(b.smart_strength == SPTR_WEAK && a.box == b.box && a.box != NULL &&
-	       a.smart_strength == SPTR_STRONG);
+	assert(b.smart_strength == SPTR_W && a.box == b.box && a.box != NULL &&
+	       a.smart_strength == SPTR_S);
 	assert(sptr_strengthen(&b) == true);
-	assert(b.smart_strength == SPTR_STRONG);
+	assert(b.smart_strength == SPTR_S);
 	assert(sptr_strengthen(&b) == true);
-	assert(b.smart_strength == SPTR_STRONG);
+	assert(b.smart_strength == SPTR_S);
 	sptr_delete(&a);
 	sptr_delete(&b);
 	a = sptr_make_shared((void *)0xDEAD, NULL);
 	b = sptr_make_shared(&a, NULL);
-	assert(b.smart_strength == SPTR_WEAK && a.box == b.box && a.box != NULL &&
-	       a.smart_strength == SPTR_STRONG);
+	assert(b.smart_strength == SPTR_W && a.box == b.box && a.box != NULL &&
+	       a.smart_strength == SPTR_S);
 	sptr_delete(&a);
 	assert(b.box->sc == 0);
 	assert(b.box->raw == NULL);
@@ -43,12 +43,12 @@ void test_sptr_weaken(void) {
 
 	a = sptr_make_shared((void *)0xDEAD, NULL);
 	b = sptr_make_shared(&a, NULL);
-	assert(b.smart_strength == SPTR_WEAK && a.box == b.box && a.box != NULL &&
-	       a.smart_strength == SPTR_STRONG);
+	assert(b.smart_strength == SPTR_W && a.box == b.box && a.box != NULL &&
+	       a.smart_strength == SPTR_S);
 	assert(sptr_weaken(&a) == true);
 	assert(a.box == b.box && a.box != NULL);
 	assert(a.box->raw == NULL);
-	assert(a.smart_strength == SPTR_WEAK);
+	assert(a.smart_strength == SPTR_W);
 	assert(sptr_weaken(&a) == true);
 	assert(sptr_weaken(&a) == true);
 	no_leaks = a.box;
@@ -60,8 +60,8 @@ void test_sptr_weaken(void) {
 	sptr_delete(&b);
 	a = sptr_make_uniq((void *)0xDEAD, NULL);
 	b = sptr_make_uniq(&a, NULL);
-	assert(b.smart_strength == SPTR_WEAK && a.box == b.box && a.box != NULL &&
-	       a.smart_strength == SPTR_STRONG);
+	assert(b.smart_strength == SPTR_W && a.box == b.box && a.box != NULL &&
+	       a.smart_strength == SPTR_S);
 	assert(sptr_weaken(&a) == false);
 	sptr_delete(&a);
 	sptr_delete(&b);
@@ -75,13 +75,13 @@ void test_sptr_steal(void) {
 
 	a = sptr_make_uniq(strdup("aaaa"), free);
 	b = sptr_make_uniq(&a, NULL);
-	assert(a.smart_strength == SPTR_STRONG && b.smart_strength == SPTR_WEAK &&
-	       a.box && a.box->type == SPTR_UNIQ);
+	assert(a.smart_strength == SPTR_S && b.smart_strength == SPTR_W && a.box &&
+	       a.box->type == SPTR_UNIQ);
 	assert(sptr_steal(&c, &a) == false);
 	assert(sptr_steal(NULL, &a) == false);
 	assert(sptr_steal(&b, &a) == true);
-	assert(a.smart_strength == SPTR_WEAK && b.smart_strength == SPTR_STRONG &&
-	       a.box && a.box->type == SPTR_UNIQ);
+	assert(a.smart_strength == SPTR_W && b.smart_strength == SPTR_S && a.box &&
+	       a.box->type == SPTR_UNIQ);
 	c.box = b.box;
 	b.box = (void *)0xDEADCAFE;
 	assert(sptr_steal(&a, &b) == false);

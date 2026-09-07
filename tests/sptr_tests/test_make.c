@@ -14,7 +14,7 @@ void test_sptr_make_sharedv(void) {
 	assert(sptr.smart_strength != 0 && sptr.box->raw != NULL);
 	assert(sptr.box->raw == data);
 	assert(sptr.box->sc == 1 && sptr.box->wc == 0);
-	assert(sptr.smart_strength == SPTR_STRONG);
+	assert(sptr.smart_strength == SPTR_S);
 	sptr_delete(&sptr);
 	assert(sptr.box == NULL);
 	assert(sptr.smart_strength == 0);
@@ -37,7 +37,7 @@ void test_sptr_make_sharedsptr(void) {
 	assert(sptr.box->raw == (void *)0xDEAD);
 	assert(sptr_get_wc(&sptr) == 1);
 	assert(sptr_get_sc(&sptr) == 1);
-	assert(sptr.smart_strength == SPTR_WEAK);
+	assert(sptr.smart_strength == SPTR_W);
 	sptr_delete(&sptr);
 	assert(sptr.box == NULL);
 	assert(sptr.smart_strength == 0);
@@ -62,13 +62,13 @@ void test_sptr_make_uniqv(void) {
 
 	uniq_1 = sptr_make_uniq(strdup("aaaa"), free);
 	assert(uniq_1.box);
-	assert(uniq_1.smart_strength == SPTR_STRONG);
+	assert(uniq_1.smart_strength == SPTR_S);
 	assert(uniq_1.box->type == SPTR_UNIQ);
-	assert(uniq_1.box->closure == free);
+	assert(uniq_1.box->dtor == free);
 	assert(uniq_1.box->sc == 1);
 	assert(uniq_1.box->wc == 0);
 	uniq_2 = sptr_make_uniq(&uniq_1, NULL);
-	assert(uniq_2.smart_strength == SPTR_WEAK);
+	assert(uniq_2.smart_strength == SPTR_W);
 	assert(uniq_2.box);
 	assert(uniq_2.box == uniq_1.box);
 	assert(uniq_2.box->wc == 1);
@@ -98,7 +98,7 @@ void test_sptr_make_uniqsptr(void) {
 	sptr = sptr_make_uniq(&shrd_src1, NULL);
 	assert(sptr.smart_strength != 0);
 	assert(sptr.box != NULL);
-	assert(sptr.smart_strength == SPTR_STRONG);
+	assert(sptr.smart_strength == SPTR_S);
 	assert(sptr.box->sc == 1);
 	assert(sptr.box->wc == 0);
 	assert(shrd_src1.box->type == SPTR_UNIQ);

@@ -18,13 +18,13 @@ void test_sptr_copy(void) {
 
 	assert(cpy.box == src[0].box);
 	assert(cpy.smart_strength == src[0].smart_strength &&
-	       cpy.smart_strength == SPTR_STRONG);
+	       cpy.smart_strength == SPTR_S);
 	assert(wc == src->box->wc && src->box->sc == rc + 1);
 	sptr_delete(&cpy);
 	cpy = sptr_copy(&src[1]);
 	assert(cpy.box == src[1].box);
 	assert(cpy.smart_strength == src[1].smart_strength &&
-	       cpy.smart_strength == SPTR_WEAK);
+	       cpy.smart_strength == SPTR_W);
 	assert(src->box->wc == wc + 1 && src->box->sc == rc);
 	sptr_delete(&src[0]);
 	sptr_delete(&src[1]);
@@ -44,12 +44,12 @@ void test_sptr_weak_copy(void) {
 	cpy = sptr_weakcopy(&src[0]);
 
 	assert(cpy.box == src[0].box);
-	assert(cpy.smart_strength == SPTR_WEAK);
+	assert(cpy.smart_strength == SPTR_W);
 	assert(src->box->wc == wc + 1 && src->box->sc == rc);
 	sptr_delete(&cpy);
 	cpy = sptr_weakcopy(&src[1]);
 	assert(cpy.box == src[1].box);
-	assert(cpy.smart_strength == SPTR_WEAK);
+	assert(cpy.smart_strength == SPTR_W);
 	assert(src->box->wc == wc + 1 && src->box->sc == rc);
 	sptr_delete(&src[0]);
 	sptr_delete(&src[1]);
@@ -69,12 +69,12 @@ void test_sptr_strong_copy(void) {
 	cpy = sptr_strongcopy(&src[0]);
 
 	assert(cpy.box == src[0].box);
-	assert(cpy.smart_strength == SPTR_STRONG);
+	assert(cpy.smart_strength == SPTR_S);
 	assert(src->box->wc == wc && src->box->sc == rc + 1);
 	sptr_delete(&cpy);
 	cpy = sptr_strongcopy(&src[1]);
 	assert(cpy.box == src[1].box);
-	assert(cpy.smart_strength == SPTR_STRONG);
+	assert(cpy.smart_strength == SPTR_S);
 	assert(src->box->wc == wc && src->box->sc == rc + 1);
 	sptr_delete(&src[0]);
 	sptr_delete(&src[1]);

@@ -19,41 +19,41 @@ void test_sptr_delete_shared(void) {
 	sptr_strengthen(&b);
 	sptr_weaken(&c);
 	// assert state pre-test
-	assert(a.smart_strength == SPTR_STRONG && b.smart_strength == SPTR_STRONG &&
-	       c.smart_strength == SPTR_WEAK);
+	assert(a.smart_strength == SPTR_S && b.smart_strength == SPTR_S &&
+	       c.smart_strength == SPTR_W);
 	assert(a.box == b.box && a.box == c.box && a.box != NULL);
 	assert(a.box->sc == 2);
 	assert(a.box->wc == 1);
-	assert(a.box->raw == data && a.box->closure == free);
-	assert(a.box->type == SPTR_SHARED);
+	assert(a.box->raw == data && a.box->dtor == free);
+	assert(a.box->type == SPTR_SHRD);
 
 	assert(sptr_delete(&b) == true);
 	assert(b.smart_strength == 0);
 	assert(b.box == NULL);
 	assert(a.box != NULL && a.box->raw != NULL && a.box == c.box);
-	assert(a.box->raw == data && a.box->closure == free);
+	assert(a.box->raw == data && a.box->dtor == free);
 	assert(a.box->sc == 1 && a.box->wc == 1);
-	assert(a.smart_strength == SPTR_STRONG && c.smart_strength == SPTR_WEAK);
+	assert(a.smart_strength == SPTR_S && c.smart_strength == SPTR_W);
 
 	assert(sptr_delete(&c) == true);
 	assert(c.smart_strength == 0 && c.box == NULL);
 	assert(a.box != NULL && a.box->raw != NULL);
-	assert(a.box->raw == data && a.box->closure == free);
+	assert(a.box->raw == data && a.box->dtor == free);
 	assert(a.box->sc == 1 && a.box->wc == 0);
-	assert(a.smart_strength == SPTR_STRONG);
+	assert(a.smart_strength == SPTR_S);
 
 	c = sptr_make_shared(&a, NULL);
 	sptr_weaken(&c); // weaken to make sure 1sc and 1wc
 	assert(a.box != NULL && a.box->raw != NULL && a.box == c.box);
-	assert(a.box->raw == data && a.box->closure == free);
+	assert(a.box->raw == data && a.box->dtor == free);
 	assert(a.box->sc == 1 && a.box->wc == 1);
-	assert(a.smart_strength == SPTR_STRONG && c.smart_strength == SPTR_WEAK);
+	assert(a.smart_strength == SPTR_S && c.smart_strength == SPTR_W);
 
 	assert(sptr_delete(&a) == true);
 	assert(a.smart_strength == 0 && a.box == NULL);
-	assert(c.box->raw == NULL && c.box->closure == free);
+	assert(c.box->raw == NULL && c.box->dtor == free);
 	assert(c.box->sc == 0 && c.box->wc == 1);
-	assert(c.smart_strength == SPTR_WEAK);
+	assert(c.smart_strength == SPTR_W);
 	assert(sptr_delete(&c) == true);
 	assert(c.smart_strength == 0 && c.box == NULL);
 
@@ -72,41 +72,41 @@ void test_sptr_delete_uniq(void) {
 	sptr_weaken(&b);
 	sptr_weaken(&c);
 	// assert state pre-test
-	assert(a.smart_strength == SPTR_STRONG && b.smart_strength == SPTR_WEAK &&
-	       c.smart_strength == SPTR_WEAK);
+	assert(a.smart_strength == SPTR_S && b.smart_strength == SPTR_W &&
+	       c.smart_strength == SPTR_W);
 	assert(a.box == b.box && a.box == c.box && a.box != NULL);
 	assert(a.box->sc == 1);
 	assert(a.box->wc == 2);
-	assert(a.box->raw == data && a.box->closure == free);
+	assert(a.box->raw == data && a.box->dtor == free);
 	assert(a.box->type == SPTR_UNIQ);
 
 	assert(sptr_delete(&b) == true);
 	assert(b.smart_strength == 0);
 	assert(b.box == NULL);
 	assert(a.box != NULL && a.box->raw != NULL && a.box == c.box);
-	assert(a.box->raw == data && a.box->closure == free);
+	assert(a.box->raw == data && a.box->dtor == free);
 	assert(a.box->sc == 1 && a.box->wc == 1);
-	assert(a.smart_strength == SPTR_STRONG && c.smart_strength == SPTR_WEAK);
+	assert(a.smart_strength == SPTR_S && c.smart_strength == SPTR_W);
 
 	assert(sptr_delete(&c) == true);
 	assert(c.smart_strength == 0 && c.box == NULL);
 	assert(a.box != NULL && a.box->raw != NULL);
-	assert(a.box->raw == data && a.box->closure == free);
+	assert(a.box->raw == data && a.box->dtor == free);
 	assert(a.box->sc == 1 && a.box->wc == 0);
-	assert(a.smart_strength == SPTR_STRONG);
+	assert(a.smart_strength == SPTR_S);
 
 	c = sptr_make_uniq(&a, NULL);
 	sptr_weaken(&c); // weaken to make sure 1sc and 1wc
 	assert(a.box != NULL && a.box->raw != NULL && a.box == c.box);
-	assert(a.box->raw == data && a.box->closure == free);
+	assert(a.box->raw == data && a.box->dtor == free);
 	assert(a.box->sc == 1 && a.box->wc == 1);
-	assert(a.smart_strength == SPTR_STRONG && c.smart_strength == SPTR_WEAK);
+	assert(a.smart_strength == SPTR_S && c.smart_strength == SPTR_W);
 
 	assert(sptr_delete(&a) == true);
 	assert(a.smart_strength == 0 && a.box == NULL);
-	assert(c.box->raw == NULL && c.box->closure == free);
+	assert(c.box->raw == NULL && c.box->dtor == free);
 	assert(c.box->sc == 0 && c.box->wc == 1);
-	assert(c.smart_strength == SPTR_WEAK);
+	assert(c.smart_strength == SPTR_W);
 
 	assert(sptr_delete(&c) == true);
 	assert(c.smart_strength == 0 && c.box == NULL);
