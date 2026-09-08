@@ -1,4 +1,4 @@
-#define C_MINI__INTERNAL
+#define C_MINI__SPTR_INTERNAL
 #include "smart_pointer.h"
 
 #ifdef C_MINI__SPTR_ATOMIC

@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#define C_MINI__INTERNAL
+#define C_MINI__SPTR_INTERNAL
 #include "sptr/smart_pointer.h"
 
 // *------*

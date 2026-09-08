@@ -4,7 +4,7 @@
 #	define C_MINI__TESTS
 #endif
 
-#define C_MINI__INTERNAL
+#define C_MINI__SPTR_INTERNAL
 #include "sptr/smart_pointer.h"
 
 // [make]

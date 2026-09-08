@@ -8,52 +8,44 @@
 
 #define C_MINI__SPTR_ATOMIC
 
+#include "common_base/log.h"
+
 #ifdef C_MINI__TESTS
-
-#	include <stdio.h>
-
-#	ifndef C_MINI__DEBUG_LEVEL
-#		define C_MINI__DEBUG_LEVEL 0
-#	endif // !C_MINI__DEBUG_LEVEL
 
 #	define CM_DBG(fmt, ...)                                                   \
 		do {                                                                   \
-			printf("\e[36;1m[DBG]\e[0m: %s: " fmt "\n",                        \
-			       __func__ __VA_OPT__(, ) __VA_ARGS__);                       \
-			fflush(stdout);                                                    \
+			DBG(fmt __VA_OPT__(, ) __VA_ARGS__);                               \
 		} while (0)
 
 #	define CM_LOG(level, fmt, ...)                                            \
 		do {                                                                   \
 			if (level > (size_t)C_MINI__DEBUG_LEVEL) break;                    \
-			printf("\e[32m[LOG]\e[0m: %s: " fmt "\n",                          \
-			       __func__ __VA_OPT__(, ) __VA_ARGS__);                       \
+			LOG(fmt __VA_OPT__(, ) __VA_ARGS__);                               \
 			fflush(stdout);                                                    \
 		} while (0)
 
 #	define CM_DBG_POS                                                         \
 		do {                                                                   \
-			CM_DBG(" %s:%d \e[33;4m[PATH]\e[0m", __FILE__, __LINE__);          \
-			fflush(stdout);                                                    \
+			DBG_POS;                                                           \
 		} while (0)
 
-#	define C_MINI__SPTR_LOG_SUCCESS   "Success"
-#	define C_MINI__SPTR_LOG_EARG      "Bad arguments"
-#	define C_MINI__SPTR_LOG_ILL       "Illegal"
-#	define C_MINI__SPTR_LOG_ILLUNIQ   C_MINI__SPTR_LOG_EARG " Illegal(owned)"
-#	define C_MINI__SPTR_LOG_ILLDATA   C_MINI__SPTR_LOG_EARG " Illegal(data)"
-#	define C_MINI__SPTR_LOG_ILLSHARED C_MINI__SPTR_LOG_EARG " Illegal(shared)"
-#	define C_MINI__SPTR_LOG_ETODO     "Todo:"
-#	define C_MINI__SPTR_LOG_EALLOC    "Allocation failure"
+#	define CM__SPTR_TODO(x, ...)                                              \
+		CM_LOG(C_MINI__LEVEL_ALWAYS, "%s:%d\t" C_MINI__SPTR_LOG_ETODO "\t" x,  \
+		       __FILE__, __LINE__ __VA_OPT__(, ) __VA_ARGS__)
 
 #	define C_MINI__LEVEL_INFO   3 // success and other info
 #	define C_MINI__LEVEL_WARN   2 // bad args and other stuff
 #	define C_MINI__LEVEL_ERR    1 // internal big errors eg alloc
 #	define C_MINI__LEVEL_ALWAYS 0 // internal big errors eg alloc
 
-#	define CM__SPTR_TODO(x, ...)                                              \
-		CM_LOG(C_MINI__LEVEL_ALWAYS, "%s:%d\t" C_MINI__SPTR_LOG_ETODO "\t" x,  \
-		       __FILE__, __LINE__ __VA_OPT__(, ) __VA_ARGS__)
+#	define C_MINI__SPTR_LOG_SUCCESS   C_MINI__LOG_SUCCESS
+#	define C_MINI__SPTR_LOG_EARG      C_MINI__LOG_F_PREFIX "Bad arguments"
+#	define C_MINI__SPTR_LOG_ILLUNIQ   C_MINI__SPTR_LOG_EARG ": Illegal(uniq)"
+#	define C_MINI__SPTR_LOG_ILLDATA   C_MINI__SPTR_LOG_EARG ": Illegal(data)"
+#	define C_MINI__SPTR_LOG_ILLSHARED C_MINI__SPTR_LOG_EARG ": Illegal(shared)"
+#	define C_MINI__SPTR_LOG_ILLDTOR   C_MINI__SPTR_LOG_EARG ": Illegal(dtor)"
+#	define C_MINI__SPTR_LOG_ETODO     C_MINI__LOG_ETODO
+#	define C_MINI__SPTR_LOG_EALLOC    C_MINI__LOG_EALLOC
 
 #else
 
@@ -68,7 +60,10 @@
 #	ifndef CM_DBG_POS
 #		define CM_DBG_POS (void)0
 #	endif // !CM_DBG_POS
-#	define CM__SPTR_TODO(x, ...) (void)0
+
+#	ifndef CM__SPTR_TODO
+#		define CM__SPTR_TODO(x, ...) (void)0
+#	endif // !CM__SPTR_TODO
 
 #endif
 
@@ -282,84 +277,6 @@ bool sptr_is_sharedu(const t_uniq_ptr *u);
 	    const t_uniq_ptr *: sptr_is_sharedu,                                   \
 	    const t_owned_ptr *: sptr_is_sharedo)(pointer)
 
-#ifdef C_MINI__INTERNAL
-
-bool sptri_is_sole_box_owns(const t_strong_ptr *ptr);
-bool sptri_is_sole_box_ownw(const t_weak_ptr *ptr);
-bool sptri_is_sole_box_owno(const t_owned_ptr *ptr);
-bool sptri_is_sole_box_ownu(const t_uniq_ptr *u);
-/**
- * \def sptri_is_sole_bow_owner(pointer)
- * \brief _generic macro to re-direct to sptr_is_own*
- * \param pointer smart pointer to check (weak, strong, owned, uniq)
- * \return true if the pointer is considered an owner of the data, false
- * otherwise
- * \note for specific infos check doc for sptr_is_sole_box_own<type's letter>
- * \ingroup sptr
- **/
-#	define sptr_is_sole_box_owner(pointer)                                    \
-		_Generic((pointer),                                                    \
-		    t_weak_ptr *: sptri_is_sole_box_ownw,                              \
-		    t_strong_ptr *: sptri_is_sole_box_owns,                            \
-		    t_uniq_ptr *: sptri_is_sole_box_ownu,                              \
-		    t_owned_ptr *: sptri_is_sole_box_owno,                             \
-		    const t_weak_ptr *: sptri_is_sole_box_ownw,                        \
-		    const t_strong_ptr *: sptri_is_sole_box_owns,                      \
-		    const t_uniq_ptr *: sptri_is_sole_box_ownu,                        \
-		    const t_owned_ptr *: sptri_is_sole_box_owno)(pointer)
-
-// defined functions documentation here due to multiple [wr]c_[inc|dec|get]
-//		implementation for atomic and non-atomic and other variations of rc/wc
-
-/**
- * \brief increases the strong count (rc) of a meta info box
- * \param b the box to increase the strong count (rc) of
- * \note variation exists for : base size_t, atomic size_t
- * \ingroup sptr
- **/
-void sptri_rc_inc(t_fbox *b);
-/**
- * \brief decrease the strong count (rc) of a meta info box
- * \param b the box to decrease the strong count (rc) of
- * \note variation exists for : base size_t, atomic size_t
- * \ingroup sptr
- **/
-void sptri_rc_dec(t_fbox *b);
-
-/**
- * \brief increase the weak count (wc) of a meta info box
- * \param b the box to increase the weak count (wc) of
- * \note variation exists for : base size_t, atomic size_t
- * \ingroup sptr
- **/
-void sptri_wc_inc(t_fbox *b);
-/**
- * \brief decrease the weak count (wc) of a meta info box
- * \param b the box to decrease the weak count (wc) of
- * \note variation exists for : base size_t, atomic size_t
- * \ingroup sptr
- **/
-void sptri_wc_dec(t_fbox *b);
-
-/**
- * \brief get the strong count (rc) of a meta info box
- * \param b the box to get the strong count (rc) of
- * \return the value of strong count (rc)
- * \note variation exists for : base size_t, atomic size_t
- * \ingroup sptr
- **/
-size_t sptri_rc_get(t_fbox *b);
-/**
- * \brief get the weak count (wc) of a meta info box
- * \param b the box to get the weak count (wc) of
- * \return the value of weak count (wc)
- * \note variation exists for : base size_t, atomic size_t
- * \ingroup sptr
- **/
-size_t sptri_wc_get(t_fbox *b);
-
-#endif // !C_MINI__INTERNAL
-
 bool sptr_deletes(t_strong_ptr *strong_ptr);
 bool sptr_deletew(t_weak_ptr *weak_ptr);
 bool sptr_deleteo(t_owned_ptr *owned_ptr);
@@ -570,6 +487,84 @@ bool         sptr_transfer_ownership(t_owned_ptr *to, t_owned_ptr *from);
 bool         sptr_move_ownership(t_owned_ptr *to, t_owned_ptr *from);
 t_uniq_ptr  *sptr_uniq_yield(t_uniq_ptr *dst, t_uniq_ptr *from);
 bool         sptr_uniq_swap(t_uniq_ptr *sw1, t_uniq_ptr *sw2);
+
+#ifdef C_MINI__SPTR_INTERNAL
+
+bool sptri_is_sole_box_owns(const t_strong_ptr *ptr);
+bool sptri_is_sole_box_ownw(const t_weak_ptr *ptr);
+bool sptri_is_sole_box_owno(const t_owned_ptr *ptr);
+bool sptri_is_sole_box_ownu(const t_uniq_ptr *u);
+/**
+ * \def sptri_is_sole_bow_owner(pointer)
+ * \brief _generic macro to re-direct to sptr_is_own*
+ * \param pointer smart pointer to check (weak, strong, owned, uniq)
+ * \return true if the pointer is considered an owner of the data, false
+ * otherwise
+ * \note for specific infos check doc for sptr_is_sole_box_own<type's letter>
+ * \ingroup sptr
+ **/
+#	define sptr_is_sole_box_owner(pointer)                                    \
+		_Generic((pointer),                                                    \
+		    t_weak_ptr *: sptri_is_sole_box_ownw,                              \
+		    t_strong_ptr *: sptri_is_sole_box_owns,                            \
+		    t_uniq_ptr *: sptri_is_sole_box_ownu,                              \
+		    t_owned_ptr *: sptri_is_sole_box_owno,                             \
+		    const t_weak_ptr *: sptri_is_sole_box_ownw,                        \
+		    const t_strong_ptr *: sptri_is_sole_box_owns,                      \
+		    const t_uniq_ptr *: sptri_is_sole_box_ownu,                        \
+		    const t_owned_ptr *: sptri_is_sole_box_owno)(pointer)
+
+// defined functions documentation here due to multiple [wr]c_[inc|dec|get]
+//		implementation for atomic and non-atomic and other variations of rc/wc
+
+/**
+ * \brief increases the strong count (rc) of a meta info box
+ * \param b the box to increase the strong count (rc) of
+ * \note variation exists for : base size_t, atomic size_t
+ * \ingroup sptr
+ **/
+void sptri_rc_inc(t_fbox *b);
+/**
+ * \brief decrease the strong count (rc) of a meta info box
+ * \param b the box to decrease the strong count (rc) of
+ * \note variation exists for : base size_t, atomic size_t
+ * \ingroup sptr
+ **/
+void sptri_rc_dec(t_fbox *b);
+
+/**
+ * \brief increase the weak count (wc) of a meta info box
+ * \param b the box to increase the weak count (wc) of
+ * \note variation exists for : base size_t, atomic size_t
+ * \ingroup sptr
+ **/
+void sptri_wc_inc(t_fbox *b);
+/**
+ * \brief decrease the weak count (wc) of a meta info box
+ * \param b the box to decrease the weak count (wc) of
+ * \note variation exists for : base size_t, atomic size_t
+ * \ingroup sptr
+ **/
+void sptri_wc_dec(t_fbox *b);
+
+/**
+ * \brief get the strong count (rc) of a meta info box
+ * \param b the box to get the strong count (rc) of
+ * \return the value of strong count (rc)
+ * \note variation exists for : base size_t, atomic size_t
+ * \ingroup sptr
+ **/
+size_t sptri_rc_get(t_fbox *b);
+/**
+ * \brief get the weak count (wc) of a meta info box
+ * \param b the box to get the weak count (wc) of
+ * \return the value of weak count (wc)
+ * \note variation exists for : base size_t, atomic size_t
+ * \ingroup sptr
+ **/
+size_t sptri_wc_get(t_fbox *b);
+
+#endif // !C_MINI__SPTR_INTERNAL
 
 /**
  * \def auto_strong

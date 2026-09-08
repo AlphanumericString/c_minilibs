@@ -1,6 +1,5 @@
 #include <assert.h>
 
-#define C_MINI__INTERNAL
 #include "sptr_tests.h"
 
 // const-data

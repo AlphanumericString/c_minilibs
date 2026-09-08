@@ -1,7 +1,6 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#define C_MINI__INTERNAL
 #include "sptr_tests.h"
 
 static int  g_dtor_calls = 0;
