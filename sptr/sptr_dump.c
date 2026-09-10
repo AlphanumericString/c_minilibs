@@ -2,69 +2,31 @@
 
 #include "sptr/smart_pointer.h"
 
-static int depth = 0;
-
-#define put_with_offset(fd, fmt, arg)                                          \
-	do {                                                                       \
-		for (int i = 0; i < depth; i++)                                        \
-			dprintf(fd, "\t");                                                 \
-		dprintf(fd, fmt, arg);                                                 \
-	} while (0);
-
-static void sptr_dump_box(int fd, const t_smartbox *box) {
-	char *type[] = {
-	    "UNK",
-	    "SHARED",
-	    "UNIQ",
-	};
-	int typ = 0;
-
-	if (fd < 0) return;
-	put_with_offset(fd, "box: %p", box);
-	if (box) {
-		printf(" {\n");
-		depth++;
-		if (box->type == SPTR_SHRD || box->type == SPTR_UNIQ) typ = box->type;
-		else typ = 0;
-		put_with_offset(fd, "type:%s\n", type[typ]);
-		put_with_offset(fd, "strong_nb:%zu\n", box->sc);
-		put_with_offset(fd, "weak_nb:%zu\n", box->wc);
-		put_with_offset(fd, "data:%p\n", box->raw);
-		put_with_offset(fd, "free-er:%p\n", box->dtor);
-		depth--;
-		put_with_offset(fd, "}\n", NULL);
-	} else {
-		printf("\n");
+void sptr_dumps(int fd, const t_strong_ptr ptr) {
+	if (fd < 0 || !ptr) {
+		LOG(C_MINI__SPTR_LOG_EARG);
+		return;
 	}
+	dprintf(fd, "SPTR STRONG { data %p, count %lu (weak:%lu), dtor %p}",
+	        sptr_get(ptr), sptr_get_rc(ptr), sptr_get_wc(ptr), ptr->dtor);
 }
 
-/**
- * \brief dumps info about the sptr at given filedescriptor \a fd
- * \param fd filedescriptor to write info to
- * \param t the smart pointer to describe
- * \ingroup sptr
- **/
-void sptr_dump(int fd, const t_sptr *t) {
-	char *stre[] = {
-	    "UNK",
-	    "WEAK",
-	    "STRONG",
-	};
-	int str = 0;
-
-	if (fd < 0) return;
-	dprintf(fd, "sptr:%p {\n", t);
-	depth++;
-	if (!t) {
-		put_with_offset(fd, "nil\n", NULL);
-		depth--;
-	} else {
-		if (t->smart_strength == SPTR_W || t->smart_strength == SPTR_S)
-			str = t->smart_strength;
-		else str = 0;
-		put_with_offset(fd, "strength:%s\n", stre[str]);
-		sptr_dump_box(fd, t->box);
-		depth--;
+void sptr_dumpw(int fd, const t_weak_ptr weak_ptr) {
+	if (fd < 0 || !weak_ptr) {
+		LOG(C_MINI__SPTR_LOG_EARG);
+		return;
 	}
-	put_with_offset(fd, "}\n", NULL);
+	dprintf(fd, "SPTR WEAK { data %p, count %lu (weak:%lu), dtor %p}",
+	        sptr_get(weak_ptr), sptr_get_rc(weak_ptr), sptr_get_wc(weak_ptr),
+	        weak_ptr->rcb.dtor);
+}
+
+void sptr_dumpu(int fd, const t_uniq_ptr uniq_ptr) {
+	if (fd < 0 || !uniq_ptr.rcbox) {
+		LOG(C_MINI__SPTR_LOG_EARG);
+		return;
+	}
+	dprintf(fd, "SPTR UNIQ %s { data %p, count %lu (weak:%lu), dtor %p}",
+	        sptr_is_ownu(uniq_ptr) ? "owned" : "borrowed", sptr_get(uniq_ptr),
+	        sptr_get_rc(uniq_ptr), sptr_get_wc(uniq_ptr), uniq_ptr.rcbox->dtor);
 }

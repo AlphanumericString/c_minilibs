@@ -1,131 +1,205 @@
+#include <assert.h>
+#include <stdbool.h>
 #include <stdlib.h>
 
 #include "sptr/smart_pointer.h"
 
 /**
- * \brief makes a shared pointer out of a raw pointer value
- * \param ptr value to encapsulate
- * \param closure function to call when values is destroyed
- * \return the t_sptr initialized or a 0 filled sptr struct
+ * \brief create a strong pointer from a raw pointer
+ * \param raw_ptr pointer to the object to wrap
+ * \param d destructor to use when the object will be deallocated
+ * \return the strong pointer on success, NULL on failure
  * \ingroup sptr
  **/
-t_sptr sptr_make_shared_v(void *ptr, void (*closure)(void *)) {
-	t_sptr ptr_ret;
+t_strong_ptr sptr_make_shared_from_raw(void *raw_ptr, t_dtor d) {
+	t_wcbox *complete_box;
 
-	if (!ptr) {
+	if (!raw_ptr) {
 		LOG(C_MINI__SPTR_LOG_EARG);
-		return ((t_sptr){0});
+		return (NULL);
 	}
-	ptr_ret.smart_strength = SPTR_S;
-	ptr_ret.box            = malloc(sizeof(*ptr_ret.box));
-	if (!ptr_ret.box) {
+	complete_box = malloc(sizeof(*complete_box));
+	if (!complete_box) {
 		LOG(C_MINI__SPTR_LOG_EALLOC);
-		return ((t_sptr){0});
+		return (NULL);
 	}
-	ptr_ret.box->raw  = ptr;
-	ptr_ret.box->type = SPTR_SHRD;
-	ptr_ret.box->dtor = closure;
-	ptr_ret.box->sc   = 1;
-	ptr_ret.box->wc   = 0;
+	*complete_box = (t_wcbox){
+	    (t_rcbox){raw_ptr, d, 1},
+        0
+    };
 	LOG(C_MINI__SPTR_LOG_SUCCESS);
-	return (ptr_ret);
+	return ((t_strong_ptr)complete_box);
 }
 /**
- * \brief makes a shared pointer out of an other smart pointer
- * \param ptr smart pointer value to encapsulate
- * \param closure function to call when values is destroyed
- * \return the t_sptr initialized or a 0 filled sptr struct
+ * \brief create a weak pointer from a weak pointer
+ * \param weak_ptr weak pointer to copy
+ * \param d destructor to use when the object will be deallocated
+ * \return the weak pointer on success, NULL on failure
  * \ingroup sptr
  **/
-t_sptr sptr_make_shared_fromsptr(t_sptr *ptr, void (*closure)(void *)) {
-	t_sptr r;
-	if (!ptr || !ptr->box) {
+t_weak_ptr sptr_make_shared_from_weak(t_weak_ptr weak_ptr, t_dtor d) {
+	if (!weak_ptr) {
 		LOG(C_MINI__SPTR_LOG_EARG);
-		return ((t_sptr){0});
+		return (NULL);
 	}
-	if (ptr->box->dtor && closure && ptr->box->dtor != closure) {
-		LOG("Sudden change of free-er function at contruction, illegal if not "
-		    "explicit.");
-		return ((t_sptr){0});
+	if (d) {
+		if (weak_ptr->rcb.dtor && weak_ptr->rcb.dtor != d) {
+			LOG(C_MINI__SPTR_LOG_ILL);
+			return (NULL);
+		}
+		weak_ptr->rcb.dtor = d;
 	}
-	switch (ptr->box->type) {
-	case SPTR_SHRD:
-		ptr->box->wc++;
-		break;
-	case SPTR_UNIQ:
-		ptr->box->wc++;
-		ptr->box->type = SPTR_SHRD;
-		break;
-	}
-	r                = *ptr;
-	r.smart_strength = SPTR_W;
+	weak_ptr->weak_count++;
 	LOG(C_MINI__SPTR_LOG_SUCCESS);
-	return (r);
+	return (weak_ptr);
 }
-
 /**
- * \brief makes a uniq pointer out of a raw pointer value
- * \param ptr value to encapsulate
- * \param closure the closure to call when destroying the value
- * \return the sptr initialized or a 0 filled sptr struct
+ * \brief create a weak pointer from a strong pointer
+ * \param strong_ptr strong pointer to copy
+ * \param d destructor to use when the object will be deallocated
+ * \return the weak pointer on success, NULL on failure
  * \ingroup sptr
  **/
-t_sptr sptr_make_uniq_v(void *ptr, void (*closure)(void *)) {
-	t_sptr ptr_ret;
+t_weak_ptr sptr_make_shared_from_strong(t_strong_ptr strong_ptr, t_dtor d) {
+	t_weak_ptr ret = (t_weak_ptr)strong_ptr;
 
-	if (!ptr) {
+	if (!strong_ptr) {
 		LOG(C_MINI__SPTR_LOG_EARG);
-		return ((t_sptr){0});
+		return (NULL);
 	}
-	ptr_ret.smart_strength = SPTR_S;
-	ptr_ret.box            = malloc(sizeof(*ptr_ret.box));
-	if (!ptr_ret.box) {
+	if (d) {
+		if (strong_ptr->dtor && strong_ptr->dtor != d) {
+			LOG(C_MINI__SPTR_LOG_ILL);
+			return (NULL);
+		}
+		strong_ptr->dtor = d;
+	}
+	ret->weak_count++;
+	LOG(C_MINI__SPTR_LOG_SUCCESS);
+	return (ret);
+}
+/**
+ * \brief create a strong pointer from a uniq pointer
+ * \param uniq uniq pointer to copy
+ * \param d destructor to use when the object will be deallocated
+ * \return the strong pointer on success, NULL on failure
+ * \ingroup sptr
+ **/
+t_strong_ptr sptr_make_shared_from_uniq(t_uniq_ptr *uniq, t_dtor d) {
+	t_wcbox *ret = NULL;
+
+	if (!uniq || !uniq->rcbox) {
+		LOG(C_MINI__SPTR_LOG_EARG);
+		return (NULL);
+	}
+	if (uniq->owner != true) {
+		LOG(C_MINI__SPTR_LOG_ILL);
+		return (NULL);
+	}
+	if (d) {
+		if (uniq->rcbox->dtor && uniq->rcbox->dtor != d) {
+			LOG(C_MINI__SPTR_LOG_ILL);
+			return (NULL);
+		}
+		uniq->rcbox->dtor = d;
+	}
+	ret = malloc(sizeof(*ret));
+	if (!ret) {
 		LOG(C_MINI__SPTR_LOG_EALLOC);
-		return ((t_sptr){0});
+		return (NULL);
 	}
-	ptr_ret.box->raw  = ptr;
-	ptr_ret.box->type = SPTR_UNIQ;
-	ptr_ret.box->dtor = closure;
-	ptr_ret.box->sc   = 1;
-	ptr_ret.box->wc   = 0;
+	ret->rcb        = *(uniq->rcbox);
+	ret->weak_count = 0;
+	ret->rcb.rc     = 1;
+	uniq->rcbox->rc--;
+	uniq->rcbox->data = NULL;
+	uniq->rcbox->dtor = NULL;
+	uniq->owner       = false;
+	if (!uniq->rcbox->rc) free(uniq->rcbox);
 	LOG(C_MINI__SPTR_LOG_SUCCESS);
-	return (ptr_ret);
+	return ((t_strong_ptr)ret);
 }
 
+// *----*
+// |uniq|
+// *----*
+
 /**
- * \brief makes a uniq pointer out of an other smart pointer
- * \param sptr value to encapsulate/turn into uniq
- * \param closure function to call when values is destroyed
- * \return the sptr initialized or a 0 filled sptr struct
+ * \brief create a uniq pointer from a raw pointer
+ * \param raw_ptr pointer to the object to wrap
+ * \param d destructor to use when the object will be deallocated
+ * \return the uniq pointer on success, NULL on failure
  * \ingroup sptr
  **/
-t_sptr sptr_make_uniq_fromsptr(t_sptr *sptr, void (*closure)(void *)) {
-	if (!sptr || !sptr->box) {
+t_uniq_ptr sptr_make_uniq_from_raw(void *raw_ptr, t_dtor d) {
+	t_uniq_ptr ret = (t_uniq_ptr){0};
+
+	if (!raw_ptr) {
 		LOG(C_MINI__SPTR_LOG_EARG);
-		return ((t_sptr){0});
+		return (ret);
 	}
-	if (sptr->box->dtor && closure && sptr->box->dtor != closure) {
-		LOG("Sudden change of free-er function at contruction, illegal if not "
-		    "explicit.");
-		return ((t_sptr){0});
+	ret.rcbox = malloc(sizeof(*ret.rcbox));
+	if (!ret.rcbox) {
+		LOG(C_MINI__SPTR_LOG_EALLOC);
+		return (ret);
 	}
-	switch (sptr->box->type) {
-	case SPTR_SHRD:
-		if (sptr->box->sc != 1) {
-			LOG(C_MINI__SPTR_LOG_EARG
-			    " Cannot make uniq from mutiple instances of strong ptr");
-			return ((t_sptr){0});
-		}
-		if (sptr->smart_strength == SPTR_W) {
-			LOG(C_MINI__SPTR_LOG_EARG " Cannot make uniq from weak ptr");
-			return ((t_sptr){0});
-		}
-		sptr->box->type = SPTR_UNIQ;
-		LOG(C_MINI__SPTR_LOG_SUCCESS);
-		return (*sptr);
-	case SPTR_UNIQ:
-		sptr->box->wc++;
-		LOG(C_MINI__SPTR_LOG_SUCCESS);
-		return ((t_sptr){.smart_strength = SPTR_W, .box = sptr->box});
+	ret.owner  = true;
+	*ret.rcbox = (t_rcbox){raw_ptr, d, 1};
+	LOG(C_MINI__SPTR_LOG_SUCCESS);
+	return (ret);
+}
+/**
+ * \brief create a uniq pointer from a strong pointer
+ * \param strong_ptr strong pointer to copy
+ * \param d destructor to use when the object will be deallocated
+ * \return the uniq pointer on success, NULL on failure
+ * \ingroup sptr
+ **/
+t_uniq_ptr sptr_make_uniq_from_strong(t_strong_ptr strong_ptr, t_dtor d) {
+	t_uniq_ptr ret = (t_uniq_ptr){0};
+
+	if (!strong_ptr || strong_ptr->rc != 1) {
+		LOG(C_MINI__SPTR_LOG_EARG);
+		return (ret);
 	}
+	if (d && strong_ptr->dtor && strong_ptr->dtor != d) {
+		LOG(C_MINI__SPTR_LOG_ILL);
+		return (ret);
+	}
+	ret.rcbox = malloc(sizeof(*ret.rcbox));
+	if (!ret.rcbox) {
+		LOG(C_MINI__SPTR_LOG_EALLOC);
+		return (ret);
+	}
+	ret.owner   = true;
+	*ret.rcbox  = *strong_ptr;
+	*strong_ptr = (t_rcbox){0};
+	if (d) ret.rcbox->dtor = d;
+	if (((t_wcbox *)strong_ptr)->weak_count == 0) free(strong_ptr);
+	return (ret);
+}
+/**
+ * \brief create a uniq pointer from a uniq pointer
+ * \param uniq uniq pointer to copy
+ * \param d destructor to use when the object will be deallocated
+ * \return the uniq pointer on success, NULL on failure
+ * \ingroup sptr
+ **/
+t_uniq_ptr sptr_make_uniq_from_uniq(t_uniq_ptr uniq, t_dtor d) {
+	t_uniq_ptr ret = (t_uniq_ptr){0};
+
+	if (!uniq.rcbox) {
+		LOG(C_MINI__SPTR_LOG_EARG);
+		return (ret);
+	}
+	if (d && uniq.rcbox->dtor && uniq.rcbox->dtor != d) {
+		LOG(C_MINI__SPTR_LOG_ILL);
+		return (ret);
+	}
+	ret.rcbox = uniq.rcbox;
+	ret.rcbox->rc++;
+	ret.owner = false;
+	if (d) ret.rcbox->dtor = d;
+	LOG(C_MINI__SPTR_LOG_SUCCESS);
+	return (ret);
 }

@@ -1,83 +1,36 @@
 #include <assert.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "sptr_tests.h"
 
-void test_sptr_copy(void) {
-	t_sptr src[2];
-	t_sptr cpy;
-	size_t wc, rc;
+void test_sptr_copys(void) {
+	t_strong_ptr p1 = sptr_make_shared((void *)0xDEAD, NULL);
+	t_strong_ptr p2 = sptr_copys(p1);
+	// TODO: error cases
 
-	src[0] = sptr_make_shared(strdup("hell"), free);
-	src[1] = sptr_copy(&src[0]);
-	sptr_weaken(&src[1]);
-	rc  = src->box->sc;
-	wc  = src->box->wc;
-	cpy = sptr_copy(&src[0]);
-
-	assert(cpy.box == src[0].box);
-	assert(cpy.smart_strength == src[0].smart_strength &&
-	       cpy.smart_strength == SPTR_S);
-	assert(wc == src->box->wc && src->box->sc == rc + 1);
-	sptr_delete(&cpy);
-	cpy = sptr_copy(&src[1]);
-	assert(cpy.box == src[1].box);
-	assert(cpy.smart_strength == src[1].smart_strength &&
-	       cpy.smart_strength == SPTR_W);
-	assert(src->box->wc == wc + 1 && src->box->sc == rc);
-	sptr_delete(&src[0]);
-	sptr_delete(&src[1]);
-	sptr_delete(&cpy);
+	assert(p1 == p2);
+	assert(p1->rc == 2);
+	free(p1);
 	return;
 }
-void test_sptr_weak_copy(void) {
-	t_sptr src[2];
-	t_sptr cpy;
-	size_t rc, wc;
+void test_sptr_copyw(void) {
+	t_weak_ptr w1 = sptr_weaken(sptr_make_shared((void *)0xDEAD, NULL));
+	t_weak_ptr w2 = sptr_copyw(w1);
+	// TODO: error cases
 
-	src[0] = sptr_make_shared(strdup("hell"), free);
-	src[1] = sptr_copy(&src[0]);
-	sptr_weaken(&src[1]);
-	rc  = src->box->sc;
-	wc  = src->box->wc;
-	cpy = sptr_weakcopy(&src[0]);
-
-	assert(cpy.box == src[0].box);
-	assert(cpy.smart_strength == SPTR_W);
-	assert(src->box->wc == wc + 1 && src->box->sc == rc);
-	sptr_delete(&cpy);
-	cpy = sptr_weakcopy(&src[1]);
-	assert(cpy.box == src[1].box);
-	assert(cpy.smart_strength == SPTR_W);
-	assert(src->box->wc == wc + 1 && src->box->sc == rc);
-	sptr_delete(&src[0]);
-	sptr_delete(&src[1]);
-	sptr_delete(&cpy);
+	assert(w1 == w2);
+	assert(w1->weak_count == 2);
+	free(w1);
 	return;
 }
-void test_sptr_strong_copy(void) {
-	t_sptr src[2];
-	t_sptr cpy;
-	size_t rc, wc;
+void test_sptr_copyu(void) {
+	t_uniq_ptr u1 = sptr_make_uniq((void *)0xDEAD, NULL);
+	t_uniq_ptr u2 = sptr_copyu(u1);
+	// TODO: error cases
 
-	src[0] = sptr_make_shared(strdup("hell"), free);
-	src[1] = sptr_copy(&src[0]);
-	sptr_weaken(&src[1]);
-	rc  = src->box->sc;
-	wc  = src->box->wc;
-	cpy = sptr_strongcopy(&src[0]);
-
-	assert(cpy.box == src[0].box);
-	assert(cpy.smart_strength == SPTR_S);
-	assert(src->box->wc == wc && src->box->sc == rc + 1);
-	sptr_delete(&cpy);
-	cpy = sptr_strongcopy(&src[1]);
-	assert(cpy.box == src[1].box);
-	assert(cpy.smart_strength == SPTR_S);
-	assert(src->box->wc == wc && src->box->sc == rc + 1);
-	sptr_delete(&src[0]);
-	sptr_delete(&src[1]);
-	sptr_delete(&cpy);
+	assert(u1.rcbox == u2.rcbox);
+	assert(u1.owner == true && u2.owner == false);
+	assert(u1.rcbox->rc == 2);
+	free(u1.rcbox);
 	return;
 }

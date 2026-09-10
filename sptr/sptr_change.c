@@ -4,90 +4,65 @@
 #include "sptr/smart_pointer.h"
 
 /**
- * \brief weaken smart ptr
- * \param sptr the smart pointer to weaken
- * \return true if operation was successful false otherwise
+ * \brief strengthens a weak pointer to a strong pointer
+ * \param sptr weak pointer to strengthen
+ * \return strong pointer if successful, NULL otherwise
+ * \note if rcb.rc == 0, it will fail
+ * \warning THE GIVEN SPTR IS NO LONGER VALID
  * \ingroup sptr
  **/
-bool sptr_weaken(t_sptr *sptr) {
-	if (!sptr || !sptr->box) {
-		LOG(C_MINI__SPTR_LOG_EARG);
-		return (false);
+t_strong_ptr sptr_strengthen(t_weak_ptr sptr) {
+	if (!sptr || sptr->rcb.rc == 0) {
+		LOG(C_MINI__SPTR_LOG_ILLDATA);
+		return (NULL);
 	}
-	if (sptr->smart_strength == SPTR_W) {
-		LOG(C_MINI__SPTR_LOG_SUCCESS);
-		return (true);
-	}
-	switch (sptr->box->type) {
-	case (SPTR_UNIQ):
-		LOG(C_MINI__SPTR_LOG_EARG " Illegal operation(uniq)");
-		return (false);
-	case (SPTR_SHRD):
-		assert(sptr->box->sc > 0);
-		sptr->box->sc--;
-		if (!sptr->box->sc) {
-			if (sptr->box->dtor) sptr->box->dtor(sptr->box->raw);
-			sptr->box->raw = NULL;
-		}
-		sptr->box->wc++;
-		sptr->smart_strength = SPTR_W;
-		LOG(C_MINI__SPTR_LOG_SUCCESS);
-		return (true);
-	}
+	sptr->rcb.rc++;
+	sptr->weak_count--;
+	LOG(C_MINI__SPTR_LOG_SUCCESS);
+	return ((t_strong_ptr)sptr);
 }
 /**
- * \brief strengthen smart ptr
- * \param sptr the smart pointer to strengthen
- * \return true if operation was successful false otherwise
+ * \brief weakens a strong pointer to a weak pointer
+ * \param sptr strong pointer to weaken
+ * \return weak pointer if successful, NULL otherwise
+ * \warning THE GIVEN SPTR IS NO LONGER VALID
  * \ingroup sptr
  **/
-bool sptr_strengthen(t_sptr *sptr) {
+t_weak_ptr sptr_weaken(t_strong_ptr sptr) {
+	t_weak_ptr ret;
 	if (!sptr) {
 		LOG(C_MINI__SPTR_LOG_EARG);
-		return (false);
+		return (NULL);
 	}
-	if (sptr->smart_strength == SPTR_S) {
-		LOG(C_MINI__SPTR_LOG_SUCCESS "(already strong)");
-		return (true);
+	ret = (t_weak_ptr)sptr;
+	ret->rcb.rc--;
+	if (!ret->rcb.rc) {
+		if (ret->rcb.dtor) ret->rcb.dtor(ret->rcb.data);
+		ret->rcb.data = NULL;
 	}
-	if (!sptr->box || sptr->box->type == SPTR_UNIQ ||
-	    !sptr->box->sc) { // catch error
-		if (!sptr->box) {
-			LOG(C_MINI__SPTR_LOG_EARG);
-		} else if (sptr->box->type == SPTR_UNIQ) {
-			LOG(C_MINI__SPTR_LOG_ILLUNIQ)
-		} else if (!sptr->box->sc) {
-			LOG(C_MINI__SPTR_LOG_ILLDATA);
-		}
-		return (false);
-	}
-	assert(sptr->box->type == SPTR_SHRD); // should be the only type left
-	sptr->box->sc++;
-	sptr->box->wc--;
-	sptr->smart_strength = SPTR_S;
+	ret->weak_count++;
 	LOG(C_MINI__SPTR_LOG_SUCCESS);
-	return (true);
+	return (ret);
 }
 /**
- * \brief move the ownership of the pointed value from one sptr to another
- * \param to sptr to move ownership to
- * \param from sptr to move ownership from
- * \return true if operation was successful false otherwise
+ * \brief steals the ownership of a unique pointer
+ * \param to unique pointer to steal to
+ * \param from unique pointer to steal from
+ * \return true if successful, false otherwise
+ * \note if to.rcbox != from.rcbox, it will fail
  * \ingroup sptr
  **/
-bool sptr_steal(t_sptr *to, t_sptr *from) {
-	if (!from || !to || !from->box || !from->smart_strength ||
-	    to->box != from->box || from == to) {
+bool sptr_steal(t_uniq_ptr *to, t_uniq_ptr *from) {
+	if (!to->rcbox || !from->rcbox || from->owner == false) {
 		LOG(C_MINI__SPTR_LOG_EARG);
 		return (false);
 	}
-	if (from->box->type == SPTR_SHRD) return (sptr_strengthen(to));
-	if (from->box->type != SPTR_UNIQ || from->smart_strength != SPTR_S) {
-		LOG(C_MINI__SPTR_LOG_EARG);
+	if (to->rcbox != from->rcbox) {
+		LOG(C_MINI__SPTR_LOG_ILLDATA);
 		return (false);
 	}
-	from->smart_strength = SPTR_W;
-	to->smart_strength   = SPTR_S;
+	to->owner   = true;
+	from->owner = false;
 	LOG(C_MINI__SPTR_LOG_SUCCESS);
 	return (true);
 }

@@ -1,72 +1,43 @@
 #include "sptr/smart_pointer.h"
 
-/**
- * \brief create a copy of a smart pointer
- * \param sptr the smart pointer to copy
- * \return the copy of the smart pointer or a zero'ed sptr if it fails
- * \ingroup sptr
- **/
-t_sptr sptr_copy(t_sptr *sptr) {
-	t_sptr ret;
-
-	if (!sptr || !sptr->box) {
+t_strong_ptr sptr_copys(const t_strong_ptr strong_ptr) {
+	if (!strong_ptr) {
 		LOG(C_MINI__SPTR_LOG_EARG);
-		return ((t_sptr){0});
+		return (NULL);
 	}
-	switch (sptr->box->type) {
-	case SPTR_UNIQ:
-		ret                = *sptr;
-		ret.smart_strength = SPTR_W;
-		ret.box->wc++;
-		break;
-	case SPTR_SHRD:
-		ret = *sptr;
-		if (ret.smart_strength == SPTR_S) ret.box->sc++;
-		else ret.box->wc++;
-		break;
+	if (!strong_ptr->rc) {
+		LOG(C_MINI__SPTR_LOG_ILLDATA);
+		return (NULL);
 	}
-	LOG(C_MINI__SPTR_LOG_SUCCESS);
+	strong_ptr->rc++;
+	return (strong_ptr);
+}
+
+t_weak_ptr sptr_copyw(const t_weak_ptr weak_ptr) {
+	if (!weak_ptr) {
+		LOG(C_MINI__SPTR_LOG_EARG);
+		return (NULL);
+	}
+	if (!weak_ptr->weak_count) {
+		LOG(C_MINI__SPTR_LOG_ILLDATA);
+		return (NULL);
+	}
+	weak_ptr->weak_count++;
+	return (weak_ptr);
+}
+
+t_uniq_ptr sptr_copyu(const t_uniq_ptr uniq_ptr) {
+	t_uniq_ptr ret;
+
+	if (!uniq_ptr.rcbox) {
+		LOG(C_MINI__SPTR_LOG_EARG);
+		return ((t_uniq_ptr){0});
+	}
+	if (!uniq_ptr.owner) {
+		LOG(C_MINI__SPTR_LOG_ILLDATA);
+		return ((t_uniq_ptr){0});
+	}
+	uniq_ptr.rcbox->rc++;
+	ret = (t_uniq_ptr){.rcbox = uniq_ptr.rcbox, .owner = false};
 	return (ret);
-}
-
-/**
- * \brief create a weak copy of a smart pointer
- * \param sptr the smart pointer to copy
- * \return the weak copy or a zero'ed sptr if it fails
- * \ingroup sptr
- **/
-t_sptr sptr_weakcopy(t_sptr *sptr) {
-	if (!sptr || !sptr->box) {
-		LOG(C_MINI__SPTR_LOG_EARG);
-		return ((t_sptr){0});
-	}
-	switch (sptr->box->type) {
-	case SPTR_UNIQ:
-	case SPTR_SHRD:
-		sptr->box->wc++;
-		break;
-	}
-	LOG(C_MINI__SPTR_LOG_SUCCESS);
-	return ((t_sptr){.smart_strength = SPTR_W, .box = sptr->box});
-}
-/**
- * \brief create a strong copy of a smart pointer
- * \param sptr the smart pointer to copy
- * \return the strong copy or a zero'ed sptr if it fails
- * \ingroup sptr
- **/
-t_sptr sptr_strongcopy(t_sptr *sptr) {
-	if (!sptr || !sptr->box) {
-		LOG(C_MINI__SPTR_LOG_EARG);
-		return ((t_sptr){0});
-	}
-	switch (sptr->box->type) {
-	case SPTR_UNIQ:
-		LOG(C_MINI__SPTR_LOG_EARG "Illegal operation");
-		return ((t_sptr){0});
-	case SPTR_SHRD:
-		sptr->box->sc++;
-		break;
-	}
-	return ((t_sptr){.smart_strength = SPTR_S, .box = sptr->box});
 }

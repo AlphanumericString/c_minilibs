@@ -3,31 +3,7 @@
 
 #include "sptr_tests.h"
 
-// TODO:
-// argument to be made to split uniq and shared into differing types
-// pros, cons,
-// 1.PROS
-//	- typecheck conserved
-//	- disambiguation inside functions, less branching
-//	- split box for re-use
-// 2.CONS
-//	- need to type twice as much
-
 int main(void) {
-	LOG("")
-	LOG("Create")
-	LOG("")
-	test_sptr_make_sharedv();
-	test_sptr_make_sharedsptr();
-	test_sptr_make_uniqv();
-	test_sptr_make_uniqsptr();
-
-	LOG("")
-	LOG("Delete")
-	LOG("")
-	test_sptr_delete_shared();
-	test_sptr_delete_uniq();
-
 	LOG("")
 	LOG("Change")
 	LOG("")
@@ -38,17 +14,63 @@ int main(void) {
 	LOG("")
 	LOG("Copy")
 	LOG("")
-	test_sptr_copy();
-	test_sptr_weak_copy();
-	test_sptr_strong_copy();
+	test_sptr_copys();
+	test_sptr_copyw();
+	test_sptr_copyu();
+
+	LOG("")
+	LOG("Delete")
+	LOG("")
+	test_sptr_deletes();
+	test_sptr_deletew();
+	test_sptr_deleteu();
+
+	LOG("")
+	LOG("Dump")
+	LOG("")
+	test_sptr_dumps();
+	test_sptr_dumpw();
+	test_sptr_dumpu();
 
 	LOG("")
 	LOG("Get")
 	LOG("")
-	test_sptr_getdata();
-	test_sptr_get_wc();
-	test_sptr_get_sc();
-	test_sptr_get_free_er();
+	test_sptr_gets();
+	test_sptr_getw();
+	test_sptr_getu();
+	test_sptr_getsc();
+	test_sptr_getwc();
+	test_sptr_getsc();
+	test_sptr_get_rcs();
+	test_sptr_get_rcw();
+	test_sptr_get_rcu();
+	test_sptr_get_wcs();
+	test_sptr_get_wcw();
+	test_sptr_get_wcu();
+
+	LOG("")
+	LOG("Is")
+	LOG("")
+	test_sptr_is_uniqs();
+	test_sptr_is_uniqw();
+	test_sptr_is_uniqu();
+	test_sptr_is_shareds();
+	test_sptr_is_sharedw();
+	test_sptr_is_sharedu();
+	test_sptr_is_owns();
+	test_sptr_is_ownw();
+	test_sptr_is_ownu();
+
+	LOG("")
+	LOG("Make")
+	LOG("")
+	test_sptr_make_shared_from_raw();
+	test_sptr_make_shared_from_weak();
+	test_sptr_make_shared_from_strong();
+	test_sptr_make_shared_from_uniq();
+	test_sptr_make_uniq_from_raw();
+	test_sptr_make_uniq_from_strong();
+	test_sptr_make_uniq_from_uniq();
 
 	return (0);
 }
