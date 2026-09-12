@@ -11,7 +11,7 @@
  * \warning THE GIVEN SPTR IS NO LONGER VALID
  * \ingroup sptr
  **/
-t_strong_ptr sptr_strengthen(t_weak_ptr sptr) {
+t_strong_ptr *sptr_strengthen(t_weak_ptr *sptr) {
 	if (!sptr || sptr->rcb.rc == 0) {
 		LOG(C_MINI__SPTR_LOG_ILLDATA);
 		return (NULL);
@@ -19,7 +19,7 @@ t_strong_ptr sptr_strengthen(t_weak_ptr sptr) {
 	sptr->rcb.rc++;
 	sptr->weak_count--;
 	LOG(C_MINI__SPTR_LOG_SUCCESS);
-	return ((t_strong_ptr)sptr);
+	return ((t_strong_ptr *)sptr);
 }
 /**
  * \brief weakens a strong pointer to a weak pointer
@@ -28,13 +28,13 @@ t_strong_ptr sptr_strengthen(t_weak_ptr sptr) {
  * \warning THE GIVEN SPTR IS NO LONGER VALID
  * \ingroup sptr
  **/
-t_weak_ptr sptr_weaken(t_strong_ptr sptr) {
-	t_weak_ptr ret;
+t_weak_ptr *sptr_weaken(t_strong_ptr *sptr) {
+	t_weak_ptr *ret;
 	if (!sptr) {
 		LOG(C_MINI__SPTR_LOG_EARG);
 		return (NULL);
 	}
-	ret = (t_weak_ptr)sptr;
+	ret = (t_weak_ptr *)sptr;
 	ret->rcb.rc--;
 	if (!ret->rcb.rc) {
 		if (ret->rcb.dtor) ret->rcb.dtor(ret->rcb.data);
@@ -53,11 +53,11 @@ t_weak_ptr sptr_weaken(t_strong_ptr sptr) {
  * \ingroup sptr
  **/
 bool sptr_steal(t_uniq_ptr *to, t_uniq_ptr *from) {
-	if (!to->rcbox || !from->rcbox || from->owner == false) {
+	if (!to || !from || !to->wcbox || !from->wcbox || from->owner == false) {
 		LOG(C_MINI__SPTR_LOG_EARG);
 		return (false);
 	}
-	if (to->rcbox != from->rcbox) {
+	if (to->wcbox != from->wcbox) {
 		LOG(C_MINI__SPTR_LOG_ILLDATA);
 		return (false);
 	}

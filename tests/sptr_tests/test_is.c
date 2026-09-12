@@ -5,10 +5,10 @@
 
 // is_uniq
 void test_sptr_is_uniqs(void) {
-	t_strong_ptr s1 = sptr_make_shared((void *)0xDEAD, NULL);
-	t_strong_ptr s2 = sptr_make_shared((void *)0xCAFE, NULL);
-	t_strong_ptr s3;
-	t_weak_ptr   w1 = sptr_make_shared(s2, NULL);
+	t_strong_ptr *s1 = sptr_make_shared((void *)0xDEAD, NULL);
+	t_strong_ptr *s2 = sptr_make_shared((void *)0xCAFE, NULL);
+	t_strong_ptr *s3;
+	t_weak_ptr   *w1 = sptr_make_shared(s2, NULL);
 
 	assert(sptr_is_uniqs(s1) == true);
 	assert(sptr_is_uniqs(s2) == true); // do weak counts?
@@ -21,15 +21,15 @@ void test_sptr_is_uniqs(void) {
 	return;
 }
 void test_sptr_is_uniqw(void) {
-	t_strong_ptr s1           = sptr_make_shared((void *)0xDEAD, NULL);
-	t_strong_ptr s2           = sptr_make_shared((void *)0xCAFE, NULL);
-	t_strong_ptr s3           = sptr_make_shared((void *)0xBEEF, NULL);
-	t_strong_ptr s3_secondary = sptr_strengthen(sptr_make_shared(s3, NULL));
+	t_strong_ptr *s1           = sptr_make_shared((void *)0xDEAD, NULL);
+	t_strong_ptr *s2           = sptr_make_shared((void *)0xCAFE, NULL);
+	t_strong_ptr *s3           = sptr_make_shared((void *)0xBEEF, NULL);
+	t_strong_ptr *s3_secondary = sptr_strengthen(sptr_make_shared(s3, NULL));
 
-	t_weak_ptr w1 = sptr_make_shared(s1, NULL);
-	t_weak_ptr w2 = sptr_make_shared(s2, NULL);
-	t_weak_ptr w3 = sptr_make_shared(w2, NULL);
-	t_weak_ptr w4 = sptr_make_shared(s3, NULL);
+	t_weak_ptr *w1 = sptr_make_shared(s1, NULL);
+	t_weak_ptr *w2 = sptr_make_shared(s2, NULL);
+	t_weak_ptr *w3 = sptr_make_shared(w2, NULL);
+	t_weak_ptr *w4 = sptr_make_shared(s3, NULL);
 
 	sptr_delete(s1); // rc=0
 	assert(sptr_is_uniqw(w1) == false);
@@ -54,7 +54,7 @@ void test_sptr_is_uniqu(void) {
 	assert(sptr_is_uniqu(u1) == true);
 	assert(sptr_is_uniqu(u2) == false);
 	assert(sptr_is_uniqu(u2_secondary) == false);
-	assert(sptr_is_uniqu((t_uniq_ptr){.rcbox = NULL, .owner = true}) == false);
+	assert(sptr_is_uniqu((t_uniq_ptr){.wcbox = NULL, .owner = true}) == false);
 	sptr_delete(u1);
 	sptr_delete(u2);
 	sptr_delete(u2_secondary);
@@ -63,10 +63,10 @@ void test_sptr_is_uniqu(void) {
 
 // is_shared
 void test_sptr_is_shareds(void) {
-	t_strong_ptr s1 = sptr_make_shared((void *)0xDEAD, NULL);
-	t_strong_ptr s2 = sptr_make_shared((void *)0xCAFE, NULL);
-	t_strong_ptr s3;
-	t_weak_ptr   w1 = sptr_make_shared(s2, NULL);
+	t_strong_ptr *s1 = sptr_make_shared((void *)0xDEAD, NULL);
+	t_strong_ptr *s2 = sptr_make_shared((void *)0xCAFE, NULL);
+	t_strong_ptr *s3;
+	t_weak_ptr   *w1 = sptr_make_shared(s2, NULL);
 
 	assert(sptr_is_shareds(s1) == false);
 	assert(sptr_is_shareds(s2) == false); // do weak counts?
@@ -79,16 +79,16 @@ void test_sptr_is_shareds(void) {
 	return;
 }
 void test_sptr_is_sharedw(void) {
-	t_strong_ptr s1           = sptr_make_shared((void *)0xDEAD, NULL);
-	t_strong_ptr s2           = sptr_make_shared((void *)0xCAFE, NULL);
-	t_strong_ptr s2_secondary = sptr_strengthen(sptr_make_shared(s2, NULL));
-	t_strong_ptr s3           = sptr_make_shared((void *)0xBEEF, NULL);
+	t_strong_ptr *s1           = sptr_make_shared((void *)0xDEAD, NULL);
+	t_strong_ptr *s2           = sptr_make_shared((void *)0xCAFE, NULL);
+	t_strong_ptr *s2_secondary = sptr_strengthen(sptr_make_shared(s2, NULL));
+	t_strong_ptr *s3           = sptr_make_shared((void *)0xBEEF, NULL);
 
 	// s1 : rc = 0, s2: rc = 2, s3: rc = 1
-	t_weak_ptr w1 = sptr_make_shared(s1, NULL);
-	t_weak_ptr w2 = sptr_make_shared(s2, NULL);
-	t_weak_ptr w2_secondary;
-	t_weak_ptr w3 = sptr_make_shared(s3, NULL);
+	t_weak_ptr *w1 = sptr_make_shared(s1, NULL);
+	t_weak_ptr *w2 = sptr_make_shared(s2, NULL);
+	t_weak_ptr *w2_secondary;
+	t_weak_ptr *w3 = sptr_make_shared(s3, NULL);
 
 	sptr_delete(s1); // rc=0
 	assert(sptr_is_sharedw(w1) == false);
@@ -115,7 +115,7 @@ void test_sptr_is_sharedu(void) {
 	assert(sptr_is_sharedu(u2) == true);
 	assert(sptr_is_sharedu(u2_secondary) == true);
 	assert(sptr_is_sharedu((t_uniq_ptr){0}) == false);
-	assert(sptr_is_sharedu((t_uniq_ptr){.owner = true, .rcbox = NULL}) ==
+	assert(sptr_is_sharedu((t_uniq_ptr){.owner = true, .wcbox = NULL}) ==
 	       false);
 	sptr_delete(u1);
 	sptr_delete(u2);
@@ -125,9 +125,9 @@ void test_sptr_is_sharedu(void) {
 
 // is_own
 void test_sptr_is_owns(void) {
-	t_strong_ptr s1           = sptr_make_shared((void *)0xDEAD, NULL);
-	t_strong_ptr s2           = sptr_make_shared((void *)0xCAFE, NULL);
-	t_strong_ptr s2_secondary = sptr_copys(s2);
+	t_strong_ptr *s1           = sptr_make_shared((void *)0xDEAD, NULL);
+	t_strong_ptr *s2           = sptr_make_shared((void *)0xCAFE, NULL);
+	t_strong_ptr *s2_secondary = sptr_copys(s2);
 
 	assert(sptr_is_owns(s1) == true);
 	assert(sptr_is_owns(s2) == false);
@@ -138,17 +138,17 @@ void test_sptr_is_owns(void) {
 	return;
 }
 void test_sptr_is_ownw(void) {
-	t_strong_ptr s1           = sptr_make_shared((void *)0xDEAD, NULL);
-	t_strong_ptr s2           = sptr_make_shared((void *)0xCAFE, NULL);
-	t_strong_ptr s2_secondary = sptr_copys(s2);
-	t_strong_ptr s3           = sptr_make_shared((void *)0xBEEF, NULL);
+	t_strong_ptr *s1           = sptr_make_shared((void *)0xDEAD, NULL);
+	t_strong_ptr *s2           = sptr_make_shared((void *)0xCAFE, NULL);
+	t_strong_ptr *s2_secondary = sptr_copys(s2);
+	t_strong_ptr *s3           = sptr_make_shared((void *)0xBEEF, NULL);
 
 	// s1->rc=1, s2->rc=2, s3->rc=0
-	t_weak_ptr w1 = sptr_make_shared(s1, NULL);
-	t_weak_ptr w1_secondary;
-	t_weak_ptr w2 = sptr_make_shared(s2, NULL);
-	t_weak_ptr w3 = sptr_make_shared(s3, NULL);
-	t_weak_ptr w3_secondary;
+	t_weak_ptr *w1 = sptr_make_shared(s1, NULL);
+	t_weak_ptr *w1_secondary;
+	t_weak_ptr *w2 = sptr_make_shared(s2, NULL);
+	t_weak_ptr *w3 = sptr_make_shared(s3, NULL);
+	t_weak_ptr *w3_secondary;
 
 	sptr_delete(s3);
 	assert(sptr_is_ownw(w1) == false);
@@ -181,7 +181,7 @@ void test_sptr_is_ownu(void) {
 	assert(sptr_is_ownu(u2) == true);
 	assert(sptr_is_ownu(u2_secondary) == false);
 	assert(sptr_is_ownu((t_uniq_ptr){0}) == false);
-	assert(sptr_is_ownu((t_uniq_ptr){.owner = true, .rcbox = NULL}) == false);
+	assert(sptr_is_ownu((t_uniq_ptr){.owner = true, .wcbox = NULL}) == false);
 	sptr_delete(u1);
 	sptr_delete(u2);
 	sptr_delete(u2_secondary);

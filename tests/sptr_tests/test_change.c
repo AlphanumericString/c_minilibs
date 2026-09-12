@@ -6,9 +6,9 @@
 #include "sptr_tests.h"
 
 void test_sptr_strengthen(void) {
-	t_strong_ptr src      = sptr_make_shared((void *)0xDEAD, NULL);
-	t_weak_ptr   test_ptr = sptr_make_shared(src, NULL);
-	t_strong_ptr res;
+	t_strong_ptr *src      = sptr_make_shared((void *)0xDEAD, NULL);
+	t_weak_ptr   *test_ptr = sptr_make_shared(src, NULL);
+	t_strong_ptr *res;
 
 	assert(sptr_get_wc(test_ptr) == 1);
 	assert(sptr_get_rc(test_ptr) == 1);
@@ -20,8 +20,8 @@ void test_sptr_strengthen(void) {
 }
 
 void test_sptr_weaken(void) {
-	t_strong_ptr src = sptr_make_shared((void *)0xDEAD, NULL);
-	t_weak_ptr   res = sptr_make_shared(src, NULL);
+	t_strong_ptr *src = sptr_make_shared((void *)0xDEAD, NULL);
+	t_weak_ptr   *res = sptr_make_shared(src, NULL);
 
 	assert(sptr_get_rc(src) == 1);
 	assert(sptr_get_wc(src) == 1);
@@ -40,9 +40,9 @@ void test_sptr_steal(void) {
 
 	// state
 	assert(t1.owner == true && t2.owner == false);
-	assert(t1.rcbox == t2.rcbox && t1.rcbox != NULL);
+	assert(t1.wcbox == t2.wcbox && t1.wcbox != NULL);
 	sptr_steal(&t2, &t1);
 	assert(t1.owner == false && t2.owner == true);
-	free(t1.rcbox);
+	free(t1.wcbox);
 	return;
 }

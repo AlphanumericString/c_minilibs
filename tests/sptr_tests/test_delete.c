@@ -9,10 +9,10 @@ static void bad(void *a) {
 }
 
 void test_sptr_deletes(void) {
-	t_strong_ptr s1 = sptr_make_shared("randcom string", NULL);
-	t_strong_ptr s2 = sptr_make_shared(malloc(32), free);
-	t_strong_ptr s3 = sptr_make_shared(malloc(32), free);
-	t_weak_ptr   w1 = sptr_make_shared(s3, NULL);
+	t_strong_ptr *s1 = sptr_make_shared("randcom string", NULL);
+	t_strong_ptr *s2 = sptr_make_shared(malloc(32), free);
+	t_strong_ptr *s3 = sptr_make_shared(malloc(32), free);
+	t_weak_ptr   *w1 = sptr_make_shared(s3, NULL);
 
 	sptr_deletes(s1); // check via valgrind that mem was free'd
 	sptr_deletes(s2);
@@ -22,10 +22,10 @@ void test_sptr_deletes(void) {
 	return;
 }
 void test_sptr_deletew(void) {
-	t_strong_ptr s1 = sptr_make_shared(malloc(12), free);
-	t_weak_ptr   w1 = sptr_make_shared(s1, bad);
-	t_weak_ptr   w2 = sptr_make_shared(s1, NULL);
-	t_weak_ptr   w3 = sptr_make_shared(s1, NULL);
+	t_strong_ptr *s1 = sptr_make_shared(malloc(12), free);
+	t_weak_ptr   *w1 = sptr_make_shared(s1, bad);
+	t_weak_ptr   *w2 = sptr_make_shared(s1, NULL);
+	t_weak_ptr   *w3 = sptr_make_shared(s1, NULL);
 
 	assert(!w1);
 	sptr_deletew(w1);

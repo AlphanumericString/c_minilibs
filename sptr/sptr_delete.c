@@ -8,8 +8,8 @@
  * \return true if the strong pointer was deleted, false otherwise
  * \ingroup sptr
  **/
-bool sptr_deletes(t_strong_ptr ptr) {
-	if (!ptr) {
+bool sptr_deletes(t_strong_ptr *ptr) {
+	if (!ptr || !ptr->rc) {
 		LOG(C_MINI__SPTR_LOG_EARG);
 		return (false);
 	}
@@ -20,7 +20,7 @@ bool sptr_deletes(t_strong_ptr ptr) {
 	}
 	if (!ptr->rc && !((t_wcbox *)ptr)->weak_count) free(ptr);
 	LOG(C_MINI__SPTR_LOG_SUCCESS);
-	return (false);
+	return (true);
 }
 /**
  * \brief delete a weak pointer
@@ -28,8 +28,8 @@ bool sptr_deletes(t_strong_ptr ptr) {
  * \return true if the weak pointer was deleted, false otherwise
  * \ingroup sptr
  **/
-bool sptr_deletew(t_weak_ptr ptr) {
-	if (!ptr) {
+bool sptr_deletew(t_weak_ptr *ptr) {
+	if (!ptr || !ptr->rcb.rc) {
 		LOG(C_MINI__SPTR_LOG_EARG);
 		return (false);
 	}
@@ -45,18 +45,23 @@ bool sptr_deletew(t_weak_ptr ptr) {
  * \ingroup sptr
  **/
 bool sptr_deleteu(t_uniq_ptr ptr) {
-	if (!ptr.rcbox) {
+	if (!ptr.wcbox || !ptr.wcbox->rcb.rc) {
 		LOG(C_MINI__SPTR_LOG_EARG);
 		return (false);
 	}
-	if (ptr.owner) {
-		if (ptr.rcbox->dtor) ptr.rcbox->dtor(ptr.rcbox->data);
-		ptr.rcbox->data = NULL;
+	if (ptr.owner == true ^ ptr.wcbox->rcb.rc == 1) {
+		LOG(C_MINI__SPTR_LOG_ILL);
+		return (false);
 	}
-	ptr.rcbox->rc--;
-	if (ptr.rcbox->rc == 0) {
-		free(ptr.rcbox);
-		ptr.rcbox = NULL;
+	if (ptr.owner) {
+		if (ptr.wcbox->rcb.dtor) ptr.wcbox->rcb.dtor(ptr.wcbox->rcb.data);
+		ptr.wcbox->rcb.data = NULL;
+		ptr.wcbox->rcb.rc--;
+	}
+	ptr.wcbox->weak_count--;
+	if (ptr.wcbox->weak_count == 0) {
+		free(ptr.wcbox);
+		ptr.wcbox = NULL;
 	}
 	LOG(C_MINI__SPTR_LOG_SUCCESS);
 	return (true);

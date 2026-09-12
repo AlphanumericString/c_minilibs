@@ -10,7 +10,7 @@
  * \return true if the strong pointer is unique, false otherwise
  * \ingroup sptr
  **/
-bool sptr_is_uniqs(const t_strong_ptr ptr) {
+bool sptr_is_uniqs(const t_strong_ptr *ptr) {
 	if (!ptr) {
 		LOG(C_MINI__SPTR_LOG_EARG);
 		return (false);
@@ -24,7 +24,7 @@ bool sptr_is_uniqs(const t_strong_ptr ptr) {
  * \return true if the weak pointer is unique, false otherwise
  * \ingroup sptr
  **/
-bool sptr_is_uniqw(const t_weak_ptr ptr) {
+bool sptr_is_uniqw(const t_weak_ptr *ptr) {
 	if (!ptr) {
 		LOG(C_MINI__SPTR_LOG_EARG);
 		return (false);
@@ -39,12 +39,12 @@ bool sptr_is_uniqw(const t_weak_ptr ptr) {
  * \ingroup sptr
  **/
 bool sptr_is_uniqu(const t_uniq_ptr ptr) {
-	if (!ptr.rcbox) {
+	if (!ptr.wcbox) {
 		LOG(C_MINI__SPTR_LOG_EARG);
 		return (false);
 	}
 	LOG(C_MINI__SPTR_LOG_SUCCESS);
-	return (ptr.rcbox->rc == 1);
+	return (ptr.wcbox->rcb.rc == 1);
 }
 
 /*************/
@@ -57,7 +57,7 @@ bool sptr_is_uniqu(const t_uniq_ptr ptr) {
  * \return true if the strong pointer is shared, false otherwise
  * \ingroup sptr
  **/
-bool sptr_is_shareds(const t_strong_ptr ptr) {
+bool sptr_is_shareds(const t_strong_ptr *ptr) {
 	if (!ptr) {
 		LOG(C_MINI__SPTR_LOG_EARG);
 		return (false);
@@ -71,7 +71,7 @@ bool sptr_is_shareds(const t_strong_ptr ptr) {
  * \return true if the weak pointer is shared, false otherwise
  * \ingroup sptr
  **/
-bool sptr_is_sharedw(const t_weak_ptr ptr) {
+bool sptr_is_sharedw(const t_weak_ptr *ptr) {
 	if (!ptr) {
 		LOG(C_MINI__SPTR_LOG_EARG);
 		return (false);
@@ -86,12 +86,12 @@ bool sptr_is_sharedw(const t_weak_ptr ptr) {
  * \ingroup sptr
  **/
 bool sptr_is_sharedu(const t_uniq_ptr ptr) {
-	if (!ptr.rcbox) {
+	if (!ptr.wcbox) {
 		LOG(C_MINI__SPTR_LOG_EARG);
 		return (false);
 	}
 	LOG(C_MINI__SPTR_LOG_SUCCESS);
-	return (ptr.rcbox->rc > 1);
+	return (ptr.wcbox->rcb.rc == 1 && ptr.owner);
 }
 
 /**********/
@@ -104,7 +104,7 @@ bool sptr_is_sharedu(const t_uniq_ptr ptr) {
  * \return true if the strong pointer is the owner, false otherwise
  * \ingroup sptr
  **/
-bool sptr_is_owns(const t_strong_ptr ptr) {
+bool sptr_is_owns(const t_strong_ptr *ptr) {
 	if (!ptr) {
 		LOG(C_MINI__SPTR_LOG_EARG);
 		return (false);
@@ -118,7 +118,7 @@ bool sptr_is_owns(const t_strong_ptr ptr) {
  * \return true if the weak pointer is the owner, false otherwise
  * \ingroup sptr
  **/
-bool sptr_is_ownw(const t_weak_ptr ptr) {
+bool sptr_is_ownw(const t_weak_ptr *ptr) {
 	(void)ptr;
 	if (!ptr) {
 		LOG(C_MINI__SPTR_LOG_EARG);
@@ -135,7 +135,7 @@ bool sptr_is_ownw(const t_weak_ptr ptr) {
  * \ingroup sptr
  **/
 bool sptr_is_ownu(const t_uniq_ptr ptr) {
-	if (!ptr.rcbox) {
+	if (!ptr.wcbox) {
 		LOG(C_MINI__SPTR_LOG_EARG);
 		return (false);
 	}
