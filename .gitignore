@@ -11,3 +11,4 @@ documentation
 *profdata
 *profraw
 coverage/*
+llm_exchanges/

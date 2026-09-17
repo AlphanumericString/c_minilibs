@@ -1,34 +1,176 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
+#define C_MINI__INTERNAL
 #include "sptr/smart_pointer.h"
 
-void sptr_dumps(int fd, const t_strong_ptr *ptr) {
-	if (fd < 0 || !ptr) {
-		LOG(C_MINI__SPTR_LOG_EARG);
-		return;
-	}
-	dprintf(fd, "SPTR STRONG { data %p, count %lu (weak:%lu), dtor %p}",
-	        sptr_get(ptr), sptr_get_rc(ptr), sptr_get_wc(ptr),
-	        sptr_get_dtor(ptr));
+/**
+ * \brief convert a shared (strong) pointer to a string
+ * \param sptr shared (strong) pointer to convert
+ * \return string representation of the shared (strong) pointer
+ * \warning caller is responsible for freeing the returned string
+ * \note fields printed: data, strong count, weak count, dtor
+ * \ingroup sptr
+ **/
+char *sptr_to_strings(const t_strong_ptr *sptr) {
+	char       *ret = NULL;
+	size_t      len;
+	const char *fmt = "SPTR STRONG { data %p, count %zu (weak:%zu), dtor %p}";
+
+	if (!sptr || !sptr->meta) return (strdup("SPTR STRONG (nil)"));
+
+	len = snprintf(ret, 0, fmt, sptr_get(sptr), sptr_get_rc(sptr),
+	               sptr_get_wc(sptr), sptr_get_dtor(sptr));
+	ret = malloc(len + 1);
+	if (!ret) return (NULL);
+	len = snprintf(ret, len + 1, fmt, sptr_get(sptr), sptr_get_rc(sptr),
+	               sptr_get_wc(sptr), sptr_get_dtor(sptr));
+	return (ret);
+}
+/**
+ * \brief convert a shared (weak) pointer to a string
+ * \param sptr shared (weak) pointer to convert
+ * \return string representation of the shared (weak) pointer
+ * \warning caller is responsible for freeing the returned string
+ * \note fields printed: data, strong count, weak count, dtor
+ * \ingroup sptr
+ **/
+char *sptr_to_stringw(const t_weak_ptr *sptr) {
+	char       *ret = NULL;
+	size_t      len;
+	const char *fmt = "SPTR WEAK { data %p, count %zu (weak:%zu), dtor %p}";
+
+	if (!sptr || !sptr->meta) return (strdup("SPTR WEAK (nil)"));
+	len = snprintf(ret, 0, fmt, sptr_get(sptr), sptr_get_rc(sptr),
+	               sptr_get_wc(sptr), (void *)sptr_get_dtor(sptr));
+	ret = malloc(len + 1);
+	if (!ret) return (NULL);
+	snprintf(ret, len + 1, fmt, sptr_get(sptr), sptr_get_rc(sptr),
+	         sptr_get_wc(sptr), (void *)sptr_get_dtor(sptr));
+	return (ret);
+}
+/**
+ * \brief convert a owned pointer to a string
+ * \param sptr owned pointer to convert
+ * \return string representation of the owned pointer
+ * \warning caller is responsible for freeing the returned string
+ * \note fields printed: ownership status, data, strong count, weak count, dtor
+ * \ingroup sptr
+ **/
+char *sptr_to_stringo(const t_owned_ptr *sptr) {
+	char       *ret = NULL;
+	size_t      len;
+	const char *fmt = "SPTR OWND %s { data %p, count %zu (weak:%zu), dtor %p}";
+
+	if (!sptr || !sptr->meta) return (strdup("SPTR OWND (nil)"));
+	len = snprintf(ret, 0, fmt, sptr->owner ? "owned" : "borrowed",
+	               sptr_get(sptr), sptr_get_rc(sptr), sptr_get_wc(sptr),
+	               (void *)sptr_get_dtor(sptr));
+	ret = malloc(len + 1);
+	if (!ret) return (NULL);
+	snprintf(ret, len + 1, fmt, sptr->owner ? "owned" : "borrowed",
+	         sptr_get(sptr), sptr_get_rc(sptr), sptr_get_wc(sptr),
+	         (void *)sptr_get_dtor(sptr));
+	return (ret);
+}
+/**
+ * \brief convert a uniq pointer to a string
+ * \param sptr uniq pointer to convert
+ * \return string representation of the uniq pointer
+ * \warning caller is responsible for freeing the returned string
+ * \note fields printed: data, dtor
+ * \ingroup sptr
+ **/
+char *sptr_to_stringu(const t_uniq_ptr *sptr) {
+	char       *ret = NULL;
+	size_t      len;
+	const char *fmt = "SPTR UNIQ { data %p, dtor %p}";
+
+	if (!sptr) return (strdup("SPTR UNIQ (nil)"));
+	len = snprintf(ret, 0, fmt, sptr_get(sptr), (void *)sptr_get_dtor(sptr));
+	ret = malloc(len + 1);
+	if (!ret) return (NULL);
+	snprintf(ret, len + 1, fmt, sptr_get(sptr), (void *)sptr_get_dtor(sptr));
+	return (ret);
 }
 
-void sptr_dumpw(int fd, const t_weak_ptr *weak_ptr) {
-	if (fd < 0 || !weak_ptr) {
-		LOG(C_MINI__SPTR_LOG_EARG);
-		return;
-	}
-	dprintf(fd, "SPTR WEAK { data %p, count %lu (weak:%lu), dtor %p}",
-	        sptr_get(weak_ptr), sptr_get_rc(weak_ptr), sptr_get_wc(weak_ptr),
-	        sptr_get_dtor(weak_ptr));
-}
+/**
+ * \brief dump debug information for a shared (strong) pointer to a given file
+ * descriptor
+ * \param fd file descriptor to output to
+ * \param sptr shared (strong) pointer to dump
+ * \note prints infos using sptr_to_string format
+ * \ingroup sptr
+ **/
+void sptr_dumps(int fd, const t_strong_ptr *sptr) {
+	char *s;
 
-void sptr_dumpu(int fd, const t_uniq_ptr uniq_ptr) {
-	if (fd < 0 || !uniq_ptr.wcbox) {
-		LOG(C_MINI__SPTR_LOG_EARG);
+	if (fd < 0) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
 		return;
 	}
-	dprintf(fd, "SPTR UNIQ %s { data %p, count %lu (weak:%lu), dtor %p}",
-	        sptr_is_ownu(uniq_ptr) ? "owned" : "borrowed", sptr_get(uniq_ptr),
-	        sptr_get_rc(uniq_ptr), sptr_get_wc(uniq_ptr),
-	        sptr_get_dtor(uniq_ptr));
+	s = sptr_to_strings(sptr);
+	if (!s) return;
+	dprintf(fd, "%s\n", s);
+	free(s);
+}
+/**
+ * \brief dump debug information for a shared (weak) pointer to a given file
+ * descriptor
+ * \param fd file descriptor to output to
+ * \param wptr shared (weak) pointer to dump
+ * \note prints infos using sptr_to_string format
+ * \ingroup sptr
+ **/
+void sptr_dumpw(int fd, const t_weak_ptr *wptr) {
+	char *s;
+
+	if (fd < 0) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		return;
+	}
+	s = sptr_to_stringw(wptr);
+	if (!s) return;
+	dprintf(fd, "%s\n", s);
+	free(s);
+}
+/**
+ * \brief dump debug information for a owned pointer to a given file descriptor
+ * \param fd file descriptor to output to
+ * \param optr owned pointer to dump
+ * \note prints infos using sptr_to_string format
+ * \ingroup sptr
+ **/
+void sptr_dumpo(int fd, const t_owned_ptr *optr) {
+	char *s;
+
+	if (fd < 0) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		return;
+	}
+	s = sptr_to_stringo(optr);
+	if (!s) return;
+	dprintf(fd, "%s\n", s);
+	free(s);
+}
+/**
+ * \brief dump debug information for a uniq pointer to a given file descriptor
+ * \param fd file descriptor to output to
+ * \param uptr uniq pointer to dump
+ * \note prints infos using sptr_to_string format
+ * \ingroup sptr
+ **/
+void sptr_dumpu(int fd, const t_uniq_ptr *uptr) {
+	char *s;
+
+	if (fd < 0) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		return;
+	}
+	s = sptr_to_stringu(uptr);
+	if (!s) return;
+	dprintf(fd, "%s\n", s);
+	free(s);
 }

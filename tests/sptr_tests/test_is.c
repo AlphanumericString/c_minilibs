@@ -1,189 +1,312 @@
 #include <assert.h>
-#include <sptr/smart_pointer.h>
 
+#define C_MINI__INTERNAL
 #include "sptr_tests.h"
 
 // is_uniq
 void test_sptr_is_uniqs(void) {
-	t_strong_ptr *s1 = sptr_make_shared((void *)0xDEAD, NULL);
-	t_strong_ptr *s2 = sptr_make_shared((void *)0xCAFE, NULL);
-	t_strong_ptr *s3;
-	t_weak_ptr   *w1 = sptr_make_shared(s2, NULL);
+	void *data = (void *)0xDEAD;
+	void *dtor = (void *)0xCAFE;
 
-	assert(sptr_is_uniqs(s1) == true);
-	assert(sptr_is_uniqs(s2) == true); // do weak counts?
-	s3 = sptr_strengthen(w1);          // w1 invalidated
-	assert(sptr_is_uniqs(s2) == false);
-	assert(sptr_is_uniqs(NULL) == false);
-	sptr_delete(s1);
-	sptr_delete(s2);
-	sptr_delete(s3);
-	return;
+	t_fbox b0_rc1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_fbox b1_rc0 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 0};
+	t_fbox b2_rc2 = (t_fbox){.data = data, .dtor = dtor, .rc = 2, .wc = 0};
+
+	t_strong_ptr s0_rc1       = (t_strong_ptr){b0_rc1.data, &b0_rc1};
+	t_strong_ptr s1_rc0       = (t_strong_ptr){b1_rc0.data, &b1_rc0};
+	t_strong_ptr s2_rc2       = (t_strong_ptr){b2_rc2.data, &b2_rc2};
+	t_strong_ptr s3_meta_null = (t_strong_ptr){data, NULL};
+
+	bool res[] = {sptr_is_uniqs(&s0_rc1), sptr_is_uniqs(&s1_rc0),
+	              sptr_is_uniqs(&s2_rc2), sptr_is_uniqs(&s3_meta_null),
+	              sptr_is_uniqs(NULL)};
+
+	assert(res[0] == true);
+	assert(!res[1]);
+	assert(!res[2]);
+	assert(!res[3]);
+	assert(!res[4]);
 }
+
 void test_sptr_is_uniqw(void) {
-	t_strong_ptr *s1           = sptr_make_shared((void *)0xDEAD, NULL);
-	t_strong_ptr *s2           = sptr_make_shared((void *)0xCAFE, NULL);
-	t_strong_ptr *s3           = sptr_make_shared((void *)0xBEEF, NULL);
-	t_strong_ptr *s3_secondary = sptr_strengthen(sptr_make_shared(s3, NULL));
+	void *data = (void *)0xDEAD;
+	void *dtor = (void *)0xCAFE;
 
-	t_weak_ptr *w1 = sptr_make_shared(s1, NULL);
-	t_weak_ptr *w2 = sptr_make_shared(s2, NULL);
-	t_weak_ptr *w3 = sptr_make_shared(w2, NULL);
-	t_weak_ptr *w4 = sptr_make_shared(s3, NULL);
+	t_fbox b0_rc1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
+	t_fbox b1_rc0 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
+	t_fbox b2_rc2 = (t_fbox){.data = data, .dtor = dtor, .rc = 2, .wc = 1};
 
-	sptr_delete(s1); // rc=0
-	assert(sptr_is_uniqw(w1) == false);
-	assert(sptr_is_uniqw(w2) == true);
-	assert(sptr_is_uniqw(w3) == true);
-	assert(sptr_is_uniqw(w4) == false);
-	assert(sptr_is_uniqw(NULL) == false);
-	sptr_delete(w1);
-	sptr_delete(w2);
-	sptr_delete(w3);
-	sptr_delete(w4);
-	sptr_delete(s2);
-	sptr_delete(s3);
-	sptr_delete(s3_secondary);
-	return;
+	t_weak_ptr w0_rc1       = (t_weak_ptr){&b0_rc1};
+	t_weak_ptr w1_rc0       = (t_weak_ptr){&b1_rc0};
+	t_weak_ptr w2_rc2       = (t_weak_ptr){&b2_rc2};
+	t_weak_ptr w3_meta_null = (t_weak_ptr){NULL};
+
+	bool res[] = {sptr_is_uniqw(&w0_rc1), sptr_is_uniqw(&w1_rc0),
+	              sptr_is_uniqw(&w2_rc2), sptr_is_uniqw(&w3_meta_null),
+	              sptr_is_uniqw(NULL)};
+
+	assert(res[0] == true);
+	assert(!res[1]);
+	assert(!res[2]);
+	assert(!res[3]);
+	assert(!res[4]);
 }
-void test_sptr_is_uniqu(void) {
-	t_uniq_ptr u1           = sptr_make_uniq((void *)0xDEAD, NULL);
-	t_uniq_ptr u2           = sptr_make_uniq((void *)0xDEAD, NULL);
-	t_uniq_ptr u2_secondary = sptr_make_uniq(u2, NULL);
 
-	assert(sptr_is_uniqu(u1) == true);
-	assert(sptr_is_uniqu(u2) == false);
-	assert(sptr_is_uniqu(u2_secondary) == false);
-	assert(sptr_is_uniqu((t_uniq_ptr){.wcbox = NULL, .owner = true}) == false);
-	sptr_delete(u1);
-	sptr_delete(u2);
-	sptr_delete(u2_secondary);
-	return;
+void test_sptr_is_uniqo(void) {
+	void *data = (void *)0xDEAD;
+	void *dtor = (void *)0xCAFE;
+
+	t_fbox b0_rc1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_fbox b1_rc0 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 0};
+	t_fbox b2_rc2 = (t_fbox){.data = data, .dtor = dtor, .rc = 2, .wc = 0};
+
+	t_owned_ptr o0_rc1       = (t_owned_ptr){b0_rc1.data, &b0_rc1, true};
+	t_owned_ptr o1_rc0       = (t_owned_ptr){b1_rc0.data, &b1_rc0, true};
+	t_owned_ptr o2_rc2       = (t_owned_ptr){b2_rc2.data, &b2_rc2, true};
+	t_owned_ptr o3_meta_null = (t_owned_ptr){data, NULL, true};
+
+	bool res[] = {sptr_is_uniqo(&o0_rc1), sptr_is_uniqo(&o1_rc0),
+	              sptr_is_uniqo(&o2_rc2), sptr_is_uniqo(&o3_meta_null),
+	              sptr_is_uniqo(NULL)};
+
+	assert(res[0] == true);
+	assert(!res[1]);
+	assert(!res[2]);
+	assert(!res[3]);
+	assert(!res[4]);
+}
+
+void test_sptr_is_uniqu(void) {
+	void *data = (void *)0xDEAD;
+	void *dtor = (void *)0xCAFE;
+
+	t_uniq_ptr u0_ok        = (t_uniq_ptr){.data = data, .dtor = dtor};
+	t_uniq_ptr u1_data_null = (t_uniq_ptr){.data = NULL, .dtor = dtor};
+
+	bool res[] = {sptr_is_uniqu(&u0_ok), sptr_is_uniqu(&u1_data_null),
+	              sptr_is_uniqu(NULL)};
+
+	assert(res[0] == true);
+	assert(!res[1]);
+	assert(!res[2]);
 }
 
 // is_shared
 void test_sptr_is_shareds(void) {
-	t_strong_ptr *s1 = sptr_make_shared((void *)0xDEAD, NULL);
-	t_strong_ptr *s2 = sptr_make_shared((void *)0xCAFE, NULL);
-	t_strong_ptr *s3;
-	t_weak_ptr   *w1 = sptr_make_shared(s2, NULL);
+	void *data = (void *)0xDEAD;
+	void *dtor = (void *)0xCAFE;
 
-	assert(sptr_is_shareds(s1) == false);
-	assert(sptr_is_shareds(s2) == false); // do weak counts?
-	s3 = sptr_strengthen(w1);             // w1 invalidated
-	assert(sptr_is_shareds(s2) == true);
-	assert(sptr_is_shareds(NULL) == false);
-	sptr_delete(s1);
-	sptr_delete(s2);
-	sptr_delete(s3);
-	return;
+	t_fbox b0_rc0 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 0};
+	t_fbox b1_rc1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_fbox b2_rc2 = (t_fbox){.data = data, .dtor = dtor, .rc = 2, .wc = 0};
+
+	t_strong_ptr s0_rc0       = (t_strong_ptr){b0_rc0.data, &b0_rc0};
+	t_strong_ptr s1_rc1       = (t_strong_ptr){b1_rc1.data, &b1_rc1};
+	t_strong_ptr s2_rc2       = (t_strong_ptr){b2_rc2.data, &b2_rc2};
+	t_strong_ptr s3_meta_null = (t_strong_ptr){data, NULL};
+
+	bool res[] = {
+	    sptr_is_shareds(&s0_rc0), sptr_is_shareds(&s1_rc1),
+	    sptr_is_shareds(&s2_rc2), sptr_is_shareds(&s3_meta_null),
+	    sptr_is_shareds(NULL),
+	};
+
+	assert(!res[0]);
+	assert(res[1] == true);
+	assert(res[2] == true);
+	assert(!res[3]);
+	assert(!res[4]);
 }
+
 void test_sptr_is_sharedw(void) {
-	t_strong_ptr *s1           = sptr_make_shared((void *)0xDEAD, NULL);
-	t_strong_ptr *s2           = sptr_make_shared((void *)0xCAFE, NULL);
-	t_strong_ptr *s2_secondary = sptr_strengthen(sptr_make_shared(s2, NULL));
-	t_strong_ptr *s3           = sptr_make_shared((void *)0xBEEF, NULL);
+	void *data = (void *)0xDEAD;
+	void *dtor = (void *)0xCAFE;
 
-	// s1 : rc = 0, s2: rc = 2, s3: rc = 1
-	t_weak_ptr *w1 = sptr_make_shared(s1, NULL);
-	t_weak_ptr *w2 = sptr_make_shared(s2, NULL);
-	t_weak_ptr *w2_secondary;
-	t_weak_ptr *w3 = sptr_make_shared(s3, NULL);
+	t_fbox b0_rc0 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
+	t_fbox b1_rc1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
+	t_fbox b2_rc2 = (t_fbox){.data = data, .dtor = dtor, .rc = 2, .wc = 1};
 
-	sptr_delete(s1); // rc=0
-	assert(sptr_is_sharedw(w1) == false);
-	assert(sptr_is_sharedw(w2) == true);
-	w2_secondary = sptr_make_shared(w2, NULL);
-	assert(sptr_is_sharedw(w2_secondary) == true); // check that weak dont count
-	assert(sptr_is_sharedw(w3) == false);
-	assert(sptr_is_sharedw(NULL) == false);
-	sptr_delete(w1);
-	sptr_delete(w2);
-	sptr_delete(w2_secondary);
-	sptr_delete(w3);
-	sptr_delete(s2);
-	sptr_delete(s2_secondary);
-	sptr_delete(s3);
-	return;
+	t_weak_ptr w0_rc0       = (t_weak_ptr){&b0_rc0};
+	t_weak_ptr w1_rc1       = (t_weak_ptr){&b1_rc1};
+	t_weak_ptr w2_rc2       = (t_weak_ptr){&b2_rc2};
+	t_weak_ptr w3_meta_null = (t_weak_ptr){NULL};
+
+	bool res[] = {
+	    sptr_is_sharedw(&w0_rc0), sptr_is_sharedw(&w1_rc1),
+	    sptr_is_sharedw(&w2_rc2), sptr_is_sharedw(&w3_meta_null),
+	    sptr_is_sharedw(NULL),
+	};
+
+	assert(!res[0]);
+	assert(res[1] == true);
+	assert(res[2] == true);
+	assert(!res[3]);
+	assert(!res[4]);
 }
+
+void test_sptr_is_sharedo(void) {
+	void *data = (void *)0xDEAD;
+	void *dtor = (void *)0xCAFE;
+
+	t_fbox b0_rc0 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 0};
+	t_fbox b1_rc1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_fbox b2_rc2 = (t_fbox){.data = data, .dtor = dtor, .rc = 2, .wc = 0};
+
+	t_owned_ptr o0_rc0       = (t_owned_ptr){b0_rc0.data, &b0_rc0, true};
+	t_owned_ptr o1_rc1       = (t_owned_ptr){b1_rc1.data, &b1_rc1, true};
+	t_owned_ptr o2_rc2       = (t_owned_ptr){b2_rc2.data, &b2_rc2, true};
+	t_owned_ptr o3_meta_null = (t_owned_ptr){data, NULL, true};
+
+	bool res[] = {
+	    sptr_is_sharedo(&o0_rc0), sptr_is_sharedo(&o1_rc1),
+	    sptr_is_sharedo(&o2_rc2), sptr_is_sharedo(&o3_meta_null),
+	    sptr_is_sharedo(NULL),
+	};
+
+	assert(!res[0]);
+	assert(res[1] == true);
+	assert(res[2] == true);
+	assert(!res[3]);
+	assert(!res[4]);
+}
+
 void test_sptr_is_sharedu(void) {
-	t_uniq_ptr u1           = sptr_make_uniq((void *)0xDEAD, NULL);
-	t_uniq_ptr u2           = sptr_make_uniq((void *)0xCAFE, NULL);
-	t_uniq_ptr u2_secondary = sptr_make_uniq(u2, NULL);
+	void *data = (void *)0xDEAD;
+	void *dtor = (void *)0xCAFE;
 
-	assert(sptr_is_sharedu(u1) == false);
-	assert(sptr_is_sharedu(u2) == true);
-	assert(sptr_is_sharedu(u2_secondary) == true);
-	assert(sptr_is_sharedu((t_uniq_ptr){0}) == false);
-	assert(sptr_is_sharedu((t_uniq_ptr){.owner = true, .wcbox = NULL}) ==
-	       false);
-	sptr_delete(u1);
-	sptr_delete(u2);
-	sptr_delete(u2_secondary);
-	return;
+	t_uniq_ptr u0_ok        = (t_uniq_ptr){.data = data, .dtor = dtor};
+	t_uniq_ptr u1_data_null = (t_uniq_ptr){.data = NULL, .dtor = dtor};
+
+	bool res[] = {
+	    sptr_is_sharedu(&u0_ok),
+	    sptr_is_sharedu(&u1_data_null),
+	    sptr_is_sharedu(NULL),
+	};
+
+	assert(!res[0]);
+	assert(!res[1]);
+	assert(!res[2]);
 }
 
-// is_own
-void test_sptr_is_owns(void) {
-	t_strong_ptr *s1           = sptr_make_shared((void *)0xDEAD, NULL);
-	t_strong_ptr *s2           = sptr_make_shared((void *)0xCAFE, NULL);
-	t_strong_ptr *s2_secondary = sptr_copys(s2);
+// is_sole_box_owner
+void test_sptr_is_sole_box_owns(void) {
+	void *data = (void *)0xDEAD;
+	void *dtor = (void *)0xCAFE;
 
-	assert(sptr_is_owns(s1) == true);
-	assert(sptr_is_owns(s2) == false);
-	assert(sptr_is_owns(NULL) == false);
-	sptr_delete(s2_secondary);
-	sptr_delete(s1);
-	sptr_delete(s2);
-	return;
+	t_fbox b0_sole    = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_fbox b1_wc      = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
+	t_fbox b2_rc_many = (t_fbox){.data = data, .dtor = dtor, .rc = 2, .wc = 0};
+	t_fbox b3_no_rc   = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 0};
+
+	t_strong_ptr s0_sole      = (t_strong_ptr){b0_sole.data, &b0_sole};
+	t_strong_ptr s1_wc        = (t_strong_ptr){b1_wc.data, &b1_wc};
+	t_strong_ptr s2_rc_many   = (t_strong_ptr){b2_rc_many.data, &b2_rc_many};
+	t_strong_ptr s3_no_rc     = (t_strong_ptr){b3_no_rc.data, &b3_no_rc};
+	t_strong_ptr s4_meta_null = (t_strong_ptr){data, NULL};
+
+	bool res[] = {
+	    sptri_is_sole_box_owns(&s0_sole),
+	    sptri_is_sole_box_owns(&s1_wc),
+	    sptri_is_sole_box_owns(&s2_rc_many),
+	    sptri_is_sole_box_owns(&s3_no_rc),
+	    sptri_is_sole_box_owns(&s4_meta_null),
+	    sptri_is_sole_box_owns(NULL),
+	};
+
+	assert(res[0] == true);
+	assert(!res[1]);
+	assert(!res[2]);
+	assert(!res[3]);
+	assert(!res[4]);
+	assert(!res[5]);
 }
-void test_sptr_is_ownw(void) {
-	t_strong_ptr *s1           = sptr_make_shared((void *)0xDEAD, NULL);
-	t_strong_ptr *s2           = sptr_make_shared((void *)0xCAFE, NULL);
-	t_strong_ptr *s2_secondary = sptr_copys(s2);
-	t_strong_ptr *s3           = sptr_make_shared((void *)0xBEEF, NULL);
 
-	// s1->rc=1, s2->rc=2, s3->rc=0
-	t_weak_ptr *w1 = sptr_make_shared(s1, NULL);
-	t_weak_ptr *w1_secondary;
-	t_weak_ptr *w2 = sptr_make_shared(s2, NULL);
-	t_weak_ptr *w3 = sptr_make_shared(s3, NULL);
-	t_weak_ptr *w3_secondary;
+void test_sptr_is_sole_box_ownw(void) {
+	void *data = (void *)0xDEAD;
+	void *dtor = (void *)0xCAFE;
 
-	sptr_delete(s3);
-	assert(sptr_is_ownw(w1) == false);
-	assert(sptr_is_ownw(w2) == false);
-	assert(sptr_is_ownw(w3) == true);
-	w1_secondary = sptr_copy(w1);
-	w3_secondary = sptr_copy(w3);
-	assert(sptr_is_ownw(w1) == false);
-	assert(sptr_is_ownw(w3) == false);
-	assert(sptr_is_ownw(NULL) == false);
-	sptr_delete(w1);
-	sptr_delete(w1_secondary);
-	sptr_delete(w2);
-	sptr_delete(w3);
-	sptr_delete(w3_secondary);
+	t_fbox b0_sole    = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
+	t_fbox b1_has_rc  = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
+	t_fbox b2_wc_many = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 2};
+	t_fbox b3_no_wc   = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 0};
 
-	sptr_delete(s1);
-	sptr_delete(s2);
-	sptr_delete(s2_secondary);
-	return;
+	t_weak_ptr w0_sole      = (t_weak_ptr){&b0_sole};
+	t_weak_ptr w1_has_rc    = (t_weak_ptr){&b1_has_rc};
+	t_weak_ptr w2_wc_many   = (t_weak_ptr){&b2_wc_many};
+	t_weak_ptr w3_no_wc     = (t_weak_ptr){&b3_no_wc};
+	t_weak_ptr w4_meta_null = (t_weak_ptr){NULL};
+
+	bool res[] = {
+	    sptri_is_sole_box_ownw(&w0_sole),
+	    sptri_is_sole_box_ownw(&w1_has_rc),
+	    sptri_is_sole_box_ownw(&w2_wc_many),
+	    sptri_is_sole_box_ownw(&w3_no_wc),
+	    sptri_is_sole_box_ownw(&w4_meta_null),
+	    sptri_is_sole_box_ownw(NULL),
+	};
+
+	assert(res[0] == true);
+	assert(!res[1]);
+	assert(!res[2]);
+	assert(!res[3]);
+	assert(!res[4]);
+	assert(!res[5]);
 }
-void test_sptr_is_ownu(void) {
-	t_uniq_ptr u1 = sptr_make_uniq((void *)0xDEAD, NULL);
-	t_uniq_ptr u2 = sptr_make_uniq((void *)0xCAFE, NULL);
-	t_uniq_ptr u2_secondary;
 
-	assert(sptr_is_ownu(u1) == true);
-	assert(sptr_is_ownu(u2) == true);
-	u2_secondary = sptr_copy(u2);
-	assert(sptr_is_ownu(u2) == true);
-	assert(sptr_is_ownu(u2_secondary) == false);
-	assert(sptr_is_ownu((t_uniq_ptr){0}) == false);
-	assert(sptr_is_ownu((t_uniq_ptr){.owner = true, .wcbox = NULL}) == false);
-	sptr_delete(u1);
-	sptr_delete(u2);
-	sptr_delete(u2_secondary);
-	return;
+void test_sptr_is_sole_box_owno(void) {
+	void *data = (void *)0xDEAD;
+	void *dtor = (void *)0xCAFE;
+
+	t_fbox b0_sole_rc = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_fbox b1_sole_wc = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
+	t_fbox b2_rc_wc   = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
+	t_fbox b3_rc_many = (t_fbox){.data = data, .dtor = dtor, .rc = 2, .wc = 0};
+	t_fbox b4_wc_many = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 2};
+	t_fbox b5_no_c    = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 0};
+
+	t_owned_ptr o0_sole_rc = (t_owned_ptr){b0_sole_rc.data, &b0_sole_rc, true};
+	t_owned_ptr o1_sole_wc = (t_owned_ptr){b1_sole_wc.data, &b1_sole_wc, false};
+	t_owned_ptr o2_rc_wc   = (t_owned_ptr){b2_rc_wc.data, &b2_rc_wc, true};
+	t_owned_ptr o3_rc_many = (t_owned_ptr){b3_rc_many.data, &b3_rc_many, true};
+	t_owned_ptr o4_wc_many = (t_owned_ptr){b4_wc_many.data, &b4_wc_many, false};
+	t_owned_ptr o5_no_c    = (t_owned_ptr){b5_no_c.data, &b5_no_c, false};
+	t_owned_ptr o6_meta_null = (t_owned_ptr){data, NULL, true};
+
+	bool res[] = {
+	    sptri_is_sole_box_owno(&o0_sole_rc),
+	    sptri_is_sole_box_owno(&o1_sole_wc),
+	    sptri_is_sole_box_owno(&o2_rc_wc),
+	    sptri_is_sole_box_owno(&o3_rc_many),
+	    sptri_is_sole_box_owno(&o4_wc_many),
+	    sptri_is_sole_box_owno(&o5_no_c),
+	    sptri_is_sole_box_owno(&o6_meta_null),
+	    sptri_is_sole_box_owno(NULL),
+	};
+
+	assert(res[0] == true);
+	assert(res[1] == true);
+	assert(!res[2]);
+	assert(!res[3]);
+	assert(!res[4]);
+	assert(!res[5]);
+	assert(!res[6]);
+	assert(!res[7]);
+}
+
+void test_sptr_is_sole_box_ownu(void) {
+	void *data = (void *)0xDEAD;
+	void *dtor = (void *)0xCAFE;
+
+	t_uniq_ptr u0_ok        = (t_uniq_ptr){.data = data, .dtor = dtor};
+	t_uniq_ptr u1_data_null = (t_uniq_ptr){.data = NULL, .dtor = dtor};
+
+	bool res[] = {
+	    sptri_is_sole_box_ownu(&u0_ok),
+	    sptri_is_sole_box_ownu(&u1_data_null),
+	    sptri_is_sole_box_ownu(NULL),
+	};
+
+	assert(!res[0]);
+	assert(!res[1]);
+	assert(!res[2]);
 }

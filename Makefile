@@ -1,21 +1,26 @@
 # define variable for all modules dir
-MODULES			= ill rb da ss dsu tls lru_cache hp sptr
-D_FILES			=
 .DEFAULT_GOAL	:= all
+
+MODULES			= ill rb da ss dsu tls lru_cache hp sptr
+
 BUILD_DIR		= build
 DOC_DIR			= documentation
 TST_DIR			= tests
 COV_DIR			= coverage
+D_FILES			=
+
 CC				= clang
-CFLAGS			= -Wall -Wextra -MMD -MP
 COV				= llvm-cov
 PRD				= llvm-profdata
+
 DEBUG_LVL		?= 0
+STD				= gnu17
+CFLAGS			= -Wall -Wextra -MMD -MP --std=$(STD)
 
 ifeq ($(DEBUG_LVL), 0)
-	CFLAGS := $(CFLAGS)
+	CFLAGS := $(CFLAGS) -DC_MINI__DEBUG_LEVEL=0
 else
-	CFLAGS += -g3 -DC_MINI__TESTS
+	CFLAGS += -g3 -DC_MINI__TESTS -DC_MINI__DEBUG_LEVEL=$(DEBUG_LVL)
 endif
 
 # Check for llvm-cov and llvm-profdata
@@ -46,10 +51,12 @@ VALGRIND_OPT= --leak-check=full --show-leak-kinds=all --track-fds=yes \
 TFLAGS	=\
 			-fprofile-instr-generate -ftest-coverage -fcoverage-mapping	\
 			-fno-inline -fno-inline-functions							\
-			-O0	-DC_MINI__TESTS -I./
+			-O0 -I./
 
+## tests
 
 define module_template
+# module vars
 $1_SRC=	$$(shell find $1 -name '*.c')
 $1_TSRC=	$$(shell find $(TST_DIR)/$1_tests -name '*.c')
 $1_OBJ=	$$(patsubst %.c, %.o, $$(addprefix $(BUILD_DIR)/,$$($1_SRC)))
@@ -57,25 +64,31 @@ $1_TOBJ=$$(patsubst %.c, %.o, $$(addprefix $(BUILD_DIR)/,$$($1_TSRC)))
 $1_TOBJSRC=$$(patsubst %.c, %.o, $$(addprefix $(BUILD_DIR)/$(TST_DIR)/,$$($1_SRC)))
 $1_D=	$$(patsubst %.o, %.d, $$($1_OBJ)) \
 		$$(patsubst %.o, %.d, $$($1_TOBJ))
-lib$1.a: $$($1_OBJ)
-	ar rcs $$@ $$^
-test_$1.out: $$($1_TOBJSRC) $$($1_TOBJ)
-	$(CC) $(TFLAGS) $(CFLAGS) $$($1_TOBJ) $$($1_TOBJSRC) -o $$@
+# add module to glob vars
 D_FILES	+= $$($1_D)
 LIBNAMES += lib$1.a
 OBJ_ALL += $$($1_OBJ)
 TESTS_ALL += test_$1.out
-
+# rules
+# define base rule to compile
 $(BUILD_DIR)/$1/%.o: $1/%.c
 	@mkdir -p $$(dir $$@)
 	$(CC) $(CFLAGS) -I. -c $$< -o $$@
-
+# define rule to compile base as test
 $(BUILD_DIR)/$(TST_DIR)/$1/%.o: $1/%.c
 	@mkdir -p $$(dir $$@)
 	$(CC) $(CFLAGS) $(TFLAGS) -c $$< -o $$@
+# define rule to compile test as test
 $(BUILD_DIR)/$(TST_DIR)/$1_tests/%.o: $(TST_DIR)/$1_tests/%.c
 	@mkdir -p $$(dir $$@)
 	$(CC) $(CFLAGS) $(TFLAGS) -I. -c $$< -o $$@
+# final targets
+# module base target
+lib$1.a: $$($1_OBJ)
+	ar rcs $$@ $$^
+# module test target
+test_$1.out: $$($1_TOBJSRC) $$($1_TOBJ)
+	$(CC) $(TFLAGS) $(CFLAGS) $$($1_TOBJ) $$($1_TOBJSRC) -o $$@
 endef
 
 $(foreach mod,$(MODULES),$(eval $(call module_template,$(mod))))
@@ -88,18 +101,18 @@ tests_run: $(TESTS_ALL)
 	done
 $(COV_DIR): $(TESTS_ALL)
 	@mkdir -p $(COV_DIR)
-	@for t in $^; do \
-		LLVM_PROFILE_FILE=./$(BUILD_DIR)/$$t.profraw ./$$t 1> /dev/null ; \
-	done
-	@$(PRD) merge -sparse \
-		$(addsuffix .profraw, $(addprefix ./$(BUILD_DIR)/, $(TESTS_ALL))) \
+	@for t in $^; do														\
+		LLVM_PROFILE_FILE=./$(BUILD_DIR)/$$t.profraw ./$$t 1> /dev/null ;	\
+		done
+	@$(PRD) merge -sparse													\
+		$(addsuffix .profraw, $(addprefix ./$(BUILD_DIR)/, $(TESTS_ALL)))	\
 		-o merged.profdata
 	@$(COV) show -format=html									\
-	-instr-profile=merged.profdata								\
-	-ignore-filename-regex=$(TST_DIR)/*							\
-	--show-branches=count	--show-directory-coverage			\
-	-output-dir=$(COV_DIR) $(addprefix -object=, $(TESTS_ALL))	&& \
-	rm -rf merged.profdata
+		-ignore-filename-regex=$(TST_DIR)/*							\
+		--show-branches=count	--show-directory-coverage			\
+		-output-dir=$(COV_DIR)										\
+		-instr-profile=merged.profdata $(addprefix -object=, $(TESTS_ALL))
+	@rm -rf merged.profdata
 
 -include:$(D_FILES)
 fclean:clean
@@ -110,5 +123,5 @@ $(DOC_DIR):
 clean:
 	$(RM) $(LIBNAMES) $(TESTS_ALL)
 re:fclean
-	make all
+	@make --no-print-directory all
 .PHONY: re clean fclean $(COV_DIR)
