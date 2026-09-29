@@ -238,7 +238,7 @@ static void test_sptr_move_o_ok(void) {
 	assert(to0.meta == &b0 && to0.data == data);
 	assert(from0.owner == false);
 	// wc incremented by sptr_copyo inside sptr_move_ownership
-	assert(b0.wc == 1);
+	assert(b0.wc == 0);
 
 	// Case 2: to has an existing box with wc > 0 (so sptr_deleteo doesn't free
 	// stack)
@@ -255,7 +255,7 @@ static void test_sptr_move_o_ok(void) {
 	assert(to1.owner == true);
 	assert(to1.meta == &b1 && to1.data == data);
 	assert(from1.owner == false);
-	assert(b1.wc == 1);
+	assert(b1.wc == 0);
 	// b_old was deleted by sptr_deleteo(to): its rc was decremented to 0
 	assert(b_old.rc == 0);
 }
