@@ -15,10 +15,10 @@ t_heap *hp_create(size_t nb_elems, t_comparator cmp) {
 	hp = malloc(sizeof(t_heap));
 	if (!hp || hp_init(hp, nb_elems, cmp) == NULL) {
 		if (hp) free(hp);
-		LOG(C_MINI__HP_LOG_EALLOC);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EALLOC);
 		return (NULL);
 	}
-	LOG(C_MINI__HP_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_SUCCESS);
 	return (hp);
 }
 
@@ -32,7 +32,7 @@ t_heap *hp_create(size_t nb_elems, t_comparator cmp) {
 **/
 t_heap *hp_init(t_heap *hp, size_t nb_elems, t_comparator cmp) {
 	if (!hp) {
-		LOG(C_MINI__HP_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG);
 		return (NULL);
 	}
 	hp->cmp      = cmp;
@@ -40,9 +40,9 @@ t_heap *hp_init(t_heap *hp, size_t nb_elems, t_comparator cmp) {
 	hp->capacity = nb_elems;
 	hp->elems    = calloc(hp->capacity, sizeof(void *));
 	if (!hp->elems) {
-		LOG(C_MINI__HP_LOG_EALLOC);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__HP_LOG_EALLOC);
 		return (NULL);
 	}
-	LOG(C_MINI__HP_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_SUCCESS);
 	return (hp);
 }

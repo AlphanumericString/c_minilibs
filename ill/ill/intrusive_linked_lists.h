@@ -19,14 +19,14 @@
 
 /**
  * \defgroup ill Intrusive Linked List
- **/
+**/
 
 /**
  * \brief t_ill struct
  * \param offset offset of the node in the element
  * \param next pointer to the next node
  * \ingroup ill
- **/
+**/
 typedef struct s_ill {
 	size_t        offset;
 	struct s_ill *next;

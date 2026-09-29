@@ -13,14 +13,15 @@ bool cdsu_union(t_cdsu *ds, size_t x, size_t y) {
 
 	if (!ds || !ds->rank || !ds->parent || !ds->size || y == x ||
 	    x >= ds->size || y >= ds->size) {
-		LOG(C_MINI__CDSU_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG);
 		return (false);
 	}
 	root_x = cdsu_find(ds, x);
 	root_y = cdsu_find(ds, y);
 	if (root_x == root_y) {
-		LOG("Link (r1:%zu, r2:%zu, components:%zu -> %zu)", x, y,
-		    ds->components, ds->components);
+		CM_LOG(C_MINI__LEVEL_INFO,
+		       "Link (r1:%zu, r2:%zu, components:%zu -> %zu)", x, y,
+		       ds->components, ds->components);
 		return (true);
 	}
 	ds->components--;
@@ -37,8 +38,8 @@ bool cdsu_union(t_cdsu *ds, size_t x, size_t y) {
 			ds->rank[root_y]++;
 		}
 	}
-	LOG("Link (r1:%zu, r2:%zu, components:%zu -> %zu)", x, y,
-	    ds->components + 1, ds->components);
+	CM_LOG(C_MINI__LEVEL_INFO, "Link (r1:%zu, r2:%zu, components:%zu -> %zu)",
+	       x, y, ds->components + 1, ds->components);
 	return (true);
 }
 /**
@@ -50,14 +51,14 @@ bool cdsu_union(t_cdsu *ds, size_t x, size_t y) {
 **/
 size_t cdsu_find(t_cdsu *ds, size_t x) {
 	if (!ds || !ds->size || !ds->parent || x > ds->size) {
-		LOG(C_MINI__CDSU_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG);
 		return (-1);
 	}
 	while (ds->parent[x] != x) {
 		ds->parent[x] = ds->parent[ds->parent[x]];
 		x             = ds->parent[x];
 	}
-	LOG(C_MINI__CDSU_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CDSU_LOG_SUCCESS);
 	return (x);
 }
 /**
@@ -69,13 +70,13 @@ size_t cdsu_find(t_cdsu *ds, size_t x) {
 **/
 size_t cdsu_strict_find(t_cdsu ds, size_t x) {
 	if (!ds.size || !ds.parent || x > ds.size) {
-		LOG(C_MINI__CDSU_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG);
 		return (-1);
 	}
 	while (ds.parent[x] != x) {
 		x = ds.parent[x];
 	}
-	LOG(C_MINI__CDSU_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CDSU_LOG_SUCCESS);
 	return (x);
 }
 /**
@@ -89,7 +90,7 @@ size_t cdsu_compress_all(t_cdsu *ds) {
 	size_t y;
 
 	if (!ds || !ds->size || !ds->parent) {
-		LOG(C_MINI__CDSU_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG);
 		return (0);
 	}
 	y = 0;
@@ -101,6 +102,6 @@ size_t cdsu_compress_all(t_cdsu *ds) {
 		}
 		y++;
 	}
-	LOG(C_MINI__CDSU_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CDSU_LOG_SUCCESS);
 	return (ds->size);
 }

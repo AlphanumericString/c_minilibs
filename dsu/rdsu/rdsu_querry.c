@@ -21,26 +21,27 @@ bool rdsu_is_related(const t_rdsu *ds, size_t x, size_t y) {
 bool rdsu_validate(t_rdsu rdsu) {
 
 	if (!rdsu.size || !rdsu.rank || !rdsu.parent) {
-		LOG(C_MINI__RDSU_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG);
 		return (false);
 	}
 	for (size_t i = 0; i < rdsu.size; i++) {
 		if (rdsu.parent[i] >= rdsu.size || rdsu.rank[i] >= rdsu.size) {
-			LOG("Invalid RDSU (rank/parent for %zu)", i);
+			CM_LOG(C_MINI__LEVEL_INFO, "Invalid DSU (rank/parent for %zu)", i);
 			return (false);
 		}
 		for (size_t x = i, steps = 0; x != rdsu.parent[x]; x = rdsu.parent[x]) {
 			steps++;
 			if (rdsu.parent[x] >= rdsu.size) {
-				LOG("Invalid DSU (rank/parent for %zu)", x);
+				CM_LOG(C_MINI__LEVEL_INFO, "Invalid DSU (rank/parent for %zu)",
+				       i);
 				return (false);
 			}
 			if (steps > rdsu.size + 1) {
-				LOG("Invalid RDSU (infinite chain)");
+				CM_LOG(C_MINI__LEVEL_WARN, "Invalid DSU (infinite chain)");
 				return (false);
 			}
 		}
 	}
-	LOG(C_MINI__RDSU_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS);
 	return (true);
 }

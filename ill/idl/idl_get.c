@@ -12,7 +12,7 @@ void *idl_get_min(t_idl *head, t_comparator c) {
 	t_idl *min;
 
 	if (!head || !c) {
-		LOG(C_MINI__IDL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
 		return NULL;
 	}
 	curr = head;
@@ -21,7 +21,7 @@ void *idl_get_min(t_idl *head, t_comparator c) {
 		if (c(idl_ntoe(curr->next), idl_ntoe(min)) < 0) min = curr->next;
 		curr = curr->next;
 	}
-	LOG(C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
 	return idl_ntoe(min);
 }
 
@@ -37,7 +37,7 @@ void *idl_get_max(t_idl *head, t_comparator c) {
 	t_idl *max;
 
 	if (!head || !c) {
-		LOG(C_MINI__IDL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
 		return NULL;
 	}
 	curr = head;
@@ -46,7 +46,7 @@ void *idl_get_max(t_idl *head, t_comparator c) {
 		if (c(idl_ntoe(curr->next), idl_ntoe(max)) > 0) max = curr->next;
 		curr = curr->next;
 	}
-	LOG(C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
 	return idl_ntoe(max);
 }
 
@@ -61,7 +61,7 @@ void *idl_get_kth(t_idl *head, size_t k) {
 	t_idl *curr;
 
 	if (!head) {
-		LOG(C_MINI__IDL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
 		return NULL;
 	}
 
@@ -71,9 +71,9 @@ void *idl_get_kth(t_idl *head, size_t k) {
 		k--;
 	}
 	if (k > 0) {
-		LOG(C_MINI__IDL_LOG_FAIL);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_FAIL);
 		return NULL;
 	}
-	LOG(C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
 	return idl_ntoe(curr);
 }

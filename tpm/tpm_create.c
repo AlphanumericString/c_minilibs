@@ -12,17 +12,17 @@ t_tpm *tpm_new(size_t nb) {
 
 	if (!nb) nb = TPM_THREADS_DFLT_NB;
 	if (nb > TPM_THREADS_MAX_NB) {
-		LOG(C_MINI__TPM_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG);
 		return (NULL);
 	}
 	if ((ret = malloc(sizeof(*ret))) == NULL) {
-		LOG(C_MINI__TPM_LOG_EALLOC);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__TPM_LOG_EALLOC);
 		return (NULL);
 	}
 	tpm_init(ret, nb);
 	if (atomic_load(&ret->nb_threads) == -1) {
 		free(ret);
-		LOG("Thread Initialization Failed.");
+		CM_LOG(C_MINI__LEVEL_ERR, "Thread Initialization Failed.");
 		return (NULL);
 	}
 	return (ret);
@@ -31,7 +31,7 @@ t_tpm *tpm_new(size_t nb) {
 t_tpm *tpm_init(t_tpm *tpm, size_t nb_thread) {
 	if (!nb_thread) nb_thread = TPM_THREADS_DFLT_NB;
 	if (!tpm || nb_thread > TPM_THREADS_MAX_NB) {
-		LOG(C_MINI__TPM_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG);
 		return (NULL);
 	}
 
@@ -47,12 +47,12 @@ t_tpm *tpm_init(t_tpm *tpm, size_t nb_thread) {
 		    (pthread_mutex_t)PTHREAD_MUTEX_INITIALIZER;
 		if (pthread_create(&(tpm->threads[i].id_absolute), NULL, &tpmi_worker,
 		                   &tpm->threads[i])) {
-			LOG("PTHREAD_CREATE FAIL: %s", strerror(errno));
+			CM_LOG("PTHREAD_CREATE FAIL: %s", strerror(errno));
 			tpm_stop(tpm);
 			for (size_t j = 0; j < i;
 			     pthread_cancel(tpm->threads[j++].id_absolute))
 				;
-			LOG(C_MINI__TPM_LOG_ETHREADS);
+			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__TPM_LOG_ETHREADS);
 			atomic_store(&tpm->nb_threads, -1);
 			return (tpm);
 		}

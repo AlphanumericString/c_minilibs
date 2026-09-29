@@ -1,77 +1,76 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "ill_tests.h"
 
 void ill_main(void) {
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_ill_init();
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_ill_ntoe();
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_ill_is();
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_ill_insert();
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_ill_rm();
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_ill_find();
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_ill_get();
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_ill_gettail();
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_ill_length();
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_ill_foreach();
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_ill_reverse();
 
-	printf("All ILL tests completed successfully.\n");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "All ILL tests completed successfully.");
 }
 
 void idl_main(void) {
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_idl_init();
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_idl_ntoe();
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_idl_is();
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_idl_insert();
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_idl_rm();
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_idl_find();
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_idl_get();
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_idl_gettail();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_idl_gethead();
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_idl_length();
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_idl_foreach();
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	test_idl_reverse();
 
-	printf("All IDL tests completed successfully.\n");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "All IDL tests completed successfully.");
 }
 
 int __attribute__((no_profile_instrument_function)) main(void) {
-	LOG("");
-	LOG("");
-	LOG("\t\tILL");
-	LOG("");
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "\t\tILL");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	ill_main();
-	LOG("");
-	LOG("");
-	LOG("\t\tIDL");
-	LOG("");
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "\t\tIDL");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	idl_main();
 
-	printf("All intrusive lists tests completed successfully.\n");
-	return (EXIT_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_ALWAYS,
+	       "All intrusive lists tests completed successfully.");
+	return (0);
 }

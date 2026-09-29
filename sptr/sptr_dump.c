@@ -13,7 +13,7 @@
  * \warning caller is responsible for freeing the returned string
  * \note fields printed: data, strong count, weak count, dtor
  * \ingroup sptr
- **/
+**/
 char *sptr_to_strings(const t_strong_ptr *sptr) {
 	char       *ret = NULL;
 	size_t      len;
@@ -36,7 +36,7 @@ char *sptr_to_strings(const t_strong_ptr *sptr) {
  * \warning caller is responsible for freeing the returned string
  * \note fields printed: data, strong count, weak count, dtor
  * \ingroup sptr
- **/
+**/
 char *sptr_to_stringw(const t_weak_ptr *sptr) {
 	char       *ret = NULL;
 	size_t      len;
@@ -58,7 +58,7 @@ char *sptr_to_stringw(const t_weak_ptr *sptr) {
  * \warning caller is responsible for freeing the returned string
  * \note fields printed: ownership status, data, strong count, weak count, dtor
  * \ingroup sptr
- **/
+**/
 char *sptr_to_stringo(const t_owned_ptr *sptr) {
 	char       *ret = NULL;
 	size_t      len;
@@ -82,7 +82,7 @@ char *sptr_to_stringo(const t_owned_ptr *sptr) {
  * \warning caller is responsible for freeing the returned string
  * \note fields printed: data, dtor
  * \ingroup sptr
- **/
+**/
 char *sptr_to_stringu(const t_uniq_ptr *sptr) {
 	char       *ret = NULL;
 	size_t      len;
@@ -103,7 +103,7 @@ char *sptr_to_stringu(const t_uniq_ptr *sptr) {
  * \param sptr shared (strong) pointer to dump
  * \note prints infos using sptr_to_string format
  * \ingroup sptr
- **/
+**/
 void sptr_dumps(int fd, const t_strong_ptr *sptr) {
 	char *s;
 
@@ -123,7 +123,7 @@ void sptr_dumps(int fd, const t_strong_ptr *sptr) {
  * \param wptr shared (weak) pointer to dump
  * \note prints infos using sptr_to_string format
  * \ingroup sptr
- **/
+**/
 void sptr_dumpw(int fd, const t_weak_ptr *wptr) {
 	char *s;
 
@@ -142,7 +142,7 @@ void sptr_dumpw(int fd, const t_weak_ptr *wptr) {
  * \param optr owned pointer to dump
  * \note prints infos using sptr_to_string format
  * \ingroup sptr
- **/
+**/
 void sptr_dumpo(int fd, const t_owned_ptr *optr) {
 	char *s;
 
@@ -161,7 +161,7 @@ void sptr_dumpo(int fd, const t_owned_ptr *optr) {
  * \param uptr uniq pointer to dump
  * \note prints infos using sptr_to_string format
  * \ingroup sptr
- **/
+**/
 void sptr_dumpu(int fd, const t_uniq_ptr *uptr) {
 	char *s;
 

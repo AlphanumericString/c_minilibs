@@ -26,7 +26,7 @@ bool da_swap(t_da *da, size_t pos_a, size_t pos_b) {
 	sa = da_at(da, pos_a);
 	sb = da_at(da, pos_b);
 	if (!sa || !sb) {
-		LOG(C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
 		return (false);
 	}
 	if (da->sz_e > C_MINI_DA__SZ_ELEM_DFLT) {
@@ -38,8 +38,8 @@ bool da_swap(t_da *da, size_t pos_a, size_t pos_b) {
 		memcpy(sa, sb, da->sz_e);
 		memcpy(sb, sized_buffer, da->sz_e);
 	}
-	//	LOG(C_MINI__DA_LOG_SWAP, 1UL, pos_a, pos_b);
-	LOG(C_MINI__DA_LOG_SUCCESS);
+	//	CM_LOG(C_MINI__DA_LOG_SWAP, 1UL, pos_a, pos_b);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
 	return (true);
 }
 /**
@@ -57,11 +57,11 @@ bool da_nswap(t_da *da, size_t n, size_t pos_a, size_t pos_b) {
 	unsigned char *sb;
 
 	if (!da_is_valid(da) || da->nb_e < (pos_a + n) || da->nb_e < (pos_b + n)) {
-		LOG(C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
 		return (false);
 	}
 	if (!n) {
-		LOG(C_MINI__DA_LOG_SWAP, n, pos_a, pos_b);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SWAP, n, pos_a, pos_b);
 		return (true);
 	}
 	sa = da_at(da, pos_a);
@@ -75,7 +75,7 @@ bool da_nswap(t_da *da, size_t n, size_t pos_a, size_t pos_b) {
 		memcpy(sa, sb, da->sz_e * n);
 		memcpy(sb, sized_buffer, da->sz_e * n);
 	}
-	// LOG(C_MINI__DA_LOG_SWAP, n, pos_a, pos_b);
-	LOG(C_MINI__DA_LOG_SUCCESS);
+	// CM_LOG(C_MINI__DA_LOG_SWAP, n, pos_a, pos_b);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
 	return (true);
 }

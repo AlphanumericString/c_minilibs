@@ -13,7 +13,7 @@
  * \warning the given weak pointer should be treated as replaced by the returned
  * strong pointer
  * \ingroup sptr
- **/
+**/
 t_strong_ptr sptr_into_strong(t_weak_ptr *sptr) {
 	if (!sptr || sptr_get_wc(sptr) == 0 || sptr_get_rc(sptr) == 0) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_ILLDATA);
@@ -34,7 +34,7 @@ t_strong_ptr sptr_into_strong(t_weak_ptr *sptr) {
  * \warning the given strong pointer should be treated as replaced by the
  * returned weak pointer
  * \ingroup sptr
- **/
+**/
 t_weak_ptr sptr_into_weak(t_strong_ptr *sptr) {
 	if (!sptr || sptr_get_rc(sptr) == 0) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -57,7 +57,7 @@ t_weak_ptr sptr_into_weak(t_strong_ptr *sptr) {
  * \note transfers ownership between owned pointers referencing the same box;
  * fails if to is already owner, from is not owner, or boxes differ
  * \ingroup sptr
- **/
+**/
 bool sptr_transfer_ownership(t_owned_ptr *to, t_owned_ptr *from) {
 	if (!to || !from || !to->meta || !from->meta || from->owner == false ||
 	    to->owner == true) {
@@ -83,7 +83,7 @@ bool sptr_transfer_ownership(t_owned_ptr *to, t_owned_ptr *from) {
  * \param from the location to copy the data from. If copy is successfully made
  * the variable is zeroed out.
  * \return true on success, false otherwise.
- **/
+**/
 bool sptr_move_ownership(t_owned_ptr *dest, t_owned_ptr *from) {
 	t_owned_ptr r;
 
@@ -109,7 +109,7 @@ bool sptr_move_ownership(t_owned_ptr *dest, t_owned_ptr *from) {
  * \note if destination's data exist calls sptr_delete() on destination
  * beforehand
  * \ingroup sptr
- **/
+**/
 t_uniq_ptr *sptr_uniq_yield(t_uniq_ptr *dst, t_uniq_ptr *src) {
 	if (!dst || !src) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -127,7 +127,7 @@ t_uniq_ptr *sptr_uniq_yield(t_uniq_ptr *dst, t_uniq_ptr *src) {
  * \param sw2 to swap data to and fro
  * \return return true on success, false on error
  * \ingroup sptr
- **/
+**/
 bool sptr_uniq_swap(t_uniq_ptr *sw1, t_uniq_ptr *sw2) {
 	t_uniq_ptr tmp;
 

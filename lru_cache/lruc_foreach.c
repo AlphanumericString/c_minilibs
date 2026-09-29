@@ -12,7 +12,7 @@
 **/
 void lruc_foreach(const t_lruc *c, t_kvcallback fn, void *user_data) {
 	if (!c || !fn) {
-		LOG(C_MINI__LRUC_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG);
 		return;
 	}
 	for (size_t i = 0; i < c->buckets_nb; i++)
@@ -29,7 +29,7 @@ void lruc_foreach(const t_lruc *c, t_kvcallback fn, void *user_data) {
 void lruc_foreach_ru_ordered(const t_lruc *c, t_kvcallback fn,
                              void *user_data) {
 	if (!c || !fn) {
-		LOG(C_MINI__LRUC_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG);
 		return;
 	}
 	for (t_lruc_keynode *it = c->MRU; it; it = it->lru_next)
@@ -46,7 +46,7 @@ void lruc_foreach_ttl_ordered(const t_lruc *c, t_kvcallback fn,
                               void *user_data) {
 	size_t i;
 	if (!c || !fn) {
-		LOG(C_MINI__LRUC_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG);
 		return;
 	}
 	i = 0;

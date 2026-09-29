@@ -4,8 +4,10 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#include "common_base/fptr.h"
+#include "common_base/log.h"
+
 #ifdef C_MINI__TESTS
-#	include "common_base/log.h"
 
 #	define C_MINI__HP_LOG_SUCCESS C_MINI__LOG_SUCCESS
 #	define C_MINI__HP_LOG_CLR     "Clear Heap"
@@ -19,27 +21,11 @@
 #	define C_MINI__HP_LOG_EARG   C_MINI__LOG_EARG
 #	define C_MINI__HP_LOG_EALLOC C_MINI__LOG_EALLOC
 
-#else // || C_MINI__TESTS
-
-#	ifndef LOG
-#		define LOG(fmt, ...) (void)0;
-#	endif // !LOG
-
-#	ifndef DBG
-#		define DBG(fmt, ...) (void)0;
-#	endif // !DBG
-
-#	ifndef DBG_POS
-#		define DBG_POS (void)0;
-#	endif // !DBG_POS
-
 #endif // !C_MINI__TESTS
-
-#include "common_base/fptr.h"
 
 /**
  * \defgroup hp Heap
- **/
+**/
 
 /**
  * \brief heap structure
@@ -48,7 +34,7 @@
  * \param elems reference to the elements as void pointers
  * \param cmp comparator fuction
  * \ingroup hp
- **/
+**/
 typedef struct s_heap {
 	size_t       nb;
 	size_t       capacity;

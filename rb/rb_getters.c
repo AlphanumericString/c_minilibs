@@ -7,7 +7,7 @@
  * \ingroup rb
 **/
 bool rb_full(t_rb rb) {
-	LOG(C_MINI__RB_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
 	return (rb.array && rb.count == rb.nb_max);
 }
 /**
@@ -17,7 +17,7 @@ bool rb_full(t_rb rb) {
  * \ingroup rb
 **/
 bool rb_empty(t_rb rb) {
-	LOG(C_MINI__RB_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
 	return (!rb.array || rb.count == 0);
 }
 /**
@@ -27,7 +27,7 @@ bool rb_empty(t_rb rb) {
  * \ingroup rb
 **/
 size_t rb_size(t_rb rb) {
-	LOG(C_MINI__RB_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
 	return (rb.count);
 }
 /**
@@ -38,10 +38,10 @@ size_t rb_size(t_rb rb) {
 **/
 size_t rb_capacity(t_rb rb) {
 	if (!rb.array) {
-		LOG(C_MINI__RB_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG);
 		return (0);
 	}
-	LOG(C_MINI__RB_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
 	return (rb.nb_max);
 }
 /**
@@ -51,6 +51,6 @@ size_t rb_capacity(t_rb rb) {
  * \ingroup rb
 **/
 size_t rb_remaining_space(t_rb rb) {
-	LOG(C_MINI__RB_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
 	return (rb_capacity(rb) - rb_size(rb));
 }

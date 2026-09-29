@@ -9,10 +9,10 @@
 **/
 void da_clr(t_da *ret) {
 	if (!ret) {
-		LOG(C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
 		return;
 	}
-	LOG(C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
 	ret->nb_e = 0;
 }
 /**
@@ -22,12 +22,12 @@ void da_clr(t_da *ret) {
 **/
 void da_destroy(t_da *ret) {
 	if (!ret) {
-		LOG(C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
 		return;
 	}
 	if (ret->array) free(ret->array);
 	*ret = (t_da){0};
-	LOG(C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
 }
 /**
  * \brief destroy and free the da
@@ -36,10 +36,10 @@ void da_destroy(t_da *ret) {
 **/
 void da_free(t_da *da) {
 	if (!da) {
-		LOG(C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
 		return;
 	}
 	da_destroy(da);
 	free(da);
-	LOG(C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
 }

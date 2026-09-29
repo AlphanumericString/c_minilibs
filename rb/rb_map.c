@@ -19,7 +19,7 @@ bool rb_nmap(t_rb *rb, size_t n, t_duplicator dup, void **out_buff) {
 	void  *dup_elem;
 
 	if (!rb || !dup || !out_buff || !n) {
-		LOG(C_MINI__RB_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG);
 		return (false);
 	}
 
@@ -34,7 +34,7 @@ bool rb_nmap(t_rb *rb, size_t n, t_duplicator dup, void **out_buff) {
 			memcpy(((unsigned char *)out_buff) + (i * sizeof(void *)),
 			       &dup_elem, sizeof(void *));
 		else {
-			LOG(C_MINI__RB_LOG_ECB);
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_ECB);
 			return (bzero(((unsigned char *)out_buff) + (i * sizeof(void *)),
 			              sizeof(void *)),
 			        false);
@@ -42,7 +42,7 @@ bool rb_nmap(t_rb *rb, size_t n, t_duplicator dup, void **out_buff) {
 		pos = (pos + 1) % rb->nb_max;
 		i++;
 	}
-	LOG(C_MINI__RB_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
 	return (true);
 }
 
@@ -58,10 +58,10 @@ bool rb_map(t_rb *rb, t_duplicator dup, void **out_buff) {
 	bool r;
 
 	if (!rb || !dup || !out_buff) {
-		LOG(C_MINI__RB_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG);
 		return (false);
 	}
 	r = rb_nmap(rb, (size_t)-1, dup, out_buff);
-	LOG(C_MINI__RB_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
 	return (r);
 }

@@ -14,15 +14,15 @@ bool da_shrink(t_da *da) {
 	bool r;
 
 	if (!da_is_valid(da)) {
-		LOG(C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
 		return (false);
 	}
 	r = da_shrink_min(da, 0);
 	if (!r) {
-		LOG(C_MINI__DA_LOG_EALLOC);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__DA_LOG_EALLOC);
 		return (NULL);
 	}
-	LOG(C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
 	return (r);
 }
 /**
@@ -38,22 +38,22 @@ bool da_shrink_min(t_da *da, size_t keep_n) {
 	void *tmp;
 
 	if (!da_is_valid(da)) {
-		LOG(C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
 		return (false);
 	}
 	if ((da->nb_e + keep_n) >= da->cap_e) {
-		LOG(C_MINI__DA_LOG_SUCCESS);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
 		return (true);
 	}
 	tmp = calloc(da->sz_e, (da->nb_e + keep_n));
 	if (!tmp) {
-		LOG(C_MINI__DA_LOG_EALLOC);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__DA_LOG_EALLOC);
 		return (false);
 	}
 	memcpy(tmp, da->array, da->nb_e * da->sz_e);
 	free(da->array);
 	da->array = tmp;
 	da->cap_e = da->nb_e + keep_n;
-	LOG(C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
 	return (true);
 }

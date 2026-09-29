@@ -13,7 +13,7 @@ int cdsu_max_depth(t_cdsu cdsu) {
 	while (i < cdsu.size) {
 		if (cdsu.rank[i++] > max) max = cdsu.rank[i - 1];
 	}
-	LOG(C_MINI__CDSU_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CDSU_LOG_SUCCESS);
 	return (max);
 }
 /**
@@ -23,7 +23,7 @@ int cdsu_max_depth(t_cdsu cdsu) {
  * \ingroup cdsu
 **/
 size_t cdsu_size(t_cdsu cdsu) {
-	LOG(C_MINI__CDSU_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CDSU_LOG_SUCCESS);
 	return (cdsu.size);
 }
 /**
@@ -33,6 +33,6 @@ size_t cdsu_size(t_cdsu cdsu) {
  * \ingroup cdsu
 **/
 size_t cdsu_nb_components(t_cdsu cdsu) {
-	LOG(C_MINI__CDSU_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CDSU_LOG_SUCCESS);
 	return (cdsu.components);
 }

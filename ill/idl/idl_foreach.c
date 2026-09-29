@@ -14,19 +14,19 @@ bool idl_foreach(t_idl *head, t_callback c, void *u_data) {
 	t_idl *nxt;
 
 	if (!c || !head) {
-		LOG(C_MINI__IDL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
 		return (false);
 	}
 	curr = head;
 	while (curr) {
 		nxt = curr->next;
 		if (!c(idl_ntoe(curr), u_data)) {
-			LOG(C_MINI__IDL_LOG_ECB);
+			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__IDL_LOG_ECB);
 			return (false);
 		}
 		curr = nxt;
 	}
-	LOG(C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
 	return (true);
 }
 
@@ -45,19 +45,19 @@ bool idl_for(t_idl *head, size_t n, t_callback c, void *u_data) {
 	t_idl *nxt;
 
 	if (!c || !head) {
-		LOG(C_MINI__IDL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
 		return (false);
 	}
 	curr = head;
 	while (curr && n) {
 		nxt = curr->next;
 		if (!c(idl_ntoe(curr), u_data)) {
-			LOG(C_MINI__IDL_LOG_ECB);
+			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__IDL_LOG_ECB);
 			return (false);
 		}
 		curr = nxt;
 		n--;
 	}
-	LOG(C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
 	return (true);
 }

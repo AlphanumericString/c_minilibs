@@ -12,17 +12,17 @@ t_ill *ill_find_prev(t_ill *head, t_ill *target) {
 	t_ill *curr;
 
 	if (!head || head == target) {
-		LOG(C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
 		return NULL;
 	}
 	curr = head;
 	while (curr->next && curr->next != target)
 		curr = curr->next;
 	if (!curr->next) {
-		LOG(C_MINI__ILL_LOG_FAIL);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_FAIL);
 		return (NULL);
 	}
-	LOG(C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
 	return curr;
 }
 
@@ -37,7 +37,7 @@ t_ill *ill_find(t_ill *head, t_ill *target) {
 	t_ill *curr;
 
 	if (!head || !target) {
-		LOG(C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
 		return NULL;
 	}
 
@@ -46,10 +46,10 @@ t_ill *ill_find(t_ill *head, t_ill *target) {
 		curr = curr->next;
 	}
 	if (!curr) {
-		LOG(C_MINI__ILL_LOG_FAIL);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_FAIL);
 		return (NULL);
 	}
-	LOG(C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
 	return curr;
 }
 
@@ -66,18 +66,18 @@ t_ill *ill_get_prev(t_ill *head, t_comparator c, void *arg) {
 	t_ill *curr;
 
 	if (!head || !c) {
-		LOG(C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
 		return NULL;
 	}
 	curr = head;
 	while (curr->next) {
 		if (c(ill_ntoe(curr->next), arg) == 0) {
-			LOG(C_MINI__ILL_LOG_SUCCESS);
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
 			return curr;
 		}
 		curr = curr->next;
 	}
-	LOG(C_MINI__ILL_LOG_FAIL);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_FAIL);
 	return NULL;
 }
 
@@ -93,17 +93,17 @@ t_ill *ill_get(t_ill *head, t_comparator c, void *arg) {
 	t_ill *curr;
 
 	if (!head || !c) {
-		LOG(C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
 		return NULL;
 	}
 	curr = head;
 	while (curr) {
 		if (c(ill_ntoe(curr), arg) == 0) {
-			LOG(C_MINI__ILL_LOG_SUCCESS);
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
 			return curr;
 		}
 		curr = curr->next;
 	}
-	LOG(C_MINI__ILL_LOG_FAIL);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_FAIL);
 	return NULL;
 }

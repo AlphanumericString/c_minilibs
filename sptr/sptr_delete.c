@@ -12,7 +12,7 @@
  * data and sets data to NULL; frees strong pointer box if both strong count and
  * weak count reach 0
  * \ingroup sptr
- **/
+**/
 bool sptr_deletes(t_strong_ptr *ptr) {
 	if (!ptr || !ptr->meta || !sptr_get_rc(ptr)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -36,7 +36,7 @@ bool sptr_deletes(t_strong_ptr *ptr) {
  * \note decrements weak count; frees memory if both weak count and strong count
  * reach 0
  * \ingroup sptr
- **/
+**/
 bool sptr_deletew(t_weak_ptr *ptr) {
 	if (!ptr || !ptr->meta || !sptr_get_wc(ptr)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -56,7 +56,7 @@ bool sptr_deletew(t_weak_ptr *ptr) {
  * strong count; otherwise decrements weak count; frees memory if both strong
  * count and weak count reach 0
  * \ingroup sptr
- **/
+**/
 bool sptr_deleteo(t_owned_ptr *ptr) {
 	if (!ptr || !ptr->meta || (!ptr->owner && !sptri_wc_get(ptr->meta))) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -85,7 +85,7 @@ bool sptr_deleteo(t_owned_ptr *ptr) {
  * \return true on success, false on error
  * \note all fields are zeroed out for safety
  * \ingroup sptr
- **/
+**/
 bool sptr_deleteu(t_uniq_ptr *ptr) {
 	if (!ptr || !ptr->data) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);

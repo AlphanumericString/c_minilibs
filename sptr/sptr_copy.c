@@ -7,7 +7,7 @@
  * \return the strong pointer on success, NULL on failure
  * \note fails if strong_ptr is NULL or its strong count is 0
  * \ingroup sptr
- **/
+**/
 t_strong_ptr *sptr_copys(t_strong_ptr *strong_ptr) {
 	if (!strong_ptr) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -27,7 +27,7 @@ t_strong_ptr *sptr_copys(t_strong_ptr *strong_ptr) {
  * \return the weak pointer on success, NULL on failure
  * \note fails if argument is NULL or its weak count is 0
  * \ingroup sptr
- **/
+**/
 t_weak_ptr *sptr_copyw(t_weak_ptr *weak_ptr) {
 	if (!weak_ptr) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -49,7 +49,7 @@ t_weak_ptr *sptr_copyw(t_weak_ptr *weak_ptr) {
  * \note the returned owned pointer has owner set to false and increments
  * weak count; fails if argument is NULL or strong count is 0
  * \ingroup sptr
- **/
+**/
 t_owned_ptr sptr_copyo(t_owned_ptr *owned_ptr) {
 	t_owned_ptr ret;
 
@@ -73,7 +73,7 @@ t_owned_ptr sptr_copyo(t_owned_ptr *owned_ptr) {
  * \return a new uniq pointer with values from the source uniq
  * \note the uniq source pointer given is zeroed out
  * \ingroup sptr
- **/
+**/
 t_uniq_ptr sptr_copyu(t_uniq_ptr *ptr) {
 	t_uniq_ptr ret;
 

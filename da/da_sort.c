@@ -11,11 +11,11 @@
 **/
 bool da_sort(t_da *da, t_comparator c) {
 	if (!da_is_valid(da) || !c) {
-		LOG(C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
 		return (false);
 	}
 	da_nsort(da, -1, c);
-	LOG(C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
 	return (true);
 }
 /**
@@ -29,15 +29,15 @@ bool da_sort(t_da *da, t_comparator c) {
 **/
 bool da_nsort(t_da *da, size_t n, t_comparator c) {
 	if (!da_is_valid(da) || !c) {
-		LOG(C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
 		return (false);
 	}
 	if (n > da->nb_e) n = da->nb_e;
 	if (n < 2) {
-		LOG(C_MINI__DA_LOG_SUCCESS);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
 		return (true);
 	}
 	qsort(da->array, n, da->sz_e, c);
-	LOG(C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
 	return (true);
 }

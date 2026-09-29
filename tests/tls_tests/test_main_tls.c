@@ -5,26 +5,26 @@
 #include "tls_tests.h"
 
 static int ctls_tests(void) {
-	LOG("");
-	LOG("Dump");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Dump");
 	test_ctls_dump_typewrap();
-	LOG("");
-	LOG("Get");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Get");
 	test_ctls_get();
-	LOG("");
-	LOG("Has");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Has");
 	test_ctls_has();
-	LOG("");
-	LOG("Len");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Len");
 	test_ctls_len();
-	LOG("");
-	LOG("Rm");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Rm");
 	test_ctls_rm();
-	LOG("");
-	LOG("Set");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Set");
 	test_ctls_set();
-	LOG("");
-	LOG("Separate");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Separate");
 	test_ctls_separate();
 
 	printf("All ctls tests completed successfully.\n");
@@ -32,9 +32,9 @@ static int ctls_tests(void) {
 }
 
 static int ftls_tests(void) {
-	LOG("Get");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Get");
 	test_ftls_get();
-	LOG("Separate");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Separate");
 	test_ftls_separate();
 
 	printf("All ftls tests completed successfully.\n");
@@ -42,15 +42,15 @@ static int ftls_tests(void) {
 }
 
 static int vtls_tests(void) {
-	LOG("Rm");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Rm");
 	test_vtls_rm();
-	LOG("Get");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Get");
 	test_vtls_get();
-	LOG("Lenght");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Lenght");
 	test_vtls_len();
-	LOG("Has");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Has");
 	test_vtls_has();
-	LOG("Set");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Set");
 	test_vtls_set();
 
 	printf("All vtls tests completed successfully.\n");
@@ -58,25 +58,25 @@ static int vtls_tests(void) {
 }
 
 int __attribute__((no_profile_instrument_function)) main(void) {
-	LOG("");
-	LOG("");
-	LOG("\t\tCTLS");
-	LOG("");
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "\t\tCTLS");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	ctls_tests();
-	LOG("");
-	LOG("");
-	LOG("\t\tFTLS");
-	LOG("");
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "\t\tFTLS");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	ftls_tests();
-	LOG("");
-	LOG("");
-	LOG("\t\tVTLS");
-	LOG("");
-	LOG("");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "\t\tVTLS");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	vtls_tests();
 
-	printf("All TLS tests completed successfully.\n");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "All TLS tests completed successfully.");
 	return (EXIT_SUCCESS);
 }

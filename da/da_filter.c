@@ -15,7 +15,7 @@
 **/
 bool da_filter(t_da *da, t_callback filter, void *arg, t_callback del) {
 	if (!filter || !da_is_valid(da) || !da->nb_e) {
-		LOG(C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
 		return (false);
 	}
 	for (size_t i = 0; i < da->nb_e; i++) {
@@ -25,7 +25,7 @@ bool da_filter(t_da *da, t_callback filter, void *arg, t_callback del) {
 			i--;
 		}
 	}
-	LOG(C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
 	return (true);
 }
 /**
@@ -41,7 +41,7 @@ bool da_filter(t_da *da, t_callback filter, void *arg, t_callback del) {
 bool da_nfilter(t_da *da, size_t n, t_callback filter, void *data,
                 t_callback del) {
 	if (!filter || !da_is_valid(da) || !da->nb_e) {
-		LOG(C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
 		return (false);
 	}
 	if (n > da->nb_e) n = da->nb_e;
@@ -53,7 +53,7 @@ bool da_nfilter(t_da *da, size_t n, t_callback filter, void *data,
 			n--;
 		}
 	}
-	LOG(C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
 	return (true);
 }
 
@@ -69,7 +69,7 @@ bool da_nfilter(t_da *da, size_t n, t_callback filter, void *data,
 **/
 bool da_filter_out(t_da *da, t_callback filter, void *data, t_callback del) {
 	if (!filter || !da_is_valid(da) || !da->nb_e) {
-		LOG(C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
 		return (false);
 	}
 	for (size_t i = 0; i < da->nb_e; i++) {
@@ -79,7 +79,7 @@ bool da_filter_out(t_da *da, t_callback filter, void *data, t_callback del) {
 			i--;
 		}
 	}
-	LOG(C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
 	return (true);
 }
 /**
@@ -95,11 +95,11 @@ bool da_filter_out(t_da *da, t_callback filter, void *data, t_callback del) {
 bool da_nfilter_out(t_da *da, size_t n, t_callback filter, void *data,
                     t_callback del) {
 	if (!filter || !da_is_valid(da) || !da->nb_e) {
-		LOG(C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
 		return (false);
 	}
 	if (!n) {
-		LOG(C_MINI__DA_LOG_SUCCESS);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
 		return (true);
 	}
 	if (n > da->nb_e) n = da->nb_e;
@@ -111,6 +111,6 @@ bool da_nfilter_out(t_da *da, size_t n, t_callback filter, void *data,
 			n--;
 		}
 	}
-	LOG(C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
 	return (true);
 }

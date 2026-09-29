@@ -4,8 +4,8 @@
 #	include <stddef.h>
 #	include <stdio.h>
 
+#	include "common_base/log.h"
 #	ifdef C_MINI__TESTS
-#		include "common_base/log.h"
 
 #		define C_MINI__IDL_LOG_ECB     C_MINI__LOG_F_PREFIX "Callback Fail."
 #		define C_MINI__IDL_LOG_EARG    C_MINI__LOG_EARG
@@ -13,27 +13,13 @@
 #		define C_MINI__IDL_LOG_FAIL    C_MINI__LOG_FAIL
 #		define C_MINI__IDL_LOG_SUCCESS C_MINI__LOG_SUCCESS
 
-#	else // || C_MINI__TESTS
-
-#		ifndef LOG
-#			define LOG(fmt, ...) (void)0;
-#		endif // !LOG
-
-#		ifndef DBG
-#			define DBG(fmt, ...) (void)0;
-#		endif // !DBG
-
-#		ifndef DBG_POS
-#			define DBG_POS (void)0;
-#		endif // !DBG_POS
-
 #	endif // !C_MINI__TESTS
 
 #	include "common_base/fptr.h"
 
 /**
  * \defgroup idl Intrsive Doubly-linked Lists
- **/
+**/
 
 /**
  * \brief t_idll struct
@@ -41,7 +27,7 @@
  * \param next pointer to the next node
  * \param prev pointer to the next node
  * \ingroup idl
- **/
+**/
 typedef struct s_idl {
 	struct s_idl *prev;
 	struct s_idl *next;

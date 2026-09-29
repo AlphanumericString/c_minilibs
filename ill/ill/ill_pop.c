@@ -10,13 +10,13 @@ t_ill *ill_pop(t_ill **head) {
 	t_ill *to_remove;
 
 	if (!head || !*head) {
-		LOG(C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
 		return NULL;
 	}
 	to_remove       = *head;
 	*head           = (*head)->next;
 	to_remove->next = NULL;
-	LOG(C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
 	return to_remove;
 }
 /**
@@ -30,12 +30,12 @@ t_ill *ill_pop_back(t_ill **head) {
 	t_ill *ret;
 
 	if (!head || !*head) {
-		LOG(C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
 		return NULL;
 	}
 	if (!(*head)->next) {
 		ret = ill_pop(head);
-		LOG(C_MINI__ILL_LOG_SUCCESS);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
 		return (ret);
 	}
 	to_remove = *head;
@@ -43,6 +43,6 @@ t_ill *ill_pop_back(t_ill **head) {
 		to_remove = to_remove->next;
 	ret             = to_remove->next;
 	to_remove->next = NULL;
-	LOG(C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
 	return (ret);
 }

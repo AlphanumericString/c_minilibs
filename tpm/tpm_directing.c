@@ -7,7 +7,7 @@
 // directing
 bool tpm_stop(t_tpm *tpm) {
 	if (!tpm) {
-		LOG(C_MINI__TPM_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG);
 		return (false);
 	}
 	pthread_mutex_lock(&tpm->q_lock);
@@ -15,7 +15,7 @@ bool tpm_stop(t_tpm *tpm) {
 	tpm->internal_val.queue_closed  = true;
 	pthread_mutex_unlock(&tpm->q_lock);
 	pthread_cond_broadcast(&tpm->q_cond);
-	LOG(C_MINI__TPM_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__TPM_LOG_SUCCESS);
 	return (true);
 }
 
@@ -40,10 +40,10 @@ static void wait_thread_queues_empty(t_tpm *tpm) {
 	for (size_t i = 0; i < tpm->nb_threads; i++) {
 		break_order = false;
 
-#ifdef LOG
+#ifdef CM_LOG
 		pthread_mutex_lock(&tpm->threads[i].job_cache_lock);
-		LOG("Waiting thread#%zu {start,end}: {%hhu, %hhu}", i,
-		    tpm->threads[i].start, tpm->threads[i].end);
+		CM_LOG("Waiting thread#%zu {start,end}: {%hhu, %hhu}", i,
+		       tpm->threads[i].start, tpm->threads[i].end);
 		pthread_mutex_unlock(&tpm->threads[i].job_cache_lock);
 #endif
 
@@ -56,7 +56,7 @@ static void wait_thread_queues_empty(t_tpm *tpm) {
 			pthread_mutex_unlock(&tpm->threads[i].job_cache_lock);
 			usleep(2000);
 		}
-		LOG("Waiting thread#%zu - done", i);
+		CM_LOG("Waiting thread#%zu - done", i);
 	}
 }
 
@@ -65,11 +65,11 @@ bool tpm_wait_end(t_tpm *tpm) {
 	size_t          step = 1;
 
 	if (!tpm) {
-		LOG(C_MINI__TPM_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG);
 		return (false);
 	}
 	if (clock_gettime(CLOCK_MONOTONIC, &t)) {
-		LOG(C_MINI__TPM_LOG_ECLOCK);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__TPM_LOG_ECLOCK);
 		return (false);
 	}
 	pthread_mutex_lock(&tpm->q_lock);
@@ -80,6 +80,6 @@ bool tpm_wait_end(t_tpm *tpm) {
 	wait_main_queue_empty(tpm, &t, &step);
 	wait_thread_queues_empty(tpm);
 
-	LOG(C_MINI__TPM_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__TPM_LOG_SUCCESS);
 	return (true);
 }

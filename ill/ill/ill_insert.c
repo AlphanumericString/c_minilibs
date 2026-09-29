@@ -8,12 +8,12 @@
 **/
 void ill_append(t_ill *anchor, t_ill *node) {
 	if (!anchor || !node) {
-		LOG(C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
 		return;
 	}
 	node->next   = anchor->next;
 	anchor->next = node;
-	LOG(C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
 }
 /**
  * \brief Appends an entire list of nodes after an anchor node.
@@ -23,10 +23,10 @@ void ill_append(t_ill *anchor, t_ill *node) {
 **/
 void ill_nappend(t_ill *anchor, t_ill *nodes) {
 	if (!anchor || !nodes) {
-		LOG(C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
 		return;
 	}
 	ill_get_tail(nodes)->next = anchor->next;
 	anchor->next              = nodes;
-	LOG(C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
 }

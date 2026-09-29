@@ -9,13 +9,13 @@
 **/
 void cdsu_destroy(t_cdsu *ds) {
 	if (!ds) {
-		LOG(C_MINI__CDSU_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG);
 		return;
 	}
 	free(ds->parent);
 	if (!ds->rp_single_alloc) free(ds->rank);
 	*ds = (t_cdsu){0};
-	LOG(C_MINI__CDSU_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CDSU_LOG_SUCCESS);
 }
 /**
  * \brief reset structure to a clean init state
@@ -26,11 +26,11 @@ bool cdsu_clr(t_cdsu *cdsu) {
 	size_t i;
 
 	if (!cdsu) {
-		LOG(C_MINI__CDSU_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG);
 		return (false);
 	}
 	if (cdsu->components == cdsu->size) {
-		LOG(C_MINI__CDSU_LOG_SUCCESS);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CDSU_LOG_SUCCESS);
 		return (true);
 	}
 	i = 0;
@@ -38,7 +38,8 @@ bool cdsu_clr(t_cdsu *cdsu) {
 		cdsu->parent[i] = i;
 		cdsu->rank[i++] = 0;
 	}
-	LOG("Clear (components:%zu -> %zu)", cdsu->components, cdsu->size);
+	CM_LOG(C_MINI__LEVEL_INFO, "Clear (components:%zu -> %zu)",
+	       cdsu->components, cdsu->size);
 	cdsu->components = cdsu->size;
 	return (true);
 }
@@ -49,11 +50,11 @@ bool cdsu_clr(t_cdsu *cdsu) {
 **/
 void cdsu_free(t_cdsu **ds) {
 	if (!ds || !*ds) {
-		LOG(C_MINI__CDSU_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG);
 		return;
 	}
 	cdsu_destroy(*ds);
 	free(*ds);
 	*ds = NULL;
-	LOG(C_MINI__CDSU_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CDSU_LOG_SUCCESS);
 }

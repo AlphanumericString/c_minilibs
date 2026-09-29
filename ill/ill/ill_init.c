@@ -8,12 +8,12 @@
 **/
 void ill_init(t_ill *node, size_t offset) {
 	if (!node) {
-		LOG(C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
 		return;
 	}
 	node->next   = NULL;
 	node->offset = offset;
-	LOG(C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
 }
 
 static inline void setup_chain(t_ill *to_setup, t_ill *nxt, size_t offset) {
@@ -37,14 +37,14 @@ void *ill_copy(const t_ill *head, t_duplicator dupper) {
 	void  *nh    = NULL;
 
 	if (!head || !dupper) {
-		LOG(C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
 		return (NULL);
 	}
 	offset = head->offset;
 	while (head) {
 		e_cpy = dupper(ill_ntoe(head));
 		if (!e_cpy) {
-			LOG(C_MINI__ILL_LOG_EALLOC);
+			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__ILL_LOG_EALLOC);
 			// TODO: maybe clearlist here from new_head if fail on dupper?
 			break;
 		}
@@ -58,6 +58,6 @@ void *ill_copy(const t_ill *head, t_duplicator dupper) {
 		head = head->next;
 	}
 	setup_chain(prev, NULL, offset);
-	LOG(C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
 	return (nh);
 }

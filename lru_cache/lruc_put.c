@@ -24,16 +24,17 @@ static int insert_to_structs(t_lruc_keynode kv, t_lruc_keynode *node, t_lruc *c,
 }
 static t_lruc_keynode *get_node_to_update(t_lruc *c, t_lruc_keynode *node,
                                           size_t hash_pos) {
-	LOG(C_MINI__LRUC_LOG_UPDATEVAL, node->kv.key, node->kv.k_len);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_UPDATEVAL, node->kv.key,
+	       node->kv.k_len);
 	lruci_unlink_node(c, node, hash_pos);
 	return (node);
 }
 static t_lruc_keynode *create_node(t_lruc *c, t_lruc_keynode *node) {
-	LOG(C_MINI__LRUC_LOG_CREATEVAL, node ? node->kv.key : NULL,
-	    node ? node->kv.k_len : -1);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_CREATEVAL,
+	       node ? node->kv.key : NULL, node ? node->kv.k_len : -1);
 	node = calloc(sizeof(t_lruc_keynode), 1);
 	if (!node) {
-		LOG(C_MINI__LRUC_LOG_EALLOC);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_EALLOC);
 		return (NULL);
 	}
 	c->node_nb++;
@@ -46,14 +47,15 @@ static t_lruc_keynode *reuse_node(t_lruc *c, t_lruc_keynode to_add,
 
 	if (now == (uint64_t)-1 || (c->minHeap[0]->time + c->ttl_glob) >= now) {
 		node = c->LRU;
-		LOG(C_MINI__LRUC_LOG_NODE_LRU);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_NODE_LRU);
 	} else {
 		node = c->minHeap[0];
-		LOG(C_MINI__LRUC_LOG_NODE_MINH);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_NODE_MINH);
 	}
-	LOG(C_MINI__LRUC_LOG_CREATEVAL, to_add.kv.key, to_add.kv.k_len);
-	LOG(C_MINI__LRUC_LOG_DELETEVAL, node ? node->kv.key : NULL,
-	    node ? node->kv.k_len : -1);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_CREATEVAL, to_add.kv.key,
+	       to_add.kv.k_len);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_DELETEVAL,
+	       node ? node->kv.key : NULL, node ? node->kv.k_len : -1);
 	if (c->dtor) c->dtor(node->kv.value);
 	lruci_unlink_node(c, node, hash_pos);
 	return (node);
@@ -78,7 +80,7 @@ static int cache_put_internal(t_lruc *c, t_lruc_keynode to_add) {
 
 	if (!c || !to_add.kv.key || !to_add.kv.k_len ||
 	    to_add.kv.k_len == (size_t)-1) {
-		LOG(C_MINI__LRUC_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG);
 		return (-1);
 	}
 	node = get_node(c, to_add, &hash_pos);
@@ -97,7 +99,7 @@ int lruc_put_kv(t_lruc *c, t_keyvalue kv) {
 
 	now = lruci_timenow();
 	if (now == (uint64_t)-1) {
-		LOG(C_MINI__LRUC_LOG_ECLOCK);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK);
 		return (-1);
 	}
 	return (cache_put_internal(c, (t_lruc_keynode){
@@ -124,7 +126,7 @@ int lruc_put(t_lruc *cache, const void *key, size_t key_len,
 
 	now = lruci_timenow();
 	if (now == (uint64_t)-1) {
-		LOG(C_MINI__LRUC_LOG_ECLOCK);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK);
 		return (-1);
 	}
 	return (cache_put_internal(cache,
@@ -155,7 +157,7 @@ int lruc_put_ttl(t_lruc *cache, const void *key, size_t key_len,
 
 	now = lruci_timenow();
 	if (now == (uint64_t)-1) {
-		LOG(C_MINI__LRUC_LOG_ECLOCK);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK);
 		return (-1);
 	}
 	return (cache_put_internal(cache,

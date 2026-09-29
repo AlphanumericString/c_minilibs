@@ -43,7 +43,7 @@
 
 /**
  * \defgroup lruc Least Recently Used Cache (with ttl support)
- **/
+**/
 
 /**
  * \brief stats format for the cache
@@ -51,7 +51,7 @@
  * \param hit number of hit (aka found)
  * \param expired number of expired key/value pairs (aka misses due to time)
  * \ingroup lruc
- **/
+**/
 typedef struct {
 	size_t misses;
 	size_t hit;
@@ -64,7 +64,7 @@ typedef struct {
  * \param k_len length to read from at pointer key
  * \param value stored value in associated to key
  * \ingroup lruc
- **/
+**/
 typedef struct {
 	const void *key;
 	void       *value;
@@ -88,7 +88,7 @@ typedef struct {
  * \note in ifdef statement in order to not polute LSP but do not depend on this
  * interface. it MAY CHANGE AT ANY MOMEMENT WHITHOUT ANY NOTICE.
  * \ingroup lruc
- **/
+**/
 typedef struct s_keycache {
 	t_keyvalue         kv;
 	uint64_t           time;
@@ -132,7 +132,7 @@ typedef struct {
  * \param stats statistics of the lru-cache (see t_lruc_stats for more
  * precisions)
  * \ingroup lruc
- **/
+**/
 typedef struct {
 	size_t buckets_nb;
 	size_t node_nb;
@@ -159,7 +159,7 @@ typedef struct {
  * \param  elem pointer to the element
  * \param  arg  argument passed as is from up function
  * \return expected to return true on success false otherwise
- **/
+**/
 typedef bool (*t_kvcallback)(t_keyvalue *elem, void *arg);
 
 #endif // CMINI__T_CALLBAKC_DEFINE

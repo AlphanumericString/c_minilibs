@@ -12,10 +12,10 @@
 
 // dbg
 void disp_chain(t_cont *head) {
-	DBG("disp chain from %p", head);
-	DBG("previous\tit\tnext");
+	CM_DBG("disp chain from %p", head);
+	CM_DBG("previous\tit\tnext");
 	for (t_cont *it = head; it; it = it->next) {
-		DBG("%p\t%p\t%p", it->prev, it, it->next);
+		CM_DBG("%p\t%p\t%p", it->prev, it, it->next);
 	}
 }
 
@@ -35,7 +35,7 @@ bool tpmi_job_push(t_cont *to_push, t_cont **head, t_cont **tail,
                    bool queue_down) {
 	assert(!(*head == NULL ^ *tail == NULL));
 	if (queue_down == true) {
-		LOG(C_MINI__TPM_LOG_EDOWN);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EDOWN);
 		return (false);
 	}
 	to_push->next = *head;
@@ -53,7 +53,7 @@ t_cont tpmi_job_pop(t_tpm *tpm) {
 	t_cont  ret;
 
 	if (!tpm->q_end) {
-		LOG(C_MINI__TPM_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG);
 		return ((t_cont){0});
 	}
 	node       = tpm->q_end;
@@ -63,7 +63,7 @@ t_cont tpmi_job_pop(t_tpm *tpm) {
 	// node->next = NULL;
 	ret = *node;
 	if (node->job.infos.reccuring == true) {
-		LOG("recuring job, re-pushing:%p", node);
+		CM_LOG("recuring job, re-pushing:%p", node);
 		tpmi_job_push(node, &tpm->q_start, &tpm->q_end,
 		              tpm->internal_val.queue_closed);
 	} else {
@@ -77,7 +77,7 @@ int tpmi_job_thrd_cache_pop(t_tpm *tpm, t_cont *buffer[CL], size_t start) {
 	t_cont *it;
 
 	if (!tpm || !buffer) {
-		LOG(C_MINI__TPM_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG);
 		return (-1);
 	}
 	it = tpm->q_start;
@@ -92,7 +92,7 @@ int tpmi_job_thrd_cache_pop(t_tpm *tpm, t_cont *buffer[CL], size_t start) {
 		it->next->prev = NULL;
 		tpm->q_start   = it->next;
 	}
-	LOG("Success: nb jobs taken:%zu", i - start);
+	CM_LOG("Success: nb jobs taken:%zu", i - start);
 	return (i - start);
 }
 
@@ -101,12 +101,12 @@ t_cont *tpm_add_job(t_tpm *tpm, t_work work, void *arg) {
 	bool    r;
 
 	if (!tpm || !work) {
-		LOG(C_MINI__TPM_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG);
 		return (NULL);
 	}
 	j = create_job(work, arg);
 	if (!j) {
-		LOG(C_MINI__TPM_LOG_EALLOC);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__TPM_LOG_EALLOC);
 		return (NULL);
 	}
 	pthread_mutex_lock(&tpm->q_lock);
@@ -115,7 +115,7 @@ t_cont *tpm_add_job(t_tpm *tpm, t_work work, void *arg) {
 	pthread_mutex_unlock(&tpm->q_lock);
 	if (!r) return (free(j), NULL);
 	pthread_cond_signal(&tpm->q_cond);
-	LOG(C_MINI__TPM_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__TPM_LOG_SUCCESS);
 	return (j);
 }
 t_cont *tpm_add_reccuring_job(t_tpm *tpm, t_work work, void *arg) {
@@ -123,12 +123,12 @@ t_cont *tpm_add_reccuring_job(t_tpm *tpm, t_work work, void *arg) {
 	bool    r;
 
 	if (!tpm || !work) {
-		LOG(C_MINI__TPM_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG);
 		return (NULL);
 	}
 	j = create_job(work, arg);
 	if (!j) {
-		LOG(C_MINI__TPM_LOG_EALLOC);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__TPM_LOG_EALLOC);
 		return (NULL);
 	}
 	j->job.infos.reccuring = true;
@@ -138,7 +138,7 @@ t_cont *tpm_add_reccuring_job(t_tpm *tpm, t_work work, void *arg) {
 	pthread_mutex_unlock(&tpm->q_lock);
 	if (!r) return (free(j), NULL);
 	pthread_cond_signal(&tpm->q_cond);
-	LOG(C_MINI__TPM_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__TPM_LOG_SUCCESS);
 	return (j);
 }
 t_cont *tpm_add_batch(t_tpm *tpm, size_t nb, t_work work, void **args) {
@@ -147,18 +147,18 @@ t_cont *tpm_add_batch(t_tpm *tpm, size_t nb, t_work work, void **args) {
 	bool    shuttingdown;
 
 	if (!tpm || !work || !args) {
-		LOG(C_MINI__TPM_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG);
 		return (NULL);
 	}
 	if (!nb) {
-		LOG(C_MINI__TPM_LOG_SUCCESS);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__TPM_LOG_SUCCESS);
 		return (NULL);
 	}
 	pthread_mutex_lock(&tpm->q_lock);
 	shuttingdown = tpm->internal_val.shutting_down;
 	pthread_mutex_unlock(&tpm->q_lock);
 	if (shuttingdown) {
-		LOG(C_MINI__TPM_LOG_EDOWN);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EDOWN);
 		return (NULL);
 	}
 	local_head = create_job(work, args[0]);
@@ -166,7 +166,7 @@ t_cont *tpm_add_batch(t_tpm *tpm, size_t nb, t_work work, void **args) {
 	for (size_t i = 1; i < nb; i++) {
 		it->next = create_job(work, args[i]);
 		if (!it->next) {
-			LOG(C_MINI__TPM_LOG_EALLOC);
+			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__TPM_LOG_EALLOC);
 			tpm_clear_job_list(local_head, NULL);
 			return (NULL);
 		}

@@ -9,8 +9,9 @@
 **/
 void *da_at(const t_da *da, size_t pos) {
 	if (!da_is_valid(da) || pos >= da->nb_e) {
-		LOG(C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
 		return (NULL);
 	}
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
 	return ((char *)da->array + da->sz_e * pos);
 }

@@ -8,13 +8,13 @@
 **/
 void idl_init(t_idl *node, size_t offset) {
 	if (!node) {
-		LOG(C_MINI__IDL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
 		return;
 	}
 	node->next   = NULL;
 	node->prev   = NULL;
 	node->offset = offset;
-	LOG(C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
 }
 
 /**
@@ -32,7 +32,7 @@ void *idl_copy(const t_idl *head, t_duplicator d) {
 	void  *nh = NULL;
 
 	if (!head || !d) {
-		LOG(C_MINI__IDL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
 		return (NULL);
 	}
 	ret = NULL;
@@ -46,6 +46,6 @@ void *idl_copy(const t_idl *head, t_duplicator d) {
 		idl_eton(elem, head->offset)->next   = NULL;
 		ret                                  = idl_eton(elem, head->offset);
 	}
-	LOG(C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
 	return (nh);
 }

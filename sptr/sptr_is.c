@@ -10,7 +10,7 @@
  * \param ptr strong pointer to check
  * \return true if the strong pointer is unique, false otherwise
  * \ingroup sptr
- **/
+**/
 bool sptr_is_uniqs(const t_strong_ptr *ptr) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
 	return (sptr_get_rc(ptr) == 1);
@@ -20,7 +20,7 @@ bool sptr_is_uniqs(const t_strong_ptr *ptr) {
  * \param ptr weak pointer to check
  * \return true if the weak pointer is unique, false otherwise
  * \ingroup sptr
- **/
+**/
 bool sptr_is_uniqw(const t_weak_ptr *ptr) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
 	return (sptr_get_rc(ptr) == 1);
@@ -30,7 +30,7 @@ bool sptr_is_uniqw(const t_weak_ptr *ptr) {
  * \param ptr uniq pointer to check
  * \return true if the uniq pointer is uniq, false otherwise
  * \ingroup sptr
- **/
+**/
 bool sptr_is_uniqo(const t_owned_ptr *ptr) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
 	return (sptr_get_rc(ptr) == 1);
@@ -40,7 +40,7 @@ bool sptr_is_uniqo(const t_owned_ptr *ptr) {
  * \param u uniq pointer to check
  * \return true
  * \ingroup sptr
- **/
+**/
 bool sptr_is_uniqu(const t_uniq_ptr *u) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
 	return (sptr_get_rc(u) == 1);
@@ -55,7 +55,7 @@ bool sptr_is_uniqu(const t_uniq_ptr *u) {
  * \param ptr the shared (strong) pointer to check
  * \return true if the shared (strong) pointer is shared, false otherwise
  * \ingroup sptr
- **/
+**/
 bool sptr_is_shareds(const t_strong_ptr *ptr) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
 	return (sptr_get_rc(ptr) >= 1);
@@ -65,7 +65,7 @@ bool sptr_is_shareds(const t_strong_ptr *ptr) {
  * \param ptr the shared (weak) pointer to check
  * \return true if the shared (weak) pointer is shared, false otherwise
  * \ingroup sptr
- **/
+**/
 bool sptr_is_sharedw(const t_weak_ptr *ptr) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
 	return (sptr_get_rc(ptr) >= 1);
@@ -75,7 +75,7 @@ bool sptr_is_sharedw(const t_weak_ptr *ptr) {
  * \param ptr owned pointer to check
  * \return true if the owned pointer is shared, false otherwise
  * \ingroup sptr
- **/
+**/
 bool sptr_is_sharedo(const t_owned_ptr *ptr) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
 	return (sptr_get_rc(ptr) >= 1);
@@ -86,7 +86,7 @@ bool sptr_is_sharedo(const t_owned_ptr *ptr) {
  * \return true if the uniq pointer is shared, otherwise false
  * \note as uniq is "uniq" it always return false
  * \ingroup sptr
- **/
+**/
 bool sptr_is_sharedu(const t_uniq_ptr *u) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
 	(void)u;

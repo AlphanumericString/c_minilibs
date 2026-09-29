@@ -11,7 +11,7 @@
  * \return the raw pointer, or NULL if argument is NULL or strong count is 0
  * \note returns NULL if the strong reference count is 0
  * \ingroup sptr
- **/
+**/
 const void *sptr_getsc(const t_strong_ptr *sptr) {
 	if (!sptr || !sptr->meta) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -28,7 +28,7 @@ const void *sptr_getsc(const t_strong_ptr *sptr) {
  * \note returns NULL if the underlying object strong count is 0 (data
  * destroyed)
  * \ingroup sptr
- **/
+**/
 const void *sptr_getwc(const t_weak_ptr *sptr) {
 	if (!sptr || !sptr->meta) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -43,7 +43,7 @@ const void *sptr_getwc(const t_weak_ptr *sptr) {
  * \param o owned pointer to get the raw pointer from
  * \return the const pointer, or NULL if an error occurred
  * \ingroup sptr
- **/
+**/
 const void *sptr_getoc(const t_owned_ptr *o) {
 	if (!o || !o->meta || sptr_get_rc(o) != 1) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -57,7 +57,7 @@ const void *sptr_getoc(const t_owned_ptr *o) {
  * \param u uniq pointer to get the raw pointer from
  * \return the const pointer, or NULL if an error occurred
  * \ingroup sptr
- **/
+**/
 const void *sptr_getuc(const t_uniq_ptr *u) {
 	if (!u) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -76,7 +76,7 @@ const void *sptr_getuc(const t_uniq_ptr *u) {
  * \return the raw pointer (non-const), or NULL if sptr is NULL or strong count
  * is 0
  * \ingroup sptr
- **/
+**/
 void *sptr_gets(t_strong_ptr *sptr) {
 	return ((void *)sptr_getsc(sptr));
 }
@@ -88,7 +88,7 @@ void *sptr_gets(t_strong_ptr *sptr) {
  * \note returns NULL if the underlying object strong count is 0 (data
  * destroyed)
  * \ingroup sptr
- **/
+**/
 void *sptr_getw(t_weak_ptr *sptr) {
 	return ((void *)sptr_getwc(sptr));
 }
@@ -97,7 +97,7 @@ void *sptr_getw(t_weak_ptr *sptr) {
  * \param o owned pointer to get the raw pointer from
  * \return the raw pointer (non-const), or NULL if an error occurred
  * \ingroup sptr
- **/
+**/
 void *sptr_geto(t_owned_ptr *o) {
 	return ((void *)sptr_getoc(o));
 }
@@ -106,7 +106,7 @@ void *sptr_geto(t_owned_ptr *o) {
  * \param u uniq pointer to get the raw pointer from
  * \return the raw pointer (non-const), or NULL if an error occurred
  * \ingroup sptr
- **/
+**/
 void *sptr_getu(t_uniq_ptr *u) {
 	return ((void *)sptr_getuc(u));
 }
@@ -120,7 +120,7 @@ void *sptr_getu(t_uniq_ptr *u) {
  * \param sptr strong pointer to get the strong count from
  * \return the strong count, or 0 on error
  * \ingroup sptr
- **/
+**/
 size_t sptr_get_strongcount_s(const t_strong_ptr *sptr) {
 	if (!sptr || !sptr->meta) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -134,7 +134,7 @@ size_t sptr_get_strongcount_s(const t_strong_ptr *sptr) {
  * \param sptr weak pointer to get the strong count from
  * \return the strong count, or 0 on error
  * \ingroup sptr
- **/
+**/
 size_t sptr_get_strongcount_w(const t_weak_ptr *sptr) {
 	if (!sptr || !sptr->meta) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -148,7 +148,7 @@ size_t sptr_get_strongcount_w(const t_weak_ptr *sptr) {
  * \param sptr owned pointer to get the strong count from
  * \return the strong count, or 0 on error
  * \ingroup sptr
- **/
+**/
 size_t sptr_get_strongcount_o(const t_owned_ptr *sptr) {
 	if (!sptr || !sptr->meta) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -162,7 +162,7 @@ size_t sptr_get_strongcount_o(const t_owned_ptr *sptr) {
  * \param ptr uniq pointer to get the strong count from
  * \return 1 if ptr is valid, 0 otherwise.
  * \ingroup sptr
- **/
+**/
 size_t sptr_get_strongcount_u(const t_uniq_ptr *ptr) {
 	if (!ptr) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -181,7 +181,7 @@ size_t sptr_get_strongcount_u(const t_uniq_ptr *ptr) {
  * \param sptr strong pointer to get the weak count from
  * \return the weak count, or 0 on error
  * \ingroup sptr
- **/
+**/
 size_t sptr_get_weakcount_s(const t_strong_ptr *sptr) {
 	if (!sptr || !sptr->meta || !sptri_rc_get(sptr->meta)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -195,7 +195,7 @@ size_t sptr_get_weakcount_s(const t_strong_ptr *sptr) {
  * \param sptr weak pointer to get the weak count from
  * \return the weak count, or 0 on error
  * \ingroup sptr
- **/
+**/
 size_t sptr_get_weakcount_w(const t_weak_ptr *sptr) {
 	if (!sptr || !sptr->meta || !sptri_wc_get(sptr->meta)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -209,7 +209,7 @@ size_t sptr_get_weakcount_w(const t_weak_ptr *sptr) {
  * \param sptr owned pointer to get the weak count from
  * \return the weak count, or 0 on error
  * \ingroup sptr
- **/
+**/
 size_t sptr_get_weakcount_o(const t_owned_ptr *sptr) {
 	if (!sptr || !sptr->meta) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -223,7 +223,7 @@ size_t sptr_get_weakcount_o(const t_owned_ptr *sptr) {
  * \param u uniq pointer to get the weak count from
  * \return always return 0, uniq has no weak count.
  * \ingroup sptr
- **/
+**/
 size_t sptr_get_weakcount_u(const t_uniq_ptr *u) {
 	if (!u) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -242,7 +242,7 @@ size_t sptr_get_weakcount_u(const t_uniq_ptr *u) {
  * \param ptr strong pointer to get the dtor from
  * \return the dtor function pointer, or NULL on error
  * \ingroup sptr
- **/
+**/
 t_dtor sptr_get_dtors(const t_strong_ptr *ptr) {
 	if (!ptr || !sptr_get_rc(ptr)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -257,7 +257,7 @@ t_dtor sptr_get_dtors(const t_strong_ptr *ptr) {
  * \return the dtor function pointer, or NULL on error
  * \note returns NULL if weak count is 0 or strong count is 0
  * \ingroup sptr
- **/
+**/
 t_dtor sptr_get_dtorw(const t_weak_ptr *ptr) {
 	if (!ptr || !ptr->meta || !sptr_get_wc(ptr) || !sptr_get_rc(ptr)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -272,7 +272,7 @@ t_dtor sptr_get_dtorw(const t_weak_ptr *ptr) {
  * \return the dtor function pointer, or NULL on error
  * \note returns NULL if strong count is 0
  * \ingroup sptr
- **/
+**/
 t_dtor sptr_get_dtoro(const t_owned_ptr *ptr) {
 	if (!ptr || !ptr->meta || !sptr_get_rc(ptr)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -286,7 +286,7 @@ t_dtor sptr_get_dtoro(const t_owned_ptr *ptr) {
  * \param ptr uniq pointer to get the dtor from
  * \return the dtor function pointer, or NULL on error
  * \ingroup sptr
- **/
+**/
 t_dtor sptr_get_dtoru(const t_uniq_ptr *ptr) {
 	if (!ptr) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -307,7 +307,7 @@ t_dtor sptr_get_dtoru(const t_uniq_ptr *ptr) {
  * \return true on success, false otherwise
  * \note fails if ptr is NULL or strong count is 0
  * \ingroup sptr
- **/
+**/
 bool sptr_set_dtors(t_strong_ptr *ptr, t_dtor dtor) {
 	if (!ptr || !ptr->meta || !sptr_get_rc(ptr)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -324,7 +324,7 @@ bool sptr_set_dtors(t_strong_ptr *ptr, t_dtor dtor) {
  * \return false always
  * \note weak pointers cannot change the dtor because they do not own the data
  * \ingroup sptr
- **/
+**/
 bool sptr_set_dtorw(t_weak_ptr *ptr, t_dtor dtor) {
 
 	if (!ptr || !ptr->meta || !sptr_get_wc(ptr) || !sptr_get_rc(ptr)) {
@@ -342,7 +342,7 @@ bool sptr_set_dtorw(t_weak_ptr *ptr, t_dtor dtor) {
  * \return true on success, false otherwise
  * \note only allowed if ptr is the owner and strong count is 1
  * \ingroup sptr
- **/
+**/
 bool sptr_set_dtoro(t_owned_ptr *ptr, t_dtor dtor) {
 	if (!ptr || !ptr->owner || !ptr->meta || sptr_get_rc(ptr) != 1) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -358,7 +358,7 @@ bool sptr_set_dtoro(t_owned_ptr *ptr, t_dtor dtor) {
  * \param dtor new dtor value to set
  * \return true on success, false otherwise
  * \ingroup sptr
- **/
+**/
 bool sptr_set_dtoru(t_uniq_ptr *ptr, t_dtor dtor) {
 	if (!ptr || !ptr->data) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);

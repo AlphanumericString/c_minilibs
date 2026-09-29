@@ -10,22 +10,21 @@
  * \param u_data user data for deletor
  * \return true on success, false otherwise
  * \ingroup da
- **/
+**/
 bool da_advance(t_da *da, size_t n, t_callback deletor, void *u_data) {
 	if (!da_is_not_null(da)) {
-		LOG(C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
 		return (false);
 	}
 	if (n >= da->nb_e) {
-		da_apply(da, deletor, u_data);
-		da_clr(da);
-		LOG(C_MINI__DA_LOG_SUCCESS);
+		da_apply(da, deletor, u_data), da_clr(da);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
 		return (true);
 	}
 	for (size_t i = 0; i < n; deletor(da_at(da, i++), u_data))
 		;
 	memcpy(da->array, da_at(da, n), (da->nb_e - n) * da->sz_e);
 	da->nb_e -= n;
-	LOG(C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
 	return (true);
 }

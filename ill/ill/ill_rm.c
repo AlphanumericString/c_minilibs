@@ -10,13 +10,13 @@ t_ill *ill_remove_after(t_ill *prev) {
 	t_ill *to_remove;
 
 	if (!prev || !prev->next) {
-		LOG(C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
 		return (NULL);
 	}
 	to_remove       = prev->next;
 	prev->next      = to_remove->next;
 	to_remove->next = NULL;
-	LOG(C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
 	return to_remove;
 }
 
@@ -31,22 +31,22 @@ bool ill_remove_node(t_ill **head, t_ill *target) {
 	t_ill *prev;
 
 	if (!head || !*head || !target) {
-		LOG(C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
 		return false;
 	}
 	if (*head == target) {
 		*head        = target->next;
 		target->next = NULL;
-		LOG(C_MINI__ILL_LOG_SUCCESS);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
 		return true;
 	}
 	prev = ill_find_prev(*head, target);
 	if (prev) {
 		prev->next   = target->next;
 		target->next = NULL;
-		LOG(C_MINI__ILL_LOG_SUCCESS);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
 		return true;
 	}
-	LOG(C_MINI__ILL_LOG_FAIL);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_FAIL);
 	return false;
 }

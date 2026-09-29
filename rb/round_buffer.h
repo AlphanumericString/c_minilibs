@@ -20,7 +20,7 @@
 
 /**
  * \defgroup rb Round Buffer
- **/
+**/
 
 /**
  * \brief round buffer struct, rb
@@ -30,7 +30,7 @@
  * \param o_pos output position (expert head)
  * \param sz_e size of elements in the array
  * \ingroup rb
- **/
+**/
 typedef struct s_roundbuffer_array {
 	void  *array;
 	size_t nb_max;

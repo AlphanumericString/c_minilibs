@@ -11,7 +11,7 @@ t_idl *idl_reverse(t_idl *head) {
 	t_idl *curr;
 
 	if (!head) {
-		LOG(C_MINI__IDL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
 		return (NULL);
 	}
 	curr = head;
@@ -22,6 +22,6 @@ t_idl *idl_reverse(t_idl *head) {
 		head       = curr;
 		curr       = curr->prev;
 	}
-	LOG(C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
 	return (head);
 }

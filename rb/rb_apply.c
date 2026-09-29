@@ -14,20 +14,20 @@ bool rb_napply(t_rb *rb, size_t n, t_callback cb, const void *arg) {
 	size_t current_pos;
 
 	if (!rb || !cb) {
-		LOG(C_MINI__RB_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG);
 		return false;
 	}
 	if (n > rb_size(*rb)) n = rb_size(*rb);
 	current_pos = rb->o_pos;
 	while (i < n) {
 		if (!cb(rb->array + (current_pos * rb->sz_e), (void *)arg)) {
-			LOG(C_MINI__RB_LOG_ECB);
+			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RB_LOG_ECB);
 			return false;
 		}
 		current_pos = (current_pos + 1) % rb->nb_max;
 		i++;
 	}
-	LOG(C_MINI__RB_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
 	return true;
 }
 
@@ -43,14 +43,14 @@ bool rb_apply(t_rb *rb, t_callback cb, const void *arg) {
 	bool r;
 
 	if (!rb || !cb) {
-		LOG(C_MINI__RB_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG);
 		return false;
 	}
 	r = rb_napply(rb, (size_t)-1, cb, arg);
 	if (!r) {
-		LOG(C_MINI__RB_LOG_FAIL);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_FAIL);
 		return (r);
 	}
-	LOG(C_MINI__RB_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
 	return (r);
 }

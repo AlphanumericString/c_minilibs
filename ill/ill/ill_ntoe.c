@@ -8,10 +8,10 @@
 **/
 void *ill_ntoe(const t_ill *node) {
 	if (!node) {
-		LOG(C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
 		return (NULL);
 	}
-	LOG(C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
 	return ((void *)(((char *)node) - node->offset));
 }
 /**
@@ -23,9 +23,9 @@ void *ill_ntoe(const t_ill *node) {
 **/
 t_ill *ill_eton(void *e, size_t offset) {
 	if (!e) {
-		LOG(C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
 		return (NULL);
 	}
-	LOG(C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
 	return ((t_ill *)((char *)e + offset));
 }

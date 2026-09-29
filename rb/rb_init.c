@@ -12,12 +12,12 @@
 **/
 t_rb *rb_create(t_rb *rb, size_t sz_elem, size_t nb_e) {
 	if (!rb || !sz_elem || !nb_e) {
-		LOG(C_MINI__RB_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG);
 		return (NULL);
 	}
 	rb->array = malloc(sz_elem * nb_e);
 	if (!rb->array) {
-		LOG(C_MINI__RB_LOG_EALLOC);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RB_LOG_EALLOC);
 		return (NULL);
 	}
 	rb->sz_e   = sz_elem;
@@ -25,7 +25,7 @@ t_rb *rb_create(t_rb *rb, size_t sz_elem, size_t nb_e) {
 	rb->o_pos  = 0;
 	rb->i_pos  = 0;
 	rb->count  = 0;
-	LOG(C_MINI__RB_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
 	return (rb);
 }
 /**
@@ -41,10 +41,10 @@ t_rb *rb_init(t_rb *rb, size_t sz_elem) {
 
 	ret = rb_create(rb, sz_elem, C_MINI_RB_NB_ELEM_DFLT);
 	if (!ret) {
-		LOG(C_MINI__RB_LOG_FAIL);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_FAIL);
 		return (NULL);
 	}
-	LOG(C_MINI__RB_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
 	return (ret);
 }
 /**
@@ -58,7 +58,7 @@ t_rb *rb_init(t_rb *rb, size_t sz_elem) {
 **/
 t_rb *rb_from_array(t_rb *rb, void *array, size_t arr_cap, size_t sz_elem) {
 	if (!rb) {
-		LOG(C_MINI__RB_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG);
 		return (NULL);
 	}
 	rb->i_pos  = 0;
@@ -67,7 +67,7 @@ t_rb *rb_from_array(t_rb *rb, void *array, size_t arr_cap, size_t sz_elem) {
 	rb->nb_max = arr_cap;
 	rb->array  = array;
 	rb->count  = 0;
-	LOG(C_MINI__RB_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
 	return (rb);
 }
 /**
@@ -80,15 +80,15 @@ t_rb *rb_new(size_t sz_elem) {
 	t_rb *ret;
 
 	if (!sz_elem) {
-		LOG(C_MINI__RB_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG);
 		return (NULL);
 	}
 	ret = malloc(sizeof(t_rb));
 	if (rb_init(ret, sz_elem) == NULL) {
 		if (ret) free(ret);
-		LOG(C_MINI__RB_LOG_EALLOC);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RB_LOG_EALLOC);
 		return (NULL);
 	}
-	LOG(C_MINI__RB_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
 	return (ret);
 }

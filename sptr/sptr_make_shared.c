@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #define C_MINI__SPTR_INTERNAL
+#define C_MINI__SPTR_CONSOLE_LOCK // make_shared
 #include "sptr/smart_pointer.h"
 
 // *------*
@@ -15,7 +16,7 @@
  * \return the strong pointer on success, NULL on failure
  * \note allocates a complete box with strong count = 1 and weak count = 0
  * \ingroup sptr
- **/
+**/
 t_strong_ptr sptr_make_shared_from_raw(void *raw_ptr, t_dtor d) {
 	t_fbox *complete_box;
 
@@ -40,7 +41,7 @@ t_strong_ptr sptr_make_shared_from_raw(void *raw_ptr, t_dtor d) {
  * \note increments strong count; fails if d is provided and conflicts with an
  * existing non-NULL destructor
  * \ingroup sptr
- **/
+**/
 t_strong_ptr sptr_make_shared_from_weak(t_weak_ptr *weak_ptr, t_dtor d) {
 	t_strong_ptr ret;
 
@@ -66,7 +67,7 @@ t_strong_ptr sptr_make_shared_from_weak(t_weak_ptr *weak_ptr, t_dtor d) {
  * \note increments strong count on the underlying box; fails if d is provided
  * and conflicts with an existing destructor
  * \ingroup sptr
- **/
+**/
 t_strong_ptr sptr_make_shared_from_strong(t_strong_ptr *strong_ptr, t_dtor d) {
 	t_strong_ptr ret;
 
@@ -92,7 +93,7 @@ t_strong_ptr sptr_make_shared_from_strong(t_strong_ptr *strong_ptr, t_dtor d) {
  * \note transfers ownership; owned loses ownership (owner becomes false, strong
  * count decremented); fails if owned is not owner or strong count != 1
  * \ingroup sptr
- **/
+**/
 t_strong_ptr sptr_make_shared_from_owned(t_owned_ptr *own, t_dtor d) {
 	t_strong_ptr ret;
 
@@ -120,7 +121,7 @@ t_strong_ptr sptr_make_shared_from_owned(t_owned_ptr *own, t_dtor d) {
  * \param d the dtor used for innit (works as innit only if !dtor in uniq)
  * \return the shared (strong) pointer
  * \ingroup sptr
- **/
+**/
 t_strong_ptr sptr_make_shared_from_uniq(t_uniq_ptr *u, t_dtor d) {
 	t_strong_ptr ret;
 
@@ -151,7 +152,7 @@ t_strong_ptr sptr_make_shared_from_uniq(t_uniq_ptr *u, t_dtor d) {
  * \param s the strong pointer to copy
  * \return the pointer to the weak pointer or NULL on error
  * \ingroup sptr
- **/
+**/
 t_weak_ptr sptr_make_weak_from_strong(t_strong_ptr *s) {
 	if (!s || !sptr_get_rc(s) || s->data != s->meta->data) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -166,7 +167,7 @@ t_weak_ptr sptr_make_weak_from_strong(t_strong_ptr *s) {
  * \param w the weak pointer to copy
  * \return the pointer to the weak pointer or NULL on error
  * \ingroup sptr
- **/
+**/
 t_weak_ptr sptr_make_weak_from_weak(t_weak_ptr *w) {
 
 	if (!w || !sptr_get_wc(w)) {

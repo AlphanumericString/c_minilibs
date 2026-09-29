@@ -7,77 +7,40 @@
 #include <stddef.h>
 
 #define C_MINI__SPTR_ATOMIC
+#define C_MINI__LOG_THREADSAFE
 
+#include "common_base/fptr.h"
 #include "common_base/log.h"
 
+#ifdef C_MINI__SPTR_CONSOLE_LOCK // make_shared
+
+#	include <pthread.h>
+pthread_mutex_t console_lock;
+
+#endif
+
 #ifdef C_MINI__TESTS
-
-#	define CM_DBG(fmt, ...)                                                   \
-		do {                                                                   \
-			DBG(fmt __VA_OPT__(, ) __VA_ARGS__);                               \
-		} while (0)
-
-#	define CM_LOG(level, fmt, ...)                                            \
-		do {                                                                   \
-			if (level > (size_t)C_MINI__DEBUG_LEVEL) break;                    \
-			LOG(fmt __VA_OPT__(, ) __VA_ARGS__);                               \
-			fflush(stdout);                                                    \
-		} while (0)
-
-#	define CM_DBG_POS                                                         \
-		do {                                                                   \
-			DBG_POS;                                                           \
-		} while (0)
 
 #	define CM__SPTR_TODO(x, ...)                                              \
 		CM_LOG(C_MINI__LEVEL_ALWAYS, "%s:%d\t" C_MINI__SPTR_LOG_ETODO "\t" x,  \
 		       __FILE__, __LINE__ __VA_OPT__(, ) __VA_ARGS__)
 
-#	define C_MINI__LEVEL_INFO   3 // success and other info
-#	define C_MINI__LEVEL_WARN   2 // bad args and other stuff
-#	define C_MINI__LEVEL_ERR    1 // internal big errors eg alloc
-#	define C_MINI__LEVEL_ALWAYS 0 // internal big errors eg alloc
-
 #	define C_MINI__SPTR_LOG_SUCCESS   C_MINI__LOG_SUCCESS
 #	define C_MINI__SPTR_LOG_EARG      C_MINI__LOG_F_PREFIX "Bad arguments"
+#	define C_MINI__SPTR_LOG_ILL       C_MINI__SPTR_LOG_EARG ": Illegal."
 #	define C_MINI__SPTR_LOG_ILLUNIQ   C_MINI__SPTR_LOG_EARG ": Illegal(uniq)"
 #	define C_MINI__SPTR_LOG_ILLDATA   C_MINI__SPTR_LOG_EARG ": Illegal(data)"
 #	define C_MINI__SPTR_LOG_ILLSHARED C_MINI__SPTR_LOG_EARG ": Illegal(shared)"
 #	define C_MINI__SPTR_LOG_ILLDTOR   C_MINI__SPTR_LOG_EARG ": Illegal(dtor)"
 #	define C_MINI__SPTR_LOG_ETODO     C_MINI__LOG_ETODO
 #	define C_MINI__SPTR_LOG_EALLOC    C_MINI__LOG_EALLOC
-
-#else
-
-#	ifndef CM_LOG
-#		define CM_LOG(fmt, ...) (void)0
-#	endif // !CM_LOG
-
-#	ifndef CM_DBG
-#		define CM_DBG(fmt, ...) (void)0
-#	endif // !CM_DBG
-
-#	ifndef CM_DBG_POS
-#		define CM_DBG_POS (void)0
-#	endif // !CM_DBG_POS
-
-#	ifndef CM__SPTR_TODO
-#		define CM__SPTR_TODO(x, ...) (void)0
-#	endif // !CM__SPTR_TODO
-
 #endif
 
 #define C_MINI__SPTR_DEFAULT_VAL {0}
 
 /**
  * \defgroup sptr Smart pointers
- **/
-
-/**
- * \brief define function pointer to more explicit name
- * \ingroup sptr
- **/
-typedef void (*t_dtor)(void *v);
+**/
 
 /**
  * \brief generic reference counted box with full capabilities
@@ -87,7 +50,7 @@ typedef void (*t_dtor)(void *v);
  * \param wc weak count (when weak count 0 AND strong count 0 box can be safely
  * free'd)
  * \ingroup sptr
- **/
+**/
 typedef struct {
 	void  *data;
 	t_dtor dtor;
@@ -105,7 +68,7 @@ typedef struct {
  * \param data pointer to the address wrapped by the box
  * \param dtor pointer to the dtor to call when data needs to be destroyed
  * \ingroup sptr
- **/
+**/
 typedef struct {
 	void  *data;
 	t_dtor dtor;
@@ -116,7 +79,7 @@ typedef struct {
  * \param data direct access to the data pointer
  * \param meta pointer to the shared metadata box
  * \ingroup sptr
- **/
+**/
 typedef struct {
 	void   *data;
 	t_fbox *meta;
@@ -128,7 +91,7 @@ typedef struct {
  * \param meta pointer to the shared metadata box
  * \param owner ownership boolean
  * \ingroup sptr
- **/
+**/
 typedef struct s_rsptr {
 	void   *data;
 	t_fbox *meta;
@@ -140,7 +103,7 @@ typedef struct s_rsptr {
  * \param meta pointer to the shared metadata box
  * \note left as struct instead of typedef for future proofing
  * \ingroup sptr
- **/
+**/
 typedef struct {
 	t_fbox *meta;
 } t_weak_ptr;
@@ -148,7 +111,7 @@ typedef struct {
 /**
  * \brief re-define of t_box to dedicated t_uniq_ptr for clarity
  * \ingroup sptr
- **/
+**/
 typedef t_box t_uniq_ptr;
 
 t_strong_ptr sptr_make_shared_from_raw(void *raw_ptr, t_dtor d);
@@ -164,7 +127,7 @@ t_strong_ptr sptr_make_shared_from_uniq(t_uniq_ptr *uniq_ptr, t_dtor d);
  * \return created or updated smart pointer, or NULL on failure
  * \note for specific infos check doc for sptr_make_shared_from_<type>
  * \ingroup sptr
- **/
+**/
 #define sptr_make_shared(pointer, dtor)                                        \
 	_Generic((pointer),                                                        \
 	    t_weak_ptr *: sptr_make_shared_from_weak,                              \
@@ -182,7 +145,7 @@ t_weak_ptr sptr_make_weak_from_strong(t_strong_ptr *s);
  * \return weak pointer struct
  * \note for specific infos check doc for sptr_make_weak_from_<weak|strong>
  * \ingroup sptr
- **/
+**/
 #define sptr_make_weak(pointer)                                                \
 	_Generic((pointer),                                                        \
 	    t_weak_ptr *: sptr_make_weak_from_weak,                                \
@@ -200,7 +163,7 @@ t_owned_ptr sptr_make_owned_from_uniq(t_uniq_ptr *uniq_ptr, t_dtor d);
  * \return owned pointer struct (t_owned_ptr)
  * \note for specific infos check doc for sptr_make_owned_from_<type>
  * \ingroup sptr
- **/
+**/
 #define sptr_make_owned(pointer, dtor)                                         \
 	_Generic((pointer),                                                        \
 	    t_strong_ptr *: sptr_make_owned_from_strong,                           \
@@ -221,7 +184,7 @@ t_uniq_ptr sptr_make_uniq_from_uniq(t_uniq_ptr *uptr, t_dtor d);
  * \return unique pointer struct (t_owned_ptr)
  * \note for specific infos check doc for sptr_make_uniq_from_<type>
  * \ingroup sptr
- **/
+**/
 #define sptr_make_uniq(pointer, dtor)                                          \
 	_Generic((pointer),                                                        \
 	    t_weak_ptr *: sptr_make_uniq_from_weak,                                \
@@ -241,7 +204,7 @@ bool sptr_is_uniqu(const t_uniq_ptr *u);
  * \return true if the smart pointer has a strong count of 1, false otherwise
  * \note for specific infos check doc for sptr_is_uniq<type's letter>
  * \ingroup sptr
- **/
+**/
 #define sptr_is_uniq(pointer)                                                  \
 	_Generic((pointer),                                                        \
 	    t_weak_ptr *: sptr_is_uniqw,                                           \
@@ -265,7 +228,7 @@ bool sptr_is_sharedu(const t_uniq_ptr *u);
  * otherwise
  * \note for specific infos check doc for sptr_is_shared<type's letter>
  * \ingroup sptr
- **/
+**/
 #define sptr_is_shared(pointer)                                                \
 	_Generic((pointer),                                                        \
 	    t_weak_ptr *: sptr_is_sharedw,                                         \
@@ -289,7 +252,7 @@ bool sptr_deleteu(t_uniq_ptr *u);
  * \return true if successfully decremented or deleted, false otherwise
  * \note for specific infos check doc for sptr_delete<type's letter>
  * \ingroup sptr
- **/
+**/
 #define sptr_delete(pointer)                                                   \
 	_Generic((pointer),                                                        \
 	    t_weak_ptr *: sptr_deletew,                                            \
@@ -314,7 +277,7 @@ void       *sptr_getu(t_uniq_ptr *u);
  * \return pointer to the underlying data, or NULL if invalid or destroyed
  * \note for specific infos check doc for sptr_get<type's letter>[C (const)]
  * \ingroup sptr
- **/
+**/
 #define sptr_get(pointer)                                                      \
 	_Generic((pointer),                                                        \
 	    t_weak_ptr *: sptr_getw,                                               \
@@ -337,7 +300,7 @@ size_t sptr_get_strongcount_u(const t_uniq_ptr *uptr);
  * \return strong reference count (or 0 on error)
  * \note for specific infos check doc for sptr_strongcount_<type's letter>
  * \ingroup sptr
- **/
+**/
 #define sptr_get_rc(pointer)                                                   \
 	_Generic((pointer),                                                        \
 	    t_weak_ptr *: sptr_get_strongcount_w,                                  \
@@ -360,7 +323,7 @@ size_t sptr_get_weakcount_u(const t_uniq_ptr *uptr);
  * \return weak reference count (or 0 on error)
  * \note for specific infos check doc for sptr_weakcount_<type's letter>
  * \ingroup sptr
- **/
+**/
 #define sptr_get_wc(pointer)                                                   \
 	_Generic((pointer),                                                        \
 	    t_weak_ptr *: sptr_get_weakcount_w,                                    \
@@ -383,7 +346,7 @@ t_dtor sptr_get_dtoru(const t_uniq_ptr *ptr);
  * \return destructor function pointer, or NULL on error
  * \note for specific infos check doc for sptr_get_dtor<type's letter>
  * \ingroup sptr
- **/
+**/
 #define sptr_get_dtor(pointer)                                                 \
 	_Generic((pointer),                                                        \
 	    t_weak_ptr *: sptr_get_dtorw,                                          \
@@ -407,7 +370,7 @@ bool sptr_set_dtoru(t_uniq_ptr *ptr, t_dtor dtor);
  * \return true on success, false otherwise
  * \note for specific infos check doc for sptr_set_dtor<type's letter>
  * \ingroup sptr
- **/
+**/
 #define sptr_set_dtor(pointer, dtor)                                           \
 	_Generic((pointer),                                                        \
 	    t_weak_ptr *: sptr_set_dtorw,                                          \
@@ -426,7 +389,7 @@ t_uniq_ptr    sptr_copyu(t_uniq_ptr *ptr);
  * \return copied smart pointer (or empty t_owned_ptr on error)
  * \note for specific infos check doc for sptr_copy<type's letter>
  * \ingroup sptr
- **/
+**/
 #define sptr_copy(pointer)                                                     \
 	_Generic((pointer),                                                        \
 	    t_weak_ptr *: sptr_copyw,                                              \
@@ -445,7 +408,7 @@ void sptr_dumpu(int fd, const t_uniq_ptr *ptr);
  * \param pointer smart pointer to dump (weak, strong, owned, uniq)
  * \note for specific infos check doc for sptr_dump<type's letter>
  * \ingroup sptr
- **/
+**/
 #define sptr_dump(fd, pointer)                                                 \
 	_Generic((pointer),                                                        \
 	    t_weak_ptr *: sptr_dumpw,                                              \
@@ -467,7 +430,7 @@ char *sptr_to_stringu(const t_uniq_ptr *sptr);
  * \note for specific infos check doc for sptr_to_string<type's letter>
  * \warning THE CALLER MUST FREE THE RETURNED STRING!
  * \ingroup sptr
- **/
+**/
 #define sptr_to_string(pointer)                                                \
 	_Generic((pointer),                                                        \
 	    t_weak_ptr *: sptr_to_stringw,                                         \
@@ -502,7 +465,7 @@ bool sptri_is_sole_box_ownu(const t_uniq_ptr *u);
  * otherwise
  * \note for specific infos check doc for sptr_is_sole_box_own<type's letter>
  * \ingroup sptr
- **/
+**/
 #	define sptr_is_sole_box_owner(pointer)                                    \
 		_Generic((pointer),                                                    \
 		    t_weak_ptr *: sptri_is_sole_box_ownw,                              \
@@ -522,14 +485,14 @@ bool sptri_is_sole_box_ownu(const t_uniq_ptr *u);
  * \param b the box to increase the strong count (rc) of
  * \note variation exists for : base size_t, atomic size_t
  * \ingroup sptr
- **/
+**/
 void sptri_rc_inc(t_fbox *b);
 /**
  * \brief decrease the strong count (rc) of a meta info box
  * \param b the box to decrease the strong count (rc) of
  * \note variation exists for : base size_t, atomic size_t
  * \ingroup sptr
- **/
+**/
 void sptri_rc_dec(t_fbox *b);
 
 /**
@@ -537,14 +500,14 @@ void sptri_rc_dec(t_fbox *b);
  * \param b the box to increase the weak count (wc) of
  * \note variation exists for : base size_t, atomic size_t
  * \ingroup sptr
- **/
+**/
 void sptri_wc_inc(t_fbox *b);
 /**
  * \brief decrease the weak count (wc) of a meta info box
  * \param b the box to decrease the weak count (wc) of
  * \note variation exists for : base size_t, atomic size_t
  * \ingroup sptr
- **/
+**/
 void sptri_wc_dec(t_fbox *b);
 
 /**
@@ -553,7 +516,7 @@ void sptri_wc_dec(t_fbox *b);
  * \return the value of strong count (rc)
  * \note variation exists for : base size_t, atomic size_t
  * \ingroup sptr
- **/
+**/
 size_t sptri_rc_get(t_fbox *b);
 /**
  * \brief get the weak count (wc) of a meta info box
@@ -561,7 +524,7 @@ size_t sptri_rc_get(t_fbox *b);
  * \return the value of weak count (wc)
  * \note variation exists for : base size_t, atomic size_t
  * \ingroup sptr
- **/
+**/
 size_t sptri_wc_get(t_fbox *b);
 
 #endif // !C_MINI__SPTR_INTERNAL
@@ -571,28 +534,28 @@ size_t sptri_wc_get(t_fbox *b);
  * \brief shortcut to declare an auto deleted strong pointer when variable goes
  * out of scope
  * \ingroup sptr
- **/
+**/
 #define auto_strong __attribute__((cleanup(sptr_deletes))) t_strong_ptr
 /**
  * \def auto_weak
  * \brief shortcut to declare an auto deleted weak pointer when variable goes
  * out of scope
  * \ingroup sptr
- **/
+**/
 #define auto_weak   __attribute__((cleanup(sptr_deletew))) t_weak_ptr
 /**
  * \def auto_owned
  * \brief shortcut to declare an auto deleted owned pointer when variable goes
  * out of scope
  * \ingroup sptr
- **/
+**/
 #define auto_owned  __attribute__((cleanup(sptr_deleteo))) t_owned_ptr
 /**
  * \def auto_uniq
  * \brief shortcut to declare an auto deleted unique pointer when variable goes
  * out of scope
  * \ingroup sptr
- **/
+**/
 #define auto_uniq   __attribute__((cleanup(sptr_deleteu))) t_unique_ptr
 
 #endif //! C_MINI__SPTR

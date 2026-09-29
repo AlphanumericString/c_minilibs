@@ -13,11 +13,11 @@ void *rb_at(t_rb rb, size_t idx) {
 	size_t pos;
 
 	if (idx >= rb_size(rb)) {
-		LOG(C_MINI__RB_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG);
 		return NULL;
 	}
 	pos = (rb.o_pos + idx) % rb.nb_max;
-	LOG(C_MINI__RB_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
 	return rb.array + (pos * rb.sz_e);
 }
 /**
@@ -39,7 +39,7 @@ void *rb_nat(t_rb rb, size_t idx, size_t n, void *buff) {
 	size_t second_chunk;
 
 	if (idx >= rb_size(rb) || !n || !buff) {
-		LOG(C_MINI__RB_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG);
 		return NULL;
 	}
 	max = rb_size(rb);
@@ -54,6 +54,6 @@ void *rb_nat(t_rb rb, size_t idx, size_t n, void *buff) {
 		memcpy(buff + (first_chunk * rb.sz_e), rb.array,
 		       second_chunk * rb.sz_e);
 	}
-	LOG(C_MINI__RB_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
 	return rb.array + (start_pos * rb.sz_e);
 }

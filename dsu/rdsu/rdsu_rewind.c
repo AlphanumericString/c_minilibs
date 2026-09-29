@@ -73,11 +73,11 @@ t_rdsu_log *rdsu_save_state(t_rdsu *rdsu) {
 	t_rdsu_log *r;
 
 	if (!rdsu) {
-		LOG(C_MINI__RDSU_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG);
 		return (NULL);
 	}
 	r = rdsui_peek_rewind(rdsu);
-	LOG(C_MINI__RDSU_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS);
 	return (r);
 }
 /**
@@ -91,22 +91,22 @@ bool rdsu_rewind(t_rdsu *rdsu) {
 	bool        ret;
 
 	if (!rdsu || !rdsu->parent || !rdsu->rank) {
-		LOG(C_MINI__RDSU_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG);
 		return (false);
 	}
 	if (!entry) {
-		LOG(C_MINI__RDSU_LOG_ELOG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_ELOG);
 		return (false);
 	}
 	ret = execute_rewind(rdsu, *entry);
 	if (ret == false) {
 		entry->nxt       = rdsu->change_log;
 		rdsu->change_log = entry;
-		LOG(C_MINI__RDSU_LOG_ELC);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_ELC);
 		return (ret);
 	}
 	free(entry);
-	LOG(C_MINI__RDSU_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS);
 	return (true);
 }
 /**
@@ -123,20 +123,16 @@ bool rdsu_rewind_to_state(t_rdsu *rdsu, t_rdsu_log *lg) {
 	bool        res;
 
 	if (!rdsu) {
-		LOG(C_MINI__RDSU_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG);
 		return (false);
 	}
-	if (!rdsu->change_log || !lg) {
-		LOG(C_MINI__RDSU_LOG_ELOG);
-		return (false);
-	}
-	if (!is_log_valid(rdsu, lg)) {
-		LOG(C_MINI__RDSU_LOG_ELC);
+	if (!rdsu->change_log || !lg || !is_log_valid(rdsu, lg)) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_ELOG);
 		return (false);
 	}
 #ifdef C_MINI__RDSU_LOG_CHECK_STRICT
 	if (!is_log_in_book(rdsu, lg)) {
-		LOG(C_MINI__RDSU_LOG_ELUN);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_ELUN);
 		return (false);
 	}
 #endif
@@ -150,10 +146,10 @@ bool rdsu_rewind_to_state(t_rdsu *rdsu, t_rdsu_log *lg) {
 		} else free(entry);
 	}
 	if (res == false) {
-		LOG(C_MINI__RDSU_LOG_ELC);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_ELC);
 		return (false);
 	}
-	LOG(C_MINI__RDSU_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS);
 	return (true);
 }
 /**
@@ -163,10 +159,10 @@ bool rdsu_rewind_to_state(t_rdsu *rdsu, t_rdsu_log *lg) {
 **/
 void rdsu_rewind_clear(t_rdsu *rdsu) {
 	if (!rdsu) {
-		LOG(C_MINI__RDSU_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG);
 		return;
 	}
 	while (rdsu->change_log)
 		free(rdsui_pop_rewind(rdsu));
-	LOG(C_MINI__RDSU_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS);
 }

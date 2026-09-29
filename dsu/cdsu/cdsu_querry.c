@@ -33,26 +33,27 @@ bool cdsu_strict_is_related(t_cdsu ds, size_t x, size_t y) {
 **/
 bool cdsu_validate(t_cdsu cdsu) {
 	if (!cdsu.size || !cdsu.rank || !cdsu.parent) {
-		LOG(C_MINI__CDSU_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG);
 		return (false);
 	}
 	for (size_t i = 0; i < cdsu.size; i++) {
 		if (cdsu.parent[i] >= cdsu.size || cdsu.rank[i] >= cdsu.size) {
-			LOG("Invalid DSU (rank/parent for %zu)", i);
+			CM_LOG(C_MINI__LEVEL_WARN, "Invalid DSU (rank/parent for %zu)", i);
 			return (false);
 		}
 		for (size_t x = i, steps = 0; x != cdsu.parent[x]; x = cdsu.parent[x]) {
 			steps++;
 			if (cdsu.parent[x] >= cdsu.size) {
-				LOG("Invalid DSU (rank/parent for %zu)", x);
+				CM_LOG(C_MINI__LEVEL_WARN, "Invalid DSU (rank/parent for %zu)",
+				       x);
 				return (false);
 			}
 			if (steps > cdsu.size + 1) {
-				LOG("Invalid DSU (infinite chain)");
+				CM_LOG(C_MINI__LEVEL_WARN, "Invalid DSU (infinite chain)");
 				return (false);
 			}
 		}
 	}
-	LOG(C_MINI__CDSU_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CDSU_LOG_SUCCESS);
 	return (true);
 }

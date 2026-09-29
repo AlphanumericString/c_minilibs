@@ -23,7 +23,7 @@
 
 /**
  * \defgroup da Dynamic array
- **/
+**/
 
 /**
  * \brief da struct
@@ -32,7 +32,7 @@
  * \param cap_e number of elements the memory can hold
  * \param sz_e size of 1 elements (the generic part of the array)
  * \ingroup da
- **/
+**/
 typedef struct s_dynamic_memory_array {
 	void  *array;
 	size_t nb_e;

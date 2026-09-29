@@ -15,7 +15,7 @@
  * \return owned pointer with owner set to true on success, or
  * zero-filed structure on failure
  * \ingroup sptr
- **/
+**/
 t_owned_ptr sptr_make_owned_from_raw(void *raw_ptr, t_dtor d) {
 	t_owned_ptr ret = (t_owned_ptr){0};
 	t_fbox     *f;
@@ -43,7 +43,7 @@ t_owned_ptr sptr_make_owned_from_raw(void *raw_ptr, t_dtor d) {
  * \note requires strong count == 1; if weak count == 0 frees or clears
  * strong_ptr
  * \ingroup sptr
- **/
+**/
 t_owned_ptr sptr_make_owned_from_strong(t_strong_ptr *sp, t_dtor d) {
 	t_owned_ptr ret = (t_owned_ptr){0};
 
@@ -71,7 +71,7 @@ t_owned_ptr sptr_make_owned_from_strong(t_strong_ptr *sp, t_dtor d) {
  * \note increments weak count; the returned owned pointer has owner set to
  * false
  * \ingroup sptr
- **/
+**/
 t_owned_ptr sptr_make_owned_from_owned(t_owned_ptr *owned, t_dtor d) {
 	t_owned_ptr ret = (t_owned_ptr){0};
 
@@ -99,7 +99,7 @@ t_owned_ptr sptr_make_owned_from_owned(t_owned_ptr *owned, t_dtor d) {
  * owned structure
  * \note clears out uptr internal values
  * \ingroup sptr
- **/
+**/
 t_owned_ptr sptr_make_owned_from_uniq(t_uniq_ptr *uptr, t_dtor d) {
 	t_owned_ptr ret = (t_owned_ptr){0};
 	t_fbox     *f;
@@ -135,7 +135,7 @@ t_owned_ptr sptr_make_owned_from_uniq(t_uniq_ptr *uptr, t_dtor d) {
  * \param d the dtor to set.
  * \return the newly created uniq pointer or a zeroed out uniq pointer
  * \ingroup sptr
- **/
+**/
 t_uniq_ptr sptr_make_uniq_from_raw(void *ptr, t_dtor d) {
 	if (!ptr) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -151,7 +151,7 @@ t_uniq_ptr sptr_make_uniq_from_raw(void *ptr, t_dtor d) {
  * \return a zeroed out uniq pointer.
  * \warning this is an illegal operation. Implemented purely to warn people.
  * \ingroup sptr
- **/
+**/
 t_uniq_ptr sptr_make_uniq_from_weak(t_weak_ptr *ptr, t_dtor _) {
 	if (!ptr) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
@@ -168,7 +168,7 @@ t_uniq_ptr sptr_make_uniq_from_weak(t_weak_ptr *ptr, t_dtor _) {
  * \return the newly created uniq pointer or a zeroed out uniq pointer
  * \note zeroes out the fields of ptr for data and dtor.
  * \ingroup sptr
- **/
+**/
 t_uniq_ptr sptr_make_uniq_from_strong(t_strong_ptr *ptr, t_dtor d) {
 	t_uniq_ptr ret;
 
@@ -196,7 +196,7 @@ t_uniq_ptr sptr_make_uniq_from_strong(t_strong_ptr *ptr, t_dtor d) {
  * \return the newly created uniq pointer or a zeroed out uniq pointer
  * \note zeroes out the fields of ptr for data and dtor.
  * \ingroup sptr
- **/
+**/
 t_uniq_ptr sptr_make_uniq_from_owned(t_owned_ptr *ptr, t_dtor d) {
 	t_uniq_ptr ret;
 
@@ -225,7 +225,7 @@ t_uniq_ptr sptr_make_uniq_from_owned(t_owned_ptr *ptr, t_dtor d) {
  * zeroed uniq pointer
  * \note empties out the source uniq pointer ptr.
  * \ingroup sptr
- **/
+**/
 t_uniq_ptr sptr_make_uniq_from_uniq(t_uniq_ptr *ptr, t_dtor d) {
 	t_uniq_ptr ret;
 
