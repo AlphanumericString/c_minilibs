@@ -7,6 +7,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#define C_MINI__TPM_INTERNAL
 #define C_MINI__LOG_THREADSAFE
 #include "common_base/log.h"
 
@@ -103,7 +104,7 @@ typedef struct s_tpm_thread_internal {
 	t_tpm    *pool;        // parent struct for work-stealing
 	pthread_t id_absolute; // linux thread id (attribute setting, debug, infos)
 	size_t    id_sequential; // pool thread id (debug, work stealing)
-} t_tpm_int_thread;
+} t_tpmi_thread;
 
 // -- jobs main queue pool
 #ifndef C_MINI__TPM_MAX_JOBS
@@ -119,8 +120,8 @@ typedef struct s_tpm_thread_internal {
 #endif
 
 typedef struct s_thread_pool_manager {
-	t_tpm_int_thread threads[C_MINI__TPM_NB_JOBS]; // threads
-	atomic_int       nb_threads;
+	t_tpmi_thread threads[C_MINI__TPM_NB_JOBS]; // threads
+	atomic_int    nb_threads;
 
 	t_tpm_jc       *q_buckets[C_MINI__TPM_BUCKETS];
 	t_tpm_jc       *q_start;
@@ -216,7 +217,8 @@ bool tpm_wait_end(t_tpm *tpm);
 #ifdef C_MINI__TPM_INTERNAL
 
 // worker spcific
-void *tpmi_worker(void *tpm);
+void     *tpmi_worker(void *tpm);
+t_tpm_jc *tpmi_create_job(t_work w_func, void *a);
 
 // job handling - consider lock as caller responsability
 bool     tpmi_job_push(t_tpm_jc *to_push, t_tpm_jc **head, t_tpm_jc **tail,

@@ -14,29 +14,34 @@ typedef struct {
 } work_item_t;
 
 void *process_work(void *arg) {
-	work_item_t *item   = (work_item_t *)arg;
-	size_t       one_ms = 1000; // 1ms;
-	size_t       ms;            // 100ms
+	work_item_t *item         = (work_item_t *)arg;
+	const size_t one_s_in_ms  = 1000;
+	const size_t one_ms_in_us = 1000; // 1ms;
+	size_t       us_wait_time = 0;
 
 	/* Simulate work randomness */
-	if (item->id % 2) ms = 1000 * one_ms;      // 1.0s
-	else if (item->id % 3) ms = 3000 * one_ms; // 3.0s
-	else ms = 100 * one_ms;                    // 0.1s
-	CM_DBG("[Worker] Processing item %d (value=%d) {estimate:%zums (%.2f s)}",
-	       item->id, item->value, ms / one_ms, (float)(ms / one_ms) / 1000);
+	if (item->id % 2) us_wait_time = 100 * one_ms_in_us;      // .10s
+	else if (item->id % 3) us_wait_time = 300 * one_ms_in_us; // .30s
+	else us_wait_time = 10 * one_ms_in_us;                    // .01s
+	CM_LOG(C_MINI__LEVEL_ALWAYS,
+	       "[Worker] Processing item (%p) %02d (value=%d) {estimate:%zums "
+	       "(%.2f s)}",
+	       item, item->id, item->value, us_wait_time / one_ms_in_us,
+	       (float)us_wait_time / (one_s_in_ms * one_ms_in_us));
 
-	usleep(ms);
+	usleep(us_wait_time);
 
-	CM_DBG("[Worker] Completed item %d", item->id);
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "[Worker] Completed item %02d", item->id);
 	free(item);
 	return (NULL);
 }
 
-int main(void) {
-	t_tpm       *t = tpm_new(4);
-	work_item_t *item_batch[20];
+int main(int ac, char **av) {
+	t_tpm    *t        = tpm_new(4);
+	const int nb_items = ac > 1 ? atoi(av[1]) : 20;
+	// work_item_t *item_batch[20];
 
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < nb_items; i++) {
 		work_item_t *item = malloc(sizeof(work_item_t));
 		if (!item) {
 			CM_DBG("Memory allocation failed\n");
@@ -44,27 +49,29 @@ int main(void) {
 		}
 		item->id    = i;
 		item->value = i * 100;
+		CM_DBG("MARKER: ITEM_ALLOC: %p %d", item, item->id);
 		tpm_add_job(t, process_work, item);
 	}
 	tpm_wait_end(t);
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "===========");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "===========");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "===========");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "marker here");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "===========");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "===========");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "===========");
-	for (int i = 0; i < 20; i++) {
-		item_batch[i] = malloc(sizeof(work_item_t));
-		if (!item_batch[i]) {
-			CM_DBG("Memory allocation failed\n");
-			break;
-		}
-		item_batch[i]->id    = i + 20;
-		item_batch[i]->value = (i + 20) * 100;
-	}
-	tpm_add_batch(t, 20, process_work, (void **)item_batch);
-	tpm_wait_end(t);
+
+	// CM_LOG(C_MINI__LEVEL_ALWAYS, "===========");
+	// CM_LOG(C_MINI__LEVEL_ALWAYS, "===========");
+	// CM_LOG(C_MINI__LEVEL_ALWAYS, "===========");
+	// CM_LOG(C_MINI__LEVEL_ALWAYS, "marker here");
+	// CM_LOG(C_MINI__LEVEL_ALWAYS, "===========");
+	// CM_LOG(C_MINI__LEVEL_ALWAYS, "===========");
+	// CM_LOG(C_MINI__LEVEL_ALWAYS, "===========");
+	// for (int i = 0; i < nb_items; i++) {
+	// 	item_batch[i] = malloc(sizeof(work_item_t));
+	// 	if (!item_batch[i]) {
+	// 		CM_DBG("Memory allocation failed\n");
+	// 		break;
+	// 	}
+	// 	item_batch[i]->id    = i + 20;
+	// 	item_batch[i]->value = (i + 20) * 100;
+	// }
+	// tpm_add_batch(t, 20, process_work, (void **)item_batch);
+	// tpm_wait_end(t);
 
 	tpm_free(t, free);
 	return 0;

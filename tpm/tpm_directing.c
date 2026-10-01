@@ -42,7 +42,8 @@ static void wait_thread_queues_empty(t_tpm *tpm) {
 
 #ifdef CM_LOG
 		pthread_mutex_lock(&tpm->threads[i].job_cache_lock);
-		CM_LOG("Waiting thread#%zu {start,end}: {%hhu, %hhu}", i,
+		CM_LOG(C_MINI__LEVEL_INFO,
+		       "Waiting thread#%zu {start,end}: {%hhu, %hhu}", i,
 		       tpm->threads[i].start, tpm->threads[i].end);
 		pthread_mutex_unlock(&tpm->threads[i].job_cache_lock);
 #endif
@@ -56,7 +57,7 @@ static void wait_thread_queues_empty(t_tpm *tpm) {
 			pthread_mutex_unlock(&tpm->threads[i].job_cache_lock);
 			usleep(2000);
 		}
-		CM_LOG("Waiting thread#%zu - done", i);
+		CM_LOG(C_MINI__LEVEL_INFO, "Waiting thread#%zu - done", i);
 	}
 }
 

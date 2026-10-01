@@ -2,7 +2,7 @@
 .DEFAULT_GOAL	:= all
 
 # list of targets / modules
-MODULES		:= ill rb da ss dsu tls lru_cache hp sptr
+MODULES		:= ill rb da ss dsu tls lru_cache hp sptr tpm
 PROJECT_NAME:= c_mini
 PRD_TARGET	:= $(PROJECT_NAME).profdata
 

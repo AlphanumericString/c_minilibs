@@ -47,7 +47,8 @@ t_tpm *tpm_init(t_tpm *tpm, size_t nb_thread) {
 		    (pthread_mutex_t)PTHREAD_MUTEX_INITIALIZER;
 		if (pthread_create(&(tpm->threads[i].id_absolute), NULL, &tpmi_worker,
 		                   &tpm->threads[i])) {
-			CM_LOG("PTHREAD_CREATE FAIL: %s", strerror(errno));
+			CM_LOG(C_MINI__LEVEL_INFO, "PTHREAD_CREATE FAIL: %s",
+			       strerror(errno));
 			tpm_stop(tpm);
 			for (size_t j = 0; j < i;
 			     pthread_cancel(tpm->threads[j++].id_absolute))
