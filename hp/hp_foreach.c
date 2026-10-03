@@ -4,7 +4,7 @@
  * \brief For each element in the heap, apply a callback
  * \param h heap pointer
  * \param cb callback function
- * \param u_arg user argument
+ * \param data user argument
  * \return true if all callbacks returned true, false otherwise
  * \ingroup hp
 **/
@@ -57,7 +57,7 @@ static bool hp_internal_infix(t_heap *h, size_t i, t_callback cb, void *u) {
  * \brief Apply a callback to each element in the heap (infix)
  * \param h heap pointer
  * \param cb callback function
- * \param u_arg user argument
+ * \param data user argument
  * \return true if all callbacks returned true, false otherwise
  * \ingroup hp
 **/
@@ -77,7 +77,7 @@ bool hp_foreach_in(t_heap *h, t_callback cb, void *data) {
  * \brief Apply a callback to each element in the heap (prefix)
  * \param h heap pointer
  * \param cb callback function
- * \param u_arg user argument
+ * \param data user argument
  * \return true if all callbacks returned true, false otherwise
  * \ingroup hp
 **/
@@ -97,18 +97,18 @@ bool hp_foreach_pre(t_heap *h, t_callback cb, void *data) {
  * \brief Apply a callback to each element in the heap (postfix)
  * \param h heap pointer
  * \param cb callback function
- * \param u_arg user argument
+ * \param data user argument
  * \return true if all callbacks returned true, false otherwise
  * \ingroup hp
 **/
-bool hp_foreach_post(t_heap *h, t_callback cb, void *u_arg) {
+bool hp_foreach_post(t_heap *h, t_callback cb, void *data) {
 	bool r;
 
 	if (!h || !cb) {
 		LOG(C_MINI__HP_LOG_EARG);
 		return (false);
 	}
-	r = hp_internal_postfix(h, 0, cb, u_arg);
+	r = hp_internal_postfix(h, 0, cb, data);
 	if (!r) return (false);
 	LOG(C_MINI__HP_LOG_SUCCESS);
 	return (true);

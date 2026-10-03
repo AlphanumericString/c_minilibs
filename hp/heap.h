@@ -109,9 +109,7 @@ typedef struct s_heap {
 
 t_heap *hp_create(size_t nb_elems, t_comparator cmp);
 t_heap *hp_init(t_heap *hp, size_t nb_elems, t_comparator cmp);
-// TODO: hp_init_from_array(hp, arr, nb_elems, cmp)
 
-// TODO: switch return to bool + add test checking return
 void hp_delete(t_heap *hp);
 void hp_free(t_heap *hp);
 void hp_clear(t_heap *hp);
@@ -129,5 +127,14 @@ bool hp_foreach(t_heap *h, t_callback cb, void *u_arg);
 bool hp_foreach_in(t_heap *h, t_callback cb, void *u_arg);
 bool hp_foreach_pre(t_heap *h, t_callback cb, void *u_arg);
 bool hp_foreach_post(t_heap *h, t_callback cb, void *u_arg);
+
+// TODO: hp_from_array(arr, nb_elems, cmp) -> t_hp
+// TODO: hp_init_from_array(hp, arr, nb_elems, cmp) -> t_hp*
+// TODO: switch return to bool everywhere possible + add test checking return
+//		values
+// TODO: add hp_is_[empty|full|valid](const ..); -> bool
+// TODO: add hp_get_[cmp|cap|curent_size|elems_array](...); -> <val type>
+// TODO: void* backing with typeagnostic heuristics (retro actively add
+//		get_elem_size)
 
 #endif // !C_MINI__HP
