@@ -4,7 +4,7 @@
 
 /**
  * \brief set element at offset pos respecting the size of elements
- * \param vec pointer to the dynamic array
+ * \param da pointer to the dynamic array
  * \param pos index where the element should be set
  * \param elem pointer to the value of element to set
  * \return true on success, false on failure

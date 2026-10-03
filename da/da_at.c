@@ -2,7 +2,7 @@
 
 /**
  * \brief get element at offset pos respecting the size of elements
- * \param vec pointer to the dynamic array
+ * \param da pointer to the dynamic array
  * \param pos index of the element
  * \return pointer to the element at the specified position
  * \ingroup da

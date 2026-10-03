@@ -5,9 +5,9 @@
 /**
  * \brief get element at offset pos respecting the size of elements and copies
  * it at elem
- * \param vec pointer to the dynamic array
+ * \param da pointer to the dynamic array
  * \param pos index of the element
- * \param out_buffer pointer where the element will be copied
+ * \param out_elem pointer where the element will be copied
  * \return true on success, false on failure
  * \ingroup da
 **/
@@ -43,7 +43,7 @@ bool da_nget(const t_da *da, size_t n, size_t pos, void *out_buffer) {
 /**
  * \brief get the raw inner array of the da
  * \param da pointer to the dynamic array
- * \return pointer to the raw inner array
+ * \return pointer to the raw inner array or null on faillure
  * \ingroup da
 **/
 void *da_array(const t_da *da) {

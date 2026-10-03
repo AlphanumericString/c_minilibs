@@ -6,7 +6,7 @@
  * \brief fold the elements of the dynamic array into a single value
  * \param da pointer to the dynamic array
  * \param m merger function
- * \param u_start_val starting value
+ * \param data starting value
  * \return the folded value
  * \ingroup da
 **/
@@ -22,7 +22,7 @@ void *da_fold(t_da *da, t_merger m, void *data) {
  * \param da pointer to the dynamic array
  * \param n number of elements to fold
  * \param m merger function
- * \param u_start_val starting value
+ * \param data starting value
  * \return the folded value
  * \ingroup da
 **/
@@ -42,7 +42,7 @@ void *da_nfold(t_da *da, size_t n, t_merger m, void *data) {
  * \brief reduce the elements of the dynamic array into a newly allocated value
  * \param da pointer to the dynamic array
  * \param m merger function
- * \return the reduced value
+ * \return the reduced value or null if any error
  * \ingroup da
 **/
 void *da_reduce(t_da *da, t_merger m) {
@@ -66,7 +66,7 @@ void *da_reduce(t_da *da, t_merger m) {
  * \param da pointer to the dynamic array
  * \param n number of elements to reduce
  * \param m merger function
- * \return the reduced value
+ * \return the reduced valu or null if any errore
  * \ingroup da
 **/
 void *da_nreduce(t_da *da, size_t n, t_merger m) {

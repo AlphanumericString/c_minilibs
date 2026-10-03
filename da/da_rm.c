@@ -8,7 +8,7 @@
 
 /**
  * \brief rm a single element while respecting the order of the da
- * \param vec pointer to the dynamic array
+ * \param da pointer to the dynamic array
  * \param pos index of the element to remove
  * \return true on success, false on failure
  * \ingroup da
@@ -27,7 +27,7 @@ bool da_rm_order(t_da *da, size_t pos) {
 }
 /**
  * \brief rm elements [start, end[ while respecting the order of the da
- * \param vec pointer to the dynamic array
+ * \param da pointer to the dynamic array
  * \param start index of the first element to remove
  * \param end index of the end element (exclusive)
  * \return true on success, false on failure
@@ -50,7 +50,7 @@ bool da_rms_order(t_da *da, size_t start, size_t end) {
 
 /**
  * \brief rm a single element (very fast) no garantee on order
- * \param vec pointer to the dynamic array
+ * \param da pointer to the dynamic array
  * \param pos index of the element to remove
  * \return true on success, false on failure
  * \ingroup da
@@ -67,7 +67,7 @@ bool da_rm(t_da *da, size_t pos) {
 }
 /**
  * \brief rm elements (very fast) no garantee on order
- * \param vec pointer to the dynamic array
+ * \param da pointer to the dynamic array
  * \param start index of the first element to remove
  * \param end index of the end element (exclusive)
  * \warning BUG: da_rms has a gap problem - check tests

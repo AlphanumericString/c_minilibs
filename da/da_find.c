@@ -7,7 +7,7 @@
  * \brief find an element matching the condition
  * \param da pointer to the dynamic array
  * \param c callback to test elements
- * \param u_data user data for callback
+ * \param data user data for callback
  * \return pointer to the found element, or NULL if not found
  * \ingroup da
 **/
@@ -29,7 +29,7 @@ void *da_find(t_da *da, t_comparator c, void *data) {
  * \param da pointer to the dynamic array
  * \param n number of elements to search
  * \param c callback to test elements
- * \param u_data user data for callback
+ * \param data user data for callback
  * \return pointer to the found element, or NULL if not found
  * \ingroup da
 **/
@@ -51,7 +51,7 @@ void *da_nfind(t_da *da, size_t n, t_comparator c, void *data) {
  * \brief find an element matching the condition and copy it to a buffer
  * \param da pointer to the dynamic array
  * \param c callback to test elements
- * \param u_data user data for callback
+ * \param data user data for callback
  * \param out_buffer buffer to copy the found element to
  * \return true if found and copied, false otherwise
  * \ingroup da
