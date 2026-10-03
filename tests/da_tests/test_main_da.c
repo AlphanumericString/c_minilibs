@@ -33,6 +33,12 @@ int main(void) {
 	test_da_grow();
 	test_da_grow_for_size();
 	LOG("")
+	LOG("Is")
+	test_da_is_valid();
+	test_da_is_not_null();
+	test_da_is_empty();
+	test_da_is_full();
+	LOG("")
 	LOG("Shrink")
 	test_da_shrink();
 	test_da_shrink_min();

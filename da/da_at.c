@@ -7,10 +7,10 @@
  * \return pointer to the element at the specified position
  * \ingroup da
 **/
-void *da_at(t_da *vec, size_t pos) {
-	if (!vec || pos >= vec->nb_e) {
+void *da_at(const t_da *da, size_t pos) {
+	if (!da_is_valid(da) || pos >= da->nb_e) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (NULL);
 	}
-	return ((char *)vec->array + vec->sz_e * pos);
+	return ((char *)da->array + da->sz_e * pos);
 }

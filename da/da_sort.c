@@ -10,7 +10,7 @@
  * \ingroup da
 **/
 bool da_sort(t_da *da, t_comparator c) {
-	if (!da || !c) {
+	if (!da_is_valid(da) || !c) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (false);
 	}
@@ -18,7 +18,6 @@ bool da_sort(t_da *da, t_comparator c) {
 	LOG(C_MINI__DA_LOG_SORT);
 	return (true);
 }
-
 /**
  * \brief sort the first n elements of the dynamic array using a comparator
  * function
@@ -29,7 +28,7 @@ bool da_sort(t_da *da, t_comparator c) {
  * \ingroup da
 **/
 bool da_nsort(t_da *da, size_t n, t_comparator c) {
-	if (!da || !c) {
+	if (!da_is_valid(da) || !c) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (false);
 	}

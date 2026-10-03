@@ -13,17 +13,16 @@
  * \return true on success, false on failure
  * \ingroup da
 **/
-bool da_rm_order(t_da *vec, size_t pos) {
-	if (!vec || vec->nb_e < pos) {
+bool da_rm_order(t_da *da, size_t pos) {
+	if (!da_is_valid(da) || da->nb_e < pos) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (false);
 	}
-	if (vec->nb_e > pos + 1) {
-		memcpy(da_at(vec, pos), da_at(vec, pos + 1),
-		       vec->sz_e * (vec->nb_e - pos));
+	if (da->nb_e > pos + 1) {
+		memcpy(da_at(da, pos), da_at(da, pos + 1), da->sz_e * (da->nb_e - pos));
 	}
-	LOG(C_MINI__DA_LOG_RM, pos, 1UL, vec->nb_e, vec->nb_e - 1);
-	vec->nb_e--;
+	LOG(C_MINI__DA_LOG_RM, pos, 1UL, da->nb_e, da->nb_e - 1);
+	da->nb_e--;
 	return (true);
 }
 /**
@@ -34,19 +33,18 @@ bool da_rm_order(t_da *vec, size_t pos) {
  * \return true on success, false on failure
  * \ingroup da
 **/
-bool da_rms_order(t_da *vec, size_t start, size_t end) {
-	if (end < start || !vec || vec->nb_e < start) {
+bool da_rms_order(t_da *da, size_t start, size_t end) {
+	if (!da_is_valid(da) || end < start || da->nb_e < start) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (false);
 	}
-	if (vec->nb_e < end) end = vec->nb_e;
-	if (vec->nb_e != end) {
-		memcpy(da_at(vec, start), da_at(vec, end),
-		       vec->sz_e * (vec->nb_e - end));
+	if (da->nb_e < end) end = da->nb_e;
+	if (da->nb_e != end) {
+		memcpy(da_at(da, start), da_at(da, end), da->sz_e * (da->nb_e - end));
 	}
-	LOG(C_MINI__DA_LOG_RM, start, end - start, vec->nb_e,
-	    vec->nb_e - (end - start));
-	vec->nb_e -= end - start;
+	LOG(C_MINI__DA_LOG_RM, start, end - start, da->nb_e,
+	    da->nb_e - (end - start));
+	da->nb_e -= end - start;
 	return (false);
 }
 
@@ -57,14 +55,14 @@ bool da_rms_order(t_da *vec, size_t start, size_t end) {
  * \return true on success, false on failure
  * \ingroup da
 **/
-bool da_rm(t_da *vec, size_t pos) {
-	if (!vec || vec->nb_e < pos) {
+bool da_rm(t_da *da, size_t pos) {
+	if (!da_is_valid(da) || da->nb_e < pos) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (false);
 	}
-	if (pos != vec->nb_e) da_swap(vec, pos, vec->nb_e - 1);
-	LOG(C_MINI__DA_LOG_RM, pos, 1UL, vec->nb_e, vec->nb_e - 1);
-	vec->nb_e--;
+	if (pos != da->nb_e) da_swap(da, pos, da->nb_e - 1);
+	LOG(C_MINI__DA_LOG_RM, pos, 1UL, da->nb_e, da->nb_e - 1);
+	da->nb_e--;
 	return (true);
 }
 /**
@@ -76,18 +74,18 @@ bool da_rm(t_da *vec, size_t pos) {
  * \return true on success, false on failure
  * \ingroup da
 **/
-bool da_rms(t_da *vec, size_t start, size_t end) {
-	if (end < start || !vec || vec->nb_e < start) {
+bool da_rms(t_da *da, size_t start, size_t end) {
+	if (end < start || !da_is_valid(da) || da->nb_e < start) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (false);
 	}
-	if (vec->nb_e < end) end = vec->nb_e;
-	if (vec->nb_e != end) {
-		memcpy(da_at(vec, start), da_at(vec, vec->nb_e - (end - start)),
-		       vec->sz_e * (end - start));
+	if (da->nb_e < end) end = da->nb_e;
+	if (da->nb_e != end) {
+		memcpy(da_at(da, start), da_at(da, da->nb_e - (end - start)),
+		       da->sz_e * (end - start));
 	}
-	LOG(C_MINI__DA_LOG_RM, start, end - start, vec->nb_e,
-	    vec->nb_e - (end - start));
-	vec->nb_e -= end - start;
+	LOG(C_MINI__DA_LOG_RM, start, end - start, da->nb_e,
+	    da->nb_e - (end - start));
+	da->nb_e -= end - start;
 	return (true);
 }

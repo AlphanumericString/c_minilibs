@@ -3,52 +3,72 @@
 #include "da_tests.h"
 
 void test_da_at(void) {
-	t_da da;
-	int  a;
+	const t_da da = {
+	    .array = (void *)&arr_3,
+	    .cap_e = 3,
+	    .nb_e  = 3,
+	    .sz_e  = sizeof(int),
+	};
 
-	da_init(&da, sizeof(int));
-	a = 1;
-	da_add(&da, &a);
-	assert(*(int *)da_at(&da, 0) == 1);
-	da_destroy(&da);
+	assert(*(int *)da_at(&da, 0) == arr_3[0]);
+	assert(*(int *)da_at(&da, 1) == arr_3[1]);
+	assert(*(int *)da_at(&da, 2) == arr_3[2]);
+	assert(da_at(NULL, 0) == NULL);
+	assert(da_at(&da, 99) == NULL);
 }
 void test_da_get(void) {
-	t_da da;
-	int  a, out;
+	const t_da da = {
+	    .array = (void *)&arr_3,
+	    .cap_e = 3,
+	    .nb_e  = 3,
+	    .sz_e  = sizeof(int),
+	};
+	int out;
 
-	da_init(&da, sizeof(int));
-	a = 1;
-	da_add(&da, &a);
-
-	da_get(&da, 0, &out);
+	assert(da_get(&da, 0, &out) == true);
 	assert(out == 1);
+	assert(da_get(&da, 1, &out) == true);
+	assert(out == 2);
+	assert(da_get(&da, 2, &out) == true);
+	assert(out == 3);
 
-	da_destroy(&da);
+	out = 44444444;
+	assert(da_get(&da, 99, &out) == false);
+	assert(out == 44444444);
+	assert(da_get(&da, 99, NULL) == false);
+	assert(da_get(&da, 1, NULL) == false);
+	assert(da_get(NULL, 1, &out) == false);
 }
 void test_da_nget(void) {
-	t_da da;
-	int  buff[2];
-	int  out;
-
-	da_init(&da, sizeof(int));
-	da_cat_array(&da, (int *)arr_3, 3, sizeof(int));
+	const t_da da = {
+	    .array = (void *)&arr_3,
+	    .cap_e = 3,
+	    .nb_e  = 3,
+	    .sz_e  = sizeof(int),
+	};
+	int buff[2];
+	int out;
 
 	da_nget(&da, 1, 0, &out);
 	assert(out == 1);
 	da_nget(&da, 2, 0, &buff);
 	assert(buff[0] == 1);
 	assert(buff[1] == 2);
-
-	da_destroy(&da);
+	da_nget(&da, -1, 0, &buff);
+	da_nget(NULL, -1, 0, &buff);
+	da_nget(NULL, -1, 0, NULL);
+	da_nget(&da, -1, 0, NULL);
+	da_nget(&da, 1, 99, &buff);
+	da_nget(&da, 0, 1, &buff);
 }
 void test_da_array(void) {
-	t_da da;
-
-	da_init(&da, sizeof(int));
+	const t_da da = {
+	    .array = (void *)&arr_3,
+	    .cap_e = 3,
+	    .nb_e  = 3,
+	    .sz_e  = sizeof(int),
+	};
 
 	assert(da_array(&da) == da.array);
-	da_cat_array(&da, (int[]){1, 43, 4, 5, 223}, 5, sizeof(int));
-	assert(da_array(&da) == da.array);
-
-	da_destroy(&da);
+	assert(da_array(NULL) == NULL);
 }

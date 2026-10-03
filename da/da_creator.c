@@ -24,7 +24,6 @@ t_da *da_new(size_t sz_elem) {
 	LOG(C_MINI__DA_LOG_SUCCESS);
 	return (ret);
 }
-
 /**
  * \brief init a given da with the default number of elements(1024) of size
  * sz_elem
@@ -36,7 +35,7 @@ t_da *da_new(size_t sz_elem) {
 t_da *da_init(t_da *ret, size_t sz_elem) {
 	void *data;
 
-	if (!ret) {
+	if (!ret || !sz_elem) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (NULL);
 	};
@@ -49,11 +48,10 @@ t_da *da_init(t_da *ret, size_t sz_elem) {
 	LOG(C_MINI__DA_LOG_SUCCESS);
 	return (ret);
 }
-
 /**
  * \brief init a given da with the number n of elements of size sz_elem
  * \param ret pointer to the dynamic array struct to init
- * \param n initial capacity (number of elements)
+ * \param n initial/starting capacity (number space for elements)
  * \param sz_elem size of 1 element
  * \return pointer to the initialized dynamic array
  * \ingroup da
@@ -61,7 +59,7 @@ t_da *da_init(t_da *ret, size_t sz_elem) {
 t_da *da_ninit(t_da *ret, size_t n, size_t sz_elem) {
 	void *data;
 
-	if (!ret) {
+	if (!ret || !sz_elem) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (NULL);
 	}
@@ -74,7 +72,6 @@ t_da *da_ninit(t_da *ret, size_t n, size_t sz_elem) {
 	LOG(C_MINI__DA_LOG_SUCCESS);
 	return (ret);
 }
-
 /**
  * \brief init a given da with the array given
  * \param ret pointer to the dynamic array struct to init
@@ -88,7 +85,7 @@ t_da *da_ninit(t_da *ret, size_t n, size_t sz_elem) {
  * \ingroup da
 **/
 t_da *da_from_array(t_da *ret, void *data, size_t nb_elem, size_t sz_elem) {
-	if (!ret || !data) {
+	if (!ret || !data || !sz_elem) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (NULL);
 	}

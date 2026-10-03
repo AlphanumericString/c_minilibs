@@ -10,16 +10,15 @@
  * \return true on success, false on failure
  * \ingroup da
 **/
-bool da_set(t_da *vec, size_t pos, void *elem) {
-	if (!vec || pos >= vec->nb_e) {
+bool da_set(t_da *da, size_t pos, void *elem) {
+	if (!da_is_valid(da) || !elem || pos >= da->nb_e) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (false);
 	}
-	memcpy(vec->array + vec->sz_e * pos, elem, vec->sz_e);
+	memcpy(da->array + da->sz_e * pos, elem, da->sz_e);
 	LOG(C_MINI__DA_LOG_SET, pos, 1UL, elem);
 	return (true);
 }
-
 /**
  * \brief set element at offset pos respecting the size of elements
  * \param da pointer to the dynamic array
@@ -30,7 +29,7 @@ bool da_set(t_da *vec, size_t pos, void *elem) {
  * \ingroup da
 **/
 bool da_nset(t_da *da, size_t n, size_t pos, void *elems) {
-	if (!da || (pos + n) >= da->nb_e) {
+	if (!da_is_valid(da) || (pos + n) >= da->nb_e || !elems) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (false);
 	}

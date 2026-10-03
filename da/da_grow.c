@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -13,7 +14,7 @@ bool da_grow(t_da *da) {
 	size_t new_size;
 	void  *tmp;
 
-	if (!da) {
+	if (!da || !da->sz_e || da->nb_e > da->cap_e) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (false);
 	}
@@ -33,7 +34,6 @@ bool da_grow(t_da *da) {
 	da->cap_e = new_size;
 	return (true);
 }
-
 /**
  * \brief grow the capacity of the dynamic array to ensure a minimum number of
  * free elements
@@ -46,7 +46,8 @@ bool da_grow_for_size(t_da *da, size_t minimal_free_elems) {
 	size_t new_size;
 	void  *tmp;
 
-	if (!da) {
+	if (!da || !da->sz_e || da->nb_e > da->cap_e ||
+	    minimal_free_elems == SIZE_MAX) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (false);
 	}

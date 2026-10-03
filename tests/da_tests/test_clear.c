@@ -17,4 +17,5 @@ void test_da_clr(void) {
 	ASSERT_DA_STATE(da, sz, cap, 0);
 	assert(da.array == arr);
 	da_destroy(&da);
+	da_clr(NULL);
 }

@@ -3,53 +3,78 @@
 #include "da_tests.h"
 
 void test_da_dup(void) {
-	t_da da, dup;
+	const t_da da = {
+	    .array = (void *)arr_3,
+	    .cap_e = 3,
+	    .nb_e  = 3,
+	    .sz_e  = sizeof(int),
+	};
+	t_da dup;
 
-	da_init(&da, sizeof(int));
-	int a = 1;
-	da_add(&da, &a);
 	dup = da_dup(&da);
 	ASSERT_DA_STATE(dup, da.sz_e, da.nb_e, da.nb_e);
 	assert(*(int *)da_at(&dup, 0) == *(int *)da_at(&da, 0));
-	da_destroy(&da);
 	da_destroy(&dup);
+	dup = da_dup(NULL);
+	assert(dup.array == NULL && dup.cap_e == 0 && dup.nb_e == 0 &&
+	       dup.sz_e == 0);
 }
 void test_da_ndup(void) {
-	t_da da, dup;
+	const t_da da = {
+	    .array = (void *)arr_3,
+	    .cap_e = 3,
+	    .nb_e  = 3,
+	    .sz_e  = sizeof(int),
+	};
+	t_da dup;
 
-	da_init(&da, sizeof(int));
-	da_cat_array(&da, (int *)arr_3, 3, sizeof(int));
 	dup = da_ndup(&da, 2);
 	ASSERT_DA_STATE(dup, da.sz_e, 2, 2);
 	assert(*(int *)da_at(&dup, 0) == *(int *)da_at(&da, 0));
 	assert(*(int *)da_at(&dup, 1) == *(int *)da_at(&da, 1));
-	da_destroy(&da);
 	da_destroy(&dup);
+	dup = da_ndup(NULL, 2);
+	assert(dup.array == NULL && dup.cap_e == 0 && dup.nb_e == 0 &&
+	       dup.sz_e == 0);
+	dup = da_ndup(&da, 0);
+	assert(dup.array == NULL && dup.cap_e == 0 && dup.nb_e == 0 &&
+	       dup.sz_e == 0);
 }
 void test_da_dup_to(void) {
-	t_da da, dst;
-	int  a;
+	const t_da da = {
+	    .array = (void *)arr_3,
+	    .cap_e = 3,
+	    .nb_e  = 3,
+	    .sz_e  = sizeof(int),
+	};
+	t_da dst;
 
-	da_init(&da, sizeof(int));
 	da_init(&dst, sizeof(int));
-	a = 1;
-	da_add(&da, &a);
 	da_dup_to(&dst, &da);
 	ASSERT_DA_STATE(dst, da.sz_e, C_MINI_DA__NB_ELEM_DFLT, da.nb_e);
 	assert(*(int *)da_at(&da, 0) == *(int *)da_at(&dst, 0));
-	da_destroy(&da);
+	da_dup_to(NULL, &da);
+	da_dup_to(&dst, NULL);
 	da_destroy(&dst);
 }
 void test_da_ndup_to(void) {
-	t_da da, dst;
+	const t_da da = {
+	    .array = (void *)arr_3,
+	    .cap_e = 3,
+	    .nb_e  = 3,
+	    .sz_e  = sizeof(int),
+	};
+	t_da dst;
 
-	da_init(&da, sizeof(int));
 	da_init(&dst, sizeof(int));
-	da_cat_array(&da, (int *)arr_3, 3, sizeof(int));
 	da_ndup_to(&dst, 2, &da);
 	ASSERT_DA_STATE(dst, da.sz_e, C_MINI_DA__NB_ELEM_DFLT, 2);
 	assert(*(int *)da_at(&dst, 0) == *(int *)da_at(&da, 0));
 	assert(*(int *)da_at(&dst, 1) == *(int *)da_at(&da, 1));
-	da_destroy(&da);
+
+	da_ndup_to(NULL, 2, &da);
+	da_ndup_to(&dst, 2, NULL);
+	da_ndup_to(&dst, 0, &da);
+
 	da_destroy(&dst);
 }

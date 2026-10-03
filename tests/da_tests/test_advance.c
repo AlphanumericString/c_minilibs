@@ -21,6 +21,9 @@ void test_da_advance(void) {
 	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 2);
 	assert(*(int *)da_at(&da, 0) == 4);
 	assert(*(int *)da_at(&da, 1) == 5);
-
+	da_advance(&da, -1, cb_empty_deletor, NULL);
+	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 0);
 	da_destroy(&da);
+
+	da_advance(NULL, 2, cb_empty_deletor, NULL);
 }

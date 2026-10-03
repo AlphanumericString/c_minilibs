@@ -25,6 +25,7 @@ void test_da_rm_order(void) {
 	assert(*(int *)da_at(&da, 1) == 5);
 	assert((int *)da_at(&da, 2) == NULL);
 	da_rm_order(&da, -1);
+	da_rm_order(NULL, 0);
 	da_destroy(&da);
 }
 void test_da_rms_order(void) {
@@ -49,6 +50,10 @@ void test_da_rms_order(void) {
 	da_clr(&da);
 	da_cat_array(&da, (int *)arr_5, 5, sizeof(int));
 	da_rms_order(&da, 1, -1);
+	da_rms_order(NULL, 0, 1);
+	da_rms_order(&da, 99, 1);
+	da_rms_order(&da, 99, 100);
+	da_rms_order(&da, 2, 100);
 	assert(da.nb_e == 1);
 
 	da_destroy(&da);
@@ -70,7 +75,13 @@ void test_da_rm(void) {
 	assert(*(int *)da_at(&da, 0) == 5);
 	assert(*(int *)da_at(&da, 1) == 4);
 	assert(*(int *)da_at(&da, 2) == 3);
+	da_rm(&da, 3);
+	assert(da.nb_e == 2);
+	assert(*(int *)da_at(&da, 0) == 5);
+	assert(*(int *)da_at(&da, 1) == 4);
 
+	da_rm(&da, 99);
+	da_rm(NULL, 1);
 	da_destroy(&da);
 }
 // TODO: better tests when fixing da_rms
@@ -88,5 +99,9 @@ void test_da_rms(void) {
 	da_rms(&da, 0, -1);
 	assert(da.nb_e == 0);
 
+	da_cat_array(&da, (int *)arr_5, 5, sizeof(int));
+	da_rms(NULL, 0, -1);
+	da_rms(&da, 3, 1);
+	da_rms(&da, 99, 100);
 	da_destroy(&da);
 }

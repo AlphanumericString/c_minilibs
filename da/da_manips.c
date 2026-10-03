@@ -3,15 +3,11 @@
 #include "dynamic_array.h"
 
 static inline void memnxor(void *a, void *b, size_t n) {
-	unsigned char *s_a;
-	unsigned char *s_b;
+	unsigned char *s_a = a;
+	unsigned char *s_b = b;
 
-	if (!n || !a || !b) return;
-	s_a = a;
-	s_b = b;
 	while (n--)
 		s_a[n] ^= s_b[n];
-	return;
 }
 
 /**
@@ -27,12 +23,12 @@ bool da_swap(t_da *da, size_t pos_a, size_t pos_b) {
 	unsigned char *sa;
 	unsigned char *sb;
 
-	if (!da || da->nb_e < pos_a || da->nb_e < pos_b) {
+	sa = da_at(da, pos_a);
+	sb = da_at(da, pos_b);
+	if (!sa || !sb) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (false);
 	}
-	sa = da_at(da, pos_a);
-	sb = da_at(da, pos_b);
 	if (da->sz_e > C_MINI_DA__SZ_ELEM_DFLT) {
 		memnxor(sa, sb, da->sz_e);
 		memnxor(sb, sa, da->sz_e);
@@ -45,7 +41,6 @@ bool da_swap(t_da *da, size_t pos_a, size_t pos_b) {
 	LOG(C_MINI__DA_LOG_SWAP, 1UL, pos_a, pos_b);
 	return (true);
 }
-
 /**
  * \brief swap n elements between two positions in the dynamic array
  * \param da pointer to the dynamic array
@@ -60,7 +55,7 @@ bool da_nswap(t_da *da, size_t n, size_t pos_a, size_t pos_b) {
 	unsigned char *sa;
 	unsigned char *sb;
 
-	if (!da || da->nb_e < (pos_a + n) || da->nb_e < (pos_b + n)) {
+	if (!da_is_valid(da) || da->nb_e < (pos_a + n) || da->nb_e < (pos_b + n)) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (false);
 	}

@@ -11,20 +11,19 @@
  * \return pointer to the found element, or NULL if not found
  * \ingroup da
 **/
-void *da_find(t_da *da, t_comparator c, void *u_data) {
-	if (!da || !c) {
+void *da_find(t_da *da, t_comparator c, void *data) {
+	if (!da_is_valid(da) || !c) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (NULL);
 	}
 	for (size_t i = 0; i < da->nb_e; i++)
-		if (c(da_at(da, i), u_data) == 0) {
+		if (c(da_at(da, i), data) == 0) {
 			LOG(C_MINI__DA_LOG_FIND, i, da_at(da, i));
 			return (da_at(da, i));
 		}
 	LOG(C_MINI__DA_LOG_FINDFAIL);
 	return (NULL);
 }
-
 /**
  * \brief find an element matching the condition within the first n elements
  * \param da pointer to the dynamic array
@@ -34,21 +33,20 @@ void *da_find(t_da *da, t_comparator c, void *u_data) {
  * \return pointer to the found element, or NULL if not found
  * \ingroup da
 **/
-void *da_nfind(t_da *da, size_t n, t_comparator c, void *u_data) {
-	if (!da || !c) {
+void *da_nfind(t_da *da, size_t n, t_comparator c, void *data) {
+	if (!da_is_valid(da) || !c) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (NULL);
 	}
 	if (n > da->nb_e) n = da->nb_e;
 	for (size_t i = 0; i < n; i++)
-		if (c(da_at(da, i), u_data) == 0) {
+		if (c(da_at(da, i), data) == 0) {
 			LOG(C_MINI__DA_LOG_FIND, i, da_at(da, i));
 			return (da_at(da, i));
 		}
 	LOG(C_MINI__DA_LOG_FINDFAIL);
 	return (NULL);
 }
-
 /**
  * \brief find an element matching the condition and copy it to a buffer
  * \param da pointer to the dynamic array
@@ -58,14 +56,14 @@ void *da_nfind(t_da *da, size_t n, t_comparator c, void *u_data) {
  * \return true if found and copied, false otherwise
  * \ingroup da
 **/
-bool da_find_get(t_da *da, t_comparator c, void *u_data, void *out_buffer) {
+bool da_find_get(t_da *da, t_comparator c, void *data, void *out_buffer) {
 	void *elem;
 
-	if (!da || !c || !out_buffer) {
+	if (!da_is_valid(da) || !c || !out_buffer) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (false);
 	}
-	elem = da_find(da, c, u_data);
+	elem = da_find(da, c, data);
 	if (elem) {
 		memcpy(out_buffer, elem, da->sz_e);
 		LOG(C_MINI__DA_LOG_FINDGET, elem, out_buffer);

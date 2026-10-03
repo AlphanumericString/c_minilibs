@@ -13,7 +13,7 @@
 bool da_shrink(t_da *da) {
 	bool r;
 
-	if (!da) {
+	if (!da_is_valid(da)) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (false);
 	}
@@ -25,19 +25,19 @@ bool da_shrink(t_da *da) {
 	}
 	return (r);
 }
-
 /**
  * \brief shrink the capacity of the dynamic array trying to keep a minimum
  * number of free elements
  * \param da pointer to the dynamic array
- * \param keep_n minimum number of extra capacity elements to keep
+ * \param keep_n minimum number of extra capacity elements to keep (0 for a
+ * 'fit to data')
  * \return true on success, false otherwise
  * \ingroup da
 **/
 bool da_shrink_min(t_da *da, size_t keep_n) {
 	void *tmp;
 
-	if (!da) {
+	if (!da_is_valid(da)) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (false);
 	}

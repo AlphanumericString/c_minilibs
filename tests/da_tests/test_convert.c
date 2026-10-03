@@ -4,11 +4,19 @@
 #include "da_tests.h"
 
 void test_da_to_array(void) {
-	t_da da;
+	const t_da da = {
+	    .array = (void *)&arr_5,
+	    .cap_e = 5,
+	    .nb_e  = 5,
+	    .sz_e  = sizeof(int),
+	};
+	const t_da da_err = {
+	    .array = NULL,
+	    .cap_e = 99,
+	    .nb_e  = 56,
+	    .sz_e  = 3,
+	};
 	int *arr;
-
-	da_init(&da, sizeof(int));
-	da_cat_array(&da, (int *)arr_5, 5, sizeof(int));
 
 	arr = (int *)da_to_array(&da);
 	assert(arr != NULL);
@@ -17,30 +25,34 @@ void test_da_to_array(void) {
 	assert(arr[2] == 3);
 	assert(arr[3] == 4);
 	assert(arr[4] == 5);
-
 	free(arr);
-	da_destroy(&da);
+	assert(da_to_array(NULL) == NULL);
+	assert(da_to_array(&da_err) == NULL);
 }
 void test_da_to_loc_array(void) {
-	t_da da;
-	int  a      = 1;
-	int  arr[5] = {42, 42, 42, 42, 42};
+	const t_da da = {
+	    .array = (void *)&arr_5,
+	    .cap_e = 5,
+	    .nb_e  = 1,
+	    .sz_e  = sizeof(int),
+	};
+	const t_da da2 = {
+	    .array = (void *)&arr_5,
+	    .cap_e = 5,
+	    .nb_e  = 5,
+	    .sz_e  = sizeof(int),
+	};
+	int arr[5] = {42, 42, 42, 42, 42};
 
-	da_init(&da, sizeof(int));
-	da_add(&da, &a);
-
-	da_to_loc_array(&da, arr);
-	assert(arr != NULL);
+	assert(da_to_loc_array(&da, arr) == arr);
 	assert(arr[0] == 1);
 	assert(arr[1] == 42);
-	da_cat_array(&da, (int *)arr_2_5, 4, sizeof(int));
-	da_to_loc_array(&da, arr);
-	assert(arr != NULL);
+	assert(da_to_loc_array(&da2, arr) == arr);
 	assert(arr[0] == 1);
 	assert(arr[1] == 2);
 	assert(arr[2] == 3);
 	assert(arr[3] == 4);
 	assert(arr[4] == 5);
-
-	da_destroy(&da);
+	assert(da_to_loc_array(&da2, NULL) == NULL);
+	assert(da_to_loc_array(NULL, arr) == NULL);
 }

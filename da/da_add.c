@@ -10,7 +10,7 @@
  * \ingroup da
 **/
 bool da_add(t_da *da, void *elem) {
-	if (!da || !elem || !da->array || !da->cap_e) {
+	if (!elem || !da_is_not_null(da)) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (false);
 	}
@@ -20,7 +20,6 @@ bool da_add(t_da *da, void *elem) {
 	LOG(C_MINI__DA_LOG_ADD, elem, da->nb_e);
 	return (true);
 }
-
 /**
  * \brief add nb_e elements of size sz_e from the array arr, if needed grows the
  * da
@@ -32,7 +31,7 @@ bool da_add(t_da *da, void *elem) {
  * \ingroup da
 **/
 bool da_cat_array(t_da *da, void *arr, size_t nb_e, size_t sz_e) {
-	if (!arr || !da || !sz_e || !da->array || sz_e != da->sz_e) {
+	if (!arr || !da_is_not_null(da) || sz_e != da->sz_e) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (false);
 	}

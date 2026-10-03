@@ -15,6 +15,12 @@
 		assert((da).array != NULL);                                            \
 	} while (0);
 
+#define DA_DUMP(x)                                                             \
+	do {                                                                       \
+		DBG("%s: {.arr=%p, .nb_e=%zu, .cap_e=%zu, .sz_e=%zu}", #x, (x).array,  \
+		    (x).nb_e, (x).cap_e, (x).sz_e);                                    \
+	} while (0);
+
 extern const int arr_3[];
 extern const int arr_5[];
 extern const int arr_2_5[];
@@ -51,6 +57,11 @@ void test_da_cat_array(void);
 
 void test_da_grow(void);
 void test_da_grow_for_size(void);
+
+void test_da_is_valid(void);
+void test_da_is_not_null(void);
+void test_da_is_empty(void);
+void test_da_is_full(void);
 
 void test_da_shrink(void);
 void test_da_shrink_min(void);

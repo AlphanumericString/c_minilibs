@@ -14,6 +14,8 @@ void test_da_destroy(void) {
 	assert(da.cap_e == 0);
 	assert(da.nb_e == 0);
 	assert(da.array == NULL);
+	da_destroy(&da);
+	da_destroy(NULL);
 }
 
 void test_da_free(void) {
@@ -23,5 +25,6 @@ void test_da_free(void) {
 	da_free(da);
 	da  = malloc(sizeof(t_da));
 	*da = (t_da){0};
-	da_free(da);
+	da_free(da); // check valgrind for no leaks
+	da_free(NULL);
 }

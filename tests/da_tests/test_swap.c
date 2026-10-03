@@ -3,29 +3,46 @@
 #include "da_tests.h"
 
 void test_da_swap(void) {
-	t_da da;
+	int  data[3] = {1, 2, 3};
+	char large_data_blocks[(C_MINI_DA__SZ_ELEM_DFLT + 1) * 3];
+	t_da da = {.array = data, .nb_e = 3, .cap_e = 3, .sz_e = sizeof(int)};
+	t_da da_large_blocks = {
+	    .array = large_data_blocks,
+	    .nb_e  = 3,
+	    .cap_e = 3,
+	    .sz_e  = C_MINI_DA__SZ_ELEM_DFLT + 1,
+	};
+	*(int *)da_at(&da_large_blocks, 0) = 42;
+	*(int *)da_at(&da_large_blocks, 1) = 24;
 
-	da_init(&da, sizeof(int));
-	da_cat_array(&da, (int *)arr_3, 3, sizeof(int));
-	da_swap(&da, 0, 1);
+	assert(da_swap(&da, 0, 1) == true);
 	assert(*(int *)da_at(&da, 0) == 2);
 	assert(*(int *)da_at(&da, 1) == 1);
-	da_destroy(&da);
+	assert(da_swap(&da_large_blocks, 0, 1) == true);
+	assert(*(int *)da_at(&da_large_blocks, 0) == 24);
+	assert(*(int *)da_at(&da_large_blocks, 1) == 42);
+	assert(da_swap(&da, 12, 1) == false);
+	assert(da_swap(&da, 1, 12) == false);
 }
 void test_da_nswap(void) {
-	t_da da;
+	int  data[5] = {1, 2, 3, 4, 5};
+	t_da da      = {.array = data, .nb_e = 5, .cap_e = 5, .sz_e = sizeof(int)};
 
-	da_init(&da, sizeof(int));
-	da_cat_array(&da, (int *)arr_5, 5, sizeof(int));
-	da_nswap(&da, 1, 0, 1); // 2 1 3 4 5
+	assert(da_nswap(&da, 1, 0, 1) == true); // 2 1 3 4 5
 	assert(*(int *)da_at(&da, 0) == 2);
 	assert(*(int *)da_at(&da, 1) == 1);
 	assert(*(int *)da_at(&da, 2) == 3);
 	assert(*(int *)da_at(&da, 3) == 4);
-	da_nswap(&da, 2, 0, 2); // 3 4 2 1 5
+	assert(da_nswap(&da, 2, 0, 2) == true); // 3 4 2 1 5
 	assert(*(int *)da_at(&da, 0) == 3);
 	assert(*(int *)da_at(&da, 1) == 4);
 	assert(*(int *)da_at(&da, 2) == 2);
 	assert(*(int *)da_at(&da, 3) == 1);
-	da_destroy(&da);
+	assert(da_nswap(&da, 0, 0, 2) == true);    // 3 4 2 1 5
+	assert(da_nswap(&da, 99, 0, 2) == false);  // 3 4 2 1 5
+	assert(da_nswap(&da, 1, 99, 2) == false);  // 3 4 2 1 5
+	assert(da_nswap(&da, 1, 0, 99) == false);  // 3 4 2 1 5
+	assert(da_nswap(NULL, 1, 0, 99) == false); // 3 4 2 1 5
+
+	// TODO: large elem swap
 }

@@ -39,27 +39,26 @@
 #		define C_MINI__DA_LOG_FINDFAIL "find Failure"
 
 #		define C_MINI__DA_LOG_SUCCESS "Success"
-#		define C_MINI__DA_LOG_CLR     "Clear (nb elems: %zu -> 0)"
-#		define C_MINI__DA_LOG_ADD     "Add (elem:%p pos:%zu)"
-#		define C_MINI__DA_LOG_GROWTH  "Growth (arr:%p -> %p, cap:%zu -> %zu)"
-#		define C_MINI__DA_LOG_SHRINK  "Shrink (arr:%p -> %p, cap:%zu -> %zu)"
-#		define C_MINI__DA_LOG_CATARR  "Add (elems:%p nb_e:%zu -> %zu)"
-#		define C_MINI__DA_LOG_GET     "Get (pos:%zu)"
-#		define C_MINI__DA_LOG_SWAP    "Swap (nb:%zu, pos1:%zu, pos2:%zu)"
-#		define C_MINI__DA_LOG_RM                                              \
-			"Remove (pos:%zu, nb del:%zu, nb_e:%zu -> %zu)"
-#		define C_MINI__DA_LOG_CONV    "Convert (ret:%p)"
+#		define C_MINI__DA_LOG_CLR     "Clear (nb elems=%zu->0)"
+#		define C_MINI__DA_LOG_ADD     "Add (elem=%p, pos=%zu)"
+#		define C_MINI__DA_LOG_GROWTH  "Growth (arr=%p->%p, cap=%zu->%zu)"
+#		define C_MINI__DA_LOG_SHRINK  "Shrink (arr=%p->%p, cap=%zu->%zu)"
+#		define C_MINI__DA_LOG_CATARR  "Add (elems=%p nb_e=%zu->%zu)"
+#		define C_MINI__DA_LOG_GET     "Get (pos=%zu)"
+#		define C_MINI__DA_LOG_SWAP    "Swap (nb=%zu, pos1=%zu, pos2=%zu)"
+#		define C_MINI__DA_LOG_RM      "Remove (pos=%zu, nb del=%zu, nb_e=%zu->%zu)"
+#		define C_MINI__DA_LOG_CONV    "Convert (ret=%p)"
 #		define C_MINI__DA_LOG_APPLY   "Apply (applied on %zu elements)"
-#		define C_MINI__DA_LOG_REDUCE  "Reduce (ptr:%p)"
-#		define C_MINI__DA_LOG_FOLD    "Fold (ptr:%p)"
+#		define C_MINI__DA_LOG_REDUCE  "Reduce (ptr=%p)"
+#		define C_MINI__DA_LOG_FOLD    "Fold (ptr=%p)"
 #		define C_MINI__DA_LOG_REV     "Reverse (all)"
-#		define C_MINI__DA_LOG_REVF    "Reverse (first n:%zu)"
-#		define C_MINI__DA_LOG_REVB    "Reverse (last n:%zu)"
+#		define C_MINI__DA_LOG_REVF    "Reverse (first=%zu)"
+#		define C_MINI__DA_LOG_REVB    "Reverse (last n=%zu)"
 #		define C_MINI__DA_LOG_SORT    "Sort (all)"
-#		define C_MINI__DA_LOG_NSORT   "Sort (first n:%zu)"
-#		define C_MINI__DA_LOG_FINDGET "Get (elem found:%p, out:%p)"
-#		define C_MINI__DA_LOG_FIND    "Find (at:%zu, e:%p)"
-#		define C_MINI__DA_LOG_SET     "Set (pos:%zu, n:%zu, e:%p)"
+#		define C_MINI__DA_LOG_NSORT   "Sort (first=%zu)"
+#		define C_MINI__DA_LOG_FINDGET "Get (found=%p, out=%p)"
+#		define C_MINI__DA_LOG_FIND    "Find (at=%zu, e=%p)"
+#		define C_MINI__DA_LOG_SET     "Set (pos=%zu, n=%zu, e=%p)"
 
 #	else // || C_MINI__TESTS
 
@@ -183,10 +182,10 @@ bool da_grow_for_size(t_da *da, size_t minimal_free_slots);
 bool da_shrink(t_da *da);
 bool da_shrink_min(t_da *da, size_t keep_n);
 
-void *da_at(t_da *da, size_t pos);
-bool  da_get(t_da *da, size_t pos, void *elem);
-bool  da_nget(t_da *da, size_t n, size_t pos, void *out_buffer);
-void *da_array(t_da *da);
+void *da_at(const t_da *da, size_t pos);
+bool  da_get(const t_da *da, size_t pos, void *elem);
+bool  da_nget(const t_da *da, size_t n, size_t pos, void *out_buffer);
+void *da_array(const t_da *da);
 
 bool da_set(t_da *da, size_t pos, void *elem);
 bool da_nset(t_da *da, size_t n, size_t pos, void *elems);
@@ -199,8 +198,8 @@ bool da_rms_order(t_da *da, size_t start, size_t end);
 bool da_rm(t_da *da, size_t pos);
 bool da_rms(t_da *da, size_t start, size_t end);
 
-void *da_to_array(t_da *da);
-void *da_to_loc_array(t_da *da, void *arr);
+void *da_to_array(const t_da *da);
+void *da_to_loc_array(const t_da *da, void *arr);
 
 void *da_apply(t_da *da, t_callback cb, void *u_data);
 void *da_napply(t_da *da, size_t n, t_callback c, void *u_data);
@@ -232,8 +231,15 @@ bool  da_find_get(t_da *da, t_comparator c, void *u_data, void *out_buffer);
 bool da_sort(t_da *da, t_comparator c);
 bool da_nsort(t_da *da, size_t n, t_comparator c);
 
+bool da_is_valid(const t_da *da);
+bool da_is_not_null(const t_da *da);
+bool da_is_empty(const t_da *da);
+bool da_is_full(const t_da *da);
+
 // BUG:
 // fix bug on rms (gap problem)
+// TODO:
+// fix nget return -> int [-1 err, 0+ nb elem copied]
 
 #	define C_MINI_DA__SZ_ELEM_DFLT 1024
 #	define C_MINI_DA__NB_ELEM_DFLT 4

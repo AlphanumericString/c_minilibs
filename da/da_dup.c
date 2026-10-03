@@ -12,7 +12,7 @@
 t_da da_dup(const t_da *src) {
 	t_da r;
 
-	if (!src) {
+	if (!da_is_valid(src)) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return ((t_da){0});
 	}
@@ -24,7 +24,6 @@ t_da da_dup(const t_da *src) {
 	}
 	return (r);
 }
-
 /**
  * \brief duplicate the first n elements of a dynamic array
  * \param src pointer to the source dynamic array
@@ -35,7 +34,7 @@ t_da da_dup(const t_da *src) {
 t_da da_ndup(const t_da *src, size_t n) {
 	t_da ret = {.array = NULL, .nb_e = 0, .cap_e = 0, .sz_e = 0};
 
-	if (!src || !n) {
+	if (!da_is_valid(src) || !n) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (ret);
 	}
@@ -46,7 +45,6 @@ t_da da_ndup(const t_da *src, size_t n) {
 	LOG(C_MINI__DA_LOG_SUCCESS);
 	return (ret);
 }
-
 /**
  * \brief duplicate a dynamic array into an existing one
  * \param dst pointer to the destination dynamic array
@@ -57,7 +55,7 @@ t_da da_ndup(const t_da *src, size_t n) {
 t_da *da_dup_to(t_da *dst, const t_da *src) {
 	t_da *ret;
 
-	if (!dst || !src) {
+	if (!dst || !da_is_valid(src)) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (dst);
 	}
@@ -69,7 +67,6 @@ t_da *da_dup_to(t_da *dst, const t_da *src) {
 	LOG(C_MINI__DA_LOG_SUCCESS);
 	return (ret);
 }
-
 /**
  * \brief duplicate the first n elements of a dynamic array into an existing one
  * \param dst pointer to the destination dynamic array
@@ -81,8 +78,12 @@ t_da *da_dup_to(t_da *dst, const t_da *src) {
 t_da *da_ndup_to(t_da *dst, size_t n, const t_da *src) {
 	void *pos;
 
-	if (!src || !dst || !n) {
+	if (!da_is_valid(src) || !da_is_valid(dst)) {
 		LOG(C_MINI__DA_LOG_EARG);
+		return (dst);
+	}
+	if (!n) {
+		LOG(C_MINI__DA_LOG_SUCCESS);
 		return (dst);
 	}
 	if (n > src->nb_e) n = src->nb_e;

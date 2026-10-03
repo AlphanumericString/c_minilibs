@@ -12,12 +12,13 @@
  * \ingroup da
 **/
 bool da_advance(t_da *da, size_t n, t_callback deletor, void *u_data) {
-	if (!da) {
+	if (!da_is_not_null(da)) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (false);
 	}
 	if (n >= da->nb_e) {
-		da_apply(da, deletor, u_data), da_clr(da);
+		da_apply(da, deletor, u_data);
+		da_clr(da);
 		LOG(C_MINI__DA_LOG_RM, 0UL, n, da->nb_e + n, da->nb_e);
 		return (true);
 	}

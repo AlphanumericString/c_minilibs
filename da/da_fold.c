@@ -10,14 +10,13 @@
  * \return the folded value
  * \ingroup da
 **/
-void *da_fold(t_da *da, t_merger m, void *u_start_val) {
-	if (!da || !m || !u_start_val) {
+void *da_fold(t_da *da, t_merger m, void *data) {
+	if (!da_is_valid(da) || !m || !data) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (NULL);
 	}
-	return (da_nfold(da, -1, m, u_start_val));
+	return (da_nfold(da, -1, m, data));
 }
-
 /**
  * \brief fold the first n elements of the dynamic array into a single value
  * \param da pointer to the dynamic array
@@ -27,16 +26,16 @@ void *da_fold(t_da *da, t_merger m, void *u_start_val) {
  * \return the folded value
  * \ingroup da
 **/
-void *da_nfold(t_da *da, size_t n, t_merger m, void *u_start_val) {
-	if (!da || !m || !u_start_val) {
+void *da_nfold(t_da *da, size_t n, t_merger m, void *data) {
+	if (!da_is_valid(da) || !m || !data) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (NULL);
 	}
 	if (n > da->nb_e) n = da->nb_e;
 	for (size_t i = 0; i < n; i++)
-		u_start_val = m(da_at(da, i), u_start_val);
-	LOG(C_MINI__DA_LOG_FOLD, u_start_val);
-	return (u_start_val);
+		data = m(da_at(da, i), data);
+	LOG(C_MINI__DA_LOG_FOLD, data);
+	return (data);
 }
 
 /**
@@ -49,7 +48,7 @@ void *da_nfold(t_da *da, size_t n, t_merger m, void *u_start_val) {
 void *da_reduce(t_da *da, t_merger m) {
 	void *r;
 
-	if (!da || !m) {
+	if (!da_is_valid(da) || !m) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (NULL);
 	}
@@ -61,7 +60,6 @@ void *da_reduce(t_da *da, t_merger m) {
 	}
 	return (r);
 }
-
 /**
  * \brief reduce the first n elements of the dynamic array into a newly
  * allocated value
@@ -74,7 +72,7 @@ void *da_reduce(t_da *da, t_merger m) {
 void *da_nreduce(t_da *da, size_t n, t_merger m) {
 	void *bag;
 
-	if (!da || !m) {
+	if (!da_is_valid(da) || !m) {
 		LOG(C_MINI__DA_LOG_EARG);
 		return (NULL);
 	}

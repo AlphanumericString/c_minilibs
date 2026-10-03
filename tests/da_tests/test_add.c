@@ -30,6 +30,14 @@ void test_da_add(void) {
 	assert(((int *)(da.array))[da.nb_e - 1] == 5);
 	ASSERT_DA_STATE(da, sizeof(int), first_growth, 5);
 	da_destroy(&da);
+
+	da_add(NULL, &a);
+	da = (t_da){.array = (void *)0xDEAD, .cap_e = 0, .nb_e = 99, .sz_e = 1};
+	da_add(&da, NULL);
+	da = (t_da){.array = NULL, .cap_e = 99, .nb_e = 99, .sz_e = 1};
+	da_add(&da, (void *)0xDEAD);
+	da = (t_da){.array = (void *)0xDEAD, .cap_e = 0, .nb_e = 99, .sz_e = 1};
+	da_add(&da, (void *)0xDEAD);
 }
 void test_da_cat_array(void) {
 	t_da da;
@@ -51,4 +59,13 @@ void test_da_cat_array(void) {
 	assert(((int *)da.array)[4] == arr2[1]);
 	assert(((int *)da.array)[5] == arr2[2]);
 	da_destroy(&da);
+
+	da = (t_da){.array = (void *)0xDEAD, .cap_e = 99, .nb_e = 99, .sz_e = 1};
+	da_cat_array(&da, NULL, 12, 1);
+	da_cat_array(NULL, (void *)0xDEAD, 12, 1);
+	da_cat_array(&da, (void *)0xDEAD, 12, 0);
+	da = (t_da){.array = NULL, .cap_e = 99, .nb_e = 99, .sz_e = 1};
+	da_cat_array(&da, (void *)0xDEAD, 12, 1);
+	da = (t_da){.array = (void *)0xDEAD, .cap_e = 99, .nb_e = 99, .sz_e = 1};
+	da_cat_array(&da, (void *)0xDEAD, 12, 12);
 }
