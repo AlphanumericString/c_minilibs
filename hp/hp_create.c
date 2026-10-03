@@ -10,15 +10,13 @@
  * \ingroup hp
 **/
 t_heap *hp_create(size_t nb_elems, t_comparator cmp) {
-	t_heap *hp = malloc(sizeof(t_heap));
+	t_heap *hp;
 
-	if (!hp) {
-		LOG(C_MINI__HP_LOG_EARG);
-		return (NULL);
-	}
-	if (hp_init(hp, nb_elems, cmp) == NULL) {
+	hp = malloc(sizeof(t_heap));
+	if (!hp || hp_init(hp, nb_elems, cmp) == NULL) {
+		if (hp) free(hp);
 		LOG(C_MINI__HP_LOG_EALLOC);
-		return (free(hp), NULL);
+		return (NULL);
 	}
 	LOG(C_MINI__HP_LOG_SUCCESS);
 	return (hp);

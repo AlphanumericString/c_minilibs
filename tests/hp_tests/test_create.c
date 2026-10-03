@@ -26,4 +26,5 @@ void test_hp_init(void) {
 	assert(h.capacity == 32);
 	assert(h.nb == 0);
 	hp_delete(&h);
+	assert(hp_init(NULL, 32, cmp_rawptr) == NULL);
 }

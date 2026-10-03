@@ -27,6 +27,7 @@ void test_hp_min_pop(void) {
 	r = hp_min_pop(&hp);
 	assert(r == (void *)0x42);
 	assert(hp_min_pop(&hp) == NULL);
+	assert(hp_min_pop(NULL) == NULL);
 	hp_delete(&hp);
 	return;
 }
@@ -42,6 +43,7 @@ void test_hp_max_pop(void) {
 	assert(hp_max_pop(&hp) == (void *)0x41);
 	assert(hp_max_pop(&hp) == (void *)0x40);
 	assert(hp_max_pop(&hp) == NULL);
+	assert(hp_max_pop(NULL) == NULL);
 	hp_delete(&hp);
 	return;
 }

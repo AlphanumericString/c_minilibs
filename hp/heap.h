@@ -109,7 +109,9 @@ typedef struct s_heap {
 
 t_heap *hp_create(size_t nb_elems, t_comparator cmp);
 t_heap *hp_init(t_heap *hp, size_t nb_elems, t_comparator cmp);
+// TODO: hp_init_from_array(hp, arr, nb_elems, cmp)
 
+// TODO: switch return to bool + add test checking return
 void hp_delete(t_heap *hp);
 void hp_free(t_heap *hp);
 void hp_clear(t_heap *hp);
