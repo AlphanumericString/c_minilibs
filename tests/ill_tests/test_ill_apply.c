@@ -15,7 +15,7 @@ static bool stop_at_30(void *elem, void *arg) {
 	return n->value != 30;
 }
 
-void test_ill_apply(void) {
+void test_ill_foreach(void) {
 	t_test_node n1, n2, n3;
 	t_ill      *head = NULL;
 

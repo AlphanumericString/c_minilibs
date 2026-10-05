@@ -12,8 +12,8 @@ void idl_append(t_idl *anchor, t_idl *node) {
 		return;
 	}
 	node->next = anchor->next;
+	node->prev = anchor;
 	if (anchor->next) anchor->next->prev = node;
-	node->prev   = anchor;
 	anchor->next = node;
 	LOG(C_MINI__IDL_LOG_SUCCESS);
 }
@@ -24,15 +24,19 @@ void idl_append(t_idl *anchor, t_idl *node) {
  * \ingroup idl
 **/
 void idl_nappend(t_idl *anchor, t_idl *nodes) {
+	t_idl *first_node, *last_node;
+
 	if (!anchor || !nodes) {
 		LOG(C_MINI__IDL_LOG_EARG);
 		return;
 	}
-	t_idl *tail = idl_get_tail(nodes);
-	tail->next  = anchor->next;
-	if (anchor->next) anchor->next->prev = tail;
-	anchor->next = nodes;
-	nodes->prev  = anchor;
+	last_node  = idl_get_tail(nodes);
+	first_node = idl_get_head(nodes);
+
+	last_node->next  = anchor->next;
+	first_node->prev = anchor;
+	if (anchor->next) anchor->next->prev = last_node;
+	anchor->next = first_node;
 	LOG(C_MINI__IDL_LOG_SUCCESS);
 }
 
@@ -47,11 +51,10 @@ void idl_prepend(t_idl *anchor, t_idl *node) {
 		LOG(C_MINI__IDL_LOG_EARG);
 		return;
 	}
-	t_idl *anchor_prev = anchor->prev;
-	node->next         = anchor;
-	anchor->prev       = node;
-	node->prev         = anchor_prev;
-	if (anchor_prev) anchor_prev->next = node;
+	node->prev = anchor->prev;
+	if (anchor->prev) anchor->prev->next = node;
+	node->next   = anchor;
+	anchor->prev = node;
 	LOG(C_MINI__IDL_LOG_SUCCESS);
 }
 /**
@@ -62,18 +65,18 @@ void idl_prepend(t_idl *anchor, t_idl *node) {
  * \ingroup idl
 **/
 void idl_nprepend(t_idl *anchor, t_idl *nodes) {
-	t_idl *anchor_prev;
-	t_idl *last_node;
+	t_idl *last_node, *first_node;
 
 	if (!anchor || !nodes) {
 		LOG(C_MINI__IDL_LOG_EARG);
 		return;
 	}
-	last_node       = idl_get_tail(nodes);
-	anchor_prev     = anchor->prev;
-	last_node->next = anchor;
-	anchor->prev    = last_node;
-	nodes->prev     = anchor_prev;
-	if (anchor_prev) anchor_prev->next = nodes;
+	last_node  = idl_get_tail(nodes);
+	first_node = idl_get_head(nodes);
+
+	first_node->prev = anchor->prev;
+	last_node->next  = anchor;
+	if (anchor->prev) anchor->prev->next = first_node;
+	anchor->prev = last_node;
 	LOG(C_MINI__IDL_LOG_SUCCESS);
 }

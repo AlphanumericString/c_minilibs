@@ -31,7 +31,7 @@ void *idl_copy(const t_idl *head, t_duplicator d) {
 	void  *elem;
 	void  *nh = NULL;
 
-	if (!head) {
+	if (!head || !d) {
 		LOG(C_MINI__IDL_LOG_EARG);
 		return (NULL);
 	}

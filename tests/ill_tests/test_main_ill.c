@@ -23,7 +23,7 @@ void ill_main(void) {
 	LOG("");
 	test_ill_length();
 	LOG("");
-	test_ill_apply();
+	test_ill_foreach();
 	LOG("");
 	test_ill_reverse();
 
@@ -47,10 +47,11 @@ void idl_main(void) {
 	test_idl_get();
 	LOG("");
 	test_idl_gettail();
+	test_idl_gethead();
 	LOG("");
 	test_idl_length();
 	LOG("");
-	test_idl_apply();
+	test_idl_foreach();
 	LOG("");
 	test_idl_reverse();
 
