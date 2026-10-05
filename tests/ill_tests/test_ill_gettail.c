@@ -11,13 +11,12 @@ void test_ill_gettail(void) {
 	ill_init(&n3.node, offsetof(t_test_node, node));
 
 	assert(ill_get_tail(head) == NULL);
-
 	ill_push_back(&head, &n1.node);
 	assert(ill_get_tail(head) == &n1.node);
-
 	ill_push_back(&head, &n2.node);
 	assert(ill_get_tail(head) == &n2.node);
-
 	ill_push_back(&head, &n3.node);
 	assert(ill_get_tail(head) == &n3.node);
+
+	assert(ill_get_tail(NULL) == NULL);
 }

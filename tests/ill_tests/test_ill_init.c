@@ -18,6 +18,7 @@ void test_ill_init(void) {
 	t_test_node node;
 
 	ill_init(&node.node, offsetof(t_test_node, node));
+	ill_init(NULL, offsetof(t_test_node, node));
 
 	assert(node.node.offset == offsetof(t_test_node, node));
 	assert(node.node.next == NULL);
@@ -36,6 +37,8 @@ void test_ill_init(void) {
 	assert(copy->id == 1);
 	assert(copy->value == 42);
 	assert(copy->node.next != NULL);
+	assert(ill_copy(&node.node, NULL) == NULL);
+	assert(ill_copy(NULL, duplicate_node) == NULL);
 
 	t_test_node *copy_next = (t_test_node *)ill_ntoe(copy->node.next);
 	assert(copy_next->id == 2);

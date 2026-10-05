@@ -30,7 +30,7 @@ t_ill *ill_remove_after(t_ill *prev) {
 bool ill_remove_node(t_ill **head, t_ill *target) {
 	t_ill *prev;
 
-	if (!*head || !target) {
+	if (!head || !*head || !target) {
 		LOG(C_MINI__ILL_LOG_EARG);
 		return false;
 	}

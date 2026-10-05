@@ -16,7 +16,7 @@ void ill_init(t_ill *node, size_t offset) {
 	LOG(C_MINI__ILL_LOG_SUCCESS);
 }
 
-static void setup_chain(t_ill *to_setup, t_ill *nxt, size_t offset) {
+static inline void setup_chain(t_ill *to_setup, t_ill *nxt, size_t offset) {
 	to_setup->next   = nxt;
 	to_setup->offset = offset;
 }
@@ -32,35 +32,32 @@ static void setup_chain(t_ill *to_setup, t_ill *nxt, size_t offset) {
 **/
 void *ill_copy(const t_ill *head, t_duplicator dupper) {
 	size_t offset;
-	void  *e_curr;
-	t_ill *prv;
-	void  *new_head;
+	void  *e_cpy = NULL;
+	t_ill *prev  = NULL;
+	void  *nh    = NULL;
 
-	if (!head) {
+	if (!head || !dupper) {
 		LOG(C_MINI__ILL_LOG_EARG);
 		return (NULL);
 	}
 	offset = head->offset;
-	e_curr = dupper(ill_ntoe(head));
-	if (!e_curr) {
-		LOG(C_MINI__ILL_LOG_EALLOC);
-		return (NULL);
-	}
-	new_head = e_curr;
-	prv      = ill_eton(e_curr, offset);
-	head     = head->next;
 	while (head) {
-		e_curr = dupper(ill_ntoe(head));
-		if (!e_curr) {
+		e_cpy = dupper(ill_ntoe(head));
+		if (!e_cpy) {
 			LOG(C_MINI__ILL_LOG_EALLOC);
-			// TODO: maybe a clearlist here from new_head if fail on dupper?
+			// TODO: maybe clearlist here from new_head if fail on dupper?
 			break;
 		}
-		setup_chain(prv, ill_eton(e_curr, offset), offset);
-		prv  = prv->next;
+		if (!prev) {
+			nh   = e_cpy;
+			prev = ill_eton(e_cpy, offset);
+		} else {
+			setup_chain(prev, ill_eton(e_cpy, offset), offset);
+			prev = prev->next;
+		}
 		head = head->next;
 	}
-	setup_chain(prv, NULL, offset);
+	setup_chain(prev, NULL, offset);
 	LOG(C_MINI__ILL_LOG_SUCCESS);
-	return (new_head);
+	return (nh);
 }

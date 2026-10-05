@@ -49,14 +49,13 @@ bool ill_for(t_ill *head, size_t n, t_callback c, void *u_data) {
 		return (false);
 	}
 	curr = head;
-	while (curr && n) {
+	while (curr && n--) {
 		nxt = curr->next;
 		if (!c(ill_ntoe(curr), u_data)) {
 			LOG(C_MINI__ILL_LOG_ECB);
 			return (false);
 		}
 		curr = nxt;
-		n--;
 	}
 	LOG(C_MINI__ILL_LOG_SUCCESS);
 	return (true);

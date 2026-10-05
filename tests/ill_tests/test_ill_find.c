@@ -13,18 +13,14 @@ void test_ill_find(void) {
 	ill_push_back(&head, &n1.node);
 	ill_push_back(&head, &n2.node);
 
-	t_ill *found = ill_find(head, &n2.node);
-	assert(found == &n2.node);
+	assert(ill_find(head, &n2.node) == &n2.node);
+	assert(ill_find(head, &n3.node) == NULL);
+	assert(ill_find(head, NULL) == NULL);
+	assert(ill_find(NULL, &n2.node) == NULL);
 
-	t_ill *not_found = ill_find(head, &n3.node);
-	assert(not_found == NULL);
-
-	t_ill *prev = ill_find_prev(head, &n2.node);
-	assert(prev == &n1.node);
-
-	t_ill *prev_head = ill_find_prev(head, &n1.node);
-	assert(prev_head == NULL);
-
-	t_ill *prev_not_found = ill_find_prev(head, &n3.node);
-	assert(prev_not_found == NULL);
+	assert(ill_find_prev(head, &n2.node) == &n1.node);
+	assert(ill_find_prev(head, head) == NULL);
+	assert(ill_find_prev(head, &n3.node) == NULL);
+	assert(ill_find_prev(head, NULL) == NULL);
+	assert(ill_find_prev(NULL, &n2.node) == NULL);
 }

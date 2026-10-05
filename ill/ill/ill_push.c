@@ -8,7 +8,7 @@
  * \ingroup ill
 **/
 t_ill *ill_push(t_ill **head, t_ill *node) {
-	if (!head) {
+	if (!head || !node) {
 		LOG(C_MINI__ILL_LOG_EARG);
 		return (NULL);
 	}
@@ -25,7 +25,7 @@ t_ill *ill_push(t_ill **head, t_ill *node) {
  * \ingroup ill
 **/
 t_ill *ill_npush(t_ill **head, t_ill *nodes) {
-	if (!head) {
+	if (!head || !nodes) {
 		LOG(C_MINI__ILL_LOG_EARG);
 		return (NULL);
 	}
@@ -42,7 +42,7 @@ t_ill *ill_npush(t_ill **head, t_ill *nodes) {
  * \ingroup ill
 **/
 t_ill *ill_push_back(t_ill **head, t_ill *node) {
-	if (!head) {
+	if (!head || !node) {
 		LOG(C_MINI__ILL_LOG_EARG);
 		return (NULL);
 	}

@@ -9,7 +9,7 @@
 t_ill *ill_pop(t_ill **head) {
 	t_ill *to_remove;
 
-	if (!*head) {
+	if (!head || !*head) {
 		LOG(C_MINI__ILL_LOG_EARG);
 		return NULL;
 	}
@@ -29,7 +29,7 @@ t_ill *ill_pop_back(t_ill **head) {
 	t_ill *to_remove;
 	t_ill *ret;
 
-	if (!*head) {
+	if (!head || !*head) {
 		LOG(C_MINI__ILL_LOG_EARG);
 		return NULL;
 	}

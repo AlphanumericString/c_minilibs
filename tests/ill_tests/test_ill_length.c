@@ -23,7 +23,9 @@ void test_ill_length(void) {
 	n4.value = 4;
 
 	assert(ill_length(head) == 0);
+	assert(ill_length(NULL) == 0);
 	assert(ill_nlength(head, 10) == 0);
+	assert(ill_nlength(NULL, 10) == 0);
 
 	ill_push_back(&head, &n1.node);
 	ill_push_back(&head, &n2.node);
@@ -34,6 +36,7 @@ void test_ill_length(void) {
 	assert(ill_nlength(head, 2) == 2);
 	assert(ill_nlength(head, 10) == 4);
 
-	size_t matches = ill_match_nb(head, is_even, NULL);
-	assert(matches == 2);
+	assert(ill_match_nb(head, is_even, NULL) == 2);
+	assert(ill_match_nb(head, NULL, NULL) == 0);
+	assert(ill_match_nb(NULL, is_even, NULL) == 0);
 }
