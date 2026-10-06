@@ -16,7 +16,9 @@ static int cmp_min_max(void *elem1, void *elem2) {
 
 void test_ill_get(void) {
 	t_test_node n1, n2, n3;
-	t_ill      *head = NULL;
+	t_ill      *head  = NULL;
+	int         val20 = 20;
+	int         val40 = 40;
 
 	ill_init(&n1.node, offsetof(t_test_node, node));
 	ill_init(&n2.node, offsetof(t_test_node, node));
@@ -30,29 +32,31 @@ void test_ill_get(void) {
 	ill_push_back(&head, &n2.node);
 	ill_push_back(&head, &n3.node);
 
-	int    val20 = 20;
-	t_ill *get20 = ill_get(head, cmp_val, &val20);
-	assert(get20 == &n2.node);
+	assert(ill_get(head, cmp_val, &val20) == &n2.node);
+	assert(ill_get(head, cmp_val, &val40) == NULL);
+	assert(ill_get(head, NULL, &val40) == NULL);
+	assert(ill_get(NULL, cmp_val, &val40) == NULL);
 
-	int    val40 = 40;
-	t_ill *get40 = ill_get(head, cmp_val, &val40);
-	assert(get40 == NULL);
+	assert(ill_get_prev(head, cmp_val, &val20) == &n1.node);
+	assert(ill_get_prev(head, cmp_val, &val40) == NULL);
+	assert(ill_get_prev(head, NULL, &val40) == NULL);
+	assert(ill_get_prev(NULL, cmp_val, &val40) == NULL);
 
-	t_ill *get_prev20 = ill_get_prev(head, cmp_val, &val20);
-	assert(get_prev20 == &n1.node);
+	assert(ill_get_min(head, cmp_min_max) == &n1);
+	assert(ill_get_max(head, cmp_min_max) == &n3);
+	n1.value = 30;
+	n2.value = 20;
+	n3.value = 10;
+	assert(ill_get_min(head, cmp_min_max) == &n3);
+	assert(ill_get_max(head, cmp_min_max) == &n1);
 
-	t_test_node *min_node = (t_test_node *)ill_get_min(head, cmp_min_max);
-	assert(min_node == &n1);
+	assert(ill_get_min(NULL, cmp_min_max) == NULL);
+	assert(ill_get_min(head, NULL) == NULL);
+	assert(ill_get_max(NULL, cmp_min_max) == NULL);
+	assert(ill_get_max(head, NULL) == NULL);
 
-	t_test_node *max_node = (t_test_node *)ill_get_max(head, cmp_min_max);
-	assert(max_node == &n3);
-
-	t_test_node *kth0 = (t_test_node *)ill_get_kth(head, 0);
-	assert(kth0 == &n1);
-
-	t_test_node *kth1 = (t_test_node *)ill_get_kth(head, 1);
-	assert(kth1 == &n2);
-
-	t_test_node *kth3 = (t_test_node *)ill_get_kth(head, 3);
-	assert(kth3 == NULL);
+	assert(ill_get_kth(head, 0) == &n1);
+	assert(ill_get_kth(head, 1) == &n2);
+	assert(ill_get_kth(head, 3) == NULL);
+	assert(ill_get_kth(NULL, 0) == NULL);
 }

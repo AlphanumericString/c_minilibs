@@ -36,7 +36,18 @@ bool idl_is_circular(t_idl *head) {
 		if (fast->next) fast = fast->next->next;
 		else fast = fast->next;
 		slow = slow->next;
-		if (slow == fast) {
+		if (fast && slow == fast) {
+			LOG(C_MINI__IDL_LOG_SUCCESS);
+			return (true);
+		}
+	}
+	slow = head;
+	fast = head;
+	while (fast) {
+		if (fast->prev) fast = fast->prev->prev;
+		else fast = fast->prev;
+		slow = slow->prev;
+		if (fast && slow == fast) {
 			LOG(C_MINI__IDL_LOG_SUCCESS);
 			return (true);
 		}
@@ -64,7 +75,7 @@ bool idl_is_sorted(t_idl *head, t_comparator comparator) {
 	}
 	if (!head->next) return (true);
 	prev = 0;
-	while (head && head->next) {
+	while (head->next) {
 		p   = idl_ntoe(head);
 		ord = comparator(p, idl_ntoe(head->next));
 		if (prev <= 0 && ord < 0) prev = -1;

@@ -7,11 +7,8 @@ void test_ill_ntoe(void) {
 
 	ill_init(&node.node, offsetof(t_test_node, node));
 
-	t_test_node *elem = ill_ntoe(&node.node);
-
-	assert(elem == &node);
-
-	t_ill *node_ptr = ill_eton(&node, offsetof(t_test_node, node));
-
-	assert(node_ptr == &node.node);
+	assert(ill_ntoe(&node.node) == &node);
+	assert(ill_ntoe(NULL) == NULL);
+	assert(ill_eton(&node, offsetof(t_test_node, node)) == &node.node);
+	assert(ill_eton(NULL, offsetof(t_test_node, node)) == NULL);
 }

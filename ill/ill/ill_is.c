@@ -36,7 +36,7 @@ bool ill_is_circular(t_ill *head) {
 		if (fast->next) fast = fast->next->next;
 		else fast = fast->next;
 		slow = slow->next;
-		if (slow == fast) {
+		if (fast && slow == fast) {
 			LOG(C_MINI__ILL_LOG_SUCCESS);
 			return (true);
 		}
@@ -58,12 +58,16 @@ bool ill_is_sorted(t_ill *head, t_comparator comparator) {
 	int   prev;
 	int   ord;
 
-	if (!head || !head->next || !comparator) {
+	if (!head || !comparator) {
 		LOG(C_MINI__ILL_LOG_EARG);
+		return (false);
+	}
+	if (!head->next) {
+		LOG(C_MINI__ILL_LOG_SUCCESS);
 		return (true);
 	}
 	prev = 0;
-	while (head && head->next) {
+	while (head->next) {
 		p   = ill_ntoe(head);
 		ord = comparator(p, ill_ntoe(head->next));
 		if (prev <= 0 && ord < 0) prev = -1;
