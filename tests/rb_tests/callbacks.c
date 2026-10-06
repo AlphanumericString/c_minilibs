@@ -30,6 +30,14 @@ int cb_cmp(void *a, void *b) {
 	return *(int *)a - *(int *)b;
 }
 
+void *cb_dup_fail3(const void *elem) {
+	int *res;
+
+	if (*(int *)elem == 3) return (NULL);
+	res = malloc(sizeof(int));
+	if (res) *res = *(const int *)elem;
+	return res;
+}
 void *cb_dup(const void *elem) {
 	int *res = malloc(sizeof(int));
 	if (res) *res = *(const int *)elem;

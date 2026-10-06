@@ -11,39 +11,22 @@
  * \ingroup rb
 **/
 t_rb *rb_grow(t_rb *rb, size_t nb_elem_added) {
-	t_rb  *new_rb;
-	size_t count;
-	size_t first_part;
+	t_rb *new_rb;
 
 	if (!rb) {
 		LOG(C_MINI__RB_LOG_EARG);
 		return NULL;
 	}
 	new_rb = malloc(sizeof(t_rb));
-	if (!new_rb) {
+	if (!rb_create(new_rb, rb->sz_e, rb->nb_max + nb_elem_added)) {
+		if (new_rb) free(new_rb);
 		LOG(C_MINI__RB_LOG_EALLOC);
 		return NULL;
 	}
-	if (!rb_create(new_rb, rb->sz_e, rb->nb_max + nb_elem_added)) {
-		LOG(C_MINI__RB_LOG_EALLOC);
-		return (free(new_rb), NULL);
-	}
-	count = rb_size(*rb);
-	if (count > 0) {
-		if (rb->o_pos <= rb->i_pos) {
-			memcpy(new_rb->array, rb->array + (rb->o_pos * rb->sz_e),
-			       count * rb->sz_e);
-		} else {
-			first_part = rb->nb_max - rb->o_pos;
-			memcpy(new_rb->array, rb->array + (rb->o_pos * rb->sz_e),
-			       first_part * rb->sz_e);
-			memcpy(new_rb->array + (first_part * rb->sz_e), rb->array,
-			       rb->i_pos * rb->sz_e);
-		}
-	}
+	rb_nat(*rb, 0, -1, new_rb->array);
 	new_rb->o_pos = 0;
-	new_rb->i_pos = count;
-	new_rb->count = count;
+	new_rb->count = rb_size(*rb);
+	new_rb->i_pos = new_rb->count;
 	LOG(C_MINI__RB_LOG_SUCCESS);
 	return new_rb;
 }

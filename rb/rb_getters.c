@@ -3,22 +3,22 @@
 /**
  * \brief true if rb is full, false otherwise
  * \param rb the round buffer
- * \return true if full, false otherwise
+ * \return true if full, false otherwise (also fail if !array)
  * \ingroup rb
 **/
 bool rb_full(t_rb rb) {
 	LOG(C_MINI__RB_LOG_SUCCESS);
-	return (rb.count == rb.nb_max);
+	return (rb.array && rb.count == rb.nb_max);
 }
 /**
  * \brief true if rb is empty, false otherwise
  * \param rb the round buffer
- * \return true if empty, false otherwise
+ * \return true if empty or no array, false otherwise
  * \ingroup rb
 **/
 bool rb_empty(t_rb rb) {
 	LOG(C_MINI__RB_LOG_SUCCESS);
-	return (rb.count == 0);
+	return (!rb.array || rb.count == 0);
 }
 /**
  * \brief return number of entries in rb not yet read/poped
@@ -37,6 +37,10 @@ size_t rb_size(t_rb rb) {
  * \ingroup rb
 **/
 size_t rb_capacity(t_rb rb) {
+	if (!rb.array) {
+		LOG(C_MINI__RB_LOG_EARG);
+		return (0);
+	}
 	LOG(C_MINI__RB_LOG_SUCCESS);
 	return (rb.nb_max);
 }

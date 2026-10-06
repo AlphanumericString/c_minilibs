@@ -36,12 +36,13 @@ void rb_clr(t_rb *rb) {
  * \param rb the round buffer to free
  * \ingroup rb
 **/
-void rb_free(t_rb *rb) {
-	if (!rb) {
+void rb_free(t_rb **rb) {
+	if (!rb || !*rb) {
 		LOG(C_MINI__RB_LOG_EARG);
 		return;
 	}
-	rb_destroy(rb);
-	free(rb);
+	rb_destroy(*rb);
+	free(*rb);
+	*rb = NULL;
 	LOG(C_MINI__RB_LOG_SUCCESS);
 }

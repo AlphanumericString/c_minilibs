@@ -14,9 +14,9 @@ void rb_push(t_rb *rb, const void *data) {
 		return;
 	}
 	memcpy(rb->array + (rb->i_pos * rb->sz_e), data, rb->sz_e);
-	if ((rb->i_pos + 1) % rb->nb_max == rb->o_pos) {
-		rb->o_pos = (rb->o_pos + 1) % rb->nb_max;
-	}
+	// if ((rb->i_pos + 1) % rb->nb_max == rb->o_pos) {
+	// 	rb->o_pos = (rb->o_pos + 1) % rb->nb_max;
+	// }
 	rb->i_pos = (rb->i_pos + 1) % rb->nb_max;
 	rb->count++;
 	LOG(C_MINI__RB_LOG_SUCCESS);
@@ -74,7 +74,7 @@ bool rb_npush_safe(t_rb *rb, const void *data, size_t n) {
 		LOG(C_MINI__RB_LOG_EARG);
 		return (false);
 	}
-	if (rb_size(*rb) + n == rb_capacity(*rb)) {
+	if (rb_size(*rb) + n > rb_capacity(*rb)) {
 		LOG(C_MINI__RB_LOG_ESPACE);
 		return (false);
 	}

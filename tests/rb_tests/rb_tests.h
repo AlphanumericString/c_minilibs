@@ -20,6 +20,7 @@ bool  cb_add_one(void *elem, void *arg);
 bool  cb_dump_int(void *elem, void *arg);
 int   cb_cmp(void *a, void *b);
 void *cb_dup(const void *elem);
+void *cb_dup_fail3(const void *elem);
 void  cb_destroy(void *elem);
 
 void test_rb_create(void);
@@ -27,6 +28,7 @@ void test_rb_init(void);
 void test_rb_from_array(void);
 void test_rb_new(void);
 
+void test_rb_free(void);
 void test_rb_destroy(void);
 void test_rb_clr(void);
 

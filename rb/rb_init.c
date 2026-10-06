@@ -42,21 +42,21 @@ t_rb *rb_init(t_rb *rb, size_t sz_elem) {
 	ret = rb_create(rb, sz_elem, C_MINI_RB_NB_ELEM_DFLT);
 	if (!ret) {
 		LOG(C_MINI__RB_LOG_FAIL);
-	} else {
-		LOG(C_MINI__RB_LOG_SUCCESS);
+		return (NULL);
 	}
+	LOG(C_MINI__RB_LOG_SUCCESS);
 	return (ret);
 }
 /**
  * \brief populate rb from given values, does not allocate array
  * \param rb the round buffer to populate
  * \param array the pre-allocated array to use
- * \param nb_elem number of elements the array can hold
+ * \param arr_cap number of elements the array can hold
  * \param sz_elem size of each element
  * \return the populated round buffer
  * \ingroup rb
 **/
-t_rb *rb_from_array(t_rb *rb, void *array, size_t nb_elem, size_t sz_elem) {
+t_rb *rb_from_array(t_rb *rb, void *array, size_t arr_cap, size_t sz_elem) {
 	if (!rb) {
 		LOG(C_MINI__RB_LOG_EARG);
 		return (NULL);
@@ -64,7 +64,7 @@ t_rb *rb_from_array(t_rb *rb, void *array, size_t nb_elem, size_t sz_elem) {
 	rb->i_pos  = 0;
 	rb->o_pos  = 0;
 	rb->sz_e   = sz_elem;
-	rb->nb_max = nb_elem;
+	rb->nb_max = arr_cap;
 	rb->array  = array;
 	rb->count  = 0;
 	LOG(C_MINI__RB_LOG_SUCCESS);
@@ -78,14 +78,16 @@ t_rb *rb_from_array(t_rb *rb, void *array, size_t nb_elem, size_t sz_elem) {
 **/
 t_rb *rb_new(size_t sz_elem) {
 	t_rb *ret;
+
 	if (!sz_elem) {
 		LOG(C_MINI__RB_LOG_EARG);
 		return (NULL);
 	}
 	ret = malloc(sizeof(t_rb));
 	if (rb_init(ret, sz_elem) == NULL) {
+		if (ret) free(ret);
 		LOG(C_MINI__RB_LOG_EALLOC);
-		return (free(ret), NULL);
+		return (NULL);
 	}
 	LOG(C_MINI__RB_LOG_SUCCESS);
 	return (ret);

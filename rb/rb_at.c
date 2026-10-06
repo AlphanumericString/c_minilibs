@@ -34,7 +34,7 @@ void *rb_at(t_rb rb, size_t idx) {
 **/
 void *rb_nat(t_rb rb, size_t idx, size_t n, void *buff) {
 	size_t start_pos;
-	size_t count;
+	size_t max;
 	size_t first_chunk;
 	size_t second_chunk;
 
@@ -42,8 +42,8 @@ void *rb_nat(t_rb rb, size_t idx, size_t n, void *buff) {
 		LOG(C_MINI__RB_LOG_EARG);
 		return NULL;
 	}
-	count = rb_size(rb) - idx;
-	if (n > count) n = count;
+	max = rb_size(rb);
+	if (n > max) n = max;
 	start_pos = (rb.o_pos + idx) % rb.nb_max;
 	if (start_pos + n <= rb.nb_max) {
 		memcpy(buff, rb.array + (start_pos * rb.sz_e), n * rb.sz_e);

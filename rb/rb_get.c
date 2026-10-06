@@ -25,6 +25,7 @@ void *rb_get(const t_rb *rb, t_comparator comp, const void *arg, void *buffer) {
 		LOG(C_MINI__RB_LOG_SUCCESS);
 		return (memcpy(buffer, elem, rb->sz_e));
 	}
+	// TODO: zero-out buffer on fail?
 	LOG(C_MINI__RB_LOG_FAIL);
 	return NULL;
 }
@@ -58,16 +59,16 @@ void *rb_nget(const t_rb *rb, size_t n, t_comparator comp, const void *arg,
 	while (i < count) {
 		elem = rb->array + (pos * rb->sz_e);
 		if (comp(elem, (void *)arg) == 0) {
-			if (rb_nat(*rb, i, n, buffer)) {
-				LOG(C_MINI__RB_LOG_SUCCESS);
-				return buffer;
-			}
-			LOG(C_MINI__RB_LOG_FAIL);
-			return NULL;
+			rb_nat(*rb, i, n, buffer);
+			LOG(C_MINI__RB_LOG_SUCCESS);
+			return buffer;
 		}
 		pos = (pos + 1) % rb->nb_max;
 		i++;
 	}
 	LOG(C_MINI__RB_LOG_FAIL);
+	// TODO: maybe null buffer?
 	return NULL;
 }
+// note: rb_nat at line 18 of funct: no fail branch since rb_nat only checks
+//	buff, idx and rb. No fail condition possible otherwise

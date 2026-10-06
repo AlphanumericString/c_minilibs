@@ -10,6 +10,8 @@ void test_rb_push(void) {
 
 	rb_push(&rb, &val);
 	assert(rb_size(rb) == 1);
+	rb_push(&rb, NULL);
+	rb_push(NULL, &val);
 
 	rb_destroy(&rb);
 }
@@ -22,6 +24,8 @@ void test_rb_npush(void) {
 
 	rb_npush(&rb, arr, 3);
 	assert(rb_size(rb) == 3);
+	rb_npush(&rb, NULL, 12);
+	rb_npush(NULL, arr, 12);
 
 	rb_destroy(&rb);
 }
@@ -35,6 +39,8 @@ void test_rb_push_safe(void) {
 	assert(rb_push_safe(&rb, &val) == true);
 	assert(rb_push_safe(&rb, &val) == true);
 	assert(rb_push_safe(&rb, &val) == false);
+	assert(rb_push_safe(NULL, &val) == false);
+	assert(rb_push_safe(&rb, false) == false);
 
 	rb_destroy(&rb);
 }
@@ -50,7 +56,13 @@ void test_rb_npush_safe(void) {
 	rb_destroy(&rb);
 	rb_create(&rb, sizeof(int), 4);
 	assert(rb_npush_safe(&rb, arr, 3) == true);
-	assert(rb_size(rb) == 3);
+	assert(rb_size(rb) == 3 && rb_capacity(rb) == 4);
+	assert(rb_npush_safe(&rb, arr, 2) == false);
+	assert(rb_size(rb) == 3 && rb_capacity(rb) == 4);
+	assert(rb_npush_safe(&rb, arr, 1) == true);
+	assert(rb_size(rb) == 4 && rb_capacity(rb) == 4);
+	assert(rb_npush_safe(&rb, NULL, 12) == false);
+	assert(rb_npush_safe(NULL, arr, 12) == false);
 
 	rb_destroy(&rb);
 }
