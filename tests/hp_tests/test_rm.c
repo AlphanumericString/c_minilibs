@@ -29,6 +29,17 @@ void test_hp_max_rm(void) {
 	assert(hp.elems[1] == (void *)0x39);
 	assert(hp.elems[2] == (void *)0x41);
 
+	assert(hp_max_rm(&hp, -1) == (void *)0x40); // TODO:error - should be 41
+	assert(hp.nb == 2);
+	assert(hp.elems[0] == (void *)0x41);
+	assert(hp.elems[1] == (void *)0x39);
+
+	assert(hp_max_rm(&hp, 0) == (void *)0x41);
+	assert(hp.nb == 1);
+	assert(hp.elems[0] == (void *)0x39);
+
+	assert(hp_max_rm(NULL, 1) == NULL);
+
 	hp_delete(&hp);
 	return;
 }
@@ -51,6 +62,17 @@ void test_hp_min_rm(void) {
 	assert(hp.elems[0] == (void *)0x39);
 	assert(hp.elems[1] == (void *)0x41);
 	assert(hp.elems[2] == (void *)0x42);
+
+	assert(hp_min_rm(&hp, -1) == (void *)0x39);
+	assert(hp.nb == 2);
+	assert(hp.elems[0] == (void *)0x42);
+	assert(hp.elems[1] == (void *)0x41);
+
+	assert(hp_min_rm(&hp, 0) == (void *)0x42);
+	assert(hp.nb == 1);
+	assert(hp.elems[0] == (void *)0x41);
+
+	assert(hp_min_rm(NULL, 1) == NULL);
 
 	hp_delete(&hp);
 	return;

@@ -8,6 +8,12 @@ static int cmp_rawptr(const void *a, const void *b) {
 	return (0);
 }
 
+// TODO: add fail test at 0-5 sweeping through values to test random error in
+// process for base but also 'pre/post/in'
+static bool fail_at(void *hp_elem, void *value) {
+	return (hp_elem != value);
+}
+
 static bool log_order(void *hp_elem, void *_order) {
 	void **order = (void **)_order;
 	size_t i;
@@ -29,13 +35,21 @@ void test_hp_foreach(void) {
 	hp_max_push(&h, (void *)0x43);
 	hp_max_push(&h, (void *)0x44);
 
-	hp_foreach(&h, log_order, &order);
+	assert(hp_foreach(&h, log_order, &order) == true);
 	assert(order[0] == (void *)0x44);
 	assert(order[1] == (void *)0x43);
 	assert(order[2] == (void *)0x41);
 	assert(order[3] == (void *)0x40);
 	assert(order[4] == (void *)0x42);
 	assert(order[5] == NULL);
+	assert(hp_foreach(NULL, log_order, &order) == false);
+	assert(hp_foreach(&h, NULL, &order) == false);
+	assert(hp_foreach(&h, fail_at, (void *)0x40L) == false);
+	assert(hp_foreach(&h, fail_at, (void *)0x41L) == false);
+	assert(hp_foreach(&h, fail_at, (void *)0x42L) == false);
+	assert(hp_foreach(&h, fail_at, (void *)0x43L) == false);
+	assert(hp_foreach(&h, fail_at, (void *)0x44L) == false);
+
 	hp_delete(&h);
 }
 void test_hp_foreach_in(void) {
@@ -49,13 +63,21 @@ void test_hp_foreach_in(void) {
 	hp_max_push(&h, (void *)0x43);
 	hp_max_push(&h, (void *)0x44);
 
-	hp_foreach_in(&h, log_order, &order);
+	assert(hp_foreach_in(&h, log_order, &order) == true);
 	assert(order[0] == (void *)0x40);
 	assert(order[1] == (void *)0x43);
 	assert(order[2] == (void *)0x42);
 	assert(order[3] == (void *)0x44);
 	assert(order[4] == (void *)0x41);
 	assert(order[5] == NULL);
+	assert(hp_foreach_in(NULL, log_order, &order) == false);
+	assert(hp_foreach_in(&h, NULL, &order) == false);
+	assert(hp_foreach_in(&h, fail_at, (void *)0x40L) == false);
+	assert(hp_foreach_in(&h, fail_at, (void *)0x41L) == false);
+	assert(hp_foreach_in(&h, fail_at, (void *)0x42L) == false);
+	assert(hp_foreach_in(&h, fail_at, (void *)0x43L) == false);
+	assert(hp_foreach_in(&h, fail_at, (void *)0x44L) == false);
+
 	hp_delete(&h);
 }
 void test_hp_foreach_pre(void) {
@@ -69,13 +91,20 @@ void test_hp_foreach_pre(void) {
 	hp_max_push(&h, (void *)0x43);
 	hp_max_push(&h, (void *)0x44);
 
-	hp_foreach_pre(&h, log_order, &order);
+	assert(hp_foreach_pre(&h, log_order, &order) == true);
 	assert(order[0] == (void *)0x40);
 	assert(order[1] == (void *)0x42);
 	assert(order[2] == (void *)0x43);
 	assert(order[3] == (void *)0x41);
 	assert(order[4] == (void *)0x44);
 	assert(order[5] == NULL);
+	assert(hp_foreach_pre(NULL, log_order, &order) == false);
+	assert(hp_foreach_pre(&h, NULL, &order) == false);
+	assert(hp_foreach_pre(&h, fail_at, (void *)0x40L) == false);
+	assert(hp_foreach_pre(&h, fail_at, (void *)0x41L) == false);
+	assert(hp_foreach_pre(&h, fail_at, (void *)0x42L) == false);
+	assert(hp_foreach_pre(&h, fail_at, (void *)0x43L) == false);
+	assert(hp_foreach_pre(&h, fail_at, (void *)0x44L) == false);
 
 	hp_delete(&h);
 }
@@ -90,13 +119,20 @@ void test_hp_foreach_post(void) {
 	hp_max_push(&h, (void *)0x43);
 	hp_max_push(&h, (void *)0x44);
 
-	hp_foreach_post(&h, log_order, &order);
+	assert(hp_foreach_post(&h, log_order, &order) == true);
 	assert(order[0] == (void *)0x44);
 	assert(order[1] == (void *)0x43);
 	assert(order[2] == (void *)0x40);
 	assert(order[3] == (void *)0x42);
 	assert(order[4] == (void *)0x41);
 	assert(order[5] == NULL);
+	assert(hp_foreach_post(NULL, log_order, &order) == false);
+	assert(hp_foreach_post(&h, NULL, &order) == false);
+	assert(hp_foreach_post(&h, fail_at, (void *)0x40L) == false);
+	assert(hp_foreach_post(&h, fail_at, (void *)0x41L) == false);
+	assert(hp_foreach_post(&h, fail_at, (void *)0x42L) == false);
+	assert(hp_foreach_post(&h, fail_at, (void *)0x43L) == false);
+	assert(hp_foreach_post(&h, fail_at, (void *)0x44L) == false);
 
 	hp_delete(&h);
 }
