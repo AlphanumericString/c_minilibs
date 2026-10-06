@@ -2,6 +2,16 @@
 
 #include "rb_tests.h"
 
+void test_rb_free(void) {
+	t_rb *rb = rb_new(sizeof(int));
+
+	assert(rb != NULL);
+	rb_free(&rb);
+	assert(rb == NULL);
+	rb_free(&rb);
+	assert(rb == NULL);
+	rb_free(NULL);
+}
 void test_rb_destroy(void) {
 	t_rb rb = {0};
 
@@ -13,6 +23,19 @@ void test_rb_destroy(void) {
 	assert(rb.array == NULL);
 	assert(rb.nb_max == 0);
 	assert(rb.sz_e == 0);
+	rb_destroy(&rb);
+	assert(rb.o_pos == 0);
+	assert(rb.i_pos == 0);
+	assert(rb.array == NULL);
+	assert(rb.nb_max == 0);
+	assert(rb.sz_e == 0);
+	rb_destroy(&rb);
+	assert(rb.o_pos == 0);
+	assert(rb.i_pos == 0);
+	assert(rb.array == NULL);
+	assert(rb.nb_max == 0);
+	assert(rb.sz_e == 0);
+	rb_destroy(NULL);
 }
 
 void test_rb_clr(void) {
@@ -25,6 +48,7 @@ void test_rb_clr(void) {
 	rb_clr(&rb);
 	assert(rb_empty(rb) == true);
 	assert(rb.i_pos == rb.o_pos);
+	rb_clr(NULL);
 
 	rb_destroy(&rb);
 }

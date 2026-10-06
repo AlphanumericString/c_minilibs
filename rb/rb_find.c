@@ -4,7 +4,7 @@
  * \brief finds the first element that matches the comparator
  * \param rb the round buffer
  * \param c the comparator function
- * \param a argument for the comparator
+ * \param a argument for the comparator (nullable)
  * \return pointer to the element in the data array, or NULL if not found
  * \ingroup rb
 **/

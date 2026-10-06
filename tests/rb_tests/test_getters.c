@@ -15,6 +15,7 @@ void test_rb_full(void) {
 	assert(rb_full(rb) == true);
 
 	rb_destroy(&rb);
+	assert(rb_full((t_rb){0}) == false);
 }
 
 void test_rb_empty(void) {
@@ -28,6 +29,7 @@ void test_rb_empty(void) {
 	assert(rb_empty(rb) == false);
 
 	rb_destroy(&rb);
+	assert(rb_empty((t_rb){0}) == true);
 }
 
 void test_rb_size(void) {
@@ -43,6 +45,7 @@ void test_rb_size(void) {
 	assert(rb_size(rb) == 2);
 
 	rb_destroy(&rb);
+	assert(rb_size((t_rb){0}) == 0);
 }
 
 void test_rb_capacity(void) {
@@ -53,6 +56,7 @@ void test_rb_capacity(void) {
 	assert(rb_capacity(rb) == 10);
 
 	rb_destroy(&rb);
+	assert(rb_capacity((t_rb){0}) == 0);
 }
 
 void test_rb_remaining_space(void) {
@@ -65,4 +69,5 @@ void test_rb_remaining_space(void) {
 	assert(rb_remaining_space(rb) == 9);
 
 	rb_destroy(&rb);
+	assert(rb_remaining_space((t_rb){0}) == 0);
 }

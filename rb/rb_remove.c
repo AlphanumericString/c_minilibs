@@ -59,6 +59,10 @@ void *rb_npeek(t_rb rb, size_t n, void *elem_out) {
 	unsigned char *pos;
 	size_t         left_size;
 
+	if (!rb.array) {
+		LOG(C_MINI__RB_LOG_EARG);
+		return (NULL);
+	}
 	if (n > rb_size(rb)) n = rb_size(rb);
 	if (!n) {
 		LOG(C_MINI__RB_LOG_SUCCESS);
@@ -66,18 +70,14 @@ void *rb_npeek(t_rb rb, size_t n, void *elem_out) {
 	}
 	pos = rb_at(rb, 0);
 	if (elem_out) {
-		if (!pos) {
-			bzero(elem_out, n * rb.sz_e);
-			LOG(C_MINI__RB_LOG_FAIL);
-		} else if (rb.nb_max > (rb.o_pos + n)) {
+		if (rb.nb_max > (rb.o_pos + n)) {
 			memcpy(elem_out, pos, n * rb.sz_e);
 			LOG(C_MINI__RB_LOG_SUCCESS);
 		} else {
 			left_size = (rb.nb_max - rb.o_pos) * rb.sz_e;
 			memcpy(elem_out, pos, left_size);
-			n  -= rb.nb_max - rb.o_pos;
-			pos = rb.array;
-			memcpy(elem_out + left_size, pos, n * rb.sz_e);
+			n -= rb.nb_max - rb.o_pos;
+			memcpy(elem_out + left_size, rb.array, n * rb.sz_e);
 			LOG(C_MINI__RB_LOG_SUCCESS);
 		}
 	}
@@ -98,7 +98,11 @@ void *rb_pop(t_rb *rb, void *elem_out) {
 		return (NULL);
 	}
 	return_val = rb_peek(*rb, elem_out);
-	rb->o_pos  = (rb->o_pos + 1) % rb->nb_max;
+	if (!return_val) {
+		LOG(C_MINI__RB_LOG_FAIL);
+		return (return_val);
+	}
+	rb->o_pos = (rb->o_pos + 1) % rb->nb_max;
 	rb->count--;
 	LOG(C_MINI__RB_LOG_SUCCESS);
 	return (return_val);
@@ -120,6 +124,10 @@ void *rb_npop(t_rb *rb, size_t n, void *elem_out) {
 	}
 	if (n > rb_size(*rb)) n = rb_size(*rb);
 	return_val = rb_npeek(*rb, n, elem_out);
+	if (!return_val) {
+		LOG(C_MINI__RB_LOG_FAIL);
+		return (return_val);
+	}
 	rb->o_pos  = (rb->o_pos + n) % rb->nb_max;
 	rb->count -= n;
 	LOG(C_MINI__RB_LOG_SUCCESS);

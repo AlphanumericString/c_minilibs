@@ -105,8 +105,8 @@ typedef void *(*t_duplicator)(const void *elem);
  * \brief round buffer struct, rb
  * \param array the raw buffer pointer
  * \param nb_max number max of elements in the array
- * \param i_pos input position
- * \param o_pos output position
+ * \param i_pos input position (import head)
+ * \param o_pos output position (expert head)
  * \param sz_e size of elements in the array
  * \ingroup rb
 **/
@@ -121,12 +121,14 @@ typedef struct s_roundbuffer_array {
 
 } t_rb;
 
-t_rb  *rb_create(t_rb *rb, size_t sz_elem, size_t nb_e);
-t_rb  *rb_init(t_rb *rb, size_t sz_elem);
-t_rb  *rb_from_array(t_rb *rb, void *array, size_t nb_elem, size_t sz_elem);
-t_rb  *rb_new(size_t sz_elem);
-void   rb_destroy(t_rb *rb);
-void   rb_clr(t_rb *rb);
+t_rb *rb_create(t_rb *rb, size_t sz_elem, size_t nb_e);
+t_rb *rb_init(t_rb *rb, size_t sz_elem);
+t_rb *rb_from_array(t_rb *rb, void *array, size_t arr_cap, size_t sz_elem);
+t_rb *rb_new(size_t sz_elem);
+void  rb_destroy(t_rb *rb);
+void  rb_clr(t_rb *rb);
+void  rb_free(t_rb **rb);
+
 bool   rb_full(t_rb rb);
 bool   rb_empty(t_rb rb);
 size_t rb_size(t_rb rb);
@@ -142,7 +144,7 @@ void   rb_npush(t_rb *rb, const void *data, size_t nb_elem);
 bool   rb_push_safe(t_rb *rb, const void *data);
 bool   rb_npush_safe(t_rb *rb, const void *data, size_t nb_elem);
 bool   rb_apply(t_rb *rb, t_callback cb, const void *arg);
-bool   rb_naplly(t_rb *rb, size_t n, t_callback cb, const void *arg);
+bool   rb_napply(t_rb *rb, size_t n, t_callback cb, const void *arg);
 bool   rb_filter(t_rb *rb, t_callback cb, const void *arg,
                  void (*destroyer)(void *elem));
 void  *rb_at(t_rb rb, size_t idx);
@@ -163,5 +165,8 @@ t_rb  *rb_grow(t_rb *rb, size_t nb_elem_added);
 // TODO:
 // rb_nget -> get's the n elements after first match
 // rb_getn -> get up to n elements that matched
+// rb_nfilter -> filter first n
+// rb_filterout -> reverse filter
+// rb_nfilterout -> reverse filter on first n
 
 #endif // !C_MINI__RB

@@ -9,7 +9,7 @@
  * \return false if the callback returns false, true otherwise
  * \ingroup rb
 **/
-bool rb_naplly(t_rb *rb, size_t n, t_callback cb, const void *arg) {
+bool rb_napply(t_rb *rb, size_t n, t_callback cb, const void *arg) {
 	size_t i = 0;
 	size_t current_pos;
 
@@ -46,7 +46,7 @@ bool rb_apply(t_rb *rb, t_callback cb, const void *arg) {
 		LOG(C_MINI__RB_LOG_EARG);
 		return false;
 	}
-	r = rb_naplly(rb, (size_t)-1, cb, arg);
+	r = rb_napply(rb, (size_t)-1, cb, arg);
 	if (!r) {
 		LOG(C_MINI__RB_LOG_FAIL);
 		return (r);

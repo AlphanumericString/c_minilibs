@@ -13,6 +13,7 @@ int main(void) {
 	LOG("");
 	LOG("Delete");
 	test_rb_destroy();
+	test_rb_free();
 	test_rb_clr();
 	LOG("");
 	LOG("Querry");
