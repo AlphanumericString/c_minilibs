@@ -8,11 +8,15 @@ void test_cdsu_clr(void) {
 	cdsu->rank[0]    = 2;
 	cdsu->components = 4;
 
-	cdsu_clr(cdsu);
+	assert(cdsu_clr(cdsu) == true);
+	assert(cdsu_clr(cdsu) == true);
+	assert(cdsu_clr(cdsu) == true);
+	assert(cdsu_clr(cdsu) == true);
 	assert(cdsu->parent[0] == 0);
 	assert(cdsu->rank[0] == 0);
 	assert(cdsu->components == 10);
-	cdsu_free(cdsu);
+	assert(cdsu_clr(NULL) == false);
+	cdsu_free(&cdsu);
 }
 
 void test_cdsu_destroy(void) {
@@ -21,11 +25,17 @@ void test_cdsu_destroy(void) {
 	cdsu_destroy(&cdsu);
 	assert(cdsu.parent == NULL);
 	assert(cdsu.size == 0);
+	cdsu_destroy(&cdsu);
+	cdsu_destroy(NULL);
 }
 
 void test_cdsu_free(void) {
 	t_cdsu *d = cdsu_new(10);
 
 	assert(d != NULL);
-	cdsu_free(d);
+	cdsu_free(&d);
+	assert(d == NULL);
+	cdsu_free(&d);
+	assert(d == NULL);
+	cdsu_free(NULL);
 }

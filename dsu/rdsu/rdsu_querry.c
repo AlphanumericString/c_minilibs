@@ -8,7 +8,8 @@
  * \return true if related, false otherwise
  * \ingroup rdsu
 **/
-bool rdsu_is_related(t_rdsu *ds, size_t x, size_t y) {
+bool rdsu_is_related(const t_rdsu *ds, size_t x, size_t y) {
+	if (!ds || (x > y ? x : y) > ds->size) return (false);
 	return (rdsu_find(ds, x) == rdsu_find(ds, y));
 }
 /**
@@ -18,33 +19,27 @@ bool rdsu_is_related(t_rdsu *ds, size_t x, size_t y) {
  * \ingroup rdsu
 **/
 bool rdsu_validate(t_rdsu rdsu) {
-	size_t       i;
-	size_t       size_div_2;
-	unsigned int x;
-	size_t       steps;
 
 	if (!rdsu.size || !rdsu.rank || !rdsu.parent) {
 		LOG(C_MINI__RDSU_LOG_EARG);
 		return (false);
 	}
-	size_div_2 = rdsu.size / 2;
-	i          = 0;
-	steps      = 0;
-	while (i < rdsu.size) {
-		x = i;
-		while (x != rdsu.parent[x]) {
-			if (rdsu.parent[i] > rdsu.size || rdsu.rank[i] > size_div_2) {
-				LOG("Invalid DSU (rank/parent for %zu)", i);
+	for (size_t i = 0; i < rdsu.size; i++) {
+		if (rdsu.parent[i] >= rdsu.size || rdsu.rank[i] >= rdsu.size) {
+			LOG("Invalid RDSU (rank/parent for %zu)", i);
+			return (false);
+		}
+		for (size_t x = i, steps = 0; x != rdsu.parent[x]; x = rdsu.parent[x]) {
+			steps++;
+			if (rdsu.parent[x] >= rdsu.size) {
+				LOG("Invalid DSU (rank/parent for %zu)", x);
 				return (false);
 			}
-			x = rdsu.parent[x];
-			steps++;
-			if (steps > rdsu.size) {
-				LOG("Invalid DSU (infinite chain)");
+			if (steps > rdsu.size + 1) {
+				LOG("Invalid RDSU (infinite chain)");
 				return (false);
 			}
 		}
-		i++;
 	}
 	LOG(C_MINI__RDSU_LOG_SUCCESS);
 	return (true);

@@ -66,6 +66,10 @@
 
 #ifdef C_MINI__RDSU_INTERNAL
 
+#	ifndef C_MINI__RDSU_LOG_CHECK_FAST
+#		define C_MINI__RDSU_LOG_CHECK_STRICT
+#	endif
+
 /**
  * @brief [INTERNAL] [DO NOT USE] the log type enum
  * \ingroup rdsu
@@ -128,26 +132,27 @@ typedef struct s_rewindable_disjointed_set_union {
 } t_rdsu;
 
 t_rdsu *rdsu_new(size_t n);
-t_rdsu *rdsu_new_from_array(size_t n, uint16_t *parents, uint16_t *rank);
+t_rdsu *rdsu_new_from_arrays(size_t n, uint16_t *parents, uint16_t *rank);
 t_rdsu *rdsu_init(t_rdsu *to_init, size_t n);
 t_rdsu *rdsu_init_from_arrays(t_rdsu *to_init, size_t size, uint16_t *parent,
                               uint16_t *rank);
 
-t_rdsu *rdsu_grow(t_rdsu *to_init, size_t n);
+bool rdsu_grow(t_rdsu *to_init, size_t n);
 
+// change to bool return
 void rdsu_clr(t_rdsu *dsu);
 void rdsu_destroy(t_rdsu *ds);
-void rdsu_free(t_rdsu *ds);
+void rdsu_free(t_rdsu **ds);
 
 int    rdsu_max_depth(t_rdsu dsu);
 size_t rdsu_size(t_rdsu dsu);
 size_t rdsu_nb_components(t_rdsu dsu);
 
-bool rdsu_is_related(t_rdsu *ds, size_t x, size_t y);
+bool rdsu_is_related(const t_rdsu *ds, size_t x, size_t y);
 bool rdsu_validate(t_rdsu dsu);
 
 void     rdsu_union(t_rdsu *ds, size_t x, size_t y);
-uint16_t rdsu_find(t_rdsu *ds, size_t x);
+uint16_t rdsu_find(const t_rdsu *ds, size_t x);
 size_t   rdsu_compress_all(t_rdsu *ds);
 
 t_rdsu_log *rdsu_save_state(t_rdsu *rdsu);

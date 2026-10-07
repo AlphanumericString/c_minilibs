@@ -31,3 +31,4 @@ void test_rdsu_save_state(void);
 void test_rdsu_rewind(void);
 void test_rdsu_rewind_to_state(void);
 void test_rdsu_rewind_clear(void);
+void test_rdsui_push_rewind(void);

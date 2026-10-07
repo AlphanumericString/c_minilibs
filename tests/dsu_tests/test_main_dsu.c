@@ -74,7 +74,7 @@ int rdsu_main_tests() {
 	test_rdsu_rewind();
 	test_rdsu_rewind_to_state();
 	test_rdsu_rewind_clear();
-
+	test_rdsui_push_rewind();
 	printf("All rdsu tests completed successfully.\n");
 	return (EXIT_SUCCESS);
 }

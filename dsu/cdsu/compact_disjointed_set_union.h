@@ -84,12 +84,13 @@ t_cdsu *cdsu_init(t_cdsu *to_init, size_t n);
 t_cdsu *cdsu_init_from_arrays(t_cdsu *to_init, size_t size, int *parent,
                               int *rank);
 
-t_cdsu *cdsu_grow(t_cdsu *to_init, size_t n);
+bool cdsu_grow(t_cdsu *to_init, size_t n);
 
-void cdsu_clr(t_cdsu *dsu);
+bool cdsu_clr(t_cdsu *dsu);
 void cdsu_destroy(t_cdsu *ds);
-void cdsu_free(t_cdsu *ds);
+void cdsu_free(t_cdsu **ds);
 
+// TODO: switch to 'const t_cdsu *'
 int    cdsu_max_depth(t_cdsu dsu);
 size_t cdsu_size(t_cdsu dsu);
 size_t cdsu_nb_components(t_cdsu dsu);

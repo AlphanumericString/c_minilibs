@@ -11,13 +11,14 @@ void cdsu_union(t_cdsu *ds, size_t x, size_t y) {
 	size_t root_x;
 	size_t root_y;
 
-	if (!ds || y == x || x > ds->size || y > ds->size) {
+	if (!ds || !ds->rank || !ds->parent || !ds->size || y == x ||
+	    x >= ds->size || y >= ds->size) {
 		LOG(C_MINI__CDSU_LOG_EARG);
 		return;
 	}
 	root_x = cdsu_find(ds, x);
 	root_y = cdsu_find(ds, y);
-	if (root_x == root_y || root_x == (size_t)-1 || root_y == (size_t)-1) {
+	if (root_x == root_y) {
 		LOG("Link (r1:%zu, r2:%zu, components:%zu -> %zu)", x, y,
 		    ds->components, ds->components);
 		return;
@@ -48,7 +49,7 @@ void cdsu_union(t_cdsu *ds, size_t x, size_t y) {
  * \ingroup cdsu
 **/
 size_t cdsu_find(t_cdsu *ds, size_t x) {
-	if (!ds || x > ds->size) {
+	if (!ds || !ds->size || !ds->parent || x > ds->size) {
 		LOG(C_MINI__CDSU_LOG_EARG);
 		return (-1);
 	}
@@ -67,7 +68,7 @@ size_t cdsu_find(t_cdsu *ds, size_t x) {
  * \ingroup cdsu
 **/
 size_t cdsu_strict_find(t_cdsu ds, size_t x) {
-	if (!ds.size || !ds.parent || !ds.rank || x > ds.size) {
+	if (!ds.size || !ds.parent || x > ds.size) {
 		LOG(C_MINI__CDSU_LOG_EARG);
 		return (-1);
 	}

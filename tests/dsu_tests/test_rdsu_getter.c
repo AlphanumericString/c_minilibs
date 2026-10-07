@@ -8,7 +8,7 @@ void test_rdsu_max_depth(void) {
 	assert(rdsu_max_depth(*rdsu) == 0);
 	rdsu_union(rdsu, 0, 1);
 	assert(rdsu_max_depth(*rdsu) == 1);
-	rdsu_free(rdsu);
+	rdsu_free(&rdsu);
 }
 void test_rdsu_size(void) {
 	t_rdsu *rdsu = rdsu_new(12);
@@ -16,7 +16,7 @@ void test_rdsu_size(void) {
 	assert(rdsu_size(*rdsu) == 12);
 	rdsu_destroy(rdsu);
 	assert(rdsu_size(*rdsu) == 0);
-	rdsu_free(rdsu);
+	rdsu_free(&rdsu);
 }
 void test_rdsu_nb_components(void) {
 	t_rdsu *rdsu = rdsu_new(5);
@@ -28,5 +28,5 @@ void test_rdsu_nb_components(void) {
 	assert(rdsu_nb_components(*rdsu) == 4);
 	rdsu_rewind(rdsu);
 	assert(rdsu_nb_components(*rdsu) == 5);
-	rdsu_free(rdsu);
+	rdsu_free(&rdsu);
 }

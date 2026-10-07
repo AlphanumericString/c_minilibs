@@ -12,8 +12,8 @@ void rdsu_destroy(t_rdsu *ds) {
 		LOG(C_MINI__RDSU_LOG_EARG);
 		return;
 	}
-	free(ds->parent);
-	if (!ds->rp_single_alloc) free(ds->rank);
+	if (ds->parent) free(ds->parent);
+	if (!ds->rp_single_alloc && ds->rank) free(ds->rank);
 	if (ds->change_log) rdsu_rewind_clear(ds);
 	*ds = (t_rdsu){0};
 	LOG(C_MINI__RDSU_LOG_SUCCESS);
@@ -26,7 +26,7 @@ void rdsu_destroy(t_rdsu *ds) {
 void rdsu_clr(t_rdsu *rdsu) {
 	size_t i;
 
-	if (!rdsu) {
+	if (!rdsu || !rdsu->rank || !rdsu->parent) {
 		LOG(C_MINI__RDSU_LOG_EARG);
 		return;
 	}
@@ -44,12 +44,13 @@ void rdsu_clr(t_rdsu *rdsu) {
  * \param ds the rdsu to clean
  * \ingroup rdsu
 **/
-void rdsu_free(t_rdsu *ds) {
+void rdsu_free(t_rdsu **ds) {
 	if (!ds) {
 		LOG(C_MINI__RDSU_LOG_EARG);
 		return;
 	}
-	rdsu_destroy(ds);
-	free(ds);
+	rdsu_destroy(*ds);
+	free(*ds);
+	*ds = NULL;
 	LOG(C_MINI__RDSU_LOG_SUCCESS);
 }

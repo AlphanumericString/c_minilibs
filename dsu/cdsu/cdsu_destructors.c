@@ -22,12 +22,16 @@ void cdsu_destroy(t_cdsu *ds) {
  * \param cdsu the cdsu to clear
  * \ingroup cdsu
 **/
-void cdsu_clr(t_cdsu *cdsu) {
+bool cdsu_clr(t_cdsu *cdsu) {
 	size_t i;
 
 	if (!cdsu) {
 		LOG(C_MINI__CDSU_LOG_EARG);
-		return;
+		return (false);
+	}
+	if (cdsu->components == cdsu->size) {
+		LOG(C_MINI__CDSU_LOG_SUCCESS);
+		return (true);
 	}
 	i = 0;
 	while (i < cdsu->size) {
@@ -36,18 +40,20 @@ void cdsu_clr(t_cdsu *cdsu) {
 	}
 	LOG("Clear (components:%zu -> %zu)", cdsu->components, cdsu->size);
 	cdsu->components = cdsu->size;
+	return (true);
 }
 /**
  * \brief cleans up the structurre and then free's it
  * \param ds the cdsu to clean
  * \ingroup cdsu
 **/
-void cdsu_free(t_cdsu *ds) {
-	if (!ds) {
+void cdsu_free(t_cdsu **ds) {
+	if (!ds || !*ds) {
 		LOG(C_MINI__CDSU_LOG_EARG);
 		return;
 	}
-	cdsu_destroy(ds);
-	free(ds);
+	cdsu_destroy(*ds);
+	free(*ds);
+	*ds = NULL;
 	LOG(C_MINI__CDSU_LOG_SUCCESS);
 }

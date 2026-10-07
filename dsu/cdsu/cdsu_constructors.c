@@ -17,6 +17,8 @@ t_cdsu *cdsu_new(size_t n) {
 		LOG(C_MINI__CDSU_LOG_EARG);
 		return (NULL);
 	}
+	// note: left alloc split for growth cappabilities.
+	// otherwise growth function would need to also re-alloc the control struct
 	ret = malloc(sizeof(*ret));
 	if (!ret) {
 		LOG(C_MINI__CDSU_LOG_EALLOC);
@@ -69,7 +71,7 @@ t_cdsu *cdsu_init(t_cdsu *to_init, size_t n) {
 t_cdsu *cdsu_new_from_array(size_t size, int *parents, int *ranks) {
 	t_cdsu *ret;
 
-	if (!size || !parents || !ranks) {
+	if (!size || !parents || !ranks || ranks == parents) {
 		LOG(C_MINI__CDSU_LOG_EARG);
 		return (NULL);
 	}
@@ -81,8 +83,8 @@ t_cdsu *cdsu_new_from_array(size_t size, int *parents, int *ranks) {
 	ret->rank            = (uint *)ranks;
 	ret->parent          = (uint *)parents;
 	ret->size            = size;
+	ret->components      = 1;
 	ret->rp_single_alloc = false;
-	ret->components      = size;
 	cdsu_clr(ret);
 	LOG("New DSU (cdsu:%p, size:%zu)", ret, size);
 	return (ret);
@@ -98,14 +100,14 @@ t_cdsu *cdsu_new_from_array(size_t size, int *parents, int *ranks) {
 **/
 t_cdsu *cdsu_init_from_arrays(t_cdsu *ret, size_t size, int *parents,
                               int *ranks) {
-	if (!ret || !size || !parents || !ranks) {
+	if (!ret || !size || !parents || !ranks || parents == ranks) {
 		LOG(C_MINI__CDSU_LOG_EARG);
 		return (NULL);
 	}
 	ret->rank            = (uint *)ranks;
 	ret->parent          = (uint *)parents;
 	ret->size            = size;
-	ret->components      = size;
+	ret->components      = 1;
 	ret->rp_single_alloc = false;
 	cdsu_clr(ret);
 	LOG("New DSU (cdsu:%p, size:%zu)", ret, size);
@@ -118,23 +120,27 @@ t_cdsu *cdsu_init_from_arrays(t_cdsu *ret, size_t size, int *parents,
  * via from_arrays methods do not use).
  * \param cdsu the t_cdsu to grow
  * \param n the number of values to add
- * \return the grown t_cdsu
+ * \return true if the dsu has grown at least n spaces, false otherwise
  * \ingroup cdsu
 **/
-t_cdsu *cdsu_grow(t_cdsu *cdsu, size_t n) {
+bool cdsu_grow(t_cdsu *cdsu, size_t n) {
 	void  *replacement_buffer;
 	void  *rank_offset;
 	size_t i;
 
-	if (!cdsu || !n) {
+	if (!cdsu || !cdsu->size || !cdsu->rank || !cdsu->parent) {
 		LOG(C_MINI__CDSU_LOG_EARG);
-		return (cdsu);
+		return (false);
 	}
-	if (!cdsu->size || !cdsu->rank || !cdsu->parent) return (cdsu);
+	if (!n) {
+		LOG(C_MINI__CDSU_LOG_SUCCESS);
+		return (true);
+	}
+
 	replacement_buffer = malloc(sizeof(int) * (cdsu->size + n) * 2);
 	if (!replacement_buffer) {
 		LOG(C_MINI__CDSU_LOG_EALLOC);
-		return (cdsu);
+		return (false);
 	}
 	rank_offset = replacement_buffer + (cdsu->size + n) * sizeof(int);
 	memcpy(replacement_buffer, cdsu->parent, cdsu->size * sizeof(int));
@@ -153,5 +159,6 @@ t_cdsu *cdsu_grow(t_cdsu *cdsu, size_t n) {
 	    cdsu->size + n);
 	cdsu->size       += n;
 	cdsu->components += n;
-	return (cdsu);
+	return (true);
 }
+// TODO: replace logic by da functions "grow for"

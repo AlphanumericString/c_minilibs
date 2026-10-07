@@ -13,13 +13,14 @@ void rdsu_union(t_rdsu *ds, size_t x, size_t y) {
 	uint16_t root_y;
 	bool     dbg;
 
-	if (!ds || y == x || x > ds->size || y > ds->size) {
+	if (!ds || !ds->rank || !ds->parent || !ds->size || y == x ||
+	    x >= ds->size || y >= ds->size) {
 		LOG(C_MINI__RDSU_LOG_EARG);
 		return;
 	}
 	root_x = rdsu_find(ds, x);
 	root_y = rdsu_find(ds, y);
-	if (root_x == root_y || root_x == (uint16_t)-1 || root_y == (uint16_t)-1) {
+	if (root_x == root_y) {
 		LOG("Link (r1:%zu, r2:%zu, components:%zu -> %zu)", x, y,
 		    ds->components, ds->components);
 		return;
@@ -46,7 +47,7 @@ void rdsu_union(t_rdsu *ds, size_t x, size_t y) {
 			ds->rank[root_y]++;
 		}
 	}
-	DBG("rdsui_push : %s", dbg ? "true" : "false");
+	DBG("rdsui_push : log update: %s", dbg ? "true" : "false");
 	LOG("Link (r1:%zu, r2:%zu, components:%zu -> %zu)", x, y,
 	    ds->components + 1, ds->components);
 	return;
@@ -58,8 +59,8 @@ void rdsu_union(t_rdsu *ds, size_t x, size_t y) {
  * \return the parent of x
  * \ingroup rdsu
 **/
-uint16_t rdsu_find(t_rdsu *ds, size_t x) {
-	if (!ds->size || !ds->parent || !ds->rank || x > ds->size) {
+uint16_t rdsu_find(const t_rdsu *ds, size_t x) {
+	if (!ds || !ds->size || !ds->parent || !ds->rank || x > ds->size) {
 		LOG(C_MINI__RDSU_LOG_EARG);
 		return (-1);
 	}
@@ -77,21 +78,16 @@ uint16_t rdsu_find(t_rdsu *ds, size_t x) {
  * \ingroup rdsu
 **/
 size_t rdsu_compress_all(t_rdsu *ds) {
-	size_t x;
-	size_t y;
 
 	if (!ds || !ds->size || !ds->parent) {
 		LOG(C_MINI__RDSU_LOG_EARG);
 		return (0);
 	}
-	y = 0;
-	while (y < ds->size) {
-		x = y;
-		while (ds->parent[x] != x) {
+	for (size_t y = 0; y < ds->size; y++) {
+		for (size_t x = y; ds->parent[x] != x;) {
 			ds->parent[x] = ds->parent[ds->parent[x]];
 			x             = ds->parent[x];
 		}
-		y++;
 	}
 	rdsu_rewind_clear(ds);
 	LOG(C_MINI__RDSU_LOG_SUCCESS);
