@@ -7,7 +7,7 @@
 void test_lruc_has(void) {
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
-	t_lruc      c;
+	t_lruc      c, intact_copy;
 
 	v1 = strdup("toto_1");
 	v2 = strdup("toto_2");
@@ -24,6 +24,17 @@ void test_lruc_has(void) {
 	assert(lruc_has(&c, k4, strlen(k4)) != false);
 	assert(lruc_has(&c, k3, strlen(k3)) == true);
 	assert(lruc_has(&c, k4, strlen(k4)) == true);
+	intact_copy = c;
+
+	c.node_nb = 0;
+	assert(lruc_has(&c, k4, strlen(k4)) == false);
+	c = intact_copy;
+
+	c.MRU = NULL;
+	assert(lruc_has(&c, k4, strlen(k4)) == false);
+	c = intact_copy;
+
+	assert(lruc_has(NULL, k4, strlen(k4)) == false);
 	lruc_destroy(&c);
 	return;
 }

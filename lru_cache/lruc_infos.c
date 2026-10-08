@@ -7,7 +7,7 @@
  * \ingroup lruc
 **/
 size_t lruc_size(const t_lruc *cache) {
-	return (cache->node_in_use);
+	return (cache->node_nb);
 }
 /**
  * \brief Get the number of hits

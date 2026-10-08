@@ -39,9 +39,9 @@ static void lruci_hp_down(t_lruc *c, size_t index) {
 		R      = 2 * index + 2;
 		target = index;
 
-		if (L < c->node_in_use && compare(c->minHeap[L], c->minHeap[target]))
+		if (L < c->node_nb && compare(c->minHeap[L], c->minHeap[target]))
 			target = L;
-		if (R < c->node_in_use && compare(c->minHeap[R], c->minHeap[target]))
+		if (R < c->node_nb && compare(c->minHeap[R], c->minHeap[target]))
 			target = R;
 
 		if (target != index) {
@@ -54,28 +54,28 @@ static void lruci_hp_down(t_lruc *c, size_t index) {
 }
 
 void lruci_hp_push(t_lruc *c, t_lruc_keynode *value) {
-	c->minHeap[c->node_in_use]             = value;
-	c->minHeap[c->node_in_use]->heap_index = c->node_in_use;
-	lruci_hp_up(c, c->node_in_use);
-	c->node_in_use++;
+	c->minHeap[c->node_nb]             = value;
+	c->minHeap[c->node_nb]->heap_index = c->node_nb;
+	lruci_hp_up(c, c->node_nb);
+	c->node_nb++;
 }
 
 t_lruc_keynode *lruci_hp_pop(t_lruc *c) {
 	t_lruc_keynode *root_value = NULL;
 
-	if (c->node_in_use <= 0) return NULL;
+	if (!c->node_nb || !c->minHeap) return NULL;
 	root_value                = c->minHeap[0];
-	c->minHeap[0]             = c->minHeap[c->node_in_use - 1];
+	c->minHeap[0]             = c->minHeap[c->node_nb - 1];
 	c->minHeap[0]->heap_index = 0;
-	c->node_in_use--;
-	if (c->node_in_use <= 0) c->minHeap[0] = NULL;
+	c->node_nb--;
+	if (!c->node_nb) c->minHeap[0] = NULL;
 	else lruci_hp_down(c, 0);
 	root_value->heap_index = -1;
 	return (root_value);
 }
 t_lruc_keynode *lruci_hp_pop_nth(t_lruc *c, size_t n) {
-	if (c->node_in_use <= 0) return NULL;
-	if (n > (c->node_in_use - 1)) n = c->node_in_use - 1;
+	if (!c->node_nb || !c->minHeap) return NULL;
+	if (n > (c->node_nb - 1)) n = c->node_nb - 1;
 	lruci_heap_swap(c, 0, n);
 	return (lruci_hp_pop(c));
 }

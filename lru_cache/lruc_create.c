@@ -14,9 +14,9 @@
  * \ingroup lruc
 **/
 t_lruc *lruc_init(t_lruc *cache, size_t cap, void (*dtor)(void *)) {
-	if (!cache) {
+	if (!cache || !cap) {
 		LOG(C_MINI__LRUC_LOG_EARG);
-		return (cache);
+		return (NULL);
 	}
 	bzero(cache, sizeof(*cache));
 	bzero(&cache->stats, sizeof(cache->stats));
@@ -45,6 +45,10 @@ t_lruc *lruc_init(t_lruc *cache, size_t cap, void (*dtor)(void *)) {
 t_lruc *lruc_create(size_t cap, void (*dtor)(void *)) {
 	t_lruc *ret;
 
+	if (!cap) {
+		LOG(C_MINI__LRUC_LOG_EARG);
+		return (NULL);
+	}
 	ret = malloc(sizeof(*ret));
 	if (!ret) {
 		LOG(C_MINI__LRUC_LOG_EALLOC);
@@ -80,12 +84,13 @@ void lruc_destroy(t_lruc *cache) {
  * \param cache the cache to free.
  * \ingroup lruc
 **/
-void lruc_free(t_lruc *cache) {
-	if (!cache) {
+void lruc_free(t_lruc **cache) {
+	if (!cache || !*cache) {
 		LOG(C_MINI__LRUC_LOG_EARG);
 		return;
 	}
-	lruc_destroy(cache);
-	free(cache);
+	lruc_destroy(*cache);
+	free(*cache);
+	*cache = NULL;
 	LOG(C_MINI__LRUC_LOG_SUCCESS);
 }

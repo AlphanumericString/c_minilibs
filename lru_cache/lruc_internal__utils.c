@@ -5,6 +5,8 @@
 #define C_MINI__INTERNAL
 #include "least_recently_used_cache.h"
 
+// is node in list of keys of lruc
+// [very slow] [used for debug] [not production code]
 t_lruc_keynode *lruci_keyinlist(const t_lruc *c, const void *key,
                                 size_t key_len) {
 	t_lruc_keynode *node;
@@ -15,6 +17,7 @@ t_lruc_keynode *lruci_keyinlist(const t_lruc *c, const void *key,
 			return (node);
 	return (NULL);
 }
+// _out -> bucket offset
 t_lruc_keynode *lruci_keyinhash(const t_lruc *c, const void *key,
                                 size_t key_len, size_t *_out) {
 	size_t          hash;
@@ -37,7 +40,7 @@ void lruci_unlink_node(t_lruc *c, t_lruc_keynode *n, size_t h) {
 	} else {
 		lruci_hp_pop_nth(c, n->heap_index);
 	}
-	c->node_in_use++;
+	c->node_nb++;
 }
 size_t lruci_hash_djb2(const void *key, size_t size) {
 	unsigned char *str;
@@ -52,9 +55,9 @@ size_t lruci_hash_djb2(const void *key, size_t size) {
 uint64_t lruci_timeto64(struct timespec t) {
 	return (t.tv_sec * 1000ULL + t.tv_nsec / 1000000ULL);
 }
-bool lruci_key_eqn(t_lruc_keynode *node_1, t_lruc_keynode *node_2) {
-	return (lruci_key_eq(node_1->kv.key, node_1->kv.k_len, node_2->kv.key,
-	                     node_2->kv.k_len));
+bool lruci_node_eq(t_lruc_keynode *node_1, t_lruc_keynode *node_2) {
+	return (node_1 == node_2 || lruci_key_eq(node_1->kv.key, node_1->kv.k_len,
+	                                         node_2->kv.key, node_2->kv.k_len));
 }
 bool lruci_key_eq(const void *k1, size_t k1_len, const void *k2,
                   size_t k2_len) {

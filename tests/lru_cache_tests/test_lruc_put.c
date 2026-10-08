@@ -28,12 +28,13 @@ void test_lruc_put_kv(void) {
 }
 void test_lruc_put(void) {
 	t_lruc      c;
-	const char *key1   = "toto";
-	const char *key2   = "titi";
-	const char *key3   = "tutu";
-	void       *value1 = "1";
-	void       *value2 = "2";
-	void       *value3 = "3";
+	const char *key1       = "toto";
+	const char *key2       = "titi";
+	const char *key3       = "tutu";
+	void       *value1     = "1";
+	void       *value2     = "2";
+	void       *value3     = "3";
+	void       *value2_alt = "2_alt";
 
 	lruc_init(&c, 2, NULL);
 	assert(lruc_put(&c, key1, strlen(key1), value1) == 0);
@@ -42,11 +43,26 @@ void test_lruc_put(void) {
 	assert(lruc_has(&c, key1, strlen(key1)) == false);
 	assert(lruc_has(&c, key2, strlen(key2)) == true);
 	assert(lruc_has(&c, key3, strlen(key3)) == true);
-	assert(c.LRU->kv.key == key2);
-	assert(c.MRU->kv.key == key3);
+	assert(c.MRU->kv.key == key3), assert(c.LRU->kv.key == key2);
 	assert(lruc_put(&c, key1, strlen(key1), (void *)0xDEAD) == 0);
-	assert(c.LRU->kv.key == key3);
-	assert(c.MRU->kv.key == key1);
+	assert(c.MRU->kv.key == key1), assert(c.LRU->kv.key == key3);
+	assert(lruc_get(&c, key3, strlen(key3)) == value3);
+	assert(lruc_put(&c, key2, strlen(key2), value2) == 0);
+	assert(c.MRU->kv.key == key2), assert(c.LRU->kv.key == key3);
+	assert(lruc_get(&c, key2, strlen(key2)) == value2);
+	assert(lruc_put(&c, key2, strlen(key2), value2_alt) == 0);
+	assert(c.MRU->kv.key == key2), assert(c.LRU->kv.key == key3);
+	assert(lruc_get(&c, key2, strlen(key2)) == value2_alt);
+	// errors
+	assert(lruc_put(NULL, key1, strlen(key1), value1) == -1);
+	assert(c.MRU->kv.key == key2), assert(c.LRU->kv.key == key3);
+	assert(lruc_put(&c, NULL, strlen(key1), value1) == -1);
+	assert(c.MRU->kv.key == key2), assert(c.LRU->kv.key == key3);
+	assert(lruc_put(&c, key1, 0, value1) == -1);
+	assert(lruc_put(&c, key1, -1, value1) == -1);
+	assert(c.MRU->kv.key == key2), assert(c.LRU->kv.key == key3);
+
+	// cleanup
 	lruc_destroy(&c);
 	return;
 }
@@ -77,7 +93,7 @@ void test_lruc_put_ttl(void) {
 		uint64_t now_int = lruci_timenow();
 		assert(now_int != (uint64_t)-1);
 		assert(c.minHeap[0]->time - now_int >= 900);
-		assert(c.minHeap[c.node_in_use - 1]->time - now_int >= 1900);
+		assert(c.minHeap[c.node_nb - 1]->time - now_int >= 1900);
 		lruc_clear(&c);
 	}
 	{

@@ -32,9 +32,8 @@ void lruc_foreach_ru_ordered(const t_lruc *c, t_kvcallback fn,
 		LOG(C_MINI__LRUC_LOG_EARG);
 		return;
 	}
-	for (t_lruc_keynode *it = c->MRU; it; it = it->lru_next) {
+	for (t_lruc_keynode *it = c->MRU; it; it = it->lru_next)
 		fn(&it->kv, user_data);
-	}
 }
 /**
  * \brief Iterate over the cache in TTL order
@@ -51,6 +50,6 @@ void lruc_foreach_ttl_ordered(const t_lruc *c, t_kvcallback fn,
 		return;
 	}
 	i = 0;
-	for (i = 0; i < c->node_in_use; i++)
+	for (i = 0; i < c->node_nb; i++)
 		fn(&(c->minHeap[i]->kv), user_data);
 }

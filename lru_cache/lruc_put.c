@@ -11,7 +11,7 @@ static int insert_to_structs(t_lruc_keynode kv, t_lruc_keynode *node, t_lruc *c,
 	*node = kv;
 	lruci_lru_push(c, node);
 	lruci_hsh_push(c, node, h_pos);
-	c->node_in_use--;
+	c->node_nb--;
 	lruci_hp_push(c, node);
 	return (0);
 }
@@ -22,13 +22,14 @@ static t_lruc_keynode *get_node_to_update(t_lruc *c, t_lruc_keynode *node,
 	return (node);
 }
 static t_lruc_keynode *create_node(t_lruc *c, t_lruc_keynode *node) {
-	LOG(C_MINI__LRUC_LOG_CREATEVAL, node->kv.key, node->kv.k_len);
+	LOG(C_MINI__LRUC_LOG_CREATEVAL, node ? node->kv.key : NULL,
+	    node ? node->kv.k_len : -1);
 	node = calloc(sizeof(t_lruc_keynode), 1);
 	if (!node) {
 		LOG(C_MINI__LRUC_LOG_EALLOC);
 		return (NULL);
 	}
-	c->node_in_use++;
+	c->node_nb++;
 	return (node);
 }
 static t_lruc_keynode *reuse_node(t_lruc *c, t_lruc_keynode to_add,
@@ -44,7 +45,9 @@ static t_lruc_keynode *reuse_node(t_lruc *c, t_lruc_keynode to_add,
 		LOG(C_MINI__LRUC_LOG_NODE_MINH);
 	}
 	LOG(C_MINI__LRUC_LOG_CREATEVAL, to_add.kv.key, to_add.kv.k_len);
-	LOG(C_MINI__LRUC_LOG_DELETEVAL, node->kv.key, node->kv.k_len);
+	LOG(C_MINI__LRUC_LOG_DELETEVAL, node ? node->kv.key : NULL,
+	    node ? node->kv.k_len : -1);
+	assert(node != NULL);
 	if (c->dtor) c->dtor(node->kv.value);
 	lruci_unlink_node(c, node, hash_pos);
 	return (node);
@@ -54,9 +57,9 @@ static t_lruc_keynode *get_node(t_lruc *c, t_lruc_keynode add_val,
 	t_lruc_keynode *node;
 
 	node = lruci_keyinhash(c, add_val.kv.key, add_val.kv.k_len, hash_pos);
-	if (node != NULL && lruci_key_eqn(node, &add_val)) {
+	if (node != NULL) {
 		node = get_node_to_update(c, node, *hash_pos);
-	} else if (!node && c->node_in_use < c->buckets_nb) {
+	} else if (c->node_nb < c->buckets_nb) {
 		node = create_node(c, node);
 	} else {
 		node = reuse_node(c, add_val, *hash_pos);
@@ -67,7 +70,7 @@ static int cache_put_internal(t_lruc *c, t_lruc_keynode to_add) {
 	t_lruc_keynode *node = NULL;
 	size_t          hash_pos;
 
-	if (!c || !to_add.kv.key || to_add.kv.k_len <= 0 ||
+	if (!c || !to_add.kv.key || !to_add.kv.k_len ||
 	    to_add.kv.k_len == (size_t)-1) {
 		LOG(C_MINI__LRUC_LOG_EARG);
 		return (-1);

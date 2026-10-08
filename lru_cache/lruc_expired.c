@@ -29,11 +29,16 @@ bool lruc_isexpired(t_lruc *c, const void *key, size_t key_len) {
 		return (false);
 	}
 	now_uint = lruci_timeto64(now);
-	if (c->ttl_glob == LONG_MAX) return (false);
-	node = lruci_keyinhash(c, key, key_len, &offset);
-	if (!node ||
-	    lruci_key_eq(node->kv.key, node->kv.k_len, key, key_len) == false)
+	if (c->ttl_glob == LONG_MAX) {
+		LOG(C_MINI__LRUC_LOG_SUCCESS);
 		return (false);
+	}
+	node = lruci_keyinhash(c, key, key_len, &offset);
+	if (!node) {
+		LOG(C_MINI__LRUC_LOG_ENODEU);
+		return (false);
+	}
+	LOG(C_MINI__LRUC_LOG_SUCCESS);
 	return ((node->time + c->ttl_glob) < (now_uint));
 }
 
@@ -46,6 +51,14 @@ void lruc_cleanup(t_lruc *c) {
 	struct timespec now;
 	uint64_t        now_uint;
 
+	if (!c || !c->minHeap) {
+		LOG(C_MINI__LRUC_LOG_EARG);
+		return;
+	}
+	if (!c->node_nb) {
+		LOG(C_MINI__LRUC_LOG_SUCCESS);
+		return;
+	}
 	if (clock_gettime(CLOCK_MONOTONIC, &now) != 0) {
 		LOG(C_MINI__LRUC_LOG_ECLOCK);
 		return;
@@ -64,7 +77,7 @@ void lruc_cleanup(t_lruc *c) {
 /**
  * \brief Set the time to live default for the cache
  * \param cache cache pointer
- * \param ttl time to live
+ * \param ttl time to live (in ms)
  * \ingroup lruc
 **/
 void lruc_setttl(t_lruc *cache, long ttl) {
