@@ -18,12 +18,6 @@ t_lruc_keynode *lruci_lru_pop(t_lruc *c, t_lruc_keynode *n) {
 	n->lru_next = NULL;
 	return (n);
 }
-void lruci_hsh_push(t_lruc *c, t_lruc_keynode *n, size_t hash) {
-	hash         = hash % c->buckets_nb;
-	n->hash_next = NULL;
-	if (c->buckets[hash] != n) n->hash_next = c->buckets[hash];
-	c->buckets[hash] = n;
-}
 t_lruc_keynode *lruci_hsh_pop(t_lruc *c, t_lruc_keynode *n, size_t hash) {
 	t_lruc_keynode *prev = NULL;
 	t_lruc_keynode *it;

@@ -6,7 +6,7 @@ const int arr_3[]   = {1, 2, 3};
 const int arr_5[]   = {1, 2, 3, 4, 5};
 const int arr_2_5[] = {2, 3, 4, 5};
 
-int main(void) {
+int __attribute__((no_profile_instrument_function)) main(void) {
 	LOG("")
 	LOG("Create")
 	test_da_init();

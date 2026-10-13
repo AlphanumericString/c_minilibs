@@ -23,19 +23,22 @@ bool vtls_set(const char *v_name, void *v_val, size_t v_size) {
 		vtls = calloc(1, sizeof(*vtls));
 		pthread_setspecific(vtls_key, vtls);
 	}
-	for (i = 0; i < vtls->len; i++) {
-		if (vtls->data[i].size_e != v_size) continue;
-		if (!strcmp(vtls->data[i].v_name, v_name))
-			return (memcpy(&vtls->data[i].var, v_val, v_size), true);
+	for (i = 0; i < vtls->len; i++) { // check already present=> update
+		if (strcmp(vtls->data[i].v_name, v_name) != 0) continue;
+		if (vtls->data[i].size_e != v_size) vtls->data[i].size_e = v_size;
+		return (memcpy(&vtls->data[i].var, &v_val, sizeof(void *)), true);
 	}
-	if (vtls->len == vtls->cap) {
-		i    = vtls->cap;
-		grow = realloc(vtls->data, sizeof(t_vtls) * (!i ? 16 : i) * 2);
+	if (vtls->len == vtls->cap) { // check space => grow
+		i    = (!vtls->cap ? C_MINI__VTLS_START_SIZE : vtls->cap * 2);
+		grow = realloc(vtls->data, sizeof(t_vtls) * i);
 		if (!grow) return (false);
 		vtls->data = grow;
-		vtls->cap  = (!i ? 16 : i) * 2;
+		vtls->cap  = i;
 	}
-	vtls->data[vtls->len++] =
-	    (t_vtls){.var = v_val, .size_e = v_size, .v_name = v_name};
+	vtls->data[vtls->len++] = (t_vtls){
+	    .var    = v_val,
+	    .size_e = v_size,
+	    .v_name = v_name,
+	};
 	return (true);
 }

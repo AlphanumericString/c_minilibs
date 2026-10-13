@@ -32,7 +32,6 @@ bool cdsu_strict_is_related(t_cdsu ds, size_t x, size_t y) {
  * \ingroup cdsu
 **/
 bool cdsu_validate(t_cdsu cdsu) {
-
 	if (!cdsu.size || !cdsu.rank || !cdsu.parent) {
 		LOG(C_MINI__CDSU_LOG_EARG);
 		return (false);

@@ -9,7 +9,6 @@ pthread_key_t vtls_key;
 static void vtls_cleanup(void *a) {
 	t_vtls_array *vtls = a;
 
-	if (!a) return;
 	if (vtls->data) free(vtls->data);
 	free(vtls);
 }

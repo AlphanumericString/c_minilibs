@@ -244,7 +244,6 @@ void            lruci_lru_push(t_lruc *c, t_lruc_keynode *node);
 t_lruc_keynode *lruci_lru_pop(t_lruc *c, t_lruc_keynode *node);
 
 t_lruc_keynode *lruci_hsh_pop(t_lruc *c, t_lruc_keynode *n, size_t hash);
-void            lruci_hsh_push(t_lruc *c, t_lruc_keynode *n, size_t hash);
 
 void            lruci_hp_push(t_lruc *c, t_lruc_keynode *value);
 t_lruc_keynode *lruci_hp_pop(t_lruc *c);

@@ -4,7 +4,7 @@
 
 #include "lru_cache_tests.h"
 
-int lruc_tests(void) {
+int __attribute__((no_profile_instrument_function)) lruc_tests(void) {
 	LOG("");
 	LOG("Create");
 	test_lruc_create();
@@ -45,6 +45,7 @@ int lruc_tests(void) {
 	test_lruci_hp_pop_nth();
 	test_lruci_keyinlist();
 	test_lruci_node_eq();
+	test_lruci_hsh_pop();
 
 	LOG("");
 	LOG("Foreach");

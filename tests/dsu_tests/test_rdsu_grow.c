@@ -26,6 +26,7 @@ void test_rdsu_grow(void) {
 	rdsu->size = 0;
 	assert(rdsu_grow(rdsu, 5) == false);
 	*rdsu = intact_copy;
+	assert(rdsu_grow(rdsu, 0) == false);
 	rdsu_free(&rdsu);
 	assert(rdsu_grow(rdsu, 0) == false);
 	assert(rdsu_grow(NULL, 5) == false);

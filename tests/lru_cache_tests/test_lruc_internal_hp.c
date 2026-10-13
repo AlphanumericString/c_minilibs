@@ -48,11 +48,11 @@ void test_lruci_hp_pop_nth(void) {
 	void           *key3 = "quaize";
 
 	lruc_init(&c, 3, free);
-	lruc_put(&c, key1, strlen(key1), malloc(14));
+	lruc_put_ttl(&c, key1, strlen(key1), malloc(14), 100);
 	kv1 = c.MRU;
-	lruc_put(&c, key2, strlen(key2), malloc(15));
+	lruc_put_ttl(&c, key2, strlen(key2), malloc(15), 200);
 	kv2 = c.MRU;
-	lruc_put(&c, key3, strlen(key3), malloc(16));
+	lruc_put_ttl(&c, key3, strlen(key3), malloc(16), 300);
 	kv3 = c.MRU;
 	assert(kv1 != NULL), assert(kv1->kv.key == key1);
 	assert(kv2 != NULL), assert(kv2->kv.key == key2);
@@ -66,11 +66,12 @@ void test_lruci_hp_pop_nth(void) {
 
 	assert(lruci_hp_pop_nth(&c, 1) == kv2);
 	assert(c.node_nb == 2);
-	assert(c.minHeap[0] != NULL), assert(c.minHeap[0] == kv3);
-	assert(c.minHeap[1] != NULL), assert(c.minHeap[1] == kv1);
-	assert(lruci_hp_pop_nth(&c, -1) == kv1);
-	assert(c.minHeap[0] != NULL), assert(c.minHeap[0] == kv3);
+	assert(c.minHeap[0] != NULL), assert(c.minHeap[0] == kv1);
+	assert(c.minHeap[1] != NULL), assert(c.minHeap[1] == kv3);
+	assert(c.node_nb == 2);
+	assert(lruci_hp_pop_nth(&c, -1) == kv3);
 	assert(c.node_nb == 1);
+	assert(c.minHeap[0] != NULL), assert(c.minHeap[0] == kv1);
 	intact_copy = c;
 
 	c.minHeap = NULL;

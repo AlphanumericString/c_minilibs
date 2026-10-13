@@ -54,16 +54,21 @@ void test_cdsu_validate(void) {
 	cdsu->parent[4] = 0;
 	assert(cdsu_validate(*cdsu) == false);
 	cdsu->parent[4] = 4;
-	cdsu->rank[0]   = cdsu_size(*cdsu);
+	cdsu->rank[0]   = cdsu_size(*cdsu) * 2;
 	assert(cdsu_validate(*cdsu) == false);
 	cdsu->rank[0] = 4;
-	cdsu->rank[2] = 4;
 	assert(cdsu_validate(*cdsu) == true);
-	cdsu->parent[2] = cdsu_size(*cdsu);
+	cdsu->parent[0] = cdsu_size(*cdsu) * 2;
+	assert(cdsu_validate(*cdsu) == false);
+	cdsu->parent[0] = 1;
+	assert(cdsu_validate(*cdsu) == true);
+	cdsu->parent[2] = cdsu_size(*cdsu) * 2;
 	assert(cdsu_validate(*cdsu) == false);
 	cdsu->parent[2] = 3;
-	intact_copy     = *cdsu;
-	cdsu->parent    = NULL;
+	assert(cdsu_validate(*cdsu) == true);
+
+	intact_copy  = *cdsu;
+	cdsu->parent = NULL;
 	assert(cdsu_validate(*cdsu) == false);
 	*cdsu      = intact_copy;
 	cdsu->rank = NULL;

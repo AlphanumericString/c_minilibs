@@ -6,6 +6,13 @@
 #define C_MINI__INTERNAL
 #include "least_recently_used_cache.h"
 
+static inline void lruci_hsh_push(t_lruc *c, t_lruc_keynode *n, size_t hash) {
+	hash             = hash % c->buckets_nb;
+	n->hash_next     = NULL;
+	n->hash_next     = c->buckets[hash];
+	c->buckets[hash] = n;
+}
+
 static int insert_to_structs(t_lruc_keynode kv, t_lruc_keynode *node, t_lruc *c,
                              size_t h_pos) {
 	*node = kv;
@@ -47,7 +54,6 @@ static t_lruc_keynode *reuse_node(t_lruc *c, t_lruc_keynode to_add,
 	LOG(C_MINI__LRUC_LOG_CREATEVAL, to_add.kv.key, to_add.kv.k_len);
 	LOG(C_MINI__LRUC_LOG_DELETEVAL, node ? node->kv.key : NULL,
 	    node ? node->kv.k_len : -1);
-	assert(node != NULL);
 	if (c->dtor) c->dtor(node->kv.value);
 	lruci_unlink_node(c, node, hash_pos);
 	return (node);

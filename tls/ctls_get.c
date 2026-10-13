@@ -13,8 +13,7 @@ t_ctls_typewrap *ctls_get(const char *s) {
 	t_ctlsv *ctls = pthread_getspecific(ctls_key);
 
 	if (!ctls) {
-		ctls = calloc(1, sizeof(*ctls));
-		pthread_setspecific(ctls_key, ctls);
+		return (NULL);
 	}
 	for (size_t i = 0; i < ctls->len; i++) {
 		if (!strcmp(s, ctls->v_name[i])) {

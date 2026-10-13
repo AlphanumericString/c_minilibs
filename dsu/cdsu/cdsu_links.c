@@ -7,21 +7,21 @@
  * \param y second element to link
  * \ingroup cdsu
 **/
-void cdsu_union(t_cdsu *ds, size_t x, size_t y) {
+bool cdsu_union(t_cdsu *ds, size_t x, size_t y) {
 	size_t root_x;
 	size_t root_y;
 
 	if (!ds || !ds->rank || !ds->parent || !ds->size || y == x ||
 	    x >= ds->size || y >= ds->size) {
 		LOG(C_MINI__CDSU_LOG_EARG);
-		return;
+		return (false);
 	}
 	root_x = cdsu_find(ds, x);
 	root_y = cdsu_find(ds, y);
 	if (root_x == root_y) {
 		LOG("Link (r1:%zu, r2:%zu, components:%zu -> %zu)", x, y,
 		    ds->components, ds->components);
-		return;
+		return (true);
 	}
 	ds->components--;
 	if (ds->rank[root_x] < ds->rank[root_y]) {
@@ -39,7 +39,7 @@ void cdsu_union(t_cdsu *ds, size_t x, size_t y) {
 	}
 	LOG("Link (r1:%zu, r2:%zu, components:%zu -> %zu)", x, y,
 	    ds->components + 1, ds->components);
-	return;
+	return (true);
 }
 /**
  * \brief search parent of x and compress parent

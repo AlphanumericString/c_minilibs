@@ -2,7 +2,7 @@
 
 #include "sptr_tests.h"
 
-int main(void) {
+int __attribute__((no_profile_instrument_function)) main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Change");
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "");

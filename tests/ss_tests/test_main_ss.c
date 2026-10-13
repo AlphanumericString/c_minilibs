@@ -30,7 +30,7 @@ void display_function(void *data) {
 	fflush(stdout);
 }
 
-int main(void) {
+int __attribute__((no_profile_instrument_function)) main(void) {
 	{
 		size_t i  = 0;
 		t_ss   ss = {0};

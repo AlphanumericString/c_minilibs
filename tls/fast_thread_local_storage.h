@@ -90,17 +90,13 @@ static void __attribute__((destructor())) ftls_dtor(void) {
 	pthread_key_delete(ftls_key);
 }
 
-static void ftls_cleanup(void *p) {
-	if (!p) return;
-	free(p);
-}
 /**
  * \brief init the Thread Local Storage structure.
  * \note check the tests for an example.
  * \ingroup ftls
 **/
 void __attribute__((constructor())) init_ftls(void) {
-	pthread_key_create(&ftls_key, ftls_cleanup);
+	pthread_key_create(&ftls_key, free);
 }
 
 /**

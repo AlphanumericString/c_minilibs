@@ -36,7 +36,10 @@ bool da_nget(const t_da *da, size_t n, size_t pos, void *out_buffer) {
 	}
 	LOG(C_MINI__DA_LOG_GET, pos);
 	if (!n) return (true);
-	if (pos + n > da->nb_e) n = da->nb_e - pos;
+	if (pos + n > da->nb_e) {
+		DBG("n updated: n (%zu -> %zu)", n, (size_t)(da->nb_e - pos));
+		n = da->nb_e - pos;
+	}
 	return (memcpy(out_buffer, da_at(da, pos), da->sz_e * n), true);
 }
 

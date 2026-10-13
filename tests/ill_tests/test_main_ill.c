@@ -58,7 +58,7 @@ void idl_main(void) {
 	printf("All IDL tests completed successfully.\n");
 }
 
-int main(void) {
+int __attribute__((no_profile_instrument_function)) main(void) {
 	LOG("");
 	LOG("");
 	LOG("\t\tILL");

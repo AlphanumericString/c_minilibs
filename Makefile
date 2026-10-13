@@ -1,31 +1,23 @@
 # define variable for all modules dir
 .DEFAULT_GOAL	:= all
 
-MODULES			= ill rb da ss dsu tls lru_cache hp sptr
+# list of targets / modules
+MODULES		:= ill rb da ss dsu tls lru_cache hp sptr
+PROJECT_NAME:= c_mini
+PRD_TARGET	:= $(PROJECT_NAME).profdata
 
-BUILD_DIR		= build
-DOC_DIR			= documentation
-TST_DIR			= tests
-COV_DIR			= coverage
-D_FILES			=
+# DIRS
+BUILD_DIR	:= build
+DOC_DIR		:= documentation
+TST_DIR		:= tests
+COV_DIR		:= coverage
 
-CC				= clang
-COV				= llvm-cov
-PRD				= llvm-profdata
-
-DEBUG_LVL		?= 0
-STD				= gnu17
-CFLAGS			= -Wall -Wextra -MMD -MP --std=$(STD)
-
-ifeq ($(DEBUG_LVL), 0)
-	CFLAGS := $(CFLAGS) -DC_MINI__DEBUG_LEVEL=0
-else
-	CFLAGS += -g3 -DC_MINI__TESTS -DC_MINI__DEBUG_LEVEL=$(DEBUG_LVL)
-endif
-
-# Check for llvm-cov and llvm-profdata
-#   If not found, use the version 12 if available
-#   If not found, use the version 14 (latest version)
+# TOOLS
+CC		:= clang
+COV		:= llvm-cov
+PRD		:= llvm-profdata
+RM		:= rm -f
+PRINT	:= printf
 ifeq (, $(shell which $(COV) 2> /dev/null))
 	COV			=	llvm-cov-12
 	ifeq (, $(shell which $(COV) 2> /dev/null))
@@ -40,88 +32,127 @@ ifeq (, $(shell which $(PRD) 2> /dev/null))
 	endif
 endif
 
-TFLAGS=
-LIBNAMES=
-OBJ_ALL=
-TESTS_ALL=
-VALGRIND_OPT= --leak-check=full --show-leak-kinds=all --track-fds=yes \
-        --trace-children=yes --track-origins=yes --read-var-info=yes \
-        --show-reachable=yes --undef-value-errors=yes
+# FLAGS
+DEBUG_LVL	?= 0
+STD			?= gnu17
+CFLAGS		:= -Wall -Wextra -MMD -MP --std=$(STD)
+VFLAGS		:= --leak-check=full --show-leak-kinds=all --track-fds=yes \
+				--trace-children=yes --track-origins=yes --read-var-info=yes \
+				--show-reachable=yes --undef-value-errors=yes
 
-TFLAGS	=\
-			-fprofile-instr-generate -ftest-coverage -fcoverage-mapping	\
-			-fno-inline -fno-inline-functions							\
-			-O0 -I./
+ifeq ($(DEBUG_LVL), 0)
+	CFLAGS += -DC_MINI__DEBUG_LEVEL=0
+else
+	CFLAGS += -g3 -DC_MINI__TESTS -DC_MINI__DEBUG_LEVEL=$(DEBUG_LVL)
+endif
 
-## tests
+TFLAGS	:= $(CFLAGS)	-O0 -I./	\
+			-fprofile-instr-generate -ftest-coverage -fcoverage-mapping \
+			-fno-inline -fno-inline-functions
 
+# FILES COLLECTOR
+D_FILES		:=
+LIB_FILES	:=
+OBJ_FILES	:=
+TST_FILES	:=
+PRD_FILES	:=
+
+# MODULE TEMPLATE
+#
+# module template define
 define module_template
-# module vars
-$1_SRC=	$$(shell find $1 -name '*.c')
-$1_TSRC=	$$(shell find $(TST_DIR)/$1_tests -name '*.c')
-$1_OBJ=	$$(patsubst %.c, %.o, $$(addprefix $(BUILD_DIR)/,$$($1_SRC)))
-$1_TOBJ=$$(patsubst %.c, %.o, $$(addprefix $(BUILD_DIR)/,$$($1_TSRC)))
-$1_TOBJSRC=$$(patsubst %.c, %.o, $$(addprefix $(BUILD_DIR)/$(TST_DIR)/,$$($1_SRC)))
-$1_D=	$$(patsubst %.o, %.d, $$($1_OBJ)) \
-		$$(patsubst %.o, %.d, $$($1_TOBJ))
-# add module to glob vars
-D_FILES	+= $$($1_D)
-LIBNAMES += lib$1.a
-OBJ_ALL += $$($1_OBJ)
-TESTS_ALL += test_$1.out
-# rules
-# define base rule to compile
+# VARS
+# declaration
+$1_SRC		:=$$(shell find $1 -name '*.c')
+$1_TSRC		:=$$(shell find $(TST_DIR)/$1_tests -name '*.c')
+$1_OBJ		:=$$(patsubst %.c, %.o, $$(addprefix $(BUILD_DIR)/,$$($1_SRC)))
+$1_TOBJ		:=$$(patsubst %.c, %.o, $$(addprefix $(BUILD_DIR)/,$$($1_TSRC)))
+$1_TOBJSRC	:=$$(patsubst %.c, %.o, $$(addprefix $(BUILD_DIR)/$(TST_DIR)/,$$($1_SRC)))
+$1_D		:=$$(patsubst %.o, %.d, $$($1_OBJ)) $$(patsubst %.o, %.d, $$($1_TOBJ))
+# var(collectors) update
+D_FILES		+= $$($1_D)
+LIB_FILES	+= lib$1.a
+OBJ_FILES	+= $$($1_OBJ)
+TST_FILES	+= test_$1.out
+PRD_FILES	+= ./$(BUILD_DIR)/test_$1.profraw
+
+# RULES
+# base rule
 $(BUILD_DIR)/$1/%.o: $1/%.c
 	@mkdir -p $$(dir $$@)
 	$(CC) $(CFLAGS) -I. -c $$< -o $$@
-# define rule to compile base as test
+# src to test
 $(BUILD_DIR)/$(TST_DIR)/$1/%.o: $1/%.c
 	@mkdir -p $$(dir $$@)
-	$(CC) $(CFLAGS) $(TFLAGS) -c $$< -o $$@
-# define rule to compile test as test
+	$(CC) $(TFLAGS) -c $$< -o $$@
+# test src to test
 $(BUILD_DIR)/$(TST_DIR)/$1_tests/%.o: $(TST_DIR)/$1_tests/%.c
 	@mkdir -p $$(dir $$@)
-	$(CC) $(CFLAGS) $(TFLAGS) -I. -c $$< -o $$@
-# final targets
-# module base target
+	$(CC) $(TFLAGS) -c $$< -o $$@
+
+# TARGETS
+# base target
 lib$1.a: $$($1_OBJ)
 	ar rcs $$@ $$^
-# module test target
+# test target
 test_$1.out: $$($1_TOBJSRC) $$($1_TOBJ)
-	$(CC) $(TFLAGS) $(CFLAGS) $$($1_TOBJ) $$($1_TOBJSRC) -o $$@
+	$(CC) $(TFLAGS) $$($1_TOBJ) $$($1_TOBJSRC) -o $$@
+# cov target
+./$(BUILD_DIR)/test_$1.profraw: test_$1.out
+	@LLVM_PROFILE_FILE=$$@ ./$$^ 1> /dev/null && \
+		$(PRINT) "$$^ ok\n" || $(PRINT) "$$^ failed\n";
+
 endef
 
+# module template instentiation
 $(foreach mod,$(MODULES),$(eval $(call module_template,$(mod))))
 
-all: $(LIBNAMES)
-tests: $(TESTS_ALL)
-tests_run: $(TESTS_ALL)
-	@for t in $^; do \
-		valgrind $(VALGRIND_OPT) -q ./$$t; \
-	done
-$(COV_DIR): $(TESTS_ALL)
+# concrete targets for tasks hierarchy
+# coverage
+$(PRD_TARGET):$(PRD_FILES)
+	@$(PRD) merge -sparse $^ -o $@
+$(COV_DIR)/index.html: $(PRD_TARGET)
 	@mkdir -p $(COV_DIR)
-	@for t in $^; do														\
-		LLVM_PROFILE_FILE=./$(BUILD_DIR)/$$t.profraw ./$$t 1> /dev/null ;	\
-		done
-	@$(PRD) merge -sparse													\
-		$(addsuffix .profraw, $(addprefix ./$(BUILD_DIR)/, $(TESTS_ALL)))	\
-		-o merged.profdata
-	@$(COV) show -format=html									\
-		-ignore-filename-regex=$(TST_DIR)/*							\
-		--show-branches=count	--show-directory-coverage			\
-		-output-dir=$(COV_DIR)										\
-		-instr-profile=merged.profdata $(addprefix -object=, $(TESTS_ALL))
-	@rm -rf merged.profdata
+	@$(COV) show -format=html												\
+		-ignore-filename-regex='ss/*' -ignore-filename-regex='$(TST_DIR)/*'	\
+		--show-branches=count	--show-directory-coverage					\
+		-output-dir=$(COV_DIR)	-instr-profile=$^							\
+		$(addprefix -object=, $(TST_FILES))
+#		--line-coverage-lt=90 --region-coverage-lt=90
 
+# documentation
+$(DOC_DIR)/html/index.html: Doxyfile
+	@DOXYGEN_INPUT="$(MODULES)" doxygen $^ 1> /dev/null &&	\
+	$(PRINT) "\nDocumentation at file://$(shell pwd)/$@\n"
+
+# auto-recompile on change
 -include:$(D_FILES)
+
+
+# RULES
+#
+# DOCUMENTATION
+# all: compiles every module into it's own lib named lib<module_name>.a
+# tests: compiles every module's tests
+# tests_run: run every tests (using valgrind with cool args too)
+# coverage: run coverage pass using llvm tooling
+# documentation: run documentation generation using doxygen
+# fclean: rm output dirs and final targets created by makefile
+# clean: rm final targets create by makefile
+# re: re-compile the project using rule fclean and all
+#
+all: $(LIB_FILES)
+tests: $(TST_FILES)
+tests_run: $(TST_FILES)
+	@for t in $^; do \
+		valgrind $(VFLAGS) -q ./$$t; \
+	done
+coverage: $(COV_DIR)/index.html
+documentation:$(DOC_DIR)/html/index.html
 fclean:clean
-	$(RM) -rf $(BUILD_DIR) $(DOC_DIR) $(COV_DIR)
-$(DOC_DIR):
-	@DOXYGEN_INPUT="$(MODULES)" doxygen Doxyfile 1> /dev/null &&	\
-	echo -e "\nDocumentation at file:///$(shell pwd)/$(DOC_DIR)/html/index.html\n"
+	$(RM) -r $(BUILD_DIR) $(DOC_DIR) $(COV_DIR)
 clean:
-	$(RM) $(LIBNAMES) $(TESTS_ALL)
+	$(RM) $(LIB_FILES) $(TST_FILES) $(PRD_TARGET)
 re:fclean
 	@make --no-print-directory all
-.PHONY: re clean fclean $(COV_DIR)
+.PHONY: re clean fclean tests tests_run

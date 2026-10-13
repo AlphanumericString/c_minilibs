@@ -46,7 +46,7 @@ void test_da_nget(void) {
 	    .nb_e  = 3,
 	    .sz_e  = sizeof(int),
 	};
-	int buff[2];
+	int buff[3];
 	int out;
 
 	da_nget(&da, 1, 0, &out);

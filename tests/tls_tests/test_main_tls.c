@@ -57,7 +57,7 @@ static int vtls_tests(void) {
 	return (EXIT_SUCCESS);
 }
 
-int main(void) {
+int __attribute__((no_profile_instrument_function)) main(void) {
 	LOG("");
 	LOG("");
 	LOG("\t\tCTLS");

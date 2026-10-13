@@ -99,7 +99,7 @@ bool cdsu_is_related(t_cdsu *ds, size_t x, size_t y);
 bool cdsu_strict_is_related(t_cdsu ds, size_t x, size_t y);
 bool cdsu_validate(t_cdsu dsu);
 
-void   cdsu_union(t_cdsu *ds, size_t x, size_t y);
+bool   cdsu_union(t_cdsu *ds, size_t x, size_t y);
 size_t cdsu_find(t_cdsu *ds, size_t x);
 size_t cdsu_strict_find(t_cdsu ds, size_t x);
 size_t cdsu_compress_all(t_cdsu *ds);

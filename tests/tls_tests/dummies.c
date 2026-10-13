@@ -20,7 +20,7 @@ void *ftls_dummy(void *__arg) {
 			if (!a->value_b) a->value_a++;
 			dump_mine_node(*a);
 		}
-		sleep(1);
+		usleep(100);
 	}
 	return (NULL);
 }

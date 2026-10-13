@@ -19,7 +19,8 @@ bool da_rm_order(t_da *da, size_t pos) {
 		return (false);
 	}
 	if (da->nb_e > pos + 1) {
-		memcpy(da_at(da, pos), da_at(da, pos + 1), da->sz_e * (da->nb_e - pos));
+		memmove(da_at(da, pos), da_at(da, pos + 1),
+		        da->sz_e * (da->nb_e - pos));
 	}
 	LOG(C_MINI__DA_LOG_RM, pos, 1UL, da->nb_e, da->nb_e - 1);
 	da->nb_e--;
@@ -40,7 +41,7 @@ bool da_rms_order(t_da *da, size_t start, size_t end) {
 	}
 	if (da->nb_e < end) end = da->nb_e;
 	if (da->nb_e != end) {
-		memcpy(da_at(da, start), da_at(da, end), da->sz_e * (da->nb_e - end));
+		memmove(da_at(da, start), da_at(da, end), da->sz_e * (da->nb_e - end));
 	}
 	LOG(C_MINI__DA_LOG_RM, start, end - start, da->nb_e,
 	    da->nb_e - (end - start));

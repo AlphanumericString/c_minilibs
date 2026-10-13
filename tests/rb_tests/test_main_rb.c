@@ -3,7 +3,7 @@
 
 #include "rb_tests.h"
 
-int main(void) {
+int __attribute__((no_profile_instrument_function)) main(void) {
 	LOG("");
 	LOG("Create");
 	test_rb_create();

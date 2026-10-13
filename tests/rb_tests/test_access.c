@@ -26,7 +26,7 @@ void test_rb_at(void) {
 void test_rb_nat(void) {
 	t_rb rb     = {0};
 	int  arr[4] = {1, 2, 3, 4};
-	int  out[2] = {0};
+	int  out[4] = {0};
 
 	rb_init(&rb, sizeof(int));
 	rb_npush(&rb, arr, 4);

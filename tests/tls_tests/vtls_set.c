@@ -3,12 +3,51 @@
 #include "tls_tests.h"
 
 void test_vtls_set(void) {
-	assert(vtls_set("a", (void *)42, sizeof(int)));
-	assert(vtls_get("a") == (void *)42);
-	assert(vtls_set("b", (void *)562, sizeof(int)));
-	assert(vtls_get("b") == (void *)562);
-	assert(vtls_get("a") == (void *)42);
-	vtls_rm("a");
-	vtls_rm("b");
+	void         *prev  = NULL;
+	void         *adr[] = {(void *)0xDEAD, (void *)0xCAFE, (void *)0xBEEF,
+	                       (void *)0xBEAD};
+	t_vtls_array *new_arr;
+	const char   *keys[C_MINI__VTLS_START_SIZE + 1] = {"a", "b", "c", "d", "e"};
+
+	assert(vtls_get(keys[0]) == NULL), assert(vtls_get(keys[1]) == NULL);
+	// set new elem
+	assert(vtls_set(keys[0], adr[0], sizeof(void *)) == true);
+	assert(vtls_get(keys[0]) == adr[0]), assert(vtls_get(keys[1]) == NULL);
+	// set new elem
+	assert(vtls_set(keys[1], adr[0], sizeof(void *)) == true);
+	assert(vtls_get(keys[0]) == adr[0]), assert(vtls_get(keys[1]) == adr[0]);
+	// update elem (same size)
+	assert(vtls_set(keys[1], adr[1], sizeof(void *)) == true);
+	assert(vtls_get(keys[0]) == adr[0]), assert(vtls_get(keys[1]) == adr[1]);
+	// update elem (diff size)
+	assert(vtls_set(keys[1], adr[2], sizeof(char)) == true);
+	assert(vtls_get(keys[0]) == adr[0]), assert(vtls_get(keys[1]) == adr[2]);
+
+	assert(vtls_set(keys[2], adr[3], sizeof(void *)) == true);
+	assert(vtls_set(keys[3], adr[3], sizeof(void *)) == true);
+	assert(vtls_set(keys[4], adr[3], sizeof(void *)) == true);
+
+	assert(vtls_get(keys[0]) == adr[0] && vtls_get(keys[1]) == adr[2] &&
+	       vtls_get(keys[2]) == adr[3] && vtls_get(keys[3]) == adr[3] &&
+	       vtls_get(keys[3]) == adr[3]);
+	for (size_t i = 0; i < C_MINI__VTLS_START_SIZE + 1; i++)
+		vtls_rm(keys[i]);
+
+	// err
+	assert(vtls_set(NULL, adr[0], sizeof(void *)) == false);
+
+	prev = pthread_getspecific(vtls_key);                      // save prev
+	pthread_setspecific(vtls_key, NULL);                       // set to NULL
+	assert(vtls_set(keys[0], adr[0], sizeof(void *)) == true); // success
+	assert(pthread_getspecific(vtls_key) != NULL);             // func init vtls
+
+	// cleanup
+	vtls_rm(keys[0]);
+	new_arr = pthread_getspecific(vtls_key);
+	free(new_arr->data);
+	free(new_arr);
+	pthread_setspecific(vtls_key, prev);
+	assert(pthread_getspecific(vtls_key) == prev); // assert reset to prev
+
 	return;
 }

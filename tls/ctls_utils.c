@@ -12,12 +12,8 @@ static void __attribute__((destructor())) destroy_ctls(void) {
 	pthread_key_delete(ctls_key);
 }
 
-static void free_non_null(void *a) {
-	if (a) free(a);
-}
-
 static void __attribute__((constructor())) init_ctls(void) {
-	pthread_key_create(&ctls_key, free_non_null);
+	pthread_key_create(&ctls_key, free);
 }
 
 /**
@@ -27,7 +23,8 @@ static void __attribute__((constructor())) init_ctls(void) {
  * \note this dumps the value directly to fd and is viewed as a debug tool
  * \ingroup ctls
 **/
-void ctls_dump_typewrap(t_ctls_typewrap t, int fd) {
+bool ctls_dump_typewrap(t_ctls_typewrap t, int fd) {
+	if (fd < 0) return (false);
 	switch (t.type) {
 	case CTLS_INT:
 		dprintf(fd, "{ \"%s\", %d }", "int", t.value.i);
@@ -41,10 +38,9 @@ void ctls_dump_typewrap(t_ctls_typewrap t, int fd) {
 	case CTLS_PTR:
 		dprintf(fd, "{ \"%s\", %p }", "ptr", t.value.p);
 		break;
-	case CTLS_NONE:
-		dprintf(fd, "{ \"%s\", %p }", "none", t.value.p);
-		break;
 	default:
 		dprintf(fd, "{ \"%s\" }", "unknown");
 	}
+	return (true);
 }
+// TODO: ctls_dump_all (dumps every var to output)

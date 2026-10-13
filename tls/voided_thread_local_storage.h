@@ -56,6 +56,16 @@
 **/
 
 #ifdef C_MINI__INTERNAL
+#	ifndef C_MINI__VTLS_START_SIZE
+
+#		ifdef C_MINI__TESTS
+#			define C_MINI__VTLS_START_SIZE 4
+#		else // || C_MINI__TESTS
+#			define C_MINI__VTLS_START_SIZE 16
+#		endif // !C_MINI__TESTS
+
+#	endif // !C_MINI__VTLS_START_SIZE
+
 /**
  * \brief the vtls key-value structure
  * \param v_name the name of the variable
@@ -83,11 +93,14 @@ typedef struct s_tlsv_array {
 } t_vtls_array;
 
 extern pthread_key_t vtls_key;
+
 #endif // C_MINI__INTERNAL
 
 bool vtls_rm(const char *v_name);
 
 void  *vtls_get(const char *v_name);
+// TODO: vtls_getout(const char *key, void *out); // - memcpy to out if found
+// using size of key'ed elem
 size_t vtls_len(void);
 
 bool vtls_has(const char *v_name);
