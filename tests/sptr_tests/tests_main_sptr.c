@@ -1,8 +1,9 @@
 #include <assert.h>
 
+#define C_MINI__TWRAP_IMPL
 #include "sptr_tests.h"
 
-int __attribute__((no_profile_instrument_function)) main(void) {
+NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Change");
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "");

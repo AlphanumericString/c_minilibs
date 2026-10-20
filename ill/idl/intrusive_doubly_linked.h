@@ -1,21 +1,22 @@
 #ifndef C_MINI__IDL
+#define C_MINI__IDL
 
-#	include <stdbool.h>
-#	include <stddef.h>
-#	include <stdio.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdio.h>
 
-#	include "common_base/log.h"
-#	ifdef C_MINI__TESTS
+#include "common_base/log.h"
+#ifdef C_MINI__TESTS
 
-#		define C_MINI__IDL_LOG_ECB     C_MINI__LOG_F_PREFIX "Callback Fail."
-#		define C_MINI__IDL_LOG_EARG    C_MINI__LOG_EARG
-#		define C_MINI__IDL_LOG_EALLOC  C_MINI__LOG_EALLOC
-#		define C_MINI__IDL_LOG_FAIL    C_MINI__LOG_FAIL
-#		define C_MINI__IDL_LOG_SUCCESS C_MINI__LOG_SUCCESS
+#	define C_MINI__IDL_LOG_ECB     C_MINI__LOG_F_PREFIX "Callback Fail."
+#	define C_MINI__IDL_LOG_EARG    C_MINI__LOG_EARG
+#	define C_MINI__IDL_LOG_EALLOC  C_MINI__LOG_EALLOC
+#	define C_MINI__IDL_LOG_FAIL    C_MINI__LOG_FAIL
+#	define C_MINI__IDL_LOG_SUCCESS C_MINI__LOG_SUCCESS
 
-#	endif // !C_MINI__TESTS
+#endif // !C_MINI__TESTS
 
-#	include "common_base/fptr.h"
+#include "common_base/fptr.h"
 
 /**
  * \defgroup idl Intrsive Doubly-linked Lists
@@ -88,5 +89,4 @@ t_idl *idl_reverse(t_idl *head);
 // TODO: idl_[n][push|pop][_back]_elem : take elem as node w offset
 // annoying for users to have to do the convertions
 
-#	define C_MINI__IDL
 #endif // !C_MINI__IDL

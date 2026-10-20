@@ -2,7 +2,7 @@
 
 #include "cdsu_tests.h"
 
-void test_cdsu_union(void) {
+NO_COV void test_cdsu_union(void) {
 	t_cdsu *cdsu = cdsu_new(5);
 	t_cdsu  no_rank, no_parents, no_size;
 
@@ -74,7 +74,7 @@ void test_cdsu_union(void) {
 	cdsu_free(&cdsu);
 }
 
-void test_cdsu_find(void) {
+NO_COV void test_cdsu_find(void) {
 	t_cdsu *cdsu = cdsu_new(5);
 	t_cdsu  intact_copy;
 
@@ -129,7 +129,7 @@ void test_cdsu_find(void) {
 	cdsu_free(&cdsu);
 }
 
-void test_cdsu_strict_find(void) {
+NO_COV void test_cdsu_strict_find(void) {
 	t_cdsu *cdsu = cdsu_new(5);
 	t_cdsu  intact_copy;
 
@@ -183,7 +183,7 @@ void test_cdsu_strict_find(void) {
 	cdsu_free(&cdsu);
 }
 
-void test_cdsu_compress_all(void) {
+NO_COV void test_cdsu_compress_all(void) {
 	t_cdsu *cdsu = cdsu_new(5);
 	t_cdsu  intact_copy;
 

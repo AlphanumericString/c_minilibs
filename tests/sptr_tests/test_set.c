@@ -45,13 +45,13 @@ static void test_sptr_set_dtors_ok(void) {
 	assert(b1.dtor == NULL);
 }
 
-void test_sptr_set_dtors(void) {
+NO_COV void test_sptr_set_dtors(void) {
 	test_sptr_set_dtors_errors();
 	test_sptr_set_dtors_ok();
 }
 
 // set_dtorw (always returns false)
-void test_sptr_set_dtorw(void) {
+NO_COV void test_sptr_set_dtorw(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -129,7 +129,7 @@ static void test_sptr_set_dtoro_ok(void) {
 	assert(b1.dtor == NULL);
 }
 
-void test_sptr_set_dtoro(void) {
+NO_COV void test_sptr_set_dtoro(void) {
 	test_sptr_set_dtoro_errors();
 	test_sptr_set_dtoro_ok();
 }
@@ -168,7 +168,7 @@ static void test_sptr_set_dtoru_ok(void) {
 	assert(u1.dtor == NULL);
 }
 
-void test_sptr_set_dtoru(void) {
+NO_COV void test_sptr_set_dtoru(void) {
 	test_sptr_set_dtoru_errors();
 	test_sptr_set_dtoru_ok();
 }

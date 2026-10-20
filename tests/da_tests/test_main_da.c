@@ -1,12 +1,13 @@
 #include <stdlib.h>
 
+#define C_MINI__TWRAP_IMPL
 #include "da_tests.h"
 
 const int arr_3[]   = {1, 2, 3};
 const int arr_5[]   = {1, 2, 3, 4, 5};
 const int arr_2_5[] = {2, 3, 4, 5};
 
-int __attribute__((no_profile_instrument_function)) main(void) {
+int NO_COV main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "")
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Create")
 	test_da_init();
@@ -102,6 +103,7 @@ int __attribute__((no_profile_instrument_function)) main(void) {
 	test_da_sort();
 	test_da_nsort();
 
+	CM_DBG("nb_alloc : %zu", nb_alloc);
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "All da tests completed successfully.");
 	return (EXIT_SUCCESS);
 }

@@ -3,6 +3,7 @@
 #ifndef C_MINI__TESTS
 #	define C_MINI__TESTS
 #endif
+#include "common_base/tests.h"
 #include "ill/idl/intrusive_doubly_linked.h"
 #include "ill/ill/intrusive_linked_lists.h"
 

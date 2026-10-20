@@ -170,6 +170,7 @@ void    lruc_destroy(t_lruc *cache);
 void    lruc_free(t_lruc **cache);
 
 // TODO: switch return of all put to bool (true on success)
+// TODO: switch to alloc enough kv at start of struct - no alloc on _put
 int lruc_put_kv(t_lruc *cache, t_keyvalue kv);
 int lruc_put(t_lruc *cache, const void *key, size_t key_len, const void *value);
 int lruc_put_ttl(t_lruc *cache, const void *key, size_t key_len,

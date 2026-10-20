@@ -9,7 +9,7 @@ static int cmp_rawptr(const void *a, const void *b) {
 	return (0);
 }
 
-void test_hp_clear(void) {
+NO_COV void test_hp_clear(void) {
 	t_heap hp;
 
 	hp_init(&hp, 32, &cmp_rawptr);
@@ -25,7 +25,7 @@ void test_hp_clear(void) {
 	hp_delete(&hp);
 	hp_clear(NULL);
 }
-void test_hp_delete(void) {
+NO_COV void test_hp_delete(void) {
 	t_heap hp;
 
 	hp_init(&hp, 32, &cmp_rawptr);
@@ -42,7 +42,7 @@ void test_hp_delete(void) {
 	assert(hp.capacity == 0 && hp.cmp == NULL && hp.nb == 0 &&
 	       hp.elems == NULL);
 }
-void test_hp_free(void) {
+NO_COV void test_hp_free(void) {
 	t_heap *hp;
 	void   *no_leaks;
 

@@ -3,7 +3,7 @@
 
 #include "da_tests.h"
 
-void test_da_destroy(void) {
+NO_COV void test_da_destroy(void) {
 	t_da da;
 
 	da_init(&da, sizeof(int));
@@ -18,7 +18,7 @@ void test_da_destroy(void) {
 	da_destroy(NULL);
 }
 
-void test_da_free(void) {
+NO_COV void test_da_free(void) {
 	t_da *da;
 
 	da = da_new(sizeof(int));

@@ -11,7 +11,7 @@ static bool cb_is_even(void *elem, void *arg) {
 	return (*(int *)elem % 2) == 0;
 }
 
-void test_rb_filter(void) {
+NO_COV void test_rb_filter(void) {
 	t_rb rb     = {0};
 	int  arr[4] = {1, 2, 3, 4};
 

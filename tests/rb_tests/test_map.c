@@ -3,7 +3,7 @@
 
 #include "rb_tests.h"
 
-void test_rb_map(void) {
+NO_COV void test_rb_map(void) {
 	t_rb rb     = {0};
 	int  arr[3] = {1, 2, 3};
 	int *out[3] = {0};
@@ -25,7 +25,7 @@ void test_rb_map(void) {
 	rb_destroy(&rb);
 }
 
-void test_rb_nmap(void) {
+NO_COV void test_rb_nmap(void) {
 	t_rb rb     = {0};
 	int  arr[4] = {1, 2, 3, 4};
 	int *out[4] = {0};

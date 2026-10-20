@@ -9,6 +9,7 @@ struct s_mine {
 #ifndef C_MINI__TESTS
 #	define C_MINI__TESTS
 #endif
+#include "common_base/tests.h"
 
 #define C_MINI__CTLS_INTERNAL
 #define C_MINI__FTLS_INTERNAL

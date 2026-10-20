@@ -3,7 +3,7 @@
 
 #include "rb_tests.h"
 
-void test_rb_grow(void) {
+NO_COV void test_rb_grow(void) {
 	int   arr[] = {1, 2, 3, 4, 5, 6, 7, 8};
 	t_rb  rb    = {0};
 	t_rb  malicious;
@@ -24,9 +24,11 @@ void test_rb_grow(void) {
 	rb_destroy(p);
 	free(p);
 
-	rb.o_pos = 1;
+	rb.o_pos = 1; // change state for tests
 
+	assert(rb.nb_max == 2 && rb.count == 2); // state pre-tests
 	assert(rb.o_pos == 1);
+
 	p = rb_grow(&rb, 5);
 	assert(p != NULL);
 	assert(p->nb_max == 7 && rb.nb_max == 2);
@@ -42,6 +44,11 @@ void test_rb_grow(void) {
 	p              = rb_grow(&malicious, 5);
 	assert(p == NULL);
 	p = rb_grow(NULL, 5);
+	assert(p == NULL);
+
+	alloc_set_call_limit(0);
+	p = rb_grow(&rb, 5);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 	assert(p == NULL);
 
 	rb_destroy(&rb);

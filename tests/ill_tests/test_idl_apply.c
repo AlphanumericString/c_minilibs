@@ -27,7 +27,7 @@ static bool stop_at_arg(void *elem, void *arg) {
 	return n->value <= val;
 }
 
-void test_idl_foreach(void) {
+NO_COV void test_idl_foreach(void) {
 	t_test_dnode n1, n2, n3;
 	t_idl       *head = NULL;
 	bool         ret;

@@ -2,7 +2,7 @@
 
 #include "rdsu_tests.h"
 
-void test_rdsu_clr(void) {
+NO_COV void test_rdsu_clr(void) {
 	t_rdsu *rdsu = rdsu_new(10);
 	t_rdsu  intact_copy;
 
@@ -27,7 +27,7 @@ void test_rdsu_clr(void) {
 	*rdsu = intact_copy;
 	rdsu_free(&rdsu);
 }
-void test_rdsu_destroy(void) {
+NO_COV void test_rdsu_destroy(void) {
 	t_rdsu rdsu;
 
 	rdsu_init(&rdsu, 10);
@@ -40,7 +40,7 @@ void test_rdsu_destroy(void) {
 	rdsu_destroy(&rdsu);
 	rdsu_destroy(NULL);
 }
-void test_rdsu_free(void) {
+NO_COV void test_rdsu_free(void) {
 	t_rdsu *d = rdsu_new(10);
 
 	assert(d != NULL);

@@ -4,7 +4,7 @@
 
 #include "rdsu_tests.h"
 
-void test_rdsu_new(void) {
+NO_COV void test_rdsu_new(void) {
 	t_rdsu *rd;
 
 	rd = rdsu_new(32);
@@ -16,8 +16,14 @@ void test_rdsu_new(void) {
 	rdsu_free(&rd);
 
 	assert(rdsu_new(0) == NULL);
+	alloc_set_call_limit(0);
+	assert(rdsu_new(32) == NULL);
+	alloc_reset_counter();
+	alloc_set_call_limit(1);
+	assert(rdsu_new(32) == NULL);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
-void test_rdsu_new_from_array(void) {
+NO_COV void test_rdsu_new_from_array(void) {
 	t_rdsu   *rdsu;
 	uint16_t *parents = malloc(sizeof(uint16_t) * 5);
 	uint16_t *ranks   = malloc(sizeof(uint16_t) * 5);
@@ -31,11 +37,15 @@ void test_rdsu_new_from_array(void) {
 	assert(rdsu->change_log == NULL);
 	rdsu_free(&rdsu);
 
+	alloc_set_call_limit(0);
+	assert(rdsu_new_from_arrays(5, parents, ranks) == NULL);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
+
 	assert(rdsu_new_from_arrays(0, parents, ranks) == NULL);
 	assert(rdsu_new_from_arrays(5, NULL, ranks) == NULL);
 	assert(rdsu_new_from_arrays(5, parents, NULL) == NULL);
 }
-void test_rdsu_init(void) {
+NO_COV void test_rdsu_init(void) {
 	t_rdsu rdsu;
 
 	assert(rdsu_init(&rdsu, 10) == &rdsu);
@@ -45,10 +55,13 @@ void test_rdsu_init(void) {
 	assert(rdsu.rank != NULL);
 	assert(rdsu.change_log == NULL);
 	rdsu_destroy(&rdsu);
+	alloc_set_call_limit(0);
+	assert(rdsu_init(&rdsu, 10) == NULL);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 	assert(rdsu_init(&rdsu, 0) == NULL);
 	assert(rdsu_init(NULL, 99) == NULL);
 }
-void test_rdsu_init_from_arrays(void) {
+NO_COV void test_rdsu_init_from_arrays(void) {
 	t_rdsu    rdsu;
 	uint16_t *parents = malloc(sizeof(uint16_t) * 5);
 	uint16_t *ranks   = malloc(sizeof(uint16_t) * 5);

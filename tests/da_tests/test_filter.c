@@ -2,7 +2,7 @@
 
 #include "da_tests.h"
 
-void test_da_filter(void) {
+NO_COV void test_da_filter(void) {
 	int  arr[5] = {1, 2, 3, 4, 5};
 	t_da da     = {.array = arr, .cap_e = 5, .nb_e = 5, .sz_e = sizeof(int)};
 	int  bound;
@@ -30,7 +30,7 @@ void test_da_filter(void) {
 	da.nb_e = 0;
 	assert(da_filter(&da, cb_filter_strict_inf, &bound, NULL) == false);
 }
-void test_da_nfilter(void) {
+NO_COV void test_da_nfilter(void) {
 	int        arr[5] = {1, 2, 3, 4, 5};
 	t_da       da = {.array = arr, .cap_e = 5, .nb_e = 5, .sz_e = sizeof(int)};
 	int        bound       = 1;
@@ -62,7 +62,7 @@ void test_da_nfilter(void) {
 	assert(da_is_empty(&da) == true);
 	assert(da_nfilter(&da, 1, cb_true, &bound, del) == false);
 }
-void test_da_filter_out(void) {
+NO_COV void test_da_filter_out(void) {
 	t_da da;
 	int  a     = 1;
 	int  bound = 3;
@@ -85,7 +85,7 @@ void test_da_filter_out(void) {
 	t_da bad_da = {.array = (void *)0xDEAD, .cap_e = 5, .nb_e = 0, .sz_e = 4};
 	da_filter_out(&bad_da, cb_filter_strict_inf, &bound, cb_empty_deletor);
 }
-void test_da_nfilter_out(void) {
+NO_COV void test_da_nfilter_out(void) {
 	t_da da;
 	int  a     = 1;
 	int  bound = 3;

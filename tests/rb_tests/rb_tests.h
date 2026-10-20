@@ -3,6 +3,7 @@
 #ifndef C_MINI__TESTS
 #	define C_MINI__TESTS
 #endif
+#include "common_base/tests.h"
 #include "rb/round_buffer.h"
 
 #define ASSERT_RB_STATE(rb, sz, max, i, o)                                     \

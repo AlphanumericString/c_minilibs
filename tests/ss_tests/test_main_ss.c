@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define C_MINI__TWRAP_IMPL
 #include "./ss/sparse_set.h"
+#include "common_base/tests.h"
 
 #define DUMP_SS(ss)                                                            \
 	do {                                                                       \

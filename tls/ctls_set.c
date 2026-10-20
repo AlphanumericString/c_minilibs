@@ -18,6 +18,7 @@ bool ctls_set(const char *name, t_ctls_typewrap init_val) {
 
 	if (!ctls) {
 		ctls = calloc(1, sizeof(*ctls));
+		if (!ctls) return (false);
 		pthread_setspecific(ctls_key, ctls);
 	}
 	for (i = 0; i < ctls->len; i++) {

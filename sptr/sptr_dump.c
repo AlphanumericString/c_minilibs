@@ -101,76 +101,96 @@ char *sptr_to_stringu(const t_uniq_ptr *sptr) {
  * descriptor
  * \param fd file descriptor to output to
  * \param sptr shared (strong) pointer to dump
+ * \return true on success, false otherwise
  * \note prints infos using sptr_to_string format
  * \ingroup sptr
 **/
-void sptr_dumps(int fd, const t_strong_ptr *sptr) {
+bool sptr_dumps(int fd, const t_strong_ptr *sptr) {
 	char *s;
 
 	if (fd < 0) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
-		return;
+		return false;
 	}
 	s = sptr_to_strings(sptr);
-	if (!s) return;
+	if (!s) {
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__SPTR_LOG_EALLOC);
+		return false;
+	}
 	dprintf(fd, "%s\n", s);
 	free(s);
+	return true;
 }
 /**
  * \brief dump debug information for a shared (weak) pointer to a given file
  * descriptor
  * \param fd file descriptor to output to
  * \param wptr shared (weak) pointer to dump
+ * \return true on success, false otherwise
  * \note prints infos using sptr_to_string format
  * \ingroup sptr
 **/
-void sptr_dumpw(int fd, const t_weak_ptr *wptr) {
+bool sptr_dumpw(int fd, const t_weak_ptr *wptr) {
 	char *s;
 
 	if (fd < 0) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
-		return;
+		return false;
 	}
 	s = sptr_to_stringw(wptr);
-	if (!s) return;
+	if (!s) {
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__SPTR_LOG_EALLOC);
+		return false;
+	}
 	dprintf(fd, "%s\n", s);
 	free(s);
+	return true;
 }
 /**
  * \brief dump debug information for a owned pointer to a given file descriptor
  * \param fd file descriptor to output to
  * \param optr owned pointer to dump
+ * \return true on success, false otherwise
  * \note prints infos using sptr_to_string format
  * \ingroup sptr
 **/
-void sptr_dumpo(int fd, const t_owned_ptr *optr) {
+bool sptr_dumpo(int fd, const t_owned_ptr *optr) {
 	char *s;
 
 	if (fd < 0) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
-		return;
+		return false;
 	}
 	s = sptr_to_stringo(optr);
-	if (!s) return;
+	if (!s) {
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__SPTR_LOG_EALLOC);
+		return false;
+	}
 	dprintf(fd, "%s\n", s);
 	free(s);
+	return true;
 }
 /**
  * \brief dump debug information for a uniq pointer to a given file descriptor
  * \param fd file descriptor to output to
  * \param uptr uniq pointer to dump
+ * \return true on success, false otherwise
  * \note prints infos using sptr_to_string format
  * \ingroup sptr
 **/
-void sptr_dumpu(int fd, const t_uniq_ptr *uptr) {
+bool sptr_dumpu(int fd, const t_uniq_ptr *uptr) {
 	char *s;
 
 	if (fd < 0) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
-		return;
+		return false;
 	}
 	s = sptr_to_stringu(uptr);
-	if (!s) return;
+	if (!s) {
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__SPTR_LOG_EALLOC);
+		return false;
+	}
 	dprintf(fd, "%s\n", s);
 	free(s);
+	return true;
 }

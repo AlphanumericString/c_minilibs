@@ -5,6 +5,7 @@
 #ifndef C_MINI__TESTS
 #	define C_MINI__TESTS
 #endif
+#include "common_base/tests.h"
 #include "lru_cache/least_recently_used_cache.h"
 
 // TODO: better test_lruc_get -> time invalidation and all the usual jazz

@@ -6,6 +6,7 @@
 #include <stdint.h>
 
 #include "common_base/log.h"
+
 #ifdef C_MINI__TESTS
 
 #	define C_MINI__RDSU_LOG_FAIL   C_MINI__LOG_FAIL
@@ -34,8 +35,8 @@
  * \ingroup rdsu
 **/
 enum s_rdsu_log_type {
-	RDSU_LOG_RANK,
-	RDSU_LOG_PARENT,
+	RDSU_LOG_YESRANK,
+	RDSU_LOG_NAYRANK,
 };
 
 typedef struct s_rdsu_log {
@@ -110,7 +111,7 @@ size_t rdsu_nb_components(t_rdsu dsu);
 bool rdsu_is_related(const t_rdsu *ds, size_t x, size_t y);
 bool rdsu_validate(t_rdsu dsu);
 
-void     rdsu_union(t_rdsu *ds, size_t x, size_t y);
+bool     rdsu_union(t_rdsu *ds, size_t x, size_t y);
 uint16_t rdsu_find(const t_rdsu *ds, size_t x);
 size_t   rdsu_compress_all(t_rdsu *ds);
 
@@ -121,8 +122,9 @@ void        rdsu_rewind_clear(t_rdsu *rdsu);
 
 #ifdef C_MINI__RDSU_INTERNAL
 
-bool rdsui_push_rewind(t_rdsu *rdsu, size_t elem, uint16_t value, uint16_t rank,
-                       enum s_rdsu_log_type type);
+bool        rdsui_push_rewind(t_rdsu *rdsu, t_rdsu_log *entry);
+t_rdsu_log  rdsui_init_log(size_t elem, uint16_t value, uint16_t rank,
+                           enum s_rdsu_log_type type);
 t_rdsu_log *rdsui_peek_rewind(const t_rdsu *rdsu);
 t_rdsu_log *rdsui_pop_rewind(t_rdsu *rdsu);
 

@@ -3,7 +3,7 @@
 #include "sptr_tests.h"
 
 // is_uniq
-void test_sptr_is_uniqs(void) {
+NO_COV void test_sptr_is_uniqs(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -27,7 +27,7 @@ void test_sptr_is_uniqs(void) {
 	assert(!res[4]);
 }
 
-void test_sptr_is_uniqw(void) {
+NO_COV void test_sptr_is_uniqw(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -51,7 +51,7 @@ void test_sptr_is_uniqw(void) {
 	assert(!res[4]);
 }
 
-void test_sptr_is_uniqo(void) {
+NO_COV void test_sptr_is_uniqo(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -75,7 +75,7 @@ void test_sptr_is_uniqo(void) {
 	assert(!res[4]);
 }
 
-void test_sptr_is_uniqu(void) {
+NO_COV void test_sptr_is_uniqu(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -91,7 +91,7 @@ void test_sptr_is_uniqu(void) {
 }
 
 // is_shared
-void test_sptr_is_shareds(void) {
+NO_COV void test_sptr_is_shareds(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -117,7 +117,7 @@ void test_sptr_is_shareds(void) {
 	assert(!res[4]);
 }
 
-void test_sptr_is_sharedw(void) {
+NO_COV void test_sptr_is_sharedw(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -143,7 +143,7 @@ void test_sptr_is_sharedw(void) {
 	assert(!res[4]);
 }
 
-void test_sptr_is_sharedo(void) {
+NO_COV void test_sptr_is_sharedo(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -169,7 +169,7 @@ void test_sptr_is_sharedo(void) {
 	assert(!res[4]);
 }
 
-void test_sptr_is_sharedu(void) {
+NO_COV void test_sptr_is_sharedu(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -188,7 +188,7 @@ void test_sptr_is_sharedu(void) {
 }
 
 // is_sole_box_owner
-void test_sptr_is_sole_box_owns(void) {
+NO_COV void test_sptr_is_sole_box_owns(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -220,7 +220,7 @@ void test_sptr_is_sole_box_owns(void) {
 	assert(!res[5]);
 }
 
-void test_sptr_is_sole_box_ownw(void) {
+NO_COV void test_sptr_is_sole_box_ownw(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -252,7 +252,7 @@ void test_sptr_is_sole_box_ownw(void) {
 	assert(!res[5]);
 }
 
-void test_sptr_is_sole_box_owno(void) {
+NO_COV void test_sptr_is_sole_box_owno(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -292,7 +292,7 @@ void test_sptr_is_sole_box_owno(void) {
 	assert(!res[7]);
 }
 
-void test_sptr_is_sole_box_ownu(void) {
+NO_COV void test_sptr_is_sole_box_ownu(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 

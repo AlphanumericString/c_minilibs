@@ -1,3 +1,4 @@
+#define C_MINI__TWRAP_IMPL
 #include "ill_tests.h"
 
 void ill_main(void) {
@@ -56,7 +57,7 @@ void idl_main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "All IDL tests completed successfully.");
 }
 
-int __attribute__((no_profile_instrument_function)) main(void) {
+NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "\t\tILL");

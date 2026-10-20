@@ -4,7 +4,7 @@
 
 #include "lru_cache_tests.h"
 
-void test_lruci_hp_pop(void) {
+NO_COV void test_lruci_hp_pop(void) {
 	t_lruc          c, intact_copy;
 	t_lruc_keynode *kv1, *kv2;
 	void           *key  = "quatorze";
@@ -40,7 +40,7 @@ void test_lruci_hp_pop(void) {
 	free(kv1), free(kv2);
 	free(c.buckets);
 }
-void test_lruci_hp_pop_nth(void) {
+NO_COV void test_lruci_hp_pop_nth(void) {
 	t_lruc          c, intact_copy;
 	t_lruc_keynode *kv1, *kv2, *kv3;
 	void           *key1 = "quatorze";

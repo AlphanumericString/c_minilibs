@@ -2,7 +2,7 @@
 
 #include "da_tests.h"
 
-void test_da_find(void) {
+NO_COV void test_da_find(void) {
 	t_da da = {
 	    .array = (void *)arr_5,
 	    .cap_e = 5,
@@ -27,7 +27,7 @@ void test_da_find(void) {
 	assert(da_find(&da, NULL, &value) == NULL);
 	assert(da_find(NULL, cb_cmp, &value) == NULL);
 }
-void test_da_nfind(void) {
+NO_COV void test_da_nfind(void) {
 	t_da da = {
 	    .array = (void *)arr_5,
 	    .cap_e = 5,
@@ -57,7 +57,7 @@ void test_da_nfind(void) {
 	assert(da_nfind(&da, -1, NULL, &value) == NULL);
 	assert(da_nfind(NULL, -1, cb_cmp, &value) == NULL);
 }
-void test_da_find_get(void) {
+NO_COV void test_da_find_get(void) {
 	t_da da = {
 	    .array = (void *)arr_5,
 	    .cap_e = 5,

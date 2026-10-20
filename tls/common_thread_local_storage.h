@@ -10,6 +10,8 @@
 
 #include "common_base/log.h"
 
+// TODO: log on tls (at least ctls)
+
 /**
  * \defgroup ctls C-types Thread Local Storage
 **/

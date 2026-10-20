@@ -17,7 +17,7 @@ static void *duplicate_dnode(const void *elem) {
 	return copy;
 }
 
-void test_idl_init(void) {
+NO_COV void test_idl_init(void) {
 	t_test_dnode  node;
 	t_test_dnode *error;
 

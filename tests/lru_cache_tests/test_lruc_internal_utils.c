@@ -3,7 +3,7 @@
 
 #include "lru_cache_tests.h"
 
-void test_lruci_keyinlist(void) {
+NO_COV void test_lruci_keyinlist(void) {
 	t_lruc      c;
 	const char *key1 = "big key";
 	const char *val1 = "big door";
@@ -23,7 +23,7 @@ void test_lruci_keyinlist(void) {
 	assert(lruci_keyinlist(&c, key4, strlen(key4)) == NULL);
 	lruc_destroy(&c);
 }
-void test_lruci_node_eq(void) {
+NO_COV void test_lruci_node_eq(void) {
 	const char    *key1 = "aaaaAAAAAAAAAAAAAAAAa";
 	const char    *key2 = "bbbbBBBBBBBBBBBBBbbbb";
 	t_lruc_keynode kv1, kv2;

@@ -11,6 +11,10 @@
 t_da *da_new(size_t sz_elem) {
 	t_da *ret;
 
+	if (!sz_elem) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
+		return (NULL);
+	}
 	ret = (t_da *)calloc(sizeof(t_da), 1);
 	if (!ret) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__DA_LOG_EALLOC);

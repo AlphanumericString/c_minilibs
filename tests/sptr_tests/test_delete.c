@@ -74,7 +74,7 @@ static void test_sptr_deletes_ok(void) {
 	assert(g_dtor_calls == 2);
 }
 
-void test_sptr_deletes(void) {
+NO_COV void test_sptr_deletes(void) {
 	test_sptr_deletes_errors();
 	test_sptr_deletes_ok();
 }
@@ -135,7 +135,7 @@ static void test_sptr_deletew_ok(void) {
 	// heap_box freed by sptr_deletew
 }
 
-void test_sptr_deletew(void) {
+NO_COV void test_sptr_deletew(void) {
 	test_sptr_deletew_errors();
 	test_sptr_deletew_ok();
 }
@@ -219,7 +219,7 @@ static void test_sptr_deleteo_ok(void) {
 	assert(g_dtor_calls == 2);
 }
 
-void test_sptr_deleteo(void) {
+NO_COV void test_sptr_deleteo(void) {
 	test_sptr_deleteo_errors();
 	test_sptr_deleteo_ok();
 }
@@ -259,7 +259,7 @@ static void test_sptr_deleteu_ok(void) {
 	assert(g_dtor_calls == 1);
 }
 
-void test_sptr_deleteu(void) {
+NO_COV void test_sptr_deleteu(void) {
 	test_sptr_deleteu_errors();
 	test_sptr_deleteu_ok();
 }

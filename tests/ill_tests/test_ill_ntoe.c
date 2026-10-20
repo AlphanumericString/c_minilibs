@@ -2,7 +2,7 @@
 
 #include "ill_tests.h"
 
-void test_ill_ntoe(void) {
+NO_COV void test_ill_ntoe(void) {
 	t_test_node node;
 
 	ill_init(&node.node, offsetof(t_test_node, node));

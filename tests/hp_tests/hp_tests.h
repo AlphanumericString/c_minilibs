@@ -3,6 +3,7 @@
 #ifndef C_MINI__TESTS
 #	define C_MINI__TESTS
 #endif
+#include "common_base/tests.h"
 #include "hp/heap.h"
 
 void test_hp_create(void);

@@ -3,7 +3,7 @@
 
 #include "da_tests.h"
 
-void test_da_to_array(void) {
+NO_COV void test_da_to_array(void) {
 	const t_da da = {
 	    .array = (void *)&arr_5,
 	    .cap_e = 5,
@@ -18,6 +18,9 @@ void test_da_to_array(void) {
 	};
 	int *arr;
 
+	alloc_set_call_limit(0);
+	assert((int *)da_to_array(&da) == NULL);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 	arr = (int *)da_to_array(&da);
 	assert(arr != NULL);
 	assert(arr[0] == 1);
@@ -26,10 +29,11 @@ void test_da_to_array(void) {
 	assert(arr[3] == 4);
 	assert(arr[4] == 5);
 	free(arr);
+
 	assert(da_to_array(NULL) == NULL);
 	assert(da_to_array(&da_err) == NULL);
 }
-void test_da_to_loc_array(void) {
+NO_COV void test_da_to_loc_array(void) {
 	const t_da da = {
 	    .array = (void *)&arr_5,
 	    .cap_e = 5,

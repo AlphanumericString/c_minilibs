@@ -2,7 +2,7 @@
 
 #include "rb_tests.h"
 
-void test_rb_get(void) {
+NO_COV void test_rb_get(void) {
 	t_rb rb     = {0};
 	int  arr[4] = {1, 2, 3, 4};
 	int  out    = 0;
@@ -24,7 +24,7 @@ void test_rb_get(void) {
 	rb_destroy(&rb);
 }
 
-void test_rb_nget(void) {
+NO_COV void test_rb_nget(void) {
 	t_rb rb     = {0};
 	int  arr[4] = {1, 2, 3, 4};
 	int  out[2] = {0};

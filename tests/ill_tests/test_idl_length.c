@@ -8,7 +8,7 @@ static bool is_even(void *elem, void *arg) {
 	return n->value % 2 == 0;
 }
 
-void test_idl_length(void) {
+NO_COV void test_idl_length(void) {
 	t_test_dnode n1, n2, n3, n4;
 	t_idl       *head = NULL;
 	size_t       matches;

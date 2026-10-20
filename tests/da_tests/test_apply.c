@@ -2,7 +2,7 @@
 
 #include "da_tests.h"
 
-void test_da_apply(void) {
+NO_COV void test_da_apply(void) {
 	t_da  da;
 	int   a    = 1;
 	void *data = (void *)0xDEAD;
@@ -23,7 +23,7 @@ void test_da_apply(void) {
 	da = (t_da){.array = data, .cap_e = 12, .sz_e = 1, .nb_e = 0};
 	assert(da_apply(&da, cb_add_one, data) == data);
 }
-void test_da_napply(void) {
+NO_COV void test_da_napply(void) {
 	t_da  da;
 	int   a    = 1;
 	void *data = (void *)0xDEAD;
@@ -55,7 +55,7 @@ void test_da_napply(void) {
 	assert(da_napply(&da, 0, cb_add_one, data) == data);
 	assert(da_napply(&da, 12, NULL, data) == data);
 }
-void test_da_apply_it(void) {
+NO_COV void test_da_apply_it(void) {
 	t_da da;
 
 	da_init(&da, sizeof(int));
@@ -80,7 +80,7 @@ void test_da_apply_it(void) {
 	da = (t_da){.array = (void *)0xCAFE, .cap_e = 12, .nb_e = 12, .sz_e = 2};
 	da_apply_it(&da, NULL, (void *)3UL);
 }
-void test_da_napply_it(void) {
+NO_COV void test_da_napply_it(void) {
 	t_da da;
 
 	da_init(&da, sizeof(int));

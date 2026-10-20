@@ -2,7 +2,7 @@
 
 #include "da_tests.h"
 
-void test_da_at(void) {
+NO_COV void test_da_at(void) {
 	const t_da da = {
 	    .array = (void *)&arr_3,
 	    .cap_e = 3,
@@ -16,7 +16,7 @@ void test_da_at(void) {
 	assert(da_at(NULL, 0) == NULL);
 	assert(da_at(&da, 99) == NULL);
 }
-void test_da_get(void) {
+NO_COV void test_da_get(void) {
 	const t_da da = {
 	    .array = (void *)&arr_3,
 	    .cap_e = 3,
@@ -39,7 +39,7 @@ void test_da_get(void) {
 	assert(da_get(&da, 1, NULL) == false);
 	assert(da_get(NULL, 1, &out) == false);
 }
-void test_da_nget(void) {
+NO_COV void test_da_nget(void) {
 	const t_da da = {
 	    .array = (void *)&arr_3,
 	    .cap_e = 3,
@@ -61,7 +61,7 @@ void test_da_nget(void) {
 	da_nget(&da, 1, 99, &buff);
 	da_nget(&da, 0, 1, &buff);
 }
-void test_da_array(void) {
+NO_COV void test_da_array(void) {
 	const t_da da = {
 	    .array = (void *)&arr_3,
 	    .cap_e = 3,

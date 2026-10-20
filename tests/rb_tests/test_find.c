@@ -2,7 +2,7 @@
 
 #include "rb_tests.h"
 
-void test_rb_find(void) {
+NO_COV void test_rb_find(void) {
 	t_rb      rb                = {0};
 	int       arr[4]            = {1, 2, 3, 4};
 	const int target            = 3;

@@ -4,6 +4,7 @@
 #	define C_MINI__TESTS
 #endif
 #include "./dsu/rdsu/rewindable_disjointed_set_union.h"
+#include "common_base/tests.h"
 
 void test_rdsu_new(void);
 void test_rdsu_new_from_array(void);

@@ -2,7 +2,7 @@
 
 #include "rb_tests.h"
 
-void test_rb_full(void) {
+NO_COV void test_rb_full(void) {
 	t_rb rb  = {0};
 	int  val = 42;
 
@@ -18,7 +18,7 @@ void test_rb_full(void) {
 	assert(rb_full((t_rb){0}) == false);
 }
 
-void test_rb_empty(void) {
+NO_COV void test_rb_empty(void) {
 	t_rb rb  = {0};
 	int  val = 42;
 
@@ -32,7 +32,7 @@ void test_rb_empty(void) {
 	assert(rb_empty((t_rb){0}) == true);
 }
 
-void test_rb_size(void) {
+NO_COV void test_rb_size(void) {
 	t_rb rb  = {0};
 	int  val = 42;
 
@@ -48,7 +48,7 @@ void test_rb_size(void) {
 	assert(rb_size((t_rb){0}) == 0);
 }
 
-void test_rb_capacity(void) {
+NO_COV void test_rb_capacity(void) {
 	t_rb rb = {0};
 
 	rb_create(&rb, sizeof(int), 10);
@@ -59,7 +59,7 @@ void test_rb_capacity(void) {
 	assert(rb_capacity((t_rb){0}) == 0);
 }
 
-void test_rb_remaining_space(void) {
+NO_COV void test_rb_remaining_space(void) {
 	t_rb rb  = {0};
 	int  val = 42;
 	rb_create(&rb, sizeof(int), 10);

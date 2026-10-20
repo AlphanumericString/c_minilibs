@@ -14,7 +14,7 @@ static int cmp_min_max(const void *elem1, const void *elem2) {
 	return n1->value - n2->value;
 }
 
-void test_ill_get(void) {
+NO_COV void test_ill_get(void) {
 	t_test_node n1, n2, n3;
 	t_ill      *head  = NULL;
 	int         val20 = 20;

@@ -33,7 +33,7 @@ static void *ftls_dummy_increase(void *arg) {
 	return (NULL);
 }
 
-void test_ftls_separate(void) {
+NO_COV void test_ftls_separate(void) {
 	pthread_t t1 = 0, t2 = 0;
 	void     *ret      = NULL;
 	size_t    nb_steps = 10;

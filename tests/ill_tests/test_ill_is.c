@@ -14,7 +14,7 @@ static bool has_val_42(void *elem, void *arg) {
 	return n->value == 42;
 }
 
-void test_ill_is(void) {
+NO_COV void test_ill_is(void) {
 	t_test_node n1, n2, n3;
 	t_test_node isolated_node;
 

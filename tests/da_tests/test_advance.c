@@ -2,7 +2,7 @@
 
 #include "da_tests.h"
 
-void test_da_advance(void) {
+NO_COV void test_da_advance(void) {
 	t_da da;
 
 	da_init(&da, sizeof(int));

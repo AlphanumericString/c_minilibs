@@ -2,7 +2,7 @@
 
 #include "da_tests.h"
 
-void test_da_swap(void) {
+NO_COV void test_da_swap(void) {
 	int  data[3] = {1, 2, 3};
 	char large_data_blocks[(C_MINI_DA__SZ_ELEM_DFLT + 1) * 3];
 	t_da da = {.array = data, .nb_e = 3, .cap_e = 3, .sz_e = sizeof(int)};
@@ -24,7 +24,7 @@ void test_da_swap(void) {
 	assert(da_swap(&da, 12, 1) == false);
 	assert(da_swap(&da, 1, 12) == false);
 }
-void test_da_nswap(void) {
+NO_COV void test_da_nswap(void) {
 	int  data[5] = {1, 2, 3, 4, 5};
 	t_da da      = {.array = data, .nb_e = 5, .cap_e = 5, .sz_e = sizeof(int)};
 

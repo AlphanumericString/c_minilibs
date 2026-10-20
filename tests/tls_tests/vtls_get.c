@@ -2,7 +2,7 @@
 
 #include "tls_tests.h"
 
-void test_vtls_get(void) {
+NO_COV void test_vtls_get(void) {
 	void *data;
 	assert(vtls_get(NULL) == NULL);
 	assert(vtls_get("a") == NULL);
@@ -20,7 +20,7 @@ void test_vtls_get(void) {
 	vtls_rm("a");
 }
 
-void test_vtls_len(void) {
+NO_COV void test_vtls_len(void) {
 	void *data;
 
 	assert(vtls_len() == 0);

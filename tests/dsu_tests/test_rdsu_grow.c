@@ -1,11 +1,12 @@
 #include <assert.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "rdsu_tests.h"
 
-void test_rdsu_grow(void) {
+NO_COV void test_rdsu_grow(void) {
 	t_rdsu *rdsu = rdsu_new(5);
-	t_rdsu  intact_copy;
+	t_rdsu  intact_copy, no_parent, no_rank, no_size;
 
 	// normal
 	assert(rdsu->size == 5);
@@ -16,17 +17,20 @@ void test_rdsu_grow(void) {
 		assert(rdsu->parent[i] == i);
 
 	// errs
-	intact_copy  = *rdsu;
-	rdsu->parent = NULL;
+	alloc_set_call_limit(0);
 	assert(rdsu_grow(rdsu, 5) == false);
-	*rdsu      = intact_copy;
-	rdsu->rank = NULL;
-	assert(rdsu_grow(rdsu, 5) == false);
-	*rdsu      = intact_copy;
-	rdsu->size = 0;
-	assert(rdsu_grow(rdsu, 5) == false);
-	*rdsu = intact_copy;
-	assert(rdsu_grow(rdsu, 0) == false);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
+	intact_copy      = *rdsu;
+	no_parent        = *rdsu;
+	no_rank          = *rdsu;
+	no_size          = *rdsu;
+	no_parent.parent = NULL;
+	no_rank.rank     = NULL;
+	no_size.size     = 0;
+	assert(rdsu_grow(&no_parent, 5) == false);
+	assert(rdsu_grow(&no_rank, 5) == false);
+	assert(rdsu_grow(&no_size, 5) == false);
+	assert(rdsu_grow(&intact_copy, 0) == false);
 	rdsu_free(&rdsu);
 	assert(rdsu_grow(rdsu, 0) == false);
 	assert(rdsu_grow(NULL, 5) == false);

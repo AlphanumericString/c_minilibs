@@ -5,6 +5,7 @@
 #endif
 
 #define C_MINI__SPTR_INTERNAL
+#include "common_base/tests.h"
 #include "sptr/smart_pointer.h"
 
 // [make]

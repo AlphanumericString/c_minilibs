@@ -2,7 +2,7 @@
 
 #include "ill_tests.h"
 
-void test_ill_insert(void) {
+NO_COV void test_ill_insert(void) {
 	t_test_node n1, n2, n3, n4;
 	t_ill      *head = NULL;
 

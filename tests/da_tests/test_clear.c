@@ -2,7 +2,7 @@
 
 #include "da_tests.h"
 
-void test_da_clr(void) {
+NO_COV void test_da_clr(void) {
 	t_da   da;
 	size_t sz;
 	size_t cap;

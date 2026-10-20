@@ -1,9 +1,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#define C_MINI__TWRAP_IMPL
 #include "lru_cache_tests.h"
 
-int __attribute__((no_profile_instrument_function)) main(void) {
+NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Create");
 	test_lruc_create();

@@ -8,7 +8,7 @@ static int cmp_rawptr(const void *a, const void *b) {
 	return (0);
 }
 
-void test_hp_create(void) {
+NO_COV void test_hp_create(void) {
 	t_heap *h;
 
 	h = hp_create(32, cmp_rawptr);
@@ -17,8 +17,15 @@ void test_hp_create(void) {
 	assert(h->nb == 0);
 	assert(h->capacity == 32);
 	hp_free(h);
+
+	alloc_set_call_limit(0);
+	assert(hp_create(32, cmp_rawptr) == NULL);
+	alloc_reset_counter();
+	alloc_set_call_limit(1);
+	assert(hp_create(32, cmp_rawptr) == NULL);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
-void test_hp_init(void) {
+NO_COV void test_hp_init(void) {
 	t_heap h;
 
 	assert(hp_init(&h, 32, cmp_rawptr) == &h);
@@ -26,5 +33,10 @@ void test_hp_init(void) {
 	assert(h.capacity == 32);
 	assert(h.nb == 0);
 	hp_delete(&h);
+
+	alloc_set_call_limit(0);
+	assert(hp_init(&h, 32, cmp_rawptr) == NULL);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
+
 	assert(hp_init(NULL, 32, cmp_rawptr) == NULL);
 }

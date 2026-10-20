@@ -10,7 +10,7 @@
 #define VAR4_STR "{ \"ptr\", 0x42 }"
 #define VAR5_STR "{ \"long\", 999 }"
 
-void test_ctls_dump_typewrap(void) {
+NO_COV void test_ctls_dump_typewrap(void) {
 	const t_ctls_typewrap vars[] = {
 	    (t_ctls_typewrap){.type = CTLS_INT,  .value.i = -1              },
 	    (t_ctls_typewrap){.type = CTLS_CHAR, .value.c = 'd'             },

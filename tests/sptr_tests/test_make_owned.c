@@ -5,15 +5,21 @@
 
 // make_owned_from_raw
 static void test_sptr_make_owned_from_raw_errors(void) {
+	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
 	t_owned_ptr res[] = {
 	    sptr_make_owned_from_raw(NULL, NULL),
 	    sptr_make_owned_from_raw(NULL, dtor),
+	    (t_owned_ptr){0},
 	};
 
 	assert(!res[0].data && !res[0].meta && !res[0].owner);
 	assert(!res[1].data && !res[1].meta && !res[1].owner);
+	alloc_set_call_limit(0);
+	res[2] = sptr_make_owned_from_raw(data, dtor);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
+	assert(!res[2].data && !res[2].meta && !res[2].owner);
 }
 
 static void test_sptr_make_owned_from_raw_ok(void) {
@@ -38,7 +44,7 @@ static void test_sptr_make_owned_from_raw_ok(void) {
 	free(res[1].meta);
 }
 
-void test_sptr_make_owned_from_raw(void) {
+NO_COV void test_sptr_make_owned_from_raw(void) {
 	test_sptr_make_owned_from_raw_errors();
 	test_sptr_make_owned_from_raw_ok();
 }
@@ -121,7 +127,7 @@ static void test_sptr_make_owned_from_strong_ok(void) {
 	assert(sptr_get_dtor(&res[3]) == NULL);
 }
 
-void test_sptr_make_owned_from_strong(void) {
+NO_COV void test_sptr_make_owned_from_strong(void) {
 	test_sptr_make_owned_from_strong_errors();
 	test_sptr_make_owned_from_strong_ok();
 }
@@ -202,7 +208,7 @@ static void test_sptr_make_owned_from_owned_ok(void) {
 	assert(sptr_get_dtor(&res[3]) == NULL);
 }
 
-void test_sptr_make_owned_from_owned(void) {
+NO_COV void test_sptr_make_owned_from_owned(void) {
 	test_sptr_make_owned_from_owned_errors();
 	test_sptr_make_owned_from_owned_ok();
 }
@@ -219,11 +225,16 @@ static void test_sptr_make_owned_from_uniq_errors(void) {
 	    sptr_make_owned_from_uniq(NULL, NULL),
 	    sptr_make_owned_from_uniq(NULL, dtor),
 	    sptr_make_owned_from_uniq(&u0, not_dtor),
+	    (t_owned_ptr){0},
 	};
 
 	assert(!res[0].data && !res[0].meta && !res[0].owner);
 	assert(!res[1].data && !res[1].meta && !res[1].owner);
 	assert(!res[2].data && !res[2].meta && !res[2].owner);
+	alloc_set_call_limit(0);
+	res[3] = sptr_make_owned_from_uniq(&u0, dtor);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
+	assert(!res[3].data && !res[3].meta && !res[3].owner);
 }
 
 static void test_sptr_make_owned_from_uniq_ok(void) {
@@ -269,7 +280,7 @@ static void test_sptr_make_owned_from_uniq_ok(void) {
 	free(res[3].meta);
 }
 
-void test_sptr_make_owned_from_uniq(void) {
+NO_COV void test_sptr_make_owned_from_uniq(void) {
 	test_sptr_make_owned_from_uniq_errors();
 	test_sptr_make_owned_from_uniq_ok();
 }

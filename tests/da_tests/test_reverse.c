@@ -2,7 +2,7 @@
 
 #include "da_tests.h"
 
-void test_da_reverse(void) {
+NO_COV void test_da_reverse(void) {
 	int  data[5] = {1, 2, 3, 4, 5};
 	t_da da      = {.array = data, .nb_e = 5, .cap_e = 5, .sz_e = sizeof(int)};
 
@@ -14,7 +14,7 @@ void test_da_reverse(void) {
 	assert(*(int *)da_at(&da, 4) == 1);
 	da_reverse(NULL);
 }
-void test_da_nreverse(void) {
+NO_COV void test_da_nreverse(void) {
 	int  data[5] = {1, 2, 3, 4, 5};
 	t_da da      = {.array = data, .nb_e = 5, .cap_e = 5, .sz_e = sizeof(int)};
 
@@ -33,7 +33,7 @@ void test_da_nreverse(void) {
 	da_nreverse(NULL, 2);
 	da_nreverse(&da, 0);
 }
-void test_da_b_nreverse(void) {
+NO_COV void test_da_b_nreverse(void) {
 	int  data[5] = {1, 2, 3, 4, 5};
 	t_da da      = {.array = data, .nb_e = 5, .cap_e = 5, .sz_e = sizeof(int)};
 

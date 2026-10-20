@@ -2,7 +2,7 @@
 
 #include "rdsu_tests.h"
 
-void test_rdsu_max_depth(void) {
+NO_COV void test_rdsu_max_depth(void) {
 	t_rdsu *rdsu = rdsu_new(5);
 
 	assert(rdsu_max_depth(*rdsu) == 0);
@@ -10,7 +10,7 @@ void test_rdsu_max_depth(void) {
 	assert(rdsu_max_depth(*rdsu) == 1);
 	rdsu_free(&rdsu);
 }
-void test_rdsu_size(void) {
+NO_COV void test_rdsu_size(void) {
 	t_rdsu *rdsu = rdsu_new(12);
 
 	assert(rdsu_size(*rdsu) == 12);
@@ -18,7 +18,7 @@ void test_rdsu_size(void) {
 	assert(rdsu_size(*rdsu) == 0);
 	rdsu_free(&rdsu);
 }
-void test_rdsu_nb_components(void) {
+NO_COV void test_rdsu_nb_components(void) {
 	t_rdsu *rdsu = rdsu_new(5);
 
 	assert(rdsu_nb_components(*rdsu) == 5);

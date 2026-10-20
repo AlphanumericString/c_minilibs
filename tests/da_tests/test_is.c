@@ -2,7 +2,7 @@
 
 #include "da_tests.h"
 
-void test_da_is_valid(void) {
+NO_COV void test_da_is_valid(void) {
 	const t_da da_ok1 = {
 	    .array = (int *)arr_5, .cap_e = 5, .nb_e = 5, .sz_e = sizeof(int)};
 	const t_da cap_inf_nb_e = {
@@ -18,7 +18,7 @@ void test_da_is_valid(void) {
 	assert(da_is_valid(&no_size_e) == false);
 	assert(da_is_valid(NULL) == false);
 }
-void test_da_is_not_null(void) {
+NO_COV void test_da_is_not_null(void) {
 	const t_da da_ok1 = {
 	    .array = (int *)arr_5, .cap_e = 5, .nb_e = 5, .sz_e = sizeof(int)};
 	const t_da no_arr = {
@@ -34,7 +34,7 @@ void test_da_is_not_null(void) {
 	assert(da_is_not_null(&no_sz) == false);
 	assert(da_is_not_null(&no_cap) == false);
 }
-void test_da_is_empty(void) {
+NO_COV void test_da_is_empty(void) {
 	const t_da da_ok1 = {
 	    .array = (int *)arr_5, .cap_e = 5, .nb_e = 5, .sz_e = sizeof(int)};
 	const t_da da_empty = {
@@ -53,7 +53,7 @@ void test_da_is_empty(void) {
 	assert(da_is_empty(&no_sz) == false);
 	assert(da_is_empty(&no_cap) == false);
 }
-void test_da_is_full(void) {
+NO_COV void test_da_is_full(void) {
 	const t_da da_full = {
 	    .array = (int *)arr_5, .cap_e = 5, .nb_e = 5, .sz_e = sizeof(int)};
 	const t_da da_empty = {

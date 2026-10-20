@@ -3,7 +3,7 @@
 
 #include "rb_tests.h"
 
-void test_rb_at(void) {
+NO_COV void test_rb_at(void) {
 	t_rb rb     = {0};
 	int  arr[3] = {1, 2, 3};
 
@@ -23,7 +23,7 @@ void test_rb_at(void) {
 	rb_destroy(&rb);
 }
 
-void test_rb_nat(void) {
+NO_COV void test_rb_nat(void) {
 	t_rb rb     = {0};
 	int  arr[4] = {1, 2, 3, 4};
 	int  out[4] = {0};

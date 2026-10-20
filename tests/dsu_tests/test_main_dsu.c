@@ -1,5 +1,6 @@
 #include <stdlib.h>
 
+#define C_MINI__TWRAP_IMPL
 #include "cdsu_tests.h"
 #include "rdsu_tests.h"
 
@@ -78,7 +79,7 @@ int rdsu_main_tests() {
 	return (EXIT_SUCCESS);
 }
 
-int __attribute__((no_profile_instrument_function)) main(void) {
+NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "\t\tCDSU");

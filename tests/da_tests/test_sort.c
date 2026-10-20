@@ -2,7 +2,7 @@
 
 #include "da_tests.h"
 
-void test_da_sort(void) {
+NO_COV void test_da_sort(void) {
 	t_da da;
 
 	da_init(&da, sizeof(int));
@@ -20,7 +20,7 @@ void test_da_sort(void) {
 	assert(da_sort(&da, NULL) == false);
 	da_destroy(&da);
 }
-void test_da_nsort(void) {
+NO_COV void test_da_nsort(void) {
 	t_da da;
 
 	da_init(&da, sizeof(int));

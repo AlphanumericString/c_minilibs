@@ -1,11 +1,10 @@
 #include <assert.h>
-#include <dsu/rdsu/rewindable_disjointed_set_union.h>
 
 #include "rdsu_tests.h"
 
-void test_rdsu_union(void) {
+NO_COV void test_rdsu_union(void) {
 	t_rdsu *rdsu = rdsu_new(5);
-	t_rdsu  intact_copy;
+	t_rdsu  no_rank, no_parent, no_size;
 
 	assert(rdsu_nb_components(*rdsu) == 5); // start state
 	assert(rdsu->rank[0] == 0 && rdsu->parent[0] == 0);
@@ -13,7 +12,7 @@ void test_rdsu_union(void) {
 	assert(rdsu->rank[2] == 0 && rdsu->parent[2] == 2);
 	assert(rdsu->rank[3] == 0 && rdsu->parent[3] == 3);
 	assert(rdsu->rank[4] == 0 && rdsu->parent[4] == 4);
-	rdsu_union(rdsu, 0, 1); // simple union
+	assert(rdsu_union(rdsu, 0, 1) == true); // simple union
 	assert(rdsu_find(rdsu, 0) == rdsu_find(rdsu, 1));
 	assert(rdsu_nb_components(*rdsu) == 4);
 	assert(rdsu->rank[0] == 1 && rdsu->parent[0] == 0);
@@ -21,7 +20,7 @@ void test_rdsu_union(void) {
 	assert(rdsu->rank[2] == 0 && rdsu->parent[2] == 2);
 	assert(rdsu->rank[3] == 0 && rdsu->parent[3] == 3);
 	assert(rdsu->rank[4] == 0 && rdsu->parent[4] == 4);
-	rdsu_union(rdsu, 3, 2); // reversed order to show always lower taken
+	assert(rdsu_union(rdsu, 3, 2) == true); // reversed order, take lower
 	assert(rdsu_find(rdsu, 2) == rdsu_find(rdsu, 3));
 	assert(rdsu_nb_components(*rdsu) == 3);
 	assert(rdsu->rank[0] == 1 && rdsu->parent[0] == 0);
@@ -29,7 +28,7 @@ void test_rdsu_union(void) {
 	assert(rdsu->rank[2] == 1 && rdsu->parent[2] == 2);
 	assert(rdsu->rank[3] == 0 && rdsu->parent[3] == 2);
 	assert(rdsu->rank[4] == 0 && rdsu->parent[4] == 4);
-	rdsu_union(rdsu, 1, 3); // merging two nets
+	assert(rdsu_union(rdsu, 1, 3) == true); // merging two nets
 	assert(rdsu_find(rdsu, 0) == rdsu_find(rdsu, 1));
 	assert(rdsu_find(rdsu, 0) == rdsu_find(rdsu, 2));
 	assert(rdsu_find(rdsu, 0) == rdsu_find(rdsu, 3));
@@ -39,14 +38,13 @@ void test_rdsu_union(void) {
 	assert(rdsu->rank[3] == 0 && rdsu->parent[3] == 2);
 	assert(rdsu->rank[4] == 0 && rdsu->parent[4] == 4);
 	assert(rdsu_nb_components(*rdsu) == 2);
-	rdsu_union(rdsu, 0, 4); // merging single elem to a net
+	assert(rdsu_union(rdsu, 0, 4) == true); // merging single elem to a net
 	assert(rdsu->rank[0] == 2 && rdsu->parent[0] == 0);
 	assert(rdsu->rank[1] == 0 && rdsu->parent[1] == 0);
 	assert(rdsu->rank[2] == 1 && rdsu->parent[2] == 0);
 	assert(rdsu->rank[3] == 0 && rdsu->parent[3] == 2);
 	assert(rdsu->rank[4] == 0 && rdsu->parent[4] == 0);
 	assert(rdsu_nb_components(*rdsu) == 1);
-	rdsu_clr(rdsu);
 
 	// net:
 	//      0-\-\  : rank 2
@@ -55,35 +53,42 @@ void test_rdsu_union(void) {
 	//      | | |
 	//      3 1 4  : rank 0
 
-	intact_copy  = *rdsu;
-	rdsu->parent = NULL;
-	rdsu_union(rdsu, 0, 1);
-	assert(rdsu_nb_components(*rdsu) == rdsu_size(*rdsu));
-	*rdsu      = intact_copy;
-	rdsu->rank = NULL;
-	rdsu_union(rdsu, 0, 1);
-	assert(rdsu_nb_components(*rdsu) == rdsu_size(*rdsu));
-	*rdsu      = intact_copy;
-	rdsu->size = 0;
-	rdsu_union(rdsu, 0, 1);
-	assert(rdsu_nb_components(*rdsu) == intact_copy.size);
-	*rdsu = intact_copy;
+	rdsu_clr(rdsu);
+	no_parent = *rdsu;
+	no_rank   = *rdsu;
+	no_size   = *rdsu;
 
-	rdsu_union(NULL, 1, 3);
-	rdsu_union(rdsu, 32, 3);
-	rdsu_union(rdsu, 1, 32);
-	rdsu_union(rdsu, 1, 1);
+	no_parent.parent = NULL;
+	no_size.size     = 0;
+	no_rank.rank     = NULL;
+	assert(rdsu_union(&no_parent, 0, 1) == false);
+	assert(rdsu_nb_components(no_parent) == rdsu_size(no_parent));
+
+	assert(rdsu_union(&no_rank, 0, 1) == false);
+	assert(rdsu_nb_components(no_rank) == rdsu_size(no_rank));
+
+	assert(rdsu_union(&no_size, 0, 1) == false);
+	assert(no_size.components == rdsu->size);
+
+	assert(rdsu_union(NULL, 1, 3) == false);
+	assert(rdsu_union(rdsu, 32, 3) == false);
+	assert(rdsu_union(rdsu, 1, 32) == false);
+	assert(rdsu_union(rdsu, 1, 1) == false);
+
+	alloc_set_call_limit(0);
+	assert(rdsu_union(rdsu, 0, 1) == false);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 
 	rdsu_free(&rdsu);
 }
 
-void test_rdsu_find(void) {
+NO_COV void test_rdsu_find(void) {
 	t_rdsu *rdsu = rdsu_new(5);
 	t_rdsu  intact_copy;
 
 	assert(rdsu_find(rdsu, 0) == 0);
 	assert(rdsu_find(rdsu, 1) == 1);
-	rdsu_union(rdsu, 0, 1);
+	assert(rdsu_union(rdsu, 0, 1) == true);
 	assert(rdsu_find(rdsu, 0) == rdsu_find(rdsu, 1));
 	rdsu_rewind(rdsu);
 	assert(rdsu_find(rdsu, 0) != rdsu_find(rdsu, 1));
@@ -104,7 +109,7 @@ void test_rdsu_find(void) {
 	rdsu_free(&rdsu);
 }
 
-void test_rdsu_compress_all(void) {
+NO_COV void test_rdsu_compress_all(void) {
 	t_rdsu *rdsu = rdsu_new(5);
 	t_rdsu  intact_copy;
 

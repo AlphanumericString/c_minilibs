@@ -39,7 +39,11 @@ t_ftls *ftls_get(void);
 
 pthread_key_t ftls_key;
 
-static void __attribute__((destructor())) ftls_dtor(void) {
+#	define COV_IGNORE __attribute__((no_profile_instrument_function))
+// note: coverage marks function as not running but mem-check tools clearly
+// states that if absent memory leaks occur on multi-threaded examples.
+// TLDR: ignore coverage repport, bug on cov repport toolchain
+static void COV_IGNORE __attribute__((destructor())) ftls_dtor(void) {
 	void *p = pthread_getspecific(ftls_key);
 
 	if (!p) return;
@@ -67,6 +71,7 @@ t_ftls *ftls_get(void) {
 
 	if (!ftls) {
 		ftls = calloc(1, sizeof(*ftls));
+		if (!ftls) return (NULL);
 		pthread_setspecific(ftls_key, ftls);
 	}
 	return (ftls);

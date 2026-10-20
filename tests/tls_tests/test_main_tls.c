@@ -1,6 +1,7 @@
 #include <pthread.h>
 #include <stdlib.h>
 
+#define C_MINI__TWRAP_IMPL
 #define C_MINI__FTLS_GET
 #include "tls_tests.h"
 
@@ -57,7 +58,7 @@ static int vtls_tests(void) {
 	return (EXIT_SUCCESS);
 }
 
-int __attribute__((no_profile_instrument_function)) main(void) {
+NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "\t\tCTLS");

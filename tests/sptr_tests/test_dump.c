@@ -5,7 +5,7 @@
 
 #include "sptr_tests.h"
 
-void test_sptr_to_string_s(void) {
+NO_COV void test_sptr_to_string_s(void) {
 	const t_fbox       b1  = (t_fbox){(void *)0xDEAD, NULL, 1, 0};
 	const t_fbox       b2  = (t_fbox){(void *)0xBEEF, (void *)0x42, 1, 0};
 	const t_fbox       b3  = (t_fbox){(void *)0xFACE, NULL, 1, 1};
@@ -34,8 +34,12 @@ void test_sptr_to_string_s(void) {
 	free(r[2]);
 	free(r[3]);
 	free(r[4]);
+
+	alloc_set_call_limit(0);
+	assert(sptr_to_strings(&s[0]) == NULL);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
-void test_sptr_to_string_w(void) {
+NO_COV void test_sptr_to_string_w(void) {
 	const t_fbox f1 = (t_fbox){(void *)0xDEAD, NULL, 1, 1};
 	const t_fbox f2 = (t_fbox){(void *)0xBEEF, (void *)0x42, 1, 2};
 	const t_fbox f3 = (t_fbox){NULL, NULL, 0, 1};
@@ -63,8 +67,12 @@ void test_sptr_to_string_w(void) {
 	free(res[1]);
 	free(res[2]);
 	free(res[3]);
+
+	alloc_set_call_limit(0);
+	assert(sptr_to_stringw(&w[0]) == NULL);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
-void test_sptr_to_string_o(void) {
+NO_COV void test_sptr_to_string_o(void) {
 	t_fbox            f1  = {(void *)0xDEAD, NULL, 1, 0};
 	t_fbox            f2  = {(void *)0xBEEF, (void *)0x42, 1, 1};
 	const t_owned_ptr o[] = {
@@ -92,8 +100,12 @@ void test_sptr_to_string_o(void) {
 	free(r[2]);
 	free(r[3]);
 	free(r[4]);
+
+	alloc_set_call_limit(0);
+	assert(sptr_to_stringo(&o[0]) == NULL);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
-void test_sptr_to_string_u(void) {
+NO_COV void test_sptr_to_string_u(void) {
 	const t_uniq_ptr u[] = {
 	    (t_uniq_ptr){(void *)0xDEAD, NULL        },
 	    (t_uniq_ptr){(void *)0xBEEF, (void *)0x42}
@@ -110,44 +122,61 @@ void test_sptr_to_string_u(void) {
 	free(r[0]);
 	free(r[1]);
 	free(r[2]);
+
+	alloc_set_call_limit(0);
+	assert(sptr_to_stringu(&u[0]) == NULL);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
 
 // set dtor at 0x42 for test instead of using real func (eg:free) as free is
 // loaded at random mem space.
-void test_sptr_dumps(void) {
+NO_COV void test_sptr_dumps(void) {
 	const t_fbox       b1 = (t_fbox){(void *)0xDEAD, NULL, 1, 0};
 	const t_strong_ptr s  = (const t_strong_ptr){b1.data, (t_fbox *)&b1};
-	int                pfd[2];
-	char               buf[256] = {0};
+	const char        *s_str =
+	    "SPTR STRONG { data 0xdead, count 1 (weak:0), dtor (nil)}\n";
+	const char *null_str = "SPTR STRONG (nil)\n";
+	int         pfd[2];
+	char        buf[256] = {0};
 
-	sptr_dumps(-1, &s);
-	sptr_dumps(-1, NULL);
+	assert(sptr_dumps(-1, &s) == false);
+	assert(sptr_dumps(-1, NULL) == false);
 
 	assert(pipe(pfd) == 0);
-	sptr_dumps(pfd[1], &s);
+	assert(sptr_dumps(pfd[1], &s) == true);
 	ssize_t n = read(pfd[0], buf, sizeof(buf) - 1);
 	assert(n > 0);
 	buf[n] = '\0';
-	assert(strcmp(buf, "SPTR STRONG { data 0xdead, count 1 (weak:0), dtor (nil)}\n") == 0);
+	assert(strcmp(buf, s_str) == 0);
 	close(pfd[0]);
 	close(pfd[1]);
 
 	assert(pipe(pfd) == 0);
-	sptr_dumps(pfd[1], NULL);
+	assert(sptr_dumps(pfd[1], NULL) == true);
 	memset(buf, 0, sizeof(buf));
 	n = read(pfd[0], buf, sizeof(buf) - 1);
 	assert(n > 0);
 	buf[n] = '\0';
-	assert(strcmp(buf, "SPTR STRONG (nil)\n") == 0);
+	assert(strcmp(buf, null_str) == 0);
+	close(pfd[0]);
+	close(pfd[1]);
+
+	assert(pipe(pfd) == 0);
+	alloc_set_call_limit(0);
+	assert(sptr_dumps(pfd[1], &s) == false);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 	close(pfd[0]);
 	close(pfd[1]);
 }
 
-void test_sptr_dumpw(void) {
+NO_COV void test_sptr_dumpw(void) {
 	const t_fbox     f1 = (t_fbox){(void *)0xDEAD, NULL, 1, 1};
 	const t_weak_ptr w  = (const t_weak_ptr){(t_fbox *)&f1};
-	int              pfd[2];
-	char             buf[256] = {0};
+	const char      *w_str =
+	    "SPTR WEAK { data 0xdead, count 1 (weak:1), dtor (nil)}\n";
+	const char *null_str = "SPTR WEAK (nil)\n";
+	int         pfd[2];
+	char        buf[256] = {0};
 
 	sptr_dumpw(-1, &w);
 	sptr_dumpw(-1, NULL);
@@ -157,7 +186,7 @@ void test_sptr_dumpw(void) {
 	ssize_t n = read(pfd[0], buf, sizeof(buf) - 1);
 	assert(n > 0);
 	buf[n] = '\0';
-	assert(strcmp(buf, "SPTR WEAK { data 0xdead, count 1 (weak:1), dtor (nil)}\n") == 0);
+	assert(strcmp(buf, w_str) == 0);
 	close(pfd[0]);
 	close(pfd[1]);
 
@@ -167,16 +196,27 @@ void test_sptr_dumpw(void) {
 	n = read(pfd[0], buf, sizeof(buf) - 1);
 	assert(n > 0);
 	buf[n] = '\0';
-	assert(strcmp(buf, "SPTR WEAK (nil)\n") == 0);
+	assert(strcmp(buf, null_str) == 0);
+	close(pfd[0]);
+	close(pfd[1]);
+
+	assert(pipe(pfd) == 0);
+	alloc_set_call_limit(0);
+	assert(sptr_dumpw(pfd[1], &w) == false);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 	close(pfd[0]);
 	close(pfd[1]);
 }
 
-void test_sptr_dumpo(void) {
+NO_COV void test_sptr_dumpo(void) {
 	t_fbox            f1 = {(void *)0xDEAD, NULL, 1, 0};
-	const t_owned_ptr o  = (t_owned_ptr){.owner = true, .meta = &f1, .data = f1.data};
-	int               pfd[2];
-	char              buf[256] = {0};
+	const t_owned_ptr o =
+	    (t_owned_ptr){.owner = true, .meta = &f1, .data = f1.data};
+	const char *o_str =
+	    "SPTR OWND owned { data 0xdead, count 1 (weak:0), dtor (nil)}\n";
+	const char *null_str = "SPTR OWND (nil)\n";
+	int         pfd[2];
+	char        buf[256] = {0};
 
 	sptr_dumpo(-1, &o);
 	sptr_dumpo(-1, NULL);
@@ -186,7 +226,7 @@ void test_sptr_dumpo(void) {
 	ssize_t n = read(pfd[0], buf, sizeof(buf) - 1);
 	assert(n > 0);
 	buf[n] = '\0';
-	assert(strcmp(buf, "SPTR OWND owned { data 0xdead, count 1 (weak:0), dtor (nil)}\n") == 0);
+	assert(strcmp(buf, o_str) == 0);
 	close(pfd[0]);
 	close(pfd[1]);
 
@@ -196,13 +236,22 @@ void test_sptr_dumpo(void) {
 	n = read(pfd[0], buf, sizeof(buf) - 1);
 	assert(n > 0);
 	buf[n] = '\0';
-	assert(strcmp(buf, "SPTR OWND (nil)\n") == 0);
+	assert(strcmp(buf, null_str) == 0);
+	close(pfd[0]);
+	close(pfd[1]);
+
+	assert(pipe(pfd) == 0);
+	alloc_set_call_limit(0);
+	assert(sptr_dumpo(pfd[1], &o) == false);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 	close(pfd[0]);
 	close(pfd[1]);
 }
 
-void test_sptr_dumpu(void) {
-	const t_uniq_ptr u = (t_uniq_ptr){(void *)0xDEAD, NULL};
+NO_COV void test_sptr_dumpu(void) {
+	const t_uniq_ptr u        = (t_uniq_ptr){(void *)0xDEAD, NULL};
+	const char      *u_str    = "SPTR UNIQ { data 0xdead, dtor (nil)}\n";
+	const char      *null_str = "SPTR UNIQ (nil)\n";
 	int              pfd[2];
 	char             buf[256] = {0};
 
@@ -214,7 +263,7 @@ void test_sptr_dumpu(void) {
 	ssize_t n = read(pfd[0], buf, sizeof(buf) - 1);
 	assert(n > 0);
 	buf[n] = '\0';
-	assert(strcmp(buf, "SPTR UNIQ { data 0xdead, dtor (nil)}\n") == 0);
+	assert(strcmp(buf, u_str) == 0);
 	close(pfd[0]);
 	close(pfd[1]);
 
@@ -224,7 +273,14 @@ void test_sptr_dumpu(void) {
 	n = read(pfd[0], buf, sizeof(buf) - 1);
 	assert(n > 0);
 	buf[n] = '\0';
-	assert(strcmp(buf, "SPTR UNIQ (nil)\n") == 0);
+	assert(strcmp(buf, null_str) == 0);
+	close(pfd[0]);
+	close(pfd[1]);
+
+	assert(pipe(pfd) == 0);
+	alloc_set_call_limit(0);
+	assert(sptr_dumpu(pfd[1], &u) == false);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 	close(pfd[0]);
 	close(pfd[1]);
 }

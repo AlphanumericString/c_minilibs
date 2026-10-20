@@ -3,25 +3,33 @@
 
 #include "sptr_tests.h"
 
-void test_sptr_make_shared_from_raw(void) {
-	t_strong_ptr s1 = sptr_make_shared((void *)0xDEAD, NULL);
-	t_strong_ptr s2 = sptr_make_shared(NULL, NULL);
-	t_strong_ptr s3 = sptr_make_shared((void *)0xDEAD, (void *)0xCAFE);
+NO_COV void test_sptr_make_shared_from_raw(void) {
+	void        *data = (void *)0xDEAD;
+	void        *dtor = (void *)0xCAFE;
+	t_strong_ptr s1   = sptr_make_shared(data, NULL);
+	t_strong_ptr s2   = sptr_make_shared(data, dtor);
+	t_strong_ptr s3   = sptr_make_shared(NULL, NULL);
+	t_strong_ptr s4;
 
-	assert(s1.data == (void *)0xDEAD && s1.meta != NULL);
+	alloc_set_call_limit(0);
+	s4 = sptr_make_shared_from_raw(data, dtor);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
+
+	assert(s1.data == data && s1.meta != NULL);
 	assert(s1.data == s1.meta->data);
 	assert(sptr_get_rc(&s1) == 1 && sptr_get_wc(&s1) == 0);
 	assert(sptr_get_dtor(&s1) == NULL);
 	free(s1.meta);
 
-	assert(!s2.data && !s2.meta);
+	assert(s2.data == data && s2.meta != NULL);
+	assert(s2.data == s2.meta->data);
+	assert(sptr_get_rc(&s2) == 1 && sptr_get_wc(&s2) == 0);
+	assert(sptr_get_dtor(&s2) == dtor);
+	free(s2.meta);
 
-	assert(s3.data == (void *)0xDEAD && s3.meta != NULL);
-	assert(s3.data == s3.meta->data);
-	assert(sptr_get_rc(&s3) == 1 && sptr_get_wc(&s3) == 0);
-	assert(sptr_get_dtor(&s3) == (void *)0xCAFE);
-	free(s3.meta);
-	// TODO: missing malloc faillure tests
+	assert(!s3.data && !s3.meta);
+
+	assert(!s4.data && !s4.meta);
 }
 
 static void test_sptr_make_shared_from_weak_errors(void) {
@@ -107,7 +115,7 @@ static void test_sptr_make_shared_from_weak_ok(void) {
 	assert(sptr_get_dtor(&res[4]) == dtor);
 	assert(sptr_get_dtor(&res[5]) == dtor);
 }
-void test_sptr_make_shared_from_weak(void) {
+NO_COV void test_sptr_make_shared_from_weak(void) {
 	test_sptr_make_shared_from_weak_errors();
 	test_sptr_make_shared_from_weak_ok();
 }
@@ -205,7 +213,7 @@ static void test_sptr_make_shared_from_strong_ok(void) {
 	assert(sptr_get(&res[4]) == data && sptr_get_dtor(&res[4]) == dtor);
 	assert(sptr_get(&res[5]) == data && sptr_get_dtor(&res[5]) == dtor);
 }
-void test_sptr_make_shared_from_strong(void) {
+NO_COV void test_sptr_make_shared_from_strong(void) {
 	test_sptr_make_shared_from_strong_errors();
 	test_sptr_make_shared_from_strong_ok();
 }
@@ -319,7 +327,7 @@ static void test_sptr_make_shared_from_owned_ok(void) {
 	assert(sptr_get(&res[4]) == data && sptr_get_dtor(&res[4]) == dtor);
 	assert(sptr_get(&res[5]) == data && sptr_get_dtor(&res[5]) == dtor);
 }
-void test_sptr_make_shared_from_owned(void) {
+NO_COV void test_sptr_make_shared_from_owned(void) {
 	test_sptr_make_shared_from_owned_error();
 	test_sptr_make_shared_from_owned_ok();
 }
@@ -334,12 +342,16 @@ static void test_sptr_make_shared_from_uniq_error(void) {
 	    sptr_make_shared_from_uniq(&u0, not_dtor),
 	    sptr_make_shared_from_uniq(NULL, NULL),
 	    sptr_make_shared_from_uniq(NULL, dtor),
+	    (t_strong_ptr){0},
 	};
 
+	alloc_set_call_limit(0);
+	res[3] = sptr_make_shared_from_uniq(&u0, dtor);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 	assert(!res[0].data && !res[0].meta);
 	assert(!res[1].data && !res[1].meta);
 	assert(!res[2].data && !res[2].meta);
-	// TODO: missing malloc faillure tests
+	assert(!res[3].data && !res[3].meta);
 }
 static void test_sptr_make_shared_from_uniq_ok(void) {
 	void *data = (void *)0xDEAD;
@@ -380,14 +392,14 @@ static void test_sptr_make_shared_from_uniq_ok(void) {
 	free(res[2].meta);
 	free(res[3].meta);
 }
-void test_sptr_make_shared_from_uniq(void) {
+NO_COV void test_sptr_make_shared_from_uniq(void) {
 	test_sptr_make_shared_from_uniq_error();
 	test_sptr_make_shared_from_uniq_ok();
 }
 
 // make weak
 
-void test_sptr_make_weak_from_weak(void) {
+NO_COV void test_sptr_make_weak_from_weak(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -431,7 +443,7 @@ void test_sptr_make_weak_from_weak(void) {
 	assert(sptr_get(&res[3]) == data && sptr_get_dtor(&res[3]) == dtor);
 }
 
-void test_sptr_make_weak_from_strong(void) {
+NO_COV void test_sptr_make_weak_from_strong(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 

@@ -2,7 +2,7 @@
 
 #include "tls_tests.h"
 
-void test_ctls_get(void) {
+NO_COV void test_ctls_get(void) {
 	t_ctls_typewrap val;
 	void           *data;
 
@@ -24,7 +24,7 @@ void test_ctls_get(void) {
 	assert(pthread_setspecific(ctls_key, data) == 0); // reset
 }
 
-void test_ctls_len(void) {
+NO_COV void test_ctls_len(void) {
 	t_ctls_typewrap val;
 	void           *data;
 

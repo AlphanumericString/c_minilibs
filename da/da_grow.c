@@ -53,7 +53,7 @@ bool da_grow_for_size(t_da *da, size_t minimal_free_elems) {
 		return (false);
 	}
 	new_size = da->cap_e;
-	if (!new_size) new_size = C_MINI_DA__NB_ELEM_DFLT;
+	if (new_size < 2) new_size = C_MINI_DA__NB_ELEM_DFLT;
 	while ((new_size - da->nb_e) < minimal_free_elems)
 		new_size *= C_MINI_DA__GROWTH;
 	tmp = malloc(da->sz_e * new_size);

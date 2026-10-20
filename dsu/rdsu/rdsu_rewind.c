@@ -5,24 +5,20 @@
 
 static inline bool is_log_valid(const t_rdsu *rdsu, const t_rdsu_log *log) {
 	return (rdsu->size > log->elem && rdsu->size > log->p &&
-	        ((log->type == RDSU_LOG_RANK && rdsu->size > log->r) ||
-	         log->type == RDSU_LOG_PARENT));
+	        ((log->type == RDSU_LOG_YESRANK && rdsu->size > log->r) ||
+	         log->type == RDSU_LOG_NAYRANK));
 }
 
-bool rdsui_push_rewind(t_rdsu *rdsu, size_t elem, uint16_t value, uint16_t rank,
-                       enum s_rdsu_log_type type) {
-	t_rdsu_log *entry;
-	t_rdsu_log  tentative_entry;
+t_rdsu_log rdsui_init_log(size_t elem, uint16_t value, uint16_t rank,
+                          enum s_rdsu_log_type type) {
 
-	tentative_entry = (t_rdsu_log){.type = type,
-	                               .elem = elem,
-	                               .p    = value,
-	                               .r    = rank,
-	                               .nxt  = rdsu->change_log};
-	if (is_log_valid(rdsu, &tentative_entry) == false) return (false);
-	entry = calloc(sizeof(*entry), 1);
-	if (!entry) return (false);
-	*entry           = tentative_entry;
+	return ((t_rdsu_log){
+	    .type = type, .elem = elem, .p = value, .r = rank, .nxt = NULL});
+}
+
+bool rdsui_push_rewind(t_rdsu *rdsu, t_rdsu_log *entry) {
+	if (!rdsu || !entry || is_log_valid(rdsu, entry) == false) return (false);
+	entry->nxt       = rdsu->change_log;
 	rdsu->change_log = entry;
 	return (true);
 }
@@ -44,7 +40,7 @@ static bool execute_rewind(t_rdsu *rdsu, t_rdsu_log lg) {
 
 	if (is_log_valid(rdsu, &lg) == false) return (false);
 	rdsu->parent[lg.elem] = lg.p;
-	if (lg.type == RDSU_LOG_RANK) {
+	if (lg.type == RDSU_LOG_YESRANK) {
 		rdsu->rank[lg.r]--;
 	}
 	rdsu->components++;

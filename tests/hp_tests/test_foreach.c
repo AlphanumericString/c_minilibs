@@ -24,7 +24,7 @@ static bool log_order(void *hp_elem, void *_order) {
 	return (true);
 }
 
-void test_hp_foreach(void) {
+NO_COV void test_hp_foreach(void) {
 	void  *order[6] = {0};
 	t_heap h;
 
@@ -52,7 +52,7 @@ void test_hp_foreach(void) {
 
 	hp_delete(&h);
 }
-void test_hp_foreach_in(void) {
+NO_COV void test_hp_foreach_in(void) {
 	void  *order[6] = {0};
 	t_heap h;
 
@@ -80,7 +80,7 @@ void test_hp_foreach_in(void) {
 
 	hp_delete(&h);
 }
-void test_hp_foreach_pre(void) {
+NO_COV void test_hp_foreach_pre(void) {
 	void  *order[6] = {0};
 	t_heap h;
 
@@ -108,7 +108,7 @@ void test_hp_foreach_pre(void) {
 
 	hp_delete(&h);
 }
-void test_hp_foreach_post(void) {
+NO_COV void test_hp_foreach_post(void) {
 	void  *order[6] = {0};
 	t_heap h;
 

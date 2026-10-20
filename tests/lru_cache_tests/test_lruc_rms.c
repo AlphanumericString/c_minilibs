@@ -7,7 +7,7 @@ void blank(void *t) {
 	(void)t;
 }
 
-void test_lruc_clear(void) {
+NO_COV void test_lruc_clear(void) {
 	t_lruc c, intact_copy;
 	char   empty_buff[sizeof(t_lruc_keynode *) * 32] = {0};
 
@@ -51,7 +51,7 @@ void test_lruc_clear(void) {
 	}
 	return;
 }
-void test_lruc_remove(void) {
+NO_COV void test_lruc_remove(void) {
 	t_lruc c; //, intact_copy;
 	char  *k1 = "toto";
 	int    k2 = 42;

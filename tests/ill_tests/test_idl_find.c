@@ -2,7 +2,7 @@
 
 #include "ill_tests.h"
 
-void test_idl_find(void) {
+NO_COV void test_idl_find(void) {
 	t_test_dnode n1, n2, n3;
 	t_idl       *head = NULL;
 	t_idl       *not_found, *found;

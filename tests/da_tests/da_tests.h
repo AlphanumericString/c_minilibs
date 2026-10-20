@@ -5,6 +5,7 @@
 #ifndef C_MINI__TESTS
 #	define C_MINI__TESTS
 #endif
+#include "common_base/tests.h"
 #include "da/dynamic_array.h"
 
 #define ASSERT_DA_STATE(da, sz, cap, nb)                                       \
@@ -26,16 +27,16 @@ extern const int arr_5[];
 extern const int arr_2_5[];
 
 // Helper callbacks
-bool  cb_true(void *elem, void *arg);
-bool  cb_dump_int(void *e, void *a);
-bool  cb_filter_strict_inf(void *e, void *a);
-bool  cb_add_one(void *elem, void *arg);
-bool  cb_false(void *elem, void *arg);
-bool  cb_it_true(void *elem, void *arg, size_t pos, bool last);
-bool  cb_it_add_it_to_arg(void *elem, void *arg, size_t pos, bool last);
-bool  cb_empty_deletor(void *elem, void *arg);
-void *cb_merger(void *elem, void *arg);
-int   cb_cmp(const void *a, const void *b);
+NO_COV bool  cb_true(void *elem, void *arg);
+NO_COV bool  cb_dump_int(void *e, void *a);
+NO_COV bool  cb_filter_strict_inf(void *e, void *a);
+NO_COV bool  cb_add_one(void *elem, void *arg);
+NO_COV bool  cb_false(void *elem, void *arg);
+NO_COV bool  cb_it_true(void *elem, void *arg, size_t pos, bool last);
+NO_COV bool  cb_it_add_it_to_arg(void *elem, void *arg, size_t pos, bool last);
+NO_COV bool  cb_empty_deletor(void *elem, void *arg);
+NO_COV void *cb_merger(void *elem, void *arg);
+NO_COV int   cb_cmp(const void *a, const void *b);
 
 void test_da_init(void);
 void test_da_ninit(void);

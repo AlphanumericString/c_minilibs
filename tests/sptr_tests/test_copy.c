@@ -43,7 +43,7 @@ static void test_sptr_copys_ok(void) {
 	assert(b1.rc == 6);
 }
 
-void test_sptr_copys(void) {
+NO_COV void test_sptr_copys(void) {
 	test_sptr_copys_errors();
 	test_sptr_copys_ok();
 }
@@ -89,7 +89,7 @@ static void test_sptr_copyw_ok(void) {
 	assert(b1.wc == 10);
 }
 
-void test_sptr_copyw(void) {
+NO_COV void test_sptr_copyw(void) {
 	test_sptr_copyw_errors();
 	test_sptr_copyw_ok();
 }
@@ -142,7 +142,7 @@ static void test_sptr_copyo_ok(void) {
 	assert(b1.wc == 4);
 }
 
-void test_sptr_copyo(void) {
+NO_COV void test_sptr_copyo(void) {
 	test_sptr_copyo_errors();
 	test_sptr_copyo_ok();
 }
@@ -176,7 +176,7 @@ static void test_sptr_copyu_ok(void) {
 	assert(!u1.data && !u1.dtor);
 }
 
-void test_sptr_copyu(void) {
+NO_COV void test_sptr_copyu(void) {
 	test_sptr_copyu_errors();
 	test_sptr_copyu_ok();
 }

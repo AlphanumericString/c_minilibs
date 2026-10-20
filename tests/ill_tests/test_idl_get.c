@@ -14,7 +14,7 @@ static int cmp_min_max(const void *elem1, const void *elem2) {
 	return n1->value - n2->value;
 }
 
-void test_idl_get(void) {
+NO_COV void test_idl_get(void) {
 	t_test_dnode n1, n2, n3, n4;
 	t_idl       *head = NULL;
 

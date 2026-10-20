@@ -3,7 +3,7 @@
 #include "sptr_tests.h"
 
 // const-data
-void test_sptr_getsc(void) {
+NO_COV void test_sptr_getsc(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -30,7 +30,7 @@ void test_sptr_getsc(void) {
 	assert(!res[3]);
 }
 
-void test_sptr_getwc(void) {
+NO_COV void test_sptr_getwc(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -55,7 +55,7 @@ void test_sptr_getwc(void) {
 	assert(!res[3]);
 }
 
-void test_sptr_getoc(void) {
+NO_COV void test_sptr_getoc(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -86,7 +86,7 @@ void test_sptr_getoc(void) {
 	assert(!res[4]);
 }
 
-void test_sptr_getuc(void) {
+NO_COV void test_sptr_getuc(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -106,7 +106,7 @@ void test_sptr_getuc(void) {
 }
 
 // non-const data
-void test_sptr_gets(void) {
+NO_COV void test_sptr_gets(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -130,7 +130,7 @@ void test_sptr_gets(void) {
 	assert(!res[3]);
 }
 
-void test_sptr_getw(void) {
+NO_COV void test_sptr_getw(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -154,7 +154,7 @@ void test_sptr_getw(void) {
 	assert(!res[3]);
 }
 
-void test_sptr_geto(void) {
+NO_COV void test_sptr_geto(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -179,7 +179,7 @@ void test_sptr_geto(void) {
 	assert(!res[4]);
 }
 
-void test_sptr_getu(void) {
+NO_COV void test_sptr_getu(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -198,7 +198,7 @@ void test_sptr_getu(void) {
 }
 
 // ref-count
-void test_sptr_get_rcs(void) {
+NO_COV void test_sptr_get_rcs(void) {
 	void *data = (void *)0xDEAD;
 
 	t_fbox b0 = (t_fbox){.data = data, .rc = 1, .wc = 0};
@@ -226,7 +226,7 @@ void test_sptr_get_rcs(void) {
 	assert(sptr_get_rc(&s0_rc1) == 1);
 }
 
-void test_sptr_get_rcw(void) {
+NO_COV void test_sptr_get_rcw(void) {
 	void *data = (void *)0xDEAD;
 
 	t_fbox b0 = (t_fbox){.data = data, .rc = 1, .wc = 1};
@@ -253,7 +253,7 @@ void test_sptr_get_rcw(void) {
 	assert(sptr_get_rc(&w0_rc1) == 1);
 }
 
-void test_sptr_get_rco(void) {
+NO_COV void test_sptr_get_rco(void) {
 	void *data = (void *)0xDEAD;
 
 	t_fbox b0 = (t_fbox){.data = data, .rc = 1, .wc = 0};
@@ -280,7 +280,7 @@ void test_sptr_get_rco(void) {
 	assert(sptr_get_rc(&o0_rc1) == 1);
 }
 
-void test_sptr_get_rcu(void) {
+NO_COV void test_sptr_get_rcu(void) {
 	void *data = (void *)0xDEAD;
 
 	t_uniq_ptr u0_ok        = (t_uniq_ptr){.data = data, .dtor = NULL};
@@ -300,7 +300,7 @@ void test_sptr_get_rcu(void) {
 }
 
 // weak-count
-void test_sptr_get_wcs(void) {
+NO_COV void test_sptr_get_wcs(void) {
 	void *data = (void *)0xDEAD;
 
 	t_fbox b0_wc0   = (t_fbox){.data = data, .rc = 1, .wc = 0};
@@ -327,7 +327,7 @@ void test_sptr_get_wcs(void) {
 	assert(sptr_get_wc(&s1_wc5) == 5);
 }
 
-void test_sptr_get_wcw(void) {
+NO_COV void test_sptr_get_wcw(void) {
 	void *data = (void *)0xDEAD;
 
 	t_fbox b0_wc1   = (t_fbox){.data = data, .rc = 1, .wc = 1};
@@ -354,7 +354,7 @@ void test_sptr_get_wcw(void) {
 	assert(sptr_get_wc(&w1_wc10) == 10);
 }
 
-void test_sptr_get_wco(void) {
+NO_COV void test_sptr_get_wco(void) {
 	void *data = (void *)0xDEAD;
 
 	t_fbox b0_wc0 = (t_fbox){.data = data, .rc = 1, .wc = 0};
@@ -379,7 +379,7 @@ void test_sptr_get_wco(void) {
 	assert(sptr_get_wc(&o1_wc8) == 8);
 }
 
-void test_sptr_get_wcu(void) {
+NO_COV void test_sptr_get_wcu(void) {
 	void *data = (void *)0xDEAD;
 
 	t_uniq_ptr u0_ok        = (t_uniq_ptr){.data = data, .dtor = NULL};
@@ -399,7 +399,7 @@ void test_sptr_get_wcu(void) {
 }
 
 // dtors
-void test_sptr_get_dtors(void) {
+NO_COV void test_sptr_get_dtors(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -425,7 +425,7 @@ void test_sptr_get_dtors(void) {
 	assert(!res[4]);
 }
 
-void test_sptr_get_dtorw(void) {
+NO_COV void test_sptr_get_dtorw(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -454,7 +454,7 @@ void test_sptr_get_dtorw(void) {
 	assert(!res[5]);
 }
 
-void test_sptr_get_dtoro(void) {
+NO_COV void test_sptr_get_dtoro(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -480,7 +480,7 @@ void test_sptr_get_dtoro(void) {
 	assert(!res[4]);
 }
 
-void test_sptr_get_dtoru(void) {
+NO_COV void test_sptr_get_dtoru(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 

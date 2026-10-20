@@ -2,7 +2,7 @@
 
 #include "rb_tests.h"
 
-void test_rb_drop(void) {
+NO_COV void test_rb_drop(void) {
 	t_rb rb  = {0};
 	int  val = 42;
 
@@ -21,7 +21,7 @@ void test_rb_drop(void) {
 	rb_destroy(&rb);
 }
 
-void test_rb_pop(void) {
+NO_COV void test_rb_pop(void) {
 	t_rb  rb   = {0};
 	int   val1 = 42, val2 = 84, out = 0;
 	void *p, *p2;
@@ -52,7 +52,7 @@ void test_rb_pop(void) {
 	rb_destroy(&rb);
 }
 
-void test_rb_npop(void) {
+NO_COV void test_rb_npop(void) {
 	t_rb  rb   = {0};
 	int   val1 = 1, val2 = 2, val3 = 3;
 	int   out[2] = {0};
@@ -82,7 +82,7 @@ void test_rb_npop(void) {
 	rb_destroy(&rb);
 }
 
-void test_rb_peek(void) {
+NO_COV void test_rb_peek(void) {
 	t_rb  rb   = {0};
 	int   val1 = 42, out = 0;
 	void *p;
@@ -106,7 +106,7 @@ void test_rb_peek(void) {
 	rb_destroy(&rb);
 }
 
-void test_rb_npeek(void) {
+NO_COV void test_rb_npeek(void) {
 	t_rb  rb = {0};
 	t_rb  malicious;
 	int   vals[]                                  = {1, 2, 3};

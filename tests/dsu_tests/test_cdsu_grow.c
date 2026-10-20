@@ -3,7 +3,7 @@
 
 #include "cdsu_tests.h"
 
-void test_cdsu_grow(void) {
+NO_COV void test_cdsu_grow(void) {
 	t_cdsu *cdsu = cdsu_new(5);
 	t_cdsu  malicious;
 
@@ -20,6 +20,9 @@ void test_cdsu_grow(void) {
 	for (size_t i = 0; i < 10; i++) {
 		assert(cdsu->parent[i] == i);
 	}
+	alloc_set_call_limit(0);
+	assert(cdsu_grow(cdsu, 5) == false);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 	cdsu_free(&cdsu);
 
 	void *buf_parents = malloc(sizeof(int) * 5);

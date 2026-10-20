@@ -2,7 +2,7 @@
 
 #include "tls_tests.h"
 
-void test_vtls_rm(void) {
+NO_COV void test_vtls_rm(void) {
 	void *data;
 	void *a = (void *)0xDEAD;
 

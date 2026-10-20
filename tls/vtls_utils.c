@@ -6,13 +6,18 @@
 
 pthread_key_t vtls_key;
 
-static void vtls_cleanup(void *a) {
+#define COV_IGNORE __attribute__((no_profile_instrument_function))
+// note: coverage marks function as not running but mem-check tools clearly
+// states that if absent memory leaks occur on multi-threaded examples.
+// TLDR: ignore coverage repport, bug on cov repport toolchain
+
+static void COV_IGNORE vtls_cleanup(void *a) {
 	t_vtls_array *vtls = a;
 
 	if (vtls->data) free(vtls->data);
 	free(vtls);
 }
-void __attribute__((destructor())) destroy_vtls_array(void) {
+void COV_IGNORE __attribute__((destructor())) destroy_vtls_array(void) {
 	t_vtls_array *vtls = pthread_getspecific(vtls_key);
 
 	if (vtls) vtls_cleanup(vtls);

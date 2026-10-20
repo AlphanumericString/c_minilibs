@@ -79,9 +79,10 @@ void  *rb_find(const t_rb *rb, t_comparator c, const void *a);
 bool   rb_map(t_rb *rb, t_duplicator dup, void **out_buff);
 bool   rb_nmap(t_rb *rb, size_t n, t_duplicator dup, void **out_buff);
 t_rb  *rb_grow(t_rb *rb, size_t nb_elem_added);
+// TODO: change grow to... you wont guess it... grow...
 
+// TODO: change to C_MINI__RB_NBE_DFLT in an ifndef
 #define C_MINI_RB_NB_ELEM_DFLT 4
-#define C_MINI_RB_SZ_ELEM_DFLT 1024
 
 // TODO:
 // rb_nget -> get's the n elements after first match

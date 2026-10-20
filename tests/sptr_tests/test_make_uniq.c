@@ -29,13 +29,13 @@ static void test_sptr_make_uniq_from_raw_ok(void) {
 	assert(res[1].data == data && res[1].dtor == dtor);
 }
 
-void test_sptr_make_uniq_from_raw(void) {
+NO_COV void test_sptr_make_uniq_from_raw(void) {
 	test_sptr_make_uniq_from_raw_errors();
 	test_sptr_make_uniq_from_raw_ok();
 }
 
 // make_uniq_from_weak (always illegal)
-void test_sptr_make_uniq_from_weak(void) {
+NO_COV void test_sptr_make_uniq_from_weak(void) {
 	void *data = (void *)0xDEAD;
 	void *dtor = (void *)0xCAFE;
 
@@ -144,7 +144,7 @@ static void test_sptr_make_uniq_from_strong_ok(void) {
 	// b5 was freed by sptr_make_uniq_from_strong since wc is 0
 }
 
-void test_sptr_make_uniq_from_strong(void) {
+NO_COV void test_sptr_make_uniq_from_strong(void) {
 	test_sptr_make_uniq_from_strong_errors();
 	test_sptr_make_uniq_from_strong_ok();
 }
@@ -246,7 +246,7 @@ static void test_sptr_make_uniq_from_owned_ok(void) {
 	// heap_box was freed by sptr_make_uniq_from_owned
 }
 
-void test_sptr_make_uniq_from_owned(void) {
+NO_COV void test_sptr_make_uniq_from_owned(void) {
 	test_sptr_make_uniq_from_owned_errors();
 	test_sptr_make_uniq_from_owned_ok();
 }
@@ -300,7 +300,7 @@ static void test_sptr_make_uniq_from_uniq_ok(void) {
 	assert(!u3.data && !u3.dtor);
 }
 
-void test_sptr_make_uniq_from_uniq(void) {
+NO_COV void test_sptr_make_uniq_from_uniq(void) {
 	test_sptr_make_uniq_from_uniq_errors();
 	test_sptr_make_uniq_from_uniq_ok();
 }

@@ -16,11 +16,12 @@
 bool vtls_set(const char *v_name, void *v_val, size_t v_size) {
 	t_vtls_array *vtls = pthread_getspecific(vtls_key);
 	size_t        i    = 0;
-	t_vtls       *grow;
+	t_vtls       *growth;
 
 	if (!v_name) return (false);
 	if (!vtls) {
 		vtls = calloc(1, sizeof(*vtls));
+		if (!vtls) return (false);
 		pthread_setspecific(vtls_key, vtls);
 	}
 	for (i = 0; i < vtls->len; i++) { // check already present=> update
@@ -29,10 +30,10 @@ bool vtls_set(const char *v_name, void *v_val, size_t v_size) {
 		return (memcpy(&vtls->data[i].var, &v_val, sizeof(void *)), true);
 	}
 	if (vtls->len == vtls->cap) { // check space => grow
-		i    = (!vtls->cap ? C_MINI__VTLS_START_SIZE : vtls->cap * 2);
-		grow = realloc(vtls->data, sizeof(t_vtls) * i);
-		if (!grow) return (false);
-		vtls->data = grow;
+		i      = (!vtls->cap ? C_MINI__VTLS_START_SIZE : vtls->cap * 2);
+		growth = realloc(vtls->data, sizeof(t_vtls) * i);
+		if (!growth) return (false);
+		vtls->data = growth;
 		vtls->cap  = i;
 	}
 	vtls->data[vtls->len++] = (t_vtls){

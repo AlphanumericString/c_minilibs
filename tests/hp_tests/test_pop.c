@@ -9,7 +9,7 @@ static int cmp_rawptr(const void *a, const void *b) {
 	return (0);
 }
 
-void test_hp_min_pop(void) {
+NO_COV void test_hp_min_pop(void) {
 	t_heap hp;
 	void  *r;
 
@@ -31,7 +31,7 @@ void test_hp_min_pop(void) {
 	hp_delete(&hp);
 	return;
 }
-void test_hp_max_pop(void) {
+NO_COV void test_hp_max_pop(void) {
 	t_heap hp;
 
 	hp_init(&hp, 32, &cmp_rawptr);

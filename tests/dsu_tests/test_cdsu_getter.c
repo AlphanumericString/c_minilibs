@@ -2,7 +2,7 @@
 
 #include "cdsu_tests.h"
 
-void test_cdsu_max_depth(void) {
+NO_COV void test_cdsu_max_depth(void) {
 	t_cdsu *cdsu = cdsu_new(5);
 	assert(cdsu_max_depth(*cdsu) == 0);
 	cdsu_union(cdsu, 0, 1);
@@ -10,13 +10,13 @@ void test_cdsu_max_depth(void) {
 	cdsu_free(&cdsu);
 }
 
-void test_cdsu_size(void) {
+NO_COV void test_cdsu_size(void) {
 	t_cdsu *cdsu = cdsu_new(12);
 	assert(cdsu_size(*cdsu) == 12);
 	cdsu_free(&cdsu);
 }
 
-void test_cdsu_nb_components(void) {
+NO_COV void test_cdsu_nb_components(void) {
 	t_cdsu *cdsu = cdsu_new(5);
 	assert(cdsu_nb_components(*cdsu) == 5);
 	cdsu_union(cdsu, 0, 1);

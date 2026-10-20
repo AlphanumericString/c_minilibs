@@ -2,7 +2,7 @@
 
 #include "da_tests.h"
 
-void test_da_add(void) {
+NO_COV void test_da_add(void) {
 	t_da         da;
 	int          a;
 	const size_t first_growth = C_MINI_DA__NB_ELEM_DFLT * C_MINI_DA__GROWTH;
@@ -39,7 +39,7 @@ void test_da_add(void) {
 	da = (t_da){.array = (void *)0xDEAD, .cap_e = 0, .nb_e = 99, .sz_e = 1};
 	da_add(&da, (void *)0xDEAD);
 }
-void test_da_cat_array(void) {
+NO_COV void test_da_cat_array(void) {
 	t_da da;
 	int  arr[]  = {1, 2, 3};
 	int  arr2[] = {4, 5, 6};

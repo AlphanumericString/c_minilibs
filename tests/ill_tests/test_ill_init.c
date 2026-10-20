@@ -14,7 +14,7 @@ static void *duplicate_node(const void *elem) {
 	return copy;
 }
 
-void test_ill_init(void) {
+NO_COV void test_ill_init(void) {
 	t_test_node node;
 
 	ill_init(&node.node, offsetof(t_test_node, node));

@@ -1,21 +1,22 @@
 #ifndef C_MINI__ILL
+#define C_MINI__ILL
 
-#	include <stdbool.h>
-#	include <stddef.h>
+#include <stdbool.h>
+#include <stddef.h>
 
-#	include "common_base/log.h"
-#	ifdef C_MINI__TESTS
+#include "common_base/log.h"
+#ifdef C_MINI__TESTS
 
-#		define C_MINI__ILL_LOG_ECB    C_MINI__LOG_F_PREFIX "Callback failed."
-#		define C_MINI__ILL_LOG_EARG   C_MINI__LOG_EARG
-#		define C_MINI__ILL_LOG_EALLOC C_MINI__LOG_EALLOC
-#		define C_MINI__ILL_LOG_FAIL   C_MINI__LOG_FAIL
+#	define C_MINI__ILL_LOG_ECB    C_MINI__LOG_F_PREFIX "Callback failed."
+#	define C_MINI__ILL_LOG_EARG   C_MINI__LOG_EARG
+#	define C_MINI__ILL_LOG_EALLOC C_MINI__LOG_EALLOC
+#	define C_MINI__ILL_LOG_FAIL   C_MINI__LOG_FAIL
 
-#		define C_MINI__ILL_LOG_SUCCESS C_MINI__LOG_SUCCESS
+#	define C_MINI__ILL_LOG_SUCCESS C_MINI__LOG_SUCCESS
 
-#	endif // !C_MINI__TESTS
+#endif // !C_MINI__TESTS
 
-#	include "common_base/fptr.h"
+#include "common_base/fptr.h"
 
 /**
  * \defgroup ill Intrusive Linked List
@@ -91,5 +92,4 @@ t_ill *ill_reverse(t_ill *head);
 // // (requirement: list must be sorted)
 // void   ill_unique(t_ill *head, t_comparator c); // !
 
-#	define C_MINI__ILL
 #endif // !C_MINI__ILL

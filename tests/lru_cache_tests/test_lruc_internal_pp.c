@@ -4,7 +4,7 @@
 
 #include "lru_cache_tests.h"
 
-void test_lruci_hsh_pop(void) {
+NO_COV void test_lruci_hsh_pop(void) {
 	t_lruc          c;
 	const char     *key1 = "hsh_pop key";
 	const char     *key2 = "different key";

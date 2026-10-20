@@ -14,7 +14,7 @@ static bool has_val_42(void *elem, void *arg) {
 	return n->value == 42;
 }
 
-void test_idl_is(void) {
+NO_COV void test_idl_is(void) {
 	t_test_dnode n1, n2, n3;
 	t_test_dnode non_chained_node;
 

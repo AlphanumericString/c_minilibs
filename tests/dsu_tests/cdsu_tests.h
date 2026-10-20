@@ -3,6 +3,7 @@
 #ifndef C_MINI__TESTS
 #	define C_MINI__TESTS
 #endif
+#include "common_base/tests.h"
 #include "dsu/cdsu/compact_disjointed_set_union.h"
 
 void test_cdsu_new(void);

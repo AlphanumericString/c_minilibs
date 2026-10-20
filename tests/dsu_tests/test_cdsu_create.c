@@ -3,7 +3,7 @@
 
 #include "cdsu_tests.h"
 
-void test_cdsu_new(void) {
+NO_COV void test_cdsu_new(void) {
 	t_cdsu *cdsu;
 
 	cdsu = NULL;
@@ -20,8 +20,14 @@ void test_cdsu_new(void) {
 	}
 	cdsu_free(&cdsu);
 	assert(cdsu_new(0) == NULL);
+	alloc_set_call_limit(0);
+	assert(cdsu_new(32) == NULL);
+	alloc_reset_counter();
+	alloc_set_call_limit(1);
+	assert(cdsu_new(32) == NULL);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
-void test_cdsu_new_from_array(void) {
+NO_COV void test_cdsu_new_from_array(void) {
 	t_cdsu *cdsu;
 	int    *parents = malloc(sizeof(int) * 5);
 	int    *ranks   = malloc(sizeof(int) * 5);
@@ -38,8 +44,11 @@ void test_cdsu_new_from_array(void) {
 	assert(cdsu_new_from_array(0, parents, ranks) == NULL);
 	assert(cdsu_new_from_array(99, NULL, ranks) == NULL);
 	assert(cdsu_new_from_array(99, parents, NULL) == NULL);
+	alloc_set_call_limit(0);
+	assert(cdsu_new_from_array(5, (void *)0xDEAD, (void *)0xCAFE) == NULL);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
-void test_cdsu_init(void) {
+NO_COV void test_cdsu_init(void) {
 	t_cdsu cdsu;
 
 	assert(cdsu_init(&cdsu, 10) == &cdsu);
@@ -50,8 +59,11 @@ void test_cdsu_init(void) {
 	cdsu_destroy(&cdsu);
 	assert(cdsu_init(NULL, 10) == NULL);
 	assert(cdsu_init(&cdsu, 0) == NULL);
+	alloc_set_call_limit(0);
+	assert(cdsu_init(&cdsu, 10) == NULL);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
-void test_cdsu_init_from_arrays(void) {
+NO_COV void test_cdsu_init_from_arrays(void) {
 	t_cdsu cdsu;
 	int   *parents = malloc(sizeof(int) * 5);
 	int   *ranks   = malloc(sizeof(int) * 5);

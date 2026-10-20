@@ -2,7 +2,7 @@
 
 #include "da_tests.h"
 
-void test_da_rm_order(void) {
+NO_COV void test_da_rm_order(void) {
 	t_da da;
 
 	da_init(&da, sizeof(int));
@@ -28,7 +28,7 @@ void test_da_rm_order(void) {
 	da_rm_order(NULL, 0);
 	da_destroy(&da);
 }
-void test_da_rms_order(void) {
+NO_COV void test_da_rms_order(void) {
 	t_da da;
 
 	da_init(&da, sizeof(int));
@@ -58,7 +58,7 @@ void test_da_rms_order(void) {
 
 	da_destroy(&da);
 }
-void test_da_rm(void) {
+NO_COV void test_da_rm(void) {
 	t_da da;
 
 	da_init(&da, sizeof(int));
@@ -85,7 +85,7 @@ void test_da_rm(void) {
 	da_destroy(&da);
 }
 // TODO: better tests when fixing da_rms
-void test_da_rms(void) {
+NO_COV void test_da_rms(void) {
 	t_da da;
 
 	da_init(&da, sizeof(int));

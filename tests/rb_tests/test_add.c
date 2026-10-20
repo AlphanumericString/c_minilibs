@@ -2,7 +2,7 @@
 
 #include "rb_tests.h"
 
-void test_rb_push(void) {
+NO_COV void test_rb_push(void) {
 	t_rb rb  = {0};
 	int  val = 42;
 
@@ -16,7 +16,7 @@ void test_rb_push(void) {
 	rb_destroy(&rb);
 }
 
-void test_rb_npush(void) {
+NO_COV void test_rb_npush(void) {
 	t_rb rb     = {0};
 	int  arr[3] = {1, 2, 3};
 
@@ -30,7 +30,7 @@ void test_rb_npush(void) {
 	rb_destroy(&rb);
 }
 
-void test_rb_push_safe(void) {
+NO_COV void test_rb_push_safe(void) {
 	t_rb rb  = {0};
 	int  val = 42;
 
@@ -45,7 +45,7 @@ void test_rb_push_safe(void) {
 	rb_destroy(&rb);
 }
 
-void test_rb_npush_safe(void) {
+NO_COV void test_rb_npush_safe(void) {
 	t_rb rb     = {0};
 	int  arr[3] = {1, 2, 3};
 

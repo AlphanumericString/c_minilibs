@@ -2,7 +2,7 @@
 
 #include "da_tests.h"
 
-void test_da_set(void) {
+NO_COV void test_da_set(void) {
 	int  data[5] = {0};
 	t_da da      = {.array = data, .cap_e = 5, .nb_e = 5, .sz_e = sizeof(int)};
 	int  b       = 1;
@@ -23,7 +23,7 @@ void test_da_set(void) {
 	da_set(NULL, 0, &b);
 	da_set(&da, 3, NULL);
 }
-void test_da_nset(void) {
+NO_COV void test_da_nset(void) {
 	t_da da;
 	int  b       = 2;
 	int  buff[2] = {3, 4};

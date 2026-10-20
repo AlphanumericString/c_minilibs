@@ -2,7 +2,7 @@
 
 #include "ill_tests.h"
 
-void test_idl_ntoe(void) {
+NO_COV void test_idl_ntoe(void) {
 	t_test_dnode node;
 
 	idl_init(&node.dnode, offsetof(t_test_dnode, dnode));

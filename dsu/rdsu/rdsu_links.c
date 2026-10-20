@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #define C_MINI__RDSU_INTERNAL
 #include "rewindable_disjointed_set_union.h"
 
@@ -8,51 +9,55 @@
  * \param y second element to link
  * \ingroup rdsu
 **/
-void rdsu_union(t_rdsu *ds, size_t x, size_t y) {
-	uint16_t root_x;
-	uint16_t root_y;
-	bool     dbg;
+bool rdsu_union(t_rdsu *ds, size_t x, size_t y) {
+	t_rdsu_log *entry;
+	uint16_t    root_x;
+	uint16_t    root_y;
 
 	if (!ds || !ds->rank || !ds->parent || !ds->size || y == x ||
 	    x >= ds->size || y >= ds->size) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG);
-		return;
+		return (false);
 	}
 	root_x = rdsu_find(ds, x);
 	root_y = rdsu_find(ds, y);
 	if (root_x == root_y) {
+		// INFO: should be true(already linked) but no log emmited so no rewind
+		// possible on action, so false
 		CM_LOG(C_MINI__LEVEL_INFO,
 		       "Link (r1:%zu, r2:%zu, components:%zu -> %zu)", x, y,
 		       ds->components, ds->components);
-		return;
+		return (false);
 	}
+
+	entry = calloc(sizeof(*entry), 1);
+	if (!entry) return (false);
 	ds->components--;
 	if (ds->rank[root_x] < ds->rank[root_y]) {
-		dbg = rdsui_push_rewind(ds, root_x, ds->parent[root_x], (uint16_t)0,
-		                        RDSU_LOG_PARENT);
+		*entry = rdsui_init_log(root_x, ds->parent[root_x], (uint16_t)0,
+		                        RDSU_LOG_NAYRANK);
 		ds->parent[root_x] = root_y;
 	} else if (ds->rank[root_x] > ds->rank[root_y]) {
-		dbg = rdsui_push_rewind(ds, root_y, ds->parent[root_y], (uint16_t)0,
-		                        RDSU_LOG_PARENT);
+		*entry = rdsui_init_log(root_y, ds->parent[root_y], (uint16_t)0,
+		                        RDSU_LOG_NAYRANK);
 		ds->parent[root_y] = root_x;
 	} else {
 		if (x < y) {
-			dbg = rdsui_push_rewind(ds, root_y, ds->parent[root_y],
-			                        (uint16_t)root_x, RDSU_LOG_RANK);
+			*entry             = rdsui_init_log(root_y, ds->parent[root_y],
+			                                    (uint16_t)root_x, RDSU_LOG_YESRANK);
 			ds->parent[root_y] = root_x;
 			ds->rank[root_x]++;
 		} else {
-			dbg = rdsui_push_rewind(ds, root_x, ds->parent[root_x],
-			                        (uint16_t)root_y, RDSU_LOG_RANK);
+			*entry             = rdsui_init_log(root_x, ds->parent[root_x],
+			                                    (uint16_t)root_y, RDSU_LOG_YESRANK);
 			ds->parent[root_x] = root_y;
 			ds->rank[root_y]++;
 		}
 	}
-	CM_DBG("rdsui_push : %s", dbg ? "true" : "false");
-	(void)dbg;
+	rdsui_push_rewind(ds, entry);
 	CM_LOG(C_MINI__LEVEL_INFO, "Link (r1:%zu, r2:%zu, components:%zu -> %zu)",
 	       x, y, ds->components + 1, ds->components);
-	return;
+	return (true);
 }
 /**
  * \brief search parent of x

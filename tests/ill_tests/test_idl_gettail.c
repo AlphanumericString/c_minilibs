@@ -2,7 +2,7 @@
 
 #include "ill_tests.h"
 
-void test_idl_gethead(void) {
+NO_COV void test_idl_gethead(void) {
 	t_test_dnode n1, n2, n3;
 	t_idl       *head = NULL;
 
@@ -25,7 +25,7 @@ void test_idl_gethead(void) {
 	assert(idl_get_head(&n2.dnode) == &n3.dnode);
 	assert(idl_get_head(&n1.dnode) == &n3.dnode);
 }
-void test_idl_gettail(void) {
+NO_COV void test_idl_gettail(void) {
 	t_test_dnode n1, n2, n3;
 	t_idl       *head = NULL;
 

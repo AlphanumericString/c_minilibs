@@ -80,7 +80,7 @@ t_da *da_ndup_to(t_da *dst, size_t n, const t_da *src) {
 
 	if (!da_is_valid(src) || !da_is_valid(dst)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
-		return (dst);
+		return (dst); // TODO: cahnge to NULL
 	}
 	if (!n) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);

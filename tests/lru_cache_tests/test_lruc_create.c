@@ -1,11 +1,10 @@
 #include <assert.h>
 #include <limits.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include "lru_cache_tests.h"
 
-void test_lruc_create(void) {
+NO_COV void test_lruc_create(void) {
 	t_lruc                  *lru;
 	const typeof(lru->stats) cmp = (typeof(lru->stats)){0};
 
@@ -17,11 +16,16 @@ void test_lruc_create(void) {
 	assert(lru->buckets_nb == 3);
 	assert(lru->dtor == (void *)0xDEADBEEF);
 	assert(lru->buckets != NULL);
-	lruc_destroy(lru);
+	lruc_free(&lru);
 	assert(lruc_create(0, (void *)0xDEADBEEF) == NULL);
-	free(lru);
+	alloc_set_call_limit(0);
+	assert(lruc_create(3, (void *)0xDEADBEEF) == NULL);
+	alloc_reset_counter();
+	alloc_set_call_limit(1);
+	assert(lruc_create(3, (void *)0xDEADBEEF) == NULL);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
-void test_lruc_init(void) {
+NO_COV void test_lruc_init(void) {
 	t_lruc                  lru;
 	const typeof(lru.stats) cmp = (typeof(lru.stats)){0};
 
@@ -34,10 +38,13 @@ void test_lruc_init(void) {
 	assert(lru.buckets != NULL);
 	assert(lru.ttl_glob == (typeof(lru.ttl_glob))C_MINI__LRUC_TTL_DFLT);
 	lruc_destroy(&lru);
+	alloc_set_call_limit(0);
+	assert(lruc_init(&lru, 3, (void *)0xDEADBEEF) == NULL);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 	assert(lruc_init(NULL, 3, (void *)0xDEADBEEF) == NULL);
 	assert(lruc_init(&lru, 0, (void *)0xDEADBEEF) == NULL);
 }
-void test_lruc_destroy(void) {
+NO_COV void test_lruc_destroy(void) {
 	t_lruc lru;
 
 	lruc_init(&lru, 3, (void *)0xDEADBEEF);
@@ -51,7 +58,7 @@ void test_lruc_destroy(void) {
 	assert(lru.buckets_nb == 0);
 	lruc_destroy(NULL);
 }
-void test_lruc_free(void) {
+NO_COV void test_lruc_free(void) {
 	t_lruc *lru;
 
 	lru = lruc_create(3, (void *)0xDEADBEEF);

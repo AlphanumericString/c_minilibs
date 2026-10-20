@@ -20,7 +20,7 @@ static bool forward_stradd_cache(t_keyvalue *value, void *u_val) {
 	return (true);
 }
 
-void test_lruc_foreach(void) {
+NO_COV void test_lruc_foreach(void) {
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
 	t_lruc      c;
@@ -52,7 +52,7 @@ static bool record_order_cb(t_keyvalue *value, void *u_val) {
 	return true;
 }
 
-void test_lruc_foreach_ru_ordered(void) {
+NO_COV void test_lruc_foreach_ru_ordered(void) {
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
 	t_lruc      c;
@@ -78,7 +78,7 @@ void test_lruc_foreach_ru_ordered(void) {
 	lruc_destroy(&c);
 }
 
-void test_lruc_foreach_ttl_ordered(void) {
+NO_COV void test_lruc_foreach_ttl_ordered(void) {
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
 	t_lruc      c;

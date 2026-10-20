@@ -57,10 +57,13 @@ t_rb *rb_init(t_rb *rb, size_t sz_elem) {
  * \ingroup rb
 **/
 t_rb *rb_from_array(t_rb *rb, void *array, size_t arr_cap, size_t sz_elem) {
-	if (!rb) {
+	if (!rb || !array || !arr_cap || !sz_elem) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG);
 		return (NULL);
 	}
+	// if (arr_cap == (size_t)-1)
+	// 	for (arr_cap = 0; ((void **)array)[arr_cap] != NULL; arr_cap++)
+	// 		;
 	rb->i_pos  = 0;
 	rb->o_pos  = 0;
 	rb->sz_e   = sz_elem;

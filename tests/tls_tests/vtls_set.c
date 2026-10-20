@@ -2,7 +2,7 @@
 
 #include "tls_tests.h"
 
-void test_vtls_set(void) {
+NO_COV void test_vtls_set(void) {
 	void         *prev  = NULL;
 	void         *adr[] = {(void *)0xDEAD, (void *)0xCAFE, (void *)0xBEEF,
 	                       (void *)0xBEAD};
@@ -38,15 +38,33 @@ void test_vtls_set(void) {
 
 	prev = pthread_getspecific(vtls_key);                      // save prev
 	pthread_setspecific(vtls_key, NULL);                       // set to NULL
-	assert(vtls_set(keys[0], adr[0], sizeof(void *)) == true); // success
-	assert(pthread_getspecific(vtls_key) != NULL);             // func init vtls
-
-	// cleanup
+	assert(vtls_set(keys[0], adr[0], sizeof(void *)) == true); // set val ok
+	assert(pthread_getspecific(vtls_key) != NULL); // confirm init ok
 	vtls_rm(keys[0]);
 	new_arr = pthread_getspecific(vtls_key);
 	free(new_arr->data);
 	free(new_arr);
-	pthread_setspecific(vtls_key, prev);
+
+	pthread_setspecific(vtls_key, NULL); // set to NULL
+	alloc_reset_counter();               // set alloc limits
+	alloc_set_call_limit(1);             //
+	assert(vtls_set(keys[0], adr[0], sizeof(void *)) == false); // set val ko
+	assert(pthread_getspecific(vtls_key) != NULL); // confirm init ok
+	// tldr: init new vtls ok, could not grow array for value
+	new_arr = pthread_getspecific(vtls_key);
+	assert(new_arr->data == NULL);
+	if (new_arr->data) free(new_arr->data);
+	free(new_arr);
+
+	pthread_setspecific(vtls_key, NULL);
+	alloc_reset_counter();
+	alloc_set_call_limit(0);
+	assert(vtls_set(keys[0], adr[0], sizeof(void *)) == false); // set val ko
+	assert(pthread_getspecific(vtls_key) == NULL); // confirm init ko
+
+	alloc_set_call_limit(ALLOC_DFT_LIMIT); // reset alloc limit
+	pthread_setspecific(vtls_key, prev);   // reset vtls
+
 	assert(pthread_getspecific(vtls_key) == prev); // assert reset to prev
 
 	return;

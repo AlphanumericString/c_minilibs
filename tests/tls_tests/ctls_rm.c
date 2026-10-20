@@ -2,7 +2,7 @@
 
 #include "tls_tests.h"
 
-void test_ctls_rm(void) {
+NO_COV void test_ctls_rm(void) {
 	t_ctls_typewrap val;
 	void           *data;
 

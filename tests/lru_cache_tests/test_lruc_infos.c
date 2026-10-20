@@ -5,7 +5,7 @@
 
 #include "lru_cache_tests.h"
 
-void test_lruc_size(void) {
+NO_COV void test_lruc_size(void) {
 	t_lruc      c;
 	const char *k1 = "titi", *k2 = "toto", *k3 = "tutu";
 
@@ -25,7 +25,7 @@ void test_lruc_size(void) {
 	lruc_destroy(&c);
 	return;
 }
-void test_lruc_hits(void) {
+NO_COV void test_lruc_hits(void) {
 	t_lruc      c;
 	const char *k1 = "titi", *k2 = "toto", *k3 = "tutu";
 
@@ -51,7 +51,7 @@ void test_lruc_hits(void) {
 	lruc_destroy(&c);
 	return;
 }
-void test_lruc_misses(void) {
+NO_COV void test_lruc_misses(void) {
 	t_lruc      c;
 	const char *k1 = "titi", *k2 = "toto", *k3 = "tutu";
 
@@ -78,7 +78,7 @@ void test_lruc_misses(void) {
 	return;
 }
 
-void test_lruc_expired(void) {
+NO_COV void test_lruc_expired(void) {
 	t_lruc      c;
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
@@ -105,7 +105,7 @@ void test_lruc_expired(void) {
 	return;
 }
 
-void test_lruc_stats(void) {
+NO_COV void test_lruc_stats(void) {
 	t_lruc       c;
 	t_lruc_stats st;
 	const char  *k1 = "titi", *k2 = "toto", *k3 = "tutu";

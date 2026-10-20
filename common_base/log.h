@@ -1,5 +1,20 @@
 #ifndef C_MINI__CB_LOG
 
+#	if !defined(C_MINI__TESTS) || !defined(C_MINI__DEBUG_LEVEL) ||            \
+	    C_MINI__DEBUG_LEVEL == 0
+#		ifndef CM_LOG
+#			define CM_LOG(level, fmt, ...) (void)0;
+#		endif // !CM_LOG
+
+#		ifndef CM_DBG
+#			define CM_DBG(fmt, ...) (void)0;
+#		endif // !CM_DBG
+
+#		ifndef CM_DBG_POS
+#			define CM_DBG_POS (void)0;
+#		endif // !CM_DBG_POS
+#	endif
+
 #	ifdef C_MINI__TESTS
 
 #		include <stdio.h>
@@ -104,24 +119,10 @@ extern pthread_mutex_t console_lock;
 #		define C_MINI__LOG_SUCCESS "Success."
 
 // levels
-#		define C_MINI__LEVEL_INFO   3 // Success and other info
-#		define C_MINI__LEVEL_WARN   2 // Bad args and other stuff
-#		define C_MINI__LEVEL_ERR    1 // Internal big errors eg alloc
-#		define C_MINI__LEVEL_ALWAYS 0 // Test/constant prints
-
-#	else // || TESTS
-
-#		ifndef CM_LOG
-#			define CM_LOG(level, fmt, ...) (void)0;
-#		endif // !CM_LOG
-
-#		ifndef CM_DBG
-#			define CM_DBG(fmt, ...) (void)0;
-#		endif // !CM_DBG
-
-#		ifndef CM_DBG_POS
-#			define CM_DBG_POS (void)0;
-#		endif // !CM_DBG_POS
+#		define C_MINI__LEVEL_INFO   4 // Success and other info
+#		define C_MINI__LEVEL_WARN   3 // Bad args and other stuff
+#		define C_MINI__LEVEL_ERR    2 // Internal big errors eg alloc
+#		define C_MINI__LEVEL_ALWAYS 1 // Test/constant prints
 
 #	endif // !TESTS
 

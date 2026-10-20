@@ -56,7 +56,7 @@ static void test_sptr_strengthen_ok(void) {
 	assert(b1.rc == 3 && b1.wc == 2);
 }
 
-void test_sptr_strengthen(void) {
+NO_COV void test_sptr_strengthen(void) {
 	test_sptr_strengthen_errors();
 	test_sptr_strengthen_ok();
 }
@@ -122,7 +122,7 @@ static void test_sptr_weaken_ok(void) {
 	assert(!b2_no_dt.data);
 }
 
-void test_sptr_weaken(void) {
+NO_COV void test_sptr_weaken(void) {
 	test_sptr_weaken_errors();
 	test_sptr_weaken_ok();
 }
@@ -180,7 +180,7 @@ static void test_sptr_transfer_o_ok(void) {
 	assert(!o_from.owner);
 }
 
-void test_sptr_transfer_o(void) {
+NO_COV void test_sptr_transfer_o(void) {
 	test_sptr_transfer_o_errors();
 	test_sptr_transfer_o_ok();
 }
@@ -194,6 +194,7 @@ static void test_sptr_move_o_errors(void) {
 	    (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
 	t_fbox b1_no_rc   = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
 	t_fbox b2_rc_many = (t_fbox){.data = data, .dtor = dtor, .rc = 2, .wc = 1};
+	t_fbox b3_ok      = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
 
 	t_owned_ptr o0_dst = (t_owned_ptr){0};
 	t_owned_ptr o1_not_owner =
@@ -201,6 +202,8 @@ static void test_sptr_move_o_errors(void) {
 	t_owned_ptr o2_no_rc   = (t_owned_ptr){b1_no_rc.data, &b1_no_rc, true};
 	t_owned_ptr o3_rc_many = (t_owned_ptr){b2_rc_many.data, &b2_rc_many, true};
 	t_owned_ptr o4_src_meta_nil = (t_owned_ptr){data, NULL, true};
+	t_owned_ptr o5_dst_non_null = (t_owned_ptr){data, &b2_rc_many, true};
+	t_owned_ptr o6_ok           = (t_owned_ptr){data, &b3_ok, true};
 
 	bool res[] = {
 	    sptr_move_ownership(NULL, NULL),
@@ -210,6 +213,7 @@ static void test_sptr_move_o_errors(void) {
 	    sptr_move_ownership(&o0_dst, &o2_no_rc),
 	    sptr_move_ownership(&o0_dst, &o3_rc_many),
 	    sptr_move_ownership(&o0_dst, &o4_src_meta_nil),
+	    sptr_move_ownership(&o5_dst_non_null, &o6_ok),
 	};
 
 	assert(!res[0]);
@@ -219,6 +223,7 @@ static void test_sptr_move_o_errors(void) {
 	assert(!res[4]);
 	assert(!res[5]);
 	assert(!res[6]);
+	assert(!res[7]);
 }
 
 static void test_sptr_move_o_ok(void) {
@@ -259,7 +264,7 @@ static void test_sptr_move_o_ok(void) {
 	assert(b_old.rc == 0);
 }
 
-void test_sptr_move_o(void) {
+NO_COV void test_sptr_move_o(void) {
 	test_sptr_move_o_errors();
 	test_sptr_move_o_ok();
 }
@@ -307,7 +312,7 @@ static void test_sptr_yield_ok(void) {
 	assert(!src2.data && !src2.dtor);
 }
 
-void test_sptr_yield(void) {
+NO_COV void test_sptr_yield(void) {
 	test_sptr_yield_errors();
 	test_sptr_yield_ok();
 }
@@ -344,7 +349,7 @@ static void test_sptr_swap_ok(void) {
 	assert(sw2.data == data1 && sw2.dtor == dtor1);
 }
 
-void test_sptr_swap(void) {
+NO_COV void test_sptr_swap(void) {
 	test_sptr_swap_errors();
 	test_sptr_swap_ok();
 }

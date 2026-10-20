@@ -397,15 +397,16 @@ t_uniq_ptr    sptr_copyu(t_uniq_ptr *ptr);
 	    t_uniq_ptr *: sptr_copyu,                                              \
 	    t_owned_ptr *: sptr_copyo)(pointer)
 
-void sptr_dumps(int fd, const t_strong_ptr *ptr);
-void sptr_dumpw(int fd, const t_weak_ptr *ptr);
-void sptr_dumpo(int fd, const t_owned_ptr *ptr);
-void sptr_dumpu(int fd, const t_uniq_ptr *ptr);
+bool sptr_dumps(int fd, const t_strong_ptr *ptr);
+bool sptr_dumpw(int fd, const t_weak_ptr *ptr);
+bool sptr_dumpo(int fd, const t_owned_ptr *ptr);
+bool sptr_dumpu(int fd, const t_uniq_ptr *ptr);
 /**
  * \def sptr_dump(fd, pointer)
  * \brief _generic macro to re-direct to sptr_dump*
  * \param fd file descriptor to output the dump to
  * \param pointer smart pointer to dump (weak, strong, owned, uniq)
+ * \return true on success, false otherwise.
  * \note for specific infos check doc for sptr_dump<type's letter>
  * \ingroup sptr
 **/

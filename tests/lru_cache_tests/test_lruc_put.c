@@ -6,7 +6,7 @@
 
 #include "lru_cache_tests.h"
 
-void test_lruc_put_kv(void) {
+NO_COV void test_lruc_put_kv(void) {
 	t_lruc          c;
 	t_keyvalue      kv1;
 	t_lruc_keynode *kv_in_cache;
@@ -23,10 +23,18 @@ void test_lruc_put_kv(void) {
 	kv_in_cache = lruci_keyinhash(&c, key, strlen(key), NULL);
 	assert(kv_in_cache);
 	assert(kv_in_cache->kv.k_len == strlen(key));
+
 	lruc_destroy(&c);
+
+	lruc_init(&c, 2, NULL);
+	alloc_set_call_limit(0);
+	assert(lruc_put_kv(&c, kv1) == -1);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
+	lruc_destroy(&c);
+
 	return;
 }
-void test_lruc_put(void) {
+NO_COV void test_lruc_put(void) {
 	t_lruc      c;
 	const char *key1       = "toto";
 	const char *key2       = "titi";
@@ -66,7 +74,7 @@ void test_lruc_put(void) {
 	lruc_destroy(&c);
 	return;
 }
-void test_lruc_put_ttl(void) {
+NO_COV void test_lruc_put_ttl(void) {
 	t_lruc      c;
 	const char *k1 = "luigi au pay des shtroumpfs";
 	const char *k2 = "squalala";

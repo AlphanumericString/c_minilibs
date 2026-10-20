@@ -3,20 +3,38 @@
 #define C_MINI__RDSU_INTERNAL
 #include "rdsu_tests.h"
 
-void test_rdsui_push_rewind(void) {
+#define RDSU_BAD____TYPE 999
+
+NO_COV void test_rdsui_push_rewind(void) {
 	t_rdsu rdsu;
+	struct {
+		t_rdsu_log log;
+		bool       expected;
+	} tests_values[] = {
+	    {{NULL, RDSU_LOG_YESRANK, 00, 00, 00}, true }, // ok
+	    {{NULL, RDSU_LOG_NAYRANK, 00, 00, 00}, true }, // ok
+	    {{NULL, RDSU_LOG_YESRANK, -1, 00, 00}, false}, // bad elem
+	    {{NULL, RDSU_LOG_NAYRANK, -1, 00, 00}, false}, // bad elem
+	    {{NULL, RDSU_LOG_YESRANK, 00, -1, 00}, false}, // bad parent
+	    {{NULL, RDSU_LOG_NAYRANK, 00, -1, 00}, false}, // bad parent
+	    {{NULL, RDSU_LOG_YESRANK, 00, 00, -1}, false}, // bad rank
+	    {{NULL, RDSU_LOG_NAYRANK, 00, 00, -1}, true }, // skip  bad rank
+	    {{NULL, RDSU_BAD____TYPE, 00, 00, 00}, false}, // bad type
+	};
 
 	rdsu_init(&rdsu, 10);
-	assert(rdsui_push_rewind(&rdsu, 0, 0, 0, RDSU_LOG_RANK) == true);
-	assert(rdsui_push_rewind(&rdsu, 0, -1, 0, RDSU_LOG_RANK) == false);
-	assert(rdsui_push_rewind(&rdsu, 0, -1, 0, RDSU_LOG_PARENT) == false);
-	assert(rdsui_push_rewind(&rdsu, 0, 0, -1, RDSU_LOG_RANK) == false);
-	assert(rdsui_push_rewind(&rdsu, 0, 0, -1, RDSU_LOG_PARENT) == true);
-	assert(rdsui_push_rewind(&rdsu, 0, 0, 0, 999) == false);
+	assert(rdsui_push_rewind(NULL, (void *)0xDEAD) == false);
+	assert(rdsui_push_rewind((void *)0xDEAD, NULL) == false);
+	for (size_t i = 0; i < sizeof(tests_values) / sizeof(tests_values[0]);
+	     i++) {
+		assert(rdsui_push_rewind(&rdsu, &(tests_values[i].log)) ==
+		       tests_values[i].expected);
+	}
+	rdsu.change_log = NULL;
 	rdsu_destroy(&rdsu);
 	return;
 }
-void test_rdsu_save_state(void) {
+NO_COV void test_rdsu_save_state(void) {
 	t_rdsu rdsu;
 
 	rdsu_init(&rdsu, 10);
@@ -28,7 +46,7 @@ void test_rdsu_save_state(void) {
 	assert(rdsu_save_state(&rdsu) == NULL);
 	return;
 }
-void test_rdsu_rewind(void) {
+NO_COV void test_rdsu_rewind(void) {
 	t_rdsu     rdsu;
 	t_rdsu     intact_copy;
 	t_rdsu_log malicious_log;
@@ -76,10 +94,10 @@ void test_rdsu_rewind(void) {
 	    .type = 999,
 	};
 	rdsu.change_log = &malicious_log;
-	assert(malicious_log.type != RDSU_LOG_RANK &&
-	       malicious_log.type != RDSU_LOG_PARENT);
+	assert(malicious_log.type != RDSU_LOG_YESRANK &&
+	       malicious_log.type != RDSU_LOG_NAYRANK);
 	assert(rdsu_rewind(&rdsu) == false);
-	malicious_log.type = RDSU_LOG_RANK;
+	malicious_log.type = RDSU_LOG_YESRANK;
 	malicious_log.p    = (uint16_t)-1;
 	assert(rdsu_rewind(&rdsu) == false);
 	malicious_log.p = 0;
@@ -96,7 +114,7 @@ void test_rdsu_rewind(void) {
 	assert(rdsu_rewind(NULL) == false);
 	return;
 }
-void test_rdsu_rewind_to_state(void) {
+NO_COV void test_rdsu_rewind_to_state(void) {
 	t_rdsu_log *log;
 	t_rdsu      rdsu;
 	t_rdsu_log  malicious_log;
@@ -136,8 +154,8 @@ void test_rdsu_rewind_to_state(void) {
 	assert(rdsu_rewind_to_state(&rdsu, NULL) == false);
 	assert(rdsu_rewind_to_state(NULL, log) == false);
 	rdsu.change_log = &malicious_log;
-	assert(malicious_log.type != RDSU_LOG_RANK &&
-	       malicious_log.type != RDSU_LOG_PARENT);
+	assert(malicious_log.type != RDSU_LOG_YESRANK &&
+	       malicious_log.type != RDSU_LOG_NAYRANK);
 	// log w bad type as input and in change_log
 	assert(rdsu_rewind_to_state(&rdsu, &malicious_log) == false);
 	// log w good type in change_log and bad log in change_log
@@ -159,7 +177,7 @@ void test_rdsu_rewind_to_state(void) {
 	rdsu_destroy(&rdsu);
 	return;
 }
-void test_rdsu_rewind_clear(void) {
+NO_COV void test_rdsu_rewind_clear(void) {
 	t_rdsu rdsu;
 
 	rdsu_init(&rdsu, 10);

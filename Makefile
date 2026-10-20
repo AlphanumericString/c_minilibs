@@ -48,7 +48,8 @@ endif
 
 TFLAGS	:= $(CFLAGS)	-O0 -I./	\
 			-fprofile-instr-generate -ftest-coverage -fcoverage-mapping \
-			-fno-inline -fno-inline-functions
+			-fno-inline -fno-inline-functions -DC_MINI__TESTS
+TLINKER_FLAGS = -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc
 
 # FILES COLLECTOR
 D_FILES		:=
@@ -96,7 +97,7 @@ lib$1.a: $$($1_OBJ)
 	ar rcs $$@ $$^
 # test target
 test_$1.out: $$($1_TOBJSRC) $$($1_TOBJ)
-	$(CC) $(TFLAGS) $$($1_TOBJ) $$($1_TOBJSRC) -o $$@
+	$(CC) $(TFLAGS) $$($1_TOBJ) $$($1_TOBJSRC) -o $$@ $$(TLINKER_FLAGS)
 # cov target
 ./$(BUILD_DIR)/test_$1.profraw: test_$1.out
 	@LLVM_PROFILE_FILE=$$@ ./$$^ 1> /dev/null && \
