@@ -3,8 +3,8 @@
 #include <unistd.h>
 
 #define C_MINI__TWRAP_IMPL
-
 #include "./tpm/thread_pool_manager.h"
+#include "common_base/tests.h"
 
 /* Example 1: Simple job processing */
 
