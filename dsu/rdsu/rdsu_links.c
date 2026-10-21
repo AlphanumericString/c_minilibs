@@ -16,7 +16,7 @@ bool rdsu_union(t_rdsu *ds, size_t x, size_t y) {
 
 	if (!ds || !ds->rank || !ds->parent || !ds->size || y == x ||
 	    x >= ds->size || y >= ds->size) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
 		return (false);
 	}
 	root_x = rdsu_find(ds, x);
@@ -26,7 +26,7 @@ bool rdsu_union(t_rdsu *ds, size_t x, size_t y) {
 		// possible on action, so false
 		CM_LOG(C_MINI__LEVEL_INFO,
 		       "Link (r1:%zu, r2:%zu, components:%zu -> %zu)", x, y,
-		       ds->components, ds->components);
+		       ds->components, ds->components)
 		return (false);
 	}
 
@@ -56,7 +56,7 @@ bool rdsu_union(t_rdsu *ds, size_t x, size_t y) {
 	}
 	rdsui_push_rewind(ds, entry);
 	CM_LOG(C_MINI__LEVEL_INFO, "Link (r1:%zu, r2:%zu, components:%zu -> %zu)",
-	       x, y, ds->components + 1, ds->components);
+	       x, y, ds->components + 1, ds->components)
 	return (true);
 }
 /**
@@ -68,13 +68,13 @@ bool rdsu_union(t_rdsu *ds, size_t x, size_t y) {
 **/
 uint16_t rdsu_find(const t_rdsu *ds, size_t x) {
 	if (!ds || !ds->size || !ds->parent || !ds->rank || x > ds->size) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
 		return (-1);
 	}
 	while (ds->parent[x] != x) {
 		x = ds->parent[x];
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS)
 	return (x);
 }
 /**
@@ -87,7 +87,7 @@ uint16_t rdsu_find(const t_rdsu *ds, size_t x) {
 size_t rdsu_compress_all(t_rdsu *ds) {
 
 	if (!ds || !ds->size || !ds->parent) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
 		return (0);
 	}
 	for (size_t y = 0; y < ds->size; y++) {
@@ -97,6 +97,6 @@ size_t rdsu_compress_all(t_rdsu *ds) {
 		}
 	}
 	rdsu_rewind_clear(ds);
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS)
 	return (ds->size);
 }

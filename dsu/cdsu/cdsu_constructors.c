@@ -14,26 +14,26 @@ t_cdsu *cdsu_new(size_t n) {
 	void   *buffer;
 
 	if (!n) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG)
+		return ((t_cdsu *)NULL);
 	}
 	// note: left alloc split for growth cappabilities.
 	// otherwise growth function would need to also re-alloc the control struct
-	ret = malloc(sizeof(*ret));
+	ret = (t_cdsu *)malloc(sizeof(*ret));
 	if (!ret) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__CDSU_LOG_EALLOC);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__CDSU_LOG_EALLOC)
+		return ((t_cdsu *)NULL);
 	}
 	*ret   = (t_cdsu){0};
 	buffer = malloc(sizeof(int) * n * 2);
 	if (!buffer) {
 		free(ret);
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__CDSU_LOG_EALLOC);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__CDSU_LOG_EALLOC)
+		return ((t_cdsu *)NULL);
 	}
-	cdsu_init_from_arrays(ret, n, buffer, buffer + n * sizeof(int));
+	cdsu_init_from_arrays(ret, n, buffer, (buffer + n * sizeof(unsigned int)));
 	ret->rp_single_alloc = true;
-	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (cdsu:%p, size:%zu)", ret, n);
+	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (cdsu:%p, size:%zu)", (void *)ret, n)
 	return (ret);
 }
 /**
@@ -47,17 +47,18 @@ t_cdsu *cdsu_init(t_cdsu *to_init, size_t n) {
 	void *buffer;
 
 	if (!n || !to_init) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG)
+		return ((t_cdsu *)NULL);
 	}
 	buffer = calloc(sizeof(int), n * 2);
 	if (!buffer) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__CDSU_LOG_EALLOC);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__CDSU_LOG_EALLOC)
+		return ((t_cdsu *)NULL);
 	}
 	cdsu_init_from_arrays(to_init, n, buffer, buffer + n * sizeof(int));
 	to_init->rp_single_alloc = true;
-	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (cdsu:%p, size:%zu)", to_init, n);
+	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (cdsu:%p, size:%zu)", (void *)to_init,
+	       n)
 	return (to_init);
 }
 /**
@@ -68,17 +69,18 @@ t_cdsu *cdsu_init(t_cdsu *to_init, size_t n) {
  * \return the new t_cdsu
  * \ingroup cdsu
 **/
-t_cdsu *cdsu_new_from_array(size_t size, int *parents, int *ranks) {
+t_cdsu *cdsu_new_from_array(size_t size, unsigned int *parents,
+                            unsigned int *ranks) {
 	t_cdsu *ret;
 
 	if (!size || !parents || !ranks || ranks == parents) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG)
+		return ((t_cdsu *)NULL);
 	}
-	ret = malloc(sizeof(t_cdsu));
+	ret = (t_cdsu *)malloc(sizeof(t_cdsu));
 	if (!ret) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__CDSU_LOG_EALLOC);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__CDSU_LOG_EALLOC)
+		return ((t_cdsu *)NULL);
 	}
 	ret->rank            = (uint *)ranks;
 	ret->parent          = (uint *)parents;
@@ -86,7 +88,7 @@ t_cdsu *cdsu_new_from_array(size_t size, int *parents, int *ranks) {
 	ret->components      = 1;
 	ret->rp_single_alloc = false;
 	cdsu_clr(ret);
-	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (cdsu:%p, size:%zu)", ret, size);
+	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (cdsu:%p, size:%zu)", (void *)ret, size)
 	return (ret);
 }
 /**
@@ -98,11 +100,11 @@ t_cdsu *cdsu_new_from_array(size_t size, int *parents, int *ranks) {
  * \return the initialized t_cdsu
  * \ingroup cdsu
 **/
-t_cdsu *cdsu_init_from_arrays(t_cdsu *ret, size_t size, int *parents,
-                              int *ranks) {
+t_cdsu *cdsu_init_from_arrays(t_cdsu *ret, size_t size, unsigned int *parents,
+                              unsigned int *ranks) {
 	if (!ret || !size || !parents || !ranks || parents == ranks) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG)
+		return ((t_cdsu *)NULL);
 	}
 	ret->rank            = (uint *)ranks;
 	ret->parent          = (uint *)parents;
@@ -110,7 +112,7 @@ t_cdsu *cdsu_init_from_arrays(t_cdsu *ret, size_t size, int *parents,
 	ret->components      = 1;
 	ret->rp_single_alloc = false;
 	cdsu_clr(ret);
-	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (cdsu:%p, size:%zu)", ret, size);
+	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (cdsu:%p, size:%zu)", (void *)ret, size)
 	return (ret);
 }
 /**
@@ -129,20 +131,20 @@ bool cdsu_grow(t_cdsu *cdsu, size_t n) {
 	size_t i;
 
 	if (!cdsu || !cdsu->size || !cdsu->rank || !cdsu->parent) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG)
 		return (false);
 	}
 	if (!n) {
-		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CDSU_LOG_SUCCESS);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CDSU_LOG_SUCCESS)
 		return (true);
 	}
 
 	replacement_buffer = malloc(sizeof(int) * (cdsu->size + n) * 2);
 	if (!replacement_buffer) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__CDSU_LOG_EALLOC);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__CDSU_LOG_EALLOC)
 		return (false);
 	}
-	rank_offset = replacement_buffer + (cdsu->size + n) * sizeof(int);
+	rank_offset = (replacement_buffer + (cdsu->size + n) * sizeof(int));
 	memcpy(replacement_buffer, cdsu->parent, cdsu->size * sizeof(int));
 	memcpy(rank_offset, cdsu->rank, cdsu->size * sizeof(int));
 	free(cdsu->parent);
@@ -155,8 +157,8 @@ bool cdsu_grow(t_cdsu *cdsu, size_t n) {
 		cdsu->parent[i + cdsu->size] = i + cdsu->size;
 		cdsu->rank[i++ + cdsu->size] = 0;
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, "Grow DSU (cdsu:%p, size:%zu -> %zu)", cdsu,
-	       cdsu->size, cdsu->size + n);
+	CM_LOG(C_MINI__LEVEL_INFO, "Grow DSU (cdsu:%p, size:%zu -> %zu)",
+	       (void *)cdsu, cdsu->size, cdsu->size + n)
 	cdsu->size       += n;
 	cdsu->components += n;
 	return (true);

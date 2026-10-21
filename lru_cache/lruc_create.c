@@ -15,14 +15,14 @@
 **/
 t_lruc *lruc_init(t_lruc *cache, size_t cap, void (*dtor)(void *)) {
 	if (!cache || !cap) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
 		return (NULL);
 	}
 	bzero(cache, sizeof(*cache));
 	bzero(&cache->stats, sizeof(cache->stats));
 	cache->buckets = calloc(sizeof(t_lruc_keynode *), cap * 2);
 	if (!cache->buckets) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_EALLOC);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_EALLOC)
 		return (NULL);
 	}
 	cache->minHeap = cache->buckets + cap;
@@ -31,7 +31,7 @@ t_lruc *lruc_init(t_lruc *cache, size_t cap, void (*dtor)(void *)) {
 	cache->ttl_glob   = (uint64_t)C_MINI__LRUC_TTL_DFLT;
 	cache->stats      = (t_lruc_stats){0};
 	cache->dtor       = dtor;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS)
 	return (cache);
 }
 
@@ -46,20 +46,20 @@ t_lruc *lruc_create(size_t cap, void (*dtor)(void *)) {
 	t_lruc *ret;
 
 	if (!cap) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
 		return (NULL);
 	}
 	ret = malloc(sizeof(*ret));
 	if (!ret) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_EALLOC);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_EALLOC)
 		return (NULL);
 	}
 	if (lruc_init(ret, cap, dtor) == NULL) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_EALLOC);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_EALLOC)
 		free(ret);
 		ret = NULL;
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS)
 	return (ret);
 }
 /**
@@ -69,7 +69,7 @@ t_lruc *lruc_create(size_t cap, void (*dtor)(void *)) {
 **/
 void lruc_destroy(t_lruc *cache) {
 	if (!cache) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
 		return;
 	}
 	lruc_clear(cache);
@@ -77,7 +77,7 @@ void lruc_destroy(t_lruc *cache) {
 	cache->buckets_nb = 0;
 	cache->buckets    = NULL;
 	cache->minHeap    = NULL;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS)
 }
 /**
  * \brief Destroy internal and cache itself is freed
@@ -86,11 +86,11 @@ void lruc_destroy(t_lruc *cache) {
 **/
 void lruc_free(t_lruc **cache) {
 	if (!cache || !*cache) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
 		return;
 	}
 	lruc_destroy(*cache);
 	free(*cache);
 	*cache = NULL;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS)
 }

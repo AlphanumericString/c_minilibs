@@ -23,7 +23,9 @@
 **/
 
 /**
- * \brief t_ill struct
+ * \typedef t_ill
+ * \brief the t_ill struct is a representation of the intrusive singly linked
+ * lists nodes
  * \param offset offset of the node in the element
  * \param next pointer to the next node
  * \ingroup ill

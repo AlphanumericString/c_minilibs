@@ -13,7 +13,7 @@ size_t ill_length(t_ill *head) {
 		len++;
 		head = head->next;
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 	return len;
 }
 
@@ -32,7 +32,7 @@ size_t ill_nlength(t_ill *head, size_t n) {
 		head = head->next;
 		n--;
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 	return len;
 }
 
@@ -48,13 +48,13 @@ size_t ill_match_nb(t_ill *head, t_callback matcher, void *arg) {
 	size_t count = 0;
 
 	if (!matcher) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return count;
 	}
 	while (head) {
 		if (matcher(ill_ntoe(head), arg)) count++;
 		head = head->next;
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 	return count;
 }

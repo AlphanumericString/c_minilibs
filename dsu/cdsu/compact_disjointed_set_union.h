@@ -20,7 +20,8 @@
 **/
 
 /**
- * \brief cdsu struct
+ * \typedef t_cdsu
+ * \brief cdsu struct represent a compact dsu (disjointed set union)
  * \param parent list of ids for the parent of nodes
  * \param rank   rank of node closer to 0 = closer to source
  * \param components number of differnt sets present in the DSU
@@ -38,10 +39,11 @@ typedef struct s_compact_disjointed_set_union {
 } t_cdsu;
 
 t_cdsu *cdsu_new(size_t n);
-t_cdsu *cdsu_new_from_array(size_t n, int *parents, int *rank);
+t_cdsu *cdsu_new_from_array(size_t n, unsigned int *parents,
+                            unsigned int *rank);
 t_cdsu *cdsu_init(t_cdsu *to_init, size_t n);
-t_cdsu *cdsu_init_from_arrays(t_cdsu *to_init, size_t size, int *parent,
-                              int *rank);
+t_cdsu *cdsu_init_from_arrays(t_cdsu *to_init, size_t size,
+                              unsigned int *parent, unsigned int *rank);
 
 bool cdsu_grow(t_cdsu *to_init, size_t n);
 

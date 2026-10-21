@@ -13,7 +13,7 @@ int rdsu_max_depth(t_rdsu rdsu) {
 	while (i < rdsu.size) {
 		if (rdsu.rank[i++] > max) max = rdsu.rank[i - 1];
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS)
 	return (max);
 }
 /**
@@ -23,7 +23,7 @@ int rdsu_max_depth(t_rdsu rdsu) {
  * \ingroup rdsu
 **/
 size_t rdsu_size(t_rdsu rdsu) {
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS)
 	return (rdsu.size);
 }
 /**
@@ -33,6 +33,6 @@ size_t rdsu_size(t_rdsu rdsu) {
  * \ingroup rdsu
 **/
 size_t rdsu_nb_components(t_rdsu rdsu) {
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS)
 	return (rdsu.components);
 }

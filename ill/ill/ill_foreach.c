@@ -14,19 +14,19 @@ bool ill_foreach(t_ill *head, t_callback c, void *u_data) {
 	t_ill *nxt;
 
 	if (!c || !head) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return (false);
 	}
 	curr = head;
 	while (curr) {
 		nxt = curr->next;
 		if (!c(ill_ntoe(curr), u_data)) {
-			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__ILL_LOG_ECB);
+			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__ILL_LOG_ECB)
 			return (false);
 		}
 		curr = nxt;
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 	return (true);
 }
 
@@ -45,18 +45,18 @@ bool ill_for(t_ill *head, size_t n, t_callback c, void *u_data) {
 	t_ill *nxt;
 
 	if (!c || !head) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return (false);
 	}
 	curr = head;
 	while (curr && n--) {
 		nxt = curr->next;
 		if (!c(ill_ntoe(curr), u_data)) {
-			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__ILL_LOG_ECB);
+			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__ILL_LOG_ECB)
 			return (false);
 		}
 		curr = nxt;
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 	return (true);
 }

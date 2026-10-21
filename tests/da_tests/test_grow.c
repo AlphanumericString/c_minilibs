@@ -21,15 +21,15 @@ NO_COV void test_da_grow(void) {
 	};
 
 	da_init(&da, sizeof(int));
-	ASSERT_DA_STATE(da, sizeof(int), dflt_size, 0);
+	ASSERT_DA_STATE(da, sizeof(int), dflt_size, 0)
 	assert(da_grow(&da) == true);
-	ASSERT_DA_STATE(da, sizeof(int), first_size, 0);
+	ASSERT_DA_STATE(da, sizeof(int), first_size, 0)
 	assert(da_grow(&da) == true);
-	ASSERT_DA_STATE(da, sizeof(int), second_size, 0);
+	ASSERT_DA_STATE(da, sizeof(int), second_size, 0)
 	alloc_set_call_limit(0);
 	assert(da_grow(&da) == false);
 	alloc_set_call_limit(ALLOC_DFT_LIMIT);
-	ASSERT_DA_STATE(da, sizeof(int), second_size, 0);
+	ASSERT_DA_STATE(da, sizeof(int), second_size, 0)
 	da_destroy(&da);
 	assert(da.array == NULL && da.cap_e == 0 && da.nb_e == 0 && da.sz_e == 0);
 	da.sz_e = sizeof(int);
@@ -58,7 +58,7 @@ NO_COV void test_da_grow_for_size(void) {
 	};
 
 	da_init(&da, sizeof(int));
-	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 0);
+	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 0)
 	assert(da_grow_for_size(&da, 20) == true);
 	assert(da.cap_e >= 20), assert(da.sz_e == sizeof(int));
 	assert(da.nb_e == 0), assert(da.array != NULL);

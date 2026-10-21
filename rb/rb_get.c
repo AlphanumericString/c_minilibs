@@ -17,16 +17,16 @@ void *rb_get(const t_rb *rb, t_comparator comp, const void *arg, void *buffer) {
 	void *elem;
 
 	if (!rb || !comp || !buffer) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return NULL;
 	}
 	elem = rb_find(rb, comp, arg);
 	if (elem) {
-		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 		return (memcpy(buffer, elem, rb->sz_e));
 	}
 	// TODO: zero-out buffer on fail?
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_FAIL);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_FAIL)
 	return NULL;
 }
 
@@ -50,7 +50,7 @@ void *rb_nget(const t_rb *rb, size_t n, t_comparator comp, const void *arg,
 	void  *elem;
 
 	if (!rb || !comp || !buffer || !n) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return NULL;
 	}
 
@@ -60,14 +60,14 @@ void *rb_nget(const t_rb *rb, size_t n, t_comparator comp, const void *arg,
 		elem = rb->array + (pos * rb->sz_e);
 		if (comp(elem, (void *)arg) == 0) {
 			rb_nat(*rb, i, n, buffer);
-			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 			return buffer;
 		}
 		pos = (pos + 1) % rb->nb_max;
 		i++;
 	}
 	// TODO: maybe null buffer?
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_FAIL);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_FAIL)
 	return NULL;
 }
 // note: rb_nat at line 18 of funct: no fail branch since rb_nat only checks

@@ -15,7 +15,7 @@
 **/
 bool sptr_deletes(t_strong_ptr *ptr) {
 	if (!ptr || !ptr->meta || !sptr_get_rc(ptr)) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (false);
 	}
 	sptri_rc_dec(ptr->meta);
@@ -25,8 +25,8 @@ bool sptr_deletes(t_strong_ptr *ptr) {
 		ptr->meta->data = NULL;
 		if (!sptri_wc_get(ptr->meta)) free(ptr->meta);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
-	*ptr = (typeof(*ptr)){0};
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
+	*ptr = (t_strong_ptr){0};
 	return (true);
 }
 /**
@@ -39,13 +39,13 @@ bool sptr_deletes(t_strong_ptr *ptr) {
 **/
 bool sptr_deletew(t_weak_ptr *ptr) {
 	if (!ptr || !ptr->meta || !sptr_get_wc(ptr)) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (false);
 	}
 	sptri_wc_dec(ptr->meta);
 	if (!sptri_wc_get(ptr->meta) && !sptri_rc_get(ptr->meta)) free(ptr->meta);
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
-	*ptr = (typeof(*ptr)){0};
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
+	*ptr = (t_weak_ptr){0};
 	return (true);
 }
 /**
@@ -59,11 +59,11 @@ bool sptr_deletew(t_weak_ptr *ptr) {
 **/
 bool sptr_deleteo(t_owned_ptr *ptr) {
 	if (!ptr || !ptr->meta || (!ptr->owner && !sptri_wc_get(ptr->meta))) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (false);
 	}
 	if (ptr->owner == true && sptr_get_rc(ptr) != 1) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_ILLDATA);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_ILLDATA)
 		return (false);
 	}
 	if (ptr->owner) {
@@ -75,8 +75,8 @@ bool sptr_deleteo(t_owned_ptr *ptr) {
 		sptri_wc_dec(ptr->meta);
 	}
 	if (!sptri_wc_get(ptr->meta) && !sptri_rc_get(ptr->meta)) free(ptr->meta);
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
-	*ptr = (typeof(*ptr)){0};
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
+	*ptr = (t_owned_ptr){0};
 	return (true);
 }
 /**
@@ -88,11 +88,11 @@ bool sptr_deleteo(t_owned_ptr *ptr) {
 **/
 bool sptr_deleteu(t_uniq_ptr *ptr) {
 	if (!ptr || !ptr->data) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (false);
 	}
 	if (ptr->dtor) ptr->dtor(ptr->data);
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
-	*ptr = (typeof(*ptr)){0};
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
+	*ptr = (t_uniq_ptr){0};
 	return (true);
 }

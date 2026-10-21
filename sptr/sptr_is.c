@@ -12,7 +12,7 @@
  * \ingroup sptr
 **/
 bool sptr_is_uniqs(const t_strong_ptr *ptr) {
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (sptr_get_rc(ptr) == 1);
 }
 /**
@@ -22,7 +22,7 @@ bool sptr_is_uniqs(const t_strong_ptr *ptr) {
  * \ingroup sptr
 **/
 bool sptr_is_uniqw(const t_weak_ptr *ptr) {
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (sptr_get_rc(ptr) == 1);
 }
 /**
@@ -32,7 +32,7 @@ bool sptr_is_uniqw(const t_weak_ptr *ptr) {
  * \ingroup sptr
 **/
 bool sptr_is_uniqo(const t_owned_ptr *ptr) {
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (sptr_get_rc(ptr) == 1);
 }
 /**
@@ -42,7 +42,7 @@ bool sptr_is_uniqo(const t_owned_ptr *ptr) {
  * \ingroup sptr
 **/
 bool sptr_is_uniqu(const t_uniq_ptr *u) {
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (sptr_get_rc(u) == 1);
 }
 
@@ -57,7 +57,7 @@ bool sptr_is_uniqu(const t_uniq_ptr *u) {
  * \ingroup sptr
 **/
 bool sptr_is_shareds(const t_strong_ptr *ptr) {
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (sptr_get_rc(ptr) >= 1);
 }
 /**
@@ -67,7 +67,7 @@ bool sptr_is_shareds(const t_strong_ptr *ptr) {
  * \ingroup sptr
 **/
 bool sptr_is_sharedw(const t_weak_ptr *ptr) {
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (sptr_get_rc(ptr) >= 1);
 }
 /**
@@ -77,7 +77,7 @@ bool sptr_is_sharedw(const t_weak_ptr *ptr) {
  * \ingroup sptr
 **/
 bool sptr_is_sharedo(const t_owned_ptr *ptr) {
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (sptr_get_rc(ptr) >= 1);
 }
 /**
@@ -88,7 +88,7 @@ bool sptr_is_sharedo(const t_owned_ptr *ptr) {
  * \ingroup sptr
 **/
 bool sptr_is_sharedu(const t_uniq_ptr *u) {
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	(void)u;
 	return (false);
 }

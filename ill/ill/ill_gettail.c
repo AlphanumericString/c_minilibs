@@ -8,11 +8,11 @@
 **/
 t_ill *ill_get_tail(t_ill *head) {
 	if (!head) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return NULL;
 	}
 	while (head->next)
 		head = head->next;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 	return (t_ill *)head;
 }

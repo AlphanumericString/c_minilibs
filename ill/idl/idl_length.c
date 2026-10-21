@@ -12,7 +12,7 @@ size_t idl_length(t_idl *head) {
 		len++;
 		head = head->next;
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return len;
 }
 
@@ -31,7 +31,7 @@ size_t idl_nlength(t_idl *head, size_t n) {
 		head = head->next;
 		n--;
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return len;
 }
 
@@ -47,13 +47,13 @@ size_t idl_match_nb(t_idl *head, t_callback matcher, void *arg) {
 	size_t count = 0;
 
 	if (!head || !matcher) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return count;
 	}
 	while (head) {
 		if (matcher(idl_ntoe(head), arg)) count++;
 		head = head->next;
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return count;
 }

@@ -10,7 +10,7 @@ void tpm_delete(t_tpm *tpm, t_call cleanup) {
 	t_tpm_jc *nxt;
 
 	if (!tpm) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG)
 		return;
 	}
 	tpm_stop(tpm);
@@ -30,13 +30,13 @@ void tpm_delete(t_tpm *tpm, t_call cleanup) {
 	}
 
 	tpm_clear_job_list(tpm->q_start, NULL);
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__TPM_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__TPM_LOG_SUCCESS)
 	return;
 }
 
 void tpm_free(t_tpm *tpm, t_call cleanup) {
 	if (!tpm) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG)
 		return;
 	}
 	tpm_delete(tpm, cleanup);

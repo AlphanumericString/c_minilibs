@@ -39,7 +39,7 @@ void *ctls_dummy_decrement(void *a) {
 	return (NULL);
 }
 
-NO_COV void test_ctls_separate() {
+NO_COV void test_ctls_separate(void) {
 	pthread_t t1, t2;
 	void     *ret;
 	size_t    nb_steps = 10;

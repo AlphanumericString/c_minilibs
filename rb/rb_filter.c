@@ -24,7 +24,7 @@ bool rb_filter(t_rb *rb, t_callback cb, const void *arg,
 	void  *elem;
 
 	if (!rb || !cb) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return false;
 	}
 	if (!destroyer) destroyer = blank;
@@ -47,6 +47,6 @@ bool rb_filter(t_rb *rb, t_callback cb, const void *arg,
 		i++;
 	}
 	rb->i_pos = write_pos;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 	return true;
 }

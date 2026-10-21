@@ -11,28 +11,28 @@
  * \ingroup rdsu
 **/
 t_rdsu *rdsu_new(size_t n) {
-	t_rdsu *ret;
-	void   *buffer;
+	t_rdsu   *ret;
+	uint16_t *buffer;
 
 	if (!n) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
+		return ((t_rdsu *)NULL);
 	}
-	ret = malloc(sizeof(*ret));
+	ret = (t_rdsu *)malloc(sizeof(*ret));
 	if (!ret) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RDSU_LOG_EALLOC);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RDSU_LOG_EALLOC)
+		return ((t_rdsu *)NULL);
 	}
 	*ret   = (t_rdsu){0};
-	buffer = malloc(sizeof(uint16_t) * n * 2);
+	buffer = (uint16_t *)malloc(sizeof(uint16_t) * n * 2);
 	if (!buffer) {
 		free(ret);
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RDSU_LOG_EALLOC);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RDSU_LOG_EALLOC)
+		return ((t_rdsu *)NULL);
 	}
-	rdsu_init_from_arrays(ret, n, buffer, buffer + n * sizeof(uint16_t));
+	rdsu_init_from_arrays(ret, n, buffer, buffer + n);
 	ret->rp_single_alloc = true;
-	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (rdsu:%p, size:%zu)", ret, n);
+	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (rdsu:%p, size:%zu)", (void *)ret, n)
 	return (ret);
 }
 /**
@@ -43,20 +43,21 @@ t_rdsu *rdsu_new(size_t n) {
  * \ingroup rdsu
 **/
 t_rdsu *rdsu_init(t_rdsu *to_init, size_t n) {
-	void *buffer;
+	uint16_t *buffer;
 
 	if (!n || !to_init) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
+		return ((t_rdsu *)NULL);
 	}
-	buffer = calloc(sizeof(uint16_t), n * 2);
+	buffer = (uint16_t *)calloc(sizeof(uint16_t), n * 2);
 	if (!buffer) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RDSU_LOG_EALLOC);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RDSU_LOG_EALLOC)
+		return ((t_rdsu *)NULL);
 	}
-	rdsu_init_from_arrays(to_init, n, buffer, buffer + n * sizeof(uint16_t));
+	rdsu_init_from_arrays(to_init, n, buffer, buffer + n);
 	to_init->rp_single_alloc = true;
-	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (rdsu:%p, size:%zu)", to_init, n);
+	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (rdsu:%p, size:%zu)", (void *)to_init,
+	       n)
 	return (to_init);
 }
 /**
@@ -71,13 +72,13 @@ t_rdsu *rdsu_new_from_arrays(size_t size, uint16_t *parents, uint16_t *ranks) {
 	t_rdsu *ret;
 
 	if (!size || !parents || !ranks) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
+		return ((t_rdsu *)NULL);
 	}
-	ret = malloc(sizeof(t_rdsu));
+	ret = (t_rdsu *)malloc(sizeof(t_rdsu));
 	if (!ret) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RDSU_LOG_EALLOC);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RDSU_LOG_EALLOC)
+		return ((t_rdsu *)NULL);
 	}
 	ret->rank            = (uint16_t *)ranks;
 	ret->parent          = (uint16_t *)parents;
@@ -86,7 +87,7 @@ t_rdsu *rdsu_new_from_arrays(size_t size, uint16_t *parents, uint16_t *ranks) {
 	ret->change_log      = NULL;
 	ret->components      = size;
 	rdsu_clr(ret);
-	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (rdsu:%p, size:%zu)", ret, size);
+	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (rdsu:%p, size:%zu)", (void *)ret, size)
 	return (ret);
 }
 /**
@@ -101,8 +102,8 @@ t_rdsu *rdsu_new_from_arrays(size_t size, uint16_t *parents, uint16_t *ranks) {
 t_rdsu *rdsu_init_from_arrays(t_rdsu *ret, size_t size, uint16_t *parents,
                               uint16_t *ranks) {
 	if (!ret || !size || !parents || !ranks) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
+		return ((t_rdsu *)NULL);
 	}
 	ret->rank            = (uint16_t *)ranks;
 	ret->parent          = (uint16_t *)parents;
@@ -111,7 +112,7 @@ t_rdsu *rdsu_init_from_arrays(t_rdsu *ret, size_t size, uint16_t *parents,
 	ret->rp_single_alloc = false;
 	ret->change_log      = NULL;
 	rdsu_clr(ret);
-	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (rdsu:%p, size:%zu)", ret, size);
+	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (rdsu:%p, size:%zu)", (void *)ret, size)
 	return (ret);
 }
 /**
@@ -130,12 +131,12 @@ bool rdsu_grow(t_rdsu *rdsu, size_t n) {
 	size_t i;
 
 	if (!rdsu || !n || !rdsu->size || !rdsu->rank || !rdsu->parent) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
 		return (false);
 	}
 	replacement_buffer = malloc(sizeof(uint16_t) * (rdsu->size + n) * 2);
 	if (!replacement_buffer) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RDSU_LOG_EALLOC);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RDSU_LOG_EALLOC)
 		return (false);
 	}
 	rank_offset = replacement_buffer + (rdsu->size + n) * sizeof(uint16_t);
@@ -151,8 +152,8 @@ bool rdsu_grow(t_rdsu *rdsu, size_t n) {
 		rdsu->parent[i + rdsu->size] = i + rdsu->size;
 		rdsu->rank[i++ + rdsu->size] = 0;
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, "Grow DSU (rdsu:%p, size:%zu -> %zu)", rdsu,
-	       rdsu->size, rdsu->size + n);
+	CM_LOG(C_MINI__LEVEL_INFO, "Grow DSU (rdsu:%p, size:%zu -> %zu)",
+	       (void *)rdsu, rdsu->size, rdsu->size + n)
 	rdsu->size       += n;
 	rdsu->components += n;
 	return (true);

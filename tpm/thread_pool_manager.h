@@ -7,7 +7,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define C_MINI__TPM_INTERNAL
 #define C_MINI__LOG_THREADSAFE
 #include "common_base/log.h"
 
@@ -43,7 +42,7 @@
 #	define TPM_THREADS_DFLT_NB 16
 #endif
 
-// -- batches
+// // --batches
 // #ifndef TPM_BATCH_MAX_SIZE
 // #	define TPM_BATCH_MAX_SIZE 255 // max batch size 255
 // #endif
@@ -63,10 +62,10 @@
 #endif
 
 // -- checks
-#if (TPM_THREADS_DFLT_NB > TPM_THREADS_MAX_NB) ||                              \
-    (TPM_BATCH_DEFAULT_SIZE > TPM_BATCH_MAX_SIZE)
-#	error "default size is bigger than max size"
-#endif // !checks
+// #if (TPM_THREADS_DFLT_NB > TPM_THREADS_MAX_NB) || \
+//     (TPM_BATCH_DEFAULT_SIZE > TPM_BATCH_MAX_SIZE)
+// #	error "default size is bigger than max size"
+// #endif // !checks
 
 typedef struct s_tpm_base_job {
 	void *(*func)(void *);
@@ -119,6 +118,12 @@ typedef struct s_tpm_thread_internal {
 #	define C_MINI__TPM_BUCKETS C_MINI__TPM_NB_JOBS / 2
 #endif
 
+struct s_tpm_stats {
+	size_t total_jobs_completed;
+	size_t total_jobs_failed;
+	// ... to be determined
+};
+
 typedef struct s_thread_pool_manager {
 	t_tpmi_thread threads[C_MINI__TPM_NB_JOBS]; // threads
 	atomic_int    nb_threads;
@@ -134,11 +139,7 @@ typedef struct s_thread_pool_manager {
 		bool    shutting_down;
 		bool    queue_closed;
 	} internal_val;
-	struct s_tpm_stats {
-		size_t total_jobs_completed;
-		size_t total_jobs_failed;
-		// ... to be determined
-	} stats;
+	struct s_tpm_stats stats;
 } t_tpm;
 
 // TODO: (non-ordered)

@@ -109,12 +109,12 @@ bool sptr_dumps(int fd, const t_strong_ptr *sptr) {
 	char *s;
 
 	if (fd < 0) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return false;
 	}
 	s = sptr_to_strings(sptr);
 	if (!s) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__SPTR_LOG_EALLOC);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__SPTR_LOG_EALLOC)
 		return false;
 	}
 	dprintf(fd, "%s\n", s);
@@ -134,12 +134,12 @@ bool sptr_dumpw(int fd, const t_weak_ptr *wptr) {
 	char *s;
 
 	if (fd < 0) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return false;
 	}
 	s = sptr_to_stringw(wptr);
 	if (!s) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__SPTR_LOG_EALLOC);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__SPTR_LOG_EALLOC)
 		return false;
 	}
 	dprintf(fd, "%s\n", s);
@@ -158,12 +158,12 @@ bool sptr_dumpo(int fd, const t_owned_ptr *optr) {
 	char *s;
 
 	if (fd < 0) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return false;
 	}
 	s = sptr_to_stringo(optr);
 	if (!s) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__SPTR_LOG_EALLOC);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__SPTR_LOG_EALLOC)
 		return false;
 	}
 	dprintf(fd, "%s\n", s);
@@ -182,12 +182,12 @@ bool sptr_dumpu(int fd, const t_uniq_ptr *uptr) {
 	char *s;
 
 	if (fd < 0) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return false;
 	}
 	s = sptr_to_stringu(uptr);
 	if (!s) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__SPTR_LOG_EALLOC);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__SPTR_LOG_EALLOC)
 		return false;
 	}
 	dprintf(fd, "%s\n", s);

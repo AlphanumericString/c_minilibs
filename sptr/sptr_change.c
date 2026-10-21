@@ -16,12 +16,12 @@
 **/
 t_strong_ptr sptr_into_strong(t_weak_ptr *sptr) {
 	if (!sptr || sptr_get_wc(sptr) == 0 || sptr_get_rc(sptr) == 0) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_ILLDATA);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_ILLDATA)
 		return ((t_strong_ptr){0});
 	}
 	sptri_rc_inc(sptr->meta);
 	sptri_wc_dec(sptr->meta);
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return ((t_strong_ptr){.meta = sptr->meta, .data = sptr->meta->data});
 }
 /**
@@ -37,7 +37,7 @@ t_strong_ptr sptr_into_strong(t_weak_ptr *sptr) {
 **/
 t_weak_ptr sptr_into_weak(t_strong_ptr *sptr) {
 	if (!sptr || sptr_get_rc(sptr) == 0) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return ((t_weak_ptr){0});
 	}
 	sptri_rc_dec(sptr->meta);
@@ -46,7 +46,7 @@ t_weak_ptr sptr_into_weak(t_strong_ptr *sptr) {
 		sptr->meta->data = NULL;
 	}
 	sptri_wc_inc(sptr->meta);
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return ((t_weak_ptr){sptr->meta});
 }
 /**
@@ -61,16 +61,16 @@ t_weak_ptr sptr_into_weak(t_strong_ptr *sptr) {
 bool sptr_transfer_ownership(t_owned_ptr *to, t_owned_ptr *from) {
 	if (!to || !from || !to->meta || !from->meta || from->owner == false ||
 	    to->owner == true) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (false);
 	}
 	if (to->meta != from->meta) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_ILLDATA);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_ILLDATA)
 		return (false);
 	}
 	to->owner   = true;
 	from->owner = false;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (true);
 }
 /**
@@ -89,15 +89,15 @@ bool sptr_move_ownership(t_owned_ptr *dest, t_owned_ptr *from) {
 
 	if (!dest || !from || !from->meta || !from->owner ||
 	    sptr_get_rc(from) != 1) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (false);
 	}
 	if (dest->meta && sptr_deleteo(dest) != true) {
-		CM_LOG(C_MINI__LEVEL_WARN, "non-empty container overridden");
+		CM_LOG(C_MINI__LEVEL_WARN, "non-empty container overridden")
 		return (false);
 	}
 	r     = *from;
-	*from = (typeof(*from)){0};
+	*from = (t_owned_ptr){0};
 	*dest = r;
 	return (true);
 }
@@ -112,13 +112,13 @@ bool sptr_move_ownership(t_owned_ptr *dest, t_owned_ptr *from) {
 **/
 t_uniq_ptr *sptr_uniq_yield(t_uniq_ptr *dst, t_uniq_ptr *src) {
 	if (!dst || !src) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (NULL);
 	}
 	if (dst->data) sptr_delete(dst);
 	*dst = *src;
 	*src = (t_uniq_ptr){0};
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (dst);
 }
 /**
@@ -132,12 +132,12 @@ bool sptr_uniq_swap(t_uniq_ptr *sw1, t_uniq_ptr *sw2) {
 	t_uniq_ptr tmp;
 
 	if (!sw1 || !sw2) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (false);
 	}
 	tmp  = *sw1;
 	*sw1 = *sw2;
 	*sw2 = tmp;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (true);
 }

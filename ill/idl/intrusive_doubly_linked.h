@@ -23,7 +23,8 @@
 **/
 
 /**
- * \brief t_idll struct
+ * \typedef t_idl
+ * \brief t_idl struct represent intrusive doubly linked lists nodes
  * \param offset offset of the node in the element
  * \param next pointer to the next node
  * \param prev pointer to the next node

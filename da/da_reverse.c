@@ -8,7 +8,7 @@
  * \ingroup da
 **/
 void da_reverse(t_da *da) {
-	return (da_nreverse(da, -1));
+	da_nreverse(da, -1);
 }
 /**
  * \brief reverse the order of the first n elements in the dynamic array
@@ -18,18 +18,17 @@ void da_reverse(t_da *da) {
 **/
 void da_nreverse(t_da *da, size_t n) {
 	size_t i;
-	bool   all;
 
 	if (!da_is_valid(da)) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return;
 	}
 	if (n < 2) return;
 	if (n > da->nb_e) n = da->nb_e;
-	all = (n-- == da->nb_e);
+	n--;
 	for (i = 0; i < n; i++, n--)
 		da_swap(da, i, n);
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
 	return;
 }
 /**
@@ -43,14 +42,17 @@ void da_b_nreverse(t_da *da, size_t n) {
 	size_t m;
 
 	if (!da) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return;
 	}
 	if (n < 2) return;
-	if (n >= da->nb_e) return (da_nreverse(da, da->nb_e));
+	if (n >= da->nb_e) {
+		da_nreverse(da, da->nb_e);
+		return;
+	}
 	m = da->nb_e - 1;
 	for (i = (da->nb_e - n); i < m; i++, m--)
 		da_swap(da, i, m);
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
 	return;
 }

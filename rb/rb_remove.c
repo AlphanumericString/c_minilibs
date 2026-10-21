@@ -11,17 +11,17 @@
 **/
 bool rb_drop(t_rb *rb, size_t n) {
 	if (!rb || !n) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return (false);
 	}
 	if (n >= rb->count) {
 		rb_clr(rb);
-		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 		return (true);
 	}
 	rb->o_pos  = (rb->o_pos + n) % rb->nb_max;
 	rb->count -= n;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 	return (true);
 }
 /**
@@ -38,10 +38,10 @@ void *rb_peek(t_rb rb, void *elem_out) {
 	if (elem_out) {
 		if (pos) {
 			memcpy(elem_out, pos, rb.sz_e);
-			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 		} else {
 			bzero(elem_out, rb.sz_e);
-			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_FAIL);
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_FAIL)
 		}
 	}
 	return (pos);
@@ -60,25 +60,25 @@ void *rb_npeek(t_rb rb, size_t n, void *elem_out) {
 	size_t         left_size;
 
 	if (!rb.array) {
-		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_EARG)
 		return (NULL);
 	}
 	if (n > rb_size(rb)) n = rb_size(rb);
 	if (!n) {
-		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 		return (NULL);
 	}
 	pos = rb_at(rb, 0);
 	if (elem_out) {
 		if (rb.nb_max > (rb.o_pos + n)) {
 			memcpy(elem_out, pos, n * rb.sz_e);
-			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 		} else {
 			left_size = (rb.nb_max - rb.o_pos) * rb.sz_e;
 			memcpy(elem_out, pos, left_size);
 			n -= rb.nb_max - rb.o_pos;
 			memcpy(elem_out + left_size, rb.array, n * rb.sz_e);
-			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 		}
 	}
 	return (pos);
@@ -94,17 +94,17 @@ void *rb_pop(t_rb *rb, void *elem_out) {
 	void *return_val;
 
 	if (!rb) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return (NULL);
 	}
 	return_val = rb_peek(*rb, elem_out);
 	if (!return_val) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_FAIL);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_FAIL)
 		return (return_val);
 	}
 	rb->o_pos = (rb->o_pos + 1) % rb->nb_max;
 	rb->count--;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 	return (return_val);
 }
 /**
@@ -119,17 +119,17 @@ void *rb_npop(t_rb *rb, size_t n, void *elem_out) {
 	void *return_val;
 
 	if (!rb || !n) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return (NULL);
 	}
 	if (n > rb_size(*rb)) n = rb_size(*rb);
 	return_val = rb_npeek(*rb, n, elem_out);
 	if (!return_val) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_FAIL);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_FAIL)
 		return (return_val);
 	}
 	rb->o_pos  = (rb->o_pos + n) % rb->nb_max;
 	rb->count -= n;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 	return (return_val);
 }

@@ -8,27 +8,27 @@ NO_COV void test_da_add(void) {
 	const size_t first_growth = C_MINI_DA__NB_ELEM_DFLT * C_MINI_DA__GROWTH;
 
 	da_init(&da, sizeof(int));
-	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 0);
+	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 0)
 	a = 1;
 	da_add(&da, &a);
 	assert(((int *)(da.array))[da.nb_e - 1] == 1);
-	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 1);
+	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 1)
 	a = 2;
 	da_add(&da, &a);
 	assert(((int *)(da.array))[da.nb_e - 1] == 2);
-	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 2);
+	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 2)
 	a = 3;
 	da_add(&da, &a);
 	assert(((int *)(da.array))[da.nb_e - 1] == 3);
-	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 3);
+	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 3)
 	a = 4;
 	da_add(&da, &a);
 	assert(((int *)(da.array))[da.nb_e - 1] == 4);
-	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 4);
+	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 4)
 	a = 5;
 	da_add(&da, &a);
 	assert(((int *)(da.array))[da.nb_e - 1] == 5);
-	ASSERT_DA_STATE(da, sizeof(int), first_growth, 5);
+	ASSERT_DA_STATE(da, sizeof(int), first_growth, 5)
 	da_destroy(&da);
 
 	da_add(NULL, &a);

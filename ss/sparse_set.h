@@ -8,6 +8,7 @@
 #include "common_base/log.h"
 
 /**
+ * \typedef t_ss
  * \brief sparse set structure
  * \param data raw vals storage
  * \param indexes storage for offsets after swaps and pushes

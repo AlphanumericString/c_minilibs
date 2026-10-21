@@ -2,10 +2,14 @@
 
 #include "sptr_tests.h"
 
+static void local_dtor(void *_) {
+	return;
+}
+
 // const-data
 NO_COV void test_sptr_getsc(void) {
-	void *data = (void *)0xDEAD;
-	void *dtor = (void *)0xCAFE;
+	void  *data = (void *)0xDEAD;
+	t_dtor dtor = local_dtor;
 
 	const t_fbox b0_ok = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
 	const t_fbox b1_no_rc =
@@ -31,8 +35,8 @@ NO_COV void test_sptr_getsc(void) {
 }
 
 NO_COV void test_sptr_getwc(void) {
-	void *data = (void *)0xDEAD;
-	void *dtor = (void *)0xCAFE;
+	void  *data = (void *)0xDEAD;
+	t_dtor dtor = local_dtor;
 
 	const t_fbox b0_ok = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
 	const t_fbox b1_no_rc =
@@ -56,8 +60,8 @@ NO_COV void test_sptr_getwc(void) {
 }
 
 NO_COV void test_sptr_getoc(void) {
-	void *data = (void *)0xDEAD;
-	void *dtor = (void *)0xCAFE;
+	void  *data = (void *)0xDEAD;
+	t_dtor dtor = local_dtor;
 
 	const t_fbox b0_rc1 =
 	    (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
@@ -87,8 +91,8 @@ NO_COV void test_sptr_getoc(void) {
 }
 
 NO_COV void test_sptr_getuc(void) {
-	void *data = (void *)0xDEAD;
-	void *dtor = (void *)0xCAFE;
+	void  *data = (void *)0xDEAD;
+	t_dtor dtor = local_dtor;
 
 	const t_uniq_ptr u0_ok = (const t_uniq_ptr){.data = data, .dtor = dtor};
 	const t_uniq_ptr u1_data_null =
@@ -107,8 +111,8 @@ NO_COV void test_sptr_getuc(void) {
 
 // non-const data
 NO_COV void test_sptr_gets(void) {
-	void *data = (void *)0xDEAD;
-	void *dtor = (void *)0xCAFE;
+	void  *data = (void *)0xDEAD;
+	t_dtor dtor = local_dtor;
 
 	t_fbox b0_ok    = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
 	t_fbox b1_no_rc = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 0};
@@ -131,8 +135,8 @@ NO_COV void test_sptr_gets(void) {
 }
 
 NO_COV void test_sptr_getw(void) {
-	void *data = (void *)0xDEAD;
-	void *dtor = (void *)0xCAFE;
+	void  *data = (void *)0xDEAD;
+	t_dtor dtor = local_dtor;
 
 	t_fbox b0_ok    = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
 	t_fbox b1_no_rc = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
@@ -155,8 +159,8 @@ NO_COV void test_sptr_getw(void) {
 }
 
 NO_COV void test_sptr_geto(void) {
-	void *data = (void *)0xDEAD;
-	void *dtor = (void *)0xCAFE;
+	void  *data = (void *)0xDEAD;
+	t_dtor dtor = local_dtor;
 
 	t_fbox b0_rc1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
 	t_fbox b1_rc0 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
@@ -180,8 +184,8 @@ NO_COV void test_sptr_geto(void) {
 }
 
 NO_COV void test_sptr_getu(void) {
-	void *data = (void *)0xDEAD;
-	void *dtor = (void *)0xCAFE;
+	void  *data = (void *)0xDEAD;
+	t_dtor dtor = local_dtor;
 
 	t_uniq_ptr u0_ok        = (t_uniq_ptr){.data = data, .dtor = dtor};
 	t_uniq_ptr u1_data_null = (t_uniq_ptr){.data = NULL, .dtor = dtor};
@@ -400,8 +404,8 @@ NO_COV void test_sptr_get_wcu(void) {
 
 // dtors
 NO_COV void test_sptr_get_dtors(void) {
-	void *data = (void *)0xDEAD;
-	void *dtor = (void *)0xCAFE;
+	void  *data = (void *)0xDEAD;
+	t_dtor dtor = local_dtor;
 
 	t_fbox b0_dtor  = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
 	t_fbox b1_null  = (t_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 0};
@@ -426,8 +430,8 @@ NO_COV void test_sptr_get_dtors(void) {
 }
 
 NO_COV void test_sptr_get_dtorw(void) {
-	void *data = (void *)0xDEAD;
-	void *dtor = (void *)0xCAFE;
+	void  *data = (void *)0xDEAD;
+	t_dtor dtor = local_dtor;
 
 	t_fbox b0_dtor  = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
 	t_fbox b1_null  = (t_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 1};
@@ -455,8 +459,8 @@ NO_COV void test_sptr_get_dtorw(void) {
 }
 
 NO_COV void test_sptr_get_dtoro(void) {
-	void *data = (void *)0xDEAD;
-	void *dtor = (void *)0xCAFE;
+	void  *data = (void *)0xDEAD;
+	t_dtor dtor = local_dtor;
 
 	t_fbox b0_dtor  = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
 	t_fbox b1_null  = (t_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 0};
@@ -481,8 +485,8 @@ NO_COV void test_sptr_get_dtoro(void) {
 }
 
 NO_COV void test_sptr_get_dtoru(void) {
-	void *data = (void *)0xDEAD;
-	void *dtor = (void *)0xCAFE;
+	void  *data = (void *)0xDEAD;
+	t_dtor dtor = local_dtor;
 
 	t_uniq_ptr u0_dtor = (t_uniq_ptr){.data = data, .dtor = dtor};
 	t_uniq_ptr u1_null = (t_uniq_ptr){.data = data, .dtor = NULL};

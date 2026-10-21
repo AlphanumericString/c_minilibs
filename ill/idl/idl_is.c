@@ -8,10 +8,10 @@
 **/
 bool idl_is_isolated(t_idl *node) {
 	if (!node) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return false;
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return node->next == NULL && node->prev == NULL;
 }
 
@@ -27,7 +27,7 @@ bool idl_is_circular(t_idl *head) {
 	t_idl *slow;
 
 	if (!head) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return false;
 	}
 	slow = head;
@@ -37,7 +37,7 @@ bool idl_is_circular(t_idl *head) {
 		else fast = fast->next;
 		slow = slow->next;
 		if (fast && slow == fast) {
-			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 			return (true);
 		}
 	}
@@ -48,11 +48,11 @@ bool idl_is_circular(t_idl *head) {
 		else fast = fast->prev;
 		slow = slow->prev;
 		if (fast && slow == fast) {
-			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 			return (true);
 		}
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (false);
 }
 
@@ -70,7 +70,7 @@ bool idl_is_sorted(t_idl *head, t_comparator comparator) {
 	int   ord;
 
 	if (!head || !comparator) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return (false);
 	}
 	if (!head->next) return (true);
@@ -81,12 +81,12 @@ bool idl_is_sorted(t_idl *head, t_comparator comparator) {
 		if (prev <= 0 && ord < 0) prev = -1;
 		else if (prev >= 0 && ord > 0) prev = 1;
 		else if (ord != 0) {
-			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_FAIL);
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_FAIL)
 			return (false);
 		}
 		head = head->next;
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (true);
 }
 
@@ -100,16 +100,16 @@ bool idl_is_sorted(t_idl *head, t_comparator comparator) {
 **/
 bool idl_has(t_idl *head, t_callback matcher, void *arg) {
 	if (!head || !matcher) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return (false);
 	}
 	while (head) {
 		if (matcher(idl_ntoe(head), arg)) {
-			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 			return (true);
 		}
 		head = head->next;
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_FAIL);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_FAIL)
 	return (false);
 }

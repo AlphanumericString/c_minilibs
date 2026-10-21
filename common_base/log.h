@@ -20,10 +20,10 @@
 #		include <stdio.h>
 
 // colors
-#		define C_MINI__LOG_L_COLOR     "\e[33m"
-#		define C_MINI__LOG_D_COLOR     "\e[36;1m"
-#		define C_MINI__LOG_DP_COLOR    "\e[34;0m"
-#		define C_MINI__LOG_RESET_COLOR "\e[0m"
+#		define C_MINI__LOG_L_COLOR     "\033[33m"
+#		define C_MINI__LOG_D_COLOR     "\033[36;1m"
+#		define C_MINI__LOG_DP_COLOR    "\033[34;0m"
+#		define C_MINI__LOG_RESET_COLOR "\033[0m"
 
 // thread-safe version
 #		ifdef C_MINI__LOG_THREADSAFE
@@ -127,3 +127,5 @@ extern pthread_mutex_t console_lock;
 #	endif // !TESTS
 
 #endif // !C_MINI__CB_LOG
+
+// TODO: \def macros

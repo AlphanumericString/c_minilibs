@@ -17,17 +17,27 @@
 **/
 
 #ifndef C_MINI__CTLS_CAP
-#	define C_MINI__CTLS_CAP 16
-#endif
+#	ifdef C_MINI__TESTS
+#		define C_MINI__CTLS_CAP 16
+#	else
+#		define C_MINI__CTLS_CAP 256
+#	endif // !C_MINI__TESTS
+#endif     // !C_MINI__CTLS_CAP
 
 #ifdef C_MINI__CTLS_INTERNAL
 /**
+ * \var ctls_key tls key used by the ctls system
  * \ingroup ctls
 **/
 extern pthread_key_t ctls_key;
 #endif // C_MINI__CTLS_INTERNAL
 
 /**
+ * \brief enum to typedef the ctls encapsulated types
+ * \param CTLS_CHAR char representation value
+ * \param CTLS_INT int representation value
+ * \param CTLS_LONG long representation value
+ * \param CTLS_PTR pointer representation value
  * \ingroup ctls
 **/
 enum e_ctls_type {
@@ -38,7 +48,7 @@ enum e_ctls_type {
 };
 
 /**
- * \brief type-sfafe abstraction of base c types.
+ * \brief type-sfafe abstraction of base c types for ctls system.
  * \param type enum of c types.
  * \param value union of different possible interpretation of data.
  * \ingroup ctls
@@ -55,7 +65,8 @@ typedef struct {
 
 #ifdef C_MINI__CTLS_INTERNAL
 /**
- * \brief the array of C-type Thread Local Storage. Fast but limited to c-types.
+ * \brief the array of Thread Local Storage for C-type. Fast but limited to
+ * c-types.
  * \param v_name array of name for the different entries.
  * \param vals array of values for the different entries.
  * \param len length of the array currently being used.

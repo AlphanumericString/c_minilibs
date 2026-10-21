@@ -10,14 +10,14 @@ NO_COV void test_da_filter(void) {
 	bound = 2;
 	assert(da_filter(&da, cb_filter_strict_inf, &bound, cb_empty_deletor) ==
 	       true);
-	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 1);
+	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 1)
 	da_cat_array(&da, (int *)arr_2_5, 4, sizeof(int));
-	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 5);
+	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 5)
 	bound = 3;
 	assert(da_filter(&da, cb_filter_strict_inf, &bound, cb_empty_deletor) ==
 	       true);
 	da_sort(&da, cb_cmp);
-	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 2);
+	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 2)
 	assert(*(int *)da_at(&da, 0) == 1);
 	assert(*(int *)da_at(&da, 1) == 2);
 	da.nb_e = 1;
@@ -38,18 +38,18 @@ NO_COV void test_da_nfilter(void) {
 	const t_callback del   = cb_empty_deletor;
 
 	assert(da_nfilter(&da, 4, cb_false, &bound, del) == true);
-	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 1);
+	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 1)
 	da_cat_array(&da, (int *)arr_2_5, 4, sizeof(int));
-	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 5);
+	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 5)
 	bound = 3;
 	assert(da_nfilter(&da, 4, func_filter, &bound, del) == true);
-	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 2);
+	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 2)
 	assert(da_nfilter(&da, 0, func_filter, &bound, del) == true);
-	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 2);
+	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 2)
 	assert(da_nfilter(NULL, 4, func_filter, &bound, del) == false);
-	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 2);
+	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 2)
 	assert(da_nfilter(&da, 4, NULL, &bound, del) == false);
-	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 2);
+	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 2)
 	assert(*(int *)da_at(&da, 0) == 2);
 	assert(*(int *)da_at(&da, 1) == 5);
 	assert(da_nfilter(&da, 4, cb_true, &bound, del) == true);
@@ -58,7 +58,7 @@ NO_COV void test_da_nfilter(void) {
 	da.nb_e = 2;
 	assert(da_nfilter(&da, 4, cb_false, &bound, NULL) == true);
 	assert(da.nb_e == 0);
-	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 0);
+	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 0)
 	assert(da_is_empty(&da) == true);
 	assert(da_nfilter(&da, 1, cb_true, &bound, del) == false);
 }
@@ -70,10 +70,10 @@ NO_COV void test_da_filter_out(void) {
 	da_init(&da, sizeof(int));
 	da_add(&da, &a);
 	da_filter_out(&da, cb_filter_strict_inf, &bound, cb_empty_deletor);
-	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 0);
+	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 0)
 	da_cat_array(&da, (int *)arr_5, 5, sizeof(int));
 	da_filter_out(&da, cb_filter_strict_inf, &bound, NULL);
-	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 3);
+	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 3)
 	da_sort(&da, cb_cmp);
 	assert(*(int *)da_at(&da, 0) == 3);
 	assert(*(int *)da_at(&da, 1) == 4);
@@ -93,10 +93,10 @@ NO_COV void test_da_nfilter_out(void) {
 	da_init(&da, sizeof(int));
 	da_add(&da, &a);
 	da_nfilter_out(&da, 1, cb_true, &bound, cb_empty_deletor);
-	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 0);
+	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 0)
 	da_cat_array(&da, (int *)arr_5, 5, sizeof(int));
 	da_nfilter_out(&da, 1, cb_filter_strict_inf, &bound, cb_empty_deletor);
-	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 4);
+	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 4)
 	da_sort(&da, cb_cmp);
 	assert(*(int *)da_at(&da, 0) == 2);
 	assert(*(int *)da_at(&da, 1) == 3);

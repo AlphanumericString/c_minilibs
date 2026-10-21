@@ -9,14 +9,14 @@
 **/
 void rdsu_destroy(t_rdsu *ds) {
 	if (!ds) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
 		return;
 	}
 	if (ds->parent) free(ds->parent);
 	if (!ds->rp_single_alloc && ds->rank) free(ds->rank);
 	if (ds->change_log) rdsu_rewind_clear(ds);
 	*ds = (t_rdsu){0};
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS)
 }
 /**
  * \brief reset structure to a clean init state
@@ -27,7 +27,7 @@ void rdsu_clr(t_rdsu *rdsu) {
 	size_t i;
 
 	if (!rdsu || !rdsu->rank || !rdsu->parent) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
 		return;
 	}
 	i = 0;
@@ -37,7 +37,7 @@ void rdsu_clr(t_rdsu *rdsu) {
 	}
 	rdsu_rewind_clear(rdsu);
 	CM_LOG(C_MINI__LEVEL_INFO, "Clear (components:%zu -> %zu)",
-	       rdsu->components, rdsu->size);
+	       rdsu->components, rdsu->size)
 	rdsu->components = rdsu->size;
 }
 /**
@@ -47,11 +47,11 @@ void rdsu_clr(t_rdsu *rdsu) {
 **/
 void rdsu_free(t_rdsu **ds) {
 	if (!ds) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
 		return;
 	}
 	rdsu_destroy(*ds);
 	free(*ds);
 	*ds = NULL;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS)
 }

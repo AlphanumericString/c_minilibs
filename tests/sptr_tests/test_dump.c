@@ -7,7 +7,7 @@
 
 NO_COV void test_sptr_to_string_s(void) {
 	const t_fbox       b1  = (t_fbox){(void *)0xDEAD, NULL, 1, 0};
-	const t_fbox       b2  = (t_fbox){(void *)0xBEEF, (void *)0x42, 1, 0};
+	const t_fbox       b2  = (t_fbox){(void *)0xBEEF, (t_dtor)0x42, 1, 0};
 	const t_fbox       b3  = (t_fbox){(void *)0xFACE, NULL, 1, 1};
 	const t_strong_ptr s[] = {
 	    (const t_strong_ptr){b1.data, (t_fbox *)&b1},
@@ -41,7 +41,7 @@ NO_COV void test_sptr_to_string_s(void) {
 }
 NO_COV void test_sptr_to_string_w(void) {
 	const t_fbox f1 = (t_fbox){(void *)0xDEAD, NULL, 1, 1};
-	const t_fbox f2 = (t_fbox){(void *)0xBEEF, (void *)0x42, 1, 2};
+	const t_fbox f2 = (t_fbox){(void *)0xBEEF, (t_dtor)0x42, 1, 2};
 	const t_fbox f3 = (t_fbox){NULL, NULL, 0, 1};
 
 	const t_weak_ptr w[] = {
@@ -74,7 +74,7 @@ NO_COV void test_sptr_to_string_w(void) {
 }
 NO_COV void test_sptr_to_string_o(void) {
 	t_fbox            f1  = {(void *)0xDEAD, NULL, 1, 0};
-	t_fbox            f2  = {(void *)0xBEEF, (void *)0x42, 1, 1};
+	t_fbox            f2  = {(void *)0xBEEF, (t_dtor)0x42, 1, 1};
 	const t_owned_ptr o[] = {
 	    (t_owned_ptr){.owner = true,  .meta = &f1,  .data = f1.data},
 	    (t_owned_ptr){.owner = true,  .meta = &f2,  .data = f2.data},
@@ -108,7 +108,7 @@ NO_COV void test_sptr_to_string_o(void) {
 NO_COV void test_sptr_to_string_u(void) {
 	const t_uniq_ptr u[] = {
 	    (t_uniq_ptr){(void *)0xDEAD, NULL        },
-	    (t_uniq_ptr){(void *)0xBEEF, (void *)0x42}
+	    (t_uniq_ptr){(void *)0xBEEF, (t_dtor)0x42}
     };
 	const char *e[sizeof(u) / sizeof(u[0]) + 1] = {
 	    "SPTR UNIQ { data 0xdead, dtor (nil)}",
@@ -131,7 +131,7 @@ NO_COV void test_sptr_to_string_u(void) {
 // set dtor at 0x42 for test instead of using real func (eg:free) as free is
 // loaded at random mem space.
 NO_COV void test_sptr_dumps(void) {
-	const t_fbox       b1 = (t_fbox){(void *)0xDEAD, NULL, 1, 0};
+	const t_fbox       b1 = (t_fbox){(void *)0xDEAD, (t_dtor)NULL, 1, 0};
 	const t_strong_ptr s  = (const t_strong_ptr){b1.data, (t_fbox *)&b1};
 	const char        *s_str =
 	    "SPTR STRONG { data 0xdead, count 1 (weak:0), dtor (nil)}\n";

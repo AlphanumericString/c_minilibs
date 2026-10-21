@@ -13,10 +13,10 @@
 **/
 bool da_get(const t_da *da, size_t pos, void *out_elem) {
 	if (!da_is_valid(da) || pos >= da->nb_e || !out_elem) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (false);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
 	return (memcpy(out_elem, da_at(da, pos), da->sz_e), true);
 }
 /**
@@ -31,13 +31,13 @@ bool da_get(const t_da *da, size_t pos, void *out_elem) {
 **/
 bool da_nget(const t_da *da, size_t n, size_t pos, void *out_buffer) {
 	if (!da_is_valid(da) || pos >= da->nb_e || !out_buffer) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (false);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
 	if (!n) return (true);
 	if (pos + n > da->nb_e) {
-		CM_DBG("n updated: n (%zu -> %zu)", n, (size_t)(da->nb_e - pos));
+		CM_DBG("n updated: n (%zu -> %zu)", n, (size_t)(da->nb_e - pos))
 		n = da->nb_e - pos;
 	}
 	return (memcpy(out_buffer, da_at(da, pos), da->sz_e * n), true);
@@ -51,9 +51,9 @@ bool da_nget(const t_da *da, size_t n, size_t pos, void *out_buffer) {
 **/
 void *da_array(const t_da *da) {
 	if (!da) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (NULL);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
 	return (da->array);
 }

@@ -3,13 +3,6 @@
 
 #include "tls_tests.h"
 
-#define VAR0_STR "{ \"int\", -1 }"
-#define VAR1_STR "{ \"char\", d (100) }"
-#define VAR2_STR "{ \"unknown\" }"
-#define VAR3_STR "{ \"ptr\", 0xdeadbeef }"
-#define VAR4_STR "{ \"ptr\", 0x42 }"
-#define VAR5_STR "{ \"long\", 999 }"
-
 NO_COV void test_ctls_dump_typewrap(void) {
 	const t_ctls_typewrap vars[] = {
 	    (t_ctls_typewrap){.type = CTLS_INT,  .value.i = -1              },

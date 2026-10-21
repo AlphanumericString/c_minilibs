@@ -10,15 +10,15 @@
 **/
 t_strong_ptr *sptr_copys(t_strong_ptr *strong_ptr) {
 	if (!strong_ptr) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (NULL);
 	}
 	if (!sptr_get_rc(strong_ptr)) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_ILLDATA);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_ILLDATA)
 		return (NULL);
 	}
 	sptri_rc_inc(strong_ptr->meta);
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (strong_ptr);
 }
 /**
@@ -30,15 +30,15 @@ t_strong_ptr *sptr_copys(t_strong_ptr *strong_ptr) {
 **/
 t_weak_ptr *sptr_copyw(t_weak_ptr *weak_ptr) {
 	if (!weak_ptr) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (NULL);
 	}
 	if (!sptr_get_wc(weak_ptr)) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_ILLDATA);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_ILLDATA)
 		return (NULL);
 	}
 	sptri_wc_inc(weak_ptr->meta);
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (weak_ptr);
 }
 /**
@@ -54,17 +54,17 @@ t_owned_ptr sptr_copyo(t_owned_ptr *owned_ptr) {
 	t_owned_ptr ret;
 
 	if (!owned_ptr || !owned_ptr->meta) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return ((t_owned_ptr){0});
 	}
 	if (!sptr_get_rc(owned_ptr)) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_ILLDATA);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_ILLDATA)
 		return ((t_owned_ptr){0});
 	}
 	sptri_wc_inc(owned_ptr->meta);
 	ret       = *owned_ptr;
 	ret.owner = false;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (ret);
 }
 /**
@@ -78,11 +78,11 @@ t_uniq_ptr sptr_copyu(t_uniq_ptr *ptr) {
 	t_uniq_ptr ret;
 
 	if (!ptr) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return ((t_uniq_ptr){0});
 	}
 	ret  = (t_uniq_ptr){.data = ptr->data, .dtor = ptr->dtor};
 	*ptr = (t_uniq_ptr){0};
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (ret);
 }

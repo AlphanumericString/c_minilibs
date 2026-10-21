@@ -2,7 +2,8 @@
 .DEFAULT_GOAL	:= all
 
 # list of targets / modules
-MODULES		:= ill rb da ss dsu tls lru_cache hp sptr tpm
+MODULES		:= da dsu hp ill lru_cache rb sptr ss tls tpm
+
 PROJECT_NAME:= c_mini
 PRD_TARGET	:= $(PROJECT_NAME).profdata
 
@@ -35,7 +36,7 @@ endif
 # FLAGS
 DEBUG_LVL	?= 0
 STD			?= gnu17
-CFLAGS		:= -Wall -Wextra -MMD -MP --std=$(STD)
+CFLAGS		:= -Wall -Wextra -MMD -MP --std=$(STD) -Werror
 VFLAGS		:= --leak-check=full --show-leak-kinds=all --track-fds=yes \
 				--trace-children=yes --track-origins=yes --read-var-info=yes \
 				--show-reachable=yes --undef-value-errors=yes
@@ -49,7 +50,8 @@ endif
 TFLAGS	:= $(CFLAGS)	-O0 -I./	\
 			-fprofile-instr-generate -ftest-coverage -fcoverage-mapping \
 			-fno-inline -fno-inline-functions -DC_MINI__TESTS
-TLINKER_FLAGS = -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc
+TLINKER_FLAGS = -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc \
+				-Wl,--wrap=clock_gettime
 
 # FILES COLLECTOR
 D_FILES		:=

@@ -27,8 +27,12 @@
  * \defgroup hp Heap
 **/
 
+// TODO: switch elems to a voided ptr with size_elements as a struct value
+// TODO: shorten t_heap -> t_hp
 /**
- * \brief heap structure
+ * \typedef t_heap
+ * \brief The heap structure is a representation of a heap, min or max depends
+ * on the user's usage of said heap.
  * \param nb the number of elements currently present in the heap
  * \param capacity max number of elements in the heap
  * \param elems reference to the elements as void pointers

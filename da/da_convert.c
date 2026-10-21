@@ -15,16 +15,16 @@ void *da_to_array(const t_da *da) {
 	void *data;
 
 	if (!da_is_valid(da)) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (NULL);
 	}
 	data = malloc(da->sz_e * da->nb_e);
 	if (!data) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__DA_LOG_EALLOC);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__DA_LOG_EALLOC)
 		return (NULL);
 	}
 	da_to_loc_array(da, data);
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
 	return (data);
 }
 /**
@@ -36,10 +36,10 @@ void *da_to_array(const t_da *da) {
 **/
 void *da_to_loc_array(const t_da *da, void *arr) {
 	if (!da_is_valid(da) || !arr) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (NULL);
-	};
+	}
 	memcpy(arr, da->array, da->sz_e * da->nb_e);
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
 	return (arr);
 }

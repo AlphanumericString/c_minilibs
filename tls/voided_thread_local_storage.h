@@ -23,10 +23,11 @@
 #	endif // !C_MINI__VTLS_START_SIZE
 
 /**
+ * \typedef t_vtls
  * \brief the vtls key-value structure
- * \param v_name the name of the variable
- * \param var the value to associate the name with, (memory ptr)
- * \param size_e the size of the data to save
+ * \var v_name the name of the variable
+ * \var var the value to associate the name with, (memory ptr)
+ * \var size_e the size of the data to save
  * \ingroup vtls
 **/
 typedef struct s_vtls {
@@ -36,10 +37,11 @@ typedef struct s_vtls {
 } t_vtls;
 
 /**
- * \brief the vtls key-value structure
- * \param data the array of key-values
- * \param len the length of current key-value
- * \param cap maximum number of elements
+ * \typedef t_vtls_array
+ * \brief the vtls key-value holder structure
+ * \var data the array of key-values
+ * \var len the length of current key-value
+ * \var cap maximum number of elements
  * \ingroup vtls
 **/
 typedef struct s_tlsv_array {
@@ -48,14 +50,19 @@ typedef struct s_tlsv_array {
 	size_t  cap;
 } t_vtls_array;
 
+/**
+ * \var vtls_key tls key for the vtls system
+ * \ingroup vtls
+**/
 extern pthread_key_t vtls_key;
 #endif // C_MINI__VTLS_INTERNAL
+// TODO: rename vtls -> vtls_key, vtls_array->vtls
 
 bool vtls_rm(const char *v_name);
 
 void  *vtls_get(const char *v_name);
-// TODO: vtls_getout(const char *key, void *out); // - memcpy to out if found
-// using size of key'ed elem
+// TODO: vtls_getout(const char *key, void *out);
+// - memcpy to out if found using size of key'ed elem
 size_t vtls_len(void);
 
 bool vtls_has(const char *v_name);

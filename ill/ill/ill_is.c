@@ -8,10 +8,10 @@
 **/
 bool ill_is_isolated(t_ill *node) {
 	if (!node) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return (false);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 	return node->next == NULL;
 }
 
@@ -27,7 +27,7 @@ bool ill_is_circular(t_ill *head) {
 	t_ill *slow;
 
 	if (!head) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return (false);
 	}
 	slow = head;
@@ -37,11 +37,11 @@ bool ill_is_circular(t_ill *head) {
 		else fast = fast->next;
 		slow = slow->next;
 		if (fast && slow == fast) {
-			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 			return (true);
 		}
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 	return (false);
 }
 
@@ -59,11 +59,11 @@ bool ill_is_sorted(t_ill *head, t_comparator comparator) {
 	int   ord;
 
 	if (!head || !comparator) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return (false);
 	}
 	if (!head->next) {
-		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 		return (true);
 	}
 	prev = 0;
@@ -73,12 +73,12 @@ bool ill_is_sorted(t_ill *head, t_comparator comparator) {
 		if (prev <= 0 && ord < 0) prev = -1;
 		else if (prev >= 0 && ord > 0) prev = 1;
 		else if (ord != 0) {
-			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_FAIL);
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_FAIL)
 			return (false);
 		}
 		head = head->next;
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 	return (true);
 }
 
@@ -92,16 +92,16 @@ bool ill_is_sorted(t_ill *head, t_comparator comparator) {
 **/
 bool ill_has(t_ill *head, t_callback matcher, void *arg) {
 	if (!head || !matcher) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return (false);
 	}
 	while (head) {
 		if (matcher(ill_ntoe(head), arg)) {
-			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 			return (true);
 		}
 		head = head->next;
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_FAIL);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_FAIL)
 	return (false);
 }

@@ -12,20 +12,20 @@ t_da *da_new(size_t sz_elem) {
 	t_da *ret;
 
 	if (!sz_elem) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
+		return ((t_da *)NULL);
 	}
 	ret = (t_da *)calloc(sizeof(t_da), 1);
 	if (!ret) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__DA_LOG_EALLOC);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__DA_LOG_EALLOC)
+		return ((t_da *)NULL);
 	}
 	if (da_init(ret, sz_elem) == false) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__DA_LOG_EALLOC);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__DA_LOG_EALLOC)
 		free(ret);
-		return (NULL);
+		return ((t_da *)NULL);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
 	return (ret);
 }
 /**
@@ -40,16 +40,16 @@ t_da *da_init(t_da *ret, size_t sz_elem) {
 	void *data;
 
 	if (!ret || !sz_elem) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
-		return (NULL);
-	};
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
+		return ((t_da *)NULL);
+	}
 	data = (void *)calloc(sz_elem, C_MINI_DA__NB_ELEM_DFLT);
 	if (!data) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__DA_LOG_EALLOC);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__DA_LOG_EALLOC)
+		return ((t_da *)NULL);
 	}
 	da_from_array(ret, data, C_MINI_DA__NB_ELEM_DFLT, sz_elem);
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
 	return (ret);
 }
 /**
@@ -64,16 +64,16 @@ t_da *da_ninit(t_da *ret, size_t n, size_t sz_elem) {
 	void *data;
 
 	if (!ret || !sz_elem) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
+		return ((t_da *)NULL);
 	}
 	data = (void *)calloc(sz_elem, n);
 	if (!data) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__DA_LOG_EALLOC);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__DA_LOG_EALLOC)
+		return ((t_da *)NULL);
 	}
 	da_from_array(ret, data, n, sz_elem);
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
 	return (ret);
 }
 /**
@@ -90,13 +90,13 @@ t_da *da_ninit(t_da *ret, size_t n, size_t sz_elem) {
 **/
 t_da *da_from_array(t_da *ret, void *data, size_t nb_elem, size_t sz_elem) {
 	if (!ret || !data || !sz_elem) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
+		return ((t_da *)NULL);
 	}
 	ret->array = data;
 	ret->sz_e  = sz_elem;
 	ret->nb_e  = 0;
 	ret->cap_e = nb_elem;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
 	return (ret);
 }

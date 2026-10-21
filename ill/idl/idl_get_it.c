@@ -8,12 +8,12 @@
 **/
 t_idl *idl_get_tail(t_idl *node) {
 	if (!node) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return NULL;
 	}
 	for (; node->next; node = node->next)
 		;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return node;
 }
 /**
@@ -25,12 +25,12 @@ t_idl *idl_get_tail(t_idl *node) {
 t_idl *idl_get_head(t_idl *node) {
 
 	if (!node) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return NULL;
 	}
 	for (; node->prev; node = node->prev)
 		;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (node);
 }
 // TODO: idl_advance_it + idl_recede_it (return node->[next|prev]);

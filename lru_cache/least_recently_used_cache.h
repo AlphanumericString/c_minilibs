@@ -46,7 +46,7 @@
 **/
 
 /**
- * \brief stats format for the cache
+ * \brief stats format for the cache stats
  * \param misses number of misses
  * \param hit number of hit (aka found)
  * \param expired number of expired key/value pairs (aka misses due to time)
@@ -59,7 +59,7 @@ typedef struct {
 } t_lruc_stats;
 
 /**
- * \brief the key value pair that enters in the cache
+ * \brief the key value pair that lives in the cache
  * \param key pointer to key
  * \param k_len length to read from at pointer key
  * \param value stored value in associated to key
@@ -77,7 +77,7 @@ typedef struct {
 #	define C_MINI__LRUC_TTL_DFLT  LONG_MAX
 
 /**
- * \brief [INTERNAL] [MAY CHANGE]
+ * \brief [INTERNAL] [MAY CHANGE] the caches internal node for each key
  * \param kv the key-value pair of the node
  * \param time the time of emission of the node in ms
  * \param hash_next next value associated with the same hash (collision
@@ -154,10 +154,10 @@ typedef struct {
 #	define CMINI__T_KVCALLBACK_DEFINE
 
 /**
- * \brief  callback function pointer, true operation successfull, elem is always
+ * \brief callback function pointer, true operation successfull, elem is always
  * the node, arg is passed as is from up function
- * \param  elem pointer to the element
- * \param  arg  argument passed as is from up function
+ * \param elem pointer to the key node element
+ * \param arg argument passed "as is" from user, given from user
  * \return expected to return true on success false otherwise
 **/
 typedef bool (*t_kvcallback)(t_keyvalue *elem, void *arg);

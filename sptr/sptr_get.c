@@ -14,10 +14,10 @@
 **/
 const void *sptr_getsc(const t_strong_ptr *sptr) {
 	if (!sptr || !sptr->meta) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (NULL);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	if (!sptr_get_rc(sptr)) return (NULL);
 	return (sptr->data);
 }
@@ -31,10 +31,10 @@ const void *sptr_getsc(const t_strong_ptr *sptr) {
 **/
 const void *sptr_getwc(const t_weak_ptr *sptr) {
 	if (!sptr || !sptr->meta) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (NULL);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	if (!sptr_get_rc(sptr)) return (NULL);
 	return (sptr->meta->data);
 }
@@ -46,10 +46,10 @@ const void *sptr_getwc(const t_weak_ptr *sptr) {
 **/
 const void *sptr_getoc(const t_owned_ptr *o) {
 	if (!o || !o->meta || sptr_get_rc(o) != 1) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (NULL);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (o->data);
 }
 /**
@@ -60,10 +60,10 @@ const void *sptr_getoc(const t_owned_ptr *o) {
 **/
 const void *sptr_getuc(const t_uniq_ptr *u) {
 	if (!u) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (NULL);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (u->data);
 }
 /******************/
@@ -123,10 +123,10 @@ void *sptr_getu(t_uniq_ptr *u) {
 **/
 size_t sptr_get_strongcount_s(const t_strong_ptr *sptr) {
 	if (!sptr || !sptr->meta) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (0);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (sptri_rc_get(sptr->meta));
 }
 /**
@@ -137,10 +137,10 @@ size_t sptr_get_strongcount_s(const t_strong_ptr *sptr) {
 **/
 size_t sptr_get_strongcount_w(const t_weak_ptr *sptr) {
 	if (!sptr || !sptr->meta) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (0);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (sptri_rc_get(sptr->meta));
 }
 /**
@@ -151,10 +151,10 @@ size_t sptr_get_strongcount_w(const t_weak_ptr *sptr) {
 **/
 size_t sptr_get_strongcount_o(const t_owned_ptr *sptr) {
 	if (!sptr || !sptr->meta) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (0);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (sptri_rc_get(sptr->meta));
 }
 /**
@@ -165,10 +165,10 @@ size_t sptr_get_strongcount_o(const t_owned_ptr *sptr) {
 **/
 size_t sptr_get_strongcount_u(const t_uniq_ptr *ptr) {
 	if (!ptr) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (0);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (ptr->data ? 1 : 0);
 }
 
@@ -184,10 +184,10 @@ size_t sptr_get_strongcount_u(const t_uniq_ptr *ptr) {
 **/
 size_t sptr_get_weakcount_s(const t_strong_ptr *sptr) {
 	if (!sptr || !sptr->meta || !sptri_rc_get(sptr->meta)) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (0);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (sptri_wc_get(sptr->meta));
 }
 /**
@@ -198,10 +198,10 @@ size_t sptr_get_weakcount_s(const t_strong_ptr *sptr) {
 **/
 size_t sptr_get_weakcount_w(const t_weak_ptr *sptr) {
 	if (!sptr || !sptr->meta || !sptri_wc_get(sptr->meta)) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (0);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (sptri_wc_get(sptr->meta));
 }
 /**
@@ -212,10 +212,10 @@ size_t sptr_get_weakcount_w(const t_weak_ptr *sptr) {
 **/
 size_t sptr_get_weakcount_o(const t_owned_ptr *sptr) {
 	if (!sptr || !sptr->meta) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (0);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (sptri_wc_get(sptr->meta));
 }
 /**
@@ -226,10 +226,10 @@ size_t sptr_get_weakcount_o(const t_owned_ptr *sptr) {
 **/
 size_t sptr_get_weakcount_u(const t_uniq_ptr *u) {
 	if (!u) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (0);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (0);
 }
 
@@ -245,10 +245,10 @@ size_t sptr_get_weakcount_u(const t_uniq_ptr *u) {
 **/
 t_dtor sptr_get_dtors(const t_strong_ptr *ptr) {
 	if (!ptr || !sptr_get_rc(ptr)) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (NULL);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (ptr->meta->dtor);
 }
 /**
@@ -260,10 +260,10 @@ t_dtor sptr_get_dtors(const t_strong_ptr *ptr) {
 **/
 t_dtor sptr_get_dtorw(const t_weak_ptr *ptr) {
 	if (!ptr || !ptr->meta || !sptr_get_wc(ptr) || !sptr_get_rc(ptr)) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (NULL);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (ptr->meta->dtor);
 }
 /**
@@ -275,10 +275,10 @@ t_dtor sptr_get_dtorw(const t_weak_ptr *ptr) {
 **/
 t_dtor sptr_get_dtoro(const t_owned_ptr *ptr) {
 	if (!ptr || !ptr->meta || !sptr_get_rc(ptr)) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (NULL);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (ptr->meta->dtor);
 }
 /**
@@ -289,10 +289,10 @@ t_dtor sptr_get_dtoro(const t_owned_ptr *ptr) {
 **/
 t_dtor sptr_get_dtoru(const t_uniq_ptr *ptr) {
 	if (!ptr) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (NULL);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (ptr->dtor);
 }
 
@@ -310,11 +310,11 @@ t_dtor sptr_get_dtoru(const t_uniq_ptr *ptr) {
 **/
 bool sptr_set_dtors(t_strong_ptr *ptr, t_dtor dtor) {
 	if (!ptr || !ptr->meta || !sptr_get_rc(ptr)) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (false);
 	}
 	ptr->meta->dtor = dtor;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (true);
 }
 /**
@@ -328,11 +328,11 @@ bool sptr_set_dtors(t_strong_ptr *ptr, t_dtor dtor) {
 bool sptr_set_dtorw(t_weak_ptr *ptr, t_dtor dtor) {
 
 	if (!ptr || !ptr->meta || !sptr_get_wc(ptr) || !sptr_get_rc(ptr)) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (false);
 	}
 	(void)dtor;
-	CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_ILL);
+	CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_ILL)
 	return (false);
 }
 /**
@@ -345,11 +345,11 @@ bool sptr_set_dtorw(t_weak_ptr *ptr, t_dtor dtor) {
 **/
 bool sptr_set_dtoro(t_owned_ptr *ptr, t_dtor dtor) {
 	if (!ptr || !ptr->owner || !ptr->meta || sptr_get_rc(ptr) != 1) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (false);
 	}
 	ptr->meta->dtor = dtor;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (true);
 }
 /**
@@ -361,10 +361,10 @@ bool sptr_set_dtoro(t_owned_ptr *ptr, t_dtor dtor) {
 **/
 bool sptr_set_dtoru(t_uniq_ptr *ptr, t_dtor dtor) {
 	if (!ptr || !ptr->data) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (false);
 	}
 	ptr->dtor = dtor;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (true);
 }

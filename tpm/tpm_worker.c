@@ -17,11 +17,10 @@ pthread_mutex_t console_lock = PTHREAD_MUTEX_INITIALIZER;
 
 // batch_refill_from_mainqueue: false fail, true success
 static inline bool batch_refill_from_mainqueue(t_tpm *tpm, t_tpmi_thread *th) {
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__TPM_LOG_TRD_INFO, th->id_sequential,
-	       "steal from main queue try");
-
 	int nb_jbs;
 
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__TPM_LOG_TRD_INFO, th->id_sequential,
+	       "steal from main queue try")
 	pthread_mutex_lock(&th->job_cache_lock);
 	nb_jbs  = tpmi_job_thrd_cache_pop(tpm, th->jc, th->start);
 	th->end = nb_jbs;
@@ -39,8 +38,7 @@ static inline t_tpmi_thread *get_victim(t_tpm *tpm, t_tpmi_thread th) {
 	victim = &tpm->threads[(th.id_sequential + nv) % tpm->nb_threads];
 	while (attempts < victims_window) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__TPM_LOG_TRD_INFO "%zu",
-		       th.id_sequential,
-		       "trying to steal from:", victim->id_sequential);
+		       th.id_sequential, "trying to steal from:", victim->id_sequential)
 		if (pthread_mutex_trylock(&victim->job_cache_lock)) {
 			if (victim->end - victim->start <= 0)
 				pthread_mutex_unlock(&victim->job_cache_lock);
@@ -52,23 +50,23 @@ static inline t_tpmi_thread *get_victim(t_tpm *tpm, t_tpmi_thread th) {
 	}
 	if (attempts == victims_window) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__TPM_LOG_TRD_INFO, th.id_sequential,
-		       "Failed to find a thread to steal from.");
+		       "Failed to find a thread to steal from.")
 		return (NULL);
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__TPM_LOG_TRD_INFO "from %zu",
-	       th.id_sequential, "Stealing", victim->id_sequential);
+	       th.id_sequential, "Stealing", victim->id_sequential)
 	CM_DBG(C_MINI__TPM_LOG_TRD_INFO "attempts: %u", th.id_sequential,
-	       "Stealing", attempts);
+	       "Stealing", attempts)
 	return (victim);
 }
 
 // steal_work_robinhood: false fail, true success
 static inline bool steal_work_robinhood(t_tpm *tpm, t_tpmi_thread *th) {
-
 	t_tpmi_thread *victimus;
 	size_t         to_steal;
+
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__TPM_LOG_TRD_INFO, th->id_sequential,
-	       "steal from neighbor queue try");
+	       "steal from neighbor queue try")
 
 	// pthread_mutex_lock(&th.job_cache_lock);
 	if ((victimus = get_victim(tpm, *th)) == NULL) { // steal failed
@@ -89,16 +87,14 @@ static inline bool steal_work_robinhood(t_tpm *tpm, t_tpmi_thread *th) {
 	pthread_mutex_unlock(&th->job_cache_lock); // steal ok
 	CM_LOG(C_MINI__LEVEL_INFO,
 	       C_MINI__TPM_LOG_TRD_INFO "Stole %zu jobs from Thread#%zu",
-	       th->id_sequential, "Steal infos:", to_steal,
-	       victimus->id_sequential);
+	       th->id_sequential, "Steal infos:", to_steal, victimus->id_sequential)
 	return (true);
 }
 
 static bool get_new_jobs(t_tpm *tpm, t_tpmi_thread *th) {
 	pthread_mutex_lock(&th->job_cache_lock);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__TPM_LOG_TRD_INFO "{%hhu, %hhu}",
-	       th->id_sequential, "decision tree {start, end}:", th->start,
-	       th->end);
+	       th->id_sequential, "decision tree {start, end}:", th->start, th->end)
 	if (!th->end || th->start == th->end) {
 		pthread_mutex_unlock(&th->job_cache_lock);
 		return (batch_refill_from_mainqueue(tpm, th));
@@ -117,7 +113,7 @@ void *tpmi_worker(void *t) {
 	t_tpm         *tpm;
 
 	if (!t) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__TPM_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__TPM_LOG_EARG)
 		return (NULL);
 	}
 	tpm = tpi->pool;
@@ -126,12 +122,12 @@ void *tpmi_worker(void *t) {
 		while (!tpm->internal_val.shutting_down && !tpm->q_start) {
 			pthread_cond_wait(&tpm->q_cond, &tpm->q_lock);
 			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__TPM_LOG_TRD_INFO,
-			       tpi->id_sequential, "Awake");
+			       tpi->id_sequential, "Awake")
 		}
 		if (tpm->internal_val.shutting_down) {
 			pthread_mutex_unlock(&tpm->q_lock);
 			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__TPM_LOG_TRD_INFO,
-			       tpi->id_sequential, "Shutting down");
+			       tpi->id_sequential, "Shutting down")
 			break;
 		}
 		linkedin = get_new_jobs(tpm, tpi); // get new jobs (steal or queue)
@@ -147,7 +143,7 @@ void *tpmi_worker(void *t) {
 		while (1) {              // exe local jobs
 			pthread_mutex_lock(&tpi->job_cache_lock);
 			CM_DBG(C_MINI__TPM_LOG_TRD_INFO "{start=%hhu, end=%hhu}",
-			       tpi->id_sequential, "local queue:", tpi->start, tpi->end);
+			       tpi->id_sequential, "local queue:", tpi->start, tpi->end)
 			if (tpi->start >= tpi->end) {
 				break;
 			}
@@ -159,8 +155,7 @@ void *tpmi_worker(void *t) {
 
 			CM_LOG(C_MINI__LEVEL_INFO,
 			       C_MINI__TPM_LOG_TRD_INFO "{job=%p, return=%p}",
-			       tpi->id_sequential, "Job logging:", tpi->jc[i]->job.func,
-			       jr);
+			       tpi->id_sequential, "Job logging:", tpi->jc[i]->job.func, jr)
 			(void)jr;
 		}
 		tpi->start = 0;

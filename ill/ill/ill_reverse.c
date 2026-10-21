@@ -12,7 +12,7 @@ t_ill *ill_reverse(t_ill *head) {
 	t_ill *nxt;
 
 	if (!head) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return (NULL);
 	}
 	prev = NULL;
@@ -23,6 +23,6 @@ t_ill *ill_reverse(t_ill *head) {
 		prev       = curr;
 		curr       = nxt;
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 	return (prev);
 }

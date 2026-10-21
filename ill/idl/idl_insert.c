@@ -8,14 +8,14 @@
 **/
 void idl_append(t_idl *anchor, t_idl *node) {
 	if (!anchor || !node) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return;
 	}
 	node->next = anchor->next;
 	node->prev = anchor;
 	if (anchor->next) anchor->next->prev = node;
 	anchor->next = node;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 }
 /**
  * \brief Appends an entire list of nodes after an anchor node.
@@ -27,7 +27,7 @@ void idl_nappend(t_idl *anchor, t_idl *nodes) {
 	t_idl *first_node, *last_node;
 
 	if (!anchor || !nodes) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return;
 	}
 	last_node  = idl_get_tail(nodes);
@@ -37,7 +37,7 @@ void idl_nappend(t_idl *anchor, t_idl *nodes) {
 	first_node->prev = anchor;
 	if (anchor->next) anchor->next->prev = last_node;
 	anchor->next = first_node;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 }
 
 /**
@@ -48,14 +48,14 @@ void idl_nappend(t_idl *anchor, t_idl *nodes) {
 **/
 void idl_prepend(t_idl *anchor, t_idl *node) {
 	if (!anchor || !node) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return;
 	}
 	node->prev = anchor->prev;
 	if (anchor->prev) anchor->prev->next = node;
 	node->next   = anchor;
 	anchor->prev = node;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 }
 /**
  * \brief Prepend (append in front) an entire list of nodes before an anchor
@@ -68,7 +68,7 @@ void idl_nprepend(t_idl *anchor, t_idl *nodes) {
 	t_idl *last_node, *first_node;
 
 	if (!anchor || !nodes) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return;
 	}
 	last_node  = idl_get_tail(nodes);
@@ -78,5 +78,5 @@ void idl_nprepend(t_idl *anchor, t_idl *nodes) {
 	last_node->next  = anchor;
 	if (anchor->prev) anchor->prev->next = first_node;
 	anchor->prev = last_node;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 }

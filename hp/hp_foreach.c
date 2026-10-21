@@ -10,15 +10,15 @@
 **/
 bool hp_foreach(t_heap *h, t_callback cb, void *data) {
 	if (!h || !cb) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (false);
 	}
 	for (size_t i = 0; i < h->nb; i++)
 		if (cb(h->elems[i], data) == false) {
-			CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_CB_FAIL, i);
+			CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_CB_FAIL, i)
 			return (false);
 		}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_SUCCESS)
 	return (true);
 }
 
@@ -27,7 +27,7 @@ static bool hp_internal_prefix(t_heap *h, size_t i, t_callback cb, void *u) {
 	if (!hp_internal_prefix(h, i * 2 + 1, cb, u)) return (false);
 	if (!hp_internal_prefix(h, i * 2 + 2, cb, u)) return (false);
 	if (cb(h->elems[i], u) == false) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_CB_FAIL, i);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_CB_FAIL, i)
 		return (false);
 	}
 	return (true);
@@ -35,7 +35,7 @@ static bool hp_internal_prefix(t_heap *h, size_t i, t_callback cb, void *u) {
 static bool hp_internal_postfix(t_heap *h, size_t i, t_callback cb, void *u) {
 	if (i >= h->nb) return (true);
 	if (cb(h->elems[i], u) == false) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_CB_FAIL, i);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_CB_FAIL, i)
 		return (false);
 	}
 	if (!hp_internal_postfix(h, i * 2 + 1, cb, u)) return (false);
@@ -46,7 +46,7 @@ static bool hp_internal_infix(t_heap *h, size_t i, t_callback cb, void *u) {
 	if (i >= h->nb) return (true);
 	if (!hp_internal_infix(h, i * 2 + 1, cb, u)) return (false);
 	if (cb(h->elems[i], u) == false) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_CB_FAIL, i);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_CB_FAIL, i)
 		return (false);
 	}
 	if (!hp_internal_infix(h, i * 2 + 2, cb, u)) return (false);
@@ -65,12 +65,12 @@ bool hp_foreach_in(t_heap *h, t_callback cb, void *data) {
 	bool r;
 
 	if (!h || !cb) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (false);
 	}
 	r = hp_internal_infix(h, 0, cb, data);
 	if (!r) return (false);
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_SUCCESS)
 	return (true);
 }
 /**
@@ -85,12 +85,12 @@ bool hp_foreach_pre(t_heap *h, t_callback cb, void *data) {
 	bool r;
 
 	if (!h || !cb) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (false);
 	}
 	r = hp_internal_prefix(h, 0, cb, data);
 	if (!r) return (false);
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_SUCCESS)
 	return (true);
 }
 /**
@@ -105,11 +105,11 @@ bool hp_foreach_post(t_heap *h, t_callback cb, void *data) {
 	bool r;
 
 	if (!h || !cb) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (false);
 	}
 	r = hp_internal_postfix(h, 0, cb, data);
 	if (!r) return (false);
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_SUCCESS)
 	return (true);
 }

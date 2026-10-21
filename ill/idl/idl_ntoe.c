@@ -8,11 +8,11 @@
 **/
 void *idl_ntoe(const t_idl *node) {
 	if (!node) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
+		return ((t_idl *)NULL);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
-	return ((void *)(((char *)node) - node->offset));
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
+	return ((void *)(((const char *)node) - node->offset));
 }
 /**
  * \brief Gets the intrusive node within an element structure.
@@ -23,9 +23,9 @@ void *idl_ntoe(const t_idl *node) {
 **/
 t_idl *idl_eton(void *e, size_t offset) {
 	if (!e) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
-		return (NULL);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
+		return ((t_idl *)NULL);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return ((t_idl *)((char *)e + offset));
 }

@@ -13,15 +13,15 @@
 **/
 void *da_find(t_da *da, t_comparator c, void *data) {
 	if (!da_is_valid(da) || !c) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (NULL);
 	}
 	for (size_t i = 0; i < da->nb_e; i++)
 		if (c(da_at(da, i), data) == 0) {
-			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
 			return (da_at(da, i));
 		}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_FINDFAIL);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_FINDFAIL)
 	return (NULL);
 }
 /**
@@ -35,16 +35,16 @@ void *da_find(t_da *da, t_comparator c, void *data) {
 **/
 void *da_nfind(t_da *da, size_t n, t_comparator c, void *data) {
 	if (!da_is_valid(da) || !c) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (NULL);
 	}
 	if (n > da->nb_e) n = da->nb_e;
 	for (size_t i = 0; i < n; i++)
 		if (c(da_at(da, i), data) == 0) {
-			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
 			return (da_at(da, i));
 		}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_FINDFAIL);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_FINDFAIL)
 	return (NULL);
 }
 /**
@@ -60,15 +60,15 @@ bool da_find_get(t_da *da, t_comparator c, void *data, void *out_buffer) {
 	void *elem;
 
 	if (!da_is_valid(da) || !c || !out_buffer) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (false);
 	}
 	elem = da_find(da, c, data);
 	if (elem) {
 		memcpy(out_buffer, elem, da->sz_e);
-		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
 		return (true);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_GETFAIL);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_GETFAIL)
 	return (false);
 }

@@ -4,9 +4,9 @@
 #include "sptr_tests.h"
 
 NO_COV int main(void) {
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "Change");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Change", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	test_sptr_strengthen();
 	test_sptr_weaken();
 	test_sptr_transfer_o();
@@ -14,25 +14,25 @@ NO_COV int main(void) {
 	test_sptr_yield();
 	test_sptr_swap();
 
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "Copy");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Copy", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	test_sptr_copys();
 	test_sptr_copyw();
 	test_sptr_copyo();
 	test_sptr_copyu();
 
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "Delete");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Delete", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	test_sptr_deletes();
 	test_sptr_deletew();
 	test_sptr_deleteo();
 	test_sptr_deleteu();
 
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "Dump");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Dump", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	test_sptr_to_string_s();
 	test_sptr_to_string_w();
 	test_sptr_to_string_o();
@@ -42,9 +42,9 @@ NO_COV int main(void) {
 	test_sptr_dumpo();
 	test_sptr_dumpu();
 
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "Get");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Get", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	test_sptr_gets();
 	test_sptr_getw();
 	test_sptr_geto();
@@ -67,17 +67,17 @@ NO_COV int main(void) {
 	test_sptr_get_dtoro();
 	test_sptr_get_dtoru();
 
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "Set");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Set", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	test_sptr_set_dtors();
 	test_sptr_set_dtorw();
 	test_sptr_set_dtoro();
 	test_sptr_set_dtoru();
 
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "Is");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Is", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	test_sptr_is_uniqs();
 	test_sptr_is_uniqw();
 	test_sptr_is_uniqo();
@@ -91,9 +91,9 @@ NO_COV int main(void) {
 	test_sptr_is_sole_box_owno();
 	test_sptr_is_sole_box_ownu();
 
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "Make");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "");
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Make", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	test_sptr_make_shared_from_raw();
 	test_sptr_make_shared_from_weak();
 	test_sptr_make_shared_from_strong();
@@ -111,8 +111,8 @@ NO_COV int main(void) {
 	test_sptr_make_uniq_from_owned();
 	test_sptr_make_uniq_from_uniq();
 
-	CM__SPTR_TODO("threaded test where rc and wc change for atomic");
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "All SPTR tests completed successfully.");
+	CM__SPTR_TODO("threaded test where rc and wc change for atomic", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "All SPTR tests completed successfully.", )
 
 	return (0);
 }

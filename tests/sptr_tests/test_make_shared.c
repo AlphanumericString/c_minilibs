@@ -3,9 +3,16 @@
 
 #include "sptr_tests.h"
 
+static void local_dtor(void *_) {
+	return;
+}
+static void other_dtor(void *_) {
+	return;
+}
+
 NO_COV void test_sptr_make_shared_from_raw(void) {
 	void        *data = (void *)0xDEAD;
-	void        *dtor = (void *)0xCAFE;
+	t_dtor       dtor = local_dtor;
 	t_strong_ptr s1   = sptr_make_shared(data, NULL);
 	t_strong_ptr s2   = sptr_make_shared(data, dtor);
 	t_strong_ptr s3   = sptr_make_shared(NULL, NULL);
@@ -33,9 +40,9 @@ NO_COV void test_sptr_make_shared_from_raw(void) {
 }
 
 static void test_sptr_make_shared_from_weak_errors(void) {
-	void *data     = (void *)0xDEAD;
-	void *dtor     = (void *)0xCAFE;
-	void *not_dtor = (void *)0xBEAD;
+	void  *data     = (void *)0xDEAD;
+	t_dtor dtor     = local_dtor;
+	t_dtor not_dtor = other_dtor;
 
 	t_fbox good_box  = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
 	t_fbox no_rc_box = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 9};
@@ -65,8 +72,8 @@ static void test_sptr_make_shared_from_weak_errors(void) {
 	assert(!res[5].data && !res[5].meta);
 }
 static void test_sptr_make_shared_from_weak_ok(void) {
-	void *data = (void *)0xDEAD;
-	void *dtor = (void *)0xCAFE;
+	void  *data = (void *)0xDEAD;
+	t_dtor dtor = local_dtor;
 
 	t_fbox b0 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
 	t_fbox b1 = (t_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 1};
@@ -121,9 +128,9 @@ NO_COV void test_sptr_make_shared_from_weak(void) {
 }
 
 static void test_sptr_make_shared_from_strong_errors(void) {
-	void *data     = (void *)0xDEAD;
-	void *dtor     = (void *)0xCAFE;
-	void *not_dtor = (void *)0xBEAD;
+	void  *data     = (void *)0xDEAD;
+	t_dtor dtor     = local_dtor;
+	t_dtor not_dtor = other_dtor;
 
 	t_fbox b0 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
 	t_fbox b1 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 9};
@@ -165,8 +172,8 @@ static void test_sptr_make_shared_from_strong_errors(void) {
 	assert(!res[9].data && !res[9].meta);
 }
 static void test_sptr_make_shared_from_strong_ok(void) {
-	void *data = (void *)0xDEAD;
-	void *dtor = (void *)0xCAFE;
+	void  *data = (void *)0xDEAD;
+	t_dtor dtor = local_dtor;
 
 	t_fbox b0 = (t_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 0};
 	t_fbox b1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
@@ -219,9 +226,9 @@ NO_COV void test_sptr_make_shared_from_strong(void) {
 }
 
 static void test_sptr_make_shared_from_owned_error(void) {
-	void *data     = (void *)0xDEAD;
-	void *dtor     = (void *)0xCAFE;
-	void *not_dtor = (void *)0xBEAD;
+	void  *data     = (void *)0xDEAD;
+	t_dtor dtor     = local_dtor;
+	t_dtor not_dtor = other_dtor;
 
 	t_fbox b0 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
 	t_fbox b1 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 0};
@@ -265,8 +272,8 @@ static void test_sptr_make_shared_from_owned_error(void) {
 	// TODO: assert that box fields did not move/change
 }
 static void test_sptr_make_shared_from_owned_ok(void) {
-	void *data = (void *)0xDEAD;
-	void *dtor = (void *)0xCAFE;
+	void  *data = (void *)0xDEAD;
+	t_dtor dtor = local_dtor;
 
 	t_fbox b0 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
 	t_fbox b1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 99};
@@ -332,9 +339,9 @@ NO_COV void test_sptr_make_shared_from_owned(void) {
 	test_sptr_make_shared_from_owned_ok();
 }
 static void test_sptr_make_shared_from_uniq_error(void) {
-	void *data     = (void *)0xDEAD;
-	void *dtor     = (void *)0xAFE;
-	void *not_dtor = (void *)0xBEAD;
+	void  *data     = (void *)0xDEAD;
+	t_dtor dtor     = local_dtor;
+	t_dtor not_dtor = other_dtor;
 
 	t_uniq_ptr u0 = (t_uniq_ptr){.data = data, .dtor = dtor};
 
@@ -354,8 +361,8 @@ static void test_sptr_make_shared_from_uniq_error(void) {
 	assert(!res[3].data && !res[3].meta);
 }
 static void test_sptr_make_shared_from_uniq_ok(void) {
-	void *data = (void *)0xDEAD;
-	void *dtor = (void *)0xAFE;
+	void  *data = (void *)0xDEAD;
+	t_dtor dtor = local_dtor;
 
 	t_uniq_ptr u0 = (t_uniq_ptr){.data = data, .dtor = dtor}; // left
 	t_uniq_ptr u1 = (t_uniq_ptr){.data = data, .dtor = dtor}; // match
@@ -400,8 +407,8 @@ NO_COV void test_sptr_make_shared_from_uniq(void) {
 // make weak
 
 NO_COV void test_sptr_make_weak_from_weak(void) {
-	void *data = (void *)0xDEAD;
-	void *dtor = (void *)0xCAFE;
+	void  *data = (void *)0xDEAD;
+	t_dtor dtor = local_dtor;
 
 	t_fbox b0_rw_ok   = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
 	t_fbox b1_rc_none = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
@@ -444,8 +451,8 @@ NO_COV void test_sptr_make_weak_from_weak(void) {
 }
 
 NO_COV void test_sptr_make_weak_from_strong(void) {
-	void *data = (void *)0xDEAD;
-	void *dtor = (void *)0xCAFE;
+	void  *data = (void *)0xDEAD;
+	t_dtor dtor = local_dtor;
 
 	t_fbox b0_rw_ok   = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
 	t_fbox b1_wc_none = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};

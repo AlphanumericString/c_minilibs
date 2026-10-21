@@ -10,7 +10,7 @@ t_idl *idl_remove_after(t_idl *prev) {
 	t_idl *to_remove;
 
 	if (!prev || !prev->next) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return NULL;
 	}
 	to_remove  = prev->next;
@@ -18,7 +18,7 @@ t_idl *idl_remove_after(t_idl *prev) {
 	if (to_remove->next) to_remove->next->prev = prev;
 	to_remove->next = NULL;
 	to_remove->prev = NULL;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return to_remove;
 }
 
@@ -31,7 +31,7 @@ t_idl *idl_remove_after(t_idl *prev) {
 **/
 bool idl_remove_node(t_idl **head, t_idl *target) {
 	if (!head || !target || !*head) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return false;
 	}
 	if (*head == target) {
@@ -39,13 +39,13 @@ bool idl_remove_node(t_idl **head, t_idl *target) {
 		if (*head) (*head)->prev = NULL;
 		target->next = NULL;
 		target->prev = NULL;
-		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 		return (true);
 	}
 
 	t_idl *curr = idl_find(*head, target);
 	if (!curr) {
-		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_FAIL);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_FAIL)
 		return (false);
 	}
 
@@ -53,6 +53,6 @@ bool idl_remove_node(t_idl **head, t_idl *target) {
 	if (target->next) target->next->prev = target->prev;
 	target->next = NULL;
 	target->prev = NULL;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (true);
 }

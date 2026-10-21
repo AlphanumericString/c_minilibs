@@ -26,7 +26,7 @@ typedef C_MINI__FTLS_STRUCT t_ftls;
 
 #if defined(C_MINI__FTLS_INTERNAL) || defined(C_MINI__FTLS_GET)
 /**
- * \brief key used for the f tls system. mandatory for thread management.
+ * \var ftls_key tls key used for the ftls system.
  * \ingroup ftls
 **/
 extern pthread_key_t ftls_key;

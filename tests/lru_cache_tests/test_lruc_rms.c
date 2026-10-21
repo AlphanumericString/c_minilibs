@@ -13,8 +13,8 @@ NO_COV void test_lruc_clear(void) {
 
 	{ // lru full
 		lruc_init(&c, 2, blank);
-		lruc_put(&c, test_lruc_clear, sizeof(test_lruc_clear), "his address");
-		lruc_get(&c, test_lruc_clear, sizeof(test_lruc_clear));
+		lruc_put(&c, (void *)&test_lruc_clear, sizeof(void *), "his address");
+		lruc_get(&c, (void *)&test_lruc_clear, sizeof(void *));
 		lruc_clear(&c);
 		assert(c.LRU == NULL);
 		assert(c.MRU == NULL);
@@ -26,7 +26,7 @@ NO_COV void test_lruc_clear(void) {
 	}
 	{ // lru with large holes
 		lruc_init(&c, 32, NULL);
-		lruc_put(&c, test_lruc_clear, sizeof(test_lruc_clear), "his address");
+		lruc_put(&c, (void *)&test_lruc_clear, sizeof(void *), "his address");
 		lruc_clear(&c);
 		assert(c.LRU == NULL);
 		assert(c.MRU == NULL);
@@ -37,7 +37,7 @@ NO_COV void test_lruc_clear(void) {
 	}
 	{ // errors
 		lruc_init(&c, 32, NULL);
-		lruc_put(&c, test_lruc_clear, sizeof(test_lruc_clear), "his address");
+		lruc_put(&c, (void *)&test_lruc_clear, sizeof(void *), "his address");
 		intact_copy  = c;
 		c.buckets_nb = 0;
 		lruc_clear(&c);
@@ -58,14 +58,14 @@ NO_COV void test_lruc_remove(void) {
 
 	lruc_init(&c, 2, NULL);
 	assert(lruc_put(&c, k1, strlen(k1), (void *)0xdead) == 0);
-	assert(lruc_put(&c, &k2, sizeof(int), (void *)0xbafa) == 0);
+	assert(lruc_put(&c, (void *)&k2, sizeof(int), (void *)0xbafa) == 0);
 	assert(lruc_get(&c, k1, strlen(k1)) == (void *)0xdead);
-	assert(lruc_get(&c, &k2, sizeof(int)) == (void *)0xbafa);
+	assert(lruc_get(&c, (void *)&k2, sizeof(int)) == (void *)0xbafa);
 	assert(c.MRU != NULL), assert(c.MRU->kv.key == &k2);
 	assert(c.LRU != NULL), assert(c.LRU->kv.key == k1);
 	assert(c.node_nb == 2);
 
-	assert(lruc_remove(&c, test_lruc_remove, sizeof(test_lruc_remove)) == -1);
+	assert(lruc_remove(&c, (void *)&test_lruc_remove, sizeof(void *)) == -1);
 	assert(c.MRU != NULL), assert(c.MRU->kv.key == &k2);
 	assert(c.LRU != NULL), assert(c.LRU->kv.key == k1);
 	assert(c.node_nb == 2);

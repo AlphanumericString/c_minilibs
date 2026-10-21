@@ -26,7 +26,8 @@
 **/
 
 /**
- * \brief da struct
+ * \typedef t_da
+ * \brief da struct represents a dynamic array
  * \param array pointer holder for the memory
  * \param nb_e number of elements currently present in the array
  * \param cap_e number of elements the memory can hold

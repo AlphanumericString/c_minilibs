@@ -61,7 +61,7 @@ size_t sptri_wc_get(t_fbox *b) {
  * \ingroup sptr
 **/
 bool sptri_is_sole_box_owns(const t_strong_ptr *ptr) {
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (ptr && sptr_get_strongcount_s(ptr) == 1 &&
 	        !sptr_get_weakcount_s(ptr));
 }
@@ -73,7 +73,7 @@ bool sptri_is_sole_box_owns(const t_strong_ptr *ptr) {
  * \ingroup sptr
 **/
 bool sptri_is_sole_box_ownw(const t_weak_ptr *ptr) {
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (ptr && !sptr_get_strongcount_w(ptr) &&
 	        sptr_get_weakcount_w(ptr) == 1);
 }
@@ -88,10 +88,10 @@ bool sptri_is_sole_box_owno(const t_owned_ptr *ptr) {
 	size_t wc;
 
 	if (!ptr) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (false);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	rc = sptr_get_strongcount_o(ptr);
 	wc = sptr_get_weakcount_o(ptr);
 	return ((rc == 1 && !wc) || (!rc && wc == 1));
@@ -104,9 +104,9 @@ bool sptri_is_sole_box_owno(const t_owned_ptr *ptr) {
 **/
 bool sptri_is_sole_box_ownu(const t_uniq_ptr *u) {
 	if (!u || !sptr_getuc(u)) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (false);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (false);
 }

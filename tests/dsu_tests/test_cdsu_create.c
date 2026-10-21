@@ -28,9 +28,9 @@ NO_COV void test_cdsu_new(void) {
 	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
 NO_COV void test_cdsu_new_from_array(void) {
-	t_cdsu *cdsu;
-	int    *parents = malloc(sizeof(int) * 5);
-	int    *ranks   = malloc(sizeof(int) * 5);
+	t_cdsu       *cdsu;
+	unsigned int *parents = malloc(sizeof(int) * 5);
+	unsigned int *ranks   = malloc(sizeof(int) * 5);
 
 	cdsu = cdsu_new_from_array(5, parents, ranks);
 	assert(cdsu != NULL);
@@ -64,9 +64,9 @@ NO_COV void test_cdsu_init(void) {
 	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
 NO_COV void test_cdsu_init_from_arrays(void) {
-	t_cdsu cdsu;
-	int   *parents = malloc(sizeof(int) * 5);
-	int   *ranks   = malloc(sizeof(int) * 5);
+	t_cdsu        cdsu;
+	unsigned int *parents = malloc(sizeof(int) * 5);
+	unsigned int *ranks   = malloc(sizeof(int) * 5);
 
 	assert(cdsu_init_from_arrays(&cdsu, 5, parents, ranks) == &cdsu);
 	assert(cdsu.size == 5);

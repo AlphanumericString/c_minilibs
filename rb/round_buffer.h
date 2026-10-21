@@ -23,7 +23,8 @@
 **/
 
 /**
- * \brief round buffer struct, rb
+ * \typedef t_rb
+ * \brief t_rb represents a round buffer.
  * \param array the raw buffer pointer
  * \param nb_max number max of elements in the array
  * \param i_pos input position (import head)
@@ -39,7 +40,6 @@ typedef struct s_roundbuffer_array {
 
 	size_t i_pos;
 	size_t o_pos;
-
 } t_rb;
 
 t_rb *rb_create(t_rb *rb, size_t sz_elem, size_t nb_e);
@@ -79,12 +79,14 @@ void  *rb_find(const t_rb *rb, t_comparator c, const void *a);
 bool   rb_map(t_rb *rb, t_duplicator dup, void **out_buff);
 bool   rb_nmap(t_rb *rb, size_t n, t_duplicator dup, void **out_buff);
 t_rb  *rb_grow(t_rb *rb, size_t nb_elem_added);
-// TODO: change grow to... you wont guess it... grow...
 
-// TODO: change to C_MINI__RB_NBE_DFLT in an ifndef
 #define C_MINI_RB_NB_ELEM_DFLT 4
 
-// TODO:
+// TODO: change rb_grow to... you wont guess it... rb_grow...
+//			-or find out why this change was made
+// TODO: atomic struct values
+// TODO: rename C_MINI_RB_NB_ELEM_DFLT->C_MINI__RB_NBE_DFLT in an ifndef
+// TODO: funcs implement:
 // rb_nget -> get's the n elements after first match
 // rb_getn -> get up to n elements that matched
 // rb_nfilter -> filter first n

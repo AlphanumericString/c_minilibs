@@ -12,7 +12,7 @@ void *ill_get_min(t_ill *head, t_comparator c) {
 	t_ill *min;
 
 	if (!head || !c) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return NULL;
 	}
 	curr = head;
@@ -21,7 +21,7 @@ void *ill_get_min(t_ill *head, t_comparator c) {
 		if (c(ill_ntoe(curr->next), ill_ntoe(min)) < 0) min = curr->next;
 		curr = curr->next;
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 	return ill_ntoe(min);
 }
 
@@ -37,7 +37,7 @@ void *ill_get_max(t_ill *head, t_comparator c) {
 	t_ill *max;
 
 	if (!head || !c) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return NULL;
 	}
 	curr = head;
@@ -46,7 +46,7 @@ void *ill_get_max(t_ill *head, t_comparator c) {
 		if (c(ill_ntoe(curr->next), ill_ntoe(max)) > 0) max = curr->next;
 		curr = curr->next;
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 	return ill_ntoe(max);
 }
 
@@ -61,7 +61,7 @@ void *ill_get_kth(t_ill *head, size_t k) {
 	t_ill *curr;
 
 	if (!head) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return NULL;
 	}
 	curr = head;
@@ -70,9 +70,9 @@ void *ill_get_kth(t_ill *head, size_t k) {
 		k--;
 	}
 	if (k > 0) {
-		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_FAIL);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_FAIL)
 		return NULL;
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 	return ill_ntoe(curr);
 }

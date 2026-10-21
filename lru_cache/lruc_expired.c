@@ -25,20 +25,20 @@ bool lruc_isexpired(t_lruc *c, const void *key, size_t key_len) {
 	uint64_t        now_uint;
 
 	if (clock_gettime(CLOCK_MONOTONIC, &now) != 0) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK)
 		return (false);
 	}
 	now_uint = lruci_timeto64(now);
 	if (c->ttl_glob == LONG_MAX) {
-		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS)
 		return (false);
 	}
 	node = lruci_keyinhash(c, key, key_len, &offset);
 	if (!node) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_ENODEU);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_ENODEU)
 		return (false);
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS)
 	return ((node->time + c->ttl_glob) < (now_uint));
 }
 
@@ -52,15 +52,15 @@ void lruc_cleanup(t_lruc *c) {
 	uint64_t        now_uint;
 
 	if (!c || !c->minHeap) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
 		return;
 	}
 	if (!c->node_nb) {
-		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS)
 		return;
 	}
 	if (clock_gettime(CLOCK_MONOTONIC, &now) != 0) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK);
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK)
 		return;
 	}
 	now_uint = now.tv_sec * 1000ULL + now.tv_nsec / 1000000ULL;
@@ -81,6 +81,6 @@ void lruc_cleanup(t_lruc *c) {
  * \ingroup lruc
 **/
 void lruc_setttl(t_lruc *cache, long ttl) {
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_UPDATE, cache->ttl_glob, ttl);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_UPDATE, cache->ttl_glob, ttl)
 	cache->ttl_glob = ttl;
 }

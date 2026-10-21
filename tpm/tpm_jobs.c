@@ -3,7 +3,6 @@
 #define C_MINI__TPM_INTERNAL
 #include "thread_pool_manager.h"
 
-#define CL     C_MINI__TPM_THRD_JOBS_CACHE
 #define t_cont t_tpm_jc
 
 t_cont *tpmi_create_job(t_work w_func, void *a) {
@@ -22,7 +21,7 @@ bool tpmi_job_push(t_cont *to_push, t_cont **head, t_cont **tail,
                    bool queue_down) {
 	assert(!(*head == NULL ^ *tail == NULL));
 	if (queue_down == true) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EDOWN);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EDOWN)
 		return (false);
 	}
 	to_push->next = *head;
@@ -40,7 +39,7 @@ t_cont tpmi_job_pop(t_tpm *tpm) {
 	t_cont  ret;
 
 	if (!tpm->q_end) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG);
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG)
 		return ((t_cont){0});
 	}
 	node       = tpm->q_end;
@@ -50,7 +49,7 @@ t_cont tpmi_job_pop(t_tpm *tpm) {
 	// node->next = NULL;
 	ret = *node;
 	if (node->job.infos.reccuring == true) {
-		CM_LOG(C_MINI__LEVEL_INFO, "recuring job, re-pushing:%p", node);
+		CM_LOG(C_MINI__LEVEL_INFO, "recuring job, re-pushing:%p", node)
 		tpmi_job_push(node, &tpm->q_start, &tpm->q_end,
 		              tpm->internal_val.queue_closed);
 	} else {

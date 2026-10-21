@@ -51,7 +51,9 @@ typedef struct s_rdsu_log {
 #else // || C_MINI__RDSU_INTERNAL
 
 /**
- * \brief the structure of a log entry in the rdsu
+ * \typedef t_rdsu_log
+ * \brief the structure of a log entry in the rdsu (rewindable distributed set
+ * union)
  * \param nxt pointer to next entry in the stack of log
  * \param type the type of entry (enum abstracted as int to not clutter LSP)
  * \param elem the elem whoms't we changed the parent of
@@ -71,7 +73,8 @@ typedef struct s_rdsu_log {
 #endif // !C_MINI__RDSU_INTERNAL
 
 /**
- * \brief rdsu struct
+ * \typedef t_rdsu
+ * \brief rdsu struct represents a rewindable dsu(distributed set union)
  * \param parent list of ids for the parent of nodes
  * \param rank   rank of node closer to 0 = closer to source
  * \param components number of differnt sets present in the RDSU
@@ -79,6 +82,9 @@ typedef struct s_rdsu_log {
  * from a continuous single alloc
  * \param change_log the stack of entries/changes in the rdsu
  * \ingroup rdsu
+ * \note rdsu are not "auto" compacted, futhermore compacting impacts logs and
+ * invalidate said logs. This means that unles you're sure not needing to rewind
+ * compacting is heavily dissencitivised.
 **/
 typedef struct s_rewindable_disjointed_set_union {
 	uint16_t *parent;
@@ -129,5 +135,9 @@ t_rdsu_log *rdsui_peek_rewind(const t_rdsu *rdsu);
 t_rdsu_log *rdsui_pop_rewind(t_rdsu *rdsu);
 
 #endif // !C_MINI__RDSU_INTERNAL
+
+// TODO: rdsu_convert_to_cdsu();
+// TODO: rdsu_new_from_cdsu();
+// TODO: rdsu_init_from_cdsu();
 
 #endif // !C_MINI__RDSU

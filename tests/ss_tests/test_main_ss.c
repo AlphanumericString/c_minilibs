@@ -37,14 +37,14 @@ int __attribute__((no_profile_instrument_function)) main(void) {
 		size_t i  = 0;
 		t_ss   ss = {0};
 
-		DUMP_SS(&ss);
+		DUMP_SS(&ss)
 		ss_ninit(&ss, 16, sizeof(int));
-		DUMP_SS(&ss);
+		DUMP_SS(&ss)
 		while (i != ss.cappacity) {
 			ss_add(&ss, &i);
 			i++;
 		}
-		DUMP_SS(&ss);
+		DUMP_SS(&ss)
 		ss_apply(&ss, display_function);
 		printf("\n");
 		ss_apply_it(&ss, display_function_it);
