@@ -2,7 +2,7 @@
 .DEFAULT_GOAL	:= all
 
 # list of targets / modules
-MODULES		:= da dsu hp ill lru_cache rb sptr tls tpm
+MODULES		:= da dsu hp ill lru_cache rb sptr tls tpm xarray
 
 # module selector
 # when left empty every module is targeted.
