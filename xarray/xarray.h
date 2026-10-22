@@ -38,7 +38,17 @@
 /*  allocation). Uppon deletion of every values in a trie, it is free'd.     */
 /* This memory management system allows the trie to remain extremely light   */
 /*  while allowing enormous slot range for users.                            */
-/* TODO: explain mark system                                                 */
+/* The mark system works a bit differently, it uses a dedicated double array */
+/*  of [nb_marks][number of slots per trie as long] on each trie. eg for a   */
+/*  trie of 64 it means that you would have 3*1 (8 octets in long and 8      */
+/*  octets long, 8*8=64) or only 192 bits long, 24 octets long               */
+/*                                                                           */
+/*                                                                           */
+/*                                                                           */
+/*                                                                           */
+/*                                                                           */
+/*                                                                           */
+/*                                                                           */
 /*                                                                           */
 /*                                                                           */
 /*****************************************************************************/
