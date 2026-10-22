@@ -71,23 +71,4 @@ bool   idl_for(t_idl *head, size_t n, t_callback c, void *u_data);
 bool   idl_foreach(t_idl *head, t_callback c, void *u_data);
 t_idl *idl_reverse(t_idl *head);
 
-// move // !
-// if !end_cut cut to the end of list included otherwise stop before end_cut
-// void   idl_move(t_idl *dest_anchor, t_idl *start_cut, t_idl *end_cut); // !
-//- Merges two sorted lists into one.
-// void   idl_sort(t_idl **head, t_comparator comp);                       // !
-// t_idl *idl_sorted_merge(t_idl *list1, t_idl *list2, t_comparator comp); // !
-
-// filter
-// list for tru is returned list of false has sotred in filtered
-// t_idl *idl_filter(t_idl *head, t_callback cb, void *arg, t_idl **filtered);
-// remove if aka filter in place. if !free_func no free.
-// bool   idl_remove_if(t_idl **head, t_callback condition_cb, void *arg,
-//                      void (*free_func)(void *elem));
-// // (requirement: list must be sorted)
-// void   idl_unique(t_idl *head, t_comparator c); // !
-
-// TODO: idl_[n][push|pop][_back]_elem : take elem as node w offset
-// annoying for users to have to do the convertions
-
 #endif // !C_MINI__IDL

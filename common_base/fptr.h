@@ -81,7 +81,7 @@ typedef void *(*t_duplicator)(const void *elem);
 
 /**
  * \typedef t_merger
- * \brief merger function pointer for datas folding and other merge tasks
+ * \brief merger function pointer for datas merging and other merge tasks
  * \param elem pointer to the accumulator
  * \param arg pointer to the value in the struct
  * \return pointer to a valid copy of the data
@@ -89,8 +89,5 @@ typedef void *(*t_duplicator)(const void *elem);
 typedef void *(*t_merger)(void *elem, void *arg);
 
 #endif // !C_MINI__T_MERGER
-
-// TODO: rename t_merger to t_folder and have a separate t_merger w elem1 &
-// elem2
 
 #endif // !C_MINI__COMMON_FPTR

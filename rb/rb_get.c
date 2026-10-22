@@ -25,8 +25,8 @@ void *rb_get(const t_rb *rb, t_comparator comp, const void *arg, void *buffer) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 		return (memcpy(buffer, elem, rb->sz_e));
 	}
-	// TODO: zero-out buffer on fail?
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_FAIL)
+	// zero out here
 	return NULL;
 }
 
@@ -66,7 +66,6 @@ void *rb_nget(const t_rb *rb, size_t n, t_comparator comp, const void *arg,
 		pos = (pos + 1) % rb->nb_max;
 		i++;
 	}
-	// TODO: maybe null buffer?
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_FAIL)
 	return NULL;
 }

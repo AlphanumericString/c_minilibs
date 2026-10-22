@@ -27,8 +27,6 @@
  * \defgroup hp Heap
 **/
 
-// TODO: switch elems to a voided ptr with size_elements as a struct value
-// TODO: shorten t_heap -> t_hp
 /**
  * \typedef t_heap
  * \brief The heap structure is a representation of a heap, min or max depends
@@ -66,14 +64,5 @@ bool hp_foreach(t_heap *h, t_callback cb, void *u_arg);
 bool hp_foreach_in(t_heap *h, t_callback cb, void *u_arg);
 bool hp_foreach_pre(t_heap *h, t_callback cb, void *u_arg);
 bool hp_foreach_post(t_heap *h, t_callback cb, void *u_arg);
-
-// TODO: hp_from_array(arr, nb_elems, cmp) -> t_hp
-// TODO: hp_init_from_array(hp, arr, nb_elems, cmp) -> t_hp*
-// TODO: switch return to bool everywhere possible + add test checking return
-//		values
-// TODO: add hp_is_[empty|full|valid](const ..); -> bool
-// TODO: add hp_get_[cmp|cap|curent_size|elems_array](...); -> <val type>
-// TODO: void* backing with typeagnostic heuristics (retro actively add
-//		get_elem_size)
 
 #endif // !C_MINI__HP

@@ -45,7 +45,6 @@ void *ill_copy(const t_ill *head, t_duplicator dupper) {
 		e_cpy = dupper(ill_ntoe(head));
 		if (!e_cpy) {
 			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__ILL_LOG_EALLOC)
-			// TODO: maybe clearlist here from new_head if fail on dupper?
 			break;
 		}
 		if (!prev) {

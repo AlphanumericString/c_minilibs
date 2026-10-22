@@ -21,10 +21,6 @@ pthread_mutex_t console_lock;
 
 #ifdef C_MINI__TESTS
 
-#	define CM__SPTR_TODO(x, ...)                                              \
-		CM_LOG(C_MINI__LEVEL_ALWAYS, "%s:%d\t" C_MINI__SPTR_LOG_ETODO "\t" x,  \
-		       __FILE__, __LINE__ __VA_OPT__(, ) __VA_ARGS__)
-
 #	define C_MINI__SPTR_LOG_SUCCESS   C_MINI__LOG_SUCCESS
 #	define C_MINI__SPTR_LOG_EARG      C_MINI__LOG_F_PREFIX "Bad arguments"
 #	define C_MINI__SPTR_LOG_ILL       C_MINI__SPTR_LOG_EARG ": Illegal."

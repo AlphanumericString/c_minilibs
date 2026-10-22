@@ -13,13 +13,16 @@ t_ctls_typewrap *ctls_get(const char *s) {
 	t_ctlsv *ctls = pthread_getspecific(ctls_key);
 
 	if (!ctls) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CTLS_EARG);
 		return (NULL);
 	}
 	for (size_t i = 0; i < ctls->len; i++) {
 		if (!strcmp(s, ctls->v_name[i])) {
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CTLS_SUCCESS);
 			return (&ctls->vals[i]);
 		}
 	}
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CTLS_FAILLURE);
 	return (NULL);
 }
 
@@ -31,6 +34,10 @@ t_ctls_typewrap *ctls_get(const char *s) {
 size_t ctls_len(void) {
 	t_ctlsv *ctls = pthread_getspecific(ctls_key);
 
-	if (!ctls) return (0);
+	if (!ctls) {
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CTLS_FAILLURE);
+		return (0);
+	}
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CTLS_SUCCESS);
 	return (ctls->len);
 }

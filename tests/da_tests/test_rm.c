@@ -84,7 +84,6 @@ NO_COV void test_da_rm(void) {
 	da_rm(NULL, 1);
 	da_destroy(&da);
 }
-// TODO: better tests when fixing da_rms
 NO_COV void test_da_rms(void) {
 	t_da da;
 

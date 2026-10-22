@@ -8,8 +8,6 @@
 #include "common_base/tests.h"
 #include "lru_cache/least_recently_used_cache.h"
 
-// TODO: better test_lruc_get -> time invalidation and all the usual jazz
-
 void test_lruc_create(void);
 void test_lruc_init(void);
 void test_lruc_destroy(void);

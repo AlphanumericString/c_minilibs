@@ -56,13 +56,10 @@ typedef struct s_tlsv_array {
 **/
 extern pthread_key_t vtls_key;
 #endif // C_MINI__VTLS_INTERNAL
-// TODO: rename vtls -> vtls_key, vtls_array->vtls
 
 bool vtls_rm(const char *v_name);
 
 void  *vtls_get(const char *v_name);
-// TODO: vtls_getout(const char *key, void *out);
-// - memcpy to out if found using size of key'ed elem
 size_t vtls_len(void);
 
 bool vtls_has(const char *v_name);

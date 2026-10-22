@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "sptr_tests.h"
 
@@ -230,14 +231,22 @@ static void test_sptr_make_shared_from_owned_error(void) {
 	t_dtor dtor     = local_dtor;
 	t_dtor not_dtor = other_dtor;
 
-	t_fbox b0 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
-	t_fbox b1 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 0};
-	t_fbox b2 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
-	t_fbox b3 = (t_fbox){.data = data, .dtor = dtor, .rc = 99, .wc = 0};
-	t_fbox b4 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
-	t_fbox b5 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
-	t_fbox b6 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
-	t_fbox b7 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_fbox       b0 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_fbox       b1 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 0};
+	t_fbox       b2 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
+	t_fbox       b3 = (t_fbox){.data = data, .dtor = dtor, .rc = 99, .wc = 0};
+	t_fbox       b4 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_fbox       b5 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_fbox       b6 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_fbox       b7 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	const t_fbox exp_b0 = b0; // byte copy
+	const t_fbox exp_b1 = b1;
+	const t_fbox exp_b2 = b2;
+	const t_fbox exp_b3 = b3;
+	const t_fbox exp_b4 = b4;
+	const t_fbox exp_b5 = b5;
+	const t_fbox exp_b6 = b6;
+	const t_fbox exp_b7 = b7;
 
 	t_owned_ptr no_own    = (t_owned_ptr){b0.data, &b0, false};
 	t_owned_ptr no_c      = (t_owned_ptr){b1.data, &b1, true};
@@ -269,7 +278,14 @@ static void test_sptr_make_shared_from_owned_error(void) {
 	assert(!res[6].data && !res[6].meta);
 	assert(!res[7].data && !res[7].meta);
 	assert(!res[8].data && !res[8].meta);
-	// TODO: assert that box fields did not move/change
+	assert(memcmp(&exp_b0, &b0, sizeof(t_fbox)) == 0);
+	assert(memcmp(&exp_b1, &b1, sizeof(t_fbox)) == 0);
+	assert(memcmp(&exp_b2, &b2, sizeof(t_fbox)) == 0);
+	assert(memcmp(&exp_b3, &b3, sizeof(t_fbox)) == 0);
+	assert(memcmp(&exp_b4, &b4, sizeof(t_fbox)) == 0);
+	assert(memcmp(&exp_b5, &b5, sizeof(t_fbox)) == 0);
+	assert(memcmp(&exp_b6, &b6, sizeof(t_fbox)) == 0);
+	assert(memcmp(&exp_b7, &b7, sizeof(t_fbox)) == 0);
 }
 static void test_sptr_make_shared_from_owned_ok(void) {
 	void  *data = (void *)0xDEAD;

@@ -51,7 +51,6 @@ bool cdsu_clr(t_cdsu *dsu);
 void cdsu_destroy(t_cdsu *ds);
 void cdsu_free(t_cdsu **ds);
 
-// TODO: switch to 'const t_cdsu *'
 int    cdsu_max_depth(t_cdsu dsu);
 size_t cdsu_size(t_cdsu dsu);
 size_t cdsu_nb_components(t_cdsu dsu);

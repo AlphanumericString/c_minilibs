@@ -33,6 +33,3 @@ t_idl *idl_get_head(t_idl *node) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (node);
 }
-// TODO: idl_advance_it + idl_recede_it (return node->[next|prev]);
-// TODO: ill_get_head + ill_[advance|recede]_it
-// TODO: tests

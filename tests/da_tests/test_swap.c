@@ -43,6 +43,4 @@ NO_COV void test_da_nswap(void) {
 	assert(da_nswap(&da, 1, 99, 2) == false);  // 3 4 2 1 5
 	assert(da_nswap(&da, 1, 0, 99) == false);  // 3 4 2 1 5
 	assert(da_nswap(NULL, 1, 0, 99) == false); // 3 4 2 1 5
-
-	// TODO: large elem swap
 }

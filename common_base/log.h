@@ -11,9 +11,13 @@
 #		endif // !CM_DBG
 
 #		ifndef CM_DBG_POS
-#			define CM_DBG_POS (void)0;
+#			define CM_DBG_POS(fmt, ...) (void)0;
 #		endif // !CM_DBG_POS
-#	endif
+
+#		ifndef CM_TODO
+#			define CM_TODO(x, ...) (void)0;
+#		endif //! CM__TODO
+#	endif     // !TESTS || !DEBUG_LVL || DEBUG_LVL==0
 
 #	ifdef C_MINI__TESTS
 
@@ -57,20 +61,8 @@ extern pthread_mutex_t console_lock;
 					} while (0);
 #			endif // !CM_DBG
 
-#			ifndef CM_DBG_POS
-#				define CM_DBG_POS                                             \
-					do {                                                       \
-						pthread_mutex_lock(&console_lock);                     \
-						printf(C_MINI__LOG_DP_COLOR                            \
-						       "[POS]" C_MINI__LOG_RESET_COLOR ": %s:%d %s\n", \
-						       __FILE__, __LINE__, __FUNCTION__);              \
-						fflush(stdout);                                        \
-						pthread_mutex_unlock(&console_lock);                   \
-					} while (0);
-#			endif // !CM_DBG_POS
-
 // non-threadsafe version
-#		else // !threadsafe
+#		else // || non-threadsafe
 
 #			include <stdio.h>
 
@@ -97,17 +89,21 @@ extern pthread_mutex_t console_lock;
 					} while (0);
 #			endif // !CM_DBG
 
-#			ifndef CM_DBG_POS
-#				define CM_DBG_POS                                             \
-					do {                                                       \
-						printf(C_MINI__LOG_DP_COLOR                            \
-						       "[POS]" C_MINI__LOG_RESET_COLOR ": %s:%d %s\n", \
-						       __FILE__, __LINE__, __FUNCTION__);              \
-						fflush(stdout);                                        \
-					} while (0);
-#			endif // !CM_DBG_POS
+#		endif // !Threadsafe
 
-#		endif // macro end
+#		ifndef CM_DBG_POS
+#			define CM_DBG_POS                                                 \
+				CM_DBG(C_MINI__LOG_DP_COLOR "[POS]" C_MINI__LOG_RESET_COLOR    \
+				                            ": %s:%d %s\n",                    \
+				       __FILE__, __LINE__, __FUNCTION__)
+#		endif // !CM_DBG_POS
+
+#		ifndef CM_TODO
+#			define CM_TODO(x, ...)                                            \
+				CM_LOG(C_MINI__LEVEL_ALWAYS,                                   \
+				       "%s:%d\t" C_MINI__LOG_ETODO "\t" x, __FILE__,           \
+				       __LINE__ __VA_OPT__(, ) __VA_ARGS__)
+#		endif //! CM__TODO
 
 #		define C_MINI__LOG_F_PREFIX "Fail: "
 
@@ -127,5 +123,3 @@ extern pthread_mutex_t console_lock;
 #	endif // !TESTS
 
 #endif // !C_MINI__CB_LOG
-
-// TODO: \def macros

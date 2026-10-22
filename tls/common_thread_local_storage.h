@@ -10,7 +10,14 @@
 
 #include "common_base/log.h"
 
-// TODO: log on tls (at least ctls)
+#ifdef C_MINI__TESTS
+
+#	define C_MINI__CTLS_EARG     C_MINI__LOG_EARG
+#	define C_MINI__CTLS_EALLOC   C_MINI__LOG_EALLOC
+#	define C_MINI__CTLS_SUCCESS  C_MINI__LOG_SUCCESS
+#	define C_MINI__CTLS_FAILLURE C_MINI__LOG_FAIL
+
+#endif
 
 /**
  * \defgroup ctls C-types Thread Local Storage

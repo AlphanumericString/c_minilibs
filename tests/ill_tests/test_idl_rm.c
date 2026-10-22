@@ -35,7 +35,7 @@ NO_COV void test_idl_rm(void) {
 
 	assert(idl_pop(&null_head) == NULL);
 	assert(idl_pop(NULL) == NULL);
-	// TODO: test were pop until !head
+	// pop until !head here
 
 	pop_res = idl_pop_back(&head);
 	assert(pop_res == &n4.dnode);
@@ -60,7 +60,7 @@ NO_COV void test_idl_rm(void) {
 	assert(idl_pop_back(&head) == &n4.dnode);
 	n4.dnode.prev = &n3.dnode;
 	idl_pop_back(&head);
-	// TODO: test were pop_back until !head
+	// pop_back until !head here
 
 	t_idl *rm_after_res;
 	rm_after_res = idl_remove_after(&n2.dnode);

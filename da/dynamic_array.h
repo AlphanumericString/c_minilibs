@@ -119,11 +119,6 @@ bool da_is_not_null(const t_da *da);
 bool da_is_empty(const t_da *da);
 bool da_is_full(const t_da *da);
 
-// BUG:
-// fix bug on rms (gap problem)
-// TODO:
-// fix nget return -> int [-1 err, 0+ nb elem copied]
-
 #define C_MINI_DA__SZ_ELEM_DFLT 1024
 #define C_MINI_DA__NB_ELEM_DFLT 4
 #define C_MINI_DA__GROWTH       1.5

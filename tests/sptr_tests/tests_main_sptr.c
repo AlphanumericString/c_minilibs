@@ -111,7 +111,6 @@ NO_COV int main(void) {
 	test_sptr_make_uniq_from_owned();
 	test_sptr_make_uniq_from_uniq();
 
-	CM__SPTR_TODO("threaded test where rc and wc change for atomic", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "All SPTR tests completed successfully.", )
 
 	return (0);

@@ -10,9 +10,16 @@
 bool ctls_has(const char *s) {
 	t_ctlsv *ctls = pthread_getspecific(ctls_key);
 
-	if (!ctls) return (false);
-	for (size_t i = 0; i < ctls->len; i++) {
-		if (!strcmp(s, ctls->v_name[i])) return (true);
+	if (!ctls) {
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CTLS_FAILLURE);
+		return (false);
 	}
+	for (size_t i = 0; i < ctls->len; i++) {
+		if (!strcmp(s, ctls->v_name[i])) {
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CTLS_SUCCESS);
+			return (true);
+		}
+	}
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CTLS_FAILLURE);
 	return (false);
 }

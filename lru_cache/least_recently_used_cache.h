@@ -169,8 +169,6 @@ t_lruc *lruc_init(t_lruc *cache, size_t capacity, void (*free_er)(void *));
 void    lruc_destroy(t_lruc *cache);
 void    lruc_free(t_lruc **cache);
 
-// TODO: switch return of all put to bool (true on success)
-// TODO: switch to alloc enough kv at start of struct - no alloc on _put
 int lruc_put_kv(t_lruc *cache, t_keyvalue kv);
 int lruc_put(t_lruc *cache, const void *key, size_t key_len, const void *value);
 int lruc_put_ttl(t_lruc *cache, const void *key, size_t key_len,
@@ -222,7 +220,5 @@ t_lruc_keynode *lruci_hp_pop(t_lruc *c);
 t_lruc_keynode *lruci_hp_pop_nth(t_lruc *c, size_t n);
 
 #endif // !C_MINI__LRUC_INTERNAL
-
-// TODO: add `bool lruci_is_valid(const t_lruc *c);`
 
 #endif // !C_MINI__LRUC

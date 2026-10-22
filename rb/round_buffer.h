@@ -82,15 +82,4 @@ t_rb  *rb_grow(t_rb *rb, size_t nb_elem_added);
 
 #define C_MINI_RB_NB_ELEM_DFLT 4
 
-// TODO: change rb_grow to... you wont guess it... rb_grow...
-//			-or find out why this change was made
-// TODO: atomic struct values
-// TODO: rename C_MINI_RB_NB_ELEM_DFLT->C_MINI__RB_NBE_DFLT in an ifndef
-// TODO: funcs implement:
-// rb_nget -> get's the n elements after first match
-// rb_getn -> get up to n elements that matched
-// rb_nfilter -> filter first n
-// rb_filterout -> reverse filter
-// rb_nfilterout -> reverse filter on first n
-
 #endif // !C_MINI__RB

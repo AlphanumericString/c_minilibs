@@ -8,8 +8,6 @@ static int cmp_rawptr(const void *a, const void *b) {
 	return (0);
 }
 
-// TODO: add fail test at 0-5 sweeping through values to test random error in
-// process for base but also 'pre/post/in'
 static bool fail_at(void *hp_elem, void *value) {
 	return (hp_elem != value);
 }

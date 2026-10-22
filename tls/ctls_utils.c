@@ -28,7 +28,10 @@ static void __attribute__((constructor())) init_ctls(void) {
  * \ingroup ctls
 **/
 bool ctls_dump_typewrap(t_ctls_typewrap t, int fd) {
-	if (fd < 0) return (false);
+	if (fd < 0) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CTLS_EARG);
+		return (false);
+	}
 	switch (t.type) {
 	case CTLS_INT:
 		dprintf(fd, "{ \"%s\", %d }", "int", t.value.i);
@@ -45,6 +48,6 @@ bool ctls_dump_typewrap(t_ctls_typewrap t, int fd) {
 	default:
 		dprintf(fd, "{ \"%s\" }", "unknown");
 	}
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CTLS_SUCCESS);
 	return (true);
 }
-// TODO: ctls_dump_all (dumps every var to output)

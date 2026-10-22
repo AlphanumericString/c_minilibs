@@ -136,8 +136,4 @@ t_rdsu_log *rdsui_pop_rewind(t_rdsu *rdsu);
 
 #endif // !C_MINI__RDSU_INTERNAL
 
-// TODO: rdsu_convert_to_cdsu();
-// TODO: rdsu_new_from_cdsu();
-// TODO: rdsu_init_from_cdsu();
-
 #endif // !C_MINI__RDSU

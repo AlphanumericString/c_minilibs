@@ -25,6 +25,7 @@ void idl_init(t_idl *node, size_t offset) {
  * \return A pointer to the head of the new copied list's first element, or NULL
  * on failure.
  * \ingroup idl
+ * \todo clean-up chained values on failure
 **/
 void *idl_copy(const t_idl *head, t_duplicator d) {
 	t_idl *ret;
@@ -38,7 +39,7 @@ void *idl_copy(const t_idl *head, t_duplicator d) {
 	ret = NULL;
 	for (; head; head = head->next) {
 		elem = d(idl_ntoe(head));
-		if (!elem) return (nh); // TODO: mayb delete chain if fail
+		if (!elem) return (nh);
 		if (!nh) nh = elem;
 		if (ret) ret->next = idl_eton(elem, head->offset);
 		idl_eton(elem, head->offset)->offset = head->offset;

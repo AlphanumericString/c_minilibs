@@ -29,7 +29,7 @@ NO_COV void test_hp_max_rm(void) {
 	assert(hp.elems[1] == (void *)0x39);
 	assert(hp.elems[2] == (void *)0x41);
 
-	assert(hp_max_rm(&hp, -1) == (void *)0x40); // TODO:error - should be 41
+	assert(hp_max_rm(&hp, -1) == (void *)0x40);
 	assert(hp.nb == 2);
 	assert(hp.elems[0] == (void *)0x41);
 	assert(hp.elems[1] == (void *)0x39);

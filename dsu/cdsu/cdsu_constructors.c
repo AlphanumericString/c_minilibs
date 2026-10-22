@@ -163,4 +163,3 @@ bool cdsu_grow(t_cdsu *cdsu, size_t n) {
 	cdsu->components += n;
 	return (true);
 }
-// TODO: replace logic by da functions "grow for"
