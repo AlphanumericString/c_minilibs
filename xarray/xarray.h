@@ -43,14 +43,38 @@
 /*  trie of 64 it means that you would have 3*1 (8 octets in long and 8      */
 /*  octets long, 8*8=64) or only 192 bits long, 24 octets long               */
 /*                                                                           */
-/*                                                                           */
-/*                                                                           */
-/*                                                                           */
-/*                                                                           */
-/*                                                                           */
-/*                                                                           */
-/*                                                                           */
-/*                                                                           */
 /*****************************************************************************/
+
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+
+//
+// TODO: read xarray linux doc pickout usefull funcs
+
+#ifndef C_MINI___XA_NB_NODES
+#	define C_MINI___XA_NB_NODES 64
+#endif
+#ifndef C_MINI___XA_NB_MARKS
+#	define C_MINI___XA_NB_MARKS 3
+#endif
+
+#if !C_MINI___XA_NB_NODES ||                                                   \
+    ((C_MINI___XA_NB_NODES & (C_MINI___XA_NB_NODES - 1)) != 0)
+#	error "C_MINI___XA_NB_NODES must be a power of 2"
+#endif
+
+typedef struct s_xarray {
+	struct s_xarray_node *nodes[C_MINI___XA_NB_NODES];
+	size_t                max;
+	uint8_t marks_metadatas[C_MINI___XA_NB_MARKS][C_MINI___XA_NB_NODES / 8];
+} t_xarray;
+
+t_xarray *xa_new(void);
+
+t_xarray *xa_init(t_xarray *to_init);
+bool      xai_delete_node(struct s_xarray_node *node);
+bool      xa_delete(t_xarray *to_del);
+bool      xa_free(t_xarray *to_free);
 
 #endif // !C_MINI__XARRAY
