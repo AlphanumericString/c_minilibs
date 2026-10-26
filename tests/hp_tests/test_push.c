@@ -9,7 +9,7 @@ static int cmp_rawptr(const void *a, const void *b) {
 }
 
 NO_COV void test_hp_min_push(void) {
-	t_heap hp;
+	t_hp hp;
 
 	hp_init(&hp, 32, &cmp_rawptr);
 	assert(hp.elems != NULL);
@@ -43,7 +43,7 @@ NO_COV void test_hp_min_push(void) {
 	return;
 }
 NO_COV void test_hp_max_push(void) {
-	t_heap hp;
+	t_hp hp;
 
 	hp_init(&hp, 32, &cmp_rawptr);
 	assert(hp.elems != NULL);

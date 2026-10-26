@@ -8,7 +8,7 @@
  * \return true if all callbacks returned true, false otherwise
  * \ingroup hp
 **/
-bool hp_foreach(t_heap *h, t_callback cb, void *data) {
+bool hp_foreach(t_hp *h, t_callback cb, void *data) {
 	if (!h || !cb) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (false);
@@ -22,7 +22,7 @@ bool hp_foreach(t_heap *h, t_callback cb, void *data) {
 	return (true);
 }
 
-static bool hp_internal_prefix(t_heap *h, size_t i, t_callback cb, void *u) {
+static bool hp_internal_prefix(t_hp *h, size_t i, t_callback cb, void *u) {
 	if (i >= h->nb) return (true);
 	if (!hp_internal_prefix(h, i * 2 + 1, cb, u)) return (false);
 	if (!hp_internal_prefix(h, i * 2 + 2, cb, u)) return (false);
@@ -32,7 +32,7 @@ static bool hp_internal_prefix(t_heap *h, size_t i, t_callback cb, void *u) {
 	}
 	return (true);
 }
-static bool hp_internal_postfix(t_heap *h, size_t i, t_callback cb, void *u) {
+static bool hp_internal_postfix(t_hp *h, size_t i, t_callback cb, void *u) {
 	if (i >= h->nb) return (true);
 	if (cb(h->elems[i], u) == false) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_CB_FAIL, i)
@@ -42,7 +42,7 @@ static bool hp_internal_postfix(t_heap *h, size_t i, t_callback cb, void *u) {
 	if (!hp_internal_postfix(h, i * 2 + 2, cb, u)) return (false);
 	return (true);
 }
-static bool hp_internal_infix(t_heap *h, size_t i, t_callback cb, void *u) {
+static bool hp_internal_infix(t_hp *h, size_t i, t_callback cb, void *u) {
 	if (i >= h->nb) return (true);
 	if (!hp_internal_infix(h, i * 2 + 1, cb, u)) return (false);
 	if (cb(h->elems[i], u) == false) {
@@ -61,7 +61,7 @@ static bool hp_internal_infix(t_heap *h, size_t i, t_callback cb, void *u) {
  * \return true if all callbacks returned true, false otherwise
  * \ingroup hp
 **/
-bool hp_foreach_in(t_heap *h, t_callback cb, void *data) {
+bool hp_foreach_in(t_hp *h, t_callback cb, void *data) {
 	bool r;
 
 	if (!h || !cb) {
@@ -81,7 +81,7 @@ bool hp_foreach_in(t_heap *h, t_callback cb, void *data) {
  * \return true if all callbacks returned true, false otherwise
  * \ingroup hp
 **/
-bool hp_foreach_pre(t_heap *h, t_callback cb, void *data) {
+bool hp_foreach_pre(t_hp *h, t_callback cb, void *data) {
 	bool r;
 
 	if (!h || !cb) {
@@ -101,7 +101,7 @@ bool hp_foreach_pre(t_heap *h, t_callback cb, void *data) {
  * \return true if all callbacks returned true, false otherwise
  * \ingroup hp
 **/
-bool hp_foreach_post(t_heap *h, t_callback cb, void *data) {
+bool hp_foreach_post(t_hp *h, t_callback cb, void *data) {
 	bool r;
 
 	if (!h || !cb) {

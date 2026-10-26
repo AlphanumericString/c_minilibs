@@ -10,7 +10,7 @@ static int cmp_rawptr(const void *a, const void *b) {
 }
 
 NO_COV void test_hp_max_rm(void) {
-	t_heap hp;
+	t_hp hp;
 
 	hp_init(&hp, 32, cmp_rawptr);
 	hp_max_push(&hp, (void *)0x40);
@@ -29,12 +29,12 @@ NO_COV void test_hp_max_rm(void) {
 	assert(hp.elems[1] == (void *)0x39);
 	assert(hp.elems[2] == (void *)0x41);
 
-	assert(hp_max_rm(&hp, -1) == (void *)0x40);
+	assert(hp_max_rm(&hp, -1) == (void *)0x41);
 	assert(hp.nb == 2);
-	assert(hp.elems[0] == (void *)0x41);
+	assert(hp.elems[0] == (void *)0x42);
 	assert(hp.elems[1] == (void *)0x39);
 
-	assert(hp_max_rm(&hp, 0) == (void *)0x41);
+	assert(hp_max_rm(&hp, 0) == (void *)0x42);
 	assert(hp.nb == 1);
 	assert(hp.elems[0] == (void *)0x39);
 
@@ -44,7 +44,7 @@ NO_COV void test_hp_max_rm(void) {
 	return;
 }
 NO_COV void test_hp_min_rm(void) {
-	t_heap hp;
+	t_hp hp;
 
 	hp_init(&hp, 32, cmp_rawptr);
 	hp_min_push(&hp, (void *)0x40);

@@ -42,27 +42,27 @@ typedef struct s_heap {
 	size_t       capacity;
 	void       **elems;
 	t_comparator cmp;
-} t_heap;
+} t_hp;
 
-t_heap *hp_create(size_t nb_elems, t_comparator cmp);
-t_heap *hp_init(t_heap *hp, size_t nb_elems, t_comparator cmp);
+t_hp *hp_create(size_t nb_elems, t_comparator cmp);
+t_hp *hp_init(t_hp *hp, size_t nb_elems, t_comparator cmp);
 
-void hp_delete(t_heap *hp);
-void hp_free(t_heap *hp);
-void hp_clear(t_heap *hp);
+bool hp_delete(t_hp *hp);
+bool hp_free(t_hp **hp);
+bool hp_clear(t_hp *hp);
 
-void hp_min_push(t_heap *h, void *e);
-void hp_max_push(t_heap *h, void *e);
+void hp_min_push(t_hp *h, void *e);
+void hp_max_push(t_hp *h, void *e);
 
-void *hp_min_pop(t_heap *h);
-void *hp_max_pop(t_heap *h);
+void *hp_min_pop(t_hp *h);
+void *hp_max_pop(t_hp *h);
 
-void *hp_min_rm(t_heap *h, size_t n);
-void *hp_max_rm(t_heap *h, size_t n);
+void *hp_min_rm(t_hp *h, size_t n);
+void *hp_max_rm(t_hp *h, size_t n);
 
-bool hp_foreach(t_heap *h, t_callback cb, void *u_arg);
-bool hp_foreach_in(t_heap *h, t_callback cb, void *u_arg);
-bool hp_foreach_pre(t_heap *h, t_callback cb, void *u_arg);
-bool hp_foreach_post(t_heap *h, t_callback cb, void *u_arg);
+bool hp_foreach(t_hp *h, t_callback cb, void *u_arg);
+bool hp_foreach_in(t_hp *h, t_callback cb, void *u_arg);
+bool hp_foreach_pre(t_hp *h, t_callback cb, void *u_arg);
+bool hp_foreach_post(t_hp *h, t_callback cb, void *u_arg);
 
 #endif // !C_MINI__HP

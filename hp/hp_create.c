@@ -9,10 +9,10 @@
  * \return t_heap* or NULL if failed
  * \ingroup hp
 **/
-t_heap *hp_create(size_t nb_elems, t_comparator cmp) {
-	t_heap *hp;
+t_hp *hp_create(size_t nb_elems, t_comparator cmp) {
+	t_hp *hp;
 
-	hp = malloc(sizeof(t_heap));
+	hp = malloc(sizeof(t_hp));
 	if (!hp || hp_init(hp, nb_elems, cmp) == NULL) {
 		if (hp) free(hp);
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EALLOC)
@@ -30,7 +30,7 @@ t_heap *hp_create(size_t nb_elems, t_comparator cmp) {
  * \return t_heap* or NULL if failed
  * \ingroup hp
 **/
-t_heap *hp_init(t_heap *hp, size_t nb_elems, t_comparator cmp) {
+t_hp *hp_init(t_hp *hp, size_t nb_elems, t_comparator cmp) {
 	if (!hp) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (NULL);

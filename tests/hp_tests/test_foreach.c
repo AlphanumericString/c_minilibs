@@ -23,8 +23,8 @@ static bool log_order(void *hp_elem, void *_order) {
 }
 
 NO_COV void test_hp_foreach(void) {
-	void  *order[6] = {0};
-	t_heap h;
+	void *order[6] = {0};
+	t_hp  h;
 
 	hp_init(&h, 5, cmp_rawptr);
 	hp_max_push(&h, (void *)0x40);
@@ -51,8 +51,8 @@ NO_COV void test_hp_foreach(void) {
 	hp_delete(&h);
 }
 NO_COV void test_hp_foreach_in(void) {
-	void  *order[6] = {0};
-	t_heap h;
+	void *order[6] = {0};
+	t_hp  h;
 
 	hp_init(&h, 5, cmp_rawptr);
 	hp_max_push(&h, (void *)0x40);
@@ -79,8 +79,8 @@ NO_COV void test_hp_foreach_in(void) {
 	hp_delete(&h);
 }
 NO_COV void test_hp_foreach_pre(void) {
-	void  *order[6] = {0};
-	t_heap h;
+	void *order[6] = {0};
+	t_hp  h;
 
 	hp_init(&h, 5, cmp_rawptr);
 	hp_max_push(&h, (void *)0x40);
@@ -107,8 +107,8 @@ NO_COV void test_hp_foreach_pre(void) {
 	hp_delete(&h);
 }
 NO_COV void test_hp_foreach_post(void) {
-	void  *order[6] = {0};
-	t_heap h;
+	void *order[6] = {0};
+	t_hp  h;
 
 	hp_init(&h, 5, cmp_rawptr);
 	hp_max_push(&h, (void *)0x40);

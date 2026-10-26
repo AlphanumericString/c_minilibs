@@ -9,14 +9,14 @@ static int cmp_rawptr(const void *a, const void *b) {
 }
 
 NO_COV void test_hp_create(void) {
-	t_heap *h;
+	t_hp *h;
 
 	h = hp_create(32, cmp_rawptr);
 	assert(h != NULL);
 	assert(h->elems != NULL);
 	assert(h->nb == 0);
 	assert(h->capacity == 32);
-	hp_free(h);
+	hp_free(&h);
 
 	alloc_set_call_limit(0);
 	assert(hp_create(32, cmp_rawptr) == NULL);
@@ -26,7 +26,7 @@ NO_COV void test_hp_create(void) {
 	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
 NO_COV void test_hp_init(void) {
-	t_heap h;
+	t_hp h;
 
 	assert(hp_init(&h, 32, cmp_rawptr) == &h);
 	assert(h.elems != NULL);

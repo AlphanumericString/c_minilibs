@@ -1,13 +1,13 @@
 #include "heap.h"
 
-static void heap_swap(t_heap *h, size_t pos1, size_t pos2) {
+static void heap_swap(t_hp *h, size_t pos1, size_t pos2) {
 	void *e = h->elems[pos1];
 
 	h->elems[pos1] = h->elems[pos2];
 	h->elems[pos2] = e;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_SWAP, pos1, pos2)
 }
-static void heap_up(t_heap *h, size_t idx, bool max) {
+static void heap_up(t_hp *h, size_t idx, bool max) {
 	size_t parent = idx / 2;
 	int    cmp_res;
 
@@ -19,7 +19,7 @@ static void heap_up(t_heap *h, size_t idx, bool max) {
 		idx = parent;
 	}
 }
-static void heap_down(t_heap *h, size_t idx, bool max) {
+static void heap_down(t_hp *h, size_t idx, bool max) {
 	int    cmp_res;
 	size_t l, r;
 	size_t target;
@@ -48,7 +48,7 @@ static void heap_down(t_heap *h, size_t idx, bool max) {
  * \param e element to push
  * \ingroup hp
 **/
-void hp_min_push(t_heap *h, void *e) {
+void hp_min_push(t_hp *h, void *e) {
 	if (!h || !e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return;
@@ -65,7 +65,7 @@ void hp_min_push(t_heap *h, void *e) {
  * \param e element to push
  * \ingroup hp
 **/
-void hp_max_push(t_heap *h, void *e) {
+void hp_max_push(t_hp *h, void *e) {
 	if (!h || !e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return;
@@ -83,7 +83,7 @@ void hp_max_push(t_heap *h, void *e) {
  * \return minimum element
  * \ingroup hp
 **/
-void *hp_min_pop(t_heap *h) {
+void *hp_min_pop(t_hp *h) {
 	void *root;
 
 	if (!h || !h->nb) {
@@ -104,7 +104,7 @@ void *hp_min_pop(t_heap *h) {
  * \return maximum element
  * \ingroup hp
 **/
-void *hp_max_pop(t_heap *h) {
+void *hp_max_pop(t_hp *h) {
 	void *root;
 
 	if (!h || !h->nb) {
@@ -127,7 +127,7 @@ void *hp_max_pop(t_heap *h) {
  * \return element removed
  * \ingroup hp
 **/
-void *hp_min_rm(t_heap *h, size_t n) {
+void *hp_min_rm(t_hp *h, size_t n) {
 	if (!h) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (NULL);
@@ -145,12 +145,12 @@ void *hp_min_rm(t_heap *h, size_t n) {
  * \return element removed
  * \ingroup hp
 **/
-void *hp_max_rm(t_heap *h, size_t n) {
+void *hp_max_rm(t_hp *h, size_t n) {
 	if (!h) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (NULL);
 	}
-	if (n > h->nb) n = h->nb;
+	if (n > h->nb) n = h->nb - 1;
 	if (!n) return (hp_max_pop(h));
 	heap_swap(h, 0, n);
 	heap_down(h, n, true);
