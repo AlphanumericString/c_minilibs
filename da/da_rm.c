@@ -36,7 +36,7 @@ bool da_rm_order(t_da *da, size_t pos) {
  * \ingroup da
 **/
 bool da_rms_order(t_da *da, size_t start, size_t end) {
-	if (!da_is_valid(da) || end < start || da->nb_e < start) {
+	if (!da_is_valid(da) || end < start || da->nb_e <= start) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (false);
 	}
@@ -47,7 +47,7 @@ bool da_rms_order(t_da *da, size_t start, size_t end) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_RM, start, end - start, da->nb_e,
 	       da->nb_e - (end - start))
 	da->nb_e -= end - start;
-	return (false);
+	return (true);
 }
 
 /**
@@ -78,14 +78,13 @@ bool da_rm(t_da *da, size_t pos) {
  * \ingroup da
 **/
 bool da_rms(t_da *da, size_t start, size_t end) {
-	if (end < start || !da_is_valid(da) || da->nb_e < start) {
+	if (end < start || !da_is_valid(da) || da->nb_e <= start) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (false);
 	}
 	if (da->nb_e < end) end = da->nb_e;
 	if (da->nb_e != end) {
-		memcpy(da_at(da, start), da_at(da, da->nb_e - (end - start)),
-		       da->sz_e * (end - start));
+		memcpy(da_at(da, start), da_at(da, end), da->sz_e * (da->nb_e - end));
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_RM, start, end - start, da->nb_e,
 	       da->nb_e - (end - start))
