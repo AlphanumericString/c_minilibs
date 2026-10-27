@@ -56,17 +56,22 @@ bool da_nswap(t_da *da, size_t n, size_t pos_a, size_t pos_b) {
 	unsigned char *sa;
 	unsigned char *sb;
 
-	if (!da_is_valid(da) || da->nb_e < (pos_a + n) || da->nb_e < (pos_b + n)) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
-		return (false);
-	}
-	if (!n) {
-		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SWAP, n, pos_a, pos_b)
-		return (true);
+	if (pos_b < pos_a) {
+		pos_b ^= pos_a;
+		pos_a ^= pos_b;
+		pos_b ^= pos_a;
 	}
 	sa = (unsigned char *)da_at(da, pos_a);
 	sb = (unsigned char *)da_at(da, pos_b);
-	if (da->sz_e * n > C_MINI_DA__SZ_ELEM_DFLT) {
+	if (!sa || !sb || (pos_a != pos_b && pos_a + n > pos_b)) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
+		return (false);
+	}
+	if (!n || sa == sb) {
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SWAP, n, pos_a, pos_b)
+		return (true);
+	}
+	if ((da->sz_e * n) > C_MINI_DA__SZ_ELEM_DFLT) {
 		memnxor(sa, sb, da->sz_e * n);
 		memnxor(sb, sa, da->sz_e * n);
 		memnxor(sa, sb, da->sz_e * n);
