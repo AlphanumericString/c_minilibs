@@ -17,16 +17,32 @@ NO_COV void test_rb_push(void) {
 }
 
 NO_COV void test_rb_npush(void) {
-	t_rb rb     = {0};
-	int  arr[3] = {1, 2, 3};
+	t_rb rb          = {0};
+	int  arr[3]      = {1, 2, 3};
+	int  arr_large[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 
 	rb_create(&rb, sizeof(int), 4);
 
 	rb_npush(&rb, arr, 3);
 	assert(rb_size(rb) == 3);
+	// i_pos at 3 - cycle "moved" by 3
+	rb_npush(&rb, arr_large, sizeof(arr_large) / sizeof(arr_large[0]));
+	assert(*(int *)rb_at(rb, 0) == 10);
+	assert(*(int *)rb_at(rb, 1) == 11);
+	assert(*(int *)rb_at(rb, 2) == 12);
+	assert(*(int *)rb_at(rb, 3) == 9);
+
+	rb_clr(&rb);
+	// i_pos at 0 - cycle "fixed"
+	rb_npush(&rb, arr_large, sizeof(arr_large) / sizeof(arr_large[0]));
+	assert(rb_size(rb) == 4);
+	assert(*(int *)rb_at(rb, 0) == 9);
+	assert(*(int *)rb_at(rb, 1) == 10);
+	assert(*(int *)rb_at(rb, 2) == 11);
+	assert(*(int *)rb_at(rb, 3) == 12);
+
 	rb_npush(&rb, NULL, 12);
 	rb_npush(NULL, arr, 12);
-
 	rb_destroy(&rb);
 }
 

@@ -17,8 +17,9 @@ void rb_push(t_rb *rb, const void *data) {
 	// if ((rb->i_pos + 1) % rb->nb_max == rb->o_pos) {
 	// 	rb->o_pos = (rb->o_pos + 1) % rb->nb_max;
 	// }
+	CM_DBG("rb->i_pos: %zu -> %zu", rb->i_pos, (rb->i_pos + 1) % rb->nb_max)
 	rb->i_pos = (rb->i_pos + 1) % rb->nb_max;
-	rb->count++;
+	if (rb->count < rb->nb_max) rb->count++;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 }
 /**
@@ -29,14 +30,19 @@ void rb_push(t_rb *rb, const void *data) {
  * \ingroup rb
 **/
 void rb_npush(t_rb *rb, const void *data, size_t n) {
+	const unsigned char *sdata;
+
 	if (!rb || !data) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return;
 	}
-	if (n > rb_remaining_space(*rb))
-		n = rb_remaining_space(*rb); // BUG: shouldn't it be overriden?
+	sdata = data;
+	if (n > rb_capacity(*rb)) {
+		sdata += rb->sz_e * (n - rb_capacity(*rb));
+		n      = rb_capacity(*rb);
+	}
 	for (size_t i = 0; i < n; i++)
-		rb_push(rb, (const char *)data + (i * rb->sz_e));
+		rb_push(rb, sdata + (i * rb->sz_e));
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 }
 /**
