@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <limits.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -24,6 +25,14 @@ NO_COV void test_lruc_isexpired(void) {
 	assert(lruc_isexpired(&c, k1, strlen(k1)) == true);
 	lruc_setttl(&c, LONG_MAX);
 	assert(lruc_isexpired(&c, k1, strlen(k1)) == false);
+
+	clock_set_call_limit(0);
+	lruc_setttl(&c, 200);
+	assert(lruc_isexpired(&c, k1, strlen(k1)) == false);
+	lruc_setttl(&c, LONG_MAX);
+	assert(lruc_isexpired(&c, k1, strlen(k1)) == false);
+	clock_set_call_limit(CLOCK_DFT_LIMIT);
+
 	lruc_destroy(&c);
 	return;
 }
@@ -68,6 +77,13 @@ NO_COV void test_lruc_cleanup(void) {
 	assert(lruc_isexpired(&c, key2, strlen(key2)) == true);
 	assert(lruc_isexpired(&c, key3, strlen(key3)) == true);
 	assert(lruc_isexpired(&c, key4, strlen(key4)) == true);
+	clock_set_call_limit(0);
+	lruc_cleanup(&c);
+	assert(lruc_has(&c, key1, strlen(key1)) == true);
+	assert(lruc_has(&c, key2, strlen(key2)) == true);
+	assert(lruc_has(&c, key3, strlen(key3)) == true);
+	assert(lruc_has(&c, key4, strlen(key4)) == true);
+	clock_set_call_limit(CLOCK_DFT_LIMIT);
 	lruc_cleanup(&c);
 	assert(lruc_has(&c, key1, strlen(key1)) == false);
 	assert(lruc_has(&c, key2, strlen(key2)) == false);

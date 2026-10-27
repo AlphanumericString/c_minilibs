@@ -105,6 +105,10 @@ NO_COV void test_lruc_get(void) {
 	c = intact_copy;
 	assert(lruc_get(&c, k4, strlen(k4)) == v4);
 
+	clock_set_call_limit(0);
+	assert(lruc_get(&c, k4, strlen(k4)) == NULL);
+	clock_set_call_limit(CLOCK_DFT_LIMIT);
+
 	lruc_destroy(&c);
 	return;
 }

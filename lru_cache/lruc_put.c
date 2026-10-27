@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <limits.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -44,7 +45,12 @@ static t_lruc_keynode *reuse_node(t_lruc *c, size_t hash_pos) {
 	const uint64_t  now = lruci_timenow();
 	t_lruc_keynode *node;
 
-	if (now == (uint64_t)-1 || (c->minHeap[0]->time + c->ttl_glob) >= now) {
+	if (now == (uint64_t)-1 && c->ttl_glob != C_MINI__LRUC_TTL_DFLT) {
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK);
+		return (NULL);
+	}
+	if (c->ttl_glob == C_MINI__LRUC_TTL_DFLT ||
+	    (c->minHeap[0]->time + c->ttl_glob) >= now) {
 		node = c->LRU;
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_NODE_LRU)
 	} else {

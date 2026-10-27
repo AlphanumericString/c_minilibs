@@ -11,8 +11,9 @@
 #	define ALLOC_DFT_LIMIT SIZE_MAX
 #	define CLOCK_DFT_LIMIT SIZE_MAX
 
-extern void  *std_handle;
 extern size_t nb_alloc;
+extern size_t nb_clock;
+extern size_t clock_limit;
 extern size_t alloc_limit;
 
 NO_COV void *__wrap_calloc(size_t sz_e, size_t nb_e);
@@ -21,6 +22,8 @@ NO_COV void *__wrap_realloc(void *ptr, size_t new_size);
 NO_COV int   __wrap_clock_gettime(clockid_t __clock_id, struct timespec *__tp);
 NO_COV void  alloc_set_call_limit(size_t lim);
 NO_COV void  alloc_reset_counter(void);
+NO_COV void  clock_set_call_limit(size_t lim);
+NO_COV void  clock_reset_counter(void);
 
 #	ifdef C_MINI__TWRAP_IMPL
 
@@ -38,6 +41,12 @@ NO_COV int __wrap_clock_gettime(clockid_t id, struct timespec *tp) {
 	if (nb_clock >= clock_limit) return (-1);
 	nb_clock++;
 	return __real_clock_gettime(id, tp);
+}
+NO_COV void clock_set_call_limit(size_t lim) {
+	clock_limit = lim;
+}
+NO_COV void clock_reset_counter(void) {
+	nb_clock = 0;
 }
 
 NO_COV void *__wrap_calloc(size_t y, size_t z) {
