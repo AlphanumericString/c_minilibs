@@ -31,14 +31,14 @@ NO_COV void test_idl_for(void) {
 	assert(n2.value == (20 + to_add * 2));
 	assert(n3.value == (30 + to_add));
 	assert(ret == true);
-	ret = idl_for(head, 999, cb_idl_true, NULL);
+	ret = idl_for(head, 999, cb_true, NULL);
 	assert(ret == true);
-	ret = idl_for(head, -1, cb_idl_true, NULL);
+	ret = idl_for(head, -1, cb_true, NULL);
 	assert(ret == true);
-	ret = idl_for(head, 2, cb_idl_true, NULL);
+	ret = idl_for(head, 2, cb_true, NULL);
 	assert(ret == true);
 
-	ret = idl_for(head, 2, cb_idl_false, NULL);
+	ret = idl_for(head, 2, cb_false, NULL);
 	assert(ret == false);
 	ret = idl_for(head, 2, NULL, NULL);
 	assert(ret == false);

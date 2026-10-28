@@ -38,8 +38,7 @@ typedef struct s_test_dnode {
 	(n1)->next = (n2);                                                         \
 	(n2)->prev = (n1);
 
-#define ASSERT_ORDER_ILL(node1, node2)                                         \
-	assert((node1)->next == (node2))
+#define ASSERT_ORDER_ILL(node1, node2) assert((node1)->next == (node2))
 
 #define INIT_NODE(n, _val, _id)                                                \
 	ill_init(&((n).node), offsetof(t_test_node, node));                        \
@@ -52,24 +51,23 @@ typedef struct s_test_dnode {
 	INIT_NODE((n3), 44, 3);                                                    \
 	INIT_NODE((n4), 45, 4);
 
-#define LINK_UP_NODES(n1, n2)                                                  \
-	(n1)->next = (n2);
+#define LINK_UP_NODES(n1, n2) (n1)->next = (n2);
 
 // --- Callbacks ---
+// --general callbacks
+NO_COV bool  cb_true(void *elem, void *arg);
+NO_COV bool  cb_false(void *elem, void *arg);
+NO_COV void *cb_bad_duplicator(const void *elem);
+// --idl only callbacks
 NO_COV bool  cb_idl_add_val_as_int_ptr(void *elem, void *arg);
-NO_COV bool  cb_idl_true(void *elem, void *arg);
-NO_COV bool  cb_idl_false(void *elem, void *arg);
 NO_COV bool  cb_idl_false_on_arg(void *elem, void *arg);
 NO_COV bool  cb_idl_has_val_42(void *elem, void *arg);
 NO_COV bool  cb_idl_is_even(void *elem, void *arg);
 NO_COV int   cb_idl_cmp_val(const void *elem, const void *arg);
 NO_COV int   cb_idl_cmp_min_max(const void *elem1, const void *elem2);
-NO_COV void *cb_idl_bad_duplicator(const void *elem);
 NO_COV void *cb_idl_duplicate(const void *elem);
-
+// --ill only callbacks
 NO_COV bool  cb_ill_add_val_as_int_ptr(void *elem, void *arg);
-NO_COV bool  cb_ill_true(void *elem, void *arg);
-NO_COV bool  cb_ill_false(void *elem, void *arg);
 NO_COV bool  cb_ill_stop_at_30(void *elem, void *arg);
 NO_COV bool  cb_ill_has_val_42(void *elem, void *arg);
 NO_COV bool  cb_ill_is_even(void *elem, void *arg);

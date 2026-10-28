@@ -17,5 +17,9 @@ NO_COV void test_ill_pop_back(void) {
 	ill_push_back(&head, &n4.node);
 
 	assert(ill_pop_back(&head) == &n4.node);
+	assert(ill_pop_back(&head) == &n3.node);
+	assert(ill_pop_back(&head) == &n2.node);
+	assert(ill_pop_back(&head) == &n1.node);
+	assert(head == NULL);
 	assert(n3.node.next == NULL);
 }

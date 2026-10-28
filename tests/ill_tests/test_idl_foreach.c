@@ -21,10 +21,10 @@ NO_COV void test_idl_foreach(void) {
 	assert(n2.value == (20 + to_add));
 	assert(n3.value == (30 + to_add));
 	assert(ret == true);
-	ret = idl_foreach(head, cb_idl_true, NULL);
+	ret = idl_foreach(head, cb_true, NULL);
 	assert(ret == true);
 
-	ret = idl_foreach(head, cb_idl_false, NULL);
+	ret = idl_foreach(head, cb_false, NULL);
 	assert(ret == false);
 	ret = idl_foreach(head, cb_idl_false_on_arg, NULL);
 	assert(ret == false);

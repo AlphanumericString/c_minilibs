@@ -38,7 +38,7 @@ NO_COV void test_idl_copy(void) {
 	free(copy);
 	free(copy_next);
 
-	assert(idl_copy(&n1.dnode, cb_idl_bad_duplicator) == NULL);
+	assert(idl_copy(&n1.dnode, cb_bad_duplicator) == NULL);
 	assert(idl_copy(NULL, cb_idl_duplicate) == NULL);
 	assert(idl_copy(&n1.dnode, NULL) == NULL);
 }

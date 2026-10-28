@@ -4,29 +4,31 @@
 #include "ill_tests.h"
 
 NO_COV void test_ill_copy(void) {
-	t_test_node  node;
-	t_test_node  node2;
-	t_test_node *copy;
-	t_test_node *copy_next;
+	t_test_node  elem_1;
+	t_test_node  elem_2;
+	t_test_node *copy_1;
+	t_test_node *copy_2;
 
-	INIT_NODE(node, 42, 1);
-	INIT_NODE(node2, 84, 2);
-	node.node.next = &node2.node;
+	INIT_NODE(elem_1, 42, 1);
+	INIT_NODE(elem_2, 84, 2);
+	LINK_UP_NODES(&elem_1.node, &elem_2.node);
 
-	copy = ill_copy(&node.node, cb_ill_duplicate);
+	copy_1 = ill_copy(&elem_1.node, cb_ill_duplicate);
 
-	assert(copy != NULL);
-	assert(copy->id == 1);
-	assert(copy->value == 42);
-	assert(copy->node.next != NULL);
-	assert(ill_copy(&node.node, NULL) == NULL);
+	assert(copy_1 != NULL);
+	assert(copy_1->id == elem_1.id);
+	assert(copy_1->value == elem_1.value);
+	assert(copy_1->node.next != NULL);
+
+	copy_2 = (t_test_node *)ill_ntoe(copy_1->node.next);
+	assert(copy_2->id == elem_2.id);
+	assert(copy_2->value == elem_2.value);
+	assert(copy_2->node.next == NULL);
+
+	free(copy_2);
+	free(copy_1);
+
+	assert(ill_copy(&elem_1.node, NULL) == NULL);
 	assert(ill_copy(NULL, cb_ill_duplicate) == NULL);
-
-	copy_next = (t_test_node *)ill_ntoe(copy->node.next);
-	assert(copy_next->id == 2);
-	assert(copy_next->value == 84);
-	assert(copy_next->node.next == NULL);
-
-	free(copy_next);
-	free(copy);
+	assert(ill_copy(&elem_1.node, cb_bad_duplicator) == NULL);
 }

@@ -3,25 +3,19 @@
 #include "ill_tests.h"
 
 // general
-NO_COV bool cb_idl_true(void *elem, void *arg) {
+NO_COV bool cb_true(void *elem, void *arg) {
 	(void)elem;
 	(void)arg;
 	return true;
 }
-NO_COV bool cb_idl_false(void *elem, void *arg) {
+NO_COV bool cb_false(void *elem, void *arg) {
 	(void)elem;
 	(void)arg;
 	return false;
 }
-NO_COV bool cb_ill_true(void *elem, void *arg) {
+NO_COV void *cb_bad_duplicator(const void *elem) {
 	(void)elem;
-	(void)arg;
-	return true;
-}
-NO_COV bool cb_ill_false(void *elem, void *arg) {
-	(void)elem;
-	(void)arg;
-	return false;
+	return NULL;
 }
 
 // idl only
@@ -63,10 +57,6 @@ NO_COV int cb_idl_cmp_min_max(const void *elem1, const void *elem2) {
 	t_test_dnode *n2 = (t_test_dnode *)elem2;
 
 	return n1->value - n2->value;
-}
-NO_COV void *cb_idl_bad_duplicator(const void *elem) {
-	(void)elem;
-	return NULL;
 }
 NO_COV void *cb_idl_duplicate(const void *elem) {
 	t_test_dnode *src  = (t_test_dnode *)elem;

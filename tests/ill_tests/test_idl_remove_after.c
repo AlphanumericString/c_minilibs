@@ -3,20 +3,21 @@
 #include "ill_tests.h"
 
 NO_COV void test_idl_remove_after(void) {
-	t_test_dnode n2, n3;
-	t_idl       *head = NULL;
+	t_test_dnode n1, n2, n3, n4;
 	t_idl       *rm_after_res;
 
-	INIT_DNODE(n2, 42, 2);
-	INIT_DNODE(n3, 43, 3);
+	INIT_STD_DNODES(n1, n2, n3, n4);
+	LINK_UP_DNODES(&n3.dnode, &n4.dnode);
+	LINK_UP_DNODES(&n1.dnode, &n2.dnode);
 
-	idl_push_back(&head, &n2.dnode);
-	idl_push_back(&head, &n3.dnode);
-
-	rm_after_res = idl_remove_after(&n2.dnode);
-	assert(rm_after_res == &n3.dnode);
-	assert(n2.dnode.next == NULL);
-	assert(head == &n2.dnode);
-	assert(idl_remove_after(idl_get_tail(&n2.dnode)) == NULL);
+	rm_after_res = idl_remove_after(&n3.dnode);
+	assert(rm_after_res == &n4.dnode);
+	assert(n3.dnode.next == NULL);
+	assert(idl_remove_after(idl_get_tail(&n3.dnode)) == NULL);
 	assert(idl_remove_after(NULL) == NULL);
+
+	LINK_UP_DNODES(&n2.dnode, &n4.dnode) // [1-2-4];
+	assert(idl_remove_after(&n1.dnode) == &n2.dnode);
+	assert(n1.dnode.next == &n4.dnode && n4.dnode.prev == &n1.dnode);
+	assert(n1.dnode.prev == NULL && n4.dnode.next == NULL);
 }
