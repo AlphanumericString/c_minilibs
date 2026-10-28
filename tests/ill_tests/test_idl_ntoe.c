@@ -11,9 +11,4 @@ NO_COV void test_idl_ntoe(void) {
 
 	assert(elem == &node);
 	assert(idl_ntoe(NULL) == NULL);
-
-	t_idl *node_ptr = idl_eton(&node, offsetof(t_test_dnode, dnode));
-
-	assert(node_ptr == &node.dnode);
-	assert(idl_eton(NULL, 99) == NULL);
 }

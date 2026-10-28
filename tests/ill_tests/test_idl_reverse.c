@@ -6,9 +6,9 @@ NO_COV void test_idl_reverse(void) {
 	t_test_dnode n1, n2, n3;
 	t_idl       *head = NULL;
 
-	idl_init(&n1.dnode, offsetof(t_test_dnode, dnode));
-	idl_init(&n2.dnode, offsetof(t_test_dnode, dnode));
-	idl_init(&n3.dnode, offsetof(t_test_dnode, dnode));
+	INIT_DNODE(n1, 42, 1);
+	INIT_DNODE(n2, 43, 2);
+	INIT_DNODE(n3, 44, 3);
 
 	idl_push_back(&head, &n1.dnode);
 	idl_push_back(&head, &n2.dnode);
