@@ -26,7 +26,7 @@ t_hp *hp_create(size_t nb_elems, t_comparator cmp) {
  * \brief Init a heap
  * \param hp heap pointer
  * \param nb_elems max number of elements
- * \param cmp comparator function
+ * \param cmp comparator function (elem is always on the left, arg on the right)
  * \return t_heap* or NULL if failed
  * \ingroup hp
 **/

@@ -19,22 +19,25 @@ static void heap_up(t_hp *h, size_t idx, bool max) {
 		idx = parent;
 	}
 }
+// idx: index from witch to heap down
+// h: heap to heap down
+// max: is max heap
 static void heap_down(t_hp *h, size_t idx, bool max) {
 	int    cmp_res;
 	size_t l, r;
 	size_t target;
 
-	while (idx) {
+	while (1) {
 		l      = idx * 2 + 1;
 		r      = idx * 2 + 2;
 		target = idx;
 		if (l < h->nb) {
 			cmp_res = h->cmp(h->elems[l], h->elems[target]);
-			if ((max && cmp_res < 0) || (!max || cmp_res > 0)) target = l;
+			if ((max && cmp_res > 0) || (!max && cmp_res < 0)) target = l;
 		}
 		if (r < h->nb) {
 			cmp_res = h->cmp(h->elems[r], h->elems[target]);
-			if ((max && cmp_res < 0) || (!max || cmp_res > 0)) target = r;
+			if ((max && cmp_res > 0) || (!max && cmp_res < 0)) target = r;
 		}
 		if (target == idx) break;
 		heap_swap(h, idx, target);
@@ -132,7 +135,7 @@ void *hp_min_rm(t_hp *h, size_t n) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (NULL);
 	}
-	if (n > h->nb) n = h->nb;
+	if (n > h->nb) n = h->nb - 1;
 	if (!n) return (hp_min_pop(h));
 	heap_swap(h, 0, n);
 	heap_down(h, n, false);
