@@ -52,6 +52,7 @@ TFLAGS	:= $(CFLAGS)	-O0 -I./	\
 			-fno-inline -fno-inline-functions -DC_MINI__TESTS
 TLINKER_FLAGS = -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc \
 				-Wl,--wrap=clock_gettime
+REMOVE_MODULE ?= ""
 
 # FILES COLLECTOR
 D_FILES		:=
@@ -135,14 +136,15 @@ $(DOC_DIR)/html/index.html: Doxyfile
 # RULES
 #
 # DOCUMENTATION
-# all: compiles every module into it's own lib named lib<module_name>.a
-# tests: compiles every module's tests
+# all: compiles every module into it's own lib named lib<module_name>.a (debug via DEBUG_LVL=<value>)
+# tests: compiles every module's tests (debug via DEBUG_LVL=<value>)
 # tests_run: run every tests (using valgrind with cool args too)
-# coverage: run coverage pass using llvm tooling
+# coverage: run coverage pass using llvm tooling (debug via DEBUG_LVL=<value>)
 # documentation: run documentation generation using doxygen
 # fclean: rm output dirs and final targets created by makefile
 # clean: rm final targets create by makefile
 # re: re-compile the project using rule fclean and all
+# remove_module: removes a specified module from the project
 #
 all: $(LIB_FILES)
 tests: $(TST_FILES)
@@ -158,4 +160,13 @@ clean:
 	$(RM) $(LIB_FILES) $(TST_FILES) $(PRD_TARGET)
 re:fclean
 	@make --no-print-directory all
+remove_module:
+	@if [ -z "$(REMOVE_MODULE)" ] ; then \
+		$(PRINT) '$(RED)Invalid$(RESET). Please use `remove_module` rule with an argument on REMOVE_MODULE (eg: `make remove_module REMOVE_MODULE=<module_name>`)'; \
+	else \
+		$(RM) -r $(DOC_DIR) $(COV_DIR) $(BUILD_DIR) $(REMOVE_MODULE) tests/$(REMOVE_MODULE)_tests; \
+		NEW_MODULES=$$(grep '^MODULES\s*:=' Makefile | grep ':=.*' --only-matching | grep ' .*' --only-matching | sed "s/\<$(REMOVE_MODULE)\> *//") ; \
+		sed -i "s/\(MODULES\s*:=\).*/\1 $$NEW_MODULES/" Makefile ; \
+		$(PRINT) "removed $(REMOVE_MODULE)" ; \
+	fi
 .PHONY: re clean fclean tests tests_run
