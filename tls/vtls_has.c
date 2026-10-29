@@ -6,7 +6,7 @@
 /**
  * \brief checks whether there is a variable of name v_name in memory
  * \param v_name the name of the variable to search for
- * \return true if found, no otherwise
+ * \return true if found, false otherwise
  * \ingroup vtls
 **/
 bool vtls_has(const char *v_name) {

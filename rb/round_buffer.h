@@ -27,9 +27,10 @@
  * \brief t_rb represents a round buffer.
  * \param array the raw buffer pointer
  * \param nb_max number max of elements in the array
- * \param i_pos input position (import head)
- * \param o_pos output position (expert head)
  * \param sz_e size of elements in the array
+ * \param count number of elements currently in the buffer
+ * \param i_pos input position (input head)
+ * \param o_pos output position (output head)
  * \ingroup rb
 **/
 typedef struct s_roundbuffer_array {

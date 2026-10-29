@@ -1,13 +1,13 @@
 # MINILIBS
 
-This project is a collection of small libs for usefull data structures in c.
+This project is a collection of small libs for useful data structures in C.
 It currently contains :
-    - dynamic arrays : array that grow
-    - disjointed set union : set and conection matrice usefull for graph and nerd shit
-    - intrusive simply linked list : good old list with the head in the node, space efficient
+    - dynamic arrays : arrays that grow
+    - disjointed set union : sets and connection matrices, useful for graphs and other nerdy things
+    - intrusive singly linked list : good old list with the head in the node, space efficient
     - intrusive doubly linked lists : good old list with the head in the node, less space efficient but a good compromise between usability and memory usage.
-    - roud buffers : a way to handle buffers that loop over the buffers and re-write stuff at oldest position  when full. (Think of a buffer as a circle)
-    - sparse sets: constant ids, data at the index, great for caching, deletion is O(N) but in the worst case you can keep O(1) deletion with some extra logic but for now we don't care. (when load of assets are present and referenc each other but still need fat iteration with random deletions possibly happening in the middle of the data. Think of a vtable for ids, ids are mapped to slot who contain data. Good compromise between list and arrays.)
+    - round buffers : a way to handle buffers that loop over the buffer and overwrite the oldest position when full. (Think of a buffer as a circle)
+    - sparse sets: constant ids, data at the index, great for caching. Deletion is O(N), but in the worst case you can keep O(1) deletion with some extra logic; for now we don't care. (Useful when loads of assets are present and reference each other but still need fast iteration with random deletions possibly happening in the middle of the data. Think of a vtable for ids: ids are mapped to slots that contain data. Good compromise between lists and arrays.)
 
 # TODOs
 ## da

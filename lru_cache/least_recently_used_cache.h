@@ -38,7 +38,7 @@
 #endif // !C_MINI__TESTS
 
 // ---------------------------------------------------
-// NOTE: ALL TIME IS SET/CONTROLED IN MS (miliseconds)
+// NOTE: ALL TIME IS SET/CONTROLLED IN MS (milliseconds)
 // ---------------------------------------------------
 
 /**
@@ -48,7 +48,7 @@
 /**
  * \brief stats format for the cache stats
  * \param misses number of misses
- * \param hit number of hit (aka found)
+ * \param hit number of hits (aka found)
  * \param expired number of expired key/value pairs (aka misses due to time)
  * \ingroup lruc
 **/
@@ -85,8 +85,8 @@ typedef struct {
  * \param heap_index index of the node in the TTL ordered minHeap
  * \param lru_prev prev value in the recency queue of values (MRU to LRU)
  * \param lru_next next value in the recency queue of values (MRU to LRU)
- * \note in ifdef statement in order to not polute LSP but do not depend on this
- * interface. it MAY CHANGE AT ANY MOMEMENT WHITHOUT ANY NOTICE.
+ * \note in an ifdef statement in order to not pollute LSP but do not depend on
+ * this interface. it MAY CHANGE AT ANY MOMENT WITHOUT ANY NOTICE.
  * \ingroup lruc
 **/
 typedef struct s_keycache {
@@ -117,9 +117,9 @@ typedef struct {
 
 /**
  * \brief the lru-cache global structure
- * \param buckets_nb number of bucket (also used as max numbr of entries to
- * limit over-crowding in cache)
- * \param node_in_use number of entries currently present in the cache
+ * \param buckets_nb number of buckets (also used as the maximum number of
+ * entries to limit over-crowding in the cache)
+ * \param node_nb number of entries currently present in the cache
  * \param buckets array of nodes indexed via hash value, collision resolved at
  * node level
  * \param minHeap heap ordered nodes using the TTL (faster insert/remove)
@@ -154,11 +154,11 @@ typedef struct {
 #	define CMINI__T_KVCALLBACK_DEFINE
 
 /**
- * \brief callback function pointer, true operation successfull, elem is always
- * the node, arg is passed as is from up function
+ * \brief callback function pointer, true when the operation is successful, elem
+ * is always the node, arg is passed as is from up function
  * \param elem pointer to the key node element
  * \param arg argument passed "as is" from user, given from user
- * \return expected to return true on success false otherwise
+ * \return expected to return true on success, false otherwise
 **/
 typedef bool (*t_kvcallback)(t_keyvalue *elem, void *arg);
 

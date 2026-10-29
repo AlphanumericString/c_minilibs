@@ -79,7 +79,7 @@ t_rdsu_log *rdsu_save_state(const t_rdsu *rdsu) {
 /**
  * \brief this function allows one to rewind a rdsu to a previous state.
  * \param rdsu the rdsu to rewind
- * \return true if the opperation was successful otherwise false.
+ * \return true if the operation was successful otherwise false.
  * \ingroup rdsu
 **/
 bool rdsu_rewind(t_rdsu *rdsu) {
@@ -109,8 +109,8 @@ bool rdsu_rewind(t_rdsu *rdsu) {
  * \brief allow someone to rewind up to a specific state using a log pointer
  * \param rdsu the rdsu to rewind
  * \param lg the log pointer to rewind to
- * \return true if the opperation was successfull, false otherwise
- * \note as log is a linked list it's implicitely trusted that lg is part of the
+ * \return true if the operation was successful, false otherwise
+ * \note as log is a linked list it's implicitly trusted that lg is part of the
  * log, in case this is false it'll rewind up to null and return false.
  * \ingroup rdsu
 **/

@@ -31,7 +31,7 @@
  * \param array pointer holder for the memory
  * \param nb_e number of elements currently present in the array
  * \param cap_e number of elements the memory can hold
- * \param sz_e size of 1 elements (the generic part of the array)
+ * \param sz_e size of one element (the generic part of the array)
  * \ingroup da
 **/
 typedef struct s_dynamic_memory_array {

@@ -8,7 +8,7 @@ pthread_key_t ctls_key;
 #define COV_IGNORE __attribute__((no_profile_instrument_function))
 // note: coverage marks function as not running but mem-check tools clearly
 // states that if absent memory leaks occur on multi-threaded examples.
-// TLDR: ignore coverage repport, bug on cov repport toolchain
+// TLDR: ignore coverage report, bug on cov report toolchain
 static void COV_IGNORE __attribute__((destructor())) destroy_ctls(void) {
 	t_ctlsv *ctls = pthread_getspecific(ctls_key);
 

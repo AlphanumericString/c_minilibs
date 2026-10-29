@@ -52,11 +52,11 @@ typedef struct s_rdsu_log {
 
 /**
  * \typedef t_rdsu_log
- * \brief the structure of a log entry in the rdsu (rewindable distributed set
+ * \brief the structure of a log entry in the rdsu (rewindable disjointed set
  * union)
- * \param nxt pointer to next entry in the stack of log
+ * \param nxt pointer to next entry in the stack of logs
  * \param type the type of entry (enum abstracted as int to not clutter LSP)
- * \param elem the elem whoms't we changed the parent of
+ * \param elem the elem whose parent we changed
  * \param p the previous parent value
  * \param r the rank that was modified if there was a rank change
  * \ingroup rdsu
@@ -74,17 +74,18 @@ typedef struct s_rdsu_log {
 
 /**
  * \typedef t_rdsu
- * \brief rdsu struct represents a rewindable dsu(distributed set union)
+ * \brief rdsu struct represents a rewindable dsu (disjointed set union)
  * \param parent list of ids for the parent of nodes
- * \param rank   rank of node closer to 0 = closer to source
- * \param components number of differnt sets present in the RDSU
+ * \param rank   rank of a node, closer to 0 = closer to the source
+ * \param size number of nodes the dsu can hold
+ * \param components number of different sets present in the RDSU
  * \param rp_single_alloc boolean on whether the rank and parent were allocated
- * from a continuous single alloc
+ * from a single contiguous allocation
  * \param change_log the stack of entries/changes in the rdsu
  * \ingroup rdsu
- * \note rdsu are not "auto" compacted, futhermore compacting impacts logs and
- * invalidate said logs. This means that unles you're sure not needing to rewind
- * compacting is heavily dissencitivised.
+ * \note rdsu are not "auto" compacted, furthermore compacting impacts logs and
+ * invalidates said logs. This means that unless you're sure you don't need to
+ * rewind, compacting is heavily disincentivized.
 **/
 typedef struct s_rewindable_disjointed_set_union {
 	uint16_t *parent;

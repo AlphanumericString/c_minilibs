@@ -5,7 +5,7 @@
 /**
  * \brief builds a compact dsu from a rewindable dsu
  * \param src the rewindable dsu to copy infos from
- * \return a newly allocated cdsu or null if any error occured
+ * \return a newly allocated cdsu or null if any error occurred
  * \note fields: 'ranks, parents' must match types between cdsu and rdsu
  * \ingroup cdsu
 **/
@@ -28,7 +28,7 @@ t_cdsu *cdsu_new_from_rdsu(const t_rdsu *src) {
  * \brief init a given compact dsu from a rewindable dsu
  * \param to the compact dsu to init
  * \param src the rewindable dsu to get infos from
- * \return the address of the compact dsu or null if any error occured
+ * \return the address of the compact dsu or null if any error occurred
  * \note fields: 'ranks, parents' must match types between cdsu and rdsu
  * \ingroup cdsu
 **/
@@ -50,7 +50,7 @@ t_cdsu *cdsu_init_from_rdsu(t_cdsu *to, const t_rdsu *src) {
 /**
  * \brief turns a compact dsu to a rewindable dsu
  * \param src address of the compact dsu to transform (set to null on success)
- * \return a newly allocated rewindable dsu or null if any error occured
+ * \return a newly allocated rewindable dsu or null if any error occurred
  * \note fields: 'ranks, parents' must match types between cdsu and rdsu
  * \ingroup cdsu
 **/

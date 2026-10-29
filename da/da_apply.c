@@ -6,7 +6,7 @@
  * \param da pointer to the dynamic array
  * \param func function to apply
  * \param u_val user argument passed to the function
- * \return true if success, false if failure
+ * \return true on success, false on failure
  * \ingroup da
 **/
 void *da_apply_it(t_da *da, t_cm_callback_it func, void *u_val) {
@@ -22,7 +22,7 @@ void *da_apply_it(t_da *da, t_cm_callback_it func, void *u_val) {
 }
 /**
  * \brief apply a function (func) to a da with a user argument(u_val). stops if
- * function reache the end or the callback returns false.
+ * function reaches the end or the callback returns false.
  * \param da pointer to the dynamic array
  * \param u_val user argument passed to the function
  * \param cb function to apply

@@ -49,7 +49,7 @@ t_cont tpmi_job_pop(t_tpm *tpm) {
 	// node->next = NULL;
 	ret = *node;
 	if (node->job.infos.reccuring == true) {
-		CM_LOG(C_MINI__LEVEL_INFO, "recuring job, re-pushing:%p", node)
+		CM_LOG(C_MINI__LEVEL_INFO, "recurring job, re-pushing:%p", node)
 		tpmi_job_push(node, &tpm->q_start, &tpm->q_end,
 		              tpm->internal_val.queue_closed);
 	} else {

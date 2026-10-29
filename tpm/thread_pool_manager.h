@@ -51,8 +51,9 @@
 // #endif
 
 // -- heartbeat
-// HEARTBEAT_RYTHM -> wake every X secend even without jobs to send info to main
-// thread abt state HBM_Inactive -> maximal number of hearbeats without jobs
+// HEARTBEAT_RYTHM -> wake every X seconds even without jobs to send info to
+// main thread about state HBM_Inactive -> maximum number of heartbeats without
+// jobs
 //		before thread gets recalled
 #ifndef C_MINI__TPM_HEARTBEAT_RYTHM
 #	define C_MINI__TPM_HEARTBEAT_RYTHM 2
@@ -77,7 +78,7 @@ typedef struct s_tpm_base_job {
 
 // job container
 // -- > split for batching later ...
-//	-> batching size + other infos abt it stored here
+//	-> batching size + other infos about it stored here
 //	-> keeps job struct clean
 typedef struct s_tpm_job {
 	t_tpm_job         job;
@@ -89,7 +90,7 @@ typedef struct s_tpm_job {
 
 typedef struct s_thread_pool_manager t_tpm;
 
-// -- Thread locacl job caching
+// -- Thread local job caching
 #ifndef C_MINI__TPM_THRD_JOBS_CACHE
 #	define C_MINI__TPM_THRD_JOBS_CACHE 8
 #endif // !C_MINI__TPM_THRD_JOBS_CACHE
@@ -217,7 +218,7 @@ bool tpm_wait_end(t_tpm *tpm);
 
 #ifdef C_MINI__TPM_INTERNAL
 
-// worker spcific
+// worker specific
 void     *tpmi_worker(void *tpm);
 t_tpm_jc *tpmi_create_job(t_work w_func, void *a);
 

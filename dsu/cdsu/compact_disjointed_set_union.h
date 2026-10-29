@@ -22,12 +22,13 @@
 
 /**
  * \typedef t_cdsu
- * \brief cdsu struct represent a compact dsu (disjointed set union)
+ * \brief cdsu struct represents a compact dsu (disjointed set union)
  * \param parent list of ids for the parent of nodes
- * \param rank   rank of node closer to 0 = closer to source
- * \param components number of differnt sets present in the DSU
+ * \param rank   rank of a node, closer to 0 = closer to the source
+ * \param size number of nodes the dsu can hold
+ * \param components number of different sets present in the DSU
  * \param rp_single_alloc boolean on whether the rank and parent were allocated
- * from a continuous single alloc
+ * from a single contiguous allocation
  * \ingroup cdsu
 **/
 typedef struct s_compact_disjointed_set_union {

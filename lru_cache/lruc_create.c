@@ -80,7 +80,7 @@ void lruc_destroy(t_lruc *cache) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS)
 }
 /**
- * \brief Destroy internal and cache itself is freed
+ * \brief Destroy the internal state and free the cache itself
  * \param cache the cache to free.
  * \ingroup lruc
 **/

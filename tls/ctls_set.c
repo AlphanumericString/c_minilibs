@@ -9,7 +9,7 @@
  * \brief update value in a variable or create it with init_val
  * \param name the name of the variable to search for
  * \param init_val the value to set in type-safe wrapper
- * \return true if success, false otherwise
+ * \return true on success, false otherwise
  * \ingroup ctls
 **/
 bool ctls_set(const char *name, t_ctls_typewrap init_val) {

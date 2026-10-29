@@ -34,7 +34,7 @@
  * \param nb the number of elements currently present in the heap
  * \param capacity max number of elements in the heap
  * \param elems reference to the elements as void pointers
- * \param cmp comparator fuction
+ * \param cmp comparator function
  * \ingroup hp
 **/
 typedef struct s_heap {

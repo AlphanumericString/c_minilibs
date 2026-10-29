@@ -118,8 +118,9 @@ t_strong_ptr sptr_make_shared_from_owned(t_owned_ptr *own, t_cm_dtor d) {
 }
 /**
  * \brief makes a shared (strong) pointer from a uniq pointer
- * \param u the uniq pointer used a source
- * \param d the dtor used for innit (works as innit only if !dtor in uniq)
+ * \param u the uniq pointer used as a source
+ * \param d the dtor used for init (only applied if the uniq pointer has no
+ * dtor)
  * \return the shared (strong) pointer
  * \ingroup sptr
 **/
@@ -151,7 +152,7 @@ t_strong_ptr sptr_make_shared_from_uniq(t_uniq_ptr *u, t_cm_dtor d) {
 /**
  * \brief makes a weak copy of a shared (strong) pointer
  * \param s the strong pointer to copy
- * \return the pointer to the weak pointer or NULL on error
+ * \return the weak pointer on success, or a zeroed weak pointer on error
  * \ingroup sptr
 **/
 t_weak_ptr sptr_make_weak_from_strong(t_strong_ptr *s) {
@@ -166,7 +167,7 @@ t_weak_ptr sptr_make_weak_from_strong(t_strong_ptr *s) {
 /**
  * \brief makes a weak copy of a shared (weak) pointer
  * \param w the weak pointer to copy
- * \return the pointer to the weak pointer or NULL on error
+ * \return the weak pointer on success, or a zeroed weak pointer on error
  * \ingroup sptr
 **/
 t_weak_ptr sptr_make_weak_from_weak(t_weak_ptr *w) {

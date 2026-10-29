@@ -13,7 +13,7 @@
  * \param raw_ptr pointer to the object to wrap
  * \param d destructor to use when the object will be deallocated
  * \return owned pointer with owner set to true on success, or
- * zero-filed structure on failure
+ * zero-filled structure on failure
  * \ingroup sptr
 **/
 t_owned_ptr sptr_make_owned_from_raw(void *raw_ptr, t_cm_dtor d) {
@@ -39,7 +39,7 @@ t_owned_ptr sptr_make_owned_from_raw(void *raw_ptr, t_cm_dtor d) {
  * \param sp the strong pointer to convert
  * \param d destructor to use when the object will be deallocated
  * \return owned pointer with owner set to true on success, or
- * zero-filed structure on failure
+ * zero-filled structure on failure
  * \note requires strong count == 1; if weak count == 0 frees or clears
  * strong_ptr
  * \ingroup sptr
@@ -67,7 +67,7 @@ t_owned_ptr sptr_make_owned_from_strong(t_strong_ptr *sp, t_cm_dtor d) {
  * \param owned owned pointer to borrow from
  * \param d destructor to use when the object will be deallocated
  * \return borrowed owned pointer with owner set to false on success,
- * or zero-filed structure on failure
+ * or zero-filled structure on failure
  * \note increments weak count; the returned owned pointer has owner set to
  * false
  * \ingroup sptr
@@ -131,7 +131,7 @@ t_owned_ptr sptr_make_owned_from_uniq(t_uniq_ptr *uptr, t_cm_dtor d) {
 
 /**
  * \brief create a new uniq pointer from a raw pointer
- * \param ptr the source strong pointer (fail on null).
+ * \param ptr the source raw pointer (fails on null).
  * \param d the dtor to set.
  * \return the newly created uniq pointer or a zeroed out uniq pointer
  * \ingroup sptr

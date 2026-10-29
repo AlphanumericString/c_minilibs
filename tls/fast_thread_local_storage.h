@@ -17,10 +17,10 @@
 #endif
 
 /**
- * \brief the ftls is the fastest of the tls and provide typesafety but can ONLY
- * be set at compile time..
+ * \brief the ftls is the fastest of the tls and provides type safety but can
+ * ONLY be set at compile time.
  * \note please override with your own struct (or alternatively, name your own
- * struct s_tls_ftls_node
+ * struct s_tls_ftls_node).
 **/
 typedef C_MINI__FTLS_STRUCT t_ftls;
 
@@ -42,7 +42,7 @@ pthread_key_t ftls_key;
 #	define COV_IGNORE __attribute__((no_profile_instrument_function))
 // note: coverage marks function as not running but mem-check tools clearly
 // states that if absent memory leaks occur on multi-threaded examples.
-// TLDR: ignore coverage repport, bug on cov repport toolchain
+// TLDR: ignore coverage report, bug on cov report toolchain
 static void COV_IGNORE __attribute__((destructor())) ftls_dtor(void) {
 	void *p = pthread_getspecific(ftls_key);
 

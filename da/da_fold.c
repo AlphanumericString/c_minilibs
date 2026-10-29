@@ -66,7 +66,7 @@ void *da_reduce(t_da *da, t_cm_merger m) {
  * \param da pointer to the dynamic array
  * \param n number of elements to reduce
  * \param m merger function
- * \return the reduced valu or null if any errore
+ * \return the reduced value or null if any error
  * \ingroup da
 **/
 void *da_nreduce(t_da *da, size_t n, t_cm_merger m) {

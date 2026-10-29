@@ -55,7 +55,7 @@ enum e_ctls_type {
 };
 
 /**
- * \brief type-sfafe abstraction of base c types for ctls system.
+ * \brief type-safe abstraction of base c types for ctls system.
  * \param type enum of c types.
  * \param value union of different possible interpretation of data.
  * \ingroup ctls
@@ -74,10 +74,10 @@ typedef struct {
 /**
  * \brief the array of Thread Local Storage for C-type. Fast but limited to
  * c-types.
- * \param v_name array of name for the different entries.
+ * \param v_name array of names for the different entries.
  * \param vals array of values for the different entries.
  * \param len length of the array currently being used.
- * \note if you want to increase the CTLS_CAP it's STRONGLY reccomended to not
+ * \note if you want to increase the CTLS_CAP it's STRONGLY recommended to not
  * go over 256
  * \ingroup ctls
 **/

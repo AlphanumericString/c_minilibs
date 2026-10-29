@@ -2,8 +2,8 @@
 #include "smart_pointer.h"
 
 #ifdef C_MINI__SPTR_ATOMIC
-// `memory_order_relaxed` for increments
-// `memory_order_acq_rel` for decrements
+// `memory_order_acq_rel` for increments
+// `memory_order_relaxed` for decrements
 void sptri_rc_inc(t_fbox *b) {
 	atomic_fetch_add_explicit(&b->rc, 1, memory_order_acq_rel);
 }

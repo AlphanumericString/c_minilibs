@@ -19,7 +19,8 @@ t_idl *idl_get_tail(t_idl *node) {
 /**
  * \brief Retrieves the head (first node) of the list.
  * \param node A node of the list.
- * \return A pointer to the last node in the list, or NULL if the list is empty.
+ * \return A pointer to the first node in the list, or NULL if the list is
+ * empty.
  * \ingroup idl
 **/
 t_idl *idl_get_head(t_idl *node) {

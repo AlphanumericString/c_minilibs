@@ -27,8 +27,8 @@ bool sptr_is_uniqw(const t_weak_ptr *ptr) {
 }
 /**
  * \brief check if a owned pointer is unique (strong count == 1)
- * \param ptr uniq pointer to check
- * \return true if the uniq pointer is uniq, false otherwise
+ * \param ptr owned pointer to check
+ * \return true if the owned pointer is unique, false otherwise
  * \ingroup sptr
 **/
 bool sptr_is_uniqo(const t_owned_ptr *ptr) {
@@ -38,7 +38,7 @@ bool sptr_is_uniqo(const t_owned_ptr *ptr) {
 /**
  * \brief check if a uniq pointer is uniq (strong count == 1)
  * \param u uniq pointer to check
- * \return true
+ * \return true if the strong count is 1, false otherwise
  * \ingroup sptr
 **/
 bool sptr_is_uniqu(const t_uniq_ptr *u) {

@@ -6,7 +6,7 @@
  * \brief add an element, if needed grow the da
  * \param da pointer to the dynamic array
  * \param elem pointer to the element to add
- * \return true if success, false if failure
+ * \return true on success, false on failure
  * \ingroup da
 **/
 bool da_add(t_da *da, void *elem) {
@@ -27,7 +27,7 @@ bool da_add(t_da *da, void *elem) {
  * \param arr pointer to the array to concatenate
  * \param nb_e number of elements to add
  * \param sz_e size of the elements
- * \return true if success, false if failure
+ * \return true on success, false on failure
  * \ingroup da
 **/
 bool da_cat_array(t_da *da, void *arr, size_t nb_e, size_t sz_e) {

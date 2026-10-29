@@ -5,8 +5,9 @@
 
 /**
  * \brief try to get the local thread variable s.
- * \param s the variable to check
- * \return the adress of the variable in a typesafe wrapper. if !s return NULL
+ * \param s the name of the variable to get
+ * \return the address of the variable in a type-safe wrapper, or NULL if not
+ * found
  * \ingroup ctls
 **/
 t_ctls_typewrap *ctls_get(const char *s) {

@@ -6,7 +6,7 @@
  * \brief Create and init a heap
  * \param nb_elems max number of elements
  * \param cmp comparator function
- * \return t_heap* or NULL if failed
+ * \return t_hp* or NULL if failed
  * \ingroup hp
 **/
 t_hp *hp_create(size_t nb_elems, t_cm_comparator cmp) {
@@ -27,7 +27,7 @@ t_hp *hp_create(size_t nb_elems, t_cm_comparator cmp) {
  * \param hp heap pointer
  * \param nb_elems max number of elements
  * \param cmp comparator function (elem is always on the left, arg on the right)
- * \return t_heap* or NULL if failed
+ * \return t_hp* or NULL if failed
  * \ingroup hp
 **/
 t_hp *hp_init(t_hp *hp, size_t nb_elems, t_cm_comparator cmp) {

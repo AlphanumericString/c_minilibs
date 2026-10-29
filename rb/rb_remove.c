@@ -25,9 +25,10 @@ bool rb_drop(t_rb *rb, size_t n) {
 	return (true);
 }
 /**
- * \brief return position in array for next elem, if elem_out copies value to it
+ * \brief return pointer to the next element, if elem_out is given copy the
+ * value to it
  * \param rb the round buffer
- * \param elem_out pointer where the removed element will be copied (optional)
+ * \param elem_out pointer where the peeked element will be copied (optional)
  * \return pointer to the element in the buffer
  * \ingroup rb
 **/
@@ -47,8 +48,8 @@ void *rb_peek(t_rb rb, void *elem_out) {
 	return (pos);
 }
 /**
- * \brief return position in array for next elems, if elem_out copies values to
- * it
+ * \brief return pointer to the next n elements, if elem_out is given copy the
+ * values to it
  * \param rb the round buffer
  * \param n number of elements to peek
  * \param elem_out pointer where the elements will be copied (optional)

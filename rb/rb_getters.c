@@ -3,7 +3,7 @@
 /**
  * \brief true if rb is full, false otherwise
  * \param rb the round buffer
- * \return true if full, false otherwise (also fail if !array)
+ * \return true if full, false otherwise (also false if !array)
  * \ingroup rb
 **/
 bool rb_full(t_rb rb) {
@@ -45,7 +45,7 @@ size_t rb_capacity(t_rb rb) {
 	return (rb.nb_max);
 }
 /**
- * \brief return number of elements rb left as disponible to hold
+ * \brief return number of elements rb has left available to hold
  * \param rb the round buffer
  * \return number of free slots
  * \ingroup rb

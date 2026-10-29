@@ -3,7 +3,7 @@
 #include "round_buffer.h"
 
 /**
- * \brief add value to rb, if overwrite happens, silently resolve and contiues
+ * \brief add value to rb, if overwrite happens, silently resolves and continues
  * \param rb the round buffer
  * \param data the element to push
  * \ingroup rb
@@ -23,7 +23,8 @@ void rb_push(t_rb *rb, const void *data) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 }
 /**
- * \brief add values to rb, if overwrite happens, silently resolve and contiues
+ * \brief add values to rb, if overwrite happens, silently resolves and
+ * continues
  * \param rb the round buffer
  * \param data the elements to push
  * \param n number of elements to push

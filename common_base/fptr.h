@@ -9,11 +9,11 @@
 
 /**
  * \typedef t_cm_callback
- * \brief  callback function pointer, true operation successfull, elem is always
- * the node, arg is passed as is from up function
+ * \brief  callback function pointer, true when the operation is successful,
+ * elem is always the node, arg is passed as is from up function
  * \param  elem pointer to the element
  * \param  arg  argument passed as is from up function
- * \return expected to return true on success false otherwise
+ * \return expected to return true on success, false otherwise
 **/
 typedef bool (*t_cm_callback)(void *elem, void *arg);
 
@@ -24,13 +24,13 @@ typedef bool (*t_cm_callback)(void *elem, void *arg);
 
 /**
  * \typedef t_cm_callback_it
- * \brief  callback function pointer, true operation successfull, elem is always
- * the node, arg is passed as is from up function
+ * \brief  callback function pointer, true when the operation is successful,
+ * elem is always the node, arg is passed as is from up function
  * \param  elem pointer to the element
  * \param  arg  argument passed as is from up function
  * \param  pos  position of the elem in the sub array backing
  * \param  last boolean on whether or not this is the last element of the call
- * \return expected to return true on success false otherwise
+ * \return expected to return true on success, false otherwise
 **/
 typedef bool (*t_cm_callback_it)(void *elem, void *arg, size_t pos, bool last);
 

@@ -28,8 +28,9 @@ void *rb_at(t_rb rb, size_t idx) {
  * \param n maximum number of elements to copy
  * \param buff out buffer to copy elements to
  * \return pointer to the first element in the data array, or NULL on error
- * \warning rb_nat MAKES NO PROMISES that the returned adress is contigous on n.
- * \warning rb_nat assume that buff is always correctly sized.
+ * \warning rb_nat MAKES NO PROMISES that the returned address is contiguous on
+ * n.
+ * \warning rb_nat assumes that buff is always correctly sized.
  * \ingroup rb
 **/
 void *rb_nat(t_rb rb, size_t idx, size_t n, void *buff) {

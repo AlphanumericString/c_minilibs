@@ -19,15 +19,15 @@
 #include "common_base/fptr.h"
 
 /**
- * \defgroup idl Intrsive Doubly-linked Lists
+ * \defgroup idl Intrusive Doubly-linked Lists
 **/
 
 /**
  * \typedef t_idl
- * \brief t_idl struct represent intrusive doubly linked lists nodes
+ * \brief t_idl struct represents an intrusive doubly linked list node
  * \param offset offset of the node in the element
  * \param next pointer to the next node
- * \param prev pointer to the next node
+ * \param prev pointer to the previous node
  * \ingroup idl
 **/
 typedef struct s_idl {

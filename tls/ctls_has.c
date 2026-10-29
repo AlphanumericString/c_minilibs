@@ -2,9 +2,9 @@
 #include "common_thread_local_storage.h"
 
 /**
- * \brief check whether the local thread variable has s.
- * \param s the variable to check
- * \return true if exist no otherwise
+ * \brief check whether the local thread variable contains s.
+ * \param s the name of the variable to check
+ * \return true if it exists, false otherwise
  * \ingroup ctls
 **/
 bool ctls_has(const char *s) {

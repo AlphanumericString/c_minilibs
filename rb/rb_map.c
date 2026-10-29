@@ -7,7 +7,7 @@
  * \param rb the round buffer
  * \param n maximum number of elements to map
  * \param dup the duplicator function
- * \param out_buff array where the adress of the duplicated elements are copied
+ * \param out_buff array where the address of the duplicated elements are copied
  * \return true on success, false if an element couldn't be duplicated
  * \ingroup rb
 **/
@@ -50,7 +50,7 @@ bool rb_nmap(t_rb *rb, size_t n, t_cm_duplicator dup, void **out_buff) {
  * \brief apply duplicator to all elements and store in out_buff
  * \param rb the round buffer
  * \param dup the duplicator function
- * \param out_buff array where the adress of the duplicated elements are copied
+ * \param out_buff array where the address of the duplicated elements are copied
  * \return true on success, false if an element couldn't be duplicated
  * \ingroup rb
 **/

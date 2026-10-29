@@ -6,7 +6,7 @@
 /**
  * \brief return the value associated to v_name
  * \param v_name name of the variable to search for
- * \return the value associated to var
+ * \return the value associated to v_name
  * \ingroup vtls
 **/
 void *vtls_get(const char *v_name) {
@@ -20,8 +20,8 @@ void *vtls_get(const char *v_name) {
 }
 
 /**
- * \brief return the number of vtls key stored
- * \return 0 if no vtls, otherwise the number of key stored inside
+ * \brief return the number of vtls keys stored
+ * \return 0 if no vtls, otherwise the number of keys stored inside
  * \ingroup vtls
 **/
 size_t vtls_len(void) {

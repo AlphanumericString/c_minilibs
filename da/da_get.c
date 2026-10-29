@@ -4,11 +4,11 @@
 
 /**
  * \brief get element at offset pos respecting the size of elements and copies
- * it at elem
+ * it at out_elem
  * \param da pointer to the dynamic array
  * \param pos index of the element
  * \param out_elem pointer where the element will be copied
- * \return true on success, false on failure
+ * \return 1 on success, -1 on failure
  * \ingroup da
 **/
 int da_get(const t_da *da, size_t pos, void *out_elem) {
@@ -20,13 +20,13 @@ int da_get(const t_da *da, size_t pos, void *out_elem) {
 	return (memcpy(out_elem, da_at(da, pos), da->sz_e), 1);
 }
 /**
- * \brief get element at offset pos respecting the size of elements and copies
- * it at elem
+ * \brief get up to n elements starting at offset pos respecting the size of
+ * elements and copies them at out_buffer
  * \param da pointer to the dynamic array
- * \param n number of copied elements
- * \param pos index of the element
- * \param out_buffer pointer where the element will be copied
- * \return true on success, false on failure
+ * \param n number of elements to copy
+ * \param pos index of the first element
+ * \param out_buffer pointer where the elements will be copied
+ * \return the number of elements copied, or -1 on failure
  * \ingroup da
 **/
 int da_nget(const t_da *da, size_t n, size_t pos, void *out_buffer) {
@@ -43,7 +43,7 @@ int da_nget(const t_da *da, size_t n, size_t pos, void *out_buffer) {
 /**
  * \brief get the raw inner array of the da
  * \param da pointer to the dynamic array
- * \return pointer to the raw inner array or null on faillure
+ * \return pointer to the raw inner array or null on failure
  * \ingroup da
 **/
 void *da_array(const t_da *da) {

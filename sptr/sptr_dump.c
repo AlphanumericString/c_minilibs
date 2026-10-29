@@ -102,7 +102,7 @@ char *sptr_to_stringu(const t_uniq_ptr *sptr) {
  * \param fd file descriptor to output to
  * \param sptr shared (strong) pointer to dump
  * \return true on success, false otherwise
- * \note prints infos using sptr_to_string format
+ * \note prints information using the sptr_to_string format
  * \ingroup sptr
 **/
 bool sptr_dumps(int fd, const t_strong_ptr *sptr) {
@@ -127,7 +127,7 @@ bool sptr_dumps(int fd, const t_strong_ptr *sptr) {
  * \param fd file descriptor to output to
  * \param wptr shared (weak) pointer to dump
  * \return true on success, false otherwise
- * \note prints infos using sptr_to_string format
+ * \note prints information using the sptr_to_string format
  * \ingroup sptr
 **/
 bool sptr_dumpw(int fd, const t_weak_ptr *wptr) {
@@ -151,7 +151,7 @@ bool sptr_dumpw(int fd, const t_weak_ptr *wptr) {
  * \param fd file descriptor to output to
  * \param optr owned pointer to dump
  * \return true on success, false otherwise
- * \note prints infos using sptr_to_string format
+ * \note prints information using the sptr_to_string format
  * \ingroup sptr
 **/
 bool sptr_dumpo(int fd, const t_owned_ptr *optr) {
@@ -175,7 +175,7 @@ bool sptr_dumpo(int fd, const t_owned_ptr *optr) {
  * \param fd file descriptor to output to
  * \param uptr uniq pointer to dump
  * \return true on success, false otherwise
- * \note prints infos using sptr_to_string format
+ * \note prints information using the sptr_to_string format
  * \ingroup sptr
 **/
 bool sptr_dumpu(int fd, const t_uniq_ptr *uptr) {

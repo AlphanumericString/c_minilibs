@@ -122,7 +122,7 @@ t_strong_ptr sptr_make_shared_from_uniq(t_uniq_ptr *uniq_ptr, t_cm_dtor d);
  * \param pointer pointer to wrap (raw, weak, strong, owned, uniq)
  * \param dtor destructor callback to call when freeing pointer
  * \return created or updated smart pointer, or NULL on failure
- * \note for specific infos check doc for sptr_make_shared_from_<type>
+ * \note for specifics, check the doc for sptr_make_shared_from_<type>
  * \ingroup sptr
 **/
 #define sptr_make_shared(pointer, dtor)                                        \
@@ -140,7 +140,7 @@ t_weak_ptr sptr_make_weak_from_strong(t_strong_ptr *s);
  * \brief _generic macro to re-direct to sptr_make_weak_from_*
  * \param pointer pointer to make a weak shared pointer from any shared pointer
  * \return weak pointer struct
- * \note for specific infos check doc for sptr_make_weak_from_<weak|strong>
+ * \note for specifics, check the doc for sptr_make_weak_from_<weak|strong>
  * \ingroup sptr
 **/
 #define sptr_make_weak(pointer)                                                \
@@ -158,7 +158,7 @@ t_owned_ptr sptr_make_owned_from_uniq(t_uniq_ptr *uniq_ptr, t_cm_dtor d);
  * \param pointer pointer to wrap (raw pointer, strong ptr, or owned ptr)
  * \param dtor destructor callback to call when freeing pointer
  * \return owned pointer struct (t_owned_ptr)
- * \note for specific infos check doc for sptr_make_owned_from_<type>
+ * \note for specifics, check the doc for sptr_make_owned_from_<type>
  * \ingroup sptr
 **/
 #define sptr_make_owned(pointer, dtor)                                         \
@@ -179,7 +179,7 @@ t_uniq_ptr sptr_make_uniq_from_uniq(t_uniq_ptr *uptr, t_cm_dtor d);
  * \param pointer pointer to wrap (raw pointer, strong ptr, or uniq ptr)
  * \param dtor destructor callback to call when freeing pointer
  * \return unique pointer struct (t_owned_ptr)
- * \note for specific infos check doc for sptr_make_uniq_from_<type>
+ * \note for specifics, check the doc for sptr_make_uniq_from_<type>
  * \ingroup sptr
 **/
 #define sptr_make_uniq(pointer, dtor)                                          \
@@ -199,7 +199,7 @@ bool sptr_is_uniqu(const t_uniq_ptr *u);
  * \brief _generic macro to re-direct to sptr_is_uniq*
  * \param pointer smart pointer to check (weak, strong, owned, uniq)
  * \return true if the smart pointer has a strong count of 1, false otherwise
- * \note for specific infos check doc for sptr_is_uniq<type's letter>
+ * \note for specifics, check the doc for sptr_is_uniq<type's letter>
  * \ingroup sptr
 **/
 #define sptr_is_uniq(pointer)                                                  \
@@ -221,9 +221,9 @@ bool sptr_is_sharedu(const t_uniq_ptr *u);
  * \def sptr_is_shared(pointer)
  * \brief _generic macro to re-direct to sptr_is_shared*
  * \param pointer smart pointer to check (weak, strong, owned, uniq)
- * \return true if the smart pointer has a strong count greater than 1, false
- * otherwise
- * \note for specific infos check doc for sptr_is_shared<type's letter>
+ * \return true if the smart pointer has a strong count greater than or equal to
+ * 1, false otherwise
+ * \note for specifics, check the doc for sptr_is_shared<type's letter>
  * \ingroup sptr
 **/
 #define sptr_is_shared(pointer)                                                \
@@ -247,7 +247,7 @@ bool sptr_deleteu(t_uniq_ptr *u);
  * \param pointer smart pointer to decrement or delete (weak, strong, owned,
  * uniq)
  * \return true if successfully decremented or deleted, false otherwise
- * \note for specific infos check doc for sptr_delete<type's letter>
+ * \note for specifics, check the doc for sptr_delete<type's letter>
  * \ingroup sptr
 **/
 #define sptr_delete(pointer)                                                   \
@@ -272,7 +272,7 @@ void       *sptr_getu(t_uniq_ptr *u);
  * \brief _generic macro to re-direct to sptr_get*
  * \param pointer smart pointer (const or non-const)
  * \return pointer to the underlying data, or NULL if invalid or destroyed
- * \note for specific infos check doc for sptr_get<type's letter>[C (const)]
+ * \note for specifics, check the doc for sptr_get<type's letter>[C (const)]
  * \ingroup sptr
 **/
 #define sptr_get(pointer)                                                      \
@@ -295,7 +295,7 @@ size_t sptr_get_strongcount_u(const t_uniq_ptr *uptr);
  * \brief _generic macro to re-direct to sptr_get_strongcount_*
  * \param pointer smart pointer (weak, strong, owned, uniq)
  * \return strong reference count (or 0 on error)
- * \note for specific infos check doc for sptr_strongcount_<type's letter>
+ * \note for specifics, check the doc for sptr_get_strongcount_<type's letter>
  * \ingroup sptr
 **/
 #define sptr_get_rc(pointer)                                                   \
@@ -318,7 +318,7 @@ size_t sptr_get_weakcount_u(const t_uniq_ptr *uptr);
  * \brief _generic macro to re-direct to sptr_get_weakcount_*
  * \param pointer smart pointer (weak, strong, owned, uniq)
  * \return weak reference count (or 0 on error)
- * \note for specific infos check doc for sptr_weakcount_<type's letter>
+ * \note for specifics, check the doc for sptr_get_weakcount_<type's letter>
  * \ingroup sptr
 **/
 #define sptr_get_wc(pointer)                                                   \
@@ -341,7 +341,7 @@ t_cm_dtor sptr_get_dtoru(const t_uniq_ptr *ptr);
  * \brief _generic macro to re-direct to sptr_get_dtor*
  * \param pointer smart pointer (weak, strong, owned, uniq)
  * \return destructor function pointer, or NULL on error
- * \note for specific infos check doc for sptr_get_dtor<type's letter>
+ * \note for specifics, check the doc for sptr_get_dtor<type's letter>
  * \ingroup sptr
 **/
 #define sptr_get_dtor(pointer)                                                 \
@@ -365,7 +365,7 @@ bool sptr_set_dtoru(t_uniq_ptr *ptr, t_cm_dtor dtor);
  * \param pointer smart pointer (weak, strong, owned, uniq)
  * \param dtor function pointer to call when freeing data inside the sptr
  * \return true on success, false otherwise
- * \note for specific infos check doc for sptr_set_dtor<type's letter>
+ * \note for specifics, check the doc for sptr_set_dtor<type's letter>
  * \ingroup sptr
 **/
 #define sptr_set_dtor(pointer, dtor)                                           \
@@ -384,7 +384,7 @@ t_uniq_ptr    sptr_copyu(t_uniq_ptr *ptr);
  * \brief _generic macro to re-direct to sptr_copy*
  * \param pointer smart pointer to copy
  * \return copied smart pointer (or empty t_owned_ptr on error)
- * \note for specific infos check doc for sptr_copy<type's letter>
+ * \note for specifics, check the doc for sptr_copy<type's letter>
  * \ingroup sptr
 **/
 #define sptr_copy(pointer)                                                     \
@@ -404,7 +404,7 @@ bool sptr_dumpu(int fd, const t_uniq_ptr *ptr);
  * \param fd file descriptor to output the dump to
  * \param pointer smart pointer to dump (weak, strong, owned, uniq)
  * \return true on success, false otherwise.
- * \note for specific infos check doc for sptr_dump<type's letter>
+ * \note for specifics, check the doc for sptr_dump<type's letter>
  * \ingroup sptr
 **/
 #define sptr_dump(fd, pointer)                                                 \
@@ -424,8 +424,8 @@ char *sptr_to_stringo(const t_owned_ptr *sptr);
 char *sptr_to_stringu(const t_uniq_ptr *sptr);
 /**
  * \brief turns a smart pointer to a string
- * \param pointer to turn to string
- * \note for specific infos check doc for sptr_to_string<type's letter>
+ * \param pointer the smart pointer to turn to a string
+ * \note for specifics, check the doc for sptr_to_string<type's letter>
  * \warning THE CALLER MUST FREE THE RETURNED STRING!
  * \ingroup sptr
 **/
@@ -456,12 +456,12 @@ bool sptri_is_sole_box_ownw(const t_weak_ptr *ptr);
 bool sptri_is_sole_box_owno(const t_owned_ptr *ptr);
 bool sptri_is_sole_box_ownu(const t_uniq_ptr *u);
 /**
- * \def sptri_is_sole_bow_owner(pointer)
- * \brief _generic macro to re-direct to sptr_is_own*
+ * \def sptr_is_sole_box_owner(pointer)
+ * \brief _generic macro to re-direct to sptr_is_sole_box_own*
  * \param pointer smart pointer to check (weak, strong, owned, uniq)
  * \return true if the pointer is considered an owner of the data, false
  * otherwise
- * \note for specific infos check doc for sptr_is_sole_box_own<type's letter>
+ * \note for specifics, check the doc for sptr_is_sole_box_own<type's letter>
  * \ingroup sptr
 **/
 #	define sptr_is_sole_box_owner(pointer)                                    \
@@ -554,6 +554,6 @@ size_t sptri_wc_get(t_fbox *b);
  * out of scope
  * \ingroup sptr
 **/
-#define auto_uniq   __attribute__((cleanup(sptr_deleteu))) t_unique_ptr
+#define auto_uniq   __attribute__((cleanup(sptr_deleteu))) t_uniq_ptr
 
 #endif //! C_MINI__SPTR
