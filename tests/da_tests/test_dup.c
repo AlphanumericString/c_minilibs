@@ -131,7 +131,7 @@ NO_COV void test_da_ndup_to(void) {
 	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 
 	assert(da_ndup_to(NULL, 2, &da) == NULL);
-	assert(da_ndup_to(&dst, 2, NULL) == &dst);
+	assert(da_ndup_to(&dst, 2, NULL) == NULL);
 	assert(da_ndup_to(&dst, 0, &da) == &dst);
 
 	da_destroy(&small2);

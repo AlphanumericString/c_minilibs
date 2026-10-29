@@ -11,13 +11,13 @@
  * \return true on success, false on failure
  * \ingroup da
 **/
-bool da_get(const t_da *da, size_t pos, void *out_elem) {
+int da_get(const t_da *da, size_t pos, void *out_elem) {
 	if (!da_is_valid(da) || pos >= da->nb_e || !out_elem) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
-		return (false);
+		return (-1);
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
-	return (memcpy(out_elem, da_at(da, pos), da->sz_e), true);
+	return (memcpy(out_elem, da_at(da, pos), da->sz_e), 1);
 }
 /**
  * \brief get element at offset pos respecting the size of elements and copies
@@ -29,18 +29,15 @@ bool da_get(const t_da *da, size_t pos, void *out_elem) {
  * \return true on success, false on failure
  * \ingroup da
 **/
-bool da_nget(const t_da *da, size_t n, size_t pos, void *out_buffer) {
+int da_nget(const t_da *da, size_t n, size_t pos, void *out_buffer) {
 	if (!da_is_valid(da) || pos >= da->nb_e || !out_buffer) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
-		return (false);
+		return (-1);
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
-	if (!n) return (true);
-	if (pos + n > da->nb_e) {
-		CM_DBG("n updated: n (%zu -> %zu)", n, (size_t)(da->nb_e - pos))
-		n = da->nb_e - pos;
-	}
-	return (memcpy(out_buffer, da_at(da, pos), da->sz_e * n), true);
+	if (!n) return (0);
+	if (pos + n > da->nb_e) n = da->nb_e - pos;
+	return (memcpy(out_buffer, da_at(da, pos), da->sz_e * n), n);
 }
 
 /**

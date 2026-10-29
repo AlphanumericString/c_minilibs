@@ -25,19 +25,19 @@ NO_COV void test_da_get(void) {
 	};
 	int out;
 
-	assert(da_get(&da, 0, &out) == true);
+	assert(da_get(&da, 0, &out) == 1);
 	assert(out == 1);
-	assert(da_get(&da, 1, &out) == true);
+	assert(da_get(&da, 1, &out) == 1);
 	assert(out == 2);
-	assert(da_get(&da, 2, &out) == true);
+	assert(da_get(&da, 2, &out) == 1);
 	assert(out == 3);
 
 	out = 44444444;
-	assert(da_get(&da, 99, &out) == false);
+	assert(da_get(&da, 99, &out) == -1);
 	assert(out == 44444444);
-	assert(da_get(&da, 99, NULL) == false);
-	assert(da_get(&da, 1, NULL) == false);
-	assert(da_get(NULL, 1, &out) == false);
+	assert(da_get(&da, 99, NULL) == -1);
+	assert(da_get(&da, 1, NULL) == -1);
+	assert(da_get(NULL, 1, &out) == -1);
 }
 NO_COV void test_da_nget(void) {
 	const t_da da = {
@@ -49,17 +49,20 @@ NO_COV void test_da_nget(void) {
 	int buff[3];
 	int out;
 
-	da_nget(&da, 1, 0, &out);
+	assert(da_nget(&da, 1, 0, &out) == 1);
 	assert(out == 1);
-	da_nget(&da, 2, 0, &buff);
+	assert(da_nget(&da, 2, 0, &buff) == 2);
 	assert(buff[0] == 1);
 	assert(buff[1] == 2);
-	da_nget(&da, -1, 0, &buff);
-	da_nget(NULL, -1, 0, &buff);
-	da_nget(NULL, -1, 0, NULL);
-	da_nget(&da, -1, 0, NULL);
-	da_nget(&da, 1, 99, &buff);
-	da_nget(&da, 0, 1, &buff);
+	assert(da_nget(&da, -1, 0, &buff) == 3);
+	assert(buff[0] == 1);
+	assert(buff[1] == 2);
+	assert(buff[2] == 3);
+	assert(da_nget(&da, 0, 1, &buff) == 0);
+	assert(da_nget(NULL, -1, 0, &buff) == -1);
+	assert(da_nget(NULL, -1, 0, NULL) == -1);
+	assert(da_nget(&da, -1, 0, NULL) == -1);
+	assert(da_nget(&da, 1, 99, &buff) == -1);
 }
 NO_COV void test_da_array(void) {
 	const t_da da = {

@@ -66,8 +66,8 @@ bool da_shrink(t_da *da);
 bool da_shrink_min(t_da *da, size_t keep_n);
 
 void *da_at(const t_da *da, size_t pos);
-bool  da_get(const t_da *da, size_t pos, void *elem);
-bool  da_nget(const t_da *da, size_t n, size_t pos, void *out_buffer);
+int   da_get(const t_da *da, size_t pos, void *elem);
+int   da_nget(const t_da *da, size_t n, size_t pos, void *out_buffer);
 void *da_array(const t_da *da);
 
 bool da_set(t_da *da, size_t pos, void *elem);

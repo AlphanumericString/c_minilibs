@@ -36,7 +36,7 @@ t_da da_ndup(const t_da *src, size_t n) {
 
 	if (!da_is_valid(src) || !n) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
-		return (ret);
+		return ((t_da){0});
 	}
 	if (n > src->nb_e) n = src->nb_e;
 	if (!da_ninit(&ret, n, src->sz_e)) return (ret);
@@ -57,7 +57,7 @@ t_da *da_dup_to(t_da *dst, const t_da *src) {
 
 	if (!dst || !da_is_valid(src)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
-		return (dst);
+		return (NULL);
 	}
 	ret = da_ndup_to(dst, -1, src);
 	if (!ret) {
@@ -80,7 +80,7 @@ t_da *da_ndup_to(t_da *dst, size_t n, const t_da *src) {
 
 	if (!da_is_valid(src) || !da_is_valid(dst)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
-		return (dst);
+		return (NULL);
 	}
 	if (!n) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
