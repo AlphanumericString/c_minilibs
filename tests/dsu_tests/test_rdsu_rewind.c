@@ -59,21 +59,21 @@ NO_COV void test_rdsu_rewind(void) {
 	assert(rdsu_find(&rdsu, 0) != rdsu_find(&rdsu, 3));
 	assert(rdsu_find(&rdsu, 0) != rdsu_find(&rdsu, 4));
 	assert(rdsu_find(&rdsu, 3) != rdsu_find(&rdsu, 4));
-	assert(rdsu_nb_components(rdsu) == 3);
+	assert(rdsu_nb_components(&rdsu) == 3);
 	rdsu_union(&rdsu, 3, 4);
 	assert(rdsu_find(&rdsu, 0) == rdsu_find(&rdsu, 2)); // state2
 	assert(rdsu_find(&rdsu, 1) == rdsu_find(&rdsu, 2));
 	assert(rdsu_find(&rdsu, 0) != rdsu_find(&rdsu, 3));
 	assert(rdsu_find(&rdsu, 0) != rdsu_find(&rdsu, 4));
 	assert(rdsu_find(&rdsu, 3) == rdsu_find(&rdsu, 4));
-	assert(rdsu_nb_components(rdsu) == 2);
+	assert(rdsu_nb_components(&rdsu) == 2);
 	rdsu_rewind(&rdsu);
 	assert(rdsu_find(&rdsu, 0) == rdsu_find(&rdsu, 2)); // state1
 	assert(rdsu_find(&rdsu, 1) == rdsu_find(&rdsu, 2));
 	assert(rdsu_find(&rdsu, 0) != rdsu_find(&rdsu, 3));
 	assert(rdsu_find(&rdsu, 0) != rdsu_find(&rdsu, 4));
 	assert(rdsu_find(&rdsu, 3) != rdsu_find(&rdsu, 4));
-	assert(rdsu_nb_components(rdsu) == 3);
+	assert(rdsu_nb_components(&rdsu) == 3);
 	intact_copy = rdsu;
 
 	rdsu.parent = NULL;
@@ -127,21 +127,21 @@ NO_COV void test_rdsu_rewind_to_state(void) {
 	assert(rdsu_find(&rdsu, 1) == rdsu_find(&rdsu, 2));
 	assert(rdsu_find(&rdsu, 3) == 3);
 	assert(rdsu_find(&rdsu, 4) == 4);
-	assert(rdsu_nb_components(rdsu) == 4);
+	assert(rdsu_nb_components(&rdsu) == 4);
 	rdsu_union(&rdsu, 0, 2); // 0-1-2 3 4
 	rdsu_union(&rdsu, 3, 4); // 0-1-2 3-4
 	assert(rdsu_find(&rdsu, 0) == rdsu_find(&rdsu, 1));
 	assert(rdsu_find(&rdsu, 0) == rdsu_find(&rdsu, 2));
 	assert(rdsu_find(&rdsu, 3) == rdsu_find(&rdsu, 4));
 	assert(rdsu_find(&rdsu, 0) != rdsu_find(&rdsu, 3));
-	assert(rdsu_nb_components(rdsu) == 2);
+	assert(rdsu_nb_components(&rdsu) == 2);
 	assert(rdsu_rewind_to_state(&rdsu, log) == true);
 	assert(log != NULL); // assert state 1
 	assert(rdsu_find(&rdsu, 0) == 0);
 	assert(rdsu_find(&rdsu, 1) == rdsu_find(&rdsu, 2));
 	assert(rdsu_find(&rdsu, 3) == 3);
 	assert(rdsu_find(&rdsu, 4) == 4);
-	assert(rdsu_nb_components(rdsu) == 4);
+	assert(rdsu_nb_components(&rdsu) == 4);
 
 	malicious_log = (t_rdsu_log){
 	    .elem = 0,

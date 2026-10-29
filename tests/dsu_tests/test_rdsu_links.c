@@ -6,7 +6,7 @@ NO_COV void test_rdsu_union(void) {
 	t_rdsu *rdsu = rdsu_new(5);
 	t_rdsu  no_rank, no_parent, no_size;
 
-	assert(rdsu_nb_components(*rdsu) == 5); // start state
+	assert(rdsu_nb_components(rdsu) == 5); // start state
 	assert(rdsu->rank[0] == 0 && rdsu->parent[0] == 0);
 	assert(rdsu->rank[1] == 0 && rdsu->parent[1] == 1);
 	assert(rdsu->rank[2] == 0 && rdsu->parent[2] == 2);
@@ -14,7 +14,7 @@ NO_COV void test_rdsu_union(void) {
 	assert(rdsu->rank[4] == 0 && rdsu->parent[4] == 4);
 	assert(rdsu_union(rdsu, 0, 1) == true); // simple union
 	assert(rdsu_find(rdsu, 0) == rdsu_find(rdsu, 1));
-	assert(rdsu_nb_components(*rdsu) == 4);
+	assert(rdsu_nb_components(rdsu) == 4);
 	assert(rdsu->rank[0] == 1 && rdsu->parent[0] == 0);
 	assert(rdsu->rank[1] == 0 && rdsu->parent[1] == 0);
 	assert(rdsu->rank[2] == 0 && rdsu->parent[2] == 2);
@@ -22,7 +22,7 @@ NO_COV void test_rdsu_union(void) {
 	assert(rdsu->rank[4] == 0 && rdsu->parent[4] == 4);
 	assert(rdsu_union(rdsu, 3, 2) == true); // reversed order, take lower
 	assert(rdsu_find(rdsu, 2) == rdsu_find(rdsu, 3));
-	assert(rdsu_nb_components(*rdsu) == 3);
+	assert(rdsu_nb_components(rdsu) == 3);
 	assert(rdsu->rank[0] == 1 && rdsu->parent[0] == 0);
 	assert(rdsu->rank[1] == 0 && rdsu->parent[1] == 0);
 	assert(rdsu->rank[2] == 1 && rdsu->parent[2] == 2);
@@ -37,14 +37,14 @@ NO_COV void test_rdsu_union(void) {
 	assert(rdsu->rank[2] == 1 && rdsu->parent[2] == 0);
 	assert(rdsu->rank[3] == 0 && rdsu->parent[3] == 2);
 	assert(rdsu->rank[4] == 0 && rdsu->parent[4] == 4);
-	assert(rdsu_nb_components(*rdsu) == 2);
+	assert(rdsu_nb_components(rdsu) == 2);
 	assert(rdsu_union(rdsu, 0, 4) == true); // merging single elem to a net
 	assert(rdsu->rank[0] == 2 && rdsu->parent[0] == 0);
 	assert(rdsu->rank[1] == 0 && rdsu->parent[1] == 0);
 	assert(rdsu->rank[2] == 1 && rdsu->parent[2] == 0);
 	assert(rdsu->rank[3] == 0 && rdsu->parent[3] == 2);
 	assert(rdsu->rank[4] == 0 && rdsu->parent[4] == 0);
-	assert(rdsu_nb_components(*rdsu) == 1);
+	assert(rdsu_nb_components(rdsu) == 1);
 
 	// net:
 	//      0-\-\  : rank 2
@@ -62,10 +62,10 @@ NO_COV void test_rdsu_union(void) {
 	no_size.size     = 0;
 	no_rank.rank     = NULL;
 	assert(rdsu_union(&no_parent, 0, 1) == false);
-	assert(rdsu_nb_components(no_parent) == rdsu_size(no_parent));
+	assert(rdsu_nb_components(&no_parent) == rdsu_size(&no_parent));
 
 	assert(rdsu_union(&no_rank, 0, 1) == false);
-	assert(rdsu_nb_components(no_rank) == rdsu_size(no_rank));
+	assert(rdsu_nb_components(&no_rank) == rdsu_size(&no_rank));
 
 	assert(rdsu_union(&no_size, 0, 1) == false);
 	assert(no_size.components == rdsu->size);

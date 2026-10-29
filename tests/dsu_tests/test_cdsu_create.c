@@ -28,16 +28,16 @@ NO_COV void test_cdsu_new(void) {
 	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
 NO_COV void test_cdsu_new_from_array(void) {
-	t_cdsu       *cdsu;
-	unsigned int *parents = malloc(sizeof(int) * 5);
-	unsigned int *ranks   = malloc(sizeof(int) * 5);
+	t_cdsu   *cdsu;
+	uint16_t *parents = malloc(sizeof(int) * 5);
+	uint16_t *ranks   = malloc(sizeof(int) * 5);
 
 	cdsu = cdsu_new_from_array(5, parents, ranks);
 	assert(cdsu != NULL);
 	assert(cdsu->size == 5);
 	assert(cdsu->rp_single_alloc == false);
-	assert(cdsu->parent == (unsigned int *)parents);
-	assert(cdsu->rank == (unsigned int *)ranks);
+	assert(cdsu->parent == (uint16_t *)parents);
+	assert(cdsu->rank == (uint16_t *)ranks);
 	cdsu_free(&cdsu);
 	assert(cdsu_new_from_array(99, parents, parents) == NULL);
 	assert(cdsu_new_from_array(99, ranks, ranks) == NULL);
@@ -64,15 +64,15 @@ NO_COV void test_cdsu_init(void) {
 	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
 NO_COV void test_cdsu_init_from_arrays(void) {
-	t_cdsu        cdsu;
-	unsigned int *parents = malloc(sizeof(int) * 5);
-	unsigned int *ranks   = malloc(sizeof(int) * 5);
+	t_cdsu    cdsu;
+	uint16_t *parents = malloc(sizeof(uint16_t) * 5);
+	uint16_t *ranks   = malloc(sizeof(uint16_t) * 5);
 
 	assert(cdsu_init_from_arrays(&cdsu, 5, parents, ranks) == &cdsu);
 	assert(cdsu.size == 5);
 	assert(cdsu.rp_single_alloc == false);
-	assert(cdsu.parent == (unsigned int *)parents);
-	assert(cdsu.rank == (unsigned int *)ranks);
+	assert(cdsu.parent == (uint16_t *)parents);
+	assert(cdsu.rank == (uint16_t *)ranks);
 	cdsu_destroy(&cdsu);
 	assert(cdsu_init_from_arrays(&cdsu, 5, parents, parents) == NULL);
 	assert(cdsu_init_from_arrays(&cdsu, 5, ranks, ranks) == NULL);

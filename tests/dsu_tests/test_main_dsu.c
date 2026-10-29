@@ -2,9 +2,10 @@
 
 #define C_MINI__TWRAP_IMPL
 #include "cdsu_tests.h"
+#include "dsuc_tests.h"
 #include "rdsu_tests.h"
 
-int cdsu_main_tests(void) {
+NO_COV int cdsu_main_tests(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Create", )
 	test_cdsu_new();
@@ -39,7 +40,7 @@ int cdsu_main_tests(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "All cdsu tests completed successfully.", )
 	return (EXIT_SUCCESS);
 }
-int rdsu_main_tests(void) {
+NO_COV int rdsu_main_tests(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Create", )
 	test_rdsu_new();
@@ -78,6 +79,21 @@ int rdsu_main_tests(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "All rdsu tests completed successfully.", )
 	return (EXIT_SUCCESS);
 }
+NO_COV int conv_main_tests(void) {
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "\t\tCDSU -> RDSU", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	test_cdsu_new_from_rdsu();
+	test_cdsu_init_from_rdsu();
+	test_cdsu_to_rdsu();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "\t\tCDSU -> RDSU", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	test_rdsu_new_from_cdsu();
+	test_rdsu_init_from_cdsu();
+	test_rdsu_to_cdsu();
+	return (EXIT_SUCCESS);
+}
 
 NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
@@ -92,6 +108,12 @@ NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	rdsu_main_tests();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "\t\tCONVERTIONS", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	conv_main_tests();
 
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "All dsu tests completed successfully.", )
 	return (EXIT_SUCCESS);

@@ -18,25 +18,26 @@ bool rdsu_is_related(const t_rdsu *ds, size_t x, size_t y) {
  * \return true if valid, false otherwise
  * \ingroup rdsu
 **/
-bool rdsu_validate(t_rdsu rdsu) {
+bool rdsu_validate(const t_rdsu *rdsu) {
 
-	if (!rdsu.size || !rdsu.rank || !rdsu.parent) {
+	if (!rdsu || !rdsu->size || !rdsu->rank || !rdsu->parent) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
 		return (false);
 	}
-	for (size_t i = 0; i < rdsu.size; i++) {
-		if (rdsu.parent[i] >= rdsu.size || rdsu.rank[i] >= rdsu.size) {
+	for (size_t i = 0; i < rdsu->size; i++) {
+		if (rdsu->parent[i] >= rdsu->size || rdsu->rank[i] >= rdsu->size) {
 			CM_LOG(C_MINI__LEVEL_INFO, "Invalid DSU (rank/parent for %zu)", i)
 			return (false);
 		}
-		for (size_t x = i, steps = 0; x != rdsu.parent[x]; x = rdsu.parent[x]) {
+		for (size_t x = i, steps = 0; x != rdsu->parent[x];
+		     x = rdsu->parent[x]) {
 			steps++;
-			if (rdsu.parent[x] >= rdsu.size) {
+			if (rdsu->parent[x] >= rdsu->size) {
 				CM_LOG(C_MINI__LEVEL_INFO, "Invalid DSU (rank/parent for %zu)",
 				       i)
 				return (false);
 			}
-			if (steps > rdsu.size + 1) {
+			if (steps > rdsu->size + 1) {
 				CM_LOG(C_MINI__LEVEL_WARN, "Invalid DSU (infinite chain)")
 				return (false);
 			}

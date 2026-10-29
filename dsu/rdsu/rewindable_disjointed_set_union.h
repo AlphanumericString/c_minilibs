@@ -110,18 +110,18 @@ void rdsu_clr(t_rdsu *dsu);
 void rdsu_destroy(t_rdsu *ds);
 void rdsu_free(t_rdsu **ds);
 
-int    rdsu_max_depth(t_rdsu dsu);
-size_t rdsu_size(t_rdsu dsu);
-size_t rdsu_nb_components(t_rdsu dsu);
+int    rdsu_max_depth(const t_rdsu *dsu);
+size_t rdsu_size(const t_rdsu *dsu);
+size_t rdsu_nb_components(const t_rdsu *dsu);
 
 bool rdsu_is_related(const t_rdsu *ds, size_t x, size_t y);
-bool rdsu_validate(t_rdsu dsu);
+bool rdsu_validate(const t_rdsu *dsu);
 
 bool     rdsu_union(t_rdsu *ds, size_t x, size_t y);
 uint16_t rdsu_find(const t_rdsu *ds, size_t x);
 size_t   rdsu_compress_all(t_rdsu *ds);
 
-t_rdsu_log *rdsu_save_state(t_rdsu *rdsu);
+t_rdsu_log *rdsu_save_state(const t_rdsu *rdsu);
 bool        rdsu_rewind(t_rdsu *rdsu);
 bool        rdsu_rewind_to_state(t_rdsu *rdsu, t_rdsu_log *lg);
 void        rdsu_rewind_clear(t_rdsu *rdsu);

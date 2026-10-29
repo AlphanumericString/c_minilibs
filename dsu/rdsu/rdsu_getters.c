@@ -6,12 +6,12 @@
  * \return the max depth
  * \ingroup rdsu
 **/
-int rdsu_max_depth(t_rdsu rdsu) {
+int rdsu_max_depth(const t_rdsu *rdsu) {
 	unsigned int max = 0;
 	size_t       i   = 0;
 
-	while (i < rdsu.size) {
-		if (rdsu.rank[i++] > max) max = rdsu.rank[i - 1];
+	while (i < rdsu->size) {
+		if (rdsu->rank[i++] > max) max = rdsu->rank[i - 1];
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS)
 	return (max);
@@ -22,9 +22,9 @@ int rdsu_max_depth(t_rdsu rdsu) {
  * \return the number of elems
  * \ingroup rdsu
 **/
-size_t rdsu_size(t_rdsu rdsu) {
+size_t rdsu_size(const t_rdsu *rdsu) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS)
-	return (rdsu.size);
+	return (rdsu->size);
 }
 /**
  * \brief return the number of distinc separate sets in the rdsu
@@ -32,7 +32,7 @@ size_t rdsu_size(t_rdsu rdsu) {
  * \return the number of components
  * \ingroup rdsu
 **/
-size_t rdsu_nb_components(t_rdsu rdsu) {
+size_t rdsu_nb_components(const t_rdsu *rdsu) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS)
-	return (rdsu.components);
+	return (rdsu->components);
 }

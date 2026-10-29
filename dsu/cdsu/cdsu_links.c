@@ -68,13 +68,13 @@ size_t cdsu_find(t_cdsu *ds, size_t x) {
  * \return the parent of x
  * \ingroup cdsu
 **/
-size_t cdsu_strict_find(t_cdsu ds, size_t x) {
-	if (!ds.size || !ds.parent || x > ds.size) {
+size_t cdsu_strict_find(const t_cdsu *ds, size_t x) {
+	if (!ds->size || !ds->parent || x > ds->size) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG)
 		return (-1);
 	}
-	while (ds.parent[x] != x) {
-		x = ds.parent[x];
+	while (ds->parent[x] != x) {
+		x = ds->parent[x];
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CDSU_LOG_SUCCESS)
 	return (x);

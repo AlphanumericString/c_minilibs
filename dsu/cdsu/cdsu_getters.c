@@ -6,12 +6,12 @@
  * \return the max depth
  * \ingroup cdsu
 **/
-int cdsu_max_depth(t_cdsu cdsu) {
+int cdsu_max_depth(const t_cdsu *cdsu) {
 	unsigned int max = 0;
 	size_t       i   = 0;
 
-	while (i < cdsu.size) {
-		if (cdsu.rank[i++] > max) max = cdsu.rank[i - 1];
+	while (i < cdsu->size) {
+		if (cdsu->rank[i++] > max) max = cdsu->rank[i - 1];
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CDSU_LOG_SUCCESS)
 	return (max);
@@ -22,9 +22,9 @@ int cdsu_max_depth(t_cdsu cdsu) {
  * \return the number of elems
  * \ingroup cdsu
 **/
-size_t cdsu_size(t_cdsu cdsu) {
+size_t cdsu_size(const t_cdsu *cdsu) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CDSU_LOG_SUCCESS)
-	return (cdsu.size);
+	return (cdsu->size);
 }
 /**
  * \brief return the number of distinc separate sets in the cdsu
@@ -32,7 +32,7 @@ size_t cdsu_size(t_cdsu cdsu) {
  * \return the number of components
  * \ingroup cdsu
 **/
-size_t cdsu_nb_components(t_cdsu cdsu) {
+size_t cdsu_nb_components(const t_cdsu *cdsu) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CDSU_LOG_SUCCESS)
-	return (cdsu.components);
+	return (cdsu->components);
 }

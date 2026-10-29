@@ -21,8 +21,8 @@ bool cdsu_is_related(t_cdsu *ds, size_t x, size_t y) {
  * \return true if related, false otherwise
  * \ingroup cdsu
 **/
-bool cdsu_strict_is_related(t_cdsu ds, size_t x, size_t y) {
-	if ((x > y ? x : y) > ds.size) return (false);
+bool cdsu_strict_is_related(const t_cdsu *ds, size_t x, size_t y) {
+	if ((x > y ? x : y) > ds->size) return (false);
 	return (cdsu_strict_find(ds, x) == cdsu_strict_find(ds, y));
 }
 /**
@@ -31,24 +31,25 @@ bool cdsu_strict_is_related(t_cdsu ds, size_t x, size_t y) {
  * \return true if valid, false otherwise
  * \ingroup cdsu
 **/
-bool cdsu_validate(t_cdsu cdsu) {
-	if (!cdsu.size || !cdsu.rank || !cdsu.parent) {
+bool cdsu_validate(const t_cdsu *cdsu) {
+	if (!cdsu || !cdsu->size || !cdsu->rank || !cdsu->parent) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG)
 		return (false);
 	}
-	for (size_t i = 0; i < cdsu.size; i++) {
-		if (cdsu.parent[i] >= cdsu.size || cdsu.rank[i] >= cdsu.size) {
+	for (size_t i = 0; i < cdsu->size; i++) {
+		if (cdsu->parent[i] >= cdsu->size || cdsu->rank[i] >= cdsu->size) {
 			CM_LOG(C_MINI__LEVEL_WARN, "Invalid DSU (rank/parent for %zu)", i)
 			return (false);
 		}
-		for (size_t x = i, steps = 0; x != cdsu.parent[x]; x = cdsu.parent[x]) {
+		for (size_t x = i, steps = 0; x != cdsu->parent[x];
+		     x = cdsu->parent[x]) {
 			steps++;
-			if (cdsu.parent[x] >= cdsu.size) {
+			if (cdsu->parent[x] >= cdsu->size) {
 				CM_LOG(C_MINI__LEVEL_WARN, "Invalid DSU (rank/parent for %zu)",
 				       x)
 				return (false);
 			}
-			if (steps > cdsu.size + 1) {
+			if (steps > cdsu->size + 1) {
 				CM_LOG(C_MINI__LEVEL_WARN, "Invalid DSU (infinite chain)")
 				return (false);
 			}

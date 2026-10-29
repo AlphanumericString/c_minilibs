@@ -65,7 +65,7 @@ static inline bool is_log_in_book(const t_rdsu *rdsu, t_rdsu_log *log) {
  * are given (eg: null rdsu) returns null.
  * \ingroup rdsu
 **/
-t_rdsu_log *rdsu_save_state(t_rdsu *rdsu) {
+t_rdsu_log *rdsu_save_state(const t_rdsu *rdsu) {
 	t_rdsu_log *r;
 
 	if (!rdsu) {
