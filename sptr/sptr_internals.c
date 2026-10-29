@@ -18,10 +18,10 @@ void sptri_wc_dec(t_fbox *b) {
 	atomic_fetch_sub_explicit(&b->wc, 1, memory_order_relaxed);
 }
 
-size_t sptri_rc_get(t_fbox *b) {
+size_t sptri_rc_get(const t_fbox *b) {
 	return (atomic_load_explicit(&b->rc, memory_order_seq_cst));
 }
-size_t sptri_wc_get(t_fbox *b) {
+size_t sptri_wc_get(const t_fbox *b) {
 	return (atomic_load_explicit(&b->wc, memory_order_seq_cst));
 }
 
@@ -41,10 +41,10 @@ void sptri_wc_dec(t_fbox *b) {
 	b->wc--;
 }
 
-size_t sptri_rc_get(t_fbox *b) {
+size_t sptri_rc_get(const t_fbox *b) {
 	return b->rc;
 }
-size_t sptri_wc_get(t_fbox *b) {
+size_t sptri_wc_get(const t_fbox *b) {
 	return b->wc;
 }
 #endif
@@ -59,7 +59,7 @@ size_t sptri_wc_get(t_fbox *b) {
  * \param ptr the shared (strong) pointer to check
  * \return true if he is sole owner, otherwise false
  * \ingroup sptr
-**/
+ **/
 bool sptri_is_sole_box_owns(const t_strong_ptr *ptr) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (ptr && sptr_get_strongcount_s(ptr) == 1 &&
@@ -71,7 +71,7 @@ bool sptri_is_sole_box_owns(const t_strong_ptr *ptr) {
  * \param ptr the shared (weak) pointer to check
  * \return true if he is sole owner, otherwise false
  * \ingroup sptr
-**/
+ **/
 bool sptri_is_sole_box_ownw(const t_weak_ptr *ptr) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (ptr && !sptr_get_strongcount_w(ptr) &&
@@ -82,7 +82,7 @@ bool sptri_is_sole_box_ownw(const t_weak_ptr *ptr) {
  * \param ptr the owned pointer to check
  * \return true if he is sole owner, otherwise false
  * \ingroup sptr
-**/
+ **/
 bool sptri_is_sole_box_owno(const t_owned_ptr *ptr) {
 	size_t rc;
 	size_t wc;
@@ -101,7 +101,7 @@ bool sptri_is_sole_box_owno(const t_owned_ptr *ptr) {
  * \param u the uniq pointer to check
  * \return false. Unique pointer interface does not have a box.
  * \ingroup sptr
-**/
+ **/
 bool sptri_is_sole_box_ownu(const t_uniq_ptr *u) {
 	if (!u || !sptr_getuc(u)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
