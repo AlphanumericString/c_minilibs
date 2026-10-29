@@ -28,7 +28,7 @@
 **/
 
 /**
- * \typedef t_heap
+ * \typedef t_hp
  * \brief The heap structure is a representation of a heap, min or max depends
  * on the user's usage of said heap.
  * \param nb the number of elements currently present in the heap
