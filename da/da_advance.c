@@ -11,7 +11,7 @@
  * \return true on success, false otherwise
  * \ingroup da
 **/
-bool da_advance(t_da *da, size_t n, t_callback deletor, void *u_data) {
+bool da_advance(t_da *da, size_t n, t_cm_callback deletor, void *u_data) {
 	if (!da_is_not_null(da)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (false);

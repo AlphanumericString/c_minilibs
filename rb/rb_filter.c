@@ -15,7 +15,7 @@ static void blank(void *a) {
  * \return true on success, false otherwise
  * \ingroup rb
 **/
-bool rb_filter(t_rb *rb, t_callback cb, const void *arg,
+bool rb_filter(t_rb *rb, t_cm_callback cb, const void *arg,
                void (*destroyer)(void *elem)) {
 	size_t read_pos;
 	size_t write_pos;

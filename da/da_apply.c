@@ -9,7 +9,7 @@
  * \return true if success, false if failure
  * \ingroup da
 **/
-void *da_apply_it(t_da *da, t_callback_it func, void *u_val) {
+void *da_apply_it(t_da *da, t_cm_callback_it func, void *u_val) {
 	void *r;
 
 	if (!da_is_valid(da) || da_is_empty(da) || !func) {
@@ -29,7 +29,7 @@ void *da_apply_it(t_da *da, t_callback_it func, void *u_val) {
  * \return the user argument (u_val)
  * \ingroup da
 **/
-void *da_apply(t_da *da, t_callback cb, void *u_val) {
+void *da_apply(t_da *da, t_cm_callback cb, void *u_val) {
 	void *r;
 
 	if (!da_is_valid(da) || da_is_empty(da) || !cb) {
@@ -49,7 +49,7 @@ void *da_apply(t_da *da, t_callback cb, void *u_val) {
  * \return the user argument (u_val)
  * \ingroup da
 **/
-void *da_napply(t_da *da, size_t n, t_callback c, void *u_val) {
+void *da_napply(t_da *da, size_t n, t_cm_callback c, void *u_val) {
 	size_t i;
 
 	if (!da_is_valid(da) || da_is_empty(da) || !c || !n) {
@@ -72,7 +72,7 @@ void *da_napply(t_da *da, size_t n, t_callback c, void *u_val) {
  * \return the user argument (u_val)
  * \ingroup da
 **/
-void *da_napply_it(t_da *da, size_t n, t_callback_it func, void *u_val) {
+void *da_napply_it(t_da *da, size_t n, t_cm_callback_it func, void *u_val) {
 	size_t i;
 
 	if (!da_is_valid(da) || da_is_empty(da) || !func) {

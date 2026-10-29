@@ -27,7 +27,7 @@ void idl_init(t_idl *node, size_t offset) {
  * \ingroup idl
  * \todo clean-up chained values on failure
 **/
-void *idl_copy(const t_idl *head, t_duplicator d) {
+void *idl_copy(const t_idl *head, t_cm_duplicator d) {
 	t_idl *ret;
 	void  *elem;
 	void  *nh = NULL;

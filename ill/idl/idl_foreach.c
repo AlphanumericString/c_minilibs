@@ -9,7 +9,7 @@
  * \return true if the callback returned true for all elements, false otherwise.
  * \ingroup idl
 **/
-bool idl_foreach(t_idl *head, t_callback c, void *u_data) {
+bool idl_foreach(t_idl *head, t_cm_callback c, void *u_data) {
 	t_idl *curr;
 	t_idl *nxt;
 
@@ -40,7 +40,7 @@ bool idl_foreach(t_idl *head, t_callback c, void *u_data) {
  * otherwise.
  * \ingroup idl
 **/
-bool idl_for(t_idl *head, size_t n, t_callback c, void *u_data) {
+bool idl_for(t_idl *head, size_t n, t_cm_callback c, void *u_data) {
 	t_idl *curr;
 	t_idl *nxt;
 

@@ -36,15 +36,15 @@ typedef struct s_ill {
 } t_ill;
 
 void  ill_init(t_ill *node, size_t offset);
-void *ill_copy(const t_ill *head, t_duplicator d);
+void *ill_copy(const t_ill *head, t_cm_duplicator d);
 
 void  *ill_ntoe(const t_ill *node);
 t_ill *ill_eton(void *e, size_t offset);
 
 bool ill_is_isolated(t_ill *node);
 bool ill_is_circular(t_ill *head);
-bool ill_is_sorted(t_ill *head, t_comparator comparator);
-bool ill_has(t_ill *head, t_callback matcher, void *arg);
+bool ill_is_sorted(t_ill *head, t_cm_comparator comparator);
+bool ill_has(t_ill *head, t_cm_callback matcher, void *arg);
 
 void ill_append(t_ill *anchor, t_ill *node);
 void ill_nappend(t_ill *anchor, t_ill *nodes);
@@ -61,37 +61,38 @@ bool   ill_remove_node(t_ill **head, t_ill *target);
 
 t_ill *ill_find_prev(t_ill *head, t_ill *target);
 t_ill *ill_find(t_ill *head, t_ill *target);
-t_ill *ill_get_prev(t_ill *head, t_comparator c, void *arg);
-t_ill *ill_get(t_ill *head, t_comparator c, void *arg);
+t_ill *ill_get_prev(t_ill *head, t_cm_comparator c, void *arg);
+t_ill *ill_get(t_ill *head, t_cm_comparator c, void *arg);
 
 t_ill *ill_get_tail(t_ill *head);
 
-void *ill_get_min(t_ill *head, t_comparator comp);
-void *ill_get_max(t_ill *head, t_comparator comp);
+void *ill_get_min(t_ill *head, t_cm_comparator comp);
+void *ill_get_max(t_ill *head, t_cm_comparator comp);
 void *ill_get_kth(t_ill *head, size_t k);
 
 size_t ill_length(t_ill *head);
 size_t ill_nlength(t_ill *head, size_t n);
-size_t ill_match_nb(t_ill *head, t_callback matcher, void *arg);
+size_t ill_match_nb(t_ill *head, t_cm_callback matcher, void *arg);
 
-bool   ill_for(t_ill *head, size_t n, t_callback c, void *u_data);
-bool   ill_foreach(t_ill *head, t_callback c, void *u_data);
+bool   ill_for(t_ill *head, size_t n, t_cm_callback c, void *u_data);
+bool   ill_foreach(t_ill *head, t_cm_callback c, void *u_data);
 t_ill *ill_reverse(t_ill *head);
 
 // move // !
 // if !end_cut cut to the end of list included otherwise stop before end_cut
 // void   ill_move(t_ill *dest_anchor, t_ill *start_cut, t_ill *end_cut); // !
 //- Merges two sorted lists into one.
-// void   ill_sort(t_ill **head, t_comparator comp);                       // !
-// t_ill *ill_sorted_merge(t_ill *list1, t_ill *list2, t_comparator comp); // !
+// void   ill_sort(t_ill **head, t_cm_comparator comp);                       //
+// ! t_ill *ill_sorted_merge(t_ill *list1, t_ill *list2, t_cm_comparator comp);
+// // !
 
 // filter
 // list for tru is returned list of false has sotred in filtered
-// t_ill *ill_filter(t_ill *head, t_callback cb, void *arg, t_ill **filtered);
-// remove if aka filter in place. if !free_func no free.
-// bool   ill_remove_if(t_ill **head, t_callback condition_cb, void *arg,
+// t_ill *ill_filter(t_ill *head, t_cm_callback cb, void *arg, t_ill
+// **filtered); remove if aka filter in place. if !free_func no free. bool
+// ill_remove_if(t_ill **head, t_cm_callback condition_cb, void *arg,
 //                      void (*free_func)(void *elem));
 // // (requirement: list must be sorted)
-// void   ill_unique(t_ill *head, t_comparator c); // !
+// void   ill_unique(t_ill *head, t_cm_comparator c); // !
 
 #endif // !C_MINI__ILL

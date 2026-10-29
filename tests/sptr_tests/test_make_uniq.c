@@ -12,7 +12,7 @@ static void local_dtor(void *_) {
 
 // make_uniq_from_raw
 static void test_sptr_make_uniq_from_raw_errors(void) {
-	t_dtor dtor = local_dtor;
+	t_cm_dtor dtor = local_dtor;
 
 	t_uniq_ptr res[] = {
 	    sptr_make_uniq_from_raw(NULL, NULL),
@@ -24,8 +24,8 @@ static void test_sptr_make_uniq_from_raw_errors(void) {
 }
 
 static void test_sptr_make_uniq_from_raw_ok(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_uniq_ptr res[] = {
 	    sptr_make_uniq_from_raw(data, NULL),
@@ -43,8 +43,8 @@ NO_COV void test_sptr_make_uniq_from_raw(void) {
 
 // make_uniq_from_weak (always illegal)
 NO_COV void test_sptr_make_uniq_from_weak(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
 	t_fbox b1 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
@@ -72,9 +72,9 @@ NO_COV void test_sptr_make_uniq_from_weak(void) {
 
 // make_uniq_from_strong
 static void test_sptr_make_uniq_from_strong_errors(void) {
-	void  *data     = (void *)0xDEAD;
-	t_dtor dtor     = local_dtor;
-	t_dtor not_dtor = other_dtor;
+	void     *data     = (void *)0xDEAD;
+	t_cm_dtor dtor     = local_dtor;
+	t_cm_dtor not_dtor = other_dtor;
 
 	t_fbox b0_no_rc   = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
 	t_fbox b1_rc_many = (t_fbox){.data = data, .dtor = dtor, .rc = 2, .wc = 1};
@@ -110,8 +110,8 @@ static void test_sptr_make_uniq_from_strong_errors(void) {
 }
 
 static void test_sptr_make_uniq_from_strong_ok(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox  b0 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
 	t_fbox  b1 = (t_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 1};
@@ -158,9 +158,9 @@ NO_COV void test_sptr_make_uniq_from_strong(void) {
 
 // make_uniq_from_owned
 static void test_sptr_make_uniq_from_owned_errors(void) {
-	void  *data     = (void *)0xDEAD;
-	t_dtor dtor     = local_dtor;
-	t_dtor not_dtor = other_dtor;
+	void     *data     = (void *)0xDEAD;
+	t_cm_dtor dtor     = local_dtor;
+	t_cm_dtor not_dtor = other_dtor;
 
 	t_fbox b0_not_owner =
 	    (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
@@ -202,8 +202,8 @@ static void test_sptr_make_uniq_from_owned_errors(void) {
 }
 
 static void test_sptr_make_uniq_from_owned_ok(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
 	t_fbox b1 = (t_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 1};
@@ -260,9 +260,9 @@ NO_COV void test_sptr_make_uniq_from_owned(void) {
 
 // make_uniq_from_uniq
 static void test_sptr_make_uniq_from_uniq_errors(void) {
-	void  *data     = (void *)0xDEAD;
-	t_dtor dtor     = local_dtor;
-	t_dtor not_dtor = other_dtor;
+	void     *data     = (void *)0xDEAD;
+	t_cm_dtor dtor     = local_dtor;
+	t_cm_dtor not_dtor = other_dtor;
 
 	t_uniq_ptr u0_data_null   = (t_uniq_ptr){.data = NULL, .dtor = dtor};
 	t_uniq_ptr u1_dt_mismatch = (t_uniq_ptr){.data = data, .dtor = dtor};
@@ -281,8 +281,8 @@ static void test_sptr_make_uniq_from_uniq_errors(void) {
 }
 
 static void test_sptr_make_uniq_from_uniq_ok(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_uniq_ptr u0 = (t_uniq_ptr){.data = data, .dtor = dtor};
 	t_uniq_ptr u1 = (t_uniq_ptr){.data = data, .dtor = NULL};

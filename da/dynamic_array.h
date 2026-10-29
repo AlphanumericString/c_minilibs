@@ -84,35 +84,36 @@ bool da_rms(t_da *da, size_t start, size_t end);
 void *da_to_array(const t_da *da);
 void *da_to_loc_array(const t_da *da, void *arr);
 
-void *da_apply(t_da *da, t_callback cb, void *u_data);
-void *da_napply(t_da *da, size_t n, t_callback c, void *u_data);
-void *da_apply_it(t_da *da, t_callback_it func, void *u_val);
-void *da_napply_it(t_da *da, size_t n, t_callback_it func, void *u_val);
+void *da_apply(t_da *da, t_cm_callback cb, void *u_data);
+void *da_napply(t_da *da, size_t n, t_cm_callback c, void *u_data);
+void *da_apply_it(t_da *da, t_cm_callback_it func, void *u_val);
+void *da_napply_it(t_da *da, size_t n, t_cm_callback_it func, void *u_val);
 
-void *da_fold(t_da *da, t_merger c, void *u_start_val);
-void *da_nfold(t_da *da, size_t n, t_merger c, void *u_start_val);
-void *da_reduce(t_da *da, t_merger m);
-void *da_nreduce(t_da *da, size_t n, t_merger m);
+void *da_fold(t_da *da, t_cm_merger c, void *u_start_val);
+void *da_nfold(t_da *da, size_t n, t_cm_merger c, void *u_start_val);
+void *da_reduce(t_da *da, t_cm_merger m);
+void *da_nreduce(t_da *da, size_t n, t_cm_merger m);
 
-bool da_filter(t_da *da, t_callback c, void *u_data, t_callback deletor);
-bool da_nfilter(t_da *da, size_t n, t_callback c, void *u_data,
-                t_callback deletor);
-bool da_filter_out(t_da *da, t_callback c, void *u_data, t_callback deletor);
-bool da_nfilter_out(t_da *da, size_t n, t_callback c, void *u_data,
-                    t_callback deletor);
+bool da_filter(t_da *da, t_cm_callback c, void *u_data, t_cm_callback deletor);
+bool da_nfilter(t_da *da, size_t n, t_cm_callback c, void *u_data,
+                t_cm_callback deletor);
+bool da_filter_out(t_da *da, t_cm_callback c, void *u_data,
+                   t_cm_callback deletor);
+bool da_nfilter_out(t_da *da, size_t n, t_cm_callback c, void *u_data,
+                    t_cm_callback deletor);
 
-bool da_advance(t_da *da, size_t n, t_callback deletor, void *u_data);
+bool da_advance(t_da *da, size_t n, t_cm_callback deletor, void *u_data);
 
 void da_reverse(t_da *da);
 void da_nreverse(t_da *da, size_t n);
 void da_b_nreverse(t_da *da, size_t n);
 
-void *da_find(t_da *da, t_comparator c, void *u_data);
-void *da_nfind(t_da *da, size_t n, t_comparator c, void *u_data);
-bool  da_find_get(t_da *da, t_comparator c, void *u_data, void *out_buffer);
+void *da_find(t_da *da, t_cm_comparator c, void *u_data);
+void *da_nfind(t_da *da, size_t n, t_cm_comparator c, void *u_data);
+bool  da_find_get(t_da *da, t_cm_comparator c, void *u_data, void *out_buffer);
 
-bool da_sort(t_da *da, t_comparator c);
-bool da_nsort(t_da *da, size_t n, t_comparator c);
+bool da_sort(t_da *da, t_cm_comparator c);
+bool da_nsort(t_da *da, size_t n, t_cm_comparator c);
 
 bool da_is_valid(const t_da *da);
 bool da_is_not_null(const t_da *da);

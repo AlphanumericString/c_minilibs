@@ -7,7 +7,7 @@
  * \return A pointer to the minimum element, or NULL if the list is empty.
  * \ingroup idl
 **/
-void *idl_get_min(t_idl *head, t_comparator c) {
+void *idl_get_min(t_idl *head, t_cm_comparator c) {
 	t_idl *curr;
 	t_idl *min;
 
@@ -32,7 +32,7 @@ void *idl_get_min(t_idl *head, t_comparator c) {
  * \return A pointer to the maximum element, or NULL if the list is empty.
  * \ingroup idl
 **/
-void *idl_get_max(t_idl *head, t_comparator c) {
+void *idl_get_max(t_idl *head, t_cm_comparator c) {
 	t_idl *curr;
 	t_idl *max;
 

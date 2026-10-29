@@ -16,8 +16,8 @@ static void other_dtor(void *_) {
 
 // strengthen (sptr_into_strong)
 static void test_sptr_strengthen_errors(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0_no_wc = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
 	t_fbox b1_no_rc = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
@@ -40,8 +40,8 @@ static void test_sptr_strengthen_errors(void) {
 }
 
 static void test_sptr_strengthen_ok(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
 	t_fbox b1 = (t_fbox){.data = data, .dtor = dtor, .rc = 2, .wc = 3};
@@ -69,8 +69,8 @@ NO_COV void test_sptr_strengthen(void) {
 
 // weaken (sptr_into_weak)
 static void test_sptr_weaken_errors(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0_no_rc = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
 
@@ -135,8 +135,8 @@ NO_COV void test_sptr_weaken(void) {
 
 // transfer_ownership (sptr_transfer_ownership)
 static void test_sptr_transfer_o_errors(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
 	t_fbox b1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
@@ -171,8 +171,8 @@ static void test_sptr_transfer_o_errors(void) {
 }
 
 static void test_sptr_transfer_o_ok(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
 
@@ -193,8 +193,8 @@ NO_COV void test_sptr_transfer_o(void) {
 
 // move_ownership (sptr_move_ownership)
 static void test_sptr_move_o_errors(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0_not_owner =
 	    (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
@@ -233,8 +233,8 @@ static void test_sptr_move_o_errors(void) {
 }
 
 static void test_sptr_move_o_ok(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	// Case 1: to has meta == NULL
 	t_fbox      b0    = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
@@ -340,10 +340,10 @@ static void test_sptr_swap_errors(void) {
 }
 
 static void test_sptr_swap_ok(void) {
-	void  *data1 = (void *)0xDEAD;
-	void  *data2 = (void *)0xBEEF;
-	t_dtor dtor1 = local_dtor;
-	t_dtor dtor2 = other_dtor;
+	void     *data1 = (void *)0xDEAD;
+	void     *data2 = (void *)0xBEEF;
+	t_cm_dtor dtor1 = local_dtor;
+	t_cm_dtor dtor2 = other_dtor;
 
 	t_uniq_ptr sw1 = (t_uniq_ptr){.data = data1, .dtor = dtor1};
 	t_uniq_ptr sw2 = (t_uniq_ptr){.data = data2, .dtor = dtor2};

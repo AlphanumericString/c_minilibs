@@ -11,7 +11,7 @@
  * \return pointer to the found element, or NULL if not found
  * \ingroup da
 **/
-void *da_find(t_da *da, t_comparator c, void *data) {
+void *da_find(t_da *da, t_cm_comparator c, void *data) {
 	if (!da_is_valid(da) || !c) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (NULL);
@@ -33,7 +33,7 @@ void *da_find(t_da *da, t_comparator c, void *data) {
  * \return pointer to the found element, or NULL if not found
  * \ingroup da
 **/
-void *da_nfind(t_da *da, size_t n, t_comparator c, void *data) {
+void *da_nfind(t_da *da, size_t n, t_cm_comparator c, void *data) {
 	if (!da_is_valid(da) || !c) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (NULL);
@@ -56,7 +56,7 @@ void *da_nfind(t_da *da, size_t n, t_comparator c, void *data) {
  * \return true if found and copied, false otherwise
  * \ingroup da
 **/
-bool da_find_get(t_da *da, t_comparator c, void *data, void *out_buffer) {
+bool da_find_get(t_da *da, t_cm_comparator c, void *data, void *out_buffer) {
 	void *elem;
 
 	if (!da_is_valid(da) || !c || !out_buffer) {

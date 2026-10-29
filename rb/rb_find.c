@@ -8,7 +8,7 @@
  * \return pointer to the element in the data array, or NULL if not found
  * \ingroup rb
 **/
-void *rb_find(const t_rb *rb, t_comparator c, const void *a) {
+void *rb_find(const t_rb *rb, t_cm_comparator c, const void *a) {
 	size_t i = 0;
 	size_t pos;
 	size_t count;

@@ -62,7 +62,7 @@ t_ill *ill_find(t_ill *head, t_ill *target) {
  * not found.
  * \ingroup ill
 **/
-t_ill *ill_get_prev(t_ill *head, t_comparator c, void *arg) {
+t_ill *ill_get_prev(t_ill *head, t_cm_comparator c, void *arg) {
 	t_ill *curr;
 
 	if (!head || !c) {
@@ -89,7 +89,7 @@ t_ill *ill_get_prev(t_ill *head, t_comparator c, void *arg) {
  * \return A pointer to the matched node, or NULL if not found.
  * \ingroup ill
 **/
-t_ill *ill_get(t_ill *head, t_comparator c, void *arg) {
+t_ill *ill_get(t_ill *head, t_cm_comparator c, void *arg) {
 	t_ill *curr;
 
 	if (!head || !c) {

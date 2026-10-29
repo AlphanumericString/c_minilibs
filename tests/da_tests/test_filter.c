@@ -31,11 +31,11 @@ NO_COV void test_da_filter(void) {
 	assert(da_filter(&da, cb_filter_strict_inf, &bound, NULL) == false);
 }
 NO_COV void test_da_nfilter(void) {
-	int        arr[5] = {1, 2, 3, 4, 5};
-	t_da       da = {.array = arr, .cap_e = 5, .nb_e = 5, .sz_e = sizeof(int)};
-	int        bound       = 1;
-	t_callback func_filter = cb_filter_strict_inf;
-	const t_callback del   = cb_empty_deletor;
+	int  arr[5] = {1, 2, 3, 4, 5};
+	t_da da     = {.array = arr, .cap_e = 5, .nb_e = 5, .sz_e = sizeof(int)};
+	int  bound  = 1;
+	t_cm_callback       func_filter = cb_filter_strict_inf;
+	const t_cm_callback del         = cb_empty_deletor;
 
 	assert(da_nfilter(&da, 4, cb_false, &bound, del) == true);
 	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 1)

@@ -53,7 +53,7 @@ bool ill_is_circular(t_ill *head) {
  * \return true if the list is sorted, false otherwise.
  * \ingroup ill
 **/
-bool ill_is_sorted(t_ill *head, t_comparator comparator) {
+bool ill_is_sorted(t_ill *head, t_cm_comparator comparator) {
 	void *p;
 	int   prev;
 	int   ord;
@@ -90,7 +90,7 @@ bool ill_is_sorted(t_ill *head, t_comparator comparator) {
  * \return true if at least one element matches, false otherwise.
  * \ingroup ill
 **/
-bool ill_has(t_ill *head, t_callback matcher, void *arg) {
+bool ill_has(t_ill *head, t_cm_callback matcher, void *arg) {
 	if (!head || !matcher) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return (false);

@@ -8,8 +8,8 @@ static void local_dtor(void *_) {
 
 // is_uniq
 NO_COV void test_sptr_is_uniqs(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0_rc1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
 	t_fbox b1_rc0 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 0};
@@ -32,8 +32,8 @@ NO_COV void test_sptr_is_uniqs(void) {
 }
 
 NO_COV void test_sptr_is_uniqw(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0_rc1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
 	t_fbox b1_rc0 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
@@ -56,8 +56,8 @@ NO_COV void test_sptr_is_uniqw(void) {
 }
 
 NO_COV void test_sptr_is_uniqo(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0_rc1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
 	t_fbox b1_rc0 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 0};
@@ -80,8 +80,8 @@ NO_COV void test_sptr_is_uniqo(void) {
 }
 
 NO_COV void test_sptr_is_uniqu(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_uniq_ptr u0_ok        = (t_uniq_ptr){.data = data, .dtor = dtor};
 	t_uniq_ptr u1_data_null = (t_uniq_ptr){.data = NULL, .dtor = dtor};
@@ -96,8 +96,8 @@ NO_COV void test_sptr_is_uniqu(void) {
 
 // is_shared
 NO_COV void test_sptr_is_shareds(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0_rc0 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 0};
 	t_fbox b1_rc1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
@@ -122,8 +122,8 @@ NO_COV void test_sptr_is_shareds(void) {
 }
 
 NO_COV void test_sptr_is_sharedw(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0_rc0 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
 	t_fbox b1_rc1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
@@ -148,8 +148,8 @@ NO_COV void test_sptr_is_sharedw(void) {
 }
 
 NO_COV void test_sptr_is_sharedo(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0_rc0 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 0};
 	t_fbox b1_rc1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
@@ -174,8 +174,8 @@ NO_COV void test_sptr_is_sharedo(void) {
 }
 
 NO_COV void test_sptr_is_sharedu(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_uniq_ptr u0_ok        = (t_uniq_ptr){.data = data, .dtor = dtor};
 	t_uniq_ptr u1_data_null = (t_uniq_ptr){.data = NULL, .dtor = dtor};
@@ -193,8 +193,8 @@ NO_COV void test_sptr_is_sharedu(void) {
 
 // is_sole_box_owner
 NO_COV void test_sptr_is_sole_box_owns(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0_sole    = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
 	t_fbox b1_wc      = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
@@ -225,8 +225,8 @@ NO_COV void test_sptr_is_sole_box_owns(void) {
 }
 
 NO_COV void test_sptr_is_sole_box_ownw(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0_sole    = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
 	t_fbox b1_has_rc  = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
@@ -257,8 +257,8 @@ NO_COV void test_sptr_is_sole_box_ownw(void) {
 }
 
 NO_COV void test_sptr_is_sole_box_owno(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0_sole_rc = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
 	t_fbox b1_sole_wc = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
@@ -297,8 +297,8 @@ NO_COV void test_sptr_is_sole_box_owno(void) {
 }
 
 NO_COV void test_sptr_is_sole_box_ownu(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_uniq_ptr u0_ok        = (t_uniq_ptr){.data = data, .dtor = dtor};
 	t_uniq_ptr u1_data_null = (t_uniq_ptr){.data = NULL, .dtor = dtor};

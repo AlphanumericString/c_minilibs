@@ -37,13 +37,13 @@ typedef struct s_idl {
 } t_idl;
 
 void   idl_init(t_idl *node, size_t offset);
-void  *idl_copy(const t_idl *head, t_duplicator d);
+void  *idl_copy(const t_idl *head, t_cm_duplicator d);
 void  *idl_ntoe(const t_idl *node);
 t_idl *idl_eton(void *e, size_t offset);
 bool   idl_is_isolated(t_idl *node);
 bool   idl_is_circular(t_idl *head);
-bool   idl_is_sorted(t_idl *head, t_comparator comparator);
-bool   idl_has(t_idl *head, t_callback matcher, void *arg);
+bool   idl_is_sorted(t_idl *head, t_cm_comparator comparator);
+bool   idl_has(t_idl *head, t_cm_callback matcher, void *arg);
 void   idl_append(t_idl *anchor, t_idl *node);
 void   idl_nappend(t_idl *anchor, t_idl *nodes);
 void   idl_prepend(t_idl *anchor, t_idl *node);
@@ -57,18 +57,18 @@ t_idl *idl_remove_after(t_idl *prev);
 bool   idl_remove_node(t_idl **head, t_idl *target);
 t_idl *idl_find_prev(t_idl *head, t_idl *target);
 t_idl *idl_find(t_idl *head, t_idl *target);
-t_idl *idl_get_prev(t_idl *head, t_comparator c, void *arg);
-t_idl *idl_get(t_idl *head, t_comparator c, void *arg);
+t_idl *idl_get_prev(t_idl *head, t_cm_comparator c, void *arg);
+t_idl *idl_get(t_idl *head, t_cm_comparator c, void *arg);
 t_idl *idl_get_tail(t_idl *node);
 t_idl *idl_get_head(t_idl *node);
-void  *idl_get_min(t_idl *head, t_comparator c);
-void  *idl_get_max(t_idl *head, t_comparator c);
+void  *idl_get_min(t_idl *head, t_cm_comparator c);
+void  *idl_get_max(t_idl *head, t_cm_comparator c);
 void  *idl_get_kth(t_idl *head, size_t k);
 size_t idl_length(t_idl *head);
 size_t idl_nlength(t_idl *head, size_t n);
-size_t idl_match_nb(t_idl *head, t_callback matcher, void *arg);
-bool   idl_for(t_idl *head, size_t n, t_callback c, void *u_data);
-bool   idl_foreach(t_idl *head, t_callback c, void *u_data);
+size_t idl_match_nb(t_idl *head, t_cm_callback matcher, void *arg);
+bool   idl_for(t_idl *head, size_t n, t_cm_callback c, void *u_data);
+bool   idl_foreach(t_idl *head, t_cm_callback c, void *u_data);
 t_idl *idl_reverse(t_idl *head);
 
 #endif // !C_MINI__IDL

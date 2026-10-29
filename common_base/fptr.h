@@ -8,14 +8,14 @@
 #	define C_MINI__T_CALLBACK
 
 /**
- * \typedef t_callback
+ * \typedef t_cm_callback
  * \brief  callback function pointer, true operation successfull, elem is always
  * the node, arg is passed as is from up function
  * \param  elem pointer to the element
  * \param  arg  argument passed as is from up function
  * \return expected to return true on success false otherwise
 **/
-typedef bool (*t_callback)(void *elem, void *arg);
+typedef bool (*t_cm_callback)(void *elem, void *arg);
 
 #endif // T_CALLBACK
 
@@ -23,7 +23,7 @@ typedef bool (*t_callback)(void *elem, void *arg);
 #	define C_MINI__T_CALLBACK_IT
 
 /**
- * \typedef t_callback_it
+ * \typedef t_cm_callback_it
  * \brief  callback function pointer, true operation successfull, elem is always
  * the node, arg is passed as is from up function
  * \param  elem pointer to the element
@@ -32,7 +32,7 @@ typedef bool (*t_callback)(void *elem, void *arg);
  * \param  last boolean on whether or not this is the last element of the call
  * \return expected to return true on success false otherwise
 **/
-typedef bool (*t_callback_it)(void *elem, void *arg, size_t pos, bool last);
+typedef bool (*t_cm_callback_it)(void *elem, void *arg, size_t pos, bool last);
 
 #endif // C_MINI__T_CALLBACK_IT
 
@@ -40,14 +40,14 @@ typedef bool (*t_callback_it)(void *elem, void *arg, size_t pos, bool last);
 #	define C_MINI__T_COMPARATOR
 
 /**
- * \typedef t_comparator
+ * \typedef t_cm_comparator
  * \brief comparator function pointer, <0, 0, >0 for inferior to, equal,
  * superior to
  * \param elem pointer to the element
  * \param arg argument passed as is from up function
  * \return expected to return <0, 0, >0 for inferior to, equal, superior to
 **/
-typedef int (*t_comparator)(const void *elem, const void *arg);
+typedef int (*t_cm_comparator)(const void *elem, const void *arg);
 
 #endif // T_COMPARATOR
 
@@ -55,11 +55,11 @@ typedef int (*t_comparator)(const void *elem, const void *arg);
 #	define C_MINI__T_DTOR
 
 /**
- * \typedef t_dtor
+ * \typedef t_cm_dtor
  * \brief dtor, destructor function to be attached to a data/ressource
  * \param elem pointer to the cleanup target
 **/
-typedef void (*t_dtor)(void *elem);
+typedef void (*t_cm_dtor)(void *elem);
 
 #endif // !C_MINI__T_DTOR
 
@@ -67,12 +67,12 @@ typedef void (*t_dtor)(void *elem);
 #	define C_MINI__T_DUPLICATOR
 
 /**
- * \typedef t_duplicator
+ * \typedef t_cm_duplicator
  * \brief duplication function pointer for datas
  * \param elem pointer to the duplication target
  * \return pointer to a valid copy of the data
 **/
-typedef void *(*t_duplicator)(const void *elem);
+typedef void *(*t_cm_duplicator)(const void *elem);
 
 #endif // !C_MINI__T_DUPLICATOR
 
@@ -80,13 +80,13 @@ typedef void *(*t_duplicator)(const void *elem);
 #	define C_MINI__T_MERGER
 
 /**
- * \typedef t_merger
+ * \typedef t_cm_merger
  * \brief merger function pointer for datas merging and other merge tasks
  * \param elem pointer to the accumulator
  * \param arg pointer to the value in the struct
  * \return pointer to a valid copy of the data
 **/
-typedef void *(*t_merger)(void *elem, void *arg);
+typedef void *(*t_cm_merger)(void *elem, void *arg);
 
 #endif // !C_MINI__T_MERGER
 

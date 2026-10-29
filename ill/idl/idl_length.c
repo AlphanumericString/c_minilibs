@@ -43,7 +43,7 @@ size_t idl_nlength(t_idl *head, size_t n) {
  * \return The number of matching elements.
  * \ingroup idl
 **/
-size_t idl_match_nb(t_idl *head, t_callback matcher, void *arg) {
+size_t idl_match_nb(t_idl *head, t_cm_callback matcher, void *arg) {
 	size_t count = 0;
 
 	if (!head || !matcher) {

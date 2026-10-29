@@ -16,7 +16,7 @@
  * zero-filed structure on failure
  * \ingroup sptr
 **/
-t_owned_ptr sptr_make_owned_from_raw(void *raw_ptr, t_dtor d) {
+t_owned_ptr sptr_make_owned_from_raw(void *raw_ptr, t_cm_dtor d) {
 	t_owned_ptr ret = (t_owned_ptr){0};
 	t_fbox     *f;
 
@@ -44,7 +44,7 @@ t_owned_ptr sptr_make_owned_from_raw(void *raw_ptr, t_dtor d) {
  * strong_ptr
  * \ingroup sptr
 **/
-t_owned_ptr sptr_make_owned_from_strong(t_strong_ptr *sp, t_dtor d) {
+t_owned_ptr sptr_make_owned_from_strong(t_strong_ptr *sp, t_cm_dtor d) {
 	t_owned_ptr ret = (t_owned_ptr){0};
 
 	if (!sp || sptr_get_rc(sp) != 1) {
@@ -72,7 +72,7 @@ t_owned_ptr sptr_make_owned_from_strong(t_strong_ptr *sp, t_dtor d) {
  * false
  * \ingroup sptr
 **/
-t_owned_ptr sptr_make_owned_from_owned(t_owned_ptr *owned, t_dtor d) {
+t_owned_ptr sptr_make_owned_from_owned(t_owned_ptr *owned, t_cm_dtor d) {
 	t_owned_ptr ret = (t_owned_ptr){0};
 
 	if (!owned || !owned->meta) {
@@ -100,7 +100,7 @@ t_owned_ptr sptr_make_owned_from_owned(t_owned_ptr *owned, t_dtor d) {
  * \note clears out uptr internal values
  * \ingroup sptr
 **/
-t_owned_ptr sptr_make_owned_from_uniq(t_uniq_ptr *uptr, t_dtor d) {
+t_owned_ptr sptr_make_owned_from_uniq(t_uniq_ptr *uptr, t_cm_dtor d) {
 	t_owned_ptr ret = (t_owned_ptr){0};
 	t_fbox     *f;
 
@@ -136,7 +136,7 @@ t_owned_ptr sptr_make_owned_from_uniq(t_uniq_ptr *uptr, t_dtor d) {
  * \return the newly created uniq pointer or a zeroed out uniq pointer
  * \ingroup sptr
 **/
-t_uniq_ptr sptr_make_uniq_from_raw(void *ptr, t_dtor d) {
+t_uniq_ptr sptr_make_uniq_from_raw(void *ptr, t_cm_dtor d) {
 	if (!ptr) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return ((t_uniq_ptr){0});
@@ -152,7 +152,7 @@ t_uniq_ptr sptr_make_uniq_from_raw(void *ptr, t_dtor d) {
  * \warning this is an illegal operation. Implemented purely to warn people.
  * \ingroup sptr
 **/
-t_uniq_ptr sptr_make_uniq_from_weak(t_weak_ptr *ptr, t_dtor _) {
+t_uniq_ptr sptr_make_uniq_from_weak(t_weak_ptr *ptr, t_cm_dtor _) {
 	if (!ptr) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return ((t_uniq_ptr){0});
@@ -169,7 +169,7 @@ t_uniq_ptr sptr_make_uniq_from_weak(t_weak_ptr *ptr, t_dtor _) {
  * \note zeroes out the fields of ptr for data and dtor.
  * \ingroup sptr
 **/
-t_uniq_ptr sptr_make_uniq_from_strong(t_strong_ptr *ptr, t_dtor d) {
+t_uniq_ptr sptr_make_uniq_from_strong(t_strong_ptr *ptr, t_cm_dtor d) {
 	t_uniq_ptr ret;
 
 	if (!ptr || sptr_get_rc(ptr) != 1 || !ptr->data) {
@@ -197,7 +197,7 @@ t_uniq_ptr sptr_make_uniq_from_strong(t_strong_ptr *ptr, t_dtor d) {
  * \note zeroes out the fields of ptr for data and dtor.
  * \ingroup sptr
 **/
-t_uniq_ptr sptr_make_uniq_from_owned(t_owned_ptr *ptr, t_dtor d) {
+t_uniq_ptr sptr_make_uniq_from_owned(t_owned_ptr *ptr, t_cm_dtor d) {
 	t_uniq_ptr ret;
 
 	if (!ptr || !ptr->owner || sptr_get_rc(ptr) != 1 || !sptr_get(ptr)) {
@@ -226,7 +226,7 @@ t_uniq_ptr sptr_make_uniq_from_owned(t_owned_ptr *ptr, t_dtor d) {
  * \note empties out the source uniq pointer ptr.
  * \ingroup sptr
 **/
-t_uniq_ptr sptr_make_uniq_from_uniq(t_uniq_ptr *ptr, t_dtor d) {
+t_uniq_ptr sptr_make_uniq_from_uniq(t_uniq_ptr *ptr, t_cm_dtor d) {
 	t_uniq_ptr ret;
 
 	if (!ptr || !ptr->data) {

@@ -13,7 +13,8 @@
  * \warning rb_get assume that buffer is always correctly sized.
  * \ingroup rb
 **/
-void *rb_get(const t_rb *rb, t_comparator comp, const void *arg, void *buffer) {
+void *rb_get(const t_rb *rb, t_cm_comparator comp, const void *arg,
+             void *buffer) {
 	void *elem;
 
 	if (!rb || !comp || !buffer) {
@@ -42,7 +43,7 @@ void *rb_get(const t_rb *rb, t_comparator comp, const void *arg, void *buffer) {
  * \warning rb_get assume that buffer is always correctly sized.
  * \ingroup rb
 **/
-void *rb_nget(const t_rb *rb, size_t n, t_comparator comp, const void *arg,
+void *rb_nget(const t_rb *rb, size_t n, t_cm_comparator comp, const void *arg,
               void *buffer) {
 	size_t i = 0;
 	size_t pos;

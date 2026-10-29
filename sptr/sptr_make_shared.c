@@ -17,7 +17,7 @@
  * \note allocates a complete box with strong count = 1 and weak count = 0
  * \ingroup sptr
 **/
-t_strong_ptr sptr_make_shared_from_raw(void *raw_ptr, t_dtor d) {
+t_strong_ptr sptr_make_shared_from_raw(void *raw_ptr, t_cm_dtor d) {
 	t_fbox *complete_box;
 
 	if (!raw_ptr) {
@@ -42,7 +42,7 @@ t_strong_ptr sptr_make_shared_from_raw(void *raw_ptr, t_dtor d) {
  * existing non-NULL destructor
  * \ingroup sptr
 **/
-t_strong_ptr sptr_make_shared_from_weak(t_weak_ptr *weak_ptr, t_dtor d) {
+t_strong_ptr sptr_make_shared_from_weak(t_weak_ptr *weak_ptr, t_cm_dtor d) {
 	t_strong_ptr ret;
 
 	if (!weak_ptr || !weak_ptr->meta || !sptr_get_rc(weak_ptr)) {
@@ -68,7 +68,8 @@ t_strong_ptr sptr_make_shared_from_weak(t_weak_ptr *weak_ptr, t_dtor d) {
  * and conflicts with an existing destructor
  * \ingroup sptr
 **/
-t_strong_ptr sptr_make_shared_from_strong(t_strong_ptr *strong_ptr, t_dtor d) {
+t_strong_ptr sptr_make_shared_from_strong(t_strong_ptr *strong_ptr,
+                                          t_cm_dtor     d) {
 	t_strong_ptr ret;
 
 	if (!strong_ptr || !sptr_get_rc(strong_ptr)) {
@@ -94,7 +95,7 @@ t_strong_ptr sptr_make_shared_from_strong(t_strong_ptr *strong_ptr, t_dtor d) {
  * count decremented); fails if owned is not owner or strong count != 1
  * \ingroup sptr
 **/
-t_strong_ptr sptr_make_shared_from_owned(t_owned_ptr *own, t_dtor d) {
+t_strong_ptr sptr_make_shared_from_owned(t_owned_ptr *own, t_cm_dtor d) {
 	t_strong_ptr ret;
 
 	if (!own || !own->meta || own->data != own->meta->data) {
@@ -122,7 +123,7 @@ t_strong_ptr sptr_make_shared_from_owned(t_owned_ptr *own, t_dtor d) {
  * \return the shared (strong) pointer
  * \ingroup sptr
 **/
-t_strong_ptr sptr_make_shared_from_uniq(t_uniq_ptr *u, t_dtor d) {
+t_strong_ptr sptr_make_shared_from_uniq(t_uniq_ptr *u, t_cm_dtor d) {
 	t_strong_ptr ret;
 
 	if (!u) {

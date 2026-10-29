@@ -8,8 +8,8 @@ static void local_dtor(void *_) {
 
 // set_dtors
 static void test_sptr_set_dtors_errors(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0_no_rc = (t_fbox){.data = data, .dtor = NULL, .rc = 0, .wc = 0};
 
@@ -28,8 +28,8 @@ static void test_sptr_set_dtors_errors(void) {
 }
 
 static void test_sptr_set_dtors_ok(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0 = (t_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 0};
 	t_fbox b1 = (t_fbox){.data = data, .dtor = dtor, .rc = 2, .wc = 0};
@@ -56,8 +56,8 @@ NO_COV void test_sptr_set_dtors(void) {
 
 // set_dtorw (always returns false)
 NO_COV void test_sptr_set_dtorw(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0_ok    = (t_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 1};
 	t_fbox b1_no_wc = (t_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 0};
@@ -86,8 +86,8 @@ NO_COV void test_sptr_set_dtorw(void) {
 
 // set_dtoro
 static void test_sptr_set_dtoro_errors(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0_borrow = (t_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 1};
 	t_fbox b1_rc0    = (t_fbox){.data = data, .dtor = NULL, .rc = 0, .wc = 0};
@@ -112,8 +112,8 @@ static void test_sptr_set_dtoro_errors(void) {
 }
 
 static void test_sptr_set_dtoro_ok(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0 = (t_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 0};
 	t_fbox b1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
@@ -140,7 +140,7 @@ NO_COV void test_sptr_set_dtoro(void) {
 
 // set_dtoru
 static void test_sptr_set_dtoru_errors(void) {
-	t_dtor dtor = local_dtor;
+	t_cm_dtor dtor = local_dtor;
 
 	t_uniq_ptr u0_data_null = (t_uniq_ptr){.data = NULL, .dtor = NULL};
 
@@ -154,8 +154,8 @@ static void test_sptr_set_dtoru_errors(void) {
 }
 
 static void test_sptr_set_dtoru_ok(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_uniq_ptr u0 = (t_uniq_ptr){.data = data, .dtor = NULL};
 	t_uniq_ptr u1 = (t_uniq_ptr){.data = data, .dtor = dtor};

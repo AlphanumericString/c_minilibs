@@ -12,7 +12,7 @@ static void free_function(void *_) {
 NO_COV void test_lruc_create(void) {
 	t_lruc            *lru;
 	const t_lruc_stats cmp = (t_lruc_stats){0};
-	t_dtor             dt  = free_function;
+	t_cm_dtor          dt  = free_function;
 
 	lru = lruc_create(3, dt);
 	assert(lru != NULL);
@@ -34,7 +34,7 @@ NO_COV void test_lruc_create(void) {
 NO_COV void test_lruc_init(void) {
 	t_lruc             lru;
 	const t_lruc_stats cmp = (t_lruc_stats){0};
-	t_dtor             dt  = free_function;
+	t_cm_dtor          dt  = free_function;
 
 	assert(lruc_init(&lru, 3, dt) == &lru);
 	assert(memcmp(&lru.stats, &cmp, sizeof(lru.stats)) == 0);
@@ -52,8 +52,8 @@ NO_COV void test_lruc_init(void) {
 	assert(lruc_init(&lru, 0, dt) == NULL);
 }
 NO_COV void test_lruc_destroy(void) {
-	t_lruc lru;
-	t_dtor dt = free_function;
+	t_lruc    lru;
+	t_cm_dtor dt = free_function;
 
 	lruc_init(&lru, 3, dt);
 	assert(lru.buckets_nb == 3);
@@ -67,8 +67,8 @@ NO_COV void test_lruc_destroy(void) {
 	lruc_destroy(NULL);
 }
 NO_COV void test_lruc_free(void) {
-	t_lruc *lru;
-	t_dtor  dt = free_function;
+	t_lruc   *lru;
+	t_cm_dtor dt = free_function;
 
 	lru = lruc_create(3, dt);
 	assert(lru != NULL);

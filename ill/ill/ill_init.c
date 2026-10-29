@@ -30,7 +30,7 @@ static inline void setup_chain(t_ill *to_setup, t_ill *nxt, size_t offset) {
  * on failure.
  * \ingroup ill
 **/
-void *ill_copy(const t_ill *head, t_duplicator dupper) {
+void *ill_copy(const t_ill *head, t_cm_duplicator dupper) {
 	size_t offset;
 	void  *e_cpy = NULL;
 	t_ill *prev  = NULL;

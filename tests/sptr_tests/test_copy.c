@@ -2,7 +2,9 @@
 
 #include "sptr_tests.h"
 
-static void local_dtor(void *_){return;}
+static void local_dtor(void *_) {
+	return;
+}
 
 // copys
 static void test_sptr_copys_errors(void) {
@@ -117,8 +119,8 @@ static void test_sptr_copyo_errors(void) {
 }
 
 static void test_sptr_copyo_ok(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_fbox b0 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
 	t_fbox b1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 3};
@@ -159,8 +161,8 @@ static void test_sptr_copyu_errors(void) {
 }
 
 static void test_sptr_copyu_ok(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = local_dtor;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = local_dtor;
 
 	t_uniq_ptr u0 = (t_uniq_ptr){.data = data, .dtor = dtor};
 	t_uniq_ptr u1 = (t_uniq_ptr){.data = data, .dtor = NULL};

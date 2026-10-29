@@ -11,8 +11,8 @@ static void dummy_dt(void *p) {
 
 // deletes
 static void test_sptr_deletes_errors(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = dummy_dt;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = dummy_dt;
 
 	t_fbox b0_no_rc = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
 
@@ -81,8 +81,8 @@ NO_COV void test_sptr_deletes(void) {
 
 // deletew
 static void test_sptr_deletew_errors(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = dummy_dt;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = dummy_dt;
 
 	t_fbox b0_no_wc = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
 
@@ -142,8 +142,8 @@ NO_COV void test_sptr_deletew(void) {
 
 // deleteo
 static void test_sptr_deleteo_errors(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dtor = dummy_dt;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dtor = dummy_dt;
 
 	t_fbox b0_borrow_no_wc =
 	    (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
@@ -174,8 +174,8 @@ static void test_sptr_deleteo_errors(void) {
 }
 
 static void test_sptr_deleteo_ok(void) {
-	void  *data = (void *)0xDEAD;
-	t_dtor dt   = dummy_dt;
+	void     *data = (void *)0xDEAD;
+	t_cm_dtor dt   = dummy_dt;
 
 	t_fbox  b0_own     = (t_fbox){.data = data, .dtor = dt, .rc = 1, .wc = 1};
 	t_fbox  b1_bor     = (t_fbox){.data = data, .dtor = dt, .rc = 1, .wc = 1};

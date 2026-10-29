@@ -44,7 +44,7 @@ size_t ill_nlength(t_ill *head, size_t n) {
  * \return The number of matching elements.
  * \ingroup ill
 **/
-size_t ill_match_nb(t_ill *head, t_callback matcher, void *arg) {
+size_t ill_match_nb(t_ill *head, t_cm_callback matcher, void *arg) {
 	size_t count = 0;
 
 	if (!matcher) {
