@@ -86,6 +86,7 @@ typedef struct s_ctlsv {
 	t_ctls_typewrap vals[C_MINI__CTLS_CAP];
 	size_t          len;
 } t_ctlsv;
+
 #endif // C_MINI__CTLS_INTERNAL
 
 bool             ctls_rm(const char *name);
@@ -94,5 +95,6 @@ bool             ctls_set(const char *name, t_ctls_typewrap init_val);
 t_ctls_typewrap *ctls_get(const char *name);
 size_t           ctls_len(void);
 bool             ctls_dump_typewrap(t_ctls_typewrap t, int fd);
+ssize_t          ctls_dump_all(int fd);
 
 #endif // !C_MINI__CTLS

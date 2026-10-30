@@ -34,6 +34,7 @@ void test_ctls_set(void);
 void test_ctls_get(void);
 void test_ctls_len(void);
 void test_ctls_dump_typewrap(void);
+void test_ctls_dump_all(void);
 void test_ctls_separate(void);
 
 // +----+
@@ -47,8 +48,12 @@ void test_ftls_separate(void);
 // |VTLS|---------<vtls>
 // +----+
 
+void test_vtls_dump(void);
+void test_vtls_dump_all(void);
 void test_vtls_rm(void);
 void test_vtls_get(void);
+void test_vtls_sizeof(void);
+void test_vtls_getout(void);
 void test_vtls_len(void);
 void test_vtls_has(void);
 void test_vtls_set(void);

@@ -51,3 +51,30 @@ bool ctls_dump_typewrap(t_ctls_typewrap t, int fd) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CTLS_SUCCESS);
 	return (true);
 }
+
+/**
+ * \brief dumps all values contained in a type-safe wrapper
+ * \param fd the filedescriptor where to output
+ * \note this dumps the values directly to fd
+ * \ingroup ctls
+**/
+ssize_t ctls_dump_all(int fd) {
+	t_ctlsv *ct;
+
+	if (fd < 0) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CTLS_EARG);
+		return (-1);
+	}
+	ct = pthread_getspecific(ctls_key);
+	if (!ct || !ct->len) {
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CTLS_SUCCESS);
+		return (0);
+	}
+	for (size_t i = 0; i < ct->len; i++) {
+		dprintf(fd, "%s:", ct->v_name[i]);
+		ctls_dump_typewrap(ct->vals[i], fd);
+		dprintf(fd, "\n");
+	}
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CTLS_SUCCESS);
+	return (ct->len);
+}

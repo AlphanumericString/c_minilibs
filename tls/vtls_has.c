@@ -10,10 +10,21 @@
  * \ingroup vtls
 **/
 bool vtls_has(const char *v_name) {
-	t_vtls_array *vtls = pthread_getspecific(vtls_key);
+	t_vtls *vtls = pthread_getspecific(vtls_key);
 
-	if (!vtls || !v_name) return (false);
+	if (!v_name) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__VTLS_EARG);
+		return (false);
+	}
+	if (!vtls) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__VTLS_FAILLURE);
+		return (false);
+	}
 	for (size_t i = 0; i < vtls->len; i++)
-		if (!strcmp(vtls->data[i].v_name, v_name)) return (true);
+		if (!strcmp(vtls->data[i].v_name, v_name)) {
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__VTLS_SUCCESS);
+			return (true);
+		}
+	CM_LOG(C_MINI__LEVEL_WARN, C_MINI__VTLS_FAILLURE);
 	return (false);
 }

@@ -9,6 +9,7 @@ static int ctls_tests(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Dump", )
 	test_ctls_dump_typewrap();
+	test_ctls_dump_all();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Get", )
 	test_ctls_get();
@@ -43,10 +44,15 @@ static int ftls_tests(void) {
 }
 
 static int vtls_tests(void) {
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Dump", )
+	test_vtls_dump();
+	test_vtls_dump_all();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Rm", )
 	test_vtls_rm();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Get", )
 	test_vtls_get();
+	test_vtls_sizeof();
+	test_vtls_getout();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Lenght", )
 	test_vtls_len();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Has", )

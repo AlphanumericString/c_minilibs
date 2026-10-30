@@ -3,11 +3,11 @@
 #include "tls_tests.h"
 
 NO_COV void test_vtls_set(void) {
-	void         *prev  = NULL;
-	void         *adr[] = {(void *)0xDEAD, (void *)0xCAFE, (void *)0xBEEF,
-	                       (void *)0xBEAD};
-	t_vtls_array *new_arr;
-	const char   *keys[C_MINI__VTLS_START_SIZE + 1] = {"a", "b", "c", "d", "e"};
+	void       *prev  = NULL;
+	void       *adr[] = {(void *)0xDEAD, (void *)0xCAFE, (void *)0xBEEF,
+	                     (void *)0xBEAD};
+	t_vtls     *new_arr;
+	const char *keys[C_MINI__VTLS_START_SIZE + 1] = {"a", "b", "c", "d", "e"};
 
 	assert(vtls_get(keys[0]) == NULL), assert(vtls_get(keys[1]) == NULL);
 	// set new elem
