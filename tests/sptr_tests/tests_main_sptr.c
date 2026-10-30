@@ -111,6 +111,16 @@ NO_COV int main(void) {
 	test_sptr_make_uniq_from_owned();
 	test_sptr_make_uniq_from_uniq();
 
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Fbox", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	test_fbox_get_count();
+	test_fbox_increment();
+	test_fbox_decrement();
+	test_fbox_get_data();
+	test_fbox_init();
+	test_fbox_new();
+
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "All SPTR tests completed successfully.", )
 
 	return (0);

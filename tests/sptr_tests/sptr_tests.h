@@ -104,6 +104,14 @@ void test_sptr_dumpw(void);
 void test_sptr_dumpo(void);
 void test_sptr_dumpu(void);
 
+// [fbox]
+void test_fbox_get_count(void);
+void test_fbox_increment(void);
+void test_fbox_decrement(void);
+void test_fbox_get_data(void);
+void test_fbox_init(void);
+void test_fbox_new(void);
+
 // [change]
 void test_sptr_strengthen(void);
 void test_sptr_weaken(void);

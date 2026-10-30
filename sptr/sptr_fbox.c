@@ -16,7 +16,7 @@ bool sptr_fb_decrement(t_fbox *f) {
 	if (!sptri_rc_get(f)) return (false);
 	sptri_rc_dec(f);
 	if (!sptri_rc_get(f)) {
-		f->dtor(f->data);
+		if (f->dtor) f->dtor(f->data);
 		f->data = NULL;
 		f->dtor = NULL;
 	}
