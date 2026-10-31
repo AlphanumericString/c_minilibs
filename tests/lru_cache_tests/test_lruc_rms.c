@@ -57,8 +57,8 @@ NO_COV void test_lruc_remove(void) {
 	int    k2 = 42;
 
 	lruc_init(&c, 2, NULL);
-	assert(lruc_put(&c, k1, strlen(k1), (void *)0xdead) == 0);
-	assert(lruc_put(&c, (void *)&k2, sizeof(int), (void *)0xbafa) == 0);
+	assert(lruc_put(&c, k1, strlen(k1), (void *)0xdead) == true);
+	assert(lruc_put(&c, (void *)&k2, sizeof(int), (void *)0xbafa) == true);
 	assert(lruc_get(&c, k1, strlen(k1)) == (void *)0xdead);
 	assert(lruc_get(&c, (void *)&k2, sizeof(int)) == (void *)0xbafa);
 	assert(c.MRU != NULL), assert(c.MRU->kv.key == &k2);

@@ -169,10 +169,10 @@ t_lruc *lruc_init(t_lruc *cache, size_t capacity, void (*free_er)(void *));
 void    lruc_destroy(t_lruc *cache);
 void    lruc_free(t_lruc **cache);
 
-int lruc_put_kv(t_lruc *cache, t_keyvalue kv);
-int lruc_put(t_lruc *cache, const void *key, size_t key_len, const void *value);
-int lruc_put_ttl(t_lruc *cache, const void *key, size_t key_len,
-                 const void *value, uint64_t ttl_ms);
+bool lruc_put_kv(t_lruc *c, t_keyvalue kv);
+bool lruc_put(t_lruc *c, const void *key, size_t k_len, const void *value);
+bool lruc_put_ttl(t_lruc *c, const void *key, size_t k_len, const void *val,
+                  uint64_t ttl_ms);
 
 void *lruc_get(t_lruc *cache, const void *key, size_t key_len);
 void *lruc_get_lru(t_lruc *cache, const void *key, size_t key_len);

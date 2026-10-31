@@ -14,14 +14,14 @@ static inline void lruci_hsh_push(t_lruc *c, t_lruc_keynode *n, size_t hash) {
 	c->buckets[hash] = n;
 }
 
-static int insert_to_structs(t_lruc_keynode kv, t_lruc_keynode *node, t_lruc *c,
-                             size_t h_pos) {
+static bool insert_to_structs(t_lruc_keynode kv, t_lruc_keynode *node,
+                              t_lruc *c, size_t h_pos) {
 	*node = kv;
 	lruci_lru_push(c, node);
 	lruci_hsh_push(c, node, h_pos);
 	c->node_nb--;
 	lruci_hp_push(c, node);
-	return (0);
+	return (true);
 }
 static t_lruc_keynode *get_node_to_update(t_lruc *c, t_lruc_keynode *node,
                                           size_t hash_pos) {
@@ -77,17 +77,17 @@ static t_lruc_keynode *get_node(t_lruc *c, t_lruc_keynode add_val,
 	}
 	return (node);
 }
-static int cache_put_internal(t_lruc *c, t_lruc_keynode to_add) {
+static bool cache_put_internal(t_lruc *c, t_lruc_keynode to_add) {
 	t_lruc_keynode *node = NULL;
 	size_t          hash_pos;
 
 	if (!c || !to_add.kv.key || !to_add.kv.k_len ||
 	    to_add.kv.k_len == (size_t)-1) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
-		return (-1);
+		return (false);
 	}
 	node = get_node(c, to_add, &hash_pos);
-	if (!node) return (-1);
+	if (!node) return (false);
 	return (insert_to_structs(to_add, node, c, hash_pos));
 }
 /**
@@ -97,13 +97,13 @@ static int cache_put_internal(t_lruc *c, t_lruc_keynode to_add) {
  * \return 0 on success, -1 on failure
  * \ingroup lruc
 **/
-int lruc_put_kv(t_lruc *c, t_keyvalue kv) {
+bool lruc_put_kv(t_lruc *c, t_keyvalue kv) {
 	uint64_t now;
 
 	now = lruci_timenow();
 	if (now == (uint64_t)-1) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK)
-		return (-1);
+		return (false);
 	}
 	return (cache_put_internal(c, (t_lruc_keynode){
 	                                  .kv         = kv,
@@ -123,14 +123,14 @@ int lruc_put_kv(t_lruc *c, t_keyvalue kv) {
  * \return 0 on success, -1 on failure
  * \ingroup lruc
 **/
-int lruc_put(t_lruc *cache, const void *key, size_t key_len,
-             const void *value) {
+bool lruc_put(t_lruc *cache, const void *key, size_t key_len,
+              const void *value) {
 	uint64_t now;
 
 	now = lruci_timenow();
 	if (now == (uint64_t)-1) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK)
-		return (-1);
+		return (false);
 	}
 	return (cache_put_internal(cache,
 	                           (t_lruc_keynode){
@@ -154,14 +154,14 @@ int lruc_put(t_lruc *cache, const void *key, size_t key_len,
  * \return 0 on success, -1 on failure
  * \ingroup lruc
 **/
-int lruc_put_ttl(t_lruc *cache, const void *key, size_t key_len,
-                 const void *value, uint64_t ttl_ms) {
+bool lruc_put_ttl(t_lruc *cache, const void *key, size_t key_len,
+                  const void *value, uint64_t ttl_ms) {
 	uint64_t now;
 
 	now = lruci_timenow();
 	if (now == (uint64_t)-1) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK)
-		return (-1);
+		return (false);
 	}
 	return (cache_put_internal(cache,
 	                           (t_lruc_keynode){
