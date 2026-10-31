@@ -20,7 +20,9 @@ void test_lruc_put_ttl(void);
 void test_lruc_get(void);
 void test_lruc_get_lru(void);
 
+void test_lruc_clear_reserved(void);
 void test_lruc_clear(void);
+void test_lruc_clear_to_reserved(void);
 void test_lruc_remove(void);
 
 void test_lruc_has(void);
@@ -37,10 +39,13 @@ void test_lruc_stats(void);
 
 void test_lruci_hp_pop(void);
 void test_lruci_hp_pop_nth(void);
+void test_lruci_keyinhash(void);
 void test_lruci_keyinlist(void);
 void test_lruci_node_eq(void);
+void test_lruci_rsvrd_push(void);
+void test_lruci_rsvrd_pop(void);
 void test_lruci_hsh_pop(void);
-void test_lruci_hsh_push(void);
+// void test_lruci_hsh_push(void);// moved to inline
 
 void test_lruc_foreach(void);
 void test_lruc_foreach_ru_ordered(void);

@@ -4,6 +4,38 @@
 
 #include "lru_cache_tests.h"
 
+NO_COV void test_lruci_rsvrd_push(void) {
+	t_lruc         c  = (t_lruc){0};
+	t_lruc_keynode kv = (t_lruc_keynode){
+	    .hash_next  = NULL,
+	    .lru_next   = NULL,
+	    .heap_index = 0,
+	    .lru_prev   = NULL,
+	    .time       = lruci_timenow(),
+	    .kv         = (t_keyvalue){0},
+	};
+
+	assert(c.reserved_nodes == NULL);
+	assert(lruci_rsrvd_push(&c, &kv));
+	assert(c.reserved_nodes == &kv);
+}
+NO_COV void test_lruci_rsvrd_pop(void) {
+	t_lruc         c  = (t_lruc){0};
+	t_lruc_keynode kv = (t_lruc_keynode){
+	    .hash_next  = NULL,
+	    .lru_next   = NULL,
+	    .heap_index = 0,
+	    .lru_prev   = NULL,
+	    .time       = lruci_timenow(),
+	    .kv         = (t_keyvalue){0},
+	};
+
+	c.reserved_nodes = &kv;
+	assert(lruci_rsrvd_pop(&c) == &kv);
+	assert(c.reserved_nodes == NULL);
+	assert(lruci_rsrvd_pop(&c) == NULL);
+}
+
 NO_COV void test_lruci_hsh_pop(void) {
 	t_lruc          c;
 	const char     *key1 = "hsh_pop key";

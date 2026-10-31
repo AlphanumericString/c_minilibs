@@ -70,6 +70,9 @@ static t_lruc_keynode *get_node(t_lruc *c, t_lruc_keynode add_val,
 	node = lruci_keyinhash(c, add_val.kv.key, add_val.kv.k_len, hash_pos);
 	if (node != NULL) {
 		node = get_node_to_update(c, node, *hash_pos);
+	} else if (c->reserved_nodes) {
+		node = lruci_rsrvd_pop(c);
+		c->node_nb++;
 	} else if (c->node_nb < c->buckets_nb) {
 		node = create_node(c, node);
 	} else {

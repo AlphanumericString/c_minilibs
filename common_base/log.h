@@ -94,7 +94,7 @@ extern pthread_mutex_t console_lock;
 #		ifndef CM_DBG_POS
 #			define CM_DBG_POS                                                 \
 				CM_DBG(C_MINI__LOG_DP_COLOR "[POS]" C_MINI__LOG_RESET_COLOR    \
-				                            ": %s:%d %s\n",                    \
+				                            ": %s:%d %s",                      \
 				       __FILE__, __LINE__, __FUNCTION__)
 #		endif // !CM_DBG_POS
 

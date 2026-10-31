@@ -3,6 +3,37 @@
 
 #include "lru_cache_tests.h"
 
+NO_COV void test_lruci_keyinhash(void) {
+	t_lruc      c;
+	size_t      returnd_hash, actual_hash;
+	const char *key1 = "big key";
+	const char *key2 = "small key";
+	const char *key3 = "skull key";
+	const char *key4 = "void key";
+
+	const char *val1 = "big door";
+	const char *val2 = "small door";
+	const char *val3 = "skull door";
+
+	lruc_init(&c, 3, NULL);
+	lruc_put(&c, key1, strlen(key1), val1);
+	lruc_put(&c, key2, strlen(key2), val2);
+	lruc_put(&c, key3, strlen(key3), val3);
+	assert(lruci_keyinhash(&c, key1, strlen(key1), NULL) != NULL);
+	assert(lruci_keyinhash(&c, key1, strlen(key1), &returnd_hash) != NULL);
+	actual_hash = lruci_hash_djb2(key1, strlen(key1));
+	assert(returnd_hash == actual_hash % c.buckets_nb);
+	assert(lruci_keyinhash(&c, key2, strlen(key2), &returnd_hash) != NULL);
+	actual_hash = lruci_hash_djb2(key2, strlen(key2));
+	assert(returnd_hash == actual_hash % c.buckets_nb);
+	assert(lruci_keyinhash(&c, key3, strlen(key3), &returnd_hash) != NULL);
+	actual_hash = lruci_hash_djb2(key3, strlen(key3));
+	assert(returnd_hash == actual_hash % c.buckets_nb);
+	assert(lruci_keyinhash(&c, key4, strlen(key4), &returnd_hash) == NULL);
+	actual_hash = lruci_hash_djb2(key4, strlen(key4));
+	assert(returnd_hash == actual_hash % c.buckets_nb);
+	lruc_destroy(&c);
+}
 NO_COV void test_lruci_keyinlist(void) {
 	t_lruc      c;
 	const char *key1 = "big key";

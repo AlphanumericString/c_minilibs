@@ -33,3 +33,20 @@ t_lruc_keynode *lruci_hsh_pop(t_lruc *c, t_lruc_keynode *n, size_t hash) {
 	n->hash_next = NULL;
 	return (it);
 }
+t_lruc_keynode *lruci_rsrvd_pop(t_lruc *c) {
+	t_lruc_keynode *node = NULL;
+
+	if (c->reserved_nodes) {
+		node              = c->reserved_nodes;
+		c->reserved_nodes = node->lru_next;
+		c->reserved_nodes_nb--;
+	}
+	return (node);
+}
+bool lruci_rsrvd_push(t_lruc *c, t_lruc_keynode *n) {
+	*n                = (t_lruc_keynode){0};
+	n->lru_next       = c->reserved_nodes;
+	c->reserved_nodes = n;
+	c->reserved_nodes_nb++;
+	return (true);
+}

@@ -9,32 +9,103 @@
 
 NO_COV void test_lruc_put_kv(void) {
 	t_lruc          c;
-	t_keyvalue      kv1;
-	t_lruc_keynode *kv_in_cache;
-	char           *key = "toto";
+	t_keyvalue      kv1_ok;
+	t_keyvalue      kv2_ok;
+	t_keyvalue      kv3_ok;
+	t_keyvalue      kv4_no_key;
+	t_keyvalue      kv5_no_keylen;
+	t_lruc_keynode *kv;
+	char           *key1 = "toto";
+	char           *key2 = "titi";
+	char           *key3 = "loooooooooooooong key";
+	char           *key5 = "tata";
+	void           *val1 = (void *)0xDEADBEEF;
+	void           *val2 = (void *)0xCAFEBEAD;
+	void           *val3 = (void *)0xB00B5;
+	void           *val4 = (void *)0x69420;
+	void           *val5 = (void *)0x3141592;
 
 	lruc_init(&c, 2, NULL);
 
-	kv1 = (t_keyvalue){.key = NULL, .k_len = 0, .value = (void *)0xDEADBEEF};
-	assert(lruc_put_kv(&c, kv1) == false);
-	kv1.key = key;
-	assert(lruc_put_kv(&c, kv1) == false);
-	kv1.k_len = strlen(key);
-	assert(lruc_put_kv(&c, kv1) == true);
-	kv_in_cache = lruci_keyinhash(&c, key, strlen(key), NULL);
-	assert(kv_in_cache);
-	assert(kv_in_cache->kv.k_len == strlen(key));
+	kv1_ok = (t_keyvalue){.key = key1, .k_len = strlen(key1), .value = val1};
+	kv2_ok = (t_keyvalue){.key = key2, .k_len = strlen(key2), .value = val2};
+	kv3_ok = (t_keyvalue){.key = key3, .k_len = strlen(key3), .value = val3};
+	kv4_no_key    = (t_keyvalue){.key = NULL, .k_len = 12, .value = val4};
+	kv5_no_keylen = (t_keyvalue){.key = key5, .k_len = 0, .value = val5};
+
+	assert(lruc_put_kv(&c, kv4_no_key) == false);
+	assert(lruc_put_kv(&c, kv5_no_keylen) == false);
+	assert(lruc_put_kv(&c, kv1_ok) == true);
+	assert(c.LRU == c.MRU && c.LRU != NULL);
+	assert(c.MRU->kv.key == key1);
+	assert(c.node_nb == 1);
+	kv = c.LRU;
+	assert(kv->kv.key == key1 && kv->kv.k_len == strlen(key1) &&
+	       kv->kv.value == val1);
+
+	// update
+	kv1_ok.value = val2;
+	assert(lruc_put_kv(&c, kv1_ok) == true);
+	assert(c.LRU == c.MRU && c.LRU != NULL);
+	assert(c.MRU->kv.key == key1);
+	assert(c.node_nb == 1);
+	kv = c.LRU;
+	assert(kv->kv.key == key1 && kv->kv.k_len == strlen(key1) &&
+	       kv->kv.value == val2);
+	kv->kv.value = val1; // manual reset
+
+	// max fill
+	assert(lruc_put_kv(&c, kv2_ok) == true);
+	assert(c.LRU != c.MRU && c.LRU != NULL && c.MRU != NULL);
+	assert(c.MRU->kv.key == key2);
+	assert(c.LRU->kv.key == key1);
+	assert(c.node_nb == 2);
+	kv = c.LRU;
+	assert(kv->kv.key == key1 && kv->kv.k_len == strlen(key1) &&
+	       kv->kv.value == val1);
+	kv = c.MRU;
+	assert(kv->kv.key == key2 && kv->kv.k_len == strlen(key2) &&
+	       kv->kv.value == val2);
+
+	// overfill
+	assert(lruc_put_kv(&c, kv3_ok) == true);
+	assert(c.LRU != c.MRU && c.LRU != NULL && c.MRU != NULL);
+	assert(c.MRU->kv.key == key3);
+	assert(c.LRU->kv.key == key2);
+	assert(c.node_nb == 2);
+	kv = c.LRU;
+	assert(kv->kv.key == key2 && kv->kv.k_len == strlen(key2) &&
+	       kv->kv.value == val2);
+	kv = c.MRU;
+	assert(kv->kv.key == key3 && kv->kv.k_len == strlen(key3) &&
+	       kv->kv.value == val3);
+
+	// reserved nodes
+	lruc_remove(&c, key2, strlen(key2));
+	assert(c.reserved_nodes != NULL);
+	assert(lruc_put_kv(&c, kv2_ok) == true);
+	assert(c.LRU != c.MRU && c.LRU != NULL && c.MRU != NULL);
+	assert(c.reserved_nodes == NULL);
+	assert(c.MRU->kv.key == key2);
+	assert(c.LRU->kv.key == key3);
+	assert(c.node_nb == 2);
+	kv = c.MRU;
+	assert(kv->kv.key == key2 && kv->kv.k_len == strlen(key2) &&
+	       kv->kv.value == val2);
+	kv = c.LRU;
+	assert(kv->kv.key == key3 && kv->kv.k_len == strlen(key3) &&
+	       kv->kv.value == val3);
 
 	lruc_destroy(&c);
 
 	lruc_init(&c, 2, NULL);
 
 	alloc_set_call_limit(0);
-	assert(lruc_put_kv(&c, kv1) == false);
+	assert(lruc_put_kv(&c, kv1_ok) == false);
 	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 
 	clock_set_call_limit(0);
-	assert(lruc_put_kv(&c, kv1) == false);
+	assert(lruc_put_kv(&c, kv1_ok) == false);
 	clock_set_call_limit(CLOCK_DFT_LIMIT);
 
 	lruc_destroy(&c);

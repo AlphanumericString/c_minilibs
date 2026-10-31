@@ -49,7 +49,6 @@ void lruc_foreach_ttl_ordered(const t_lruc *c, t_kvcallback fn,
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
 		return;
 	}
-	i = 0;
 	for (i = 0; i < c->node_nb; i++)
 		fn(&(c->minHeap[i]->kv), user_data);
 }

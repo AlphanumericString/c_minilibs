@@ -70,9 +70,10 @@ void lruc_cleanup(t_lruc *c) {
 		lruci_hsh_pop(
 		    c, c->minHeap[0],
 		    lruci_hash_djb2(c->minHeap[0]->kv.key, c->minHeap[0]->kv.k_len));
-		free(lruci_hp_pop(c));
+		lruci_rsrvd_push(c, lruci_hp_pop(c));
 		c->stats.expired++;
 	}
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS);
 }
 /**
  * \brief Set the time to live default for the cache

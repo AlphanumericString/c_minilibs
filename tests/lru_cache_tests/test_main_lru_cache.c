@@ -23,6 +23,8 @@ NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Rm", )
 	test_lruc_clear();
+	test_lruc_clear_reserved();
+	test_lruc_clear_to_reserved();
 	test_lruc_remove();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Has", )
@@ -43,15 +45,19 @@ NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Internals", )
 	test_lruci_hp_pop();
 	test_lruci_hp_pop_nth();
+	test_lruci_keyinhash();
 	test_lruci_keyinlist();
 	test_lruci_node_eq();
 	test_lruci_hsh_pop();
+	test_lruci_rsvrd_push();
+	test_lruci_rsvrd_pop();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Foreach", )
 	test_lruc_foreach();
 	test_lruc_foreach_ru_ordered();
 	test_lruc_foreach_ttl_ordered();
 
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "All LRU CACHE tests completed successfully.", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS,
+	       "All LRU CACHE tests completed successfully.", )
 	return (EXIT_SUCCESS);
 }

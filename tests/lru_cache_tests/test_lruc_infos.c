@@ -19,6 +19,7 @@ NO_COV void test_lruc_size(void) {
 	lruc_put(&c, k3, strlen(k3), strdup("grippe sous"));
 	assert(lruc_size(&c) == 3);
 	lruc_remove(&c, k2, strlen(k2));
+	lruc_clear_reserved(&c);
 	assert(lruc_size(&c) == 2);
 	lruc_clear(&c);
 	assert(lruc_size(&c) == 0);

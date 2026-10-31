@@ -99,13 +99,17 @@ typedef struct s_keycache {
 } t_lruc_keynode;
 
 typedef struct {
-	size_t           buckets_nb;
-	size_t           node_nb;
+	size_t buckets_nb;
+	size_t node_nb;
+
 	t_lruc_keynode **buckets;
 	t_lruc_keynode **minHeap;
 
 	t_lruc_keynode *MRU;
 	t_lruc_keynode *LRU;
+
+	size_t          reserved_nodes_nb;
+	t_lruc_keynode *reserved_nodes;
 
 	uint64_t ttl_glob;
 
@@ -136,13 +140,17 @@ typedef struct {
 typedef struct {
 	size_t buckets_nb;
 	size_t node_nb;
-	void **buckets;
-	void **minHeap;
+
+	void *buckets;
+	void *minHeap;
 
 	void *MRU;
 	void *LRU;
 
-	long ttl_glob;
+	size_t reserved_nodes_nb;
+	void  *reserved_nodes;
+
+	uint64_t ttl_glob;
 
 	void         (*dtor)(void *);
 	t_lruc_stats stats;
@@ -179,6 +187,8 @@ void *lruc_get_lru(t_lruc *cache, const void *key, size_t key_len);
 
 void lruc_clear(t_lruc *cache);
 int  lruc_remove(t_lruc *cache, const void *key, size_t key_len);
+bool lruc_clear_reserved(t_lruc *cache);
+void lruc_clear_to_reserved(t_lruc *c);
 
 bool lruc_has(const t_lruc *cache, const void *key, size_t key_len);
 
@@ -214,6 +224,8 @@ void            lruci_lru_push(t_lruc *c, t_lruc_keynode *node);
 t_lruc_keynode *lruci_lru_pop(t_lruc *c, t_lruc_keynode *node);
 
 t_lruc_keynode *lruci_hsh_pop(t_lruc *c, t_lruc_keynode *n, size_t hash);
+t_lruc_keynode *lruci_rsrvd_pop(t_lruc *c);
+bool            lruci_rsrvd_push(t_lruc *c, t_lruc_keynode *n);
 
 void            lruci_hp_push(t_lruc *c, t_lruc_keynode *value);
 t_lruc_keynode *lruci_hp_pop(t_lruc *c);

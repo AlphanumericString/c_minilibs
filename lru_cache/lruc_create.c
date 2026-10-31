@@ -74,6 +74,7 @@ void lruc_destroy(t_lruc *cache) {
 	}
 	lruc_clear(cache);
 	free(cache->buckets);
+	lruc_clear_reserved(cache);
 	cache->buckets_nb = 0;
 	cache->buckets    = NULL;
 	cache->minHeap    = NULL;
