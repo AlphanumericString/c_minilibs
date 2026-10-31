@@ -26,6 +26,7 @@ NO_COV void test_lruc_isexpired(void) {
 	lruc_setttl(&c, LONG_MAX);
 	assert(lruc_isexpired(&c, k1, strlen(k1)) == false);
 
+	assert(lruc_isexpired(NULL, k1, strlen(k1)) == false);
 	clock_set_call_limit(0);
 	lruc_setttl(&c, 200);
 	assert(lruc_isexpired(&c, k1, strlen(k1)) == false);

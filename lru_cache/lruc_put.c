@@ -84,7 +84,7 @@ static bool cache_put_internal(t_lruc *c, t_lruc_keynode to_add) {
 	t_lruc_keynode *node = NULL;
 	size_t          hash_pos;
 
-	if (!c || !to_add.kv.key || !to_add.kv.k_len ||
+	if (!lruc_is_valid(c) || !to_add.kv.key || !to_add.kv.k_len ||
 	    to_add.kv.k_len == (size_t)-1) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
 		return (false);

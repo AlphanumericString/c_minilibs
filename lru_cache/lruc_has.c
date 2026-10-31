@@ -15,7 +15,7 @@ bool lruc_has(const t_lruc *c, const void *key, size_t key_len) {
 	size_t          pos;
 	t_lruc_keynode *kv;
 
-	if (!c || !c->MRU || !c->node_nb) return (NULL);
+	if (!lruc_is_valid(c) || !c->node_nb) return (NULL);
 	kv = lruci_keyinhash(c, key, key_len, &pos);
 	if (!kv) return (false);
 	return (true);

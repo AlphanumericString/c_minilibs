@@ -41,6 +41,7 @@ NO_COV int main(void) {
 	test_lruc_hits();
 	test_lruc_misses();
 	test_lruc_stats();
+	test_lruc_is_valid();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Internals", )
 	test_lruci_hp_pop();

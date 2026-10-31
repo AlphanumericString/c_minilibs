@@ -39,7 +39,7 @@ static inline void clear_node(t_lruc_keynode *node, t_lruc_keynode **nxt,
 void lruc_clear_to_reserved(t_lruc *c) {
 	t_lruc_keynode *nxt;
 
-	if (!c || !c->node_nb || !c->buckets_nb) {
+	if (!lruc_is_valid(c) || !c->node_nb) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
 		return;
 	}
@@ -76,7 +76,7 @@ void lruc_clear_to_reserved(t_lruc *c) {
 void lruc_clear(t_lruc *c) {
 	t_lruc_keynode *nxt;
 
-	if (!c || !c->node_nb || !c->buckets_nb) {
+	if (!lruc_is_valid(c) || !c->node_nb) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
 		return;
 	}
@@ -117,7 +117,7 @@ int lruc_remove(t_lruc *c, const void *key, size_t key_len) {
 	t_lruc_keynode *node;
 	size_t          pos;
 
-	if (!c || !c->LRU || !c->MRU || !c->node_nb) return (-1);
+	if (!lruc_is_valid(c) || !c->node_nb) return (-1);
 	node = lruci_keyinhash(c, key, key_len, &pos);
 	if (!node) return (-1);
 	lruci_unlink_node(c, node, pos);

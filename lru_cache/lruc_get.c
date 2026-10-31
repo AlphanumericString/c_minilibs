@@ -20,7 +20,7 @@ void *lruc_get_lru(t_lruc *c, const void *key, size_t key_len) {
 	t_lruc_keynode *node;
 	size_t          pos;
 
-	if (!c || !c->MRU || !c->node_nb) return (NULL);
+	if (!lruc_is_valid(c) || !c->node_nb) return (NULL);
 	node = lruci_keyinhash(c, key, key_len, &pos);
 	if (!node) {
 		c->stats.misses++;
@@ -28,11 +28,8 @@ void *lruc_get_lru(t_lruc *c, const void *key, size_t key_len) {
 		       key, key_len)
 		return (NULL);
 	}
-	lruci_lru_pop(c, node);
-	node->lru_next = c->MRU;
-	if (c->MRU) c->MRU->lru_prev = node;
+	lruci_lru_push(c, lruci_lru_pop(c, node));
 	c->stats.hit++;
-	c->MRU = node;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_HIT, c->stats.hit, key, key_len)
 	return (node->kv.value);
 }
@@ -49,7 +46,7 @@ void *lruc_get(t_lruc *c, const void *key, size_t len) {
 	t_lruc_keynode *node;
 	size_t          pos;
 
-	if (!c || !c->MRU || !c->node_nb || !c->buckets) {
+	if (!lruc_is_valid(c) || !c->node_nb) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
 		return (NULL);
 	}
@@ -73,10 +70,8 @@ void *lruc_get(t_lruc *c, const void *key, size_t len) {
 		       key, len, now + node->time)
 		return (NULL);
 	}
-	lruci_lru_pop(c, node);
+	lruci_lru_push(c, lruci_lru_pop(c, node));
 	c->stats.hit++;
-	node->lru_next = c->MRU;
-	c->MRU         = node;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_HIT, c->stats.hit, key, len)
 	return (node->kv.value);
 }

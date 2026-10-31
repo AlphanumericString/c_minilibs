@@ -1,6 +1,17 @@
 #include "least_recently_used_cache.h"
 
 /**
+ * \brief Check if a cache is valid and usable
+ * \param cache cache pointer
+ * \return true if the cache is valid, false otherwise
+ * \ingroup lruc
+**/
+bool lruc_is_valid(const t_lruc *cache) {
+	return (cache && cache->buckets && cache->minHeap && cache->buckets_nb &&
+	        cache->node_nb <= cache->buckets_nb &&
+	        (!cache->node_nb || (cache->MRU && cache->LRU)));
+}
+/**
  * \brief Get the size of the cache
  * \param cache cache pointer
  * \return size of the cache

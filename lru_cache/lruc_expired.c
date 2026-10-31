@@ -24,6 +24,10 @@ bool lruc_isexpired(t_lruc *c, const void *key, size_t key_len) {
 	struct timespec now;
 	uint64_t        now_uint;
 
+	if (!lruc_is_valid(c)) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
+		return (false);
+	}
 	if (clock_gettime(CLOCK_MONOTONIC, &now) != 0) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK)
 		return (false);
@@ -51,7 +55,7 @@ void lruc_cleanup(t_lruc *c) {
 	struct timespec now;
 	uint64_t        now_uint;
 
-	if (!c || !c->minHeap) {
+	if (!lruc_is_valid(c)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
 		return;
 	}

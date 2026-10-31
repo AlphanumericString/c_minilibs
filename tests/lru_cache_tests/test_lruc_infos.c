@@ -139,3 +139,46 @@ NO_COV void test_lruc_stats(void) {
 	lruc_destroy(&c);
 	return;
 }
+
+NO_COV void test_lruc_is_valid(void) {
+	t_lruc      c, intact_copy;
+	const char *k1 = "titi", *k2 = "toto";
+
+	lruc_init(&c, 4, free);
+	assert(lruc_is_valid(&c) == true);
+	lruc_put(&c, k1, strlen(k1), strdup("pique sous"));
+	lruc_put(&c, k2, strlen(k2), strdup("gontrant du bonheur"));
+	assert(lruc_is_valid(&c) == true);
+	intact_copy = c;
+
+	assert(lruc_is_valid(NULL) == false);
+
+	c.buckets = NULL;
+	assert(lruc_is_valid(&c) == false);
+	c = intact_copy;
+
+	c.minHeap = NULL;
+	assert(lruc_is_valid(&c) == false);
+	c = intact_copy;
+
+	c.buckets_nb = 0;
+	assert(lruc_is_valid(&c) == false);
+	c = intact_copy;
+
+	c.node_nb = c.buckets_nb + 1;
+	assert(lruc_is_valid(&c) == false);
+	c = intact_copy;
+
+	c.MRU = NULL;
+	assert(lruc_is_valid(&c) == false);
+	c = intact_copy;
+
+	c.LRU = NULL;
+	assert(lruc_is_valid(&c) == false);
+	c = intact_copy;
+
+	lruc_clear(&c);
+	assert(lruc_is_valid(&c) == true);
+	lruc_destroy(&c);
+	return;
+}

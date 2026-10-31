@@ -36,6 +36,7 @@ void test_lruc_hits(void);
 void test_lruc_misses(void);
 void test_lruc_expired(void);
 void test_lruc_stats(void);
+void test_lruc_is_valid(void);
 
 void test_lruci_hp_pop(void);
 void test_lruci_hp_pop_nth(void);

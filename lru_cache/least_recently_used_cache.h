@@ -196,6 +196,8 @@ bool lruc_isexpired(t_lruc *cache, const void *key, size_t key_len);
 void lruc_cleanup(t_lruc *cache);
 void lruc_setttl(t_lruc *cache, long ttl_ms);
 
+bool lruc_is_valid(const t_lruc *cache);
+
 size_t       lruc_size(const t_lruc *cache);
 uint64_t     lruc_hits(const t_lruc *cache);
 uint64_t     lruc_misses(const t_lruc *cache);
