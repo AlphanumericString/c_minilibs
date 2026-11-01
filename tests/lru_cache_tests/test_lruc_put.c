@@ -9,162 +9,333 @@
 
 NO_COV void test_lruc_put_kv(void) {
 	t_lruc          c;
-	t_keyvalue      kv1_ok;
-	t_keyvalue      kv2_ok;
-	t_keyvalue      kv3_ok;
-	t_keyvalue      kv4_no_key;
-	t_keyvalue      kv5_no_keylen;
 	t_lruc_keynode *kv;
-	char           *key1 = "toto";
-	char           *key2 = "titi";
-	char           *key3 = "loooooooooooooong key";
-	char           *key5 = "tata";
-	void           *val1 = (void *)0xDEADBEEF;
-	void           *val2 = (void *)0xCAFEBEAD;
-	void           *val3 = (void *)0xB00B5;
-	void           *val4 = (void *)0x69420;
-	void           *val5 = (void *)0x3141592;
 
-	lruc_init(&c, 2, NULL);
+	char *key1 = "toto";
+	char *key2 = "titi";
+	char *key3 = "loooooooooooooong key";
+	char *key5 = "tata";
+	void *val1 = (void *)0xDEADBEEF;
+	void *val2 = (void *)0xCAFEBEAD;
+	void *val3 = (void *)0xB00B5;
+	void *val4 = (void *)0x69420;
+	void *val5 = (void *)0x3141592;
 
-	kv1_ok = (t_keyvalue){.key = key1, .k_len = strlen(key1), .value = val1};
-	kv2_ok = (t_keyvalue){.key = key2, .k_len = strlen(key2), .value = val2};
-	kv3_ok = (t_keyvalue){.key = key3, .k_len = strlen(key3), .value = val3};
-	kv4_no_key    = (t_keyvalue){.key = NULL, .k_len = 12, .value = val4};
-	kv5_no_keylen = (t_keyvalue){.key = key5, .k_len = 0, .value = val5};
+	t_keyvalue kv1_ok      = {.key = key1, .value = val1, strlen(key1)};
+	t_keyvalue kv2_ok      = {.key = key2, .value = val2, strlen(key2)};
+	t_keyvalue kv3_ok      = {.key = key3, .value = val3, strlen(key3)};
+	t_keyvalue kv4_no_key  = {.key = NULL, .value = val4, 12};
+	t_keyvalue kv5_no_klen = {.key = key5, .value = val5, 0};
 
-	assert(lruc_put_kv(&c, kv4_no_key) == false);
-	assert(lruc_put_kv(&c, kv5_no_keylen) == false);
-	assert(lruc_put_kv(&c, kv1_ok) == true);
-	assert(c.LRU == c.MRU && c.LRU != NULL);
-	assert(c.MRU->kv.key == key1);
-	assert(c.node_nb == 1);
-	kv = c.LRU;
-	assert(kv->kv.key == key1 && kv->kv.k_len == strlen(key1) &&
-	       kv->kv.value == val1);
+	{ // simple MRU/LRU checks
+		lruc_init(&c, 2, NULL);
 
-	// update
-	kv1_ok.value = val2;
-	assert(lruc_put_kv(&c, kv1_ok) == true);
-	assert(c.LRU == c.MRU && c.LRU != NULL);
-	assert(c.MRU->kv.key == key1);
-	assert(c.node_nb == 1);
-	kv = c.LRU;
-	assert(kv->kv.key == key1 && kv->kv.k_len == strlen(key1) &&
-	       kv->kv.value == val2);
-	kv->kv.value = val1; // manual reset
+		assert(lruc_put_kv(&c, kv1_ok) == true);
+		assert(c.LRU == c.MRU && c.LRU != NULL);
+		assert(c.MRU->kv.key == key1);
+		assert(c.node_nb == 1);
+		kv = c.LRU;
+		assert(kv->kv.key == key1 && kv->kv.k_len == strlen(key1) &&
+		       kv->kv.value == val1);
 
-	// max fill
-	assert(lruc_put_kv(&c, kv2_ok) == true);
-	assert(c.LRU != c.MRU && c.LRU != NULL && c.MRU != NULL);
-	assert(c.MRU->kv.key == key2);
-	assert(c.LRU->kv.key == key1);
-	assert(c.node_nb == 2);
-	kv = c.LRU;
-	assert(kv->kv.key == key1 && kv->kv.k_len == strlen(key1) &&
-	       kv->kv.value == val1);
-	kv = c.MRU;
-	assert(kv->kv.key == key2 && kv->kv.k_len == strlen(key2) &&
-	       kv->kv.value == val2);
+		assert(lruc_put_kv(&c, kv2_ok) == true);
+		assert(c.LRU != c.MRU && c.LRU != NULL && c.MRU != NULL);
+		assert(c.MRU->kv.key == key2);
+		assert(c.LRU->kv.key == key1);
+		assert(c.node_nb == 2);
+		kv = c.LRU;
+		assert(kv->kv.key == key1 && kv->kv.k_len == strlen(key1) &&
+		       kv->kv.value == val1);
+		kv = c.MRU;
+		assert(kv->kv.key == key2 && kv->kv.k_len == strlen(key2) &&
+		       kv->kv.value == val2);
 
-	// overfill
-	assert(lruc_put_kv(&c, kv3_ok) == true);
-	assert(c.LRU != c.MRU && c.LRU != NULL && c.MRU != NULL);
-	assert(c.MRU->kv.key == key3);
-	assert(c.LRU->kv.key == key2);
-	assert(c.node_nb == 2);
-	kv = c.LRU;
-	assert(kv->kv.key == key2 && kv->kv.k_len == strlen(key2) &&
-	       kv->kv.value == val2);
-	kv = c.MRU;
-	assert(kv->kv.key == key3 && kv->kv.k_len == strlen(key3) &&
-	       kv->kv.value == val3);
+		lruc_destroy(&c);
+	}
+	{ // update val
+		lruc_init(&c, 2, NULL);
 
-	// reserved nodes
-	lruc_remove(&c, key2, strlen(key2));
-	assert(c.reserved_nodes != NULL);
-	assert(lruc_put_kv(&c, kv2_ok) == true);
-	assert(c.LRU != c.MRU && c.LRU != NULL && c.MRU != NULL);
-	assert(c.reserved_nodes == NULL);
-	assert(c.MRU->kv.key == key2);
-	assert(c.LRU->kv.key == key3);
-	assert(c.node_nb == 2);
-	kv = c.MRU;
-	assert(kv->kv.key == key2 && kv->kv.k_len == strlen(key2) &&
-	       kv->kv.value == val2);
-	kv = c.LRU;
-	assert(kv->kv.key == key3 && kv->kv.k_len == strlen(key3) &&
-	       kv->kv.value == val3);
+		assert(lruc_put_kv(&c, kv1_ok) == true);
+		assert(c.LRU == c.MRU && c.LRU != NULL);
+		assert(c.MRU->kv.key == key1);
+		assert(c.node_nb == 1);
+		kv = c.LRU;
+		assert(kv->kv.key == key1 && kv->kv.k_len == strlen(key1) &&
+		       kv->kv.value == val1);
 
-	lruc_destroy(&c);
+		kv1_ok.value = val2;
+		assert(lruc_put_kv(&c, kv1_ok) == true);
+		assert(c.LRU == c.MRU && c.LRU != NULL);
+		assert(c.MRU->kv.key == key1);
+		assert(c.node_nb == 1);
+		kv = c.LRU;
+		assert(kv->kv.key == key1 && kv->kv.k_len == strlen(key1) &&
+		       kv->kv.value == val2);
 
-	lruc_init(&c, 2, NULL);
+		lruc_destroy(&c);
+	}
+	{ // overfill
+		lruc_init(&c, 2, NULL);
 
-	alloc_set_call_limit(0);
-	assert(lruc_put_kv(&c, kv1_ok) == false);
-	alloc_set_call_limit(ALLOC_DFT_LIMIT);
+		assert(lruc_put_kv(&c, kv1_ok) == true);
+		assert(lruc_put_kv(&c, kv2_ok) == true);
 
-	clock_set_call_limit(0);
-	assert(lruc_put_kv(&c, kv1_ok) == false);
-	clock_set_call_limit(CLOCK_DFT_LIMIT);
+		assert(lruc_put_kv(&c, kv3_ok) == true);
+		assert(c.LRU != c.MRU && c.LRU != NULL && c.MRU != NULL);
+		assert(c.MRU->kv.key == key3);
+		assert(c.LRU->kv.key == key2);
+		assert(c.node_nb == 2);
+		kv = c.LRU;
+		assert(kv->kv.key == key2 && kv->kv.k_len == strlen(key2) &&
+		       kv->kv.value == val2);
+		kv = c.MRU;
+		assert(kv->kv.key == key3 && kv->kv.k_len == strlen(key3) &&
+		       kv->kv.value == val3);
 
-	lruc_destroy(&c);
+		lruc_destroy(&c);
+	}
+	{ // re-use nodes
+		lruc_init(&c, 2, NULL);
 
+		assert(lruc_put_kv(&c, kv3_ok) == true);
+		assert(lruc_put_kv(&c, kv2_ok) == true);
+		assert(c.node_nb == 2);
+
+		lruc_remove(&c, key2, strlen(key2));
+		assert(c.node_nb == 1);
+		assert(c.reserved_nodes_nb == 1);
+		assert(c.reserved_nodes != NULL);
+
+		assert(lruc_put_kv(&c, kv2_ok) == true);
+		assert(c.LRU != c.MRU && c.LRU != NULL && c.MRU != NULL);
+		assert(c.reserved_nodes == NULL);
+		assert(c.MRU->kv.key == key2);
+		assert(c.LRU->kv.key == key3);
+		assert(c.node_nb == 2);
+		kv = c.MRU;
+		assert(kv->kv.key == key2 && kv->kv.k_len == strlen(key2) &&
+		       kv->kv.value == val2);
+		kv = c.LRU;
+		assert(kv->kv.key == key3 && kv->kv.k_len == strlen(key3) &&
+		       kv->kv.value == val3);
+
+		lruc_destroy(&c);
+	}
+	{ // errors
+		lruc_init(&c, 2, NULL);
+
+		// EAGRS
+		assert(lruc_put_kv(NULL, kv1_ok) == false);
+		assert(lruc_put_kv(&c, kv4_no_key) == false);
+		assert(lruc_put_kv(&c, kv5_no_klen) == false);
+		assert(c.LRU == NULL && c.MRU == NULL);
+		assert(c.node_nb == 0);
+
+		lruc_destroy(&c); // reset
+		lruc_init(&c, 2, NULL);
+
+		// EALLOC
+		alloc_set_call_limit(0);
+		assert(lruc_put_kv(&c, kv1_ok) == false);
+		alloc_set_call_limit(ALLOC_DFT_LIMIT);
+		lruc_put_kv(&c, kv1_ok);
+		lruc_remove(&c, kv1_ok.key, kv1_ok.k_len);
+		assert(c.node_nb == 0 && c.reserved_nodes_nb == 1);
+		assert(c.reserved_nodes != NULL);
+		alloc_set_call_limit(0);
+		// success since we use reserved nodes
+		assert(lruc_put_kv(&c, kv1_ok) == true);
+		alloc_set_call_limit(ALLOC_DFT_LIMIT);
+		assert(c.node_nb == 1 && c.reserved_nodes_nb == 0);
+		assert(c.reserved_nodes == NULL);
+
+		lruc_destroy(&c); // reset
+		lruc_init(&c, 2, NULL);
+
+		// ECLOCK
+		clock_set_call_limit(0);
+		lruc_setttl(&c, C_MINI__LRUC_TTL_DFLT);
+		// true, ttl not on, so clock fail is ignored
+		assert(lruc_put_kv(&c, kv1_ok) == true);
+		lruc_setttl(&c, 300);
+		// false clock fail not ignored
+		assert(lruc_put_kv(&c, kv1_ok) == false);
+		clock_set_call_limit(CLOCK_DFT_LIMIT);
+		// true clock call successful
+		assert(lruc_put_kv(&c, kv1_ok) == true);
+
+		lruc_destroy(&c);
+	}
 	return;
 }
 NO_COV void test_lruc_put(void) {
 	t_lruc      c;
-	const char *key1       = "toto";
-	const char *key2       = "titi";
-	const char *key3       = "tutu";
-	void       *value1     = "1";
-	void       *value2     = "2";
-	void       *value3     = "3";
-	void       *value2_alt = "2_alt";
+	const char *key1   = "toto";
+	const char *key2   = "titi";
+	const char *key3   = "tutu";
+	void       *value1 = "1";
+	void       *value2 = "2";
+	void       *value3 = "3";
 
-	lruc_init(&c, 2, NULL);
-	assert(lruc_put(&c, key1, strlen(key1), value1) == true);
-	assert(lruc_put(&c, key2, strlen(key2), value2) == true);
-	assert(lruc_put(&c, key3, strlen(key3), value3) == true); // < re-use node
-	assert(lruc_has(&c, key1, strlen(key1)) == false);
-	assert(lruc_has(&c, key2, strlen(key2)) == true);
-	assert(lruc_has(&c, key3, strlen(key3)) == true);
-	assert(c.MRU->kv.key == key3), assert(c.LRU->kv.key == key2);
-	assert(lruc_put(&c, key1, strlen(key1), (void *)0xDEAD) == true);
-	assert(c.MRU->kv.key == key1), assert(c.LRU->kv.key == key3);
-	assert(lruc_get(&c, key3, strlen(key3)) == value3);
-	assert(lruc_put(&c, key2, strlen(key2), value2) == true);
-	assert(c.MRU->kv.key == key2), assert(c.LRU->kv.key == key3);
-	assert(lruc_get(&c, key2, strlen(key2)) == value2);
-	assert(lruc_put(&c, key2, strlen(key2), value2_alt) == true);
-	assert(c.MRU->kv.key == key2), assert(c.LRU->kv.key == key3);
-	assert(lruc_get(&c, key2, strlen(key2)) == value2_alt);
-	// errors
-	// status
-	assert(lruc_has(&c, key2, strlen(key2)) == true);
-	assert(lruc_has(&c, key3, strlen(key3)) == true);
-	// eargs
-	assert(lruc_put(NULL, key1, strlen(key1), value1) == false);
-	assert(c.MRU->kv.key == key2), assert(c.LRU->kv.key == key3);
-	assert(lruc_put(&c, NULL, strlen(key1), value1) == false);
-	assert(c.MRU->kv.key == key2), assert(c.LRU->kv.key == key3);
-	assert(lruc_put(&c, key1, 0, value1) == false);
-	assert(lruc_put(&c, key1, -1, value1) == false);
-	assert(c.MRU->kv.key == key2), assert(c.LRU->kv.key == key3);
-	// eclock
-	clock_set_call_limit(0);
-	clock_reset_counter();
-	assert(lruc_put(&c, key2, strlen(key2), value3) == false);
-	clock_set_call_limit(1);
-	clock_reset_counter();
-	// 2nd clock call fails and instead taking of ttl/minHeap takes from LRU
-	// doesnt change anything on simple put but changes stuff on ttl side
-	// TODO: remove call to clock when ttl isn't set on cache, useless
-	assert(lruc_put(&c, key1, strlen(key1), value1) == true);
-	clock_set_call_limit(CLOCK_DFT_LIMIT);
+	{ // mru/lru checks
+		lruc_init(&c, 2, NULL);
 
-	// cleanup
-	lruc_destroy(&c);
+		assert(lruc_put(&c, key1, strlen(key1), value1) == true);
+		assert(c.LRU == c.MRU && c.LRU->kv.key == key1);
+		assert(c.node_nb == 1);
+		assert(lruc_put(&c, key2, strlen(key2), value2) == true);
+		assert(c.LRU != c.MRU);
+		assert(c.LRU->kv.key == key1);
+		assert(c.MRU->kv.key == key2);
+		assert(c.node_nb == 2);
+		assert(lruc_put(&c, key3, strlen(key3), value3) == true); // < re-use
+		assert(c.LRU->kv.key == key2);
+		assert(c.MRU->kv.key == key3);
+		assert(c.node_nb == 2);
+		assert(lruc_has(&c, key1, strlen(key1)) == false);
+		assert(lruc_has(&c, key2, strlen(key2)) == true);
+		assert(lruc_has(&c, key3, strlen(key3)) == true);
+
+		lruc_destroy(&c);
+	}
+	{ // update val with single elem
+		lruc_init(&c, 2, NULL);
+		lruc_put(&c, key1, strlen(key1), value1);
+
+		assert(c.LRU == c.MRU);
+		assert(c.LRU->kv.key == key1);
+		assert(c.MRU->kv.key == key1);
+		assert(c.node_nb == 1);
+		assert(lruc_put(&c, key1, strlen(key1), (void *)0xDEAD) == true);
+		assert(c.LRU == c.MRU);
+		assert(c.LRU->kv.key == key1);
+		assert(c.MRU->kv.key == key1);
+		assert(c.node_nb == 1);
+		assert(c.MRU->kv.value == (void *)0xDEAD);
+
+		lruc_destroy(&c);
+	}
+	{ // update val with 2 vals
+		lruc_init(&c, 2, NULL);
+		lruc_put(&c, key1, strlen(key1), value1);
+		lruc_put(&c, key2, strlen(key2), value2);
+
+		assert(c.LRU != c.MRU);
+		assert(c.LRU->kv.key == key1);
+		assert(c.MRU->kv.key == key2);
+		assert(c.node_nb == 2);
+		assert(lruc_put(&c, key1, strlen(key1), (void *)0xDEAD) == true);
+		assert(c.LRU != c.MRU);
+		assert(c.LRU->kv.key == key2);
+		assert(c.MRU->kv.key == key1);
+		assert(c.node_nb == 2);
+		assert(c.MRU->kv.value == (void *)0xDEAD);
+
+		lruc_destroy(&c);
+	}
+	{ // errors
+	  // setup
+		lruc_init(&c, 2, NULL);
+		assert(lruc_put(&c, key1, strlen(key1), value1) == true);
+		assert(lruc_put(&c, key2, strlen(key2), value2) == true);
+		assert(c.LRU != c.MRU);
+		assert(c.LRU->kv.key == key1);
+		assert(c.MRU->kv.key == key2);
+		assert(c.node_nb == 2);
+
+		// eargs
+		assert(lruc_put(NULL, key1, strlen(key1), value1) == false);
+		assert(c.LRU != c.MRU);
+		assert(c.LRU->kv.key == key1);
+		assert(c.MRU->kv.key == key2);
+		assert(c.node_nb == 2);
+
+		assert(lruc_put(&c, NULL, strlen(key1), value1) == false);
+		assert(c.LRU != c.MRU);
+		assert(c.LRU->kv.key == key1);
+		assert(c.MRU->kv.key == key2);
+		assert(c.node_nb == 2);
+
+		assert(lruc_put(&c, key1, 0, value1) == false);
+		assert(c.LRU != c.MRU);
+		assert(c.LRU->kv.key == key1);
+		assert(c.MRU->kv.key == key2);
+		assert(c.node_nb == 2);
+
+		assert(lruc_put(&c, key1, -1, value1) == false);
+		assert(c.LRU != c.MRU);
+		assert(c.LRU->kv.key == key1);
+		assert(c.MRU->kv.key == key2);
+		assert(c.node_nb == 2);
+
+		lruc_clear(&c); // reset cache
+		lruc_clear_reserved(&c);
+		// set-up
+		assert(lruc_put(&c, key1, strlen(key1), value1) == true);
+		assert(lruc_put(&c, key2, strlen(key2), value2) == true);
+		assert(c.LRU != c.MRU);
+		assert(c.LRU->kv.key == key1);
+		assert(c.MRU->kv.key == key2);
+		assert(c.node_nb == 2);
+
+		// eclock
+		clock_reset_counter();
+		clock_set_call_limit(0);
+		assert(lruc_put(&c, key3, strlen(key3), value3) == true);
+		clock_set_call_limit(CLOCK_DFT_LIMIT);
+		assert(c.LRU != c.MRU);
+		assert(c.LRU->kv.key == key2);
+		assert(c.MRU->kv.key == key3);
+		assert(c.node_nb == 2);
+		// key 3 was pushed, clock not called since no ttl set
+
+		lruc_clear(&c); // reset cache
+		lruc_clear_reserved(&c);
+		// set-up
+		lruc_put(&c, key1, strlen(key1), value1);
+		lruc_put(&c, key2, strlen(key2), value2);
+		lruc_setttl(&c, 300);
+
+		clock_reset_counter();
+		clock_set_call_limit(0);
+
+		assert(lruc_put(&c, key3, strlen(key3), value3) == false);
+		clock_set_call_limit(CLOCK_DFT_LIMIT);
+		assert(c.LRU != c.MRU);
+		assert(c.LRU->kv.key == key1);
+		assert(c.MRU->kv.key == key2);
+		assert(c.node_nb == 2);
+		// k3 not pushed, ttl set so clock call needed, so fail
+
+		lruc_clear(&c); // reset cache
+		lruc_clear_reserved(&c);
+		// set-up
+		lruc_setttl(&c, 300);
+		lruc_put(&c, key1, strlen(key1), value1);
+		lruc_put(&c, key2, strlen(key2), value2);
+
+		clock_set_call_limit(1);
+		clock_reset_counter();
+		assert(lruc_put(&c, key3, strlen(key3), value3) == false);
+		// 2nd clock call fails since ttl is set must take from minHeap, fail
+		assert(c.LRU != c.MRU);
+		assert(c.LRU->kv.key == key1);
+		assert(c.MRU->kv.key == key2);
+		assert(c.node_nb == 2);
+
+		clock_set_call_limit(1);
+		clock_reset_counter();
+		lruc_setttl(&c, C_MINI__LRUC_TTL_DFLT); // reset ttl
+
+		assert(lruc_put(&c, key3, strlen(key3), value3) == true);
+		clock_set_call_limit(CLOCK_DFT_LIMIT);
+		assert(c.LRU != c.MRU);
+		assert(c.LRU->kv.key == key2);
+		assert(c.MRU->kv.key == key3);
+		assert(c.node_nb == 2);
+
+		lruc_destroy(&c);
+	}
 	return;
 }
 NO_COV void test_lruc_put_ttl(void) {

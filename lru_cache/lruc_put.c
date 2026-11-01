@@ -95,27 +95,29 @@ static bool cache_put_internal(t_lruc *c, t_lruc_keynode to_add) {
 }
 /**
  * \brief Put a key-value pair into the cache
- * \param c cache pointer
+ * \param cache the lru cache pointer
  * \param kv key-value pair
  * \return 0 on success, -1 on failure
  * \ingroup lruc
 **/
-bool lruc_put_kv(t_lruc *c, t_keyvalue kv) {
+bool lruc_put_kv(t_lruc *cache, t_keyvalue kv) {
 	uint64_t now;
 
-	now = lruci_timenow();
-	if (now == (uint64_t)-1) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK)
-		return (false);
-	}
-	return (cache_put_internal(c, (t_lruc_keynode){
-	                                  .kv         = kv,
-	                                  .time       = now,
-	                                  .lru_next   = 0,
-	                                  .lru_prev   = 0,
-	                                  .heap_index = 0,
-	                                  .hash_next  = NULL,
-	                              }));
+	if (cache && cache->ttl_glob != C_MINI__LRUC_TTL_DFLT) {
+		now = lruci_timenow();
+		if (now == (uint64_t)-1) {
+			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK)
+			return (false);
+		}
+	} else now = 0;
+	return (cache_put_internal(cache, (t_lruc_keynode){
+	                                      .kv         = kv,
+	                                      .time       = now,
+	                                      .lru_next   = 0,
+	                                      .lru_prev   = 0,
+	                                      .heap_index = 0,
+	                                      .hash_next  = NULL,
+	                                  }));
 }
 /**
  * \brief Put a key-value pair into the cache
@@ -130,11 +132,13 @@ bool lruc_put(t_lruc *cache, const void *key, size_t key_len,
               const void *value) {
 	uint64_t now;
 
-	now = lruci_timenow();
-	if (now == (uint64_t)-1) {
-		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK)
-		return (false);
-	}
+	if (cache && cache->ttl_glob != C_MINI__LRUC_TTL_DFLT) {
+		now = lruci_timenow();
+		if (now == (uint64_t)-1) {
+			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK)
+			return (false);
+		}
+	} else now = 0;
 	return (cache_put_internal(cache,
 	                           (t_lruc_keynode){
 	                               .kv       = (t_keyvalue){.key   = (void *)key,

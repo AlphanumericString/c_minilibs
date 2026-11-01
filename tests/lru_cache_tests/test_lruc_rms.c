@@ -19,6 +19,7 @@ NO_COV void test_lruc_clear_reserved(void) {
 	assert(lruc_clear_reserved(&c) == true);
 	assert(c.reserved_nodes_nb == 0);
 	assert(lruc_clear_reserved(NULL) == false);
+	lruc_destroy(&c);
 };
 
 NO_COV void test_lruc_clear(void) {
