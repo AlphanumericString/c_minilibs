@@ -70,5 +70,6 @@ void *rb_nget(const t_rb *rb, size_t n, t_cm_comparator comp, const void *arg,
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_FAIL)
 	return NULL;
 }
-// note: rb_nat at line 18 of funct: no fail branch since rb_nat only checks
-//	buff, idx and rb. No fail condition possible otherwise
+// note: rb_nat at line 17 of funct: no fail branch since rb_nat only checks
+//	{buff, idx, rb}. No fail condition possible otherwise. They have been
+//  checked above in the function

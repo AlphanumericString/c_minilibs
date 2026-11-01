@@ -14,12 +14,10 @@ void rb_push(t_rb *rb, const void *data) {
 		return;
 	}
 	memcpy(rb->array + (rb->i_pos * rb->sz_e), data, rb->sz_e);
-	// if ((rb->i_pos + 1) % rb->nb_max == rb->o_pos) {
-	// 	rb->o_pos = (rb->o_pos + 1) % rb->nb_max;
-	// }
-	CM_DBG("rb->i_pos: %zu -> %zu", rb->i_pos, (rb->i_pos + 1) % rb->nb_max)
 	rb->i_pos = (rb->i_pos + 1) % rb->nb_max;
-	if (rb->count < rb->nb_max) rb->count++;
+	if (rb->count == rb->nb_max) rb->o_pos = (rb->o_pos + 1) % rb->nb_max;
+	else rb->count++;
+
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 }
 /**

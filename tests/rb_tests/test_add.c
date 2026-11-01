@@ -3,15 +3,30 @@
 #include "rb_tests.h"
 
 NO_COV void test_rb_push(void) {
-	t_rb rb  = {0};
-	int  val = 42;
+	t_rb rb   = {0};
+	int  val1 = 42;
+	int  val2 = 43;
+	int  val3 = 44;
 
 	rb_create(&rb, sizeof(int), 2);
 
-	rb_push(&rb, &val);
+	rb_push(&rb, &val1);
+	assert(*(int *)rb_at(rb, 0) == val1);
 	assert(rb_size(rb) == 1);
+	assert(rb.o_pos == 0);
+	rb_push(&rb, &val2);
+	assert(*(int *)rb_at(rb, 0) == val1);
+	assert(*(int *)rb_at(rb, 1) == val2);
+	assert(rb_size(rb) == 2);
+	assert(rb.o_pos == 0);
+	rb_push(&rb, &val3);
+	assert(*(int *)rb_at(rb, 0) == val2);
+	assert(*(int *)rb_at(rb, 1) == val3);
+	assert(rb_size(rb) == 2);
+	assert(rb.o_pos == 1);
+
 	rb_push(&rb, NULL);
-	rb_push(NULL, &val);
+	rb_push(NULL, &val1);
 
 	rb_destroy(&rb);
 }
@@ -24,18 +39,28 @@ NO_COV void test_rb_npush(void) {
 	rb_create(&rb, sizeof(int), 4);
 
 	rb_npush(&rb, arr, 3);
+	CM_DBG("rb_at(rb, 0) == %d", *(int *)rb_at(rb, 0));
+	CM_DBG("rb_at(rb, 1) == %d", *(int *)rb_at(rb, 1));
+	CM_DBG("rb_at(rb, 2) == %d", *(int *)rb_at(rb, 2));
+	CM_DBG("rb_at(rb, 3) == %p", (int *)rb_at(rb, 3));
 	assert(rb_size(rb) == 3);
+	assert(rb.o_pos == 0);
+	assert(rb.i_pos == 3);
 	// i_pos at 3 - cycle "moved" by 3
 	rb_npush(&rb, arr_large, sizeof(arr_large) / sizeof(arr_large[0]));
-	assert(*(int *)rb_at(rb, 0) == 10);
-	assert(*(int *)rb_at(rb, 1) == 11);
-	assert(*(int *)rb_at(rb, 2) == 12);
-	assert(*(int *)rb_at(rb, 3) == 9);
+
+	assert(rb.o_pos == 3);
+	assert(*(int *)rb_at(rb, 0) == 9);
+	assert(*(int *)rb_at(rb, 1) == 10);
+	assert(*(int *)rb_at(rb, 2) == 11);
+	assert(*(int *)rb_at(rb, 3) == 12);
 
 	rb_clr(&rb);
+	assert(rb.o_pos == 0);
 	// i_pos at 0 - cycle "fixed"
 	rb_npush(&rb, arr_large, sizeof(arr_large) / sizeof(arr_large[0]));
 	assert(rb_size(rb) == 4);
+
 	assert(*(int *)rb_at(rb, 0) == 9);
 	assert(*(int *)rb_at(rb, 1) == 10);
 	assert(*(int *)rb_at(rb, 2) == 11);
