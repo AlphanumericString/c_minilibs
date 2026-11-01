@@ -35,10 +35,13 @@ typedef struct s_ill {
 } t_ill;
 
 void  ill_init(t_ill *node, size_t offset);
-void *ill_copy(const t_ill *head, t_cm_duplicator d);
+void *ill_copy(const t_ill *head, t_cm_duplicator d, t_cm_dtor dtor);
 
 void  *ill_ntoe(const t_ill *node);
 t_ill *ill_eton(void *e, size_t offset);
+
+void  *ill_advance_it(void *e, size_t offset);
+t_ill *ill_advance_it_node(t_ill *it);
 
 bool ill_is_isolated(t_ill *node);
 bool ill_is_circular(t_ill *head);
@@ -80,18 +83,21 @@ t_ill *ill_reverse(t_ill *head);
 // move // !
 // if !end_cut cut to the end of list included otherwise stop before end_cut
 // void   ill_move(t_ill *dest_anchor, t_ill *start_cut, t_ill *end_cut); // !
-//- Merges two sorted lists into one.
-// void   ill_sort(t_ill **head, t_cm_comparator comp);                       //
-// ! t_ill *ill_sorted_merge(t_ill *list1, t_ill *list2, t_cm_comparator comp);
-// // !
-
+// Merges two sorted lists into one (classic merge sort building block).
+t_ill *ill_sorted_merge(t_ill *list1, t_ill *list2, t_cm_comparator comp);
+// Sorts the list in place (classic merge sort, O(n log n)).
+void   ill_sort(t_ill **head, t_cm_comparator comp);
 // filter
-// list for tru is returned list of false has sotred in filtered
-// t_ill *ill_filter(t_ill *head, t_cm_callback cb, void *arg, t_ill
-// **filtered); remove if aka filter in place. if !free_func no free. bool
-// ill_remove_if(t_ill **head, t_cm_callback condition_cb, void *arg,
-//                      void (*free_func)(void *elem));
-// // (requirement: list must be sorted)
-// void   ill_unique(t_ill *head, t_cm_comparator c); // !
+// keeps elements for which cb is true, moves the others into *filtered.
+// *head is updated if the current head is moved out.
+// returns the number of elements moved into *filtered.
+size_t ill_filter(t_ill **head, t_cm_callback cb, void *arg, t_ill **filtered);
+// inverse of ill_filter: moves elements for which cb is true into *filtered.
+size_t ill_filter_out(t_ill **head, t_cm_callback cb, void *arg,
+                      t_ill **filtered);
+// destructive variant of ill_filter: destroys (dtor) the moved-out elements.
+size_t ill_rm_if(t_ill **head, t_cm_callback cb, void *arg, t_cm_dtor d);
+// removes consecutive duplicates according to the comparator, dtor is optional.
+void   ill_unique(t_ill *head, t_cm_comparator c, t_cm_dtor d);
 
 #endif // !C_MINI__ILL

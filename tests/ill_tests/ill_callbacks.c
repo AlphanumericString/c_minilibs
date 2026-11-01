@@ -18,6 +18,28 @@ NO_COV void *cb_bad_duplicator(const void *elem) {
 	return NULL;
 }
 
+int g_dtor_hits   = 0;
+int g_dup_hits    = 0;
+int g_dup_fail_at = -1;
+
+NO_COV void cb_free_elem(void *elem) {
+	free(elem);
+}
+NO_COV void cb_count_dtor(void *elem) {
+	(void)elem;
+	g_dtor_hits++;
+}
+NO_COV void *cb_ill_duplicate_fail_at(const void *elem) {
+	if (g_dup_fail_at >= 0 && g_dup_hits >= g_dup_fail_at) return NULL;
+	g_dup_hits++;
+	return cb_ill_duplicate(elem);
+}
+NO_COV void *cb_idl_duplicate_fail_at(const void *elem) {
+	if (g_dup_fail_at >= 0 && g_dup_hits >= g_dup_fail_at) return NULL;
+	g_dup_hits++;
+	return cb_idl_duplicate(elem);
+}
+
 // idl only
 NO_COV bool cb_idl_add_val_as_int_ptr(void *elem, void *arg) {
 	t_test_dnode *n   = (t_test_dnode *)elem;

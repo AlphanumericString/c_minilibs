@@ -37,9 +37,13 @@ typedef struct s_idl {
 } t_idl;
 
 void   idl_init(t_idl *node, size_t offset);
-void  *idl_copy(const t_idl *head, t_cm_duplicator d);
+void  *idl_copy(const t_idl *head, t_cm_duplicator d, t_cm_dtor dtor);
 void  *idl_ntoe(const t_idl *node);
 t_idl *idl_eton(void *e, size_t offset);
+void  *idl_advance_it(void *e, size_t offset);
+void  *idl_recede_it(void *e, size_t offset);
+t_idl *idl_advance_it_node(t_idl *it);
+t_idl *idl_recede_it_node(t_idl *it);
 bool   idl_is_isolated(t_idl *node);
 bool   idl_is_circular(t_idl *head);
 bool   idl_is_sorted(t_idl *head, t_cm_comparator comparator);
@@ -70,5 +74,22 @@ size_t idl_match_nb(t_idl *head, t_cm_callback matcher, void *arg);
 bool   idl_for(t_idl *head, size_t n, t_cm_callback c, void *u_data);
 bool   idl_foreach(t_idl *head, t_cm_callback c, void *u_data);
 t_idl *idl_reverse(t_idl *head);
+
+// Merges two sorted lists into one (classic merge sort building block).
+t_idl *idl_sorted_merge(t_idl *list1, t_idl *list2, t_cm_comparator comp);
+// Sorts the list in place (classic merge sort, O(n log n)).
+void   idl_sort(t_idl **head, t_cm_comparator comp);
+// filter
+// keeps elements for which cb is true, moves the others into *filtered.
+// *head is updated if the current head is moved out.
+// returns the number of elements moved into *filtered.
+size_t idl_filter(t_idl **head, t_cm_callback cb, void *arg, t_idl **filtered);
+// inverse of idl_filter: moves elements for which cb is true into *filtered.
+size_t idl_filter_out(t_idl **head, t_cm_callback cb, void *arg,
+                      t_idl **filtered);
+// destructive variant of idl_filter: destroys (dtor) the moved-out elements.
+size_t idl_rm_if(t_idl **head, t_cm_callback cb, void *arg, t_cm_dtor d);
+// removes consecutive duplicates according to the comparator, dtor is optional.
+void   idl_unique(t_idl *head, t_cm_comparator c, t_cm_dtor d);
 
 #endif // !C_MINI__IDL

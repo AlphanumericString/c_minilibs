@@ -21,16 +21,30 @@ static inline void setup_chain(t_ill *to_setup, t_ill *nxt, size_t offset) {
 	to_setup->offset = offset;
 }
 
+static void clean_chain(void *nh, size_t offset, t_cm_dtor dtor) {
+	t_ill *curr;
+
+	if (!nh || !dtor) return;
+	curr = ill_eton(nh, offset);
+	while (curr) {
+		t_ill *nxt = curr->next;
+		dtor(ill_ntoe(curr));
+		curr = nxt;
+	}
+}
+
 /**
  * \brief Creates a deep copy of the list using the provided duplicator
  * function.
  * \param head The head of the list to copy.
  * \param dupper The duplicator function used to copy each element.
+ * \param dtor Optional destructor used to clean-up already copied elements if a
+ * later duplication fails.
  * \return A pointer to the head of the new copied list's first element, or NULL
  * on failure.
  * \ingroup ill
 **/
-void *ill_copy(const t_ill *head, t_cm_duplicator dupper) {
+void *ill_copy(const t_ill *head, t_cm_duplicator dupper, t_cm_dtor dtor) {
 	size_t offset;
 	void  *e_cpy = NULL;
 	t_ill *prev  = NULL;
@@ -45,6 +59,7 @@ void *ill_copy(const t_ill *head, t_cm_duplicator dupper) {
 		e_cpy = dupper(ill_ntoe(head));
 		if (!e_cpy) {
 			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__ILL_LOG_EALLOC)
+			clean_chain(nh, offset, dtor);
 			return (NULL);
 		}
 		if (!prev) {

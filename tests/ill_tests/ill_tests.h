@@ -58,6 +58,13 @@ typedef struct s_test_dnode {
 NO_COV bool  cb_true(void *elem, void *arg);
 NO_COV bool  cb_false(void *elem, void *arg);
 NO_COV void *cb_bad_duplicator(const void *elem);
+NO_COV void  cb_free_elem(void *elem);
+NO_COV void  cb_count_dtor(void *elem);
+NO_COV void *cb_ill_duplicate_fail_at(const void *elem);
+NO_COV void *cb_idl_duplicate_fail_at(const void *elem);
+extern int   g_dtor_hits;
+extern int   g_dup_hits;
+extern int   g_dup_fail_at;
 // --idl only callbacks
 NO_COV bool  cb_idl_add_val_as_int_ptr(void *elem, void *arg);
 NO_COV bool  cb_idl_false_on_arg(void *elem, void *arg);
@@ -76,11 +83,14 @@ NO_COV int   cb_ill_cmp_min_max(const void *elem1, const void *elem2);
 NO_COV void *cb_ill_duplicate(const void *elem);
 
 // --- ILL tests ---
+NO_COV void test_ill_advance_it(void);
 NO_COV void test_ill_append(void);
 NO_COV void test_ill_copy(void);
 NO_COV void test_ill_eton(void);
 NO_COV void test_ill_find(void);
 NO_COV void test_ill_find_prev(void);
+NO_COV void test_ill_filter(void);
+NO_COV void test_ill_filter_out(void);
 NO_COV void test_ill_for(void);
 NO_COV void test_ill_foreach(void);
 NO_COV void test_ill_get(void);
@@ -107,13 +117,18 @@ NO_COV void test_ill_push_back(void);
 NO_COV void test_ill_remove_after(void);
 NO_COV void test_ill_remove_node(void);
 NO_COV void test_ill_reverse(void);
+NO_COV void test_ill_rm_if(void);
+NO_COV void test_ill_sort(void);
 
 // --- IDL tests ---
+NO_COV void test_idl_advance_it(void);
 NO_COV void test_idl_append(void);
 NO_COV void test_idl_copy(void);
 NO_COV void test_idl_eton(void);
 NO_COV void test_idl_find(void);
 NO_COV void test_idl_find_prev(void);
+NO_COV void test_idl_filter(void);
+NO_COV void test_idl_filter_out(void);
 NO_COV void test_idl_for(void);
 NO_COV void test_idl_foreach(void);
 NO_COV void test_idl_get(void);
@@ -143,3 +158,7 @@ NO_COV void test_idl_push_back(void);
 NO_COV void test_idl_remove_after(void);
 NO_COV void test_idl_remove_node(void);
 NO_COV void test_idl_reverse(void);
+NO_COV void test_idl_rm_if(void);
+NO_COV void test_idl_sort(void);
+NO_COV void test_idl_unique(void);
+NO_COV void test_ill_unique(void);

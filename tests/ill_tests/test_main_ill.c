@@ -8,6 +8,7 @@ NO_COV void ill_main(void) {
 	test_ill_copy();
 	test_ill_ntoe();
 	test_ill_eton();
+	test_ill_advance_it();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Is", )
 	test_ill_is_isolated();
@@ -51,6 +52,17 @@ NO_COV void ill_main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Reverse", )
 	test_ill_reverse();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Sort", )
+	test_ill_sort();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Filter", )
+	test_ill_filter();
+	test_ill_filter_out();
+	test_ill_rm_if();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Unique", )
+	test_ill_unique();
 
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "All ILL tests completed successfully.", );
 }
@@ -62,6 +74,7 @@ NO_COV void idl_main(void) {
 	test_idl_copy();
 	test_idl_ntoe();
 	test_idl_eton();
+	test_idl_advance_it();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Is", )
 	test_idl_is_isolated();
@@ -108,6 +121,17 @@ NO_COV void idl_main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Reverse", )
 	test_idl_reverse();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Sort", )
+	test_idl_sort();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Filter", )
+	test_idl_filter();
+	test_idl_filter_out();
+	test_idl_rm_if();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Unique", )
+	test_idl_unique();
 
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "All IDL tests completed successfully.", );
 }
