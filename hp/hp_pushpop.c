@@ -7,6 +7,7 @@ static void heap_swap(t_hp *h, size_t pos1, size_t pos2) {
 	h->elems[pos2] = e;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_SWAP, pos1, pos2)
 }
+// heapup in max or min mode, both works
 static void heap_up(t_hp *h, size_t idx, bool max) {
 	size_t parent = idx / 2;
 	int    cmp_res;
@@ -22,6 +23,7 @@ static void heap_up(t_hp *h, size_t idx, bool max) {
 // idx: index from witch to heap down
 // h: heap to heap down
 // max: is max heap
+// heapdown in max or min mode, both works
 static void heap_down(t_hp *h, size_t idx, bool max) {
 	int    cmp_res;
 	size_t l, r;

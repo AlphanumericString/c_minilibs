@@ -47,9 +47,22 @@ typedef struct s_heap {
 t_hp *hp_create(size_t nb_elems, t_cm_comparator cmp);
 t_hp *hp_init(t_hp *hp, size_t nb_elems, t_cm_comparator cmp);
 
+t_hp *hp_new_from_array(void **arr, size_t nb_elems, t_cm_comparator cmp);
+t_hp *hp_init_from_array(t_hp *hp, void **arr, size_t nb_elems,
+                         t_cm_comparator cmp);
+
 bool hp_delete(t_hp *hp);
 bool hp_free(t_hp **hp);
 bool hp_clear(t_hp *hp);
+
+bool hp_is_empty(const t_hp *hp);
+bool hp_is_full(const t_hp *hp);
+bool hp_is_valid(const t_hp *hp);
+
+t_cm_comparator hp_get_cmp(const t_hp *hp);
+size_t          hp_get_cap(const t_hp *hp);
+size_t          hp_get_current_size(const t_hp *hp);
+void          **hp_get_elems_array(const t_hp *hp);
 
 void hp_min_push(t_hp *h, void *e);
 void hp_max_push(t_hp *h, void *e);
