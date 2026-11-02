@@ -144,6 +144,7 @@ typedef struct s_thread_pool_manager {
 } t_tpm;
 
 // TODO: (non-ordered)
+// 1. fix error. losing jobs.
 //
 // 3. heartbeat system -> clock heartbeat
 //				monitor thread-> if threads[nb%max].hb - now > hb_steps*hb !

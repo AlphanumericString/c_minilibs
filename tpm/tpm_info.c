@@ -13,7 +13,6 @@ struct s_tpm_stats tpm_get_stats(t_tpm *tpm) {
 	pthread_mutex_lock(&tpm->q_lock);
 	r = tpm->stats;
 	pthread_mutex_unlock(&tpm->q_lock);
-	CM_TODO();
 	return (r);
 }
 int tpm_get_nbthread(const t_tpm *tpm) {
