@@ -76,6 +76,7 @@ NO_COV int rdsu_main_tests(void) {
 	test_rdsu_rewind_to_state();
 	test_rdsu_rewind_clear();
 	test_rdsui_push_rewind();
+	test_rdsui_log_reuse();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "All rdsu tests completed successfully.", )
 	return (EXIT_SUCCESS);
 }

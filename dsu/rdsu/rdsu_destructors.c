@@ -14,7 +14,7 @@ void rdsu_destroy(t_rdsu *ds) {
 	}
 	if (ds->parent) free(ds->parent);
 	if (!ds->rp_single_alloc && ds->rank) free(ds->rank);
-	if (ds->change_log) rdsu_rewind_clear(ds);
+	if (ds->change_log || ds->reserved_logs) rdsu_rewind_clear(ds);
 	*ds = (t_rdsu){0};
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS)
 }

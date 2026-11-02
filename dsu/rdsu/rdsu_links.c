@@ -30,7 +30,7 @@ bool rdsu_union(t_rdsu *ds, size_t x, size_t y) {
 		return (false);
 	}
 
-	entry = calloc(sizeof(*entry), 1);
+	entry = rdsui_get_log(ds);
 	if (!entry) return (false);
 	ds->components--;
 	if (ds->rank[root_x] < ds->rank[root_y]) {

@@ -182,14 +182,55 @@ NO_COV void test_rdsu_rewind_clear(void) {
 
 	rdsu_init(&rdsu, 10);
 	assert(rdsu.change_log == NULL);
+	assert(rdsu.reserved_logs == NULL);
 	rdsu_union(&rdsu, 1, 2);
 	rdsu_union(&rdsu, 0, 2); // 0-1-2 3 4
 	rdsu_union(&rdsu, 3, 4); // 0-1-2 3-4
 	assert(rdsu.change_log != NULL);
+	rdsu_rewind(&rdsu);
+	assert(rdsu.reserved_logs != NULL);
 	rdsu_rewind_clear(&rdsu);
 	assert(rdsu.change_log == NULL);
+	assert(rdsu.reserved_logs == NULL);
 	assert(rdsu_rewind(&rdsu) == false);
 	rdsu_rewind_clear(NULL);
 	rdsu_destroy(&rdsu);
+	return;
+}
+NO_COV void test_rdsui_log_reuse(void) {
+	t_rdsu rdsu;
+
+	rdsu_init(&rdsu, 10);
+	assert(rdsu.change_log == NULL);
+	assert(rdsu.reserved_logs == NULL);
+
+	alloc_reset_counter();
+	assert(rdsu_union(&rdsu, 0, 1) == true);
+	assert(nb_alloc == 1); // first log has to be allocated
+	assert(rdsu.change_log != NULL);
+	assert(rdsu.reserved_logs == NULL);
+
+	// rewinding pops the log to the reserved stack (no alloc/free)
+	alloc_reset_counter();
+	assert(rdsu_rewind(&rdsu) == true);
+	assert(nb_alloc == 0);
+	assert(rdsu.change_log == NULL);
+	assert(rdsu.reserved_logs != NULL);
+
+	// a new linking re-uses the reserved log, forbidding allocation proves it
+	alloc_set_call_limit(0);
+	assert(rdsu_union(&rdsu, 0, 1) == true);
+	assert(rdsu.change_log != NULL);
+	assert(rdsu.reserved_logs == NULL);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
+
+	// once the reserve is empty an allocation is required again
+	alloc_set_call_limit(0);
+	assert(rdsu_union(&rdsu, 2, 3) == false);
+	alloc_set_call_limit(ALLOC_DFT_LIMIT);
+
+	rdsu_destroy(&rdsu);
+	assert(rdsu.change_log == NULL);
+	assert(rdsu.reserved_logs == NULL);
 	return;
 }

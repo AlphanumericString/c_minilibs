@@ -85,6 +85,7 @@ t_rdsu *rdsu_new_from_arrays(size_t size, uint16_t *parents, uint16_t *ranks) {
 	ret->size            = size;
 	ret->rp_single_alloc = false;
 	ret->change_log      = NULL;
+	ret->reserved_logs   = NULL;
 	ret->components      = size;
 	rdsu_clr(ret);
 	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (rdsu:%p, size:%zu)", (void *)ret, size)
@@ -111,6 +112,7 @@ t_rdsu *rdsu_init_from_arrays(t_rdsu *ret, size_t size, uint16_t *parents,
 	ret->components      = size;
 	ret->rp_single_alloc = false;
 	ret->change_log      = NULL;
+	ret->reserved_logs   = NULL;
 	rdsu_clr(ret);
 	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (rdsu:%p, size:%zu)", (void *)ret, size)
 	return (ret);

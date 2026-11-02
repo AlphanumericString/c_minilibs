@@ -31,9 +31,29 @@ t_rdsu_log *rdsui_pop_rewind(t_rdsu *rdsu) {
 	if (!rdsu || !rdsu->parent || !rdsu->rank) return (NULL);
 	ret = rdsui_peek_rewind(rdsu);
 	if (!ret) return (NULL);
-	rdsu->change_log = ret->nxt;
-	ret->nxt         = NULL;
+	rdsu->change_log    = ret->nxt;
+	ret->nxt            = rdsu->reserved_logs;
+	rdsu->reserved_logs = ret;
 	return (ret);
+}
+/**
+ * \brief [INTERNAL] [DO NOT USE] get a log entry to link, re-using a popped
+ * log if any is available otherwise allocating a new one
+ * \param rdsu the rdsu to get a log for
+ * \return the log entry or null if allocation failed
+ * \ingroup rdsu
+**/
+t_rdsu_log *rdsui_get_log(t_rdsu *rdsu) {
+	t_rdsu_log *ret;
+
+	if (!rdsu) return (NULL);
+	if (rdsu->reserved_logs) {
+		ret                 = rdsu->reserved_logs;
+		rdsu->reserved_logs = ret->nxt;
+		ret->nxt            = NULL;
+		return (ret);
+	}
+	return ((t_rdsu_log *)calloc(sizeof(t_rdsu_log), 1));
 }
 
 static bool execute_rewind(t_rdsu *rdsu, t_rdsu_log lg) {
@@ -96,12 +116,12 @@ bool rdsu_rewind(t_rdsu *rdsu) {
 	}
 	ret = execute_rewind(rdsu, *entry);
 	if (ret == false) {
-		entry->nxt       = rdsu->change_log;
-		rdsu->change_log = entry;
+		rdsu->reserved_logs = entry->nxt;
+		entry->nxt          = rdsu->change_log;
+		rdsu->change_log    = entry;
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_ELC)
 		return (ret);
 	}
-	free(entry);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS)
 	return (true);
 }
@@ -137,9 +157,10 @@ bool rdsu_rewind_to_state(t_rdsu *rdsu, t_rdsu_log *lg) {
 		entry = rdsui_pop_rewind(rdsu);
 		res   = execute_rewind(rdsu, *entry);
 		if (!res) {
-			entry->nxt       = rdsu->change_log;
-			rdsu->change_log = entry;
-		} else free(entry);
+			rdsu->reserved_logs = entry->nxt;
+			entry->nxt          = rdsu->change_log;
+			rdsu->change_log    = entry;
+		}
 	}
 	if (res == false) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_ELC)
@@ -154,11 +175,21 @@ bool rdsu_rewind_to_state(t_rdsu *rdsu, t_rdsu_log *lg) {
  * \ingroup rdsu
 **/
 void rdsu_rewind_clear(t_rdsu *rdsu) {
+	t_rdsu_log *entry;
+
 	if (!rdsu) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
 		return;
 	}
-	while (rdsu->change_log)
-		free(rdsui_pop_rewind(rdsu));
+	while (rdsu->change_log) {
+		entry            = rdsu->change_log;
+		rdsu->change_log = entry->nxt;
+		free(entry);
+	}
+	while (rdsu->reserved_logs) {
+		entry               = rdsu->reserved_logs;
+		rdsu->reserved_logs = entry->nxt;
+		free(entry);
+	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS)
 }

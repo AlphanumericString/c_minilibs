@@ -82,6 +82,8 @@ typedef struct s_rdsu_log {
  * \param rp_single_alloc boolean on whether the rank and parent were allocated
  * from a single contiguous allocation
  * \param change_log the stack of entries/changes in the rdsu
+ * \param reserved_logs the stack of logs that where popped and can be re-used
+ * for future linkings (reduces alloc/free churn on do/undo cycles)
  * \ingroup rdsu
  * \note rdsu are not "auto" compacted, furthermore compacting impacts logs and
  * invalidates said logs. This means that unless you're sure you don't need to
@@ -96,6 +98,7 @@ typedef struct s_rewindable_disjointed_set_union {
 	bool   rp_single_alloc;
 
 	t_rdsu_log *change_log;
+	t_rdsu_log *reserved_logs;
 } t_rdsu;
 
 t_rdsu *rdsu_new(size_t n);
@@ -134,6 +137,7 @@ t_rdsu_log  rdsui_init_log(size_t elem, uint16_t value, uint16_t rank,
                            enum s_rdsu_log_type type);
 t_rdsu_log *rdsui_peek_rewind(const t_rdsu *rdsu);
 t_rdsu_log *rdsui_pop_rewind(t_rdsu *rdsu);
+t_rdsu_log *rdsui_get_log(t_rdsu *rdsu);
 
 #endif // !C_MINI__RDSU_INTERNAL
 

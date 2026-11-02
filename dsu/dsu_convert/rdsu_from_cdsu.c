@@ -40,7 +40,7 @@ t_rdsu *rdsu_init_from_cdsu(t_rdsu *to, const t_cdsu *src) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG);
 		return (NULL);
 	}
-	if (to->change_log) rdsu_rewind_clear(to);
+	if (to->change_log || to->reserved_logs) rdsu_rewind_clear(to);
 	memcpy(to->parent, src->parent, sizeof(*to->parent) * src->size);
 	memcpy(to->rank, src->rank, sizeof(*to->rank) * src->size);
 	to->components = src->components;
