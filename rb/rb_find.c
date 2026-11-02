@@ -1,3 +1,4 @@
+#define C_MINI__RB_INTERNALS
 #include "round_buffer.h"
 
 /**
@@ -19,7 +20,7 @@ void *rb_find(const t_rb *rb, t_cm_comparator c, const void *a) {
 		return false;
 	}
 	count = rb_size(*rb);
-	pos   = rb->o_pos;
+	pos   = rbi_opos_get(rb);
 	while (i < count) {
 		elem = rb->array + (pos * rb->sz_e);
 		if (c(elem, (void *)a) == 0) {

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 
+#define C_MINI__RB_INTERNALS
 #include "round_buffer.h"
 
 /**
@@ -14,7 +15,12 @@ void rb_destroy(t_rb *rb) {
 		return;
 	}
 	if (rb->array) free(rb->array);
-	*rb = (t_rb){0};
+	rb->array  = NULL;
+	rb->nb_max = 0;
+	rb->sz_e   = 0;
+	rbi_count_set(rb, 0);
+	rbi_ipos_set(rb, 0);
+	rbi_opos_set(rb, 0);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 }
 /**
@@ -28,9 +34,9 @@ void rb_clr(t_rb *rb) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return;
 	}
-	rb->o_pos = 0;
-	rb->i_pos = rb->o_pos;
-	rb->count = 0;
+	rbi_opos_set(rb, 0);
+	rbi_ipos_set(rb, 0);
+	rbi_count_set(rb, 0);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 }
 /**

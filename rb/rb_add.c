@@ -1,5 +1,6 @@
 #include <string.h>
 
+#define C_MINI__RB_INTERNALS
 #include "round_buffer.h"
 
 /**
@@ -13,10 +14,11 @@ void rb_push(t_rb *rb, const void *data) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return;
 	}
-	memcpy(rb->array + (rb->i_pos * rb->sz_e), data, rb->sz_e);
-	rb->i_pos = (rb->i_pos + 1) % rb->nb_max;
-	if (rb->count == rb->nb_max) rb->o_pos = (rb->o_pos + 1) % rb->nb_max;
-	else rb->count++;
+	memcpy(rb->array + (rbi_ipos_get(rb) * rb->sz_e), data, rb->sz_e);
+	rbi_ipos_set(rb, (rbi_ipos_get(rb) + 1) % rb->nb_max);
+	if (rbi_count_get(rb) == rb->nb_max)
+		rbi_opos_set(rb, (rbi_opos_get(rb) + 1) % rb->nb_max);
+	else rbi_count_inc(rb);
 
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 }

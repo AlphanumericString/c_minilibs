@@ -1,5 +1,6 @@
 #include <string.h>
 
+#define C_MINI__RB_INTERNALS
 #include "round_buffer.h"
 
 static void blank(void *a) {
@@ -30,8 +31,8 @@ bool rb_filter(t_rb *rb, t_cm_callback cb, const void *arg,
 	if (!destroyer) destroyer = blank;
 
 	count     = rb_size(*rb);
-	read_pos  = rb->o_pos;
-	write_pos = rb->o_pos;
+	read_pos  = rbi_opos_get(rb);
+	write_pos = rbi_opos_get(rb);
 
 	while (i < count) {
 		elem = rb->array + (read_pos * rb->sz_e);
@@ -41,12 +42,12 @@ bool rb_filter(t_rb *rb, t_cm_callback cb, const void *arg,
 			write_pos = (write_pos + 1) % rb->nb_max;
 		} else {
 			destroyer(elem);
-			rb->count--;
+			rbi_count_dec(rb);
 		}
 		read_pos = (read_pos + 1) % rb->nb_max;
 		i++;
 	}
-	rb->i_pos = write_pos;
+	rbi_ipos_set(rb, write_pos);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 	return true;
 }

@@ -1,3 +1,4 @@
+#define C_MINI__RB_INTERNALS
 #include "round_buffer.h"
 
 /**
@@ -8,7 +9,7 @@
 **/
 bool rb_full(t_rb rb) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
-	return (rb.array && rb.count == rb.nb_max);
+	return (rb.array && rbi_count_get(&rb) == rb.nb_max);
 }
 /**
  * \brief true if rb is empty, false otherwise
@@ -18,7 +19,7 @@ bool rb_full(t_rb rb) {
 **/
 bool rb_empty(t_rb rb) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
-	return (!rb.array || rb.count == 0);
+	return (!rb.array || rbi_count_get(&rb) == 0);
 }
 /**
  * \brief return number of entries in rb not yet read/poped
@@ -28,7 +29,7 @@ bool rb_empty(t_rb rb) {
 **/
 size_t rb_size(t_rb rb) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
-	return (rb.count);
+	return (rbi_count_get(&rb));
 }
 /**
  * \brief return max number of elements rb can hold

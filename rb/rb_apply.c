@@ -1,3 +1,4 @@
+#define C_MINI__RB_INTERNALS
 #include "round_buffer.h"
 
 /**
@@ -18,7 +19,7 @@ bool rb_napply(t_rb *rb, size_t n, t_cm_callback cb, const void *arg) {
 		return false;
 	}
 	if (n > rb_size(*rb)) n = rb_size(*rb);
-	current_pos = rb->o_pos;
+	current_pos = rbi_opos_get(rb);
 	while (i < n) {
 		if (!cb(rb->array + (current_pos * rb->sz_e), (void *)arg)) {
 			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RB_LOG_ECB)

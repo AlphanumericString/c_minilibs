@@ -1,5 +1,6 @@
 #include <string.h>
 
+#define C_MINI__RB_INTERNALS
 #include "round_buffer.h"
 
 /**
@@ -14,13 +15,13 @@ bool rb_drop(t_rb *rb, size_t n) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return (false);
 	}
-	if (n >= rb->count) {
+	if (n >= rbi_count_get(rb)) {
 		rb_clr(rb);
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 		return (true);
 	}
-	rb->o_pos  = (rb->o_pos + n) % rb->nb_max;
-	rb->count -= n;
+	rbi_opos_set(rb, (rbi_opos_get(rb) + n) % rb->nb_max);
+	rbi_count_set(rb, rbi_count_get(rb) - n);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 	return (true);
 }
@@ -71,13 +72,13 @@ void *rb_npeek(t_rb rb, size_t n, void *elem_out) {
 	}
 	pos = rb_at(rb, 0);
 	if (elem_out) {
-		if (rb.nb_max > (rb.o_pos + n)) {
+		if (rb.nb_max > (rbi_opos_get(&rb) + n)) {
 			memcpy(elem_out, pos, n * rb.sz_e);
 			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 		} else {
-			left_size = (rb.nb_max - rb.o_pos) * rb.sz_e;
+			left_size = (rb.nb_max - rbi_opos_get(&rb)) * rb.sz_e;
 			memcpy(elem_out, pos, left_size);
-			n -= rb.nb_max - rb.o_pos;
+			n -= rb.nb_max - rbi_opos_get(&rb);
 			memcpy(elem_out + left_size, rb.array, n * rb.sz_e);
 			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 		}
@@ -103,8 +104,8 @@ void *rb_pop(t_rb *rb, void *elem_out) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_FAIL)
 		return (return_val);
 	}
-	rb->o_pos = (rb->o_pos + 1) % rb->nb_max;
-	rb->count--;
+	rbi_opos_set(rb, (rbi_opos_get(rb) + 1) % rb->nb_max);
+	rbi_count_dec(rb);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 	return (return_val);
 }
@@ -129,8 +130,8 @@ void *rb_npop(t_rb *rb, size_t n, void *elem_out) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_FAIL)
 		return (return_val);
 	}
-	rb->o_pos  = (rb->o_pos + n) % rb->nb_max;
-	rb->count -= n;
+	rbi_opos_set(rb, (rbi_opos_get(rb) + n) % rb->nb_max);
+	rbi_count_set(rb, rbi_count_get(rb) - n);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 	return (return_val);
 }

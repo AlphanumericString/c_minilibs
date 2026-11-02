@@ -1,5 +1,6 @@
 #include <string.h>
 
+#define C_MINI__RB_INTERNALS
 #include "round_buffer.h"
 
 /**
@@ -56,7 +57,7 @@ void *rb_nget(const t_rb *rb, size_t n, t_cm_comparator comp, const void *arg,
 	}
 
 	count = rb_size(*rb);
-	pos   = rb->o_pos;
+	pos   = rbi_opos_get(rb);
 	while (i < count) {
 		elem = rb->array + (pos * rb->sz_e);
 		if (comp(elem, (void *)arg) == 0) {
@@ -100,7 +101,7 @@ void *rb_getn(const t_rb *rb, size_t n, t_cm_comparator comp, const void *arg,
 	}
 
 	count = rb_size(*rb);
-	pos   = rb->o_pos;
+	pos   = rbi_opos_get(rb);
 	while (i < count && found < n) {
 		elem = rb->array + (pos * rb->sz_e);
 		if (comp(elem, (void *)arg) == 0) {

@@ -1,5 +1,6 @@
 #include <string.h>
 
+#define C_MINI__RB_INTERNALS
 #include "round_buffer.h"
 
 /**
@@ -16,7 +17,7 @@ void *rb_at(t_rb rb, size_t idx) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return NULL;
 	}
-	pos = (rb.o_pos + idx) % rb.nb_max;
+	pos = (rbi_opos_get(&rb) + idx) % rb.nb_max;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 	return rb.array + (pos * rb.sz_e);
 }
@@ -45,7 +46,7 @@ void *rb_nat(t_rb rb, size_t idx, size_t n, void *buff) {
 	}
 	max = rb_size(rb);
 	if (n > max) n = max;
-	start_pos = (rb.o_pos + idx) % rb.nb_max;
+	start_pos = (rbi_opos_get(&rb) + idx) % rb.nb_max;
 	if (start_pos + n <= rb.nb_max) {
 		memcpy(buff, rb.array + (start_pos * rb.sz_e), n * rb.sz_e);
 	} else {

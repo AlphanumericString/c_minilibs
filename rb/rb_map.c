@@ -1,5 +1,6 @@
 #include <string.h>
 
+#define C_MINI__RB_INTERNALS
 #include "round_buffer.h"
 
 /**
@@ -26,7 +27,7 @@ bool rb_nmap(t_rb *rb, size_t n, t_cm_duplicator dup, void **out_buff) {
 	count = rb_size(*rb);
 	if (n > count) n = count;
 
-	pos = rb->o_pos;
+	pos = rbi_opos_get(rb);
 	while (i < n) {
 		elem     = rb->array + (pos * rb->sz_e);
 		dup_elem = dup(elem);

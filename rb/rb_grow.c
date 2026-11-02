@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define C_MINI__RB_INTERNALS
 #include "round_buffer.h"
 
 /**
@@ -24,9 +25,9 @@ t_rb *rb_grow(t_rb *rb, size_t nb_elem_added) {
 		return NULL;
 	}
 	rb_nat(*rb, 0, -1, new_rb->array);
-	new_rb->o_pos = 0;
-	new_rb->count = rb_size(*rb);
-	new_rb->i_pos = new_rb->count;
+	rbi_opos_set(new_rb, 0);
+	rbi_count_set(new_rb, rb_size(*rb));
+	rbi_ipos_set(new_rb, rbi_count_get(new_rb));
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 	return new_rb;
 }
