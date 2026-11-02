@@ -1,6 +1,6 @@
 #include <string.h>
 
-#define C_MINI__RB_INTERNALS
+#define C_MINI__RB_INTERNAL
 #include "round_buffer.h"
 
 static void blank(void *a) {

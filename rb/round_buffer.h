@@ -105,7 +105,7 @@ bool   rb_map(t_rb *rb, t_cm_duplicator dup, void **out_buff);
 bool   rb_nmap(t_rb *rb, size_t n, t_cm_duplicator dup, void **out_buff);
 t_rb  *rb_grow(t_rb *rb, size_t nb_elem_added);
 
-#ifdef C_MINI__RB_INTERNALS
+#ifdef C_MINI__RB_INTERNAL
 
 /**
  * The rb positions (i_pos, o_pos) and count are atomic in multi-threaded
@@ -175,6 +175,6 @@ static inline size_t rbi_count_dec(t_rb *rb) {
 
 #	endif // !C_MINI__RB_ATOMIC
 
-#endif // !C_MINI__RB_INTERNALS
+#endif // !C_MINI__RB_INTERNAL
 
 #endif // !C_MINI__RB
