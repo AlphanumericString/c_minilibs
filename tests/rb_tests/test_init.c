@@ -21,7 +21,7 @@ NO_COV void test_rb_init(void) {
 	t_rb rb = {0};
 
 	assert(rb_init(&rb, sizeof(int)) != NULL);
-	ASSERT_RB_STATE(rb, sizeof(int), C_MINI_RB_NB_ELEM_DFLT, 0, 0)
+	ASSERT_RB_STATE(rb, sizeof(int), C_MINI__RB_NBE_DFLT, 0, 0)
 
 	rb_destroy(&rb);
 	assert(rb_init(NULL, sizeof(int)) == NULL);
@@ -50,7 +50,7 @@ NO_COV void test_rb_new(void) {
 	t_rb *rb = NULL;
 
 	rb = rb_new(sizeof(int));
-	ASSERT_RB_STATE(*rb, sizeof(int), C_MINI_RB_NB_ELEM_DFLT, 0, 0)
+	ASSERT_RB_STATE(*rb, sizeof(int), C_MINI__RB_NBE_DFLT, 0, 0)
 	rb_free(&rb);
 
 	assert(rb_new(0) == NULL);

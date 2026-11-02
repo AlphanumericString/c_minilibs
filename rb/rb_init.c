@@ -39,7 +39,7 @@ t_rb *rb_create(t_rb *rb, size_t sz_elem, size_t nb_e) {
 t_rb *rb_init(t_rb *rb, size_t sz_elem) {
 	t_rb *ret;
 
-	ret = rb_create(rb, sz_elem, C_MINI_RB_NB_ELEM_DFLT);
+	ret = rb_create(rb, sz_elem, C_MINI__RB_NBE_DFLT);
 	if (!ret) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_FAIL)
 		return (NULL);

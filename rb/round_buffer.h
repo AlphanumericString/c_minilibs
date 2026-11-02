@@ -18,6 +18,14 @@
 
 #include "common_base/fptr.h"
 
+#ifndef C_MINI__RB_NBE_DFLT
+#	ifdef C_MINI__TESTS
+#		define C_MINI__RB_NBE_DFLT 4
+#	else // ||!C_MINI__TESTS
+#		define C_MINI__RB_NBE_DFLT 64
+#	endif
+#endif // !C_MINI__RB_NBE_DFLT
+
 /**
  * \defgroup rb Round Buffer
 **/
@@ -81,7 +89,5 @@ void  *rb_find(const t_rb *rb, t_cm_comparator c, const void *a);
 bool   rb_map(t_rb *rb, t_cm_duplicator dup, void **out_buff);
 bool   rb_nmap(t_rb *rb, size_t n, t_cm_duplicator dup, void **out_buff);
 t_rb  *rb_grow(t_rb *rb, size_t nb_elem_added);
-
-#define C_MINI_RB_NB_ELEM_DFLT 4
 
 #endif // !C_MINI__RB
