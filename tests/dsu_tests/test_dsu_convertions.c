@@ -143,6 +143,22 @@ NO_COV void test_rdsu_init_from_cdsu(void) {
 	assert(rdsu != NULL);
 	assert(rdsu_union(rdsu, 0, 1) == true);
 	assert(rdsu->change_log != NULL);
+	assert(rdsu->reserved_logs == NULL);
+	assert(rdsu_init_from_cdsu(rdsu, cdsu) == rdsu);
+	assert(rdsu->size == cdsu->size);
+	assert(rdsu->components == cdsu->components);
+	assert(rdsu->change_log == NULL);
+	for (size_t i = 0; i < rdsu->size; i++) {
+		assert(rdsu->parent[i] == cdsu->parent[i]);
+		assert(rdsu->rank[i] == cdsu->rank[i]);
+	}
+	assert(rdsu_validate(rdsu));
+
+	// with reserved logs
+	assert(rdsu_union(rdsu, 4, 3) == true);
+	assert(rdsu_rewind(rdsu) == true);
+	assert(rdsu->change_log == NULL);
+	assert(rdsu->reserved_logs != NULL);
 	assert(rdsu_init_from_cdsu(rdsu, cdsu) == rdsu);
 	assert(rdsu->size == cdsu->size);
 	assert(rdsu->components == cdsu->components);
