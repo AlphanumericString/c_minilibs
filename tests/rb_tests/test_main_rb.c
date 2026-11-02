@@ -50,6 +50,7 @@ NO_COV int main(void) {
 	test_rb_nat();
 	test_rb_get();
 	test_rb_nget();
+	test_rb_getn();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Find", )
 	test_rb_find();

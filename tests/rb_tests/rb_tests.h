@@ -60,6 +60,7 @@ void test_rb_nat(void);
 
 void test_rb_get(void);
 void test_rb_nget(void);
+void test_rb_getn(void);
 
 void test_rb_find(void);
 

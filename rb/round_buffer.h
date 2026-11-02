@@ -83,8 +83,8 @@ void  *rb_get(const t_rb *rb, t_cm_comparator comp, const void *arg,
               void *buffer);
 void  *rb_nget(const t_rb *rb, size_t n, t_cm_comparator comp, const void *arg,
                void *buffer);
-// void *rb_getn(const t_rb *rb, size_t n, t_cm_comparator comp, const void
-// *arg, void *buffer);
+void  *rb_getn(const t_rb *rb, size_t n, t_cm_comparator comp, const void *arg,
+               void *buffer);
 void  *rb_find(const t_rb *rb, t_cm_comparator c, const void *a);
 bool   rb_map(t_rb *rb, t_cm_duplicator dup, void **out_buff);
 bool   rb_nmap(t_rb *rb, size_t n, t_cm_duplicator dup, void **out_buff);
