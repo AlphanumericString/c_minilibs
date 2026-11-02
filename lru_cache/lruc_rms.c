@@ -8,7 +8,7 @@
 
 /**
  * \brief Clear node in reserved node list
- * \param c cache pointer
+ * \param cache cache pointer
  * \ingroup lruc
 **/
 bool lruc_clear_reserved(t_lruc *cache) {
