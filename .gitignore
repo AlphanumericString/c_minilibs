@@ -11,6 +11,7 @@ documentation
 *profdata
 *profraw
 coverage/*
+single/
 llm_exchanges/
 *todo*
 *idea*

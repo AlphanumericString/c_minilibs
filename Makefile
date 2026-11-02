@@ -4,6 +4,13 @@
 # list of targets / modules
 MODULES		:= da dsu hp ill lru_cache rb sptr tls tpm
 
+# module selector
+# when left empty every module is targeted.
+MODULE			?=
+SELECTED_MODULES:=
+
+MODULE_CL		= $(filter $(MODULES), $(MODULE))
+
 PROJECT_NAME:= c_mini
 PRD_TARGET	:= $(PROJECT_NAME).profdata
 
@@ -12,34 +19,22 @@ BUILD_DIR	:= build
 DOC_DIR		:= documentation
 TST_DIR		:= tests
 COV_DIR		:= coverage
+SINGLE_DIR	:= single
 
 # TOOLS
-CC		:= clang
-COV		:= llvm-cov
-PRD		:= llvm-profdata
-RM		:= rm -f
-PRINT	:= printf
-ifeq (, $(shell which $(COV) 2> /dev/null))
-	COV			=	llvm-cov-12
-	ifeq (, $(shell which $(COV) 2> /dev/null))
-		COV			=	llvm-cov-14
-	endif
-endif
-
-ifeq (, $(shell which $(PRD) 2> /dev/null))
-	PRD			=	llvm-profdata-12
-	ifeq (, $(shell which $(PRD) 2> /dev/null))
-		PRD			=	llvm-profdata-14
-	endif
-endif
+CC			:= clang
+COV			:= llvm-cov
+PRD			:= llvm-profdata
+CPPCHECK	:= cppcheck
+RM			:= rm -f
+PRINT		:= printf
 
 # FLAGS
+# Compilation flags
 DEBUG_LVL	?= 0
 STD			?= gnu17
+CHECK_STD	?= c17
 CFLAGS		:= -Wall -Wextra -MMD -MP --std=$(STD) -Werror
-VFLAGS		:= --leak-check=full --show-leak-kinds=all --track-fds=yes \
-				--trace-children=yes --track-origins=yes --read-var-info=yes \
-				--show-reachable=yes --undef-value-errors=yes
 
 ifeq ($(DEBUG_LVL), 0)
 	CFLAGS += -DC_MINI__DEBUG_LEVEL=0
@@ -47,19 +42,28 @@ else
 	CFLAGS += -g3 -DC_MINI__TESTS -DC_MINI__DEBUG_LEVEL=$(DEBUG_LVL)
 endif
 
-TFLAGS	:= $(CFLAGS)	-O0 -I./	\
+TFLAGS	?= $(CFLAGS)	-O0 -I./	\
 			-fprofile-instr-generate -ftest-coverage -fcoverage-mapping \
 			-fno-inline -fno-inline-functions -DC_MINI__TESTS
 TLINKER_FLAGS = -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc \
 				-Wl,--wrap=clock_gettime
-REMOVE_MODULE ?= ""
+VGFLAGS		?= $(filter-out -fprofile-instr-generate -ftest-coverage \
+				-fcoverage-mapping,$(TFLAGS))
+# Tools flags
+CHECK_FLAGS	?= --enable=all --std=$(CHECK_STD) --language=c --inline-suppr \
+				-I. --suppress=missingIncludeSystem --suppress=unusedFunction \
+				--quiet --suppress=staticFunction
+VFLAGS		:= --leak-check=full --show-leak-kinds=all --track-fds=yes \
+				--trace-children=yes --track-origins=yes --read-var-info=yes \
+				--show-reachable=yes --undef-value-errors=yes
 
 # FILES COLLECTOR
 D_FILES		:=
 LIB_FILES	:=
 OBJ_FILES	:=
-TST_FILES	:=
 PRD_FILES	:=
+TST_PROGS	:=
+VG_PROGS	:=
 
 # MODULE TEMPLATE
 #
@@ -73,11 +77,16 @@ $1_OBJ		:=$$(patsubst %.c, %.o, $$(addprefix $(BUILD_DIR)/,$$($1_SRC)))
 $1_TOBJ		:=$$(patsubst %.c, %.o, $$(addprefix $(BUILD_DIR)/,$$($1_TSRC)))
 $1_TOBJSRC	:=$$(patsubst %.c, %.o, $$(addprefix $(BUILD_DIR)/$(TST_DIR)/,$$($1_SRC)))
 $1_D		:=$$(patsubst %.o, %.d, $$($1_OBJ)) $$(patsubst %.o, %.d, $$($1_TOBJ))
+# valgrind flavour (no coverage instrumentation)
+$1_TOBJVG	:=$$(patsubst %.c, %.o, $$(addprefix $(BUILD_DIR)/vg/,$$($1_TSRC)))
+$1_TOBJSRCVG:=$$(patsubst %.c, %.o, $$(addprefix $(BUILD_DIR)/vg/,$$($1_SRC)))
+$1_DVG		:=$$(patsubst %.o, %.d, $$($1_TOBJVG)) $$(patsubst %.o, %.d, $$($1_TOBJSRCVG))
 # var(collectors) update
-D_FILES		+= $$($1_D)
+D_FILES		+= $$($1_D) $$($1_DVG)
 LIB_FILES	+= lib$1.a
 OBJ_FILES	+= $$($1_OBJ)
-TST_FILES	+= test_$1.out
+TST_PROGS	+= test_$1.out
+VG_PROGS	+= test_$1.vg.out
 PRD_FILES	+= ./$(BUILD_DIR)/test_$1.profraw
 
 # RULES
@@ -93,6 +102,10 @@ $(BUILD_DIR)/$(TST_DIR)/$1/%.o: $1/%.c
 $(BUILD_DIR)/$(TST_DIR)/$1_tests/%.o: $(TST_DIR)/$1_tests/%.c
 	@mkdir -p $$(dir $$@)
 	$(CC) $(TFLAGS) -c $$< -o $$@
+# static analysis
+analyze_$1:
+	@$(CPPCHECK) $(CHECK_FLAGS) $1
+	@$(PRINT) "static analysis: $1 done\n"
 
 # TARGETS
 # base target
@@ -101,12 +114,18 @@ lib$1.a: $$($1_OBJ)
 # test target
 test_$1.out: $$($1_TOBJSRC) $$($1_TOBJ)
 	$(CC) $(TFLAGS) $$($1_TOBJ) $$($1_TOBJSRC) -o $$@ $$(TLINKER_FLAGS)
+# valgrind test target
+test_$1.vg.out: $$($1_TOBJSRCVG) $$($1_TOBJVG)
+	$(CC) $(VGFLAGS) $$($1_TOBJVG) $$($1_TOBJSRCVG) -o $$@ $$(TLINKER_FLAGS)
 # cov target
 ./$(BUILD_DIR)/test_$1.profraw: test_$1.out
 	@LLVM_PROFILE_FILE=$$@ ./$$^ 1> /dev/null && \
 		$(PRINT) "$$^ ok\n" || $(PRINT) "$$^ failed\n";
-
 endef
+
+$(BUILD_DIR)/vg/%.o: %.c
+	@mkdir -p $(dir $@)
+	$(CC) $(VGFLAGS) -c $< -o $@
 
 # module template instentiation
 $(foreach mod,$(MODULES),$(eval $(call module_template,$(mod))))
@@ -121,7 +140,7 @@ $(COV_DIR)/index.html: $(PRD_TARGET)
 		-ignore-filename-regex='ss/*' -ignore-filename-regex='$(TST_DIR)/*'	\
 		--show-branches=count	--show-directory-coverage					\
 		-output-dir=$(COV_DIR)	-instr-profile=$^							\
-		$(addprefix -object=, $(TST_FILES))
+		$(addprefix -object=, $(TST_PROGS))
 #		--line-coverage-lt=90 --region-coverage-lt=90
 
 # documentation
@@ -138,7 +157,12 @@ $(DOC_DIR)/html/index.html: Doxyfile
 # DOCUMENTATION
 # all: compiles every module into it's own lib named lib<module_name>.a (debug via DEBUG_LVL=<value>)
 # tests: compiles every module's tests (debug via DEBUG_LVL=<value>)
-# tests_run: run every tests (using valgrind with cool args too)
+# tests_run: build and run every module's tests under valgrind
+# valgrind: build and run tests under valgrind (module aware via MODULE=<name>)
+# static_analysis: run the static analyzer (module aware via MODULE=<name>)
+# tests_mt: build the threaded tests of every module that provides some
+# tests_mt_run: build and run the threaded tests
+# single_file: amalgamate MODULE into a single stb style header (MODULE required)
 # coverage: run coverage pass using llvm tooling (debug via DEBUG_LVL=<value>)
 # documentation: run documentation generation using doxygen
 # fclean: rm output dirs and final targets created by makefile
@@ -147,26 +171,40 @@ $(DOC_DIR)/html/index.html: Doxyfile
 # remove_module: removes a specified module from the project
 #
 all: $(LIB_FILES)
-tests: $(TST_FILES)
-tests_run: $(TST_FILES)
+tests: $(TST_PROGS)
+tests_run: $(VG_PROGS)
 	@for t in $^; do \
 		valgrind $(VFLAGS) -q ./$$t; \
 	done
+valgrind: $(addprefix test_,$(addsuffix .vg.out,$(SELECTED_MODULES)))
+	@for t in $^; do \
+		valgrind $(VFLAGS) -q ./$$t; \
+	done
+static_analysis: $(addprefix analyze_,$(SELECTED_MODULES))
+single_file:
+	@if [ -z "$(MODULE_CL)" ] ; then \
+		$(PRINT) '$(RED)Invalid$(RESET). Please use `single_file` rule with a module (eg: `make single_file MODULE=<module_name>`)'; \
+		exit 1 ; \
+	fi
+	@mkdir -p $(SINGLE_DIR)
+	@sh scripts/amalgamate.sh $(MODULE_CL) $(SINGLE_DIR)/$(MODULE_CL).h $(MODULE_CL)
+	@$(PRINT) "single file: $(SINGLE_DIR)/$(MODULE_CL).h\n"
 coverage: $(COV_DIR)/index.html
 documentation:$(DOC_DIR)/html/index.html
 fclean:clean
-	$(RM) -r $(BUILD_DIR) $(DOC_DIR) $(COV_DIR)
+	$(RM) -r $(BUILD_DIR) $(DOC_DIR) $(COV_DIR) $(SINGLE_DIR)
 clean:
-	$(RM) $(LIB_FILES) $(TST_FILES) $(PRD_TARGET)
+	$(RM) $(LIB_FILES) $(TST_PROGS) $(VG_PROGS) $(PRD_TARGET)
 re:fclean
 	@make --no-print-directory all
 remove_module:
-	@if [ -z "$(REMOVE_MODULE)" ] ; then \
-		$(PRINT) '$(RED)Invalid$(RESET). Please use `remove_module` rule with an argument on REMOVE_MODULE (eg: `make remove_module REMOVE_MODULE=<module_name>`)'; \
+	@if [ -z "$(MODULE_CL)" ] ; then \
+		$(PRINT) "$(RED)Invalid$(RESET). Please use \`remove_module\` %s%s\n" \
+		"rule with an argument on remove_module (eg: \`make remove_module " \
+		"MODULE=<module_name>\`)"; \
+		exit 1 ; \
 	else \
-		$(RM) -r $(DOC_DIR) $(COV_DIR) $(BUILD_DIR) $(REMOVE_MODULE) tests/$(REMOVE_MODULE)_tests; \
-		NEW_MODULES=$$(grep '^MODULES\s*:=' Makefile | grep ':=.*' --only-matching | grep ' .*' --only-matching | sed "s/\<$(REMOVE_MODULE)\> *//") ; \
-		sed -i "s/\(MODULES\s*:=\).*/\1 $$NEW_MODULES/" Makefile ; \
-		$(PRINT) "removed $(REMOVE_MODULE)" ; \
+		sh scripts/remove_module.sh $(MODULE_CL) ./Makefile ; \
+		$(PRINT) "removed module: $(MODULE_CL)\n" ; \
 	fi
-.PHONY: re clean fclean tests tests_run
+.PHONY: re clean fclean tests tests_run valgrind static_analysis single_file remove_module
