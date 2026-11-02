@@ -2,6 +2,42 @@
 #define C_MINI__RDSU_INTERNAL
 #include "rewindable_disjointed_set_union.h"
 
+// -- local func
+
+/*
+ * push a log
+ */
+static inline bool rdsui_push_rewind(t_rdsu *rdsu, t_rdsu_log *entry) {
+	entry->nxt       = rdsu->change_log;
+	rdsu->change_log = entry;
+	return (true);
+}
+/*
+ * init a log
+ */
+static inline t_rdsu_log rdsui_init_log(size_t elem, uint16_t value,
+                                        uint16_t             rank,
+                                        enum s_rdsu_log_type type) {
+	return ((t_rdsu_log){
+	    .type = type, .elem = elem, .p = value, .r = rank, .nxt = NULL});
+}
+
+/*
+ * get a log from the reserved pile or create a new one
+ */
+static inline t_rdsu_log *rdsui_get_log(t_rdsu *rdsu) {
+	t_rdsu_log *ret;
+
+	if (rdsu->reserved_logs) {
+		ret                 = rdsu->reserved_logs;
+		rdsu->reserved_logs = ret->nxt;
+		ret->nxt            = NULL;
+		return (ret);
+	}
+	return ((t_rdsu_log *)calloc(sizeof(t_rdsu_log), 1));
+}
+// ----------
+
 /**
  * \brief links 2 elements
  * \param ds the rdsu structure
@@ -29,7 +65,6 @@ bool rdsu_union(t_rdsu *ds, size_t x, size_t y) {
 		       ds->components, ds->components)
 		return (false);
 	}
-
 	entry = rdsui_get_log(ds);
 	if (!entry) return (false);
 	ds->components--;

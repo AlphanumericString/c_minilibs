@@ -9,19 +9,6 @@ static inline bool is_log_valid(const t_rdsu *rdsu, const t_rdsu_log *log) {
 	         log->type == RDSU_LOG_NAYRANK));
 }
 
-t_rdsu_log rdsui_init_log(size_t elem, uint16_t value, uint16_t rank,
-                          enum s_rdsu_log_type type) {
-
-	return ((t_rdsu_log){
-	    .type = type, .elem = elem, .p = value, .r = rank, .nxt = NULL});
-}
-
-bool rdsui_push_rewind(t_rdsu *rdsu, t_rdsu_log *entry) {
-	if (!rdsu || !entry || is_log_valid(rdsu, entry) == false) return (false);
-	entry->nxt       = rdsu->change_log;
-	rdsu->change_log = entry;
-	return (true);
-}
 t_rdsu_log *rdsui_peek_rewind(const t_rdsu *rdsu) {
 	return (rdsu->change_log);
 }
@@ -36,27 +23,7 @@ t_rdsu_log *rdsui_pop_rewind(t_rdsu *rdsu) {
 	rdsu->reserved_logs = ret;
 	return (ret);
 }
-/**
- * \brief [INTERNAL] [DO NOT USE] get a log entry to link, re-using a popped
- * log if any is available otherwise allocating a new one
- * \param rdsu the rdsu to get a log for
- * \return the log entry or null if allocation failed
- * \ingroup rdsu
-**/
-t_rdsu_log *rdsui_get_log(t_rdsu *rdsu) {
-	t_rdsu_log *ret;
-
-	if (!rdsu) return (NULL);
-	if (rdsu->reserved_logs) {
-		ret                 = rdsu->reserved_logs;
-		rdsu->reserved_logs = ret->nxt;
-		ret->nxt            = NULL;
-		return (ret);
-	}
-	return ((t_rdsu_log *)calloc(sizeof(t_rdsu_log), 1));
-}
-
-static bool execute_rewind(t_rdsu *rdsu, t_rdsu_log lg) {
+static inline bool execute_rewind(t_rdsu *rdsu, t_rdsu_log lg) {
 
 	if (is_log_valid(rdsu, &lg) == false) return (false);
 	rdsu->parent[lg.elem] = lg.p;

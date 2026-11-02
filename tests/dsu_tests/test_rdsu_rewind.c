@@ -5,35 +5,6 @@
 
 #define RDSU_BAD____TYPE 999
 
-NO_COV void test_rdsui_push_rewind(void) {
-	t_rdsu rdsu;
-	struct {
-		t_rdsu_log log;
-		bool       expected;
-	} tests_values[] = {
-	    {{NULL, RDSU_LOG_YESRANK, 00, 00, 00}, true }, // ok
-	    {{NULL, RDSU_LOG_NAYRANK, 00, 00, 00}, true }, // ok
-	    {{NULL, RDSU_LOG_YESRANK, -1, 00, 00}, false}, // bad elem
-	    {{NULL, RDSU_LOG_NAYRANK, -1, 00, 00}, false}, // bad elem
-	    {{NULL, RDSU_LOG_YESRANK, 00, -1, 00}, false}, // bad parent
-	    {{NULL, RDSU_LOG_NAYRANK, 00, -1, 00}, false}, // bad parent
-	    {{NULL, RDSU_LOG_YESRANK, 00, 00, -1}, false}, // bad rank
-	    {{NULL, RDSU_LOG_NAYRANK, 00, 00, -1}, true }, // skip  bad rank
-	    {{NULL, RDSU_BAD____TYPE, 00, 00, 00}, false}, // bad type
-	};
-
-	rdsu_init(&rdsu, 10);
-	assert(rdsui_push_rewind(NULL, (void *)0xDEAD) == false);
-	assert(rdsui_push_rewind((void *)0xDEAD, NULL) == false);
-	for (size_t i = 0; i < sizeof(tests_values) / sizeof(tests_values[0]);
-	     i++) {
-		assert(rdsui_push_rewind(&rdsu, &(tests_values[i].log)) ==
-		       tests_values[i].expected);
-	}
-	rdsu.change_log = NULL;
-	rdsu_destroy(&rdsu);
-	return;
-}
 NO_COV void test_rdsu_save_state(void) {
 	t_rdsu rdsu;
 

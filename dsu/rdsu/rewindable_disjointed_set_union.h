@@ -132,12 +132,8 @@ void        rdsu_rewind_clear(t_rdsu *rdsu);
 
 #ifdef C_MINI__RDSU_INTERNAL
 
-bool        rdsui_push_rewind(t_rdsu *rdsu, t_rdsu_log *entry);
-t_rdsu_log  rdsui_init_log(size_t elem, uint16_t value, uint16_t rank,
-                           enum s_rdsu_log_type type);
 t_rdsu_log *rdsui_peek_rewind(const t_rdsu *rdsu);
 t_rdsu_log *rdsui_pop_rewind(t_rdsu *rdsu);
-t_rdsu_log *rdsui_get_log(t_rdsu *rdsu);
 
 #endif // !C_MINI__RDSU_INTERNAL
 
