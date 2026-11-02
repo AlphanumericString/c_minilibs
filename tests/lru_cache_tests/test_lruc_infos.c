@@ -182,3 +182,55 @@ NO_COV void test_lruc_is_valid(void) {
 	lruc_destroy(&c);
 	return;
 }
+
+NO_COV void test_lruc_reserved_nb(void) {
+	t_lruc      c;
+	const char *k1 = "titi";
+
+	lruc_init(&c, 4, free);
+	assert(lruc_reserved_nb(&c) == 0);
+	lruc_put(&c, k1, strlen(k1), strdup("pique sous"));
+	assert(lruc_reserved_nb(&c) == 0);
+	lruc_remove(&c, k1, strlen(k1));
+	assert(lruc_reserved_nb(&c) == 1);
+	assert(lruc_reserve(&c, 2) == 2);
+	assert(lruc_reserved_nb(&c) == 3);
+	lruc_clear_reserved(&c);
+	assert(lruc_reserved_nb(&c) == 0);
+	lruc_destroy(&c);
+	return;
+}
+
+NO_COV void test_lruc_has_reserved(void) {
+	t_lruc      c;
+	const char *k1 = "titi";
+
+	lruc_init(&c, 4, free);
+	assert(lruc_has_reserved(&c) == false);
+	lruc_put(&c, k1, strlen(k1), strdup("pique sous"));
+	assert(lruc_has_reserved(&c) == false);
+	lruc_remove(&c, k1, strlen(k1));
+	assert(lruc_has_reserved(&c) == true);
+	lruc_clear_reserved(&c);
+	assert(lruc_has_reserved(&c) == false);
+	lruc_destroy(&c);
+	return;
+}
+
+NO_COV void test_lruc_max_reserve(void) {
+	t_lruc      c;
+	const char *k1 = "titi";
+
+	lruc_init(&c, 4, free);
+	assert(lruc_max_reserve(&c) == 4);
+	lruc_put(&c, k1, strlen(k1), strdup("pique sous"));
+	assert(lruc_max_reserve(&c) == 3);
+	assert(lruc_reserve(&c, 2) == 2);
+	assert(lruc_max_reserve(&c) == 1);
+	assert(lruc_remove(&c, k1, strlen(k1)) == 0);
+	assert(lruc_max_reserve(&c) == 1);
+	lruc_clear_reserved(&c);
+	assert(lruc_max_reserve(&c) == 4);
+	lruc_destroy(&c);
+	return;
+}

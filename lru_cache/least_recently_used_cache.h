@@ -190,6 +190,8 @@ int  lruc_remove(t_lruc *cache, const void *key, size_t key_len);
 bool lruc_clear_reserved(t_lruc *cache);
 void lruc_clear_to_reserved(t_lruc *c);
 
+size_t lruc_reserve(t_lruc *cache, size_t nb_nodes);
+
 bool lruc_has(const t_lruc *cache, const void *key, size_t key_len);
 
 bool lruc_isexpired(t_lruc *cache, const void *key, size_t key_len);
@@ -203,6 +205,10 @@ uint64_t     lruc_hits(const t_lruc *cache);
 uint64_t     lruc_misses(const t_lruc *cache);
 uint64_t     lruc_expired(const t_lruc *cache);
 t_lruc_stats lruc_stats(const t_lruc *cache);
+
+size_t lruc_reserved_nb(const t_lruc *cache);
+bool   lruc_has_reserved(const t_lruc *cache);
+size_t lruc_max_reserve(const t_lruc *cache);
 
 void lruc_foreach(const t_lruc *cache, t_kvcallback fn, void *u_data);
 void lruc_foreach_ru_ordered(const t_lruc *c, t_kvcallback fn, void *u_data);

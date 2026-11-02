@@ -95,3 +95,36 @@ void lruc_free(t_lruc **cache) {
 	*cache = NULL;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS)
 }
+/**
+ * \brief Reserve pre-allocated nodes for fast later insertion
+ * \param cache cache pointer
+ * \param nb_nodes number of nodes to reserve
+ * \return number of nodes effectively reserved
+ * \note the reservation is capped so that the total number of nodes (live plus
+ * reserved) never exceeds the cache capacity, keeping the hash buckets very
+ * light for fast access
+ * \ingroup lruc
+**/
+size_t lruc_reserve(t_lruc *cache, size_t nb_nodes) {
+	size_t          reserved = 0;
+	size_t          max;
+	t_lruc_keynode *node;
+
+	if (!lruc_is_valid(cache)) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
+		return (0);
+	}
+	max = lruc_max_reserve(cache);
+	if (nb_nodes > max) nb_nodes = max;
+	while (reserved < nb_nodes) {
+		node = calloc(sizeof(t_lruc_keynode), 1);
+		if (!node) {
+			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_EALLOC)
+			break;
+		}
+		lruci_rsrvd_push(cache, node);
+		reserved++;
+	}
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS)
+	return (reserved);
+}

@@ -11,6 +11,7 @@ NO_COV int main(void) {
 	test_lruc_init();
 	test_lruc_destroy();
 	test_lruc_free();
+	test_lruc_reserve();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Put", )
 	test_lruc_put_kv();
@@ -42,6 +43,9 @@ NO_COV int main(void) {
 	test_lruc_misses();
 	test_lruc_stats();
 	test_lruc_is_valid();
+	test_lruc_reserved_nb();
+	test_lruc_has_reserved();
+	test_lruc_max_reserve();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Internals", )
 	test_lruci_hp_pop();

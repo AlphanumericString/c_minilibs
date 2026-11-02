@@ -24,6 +24,7 @@ void test_lruc_clear_reserved(void);
 void test_lruc_clear(void);
 void test_lruc_clear_to_reserved(void);
 void test_lruc_remove(void);
+void test_lruc_reserve(void);
 
 void test_lruc_has(void);
 
@@ -37,6 +38,10 @@ void test_lruc_misses(void);
 void test_lruc_expired(void);
 void test_lruc_stats(void);
 void test_lruc_is_valid(void);
+
+void test_lruc_reserved_nb(void);
+void test_lruc_has_reserved(void);
+void test_lruc_max_reserve(void);
 
 void test_lruci_hp_pop(void);
 void test_lruci_hp_pop_nth(void);

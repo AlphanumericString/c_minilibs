@@ -56,3 +56,30 @@ uint64_t lruc_expired(const t_lruc *cache) {
 t_lruc_stats lruc_stats(const t_lruc *cache) {
 	return (cache->stats);
 }
+/**
+ * \brief Get the number of reserved nodes
+ * \param cache cache pointer
+ * \return number of reserved (pre-allocated) nodes
+ * \ingroup lruc
+**/
+size_t lruc_reserved_nb(const t_lruc *cache) {
+	return (cache->reserved_nodes_nb);
+}
+/**
+ * \brief Check whether the cache has reserved nodes
+ * \param cache cache pointer
+ * \return true if at least one reserved node is available, false otherwise
+ * \ingroup lruc
+**/
+bool lruc_has_reserved(const t_lruc *cache) {
+	return (cache->reserved_nodes_nb > 0);
+}
+/**
+ * \brief Get the maximum number of nodes that can still be reserved
+ * \param cache cache pointer
+ * \return maximum number of reservable nodes
+ * \ingroup lruc
+**/
+size_t lruc_max_reserve(const t_lruc *cache) {
+	return (cache->buckets_nb - (cache->node_nb + cache->reserved_nodes_nb));
+}
