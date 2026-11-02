@@ -17,14 +17,14 @@
 #	define C_MINI__LRUC_LOG_ECLOCK   C_MINI__LOG_F_PREFIX "Clock error."
 #	define C_MINI__LRUC_LOG_ENODEU   C_MINI__LOG_F_PREFIX "Unknown node"
 #	define C_MINI__LRUC_LOG_EVICTION                                          \
-		"Eviction: key=%p delta (%ld) >= ttl (%ld)"
-#	define C_MINI__LRUC_LOG_UPDATE "Update ttl: %ld->%ld"
+		"Eviction: key=%p delta (%ld) >= ttl (%lu)"
+#	define C_MINI__LRUC_LOG_UPDATE "Update ttl: %lu->%lu"
 #	define C_MINI__LRUC_LOG_HIT    "Hit: hit=%zu, key:%p, key_len:%zu"
 #	define C_MINI__LRUC_LOG_MISS_LRU                                          \
 		C_MINI__LOG_F_PREFIX "LRU-Miss: miss=%zu, key:%p, key_len:%zu"
 #	define C_MINI__LRUC_LOG_MISS_TTL                                          \
 		C_MINI__LOG_F_PREFIX                                                   \
-		"TTL-Miss: miss=%zu, key:%p, key_len:%zu delta(%ld)"
+		"TTL-Miss: miss=%zu, key:%p, key_len:%zu delta(%lu)"
 #	define C_MINI__LRUC_LOG_UPDATEVAL "Update: key:%p, key_len:%zu"
 #	define C_MINI__LRUC_LOG_CREATEVAL "Create: key:%p, key_len:%zu"
 #	define C_MINI__LRUC_LOG_DELETEVAL "Delete: key:%p, key_len:%zu"
@@ -194,9 +194,9 @@ size_t lruc_reserve(t_lruc *cache, size_t nb_nodes);
 
 bool lruc_has(const t_lruc *cache, const void *key, size_t key_len);
 
-bool lruc_isexpired(t_lruc *cache, const void *key, size_t key_len);
+bool lruc_isexpired(const t_lruc *cache, const void *key, size_t key_len);
 void lruc_cleanup(t_lruc *cache);
-void lruc_setttl(t_lruc *cache, long ttl_ms);
+void lruc_setttl(t_lruc *cache, unsigned long ttl_ms);
 
 bool lruc_is_valid(const t_lruc *cache);
 
@@ -218,7 +218,7 @@ void lruc_foreach_ttl_ordered(const t_lruc *c, t_kvcallback fn, void *u_data);
 uint64_t lruci_timeto64(struct timespec t);
 uint64_t lruci_timenow(void);
 bool lruci_key_eq(const void *k1, size_t k1_len, const void *k2, size_t k2_len);
-bool lruci_node_eq(t_lruc_keynode *node_1, t_lruc_keynode *node_2);
+bool lruci_node_eq(const t_lruc_keynode *node_1, const t_lruc_keynode *node_2);
 void lruci_unlink_node(t_lruc *c, t_lruc_keynode *node, size_t hash);
 
 size_t lruci_hash_djb2(const void *key, size_t size);

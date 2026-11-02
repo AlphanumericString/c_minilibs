@@ -36,7 +36,7 @@ void __attribute__((constructor())) init_vtls(void) {
  * \ingroup vtls
 **/
 bool vtls_dump(const char *v_name, int fd) {
-	t_vtls *vtls = pthread_getspecific(vtls_key);
+	const t_vtls *vtls = pthread_getspecific(vtls_key);
 
 	if (!v_name || fd < 0) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__VTLS_EARG);
@@ -63,7 +63,7 @@ bool vtls_dump(const char *v_name, int fd) {
  * \ingroup vtls
 **/
 ssize_t vtls_dump_all(int fd) {
-	t_vtls *vtls = pthread_getspecific(vtls_key);
+	const t_vtls *vtls = pthread_getspecific(vtls_key);
 
 	if (fd < 0) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__VTLS_EARG);

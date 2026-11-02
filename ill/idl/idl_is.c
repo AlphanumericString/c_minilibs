@@ -6,7 +6,7 @@
  * \return true if isolated, false otherwise.
  * \ingroup idl
 **/
-bool idl_is_isolated(t_idl *node) {
+bool idl_is_isolated(const t_idl *node) {
 	if (!node) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return false;
@@ -22,9 +22,9 @@ bool idl_is_isolated(t_idl *node) {
  * \return true if a cycle is detected, false otherwise.
  * \ingroup idl
 **/
-bool idl_is_circular(t_idl *head) {
-	t_idl *fast;
-	t_idl *slow;
+bool idl_is_circular(const t_idl *head) {
+	const t_idl *fast;
+	const t_idl *slow;
 
 	if (!head) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -64,7 +64,7 @@ bool idl_is_circular(t_idl *head) {
  * \return true if the list is sorted, false otherwise.
  * \ingroup idl
 **/
-bool idl_is_sorted(t_idl *head, t_cm_comparator comparator) {
+bool idl_is_sorted(const t_idl *head, t_cm_comparator comparator) {
 	void *p;
 	int   prev;
 	int   ord;
@@ -98,7 +98,7 @@ bool idl_is_sorted(t_idl *head, t_cm_comparator comparator) {
  * \return true if at least one element matches, false otherwise.
  * \ingroup idl
 **/
-bool idl_has(t_idl *head, t_cm_callback matcher, void *arg) {
+bool idl_has(const t_idl *head, t_cm_callback matcher, void *arg) {
 	if (!head || !matcher) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return (false);

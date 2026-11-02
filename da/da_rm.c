@@ -22,7 +22,7 @@ bool da_rm_order(t_da *da, size_t pos) {
 		memmove(da_at(da, pos), da_at(da, pos + 1),
 		        da->sz_e * (da->nb_e - pos));
 	}
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_RM, pos, 1UL, da->nb_e,
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_RM, pos, (size_t)1UL, da->nb_e,
 	       da->nb_e - 1)
 	da->nb_e--;
 	return (true);
@@ -63,7 +63,7 @@ bool da_rm(t_da *da, size_t pos) {
 		return (false);
 	}
 	if (pos != da->nb_e) da_swap(da, pos, da->nb_e - 1);
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_RM, pos, 1UL, da->nb_e,
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_RM, pos, (size_t)1UL, da->nb_e,
 	       da->nb_e - 1)
 	da->nb_e--;
 	return (true);

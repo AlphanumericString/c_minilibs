@@ -59,7 +59,7 @@ bool ctls_dump_typewrap(t_ctls_typewrap t, int fd) {
  * \ingroup ctls
 **/
 ssize_t ctls_dump_all(int fd) {
-	t_ctlsv *ct;
+	const t_ctlsv *ct;
 
 	if (fd < 0) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CTLS_EARG);

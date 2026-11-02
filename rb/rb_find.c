@@ -17,12 +17,12 @@ void *rb_find(const t_rb *rb, t_cm_comparator c, const void *a) {
 
 	if (!rb || !c) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
-		return false;
+		return (NULL);
 	}
 	count = rb_size(*rb);
 	pos   = rbi_opos_get(rb);
 	while (i < count) {
-		elem = rb->array + (pos * rb->sz_e);
+		elem = rbi_get_pos(rb, pos);
 		if (c(elem, (void *)a) == 0) {
 			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 			return elem;
@@ -31,5 +31,5 @@ void *rb_find(const t_rb *rb, t_cm_comparator c, const void *a) {
 		i++;
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_FAIL)
-	return NULL;
+	return (NULL);
 }

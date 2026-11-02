@@ -32,7 +32,7 @@ bool vtls_set(const char *v_name, void *v_val, size_t v_size) {
 	}
 	for (i = 0; i < vtls->len; i++) { // check already present=> update
 		if (strcmp(vtls->data[i].v_name, v_name) != 0) continue;
-		if (vtls->data[i].size_e != v_size) vtls->data[i].size_e = v_size;
+		vtls->data[i].size_e = v_size;
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__VTLS_SUCCESS);
 		return (memcpy(&vtls->data[i].var, &v_val, sizeof(void *)), true);
 	}

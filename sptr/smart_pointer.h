@@ -169,7 +169,7 @@ t_owned_ptr sptr_make_owned_from_uniq(t_uniq_ptr *uniq_ptr, t_cm_dtor d);
 	    default: sptr_make_owned_from_raw)(pointer, dtor)
 
 t_uniq_ptr sptr_make_uniq_from_raw(void *raw, t_cm_dtor d);
-t_uniq_ptr sptr_make_uniq_from_weak(t_weak_ptr *wptr, t_cm_dtor d);
+t_uniq_ptr sptr_make_uniq_from_weak(const t_weak_ptr *wptr, t_cm_dtor d);
 t_uniq_ptr sptr_make_uniq_from_strong(t_strong_ptr *sptr, t_cm_dtor d);
 t_uniq_ptr sptr_make_uniq_from_owned(t_owned_ptr *optr, t_cm_dtor d);
 t_uniq_ptr sptr_make_uniq_from_uniq(t_uniq_ptr *uptr, t_cm_dtor d);
@@ -453,7 +453,7 @@ bool         sptr_uniq_swap(t_uniq_ptr *sw1, t_uniq_ptr *sw2);
 size_t  sptr_fb_get_count(const t_fbox *f);
 bool    sptr_fb_increment(t_fbox *f);
 bool    sptr_fb_decrement(t_fbox *f);
-bool    sptr_fb_get_data(t_fbox *f);
+bool    sptr_fb_get_data(const t_fbox *f);
 t_fbox *sptr_fb_init(t_fbox *f, void *d, t_cm_dtor dt);
 t_fbox *sptr_fb_new(void *d, t_cm_dtor dt);
 

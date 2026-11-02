@@ -79,7 +79,8 @@ void *rb_npeek(t_rb rb, size_t n, void *elem_out) {
 			left_size = (rb.nb_max - rbi_opos_get(&rb)) * rb.sz_e;
 			memcpy(elem_out, pos, left_size);
 			n -= rb.nb_max - rbi_opos_get(&rb);
-			memcpy(elem_out + left_size, rb.array, n * rb.sz_e);
+			memcpy((unsigned char *)elem_out + left_size, rb.array,
+			       n * rb.sz_e);
 			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 		}
 	}

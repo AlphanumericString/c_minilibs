@@ -8,7 +8,7 @@
  * is head.
  * \ingroup idl
 **/
-t_idl *idl_find_prev(t_idl *head, t_idl *target) {
+t_idl *idl_find_prev(t_idl *head, const t_idl *target) {
 	t_idl *curr;
 
 	if (!head || !target || head == target) {
@@ -33,7 +33,7 @@ t_idl *idl_find_prev(t_idl *head, t_idl *target) {
  * \return A pointer to the target node if found, or NULL otherwise.
  * \ingroup idl
 **/
-t_idl *idl_find(t_idl *head, t_idl *target) {
+t_idl *idl_find(t_idl *head, const t_idl *target) {
 	t_idl *curr;
 
 	if (!head || !target) {
@@ -60,7 +60,7 @@ t_idl *idl_find(t_idl *head, t_idl *target) {
  * not found.
  * \ingroup idl
 **/
-t_idl *idl_get_prev(t_idl *head, t_cm_comparator c, void *arg) {
+t_idl *idl_get_prev(t_idl *head, t_cm_comparator c, const void *arg) {
 	t_idl *curr;
 
 	if (!head || !c) {
@@ -87,7 +87,7 @@ t_idl *idl_get_prev(t_idl *head, t_cm_comparator c, void *arg) {
  * \return A pointer to the matched node, or NULL if not found.
  * \ingroup idl
 **/
-t_idl *idl_get(t_idl *head, t_cm_comparator c, void *arg) {
+t_idl *idl_get(t_idl *head, t_cm_comparator c, const void *arg) {
 	t_idl *curr;
 
 	if (!head || !c) {

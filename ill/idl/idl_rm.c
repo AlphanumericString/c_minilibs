@@ -30,6 +30,8 @@ t_idl *idl_remove_after(t_idl *prev) {
  * \ingroup idl
 **/
 bool idl_remove_node(t_idl **head, t_idl *target) {
+	const t_idl *curr;
+
 	if (!head || !target || !*head) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return false;
@@ -42,8 +44,7 @@ bool idl_remove_node(t_idl **head, t_idl *target) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 		return (true);
 	}
-
-	t_idl *curr = idl_find(*head, target);
+	curr = idl_find(*head, target);
 	if (!curr) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_FAIL)
 		return (false);

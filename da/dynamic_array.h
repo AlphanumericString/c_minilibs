@@ -56,8 +56,8 @@ void da_clr(t_da *ret);
 void da_destroy(t_da *ret);
 void da_free(t_da *ret);
 
-bool da_add(t_da *da, void *elem);
-bool da_cat_array(t_da *da, void *arr, size_t nb_e, size_t sz_e);
+bool da_add(t_da *da, const void *elem);
+bool da_cat_array(t_da *da, const void *arr, size_t nb_e, size_t sz_e);
 
 bool da_grow(t_da *da);
 bool da_grow_for_size(t_da *da, size_t minimal_free_slots);
@@ -70,11 +70,11 @@ int   da_get(const t_da *da, size_t pos, void *elem);
 int   da_nget(const t_da *da, size_t n, size_t pos, void *out_buffer);
 void *da_array(const t_da *da);
 
-bool da_set(t_da *da, size_t pos, void *elem);
-bool da_nset(t_da *da, size_t n, size_t pos, void *elems);
+bool da_set(const t_da *da, size_t pos, const void *elem);
+bool da_nset(const t_da *da, size_t n, size_t pos, const void *elems);
 
-bool da_swap(t_da *da, size_t pos_a, size_t pos_b);
-bool da_nswap(t_da *da, size_t n, size_t pos_a, size_t pos_b);
+bool da_swap(const t_da *da, size_t pos_a, size_t pos_b);
+bool da_nswap(const t_da *da, size_t n, size_t pos_a, size_t pos_b);
 
 bool da_rm_order(t_da *da, size_t pos);
 bool da_rms_order(t_da *da, size_t start, size_t end);
@@ -84,15 +84,16 @@ bool da_rms(t_da *da, size_t start, size_t end);
 void *da_to_array(const t_da *da);
 void *da_to_loc_array(const t_da *da, void *arr);
 
-void *da_apply(t_da *da, t_cm_callback cb, void *u_data);
-void *da_napply(t_da *da, size_t n, t_cm_callback c, void *u_data);
-void *da_apply_it(t_da *da, t_cm_callback_it func, void *u_val);
-void *da_napply_it(t_da *da, size_t n, t_cm_callback_it func, void *u_val);
+void *da_apply(const t_da *da, t_cm_callback cb, void *u_data);
+void *da_napply(const t_da *da, size_t n, t_cm_callback c, void *u_data);
+void *da_apply_it(const t_da *da, t_cm_callback_it func, void *u_val);
+void *da_napply_it(const t_da *da, size_t n, t_cm_callback_it func,
+                   void *u_val);
 
-void *da_fold(t_da *da, t_cm_merger c, void *u_start_val);
-void *da_nfold(t_da *da, size_t n, t_cm_merger c, void *u_start_val);
-void *da_reduce(t_da *da, t_cm_merger m);
-void *da_nreduce(t_da *da, size_t n, t_cm_merger m);
+void *da_fold(const t_da *da, t_cm_merger c, void *u_start_val);
+void *da_nfold(const t_da *da, size_t n, t_cm_merger c, void *u_start_val);
+void *da_reduce(const t_da *da, t_cm_merger m);
+void *da_nreduce(const t_da *da, size_t n, t_cm_merger m);
 
 bool da_filter(t_da *da, t_cm_callback c, void *u_data, t_cm_callback deletor);
 bool da_nfilter(t_da *da, size_t n, t_cm_callback c, void *u_data,
@@ -104,13 +105,14 @@ bool da_nfilter_out(t_da *da, size_t n, t_cm_callback c, void *u_data,
 
 bool da_advance(t_da *da, size_t n, t_cm_callback deletor, void *u_data);
 
-void da_reverse(t_da *da);
-void da_nreverse(t_da *da, size_t n);
-void da_b_nreverse(t_da *da, size_t n);
+void da_reverse(const t_da *da);
+void da_nreverse(const t_da *da, size_t n);
+void da_b_nreverse(const t_da *da, size_t n);
 
-void *da_find(t_da *da, t_cm_comparator c, void *u_data);
-void *da_nfind(t_da *da, size_t n, t_cm_comparator c, void *u_data);
-bool  da_find_get(t_da *da, t_cm_comparator c, void *u_data, void *out_buffer);
+void *da_find(const t_da *da, t_cm_comparator c, void *u_data);
+void *da_nfind(const t_da *da, size_t n, t_cm_comparator c, void *u_data);
+bool  da_find_get(const t_da *da, t_cm_comparator c, void *u_data,
+                  void *out_buffer);
 
 bool da_sort(t_da *da, t_cm_comparator c);
 bool da_nsort(t_da *da, size_t n, t_cm_comparator c);

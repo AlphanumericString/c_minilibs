@@ -52,7 +52,8 @@ VGFLAGS		?= $(filter-out -fprofile-instr-generate -ftest-coverage \
 # Tools flags
 CHECK_FLAGS	?= --enable=all --std=$(CHECK_STD) --language=c --inline-suppr \
 				-I. --suppress=missingIncludeSystem --suppress=unusedFunction \
-				--quiet --suppress=staticFunction
+				--suppress=staticFunction --suppress=variableScope \
+				--check-level=exhaustive --quiet --checkers-report=report
 VFLAGS		:= --leak-check=full --show-leak-kinds=all --track-fds=yes \
 				--trace-children=yes --track-origins=yes --read-var-info=yes \
 				--show-reachable=yes --undef-value-errors=yes
@@ -104,7 +105,7 @@ $(BUILD_DIR)/$(TST_DIR)/$1_tests/%.o: $(TST_DIR)/$1_tests/%.c
 	$(CC) $(TFLAGS) -c $$< -o $$@
 # static analysis
 analyze_$1:
-	@$(CPPCHECK) $(CHECK_FLAGS) $1
+	@$(CPPCHECK) $(CHECK_FLAGS) -I./$1 $1
 	@$(PRINT) "static analysis: $1 done\n"
 
 # TARGETS

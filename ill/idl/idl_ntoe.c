@@ -21,7 +21,7 @@ void *idl_ntoe(const t_idl *node) {
  * \return A pointer to the intrusive node.
  * \ingroup idl
 **/
-t_idl *idl_eton(void *e, size_t offset) {
+t_idl *idl_eton(const void *e, size_t offset) {
 	if (!e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return ((t_idl *)NULL);

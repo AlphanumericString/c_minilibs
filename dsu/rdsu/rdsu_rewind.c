@@ -36,10 +36,10 @@ static inline bool execute_rewind(t_rdsu *rdsu, t_rdsu_log lg) {
 
 #ifdef C_MINI__RDSU_LOG_CHECK_STRICT
 // horrible performance.
-static inline bool is_log_in_book(const t_rdsu *rdsu, t_rdsu_log *log) {
-	t_rdsu_log *entry = rdsu->change_log;
+static inline bool is_log_in_book(const t_rdsu *rdsu, const t_rdsu_log *log) {
+	const t_rdsu_log *entry = rdsu->change_log;
 
-	for (entry = rdsu->change_log; entry && entry != log; entry = entry->nxt)
+	for (; entry && entry != log; entry = entry->nxt)
 		;
 	return (entry == log);
 }
@@ -101,7 +101,7 @@ bool rdsu_rewind(t_rdsu *rdsu) {
  * log, in case this is false it'll rewind up to null and return false.
  * \ingroup rdsu
 **/
-bool rdsu_rewind_to_state(t_rdsu *rdsu, t_rdsu_log *lg) {
+bool rdsu_rewind_to_state(t_rdsu *rdsu, const t_rdsu_log *lg) {
 	t_rdsu_log *entry;
 	bool        res;
 

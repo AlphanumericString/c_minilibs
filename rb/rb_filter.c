@@ -35,10 +35,10 @@ bool rb_filter(t_rb *rb, t_cm_callback cb, const void *arg,
 	write_pos = rbi_opos_get(rb);
 
 	while (i < count) {
-		elem = rb->array + (read_pos * rb->sz_e);
+		elem = rbi_get_pos(rb, read_pos);
 		if (cb(elem, (void *)arg)) {
 			if (read_pos != write_pos)
-				memcpy(rb->array + (write_pos * rb->sz_e), elem, rb->sz_e);
+				memcpy(rbi_get_pos(rb, write_pos), elem, rb->sz_e);
 			write_pos = (write_pos + 1) % rb->nb_max;
 		} else {
 			destroyer(elem);

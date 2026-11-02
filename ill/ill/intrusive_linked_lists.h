@@ -41,12 +41,12 @@ void  *ill_ntoe(const t_ill *node);
 t_ill *ill_eton(void *e, size_t offset);
 
 void  *ill_advance_it(void *e, size_t offset);
-t_ill *ill_advance_it_node(t_ill *it);
+t_ill *ill_advance_it_node(const t_ill *it);
 
-bool ill_is_isolated(t_ill *node);
-bool ill_is_circular(t_ill *head);
-bool ill_is_sorted(t_ill *head, t_cm_comparator comparator);
-bool ill_has(t_ill *head, t_cm_callback matcher, void *arg);
+bool ill_is_isolated(const t_ill *node);
+bool ill_is_circular(const t_ill *head);
+bool ill_is_sorted(const t_ill *head, t_cm_comparator comparator);
+bool ill_has(const t_ill *head, t_cm_callback matcher, void *arg);
 
 void ill_append(t_ill *anchor, t_ill *node);
 void ill_nappend(t_ill *anchor, t_ill *nodes);
@@ -61,20 +61,20 @@ t_ill *ill_pop_back(t_ill **head);
 t_ill *ill_remove_after(t_ill *prev);
 bool   ill_remove_node(t_ill **head, t_ill *target);
 
-t_ill *ill_find_prev(t_ill *head, t_ill *target);
-t_ill *ill_find(t_ill *head, t_ill *target);
-t_ill *ill_get_prev(t_ill *head, t_cm_comparator c, void *arg);
-t_ill *ill_get(t_ill *head, t_cm_comparator c, void *arg);
+t_ill *ill_find_prev(const t_ill *head, const t_ill *target);
+t_ill *ill_find(const t_ill *head, const t_ill *target);
+t_ill *ill_get_prev(const t_ill *head, t_cm_comparator c, const void *arg);
+t_ill *ill_get(const t_ill *head, t_cm_comparator c, const void *arg);
 
 t_ill *ill_get_tail(t_ill *head);
 
-void *ill_get_min(t_ill *head, t_cm_comparator comp);
-void *ill_get_max(t_ill *head, t_cm_comparator comp);
-void *ill_get_kth(t_ill *head, size_t k);
+void *ill_get_min(const t_ill *head, t_cm_comparator comp);
+void *ill_get_max(const t_ill *head, t_cm_comparator comp);
+void *ill_get_kth(const t_ill *head, size_t k);
 
-size_t ill_length(t_ill *head);
-size_t ill_nlength(t_ill *head, size_t n);
-size_t ill_match_nb(t_ill *head, t_cm_callback matcher, void *arg);
+size_t ill_length(const t_ill *head);
+size_t ill_nlength(const t_ill *head, size_t n);
+size_t ill_match_nb(const t_ill *head, t_cm_callback matcher, void *arg);
 
 bool   ill_for(t_ill *head, size_t n, t_cm_callback c, void *u_data);
 bool   ill_foreach(t_ill *head, t_cm_callback c, void *u_data);

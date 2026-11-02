@@ -6,7 +6,7 @@
  * \return The number of nodes in the list.
  * \ingroup idl
 **/
-size_t idl_length(t_idl *head) {
+size_t idl_length(const t_idl *head) {
 	size_t len = 0;
 	while (head) {
 		len++;
@@ -23,7 +23,7 @@ size_t idl_length(t_idl *head) {
  * \return The bounded length.
  * \ingroup idl
 **/
-size_t idl_nlength(t_idl *head, size_t n) {
+size_t idl_nlength(const t_idl *head, size_t n) {
 	size_t len = 0;
 
 	while (head && n) {
@@ -43,7 +43,7 @@ size_t idl_nlength(t_idl *head, size_t n) {
  * \return The number of matching elements.
  * \ingroup idl
 **/
-size_t idl_match_nb(t_idl *head, t_cm_callback matcher, void *arg) {
+size_t idl_match_nb(const t_idl *head, t_cm_callback matcher, void *arg) {
 	size_t count = 0;
 
 	if (!head || !matcher) {

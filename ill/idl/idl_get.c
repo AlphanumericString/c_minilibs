@@ -7,9 +7,9 @@
  * \return A pointer to the minimum element, or NULL if the list is empty.
  * \ingroup idl
 **/
-void *idl_get_min(t_idl *head, t_cm_comparator c) {
-	t_idl *curr;
-	t_idl *min;
+void *idl_get_min(const t_idl *head, t_cm_comparator c) {
+	const t_idl *curr;
+	const t_idl *min;
 
 	if (!head || !c) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -32,9 +32,9 @@ void *idl_get_min(t_idl *head, t_cm_comparator c) {
  * \return A pointer to the maximum element, or NULL if the list is empty.
  * \ingroup idl
 **/
-void *idl_get_max(t_idl *head, t_cm_comparator c) {
-	t_idl *curr;
-	t_idl *max;
+void *idl_get_max(const t_idl *head, t_cm_comparator c) {
+	const t_idl *curr;
+	const t_idl *max;
 
 	if (!head || !c) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -57,8 +57,8 @@ void *idl_get_max(t_idl *head, t_cm_comparator c) {
  * \return A pointer to the k-th element, or NULL if the index is out of bounds.
  * \ingroup idl
 **/
-void *idl_get_kth(t_idl *head, size_t k) {
-	t_idl *curr;
+void *idl_get_kth(const t_idl *head, size_t k) {
+	const t_idl *curr;
 
 	if (!head) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)

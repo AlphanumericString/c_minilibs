@@ -128,9 +128,9 @@ t_rdsu *rdsu_init_from_arrays(t_rdsu *ret, size_t size, uint16_t *parents,
  * \ingroup rdsu
 **/
 bool rdsu_grow(t_rdsu *rdsu, size_t n) {
-	void  *replacement_buffer;
-	void  *rank_offset;
-	size_t i;
+	uint16_t *replacement_buffer;
+	uint16_t *rank_offset;
+	size_t    i;
 
 	if (!rdsu || !n || !rdsu->size || !rdsu->rank || !rdsu->parent) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
@@ -141,7 +141,7 @@ bool rdsu_grow(t_rdsu *rdsu, size_t n) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RDSU_LOG_EALLOC)
 		return (false);
 	}
-	rank_offset = replacement_buffer + (rdsu->size + n) * sizeof(uint16_t);
+	rank_offset = replacement_buffer + (rdsu->size + n);
 	memcpy(replacement_buffer, rdsu->parent, rdsu->size * sizeof(uint16_t));
 	memcpy(rank_offset, rdsu->rank, rdsu->size * sizeof(uint16_t));
 	free(rdsu->parent);

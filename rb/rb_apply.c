@@ -10,7 +10,7 @@
  * \return false if the callback returns false, true otherwise
  * \ingroup rb
 **/
-bool rb_napply(t_rb *rb, size_t n, t_cm_callback cb, const void *arg) {
+bool rb_napply(const t_rb *rb, size_t n, t_cm_callback cb, const void *arg) {
 	size_t i = 0;
 	size_t current_pos;
 
@@ -21,7 +21,7 @@ bool rb_napply(t_rb *rb, size_t n, t_cm_callback cb, const void *arg) {
 	if (n > rb_size(*rb)) n = rb_size(*rb);
 	current_pos = rbi_opos_get(rb);
 	while (i < n) {
-		if (!cb(rb->array + (current_pos * rb->sz_e), (void *)arg)) {
+		if (!cb(rbi_get_pos(rb, current_pos), (void *)arg)) {
 			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RB_LOG_ECB)
 			return false;
 		}
@@ -40,7 +40,7 @@ bool rb_napply(t_rb *rb, size_t n, t_cm_callback cb, const void *arg) {
  * \return false if the callback returns false, true otherwise
  * \ingroup rb
 **/
-bool rb_apply(t_rb *rb, t_cm_callback cb, const void *arg) {
+bool rb_apply(const t_rb *rb, t_cm_callback cb, const void *arg) {
 	bool r;
 
 	if (!rb || !cb) {

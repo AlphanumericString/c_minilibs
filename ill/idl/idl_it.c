@@ -7,8 +7,8 @@
  * \return A pointer to the next element, or NULL if there is none.
  * \ingroup idl
 **/
-void *idl_advance_it(void *e, size_t offset) {
-	t_idl *node;
+void *idl_advance_it(const void *e, size_t offset) {
+	const t_idl *node;
 
 	if (!e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -32,8 +32,8 @@ void *idl_advance_it(void *e, size_t offset) {
  * \return A pointer to the previous element, or NULL if there is none.
  * \ingroup idl
 **/
-void *idl_recede_it(void *e, size_t offset) {
-	t_idl *node;
+void *idl_recede_it(const void *e, size_t offset) {
+	const t_idl *node;
 
 	if (!e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -55,7 +55,7 @@ void *idl_recede_it(void *e, size_t offset) {
  * \return The next node, or NULL if there is none.
  * \ingroup idl
 **/
-t_idl *idl_advance_it_node(t_idl *it) {
+t_idl *idl_advance_it_node(const t_idl *it) {
 	if (!it) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return (NULL);
@@ -70,7 +70,7 @@ t_idl *idl_advance_it_node(t_idl *it) {
  * \return The previous node, or NULL if there is none.
  * \ingroup idl
 **/
-t_idl *idl_recede_it_node(t_idl *it) {
+t_idl *idl_recede_it_node(const t_idl *it) {
 	if (!it) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return (NULL);

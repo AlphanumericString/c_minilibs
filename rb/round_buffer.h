@@ -88,8 +88,8 @@ void   rb_push(t_rb *rb, const void *data);
 void   rb_npush(t_rb *rb, const void *data, size_t nb_elem);
 bool   rb_push_safe(t_rb *rb, const void *data);
 bool   rb_npush_safe(t_rb *rb, const void *data, size_t nb_elem);
-bool   rb_apply(t_rb *rb, t_cm_callback cb, const void *arg);
-bool   rb_napply(t_rb *rb, size_t n, t_cm_callback cb, const void *arg);
+bool   rb_apply(const t_rb *rb, t_cm_callback cb, const void *arg);
+bool   rb_napply(const t_rb *rb, size_t n, t_cm_callback cb, const void *arg);
 bool   rb_filter(t_rb *rb, t_cm_callback cb, const void *arg,
                  void (*destroyer)(void *elem));
 void  *rb_at(t_rb rb, size_t idx);
@@ -101,11 +101,15 @@ void  *rb_nget(const t_rb *rb, size_t n, t_cm_comparator comp, const void *arg,
 void  *rb_getn(const t_rb *rb, size_t n, t_cm_comparator comp, const void *arg,
                void *buffer);
 void  *rb_find(const t_rb *rb, t_cm_comparator c, const void *a);
-bool   rb_map(t_rb *rb, t_cm_duplicator dup, void **out_buff);
-bool   rb_nmap(t_rb *rb, size_t n, t_cm_duplicator dup, void **out_buff);
-t_rb  *rb_grow(t_rb *rb, size_t nb_elem_added);
+bool   rb_map(const t_rb *rb, t_cm_duplicator dup, void **out_buff);
+bool   rb_nmap(const t_rb *rb, size_t n, t_cm_duplicator dup, void **out_buff);
+t_rb  *rb_grow(const t_rb *rb, size_t nb_elem_added);
 
 #ifdef C_MINI__RB_INTERNAL
+
+static void *rbi_get_pos(const t_rb *rb, size_t pos) {
+	return ((unsigned char *)rb->array + pos * rb.sz_e);
+}
 
 /**
  * The rb positions (i_pos, o_pos) and count are atomic in multi-threaded
@@ -113,6 +117,7 @@ t_rb  *rb_grow(t_rb *rb, size_t nb_elem_added);
  * orders are declared once and can be changed here without touching any call
  * site.
  * \ingroup rb_internals
+ * \note static inline so function are posted here
 **/
 
 #	ifdef C_MINI__RB_ATOMIC

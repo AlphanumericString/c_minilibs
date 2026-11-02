@@ -86,7 +86,6 @@ size_t cdsu_strict_find(const t_cdsu *ds, size_t x) {
  * \ingroup cdsu
 **/
 size_t cdsu_compress_all(t_cdsu *ds) {
-	size_t x;
 	size_t y;
 
 	if (!ds || !ds->size || !ds->parent) {
@@ -94,8 +93,7 @@ size_t cdsu_compress_all(t_cdsu *ds) {
 		return (0);
 	}
 	y = 0;
-	while (y < ds->size) {
-		x = y;
+	for (size_t x = 0; y < ds->size; x = y) {
 		while (ds->parent[x] != x) {
 			ds->parent[x] = ds->parent[ds->parent[x]];
 			x             = ds->parent[x];

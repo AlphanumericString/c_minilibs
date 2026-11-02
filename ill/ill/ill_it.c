@@ -8,7 +8,7 @@
  * \ingroup ill
 **/
 void *ill_advance_it(void *e, size_t offset) {
-	t_ill *node;
+	const t_ill *node;
 
 	if (!e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
@@ -30,7 +30,7 @@ void *ill_advance_it(void *e, size_t offset) {
  * \return The next node, or NULL if there is none.
  * \ingroup ill
 **/
-t_ill *ill_advance_it_node(t_ill *it) {
+t_ill *ill_advance_it_node(const t_ill *it) {
 	if (!it) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return (NULL);

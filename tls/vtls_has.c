@@ -10,7 +10,7 @@
  * \ingroup vtls
 **/
 bool vtls_has(const char *v_name) {
-	t_vtls *vtls = pthread_getspecific(vtls_key);
+	const t_vtls *vtls = pthread_getspecific(vtls_key);
 
 	if (!v_name) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__VTLS_EARG);

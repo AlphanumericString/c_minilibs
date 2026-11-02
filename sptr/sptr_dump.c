@@ -25,8 +25,8 @@ char *sptr_to_strings(const t_strong_ptr *sptr) {
 	               sptr_get_wc(sptr), sptr_get_dtor(sptr));
 	ret = malloc(len + 1);
 	if (!ret) return (NULL);
-	len = snprintf(ret, len + 1, fmt, sptr_get(sptr), sptr_get_rc(sptr),
-	               sptr_get_wc(sptr), sptr_get_dtor(sptr));
+	snprintf(ret, len + 1, fmt, sptr_get(sptr), sptr_get_rc(sptr),
+	         sptr_get_wc(sptr), sptr_get_dtor(sptr));
 	return (ret);
 }
 /**

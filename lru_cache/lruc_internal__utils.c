@@ -43,11 +43,11 @@ void lruci_unlink_node(t_lruc *c, t_lruc_keynode *n, size_t h) {
 	c->node_nb++;
 }
 size_t lruci_hash_djb2(const void *key, size_t size) {
-	unsigned char *str;
-	size_t         hash;
+	const unsigned char *str;
+	size_t               hash;
 
 	hash = 5381;
-	str  = (unsigned char *)key;
+	str  = (const unsigned char *)key;
 	while (size--)
 		hash = (hash << 5) + hash + str[size];
 	return (hash);
@@ -55,7 +55,7 @@ size_t lruci_hash_djb2(const void *key, size_t size) {
 uint64_t lruci_timeto64(struct timespec t) {
 	return (t.tv_sec * 1000ULL + t.tv_nsec / 1000000ULL);
 }
-bool lruci_node_eq(t_lruc_keynode *node_1, t_lruc_keynode *node_2) {
+bool lruci_node_eq(const t_lruc_keynode *node_1, const t_lruc_keynode *node_2) {
 	return (node_1 == node_2 || lruci_key_eq(node_1->kv.key, node_1->kv.k_len,
 	                                         node_2->kv.key, node_2->kv.k_len));
 }

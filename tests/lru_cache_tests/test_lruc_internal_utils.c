@@ -57,7 +57,8 @@ NO_COV void test_lruci_keyinlist(void) {
 NO_COV void test_lruci_node_eq(void) {
 	const char    *key1 = "aaaaAAAAAAAAAAAAAAAAa";
 	const char    *key2 = "bbbbBBBBBBBBBBBBBbbbb";
-	t_lruc_keynode kv1, kv2;
+	t_lruc_keynode kv1  = {0};
+	t_lruc_keynode kv2  = kv1;
 
 	assert(lruci_node_eq(&kv1, &kv1) == true);
 	assert(lruci_node_eq(&kv2, &kv2) == true);

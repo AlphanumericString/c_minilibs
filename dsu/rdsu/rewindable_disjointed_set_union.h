@@ -127,7 +127,7 @@ size_t   rdsu_compress_all(t_rdsu *ds);
 
 t_rdsu_log *rdsu_save_state(const t_rdsu *rdsu);
 bool        rdsu_rewind(t_rdsu *rdsu);
-bool        rdsu_rewind_to_state(t_rdsu *rdsu, t_rdsu_log *lg);
+bool        rdsu_rewind_to_state(t_rdsu *rdsu, const t_rdsu_log *lg);
 void        rdsu_rewind_clear(t_rdsu *rdsu);
 
 #ifdef C_MINI__RDSU_INTERNAL

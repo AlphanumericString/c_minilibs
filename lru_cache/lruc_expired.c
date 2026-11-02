@@ -18,11 +18,11 @@
  * \return true if key is expired, false otherwise
  * \ingroup lruc
 **/
-bool lruc_isexpired(t_lruc *c, const void *key, size_t key_len) {
-	size_t          offset;
-	t_lruc_keynode *node;
-	struct timespec now;
-	uint64_t        now_uint;
+bool lruc_isexpired(const t_lruc *c, const void *key, size_t key_len) {
+	size_t                offset;
+	const t_lruc_keynode *node;
+	struct timespec       now;
+	uint64_t              now_uint;
 
 	if (!lruc_is_valid(c)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
@@ -85,7 +85,7 @@ void lruc_cleanup(t_lruc *c) {
  * \param ttl time to live (in ms)
  * \ingroup lruc
 **/
-void lruc_setttl(t_lruc *cache, long ttl) {
+void lruc_setttl(t_lruc *cache, unsigned long ttl) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_UPDATE, cache->ttl_glob, ttl)
 	cache->ttl_glob = ttl;
 }

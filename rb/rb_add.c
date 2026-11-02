@@ -14,7 +14,7 @@ void rb_push(t_rb *rb, const void *data) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return;
 	}
-	memcpy(rb->array + (rbi_ipos_get(rb) * rb->sz_e), data, rb->sz_e);
+	memcpy(rbi_get_pos(rb, rbi_ipos_get(rb)), data, rb->sz_e);
 	rbi_ipos_set(rb, (rbi_ipos_get(rb) + 1) % rb->nb_max);
 	if (rbi_count_get(rb) == rb->nb_max)
 		rbi_opos_set(rb, (rbi_opos_get(rb) + 1) % rb->nb_max);
@@ -86,7 +86,7 @@ bool rb_npush_safe(t_rb *rb, const void *data, size_t n) {
 		return (false);
 	}
 	while (i < n)
-		rb_push(rb, data + i++ * rb->sz_e);
+		rb_push(rb, (unsigned char *)data + i++ * rb->sz_e);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 	return (true);
 }

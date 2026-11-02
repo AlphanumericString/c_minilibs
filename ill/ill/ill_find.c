@@ -8,14 +8,14 @@
  * is head.
  * \ingroup ill
 **/
-t_ill *ill_find_prev(t_ill *head, t_ill *target) {
+t_ill *ill_find_prev(const t_ill *head, const t_ill *target) {
 	t_ill *curr;
 
 	if (!head || head == target) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return NULL;
 	}
-	curr = head;
+	curr = (t_ill *)head;
 	while (curr->next && curr->next != target)
 		curr = curr->next;
 	if (!curr->next) {
@@ -33,15 +33,14 @@ t_ill *ill_find_prev(t_ill *head, t_ill *target) {
  * \return A pointer to the target node if found, or NULL otherwise.
  * \ingroup ill
 **/
-t_ill *ill_find(t_ill *head, t_ill *target) {
+t_ill *ill_find(const t_ill *head, const t_ill *target) {
 	t_ill *curr;
 
 	if (!head || !target) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return NULL;
 	}
-
-	curr = head;
+	curr = (t_ill *)head;
 	while (curr && curr != target) {
 		curr = curr->next;
 	}
@@ -62,14 +61,14 @@ t_ill *ill_find(t_ill *head, t_ill *target) {
  * not found.
  * \ingroup ill
 **/
-t_ill *ill_get_prev(t_ill *head, t_cm_comparator c, void *arg) {
+t_ill *ill_get_prev(const t_ill *head, t_cm_comparator c, const void *arg) {
 	t_ill *curr;
 
 	if (!head || !c) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return NULL;
 	}
-	curr = head;
+	curr = (t_ill *)head;
 	while (curr->next) {
 		if (c(ill_ntoe(curr->next), arg) == 0) {
 			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
@@ -89,14 +88,14 @@ t_ill *ill_get_prev(t_ill *head, t_cm_comparator c, void *arg) {
  * \return A pointer to the matched node, or NULL if not found.
  * \ingroup ill
 **/
-t_ill *ill_get(t_ill *head, t_cm_comparator c, void *arg) {
+t_ill *ill_get(const t_ill *head, t_cm_comparator c, const void *arg) {
 	t_ill *curr;
 
 	if (!head || !c) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return NULL;
 	}
-	curr = head;
+	curr = (t_ill *)head;
 	while (curr) {
 		if (c(ill_ntoe(curr), arg) == 0) {
 			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)

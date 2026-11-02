@@ -16,7 +16,7 @@ void lruc_foreach(const t_lruc *c, t_kvcallback fn, void *user_data) {
 		return;
 	}
 	for (size_t i = 0; i < c->buckets_nb; i++)
-		for (t_lruc_keynode *n = c->buckets[i]; n; n = n->hash_next)
+		for (const t_lruc_keynode *n = c->buckets[i]; n; n = n->hash_next)
 			fn(&c->buckets[i]->kv, user_data);
 }
 /**

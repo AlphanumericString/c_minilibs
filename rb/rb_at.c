@@ -19,7 +19,7 @@ void *rb_at(t_rb rb, size_t idx) {
 	}
 	pos = (rbi_opos_get(&rb) + idx) % rb.nb_max;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
-	return rb.array + (pos * rb.sz_e);
+	return rbi_get_pos(&rb, pos);
 }
 /**
  * \brief return position in array for element at index and copies up to n
@@ -48,14 +48,14 @@ void *rb_nat(t_rb rb, size_t idx, size_t n, void *buff) {
 	if (n > max) n = max;
 	start_pos = (rbi_opos_get(&rb) + idx) % rb.nb_max;
 	if (start_pos + n <= rb.nb_max) {
-		memcpy(buff, rb.array + (start_pos * rb.sz_e), n * rb.sz_e);
+		memcpy(buff, rbi_get_pos(&rb, start_pos), n * rb.sz_e);
 	} else {
 		first_chunk  = rb.nb_max - start_pos;
 		second_chunk = n - first_chunk;
-		memcpy(buff, rb.array + (start_pos * rb.sz_e), first_chunk * rb.sz_e);
-		memcpy(buff + (first_chunk * rb.sz_e), rb.array,
+		memcpy(buff, rbi_get_pos(&rb, start_pos), first_chunk * rb.sz_e);
+		memcpy((unsigned char *)buff + (first_chunk * rb.sz_e), rb.array,
 		       second_chunk * rb.sz_e);
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
-	return rb.array + (start_pos * rb.sz_e);
+	return rbi_get_pos(&rb, start_pos);
 }

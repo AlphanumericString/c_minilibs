@@ -16,7 +16,7 @@
 **/
 void *rb_get(const t_rb *rb, t_cm_comparator comp, const void *arg,
              void *buffer) {
-	void *elem;
+	const void *elem;
 
 	if (!rb || !comp || !buffer) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
@@ -59,7 +59,7 @@ void *rb_nget(const t_rb *rb, size_t n, t_cm_comparator comp, const void *arg,
 	count = rb_size(*rb);
 	pos   = rbi_opos_get(rb);
 	while (i < count) {
-		elem = rb->array + (pos * rb->sz_e);
+		elem = rbi_get_pos(rb, pos);
 		if (comp(elem, (void *)arg) == 0) {
 			rb_nat(*rb, i, n, buffer);
 			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
@@ -103,9 +103,10 @@ void *rb_getn(const t_rb *rb, size_t n, t_cm_comparator comp, const void *arg,
 	count = rb_size(*rb);
 	pos   = rbi_opos_get(rb);
 	while (i < count && found < n) {
-		elem = rb->array + (pos * rb->sz_e);
+		elem = rbi_get_pos(rb, pos);
 		if (comp(elem, (void *)arg) == 0) {
-			memcpy(buffer + (found * rb->sz_e), elem, rb->sz_e);
+			memcpy((unsigned char *)buffer + (found * rb->sz_e), elem,
+			       rb->sz_e);
 			found++;
 		}
 		pos = (pos + 1) % rb->nb_max;

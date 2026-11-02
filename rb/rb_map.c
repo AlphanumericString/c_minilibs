@@ -12,12 +12,12 @@
  * \return true on success, false if an element couldn't be duplicated
  * \ingroup rb
 **/
-bool rb_nmap(t_rb *rb, size_t n, t_cm_duplicator dup, void **out_buff) {
-	size_t i = 0;
-	size_t pos;
-	size_t count;
-	void  *elem;
-	void  *dup_elem;
+bool rb_nmap(const t_rb *rb, size_t n, t_cm_duplicator dup, void **out_buff) {
+	size_t      i = 0;
+	size_t      pos;
+	size_t      count;
+	void       *elem;
+	const void *dup_elem;
 
 	if (!rb || !dup || !out_buff || !n) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
@@ -29,7 +29,7 @@ bool rb_nmap(t_rb *rb, size_t n, t_cm_duplicator dup, void **out_buff) {
 
 	pos = rbi_opos_get(rb);
 	while (i < n) {
-		elem     = rb->array + (pos * rb->sz_e);
+		elem     = rbi_get_pos(rb, pos);
 		dup_elem = dup(elem);
 		if (dup_elem)
 			memcpy(((unsigned char *)out_buff) + (i * sizeof(void *)),
@@ -55,7 +55,7 @@ bool rb_nmap(t_rb *rb, size_t n, t_cm_duplicator dup, void **out_buff) {
  * \return true on success, false if an element couldn't be duplicated
  * \ingroup rb
 **/
-bool rb_map(t_rb *rb, t_cm_duplicator dup, void **out_buff) {
+bool rb_map(const t_rb *rb, t_cm_duplicator dup, void **out_buff) {
 	bool r;
 
 	if (!rb || !dup || !out_buff) {

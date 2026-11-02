@@ -33,7 +33,7 @@ t_ctls_typewrap *ctls_get(const char *s) {
  * \ingroup ctls
 **/
 size_t ctls_len(void) {
-	t_ctlsv *ctls = pthread_getspecific(ctls_key);
+	const t_ctlsv *ctls = pthread_getspecific(ctls_key);
 
 	if (!ctls) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CTLS_FAILLURE);

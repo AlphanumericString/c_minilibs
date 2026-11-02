@@ -17,7 +17,7 @@ void idl_init(t_idl *node, size_t offset) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 }
 
-static void clean_chain(void *nh, size_t offset, t_cm_dtor dtor) {
+static void clean_chain(const void *nh, size_t offset, t_cm_dtor dtor) {
 	t_idl *curr;
 
 	if (!nh || !dtor) return;

@@ -152,7 +152,7 @@ t_uniq_ptr sptr_make_uniq_from_raw(void *ptr, t_cm_dtor d) {
  * \warning this is an illegal operation. Implemented purely to warn people.
  * \ingroup sptr
 **/
-t_uniq_ptr sptr_make_uniq_from_weak(t_weak_ptr *ptr, t_cm_dtor _) {
+t_uniq_ptr sptr_make_uniq_from_weak(const t_weak_ptr *ptr, t_cm_dtor _) {
 	if (!ptr) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return ((t_uniq_ptr){0});

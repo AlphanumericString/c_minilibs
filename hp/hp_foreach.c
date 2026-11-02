@@ -12,7 +12,7 @@ static void *hp_elem_ptr(const t_hp *h, size_t idx) {
  * \return true if all callbacks returned true, false otherwise
  * \ingroup hp
 **/
-bool hp_foreach(t_hp *h, t_cm_callback cb, void *data) {
+bool hp_foreach(const t_hp *h, t_cm_callback cb, void *data) {
 	if (!h || !cb) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (false);

@@ -22,10 +22,11 @@ bool sptr_fb_decrement(t_fbox *f) {
 	}
 	return (true);
 }
-bool sptr_fb_get_data(t_fbox *f) {
+bool sptr_fb_get_data(const t_fbox *f) {
 	return (f->data);
 }
 t_fbox *sptr_fb_init(t_fbox *f, void *d, t_cm_dtor dt) {
+	if (!f) return (NULL);
 	f->data = d;
 	f->dtor = dt;
 	f->rc   = 0;

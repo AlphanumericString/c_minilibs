@@ -10,8 +10,8 @@
  * \ingroup cdsu
 **/
 t_cdsu *cdsu_new(size_t n) {
-	t_cdsu *ret;
-	void   *buffer;
+	t_cdsu   *ret;
+	uint16_t *buffer;
 
 	if (!n) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG)
@@ -25,13 +25,13 @@ t_cdsu *cdsu_new(size_t n) {
 		return ((t_cdsu *)NULL);
 	}
 	*ret   = (t_cdsu){0};
-	buffer = malloc(sizeof(int) * n * 2);
+	buffer = malloc(sizeof(uint16_t) * n * 2);
 	if (!buffer) {
 		free(ret);
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__CDSU_LOG_EALLOC)
 		return ((t_cdsu *)NULL);
 	}
-	cdsu_init_from_arrays(ret, n, buffer, (buffer + n * sizeof(unsigned int)));
+	cdsu_init_from_arrays(ret, n, buffer, (buffer + n));
 	ret->rp_single_alloc = true;
 	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (cdsu:%p, size:%zu)", (void *)ret, n)
 	return (ret);
@@ -44,18 +44,18 @@ t_cdsu *cdsu_new(size_t n) {
  * \ingroup cdsu
 **/
 t_cdsu *cdsu_init(t_cdsu *to_init, size_t n) {
-	void *buffer;
+	uint16_t *buffer;
 
 	if (!n || !to_init) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG)
 		return ((t_cdsu *)NULL);
 	}
-	buffer = calloc(sizeof(int), n * 2);
+	buffer = calloc(sizeof(uint16_t), n * 2);
 	if (!buffer) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__CDSU_LOG_EALLOC)
 		return ((t_cdsu *)NULL);
 	}
-	cdsu_init_from_arrays(to_init, n, buffer, buffer + n * sizeof(int));
+	cdsu_init_from_arrays(to_init, n, buffer, buffer + n);
 	to_init->rp_single_alloc = true;
 	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (cdsu:%p, size:%zu)", (void *)to_init,
 	       n)
@@ -125,9 +125,9 @@ t_cdsu *cdsu_init_from_arrays(t_cdsu *ret, size_t size, uint16_t *parents,
  * \ingroup cdsu
 **/
 bool cdsu_grow(t_cdsu *cdsu, size_t n) {
-	void  *replacement_buffer;
-	void  *rank_offset;
-	size_t i;
+	uint16_t *replacement_buffer;
+	uint16_t *rank_offset;
+	size_t    i;
 
 	if (!cdsu || !cdsu->size || !cdsu->rank || !cdsu->parent) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG)
@@ -143,7 +143,7 @@ bool cdsu_grow(t_cdsu *cdsu, size_t n) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__CDSU_LOG_EALLOC)
 		return (false);
 	}
-	rank_offset = (replacement_buffer + (cdsu->size + n) * sizeof(uint16_t));
+	rank_offset = replacement_buffer + (cdsu->size + n);
 	memcpy(replacement_buffer, cdsu->parent, cdsu->size * sizeof(uint16_t));
 	memcpy(rank_offset, cdsu->rank, cdsu->size * sizeof(uint16_t));
 	free(cdsu->parent);
