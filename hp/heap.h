@@ -11,8 +11,8 @@
 
 #	define C_MINI__HP_LOG_SUCCESS C_MINI__LOG_SUCCESS
 #	define C_MINI__HP_LOG_CLR     "Clear Heap"
-#	define C_MINI__HP_LOG_STATUS  "Heap(%p), {nb:%zu, cap:%zu}"
-#	define C_MINI__HP_LOG_POP     "Pop (return:%p)\t" C_MINI__HP_LOG_STATUS
+#	define C_MINI__HP_LOG_STATUS  "Heap(%p), {nb:%zu, cap:%zu, sz:%zu}"
+#	define C_MINI__HP_LOG_POP     "Pop (out:%p)\t" C_MINI__HP_LOG_STATUS
 #	define C_MINI__HP_LOG_PUSH    "Push (elem:%p)\t" C_MINI__HP_LOG_STATUS
 #	define C_MINI__HP_LOG_SWAP    "Swap (%zu, %zu)"
 
@@ -33,22 +33,25 @@
  * on the user's usage of said heap.
  * \param nb the number of elements currently present in the heap
  * \param capacity max number of elements in the heap
- * \param elems reference to the elements as void pointers
+ * \param sz_e size of one element (the generic part of the storage)
+ * \param elems reference to the elements as a raw byte buffer
  * \param cmp comparator function
  * \ingroup hp
 **/
 typedef struct s_heap {
 	size_t          nb;
 	size_t          capacity;
-	void          **elems;
+	size_t          sz_e;
+	void           *elems;
 	t_cm_comparator cmp;
 } t_hp;
 
-t_hp *hp_create(size_t nb_elems, t_cm_comparator cmp);
-t_hp *hp_init(t_hp *hp, size_t nb_elems, t_cm_comparator cmp);
+t_hp *hp_create(size_t nb_elems, size_t sz_elem, t_cm_comparator cmp);
+t_hp *hp_init(t_hp *hp, size_t nb_elems, size_t sz_elem, t_cm_comparator cmp);
 
-t_hp *hp_new_from_array(void **arr, size_t nb_elems, t_cm_comparator cmp);
-t_hp *hp_init_from_array(t_hp *hp, void **arr, size_t nb_elems,
+t_hp *hp_new_from_array(void *arr, size_t nb_elems, size_t sz_elem,
+                        t_cm_comparator cmp);
+t_hp *hp_init_from_array(t_hp *hp, void *arr, size_t nb_elems, size_t sz_elem,
                          t_cm_comparator cmp);
 
 bool hp_delete(t_hp *hp);
@@ -62,16 +65,18 @@ bool hp_is_valid(const t_hp *hp);
 t_cm_comparator hp_get_cmp(const t_hp *hp);
 size_t          hp_get_cap(const t_hp *hp);
 size_t          hp_get_current_size(const t_hp *hp);
-void          **hp_get_elems_array(const t_hp *hp);
+size_t          hp_get_elem_size(const t_hp *hp);
+void           *hp_get_elems_array(const t_hp *hp);
+void           *hp_at(const t_hp *hp, size_t pos);
 
-void hp_min_push(t_hp *h, void *e);
-void hp_max_push(t_hp *h, void *e);
+bool hp_min_push(t_hp *h, void *e);
+bool hp_max_push(t_hp *h, void *e);
 
-void *hp_min_pop(t_hp *h);
-void *hp_max_pop(t_hp *h);
+bool hp_min_pop(t_hp *h, void *out);
+bool hp_max_pop(t_hp *h, void *out);
 
-void *hp_min_rm(t_hp *h, size_t n);
-void *hp_max_rm(t_hp *h, size_t n);
+bool hp_min_rm(t_hp *h, size_t n, void *out);
+bool hp_max_rm(t_hp *h, size_t n, void *out);
 
 bool hp_foreach(t_hp *h, t_cm_callback cb, void *u_arg);
 bool hp_foreach_in(t_hp *h, t_cm_callback cb, void *u_arg);

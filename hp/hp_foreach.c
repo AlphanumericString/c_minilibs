@@ -1,5 +1,9 @@
 #include "heap.h"
 
+static void *hp_elem_ptr(const t_hp *h, size_t idx) {
+	return ((char *)h->elems + h->sz_e * idx);
+}
+
 /**
  * \brief For each element in the heap, apply a callback
  * \param h heap pointer
@@ -14,7 +18,7 @@ bool hp_foreach(t_hp *h, t_cm_callback cb, void *data) {
 		return (false);
 	}
 	for (size_t i = 0; i < h->nb; i++)
-		if (cb(h->elems[i], data) == false) {
+		if (cb(hp_elem_ptr(h, i), data) == false) {
 			CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_CB_FAIL, i)
 			return (false);
 		}
@@ -26,7 +30,7 @@ static bool hp_internal_prefix(t_hp *h, size_t i, t_cm_callback cb, void *u) {
 	if (i >= h->nb) return (true);
 	if (!hp_internal_prefix(h, i * 2 + 1, cb, u)) return (false);
 	if (!hp_internal_prefix(h, i * 2 + 2, cb, u)) return (false);
-	if (cb(h->elems[i], u) == false) {
+	if (cb(hp_elem_ptr(h, i), u) == false) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_CB_FAIL, i)
 		return (false);
 	}
@@ -34,7 +38,7 @@ static bool hp_internal_prefix(t_hp *h, size_t i, t_cm_callback cb, void *u) {
 }
 static bool hp_internal_postfix(t_hp *h, size_t i, t_cm_callback cb, void *u) {
 	if (i >= h->nb) return (true);
-	if (cb(h->elems[i], u) == false) {
+	if (cb(hp_elem_ptr(h, i), u) == false) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_CB_FAIL, i)
 		return (false);
 	}
@@ -45,7 +49,7 @@ static bool hp_internal_postfix(t_hp *h, size_t i, t_cm_callback cb, void *u) {
 static bool hp_internal_infix(t_hp *h, size_t i, t_cm_callback cb, void *u) {
 	if (i >= h->nb) return (true);
 	if (!hp_internal_infix(h, i * 2 + 1, cb, u)) return (false);
-	if (cb(h->elems[i], u) == false) {
+	if (cb(hp_elem_ptr(h, i), u) == false) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_CB_FAIL, i)
 		return (false);
 	}

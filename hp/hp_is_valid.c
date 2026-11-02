@@ -7,7 +7,7 @@
  * \ingroup hp
 **/
 bool hp_is_valid(const t_hp *hp) {
-	return (hp && hp->elems && hp->cmp && hp->nb <= hp->capacity);
+	return (hp && hp->elems && hp->cmp && hp->sz_e && hp->nb <= hp->capacity);
 }
 /**
  * \brief check if a given heap is empty on element count

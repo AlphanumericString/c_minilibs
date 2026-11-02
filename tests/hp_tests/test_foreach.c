@@ -2,135 +2,96 @@
 
 #include "hp_tests.h"
 
-static int cmp_rawptr(const void *a, const void *b) {
-	if ((size_t)a < (size_t)b) return (-1);
-	else if ((size_t)a > (size_t)b) return (1);
-	return (0);
-}
-
-static bool fail_at(void *hp_elem, void *value) {
-	return (hp_elem != value);
-}
-
-static bool log_order(void *hp_elem, void *_order) {
-	void **order = (void **)_order;
-	size_t i;
-
-	for (i = 0; order[i] != NULL; i++)
-		;
-	order[i] = hp_elem;
-	return (true);
+NO_COV static void build_max(t_hp *h, int *vals) {
+	for (size_t i = 0; i < 5; i++)
+		assert(hp_max_push(h, &vals[i]) == true);
 }
 
 NO_COV void test_hp_foreach(void) {
-	void *order[6] = {0};
-	t_hp  h;
+	t_order_ctx ctx = {0};
+	t_hp        h;
+	int         in[]       = {0x40, 0x41, 0x42, 0x43, 0x44};
+	int         expected[] = {0x44, 0x43, 0x41, 0x40, 0x42};
 
-	hp_init(&h, 5, cmp_rawptr);
-	hp_max_push(&h, (void *)0x40);
-	hp_max_push(&h, (void *)0x41);
-	hp_max_push(&h, (void *)0x42);
-	hp_max_push(&h, (void *)0x43);
-	hp_max_push(&h, (void *)0x44);
+	hp_init(&h, 5, sizeof(int), cb_cmp_int);
+	build_max(&h, in);
 
-	assert(hp_foreach(&h, log_order, &order) == true);
-	assert(order[0] == (void *)0x44);
-	assert(order[1] == (void *)0x43);
-	assert(order[2] == (void *)0x41);
-	assert(order[3] == (void *)0x40);
-	assert(order[4] == (void *)0x42);
-	assert(order[5] == NULL);
-	assert(hp_foreach(NULL, log_order, &order) == false);
-	assert(hp_foreach(&h, NULL, &order) == false);
-	assert(hp_foreach(&h, fail_at, (void *)0x40L) == false);
-	assert(hp_foreach(&h, fail_at, (void *)0x41L) == false);
-	assert(hp_foreach(&h, fail_at, (void *)0x42L) == false);
-	assert(hp_foreach(&h, fail_at, (void *)0x43L) == false);
-	assert(hp_foreach(&h, fail_at, (void *)0x44L) == false);
+	assert(hp_foreach(&h, cb_log_int, &ctx) == true);
+	for (size_t i = 0; i < 5; i++)
+		assert(ctx.vals[i] == expected[i]);
+	assert(ctx.n == 5);
+	assert(hp_foreach(NULL, cb_log_int, &ctx) == false);
+	assert(hp_foreach(&h, NULL, &ctx) == false);
+	for (size_t i = 0; i < 5; i++)
+		assert(hp_foreach(&h, cb_fail_at, &in[i]) == false);
+	assert(hp_foreach(&h, cb_true, NULL) == true);
+	assert(hp_foreach(&h, cb_false, NULL) == false);
 
 	hp_delete(&h);
 }
 NO_COV void test_hp_foreach_in(void) {
-	void *order[6] = {0};
-	t_hp  h;
+	t_order_ctx ctx = {0};
+	t_hp        h;
+	int         in[]       = {0x40, 0x41, 0x42, 0x43, 0x44};
+	int         expected[] = {0x40, 0x43, 0x42, 0x44, 0x41};
 
-	hp_init(&h, 5, cmp_rawptr);
-	hp_max_push(&h, (void *)0x40);
-	hp_max_push(&h, (void *)0x41);
-	hp_max_push(&h, (void *)0x42);
-	hp_max_push(&h, (void *)0x43);
-	hp_max_push(&h, (void *)0x44);
+	hp_init(&h, 5, sizeof(int), cb_cmp_int);
+	build_max(&h, in);
 
-	assert(hp_foreach_in(&h, log_order, &order) == true);
-	assert(order[0] == (void *)0x40);
-	assert(order[1] == (void *)0x43);
-	assert(order[2] == (void *)0x42);
-	assert(order[3] == (void *)0x44);
-	assert(order[4] == (void *)0x41);
-	assert(order[5] == NULL);
-	assert(hp_foreach_in(NULL, log_order, &order) == false);
-	assert(hp_foreach_in(&h, NULL, &order) == false);
-	assert(hp_foreach_in(&h, fail_at, (void *)0x40L) == false);
-	assert(hp_foreach_in(&h, fail_at, (void *)0x41L) == false);
-	assert(hp_foreach_in(&h, fail_at, (void *)0x42L) == false);
-	assert(hp_foreach_in(&h, fail_at, (void *)0x43L) == false);
-	assert(hp_foreach_in(&h, fail_at, (void *)0x44L) == false);
+	assert(hp_foreach_in(&h, cb_log_int, &ctx) == true);
+	for (size_t i = 0; i < 5; i++)
+		assert(ctx.vals[i] == expected[i]);
+	assert(ctx.n == 5);
+	assert(hp_foreach_in(NULL, cb_log_int, &ctx) == false);
+	assert(hp_foreach_in(&h, NULL, &ctx) == false);
+	for (size_t i = 0; i < 5; i++)
+		assert(hp_foreach_in(&h, cb_fail_at, &in[i]) == false);
+	assert(hp_foreach_in(&h, cb_true, NULL) == true);
+	assert(hp_foreach_in(&h, cb_false, NULL) == false);
 
 	hp_delete(&h);
 }
 NO_COV void test_hp_foreach_pre(void) {
-	void *order[6] = {0};
-	t_hp  h;
+	t_order_ctx ctx = {0};
+	t_hp        h;
+	int         in[]       = {0x40, 0x41, 0x42, 0x43, 0x44};
+	int         expected[] = {0x40, 0x42, 0x43, 0x41, 0x44};
 
-	hp_init(&h, 5, cmp_rawptr);
-	hp_max_push(&h, (void *)0x40);
-	hp_max_push(&h, (void *)0x41);
-	hp_max_push(&h, (void *)0x42);
-	hp_max_push(&h, (void *)0x43);
-	hp_max_push(&h, (void *)0x44);
+	hp_init(&h, 5, sizeof(int), cb_cmp_int);
+	build_max(&h, in);
 
-	assert(hp_foreach_pre(&h, log_order, &order) == true);
-	assert(order[0] == (void *)0x40);
-	assert(order[1] == (void *)0x42);
-	assert(order[2] == (void *)0x43);
-	assert(order[3] == (void *)0x41);
-	assert(order[4] == (void *)0x44);
-	assert(order[5] == NULL);
-	assert(hp_foreach_pre(NULL, log_order, &order) == false);
-	assert(hp_foreach_pre(&h, NULL, &order) == false);
-	assert(hp_foreach_pre(&h, fail_at, (void *)0x40L) == false);
-	assert(hp_foreach_pre(&h, fail_at, (void *)0x41L) == false);
-	assert(hp_foreach_pre(&h, fail_at, (void *)0x42L) == false);
-	assert(hp_foreach_pre(&h, fail_at, (void *)0x43L) == false);
-	assert(hp_foreach_pre(&h, fail_at, (void *)0x44L) == false);
+	assert(hp_foreach_pre(&h, cb_log_int, &ctx) == true);
+	for (size_t i = 0; i < 5; i++)
+		assert(ctx.vals[i] == expected[i]);
+	assert(ctx.n == 5);
+	assert(hp_foreach_pre(NULL, cb_log_int, &ctx) == false);
+	assert(hp_foreach_pre(&h, NULL, &ctx) == false);
+	for (size_t i = 0; i < 5; i++)
+		assert(hp_foreach_pre(&h, cb_fail_at, &in[i]) == false);
+	assert(hp_foreach_pre(&h, cb_true, NULL) == true);
+	assert(hp_foreach_pre(&h, cb_false, NULL) == false);
 
 	hp_delete(&h);
 }
 NO_COV void test_hp_foreach_post(void) {
-	void *order[6] = {0};
-	t_hp  h;
+	t_order_ctx ctx = {0};
+	t_hp        h;
+	int         in[]       = {0x40, 0x41, 0x42, 0x43, 0x44};
+	int         expected[] = {0x44, 0x43, 0x40, 0x42, 0x41};
 
-	hp_init(&h, 5, cmp_rawptr);
-	hp_max_push(&h, (void *)0x40);
-	hp_max_push(&h, (void *)0x41);
-	hp_max_push(&h, (void *)0x42);
-	hp_max_push(&h, (void *)0x43);
-	hp_max_push(&h, (void *)0x44);
+	hp_init(&h, 5, sizeof(int), cb_cmp_int);
+	build_max(&h, in);
 
-	assert(hp_foreach_post(&h, log_order, &order) == true);
-	assert(order[0] == (void *)0x44);
-	assert(order[1] == (void *)0x43);
-	assert(order[2] == (void *)0x40);
-	assert(order[3] == (void *)0x42);
-	assert(order[4] == (void *)0x41);
-	assert(order[5] == NULL);
-	assert(hp_foreach_post(NULL, log_order, &order) == false);
-	assert(hp_foreach_post(&h, NULL, &order) == false);
-	assert(hp_foreach_post(&h, fail_at, (void *)0x40L) == false);
-	assert(hp_foreach_post(&h, fail_at, (void *)0x41L) == false);
-	assert(hp_foreach_post(&h, fail_at, (void *)0x42L) == false);
-	assert(hp_foreach_post(&h, fail_at, (void *)0x43L) == false);
-	assert(hp_foreach_post(&h, fail_at, (void *)0x44L) == false);
+	assert(hp_foreach_post(&h, cb_log_int, &ctx) == true);
+	for (size_t i = 0; i < 5; i++)
+		assert(ctx.vals[i] == expected[i]);
+	assert(ctx.n == 5);
+	assert(hp_foreach_post(NULL, cb_log_int, &ctx) == false);
+	assert(hp_foreach_post(&h, NULL, &ctx) == false);
+	for (size_t i = 0; i < 5; i++)
+		assert(hp_foreach_post(&h, cb_fail_at, &in[i]) == false);
+	assert(hp_foreach_post(&h, cb_true, NULL) == true);
+	assert(hp_foreach_post(&h, cb_false, NULL) == false);
 
 	hp_delete(&h);
 }

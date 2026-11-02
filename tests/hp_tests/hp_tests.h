@@ -6,6 +6,20 @@
 #include "common_base/tests.h"
 #include "hp/heap.h"
 
+#define HP_ORDER_MAX 8
+
+typedef struct s_order_ctx {
+	int    vals[HP_ORDER_MAX];
+	size_t n;
+} t_order_ctx;
+
+// Helper callbacks
+NO_COV int  cb_cmp_int(const void *a, const void *b);
+NO_COV bool cb_true(void *e, void *a);
+NO_COV bool cb_false(void *e, void *a);
+NO_COV bool cb_fail_at(void *e, void *a);
+NO_COV bool cb_log_int(void *e, void *a);
+
 void test_hp_create(void);
 void test_hp_init(void);
 
@@ -23,7 +37,9 @@ void test_hp_is_valid(void);
 void test_hp_get_cmp(void);
 void test_hp_get_cap(void);
 void test_hp_get_current_size(void);
+void test_hp_get_elem_size(void);
 void test_hp_get_elems_array(void);
+void test_hp_at(void);
 
 void test_hp_min_push(void);
 void test_hp_max_push(void);

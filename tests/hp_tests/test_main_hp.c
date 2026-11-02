@@ -23,7 +23,9 @@ NO_COV int main(void) {
 	test_hp_get_cmp();
 	test_hp_get_cap();
 	test_hp_get_current_size();
+	test_hp_get_elem_size();
 	test_hp_get_elems_array();
+	test_hp_at();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Push", )
 	test_hp_min_push();

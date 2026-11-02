@@ -50,6 +50,6 @@ bool hp_clear(t_hp *hp) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_CLR)
 	hp->nb = 0;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_STATUS, (void *)hp, hp->nb,
-	       hp->capacity)
+	       hp->capacity, hp->sz_e)
 	return (true);
 }

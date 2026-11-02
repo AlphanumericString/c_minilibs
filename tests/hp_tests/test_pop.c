@@ -1,49 +1,67 @@
 #include <assert.h>
-#include <stdio.h>
 
 #include "hp_tests.h"
 
-static int cmp_rawptr(const void *a, const void *b) {
-	if ((size_t)a < (size_t)b) return (-1);
-	else if ((size_t)a > (size_t)b) return (1);
-	return (0);
-}
-
 NO_COV void test_hp_min_pop(void) {
-	t_hp  hp;
-	void *r;
+	t_hp hp;
+	int  v40 = 0x40;
+	int  v41 = 0x41;
+	int  v42 = 0x42;
+	int  out = 0x1234;
 
-	hp_init(&hp, 32, &cmp_rawptr);
+	assert(hp_init(&hp, 32, sizeof(int), cb_cmp_int) == &hp);
 	assert(hp.elems != NULL);
-	hp_min_push(&hp, (void *)0x42);
-	hp_min_push(&hp, (void *)0x40);
-	hp_min_push(&hp, (void *)0x41);
-	assert(hp.nb > 0);
+	assert(hp_min_push(&hp, &v42) == true);
+	assert(hp_min_push(&hp, &v40) == true);
+	assert(hp_min_push(&hp, &v41) == true);
 	assert(hp.nb == 3);
-	r = hp_min_pop(&hp);
-	assert(r == (void *)0x40);
-	r = hp_min_pop(&hp);
-	assert(r == (void *)0x41);
-	r = hp_min_pop(&hp);
-	assert(r == (void *)0x42);
-	assert(hp_min_pop(&hp) == NULL);
-	assert(hp_min_pop(NULL) == NULL);
+	assert(hp_min_pop(&hp, &out) == true);
+	assert(out == 0x40);
+	assert(hp_min_pop(&hp, &out) == true);
+	assert(out == 0x41);
+	assert(hp_min_pop(&hp, &out) == true);
+	assert(out == 0x42);
+	out = 0x1234;
+	assert(hp_min_pop(&hp, &out) == false);
+	assert(out == 0x1234);
+	assert(hp_min_pop(NULL, &out) == false);
+	assert(hp_min_pop(&hp, NULL) == false);
+	hp.nb   = 1;
+	hp.sz_e = 0;
+	out     = 0x1234;
+	assert(hp_min_pop(&hp, &out) == false);
+	assert(out == 0x1234);
 	hp_delete(&hp);
 	return;
 }
 NO_COV void test_hp_max_pop(void) {
 	t_hp hp;
+	int  v40 = 0x40;
+	int  v41 = 0x41;
+	int  v42 = 0x42;
+	int  out = 0x1234;
 
-	hp_init(&hp, 32, &cmp_rawptr);
+	assert(hp_init(&hp, 32, sizeof(int), cb_cmp_int) == &hp);
 	assert(hp.elems != NULL);
-	hp_max_push(&hp, (void *)0x42);
-	hp_max_push(&hp, (void *)0x40);
-	hp_max_push(&hp, (void *)0x41);
-	assert(hp_max_pop(&hp) == (void *)0x42);
-	assert(hp_max_pop(&hp) == (void *)0x41);
-	assert(hp_max_pop(&hp) == (void *)0x40);
-	assert(hp_max_pop(&hp) == NULL);
-	assert(hp_max_pop(NULL) == NULL);
+	assert(hp_max_push(&hp, &v42) == true);
+	assert(hp_max_push(&hp, &v40) == true);
+	assert(hp_max_push(&hp, &v41) == true);
+	assert(hp_max_pop(&hp, &out) == true);
+	assert(out == 0x42);
+	assert(hp_max_pop(&hp, &out) == true);
+	assert(out == 0x41);
+	assert(hp_max_pop(&hp, &out) == true);
+	assert(out == 0x40);
+	out = 0x1234;
+	assert(hp_max_pop(&hp, &out) == false);
+	assert(out == 0x1234);
+	assert(hp_max_pop(NULL, &out) == false);
+	assert(hp_max_pop(&hp, NULL) == false);
+	hp.nb   = 1;
+	hp.sz_e = 0;
+	out     = 0x1234;
+	assert(hp_max_pop(&hp, &out) == false);
+	assert(out == 0x1234);
 	hp_delete(&hp);
 	return;
 }
