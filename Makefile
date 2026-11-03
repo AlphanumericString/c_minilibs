@@ -166,6 +166,7 @@ $(DOC_DIR)/html/index.html: Doxyfile
 # tests_run: build and run every module's tests under valgrind
 # valgrind: build and run tests under valgrind (module aware via MODULE=<name>)
 # static_analysis: run the static analyzer (module aware via MODULE=<name>)
+# norm_check: check that every C/H file is clang-format compliant
 # single_file: amalgamate MODULE into a single stb style header (MODULE required)
 # coverage: run coverage pass using llvm tooling (debug via DEBUG_LVL=<value>)
 # documentation: run documentation generation using doxygen
@@ -192,6 +193,15 @@ static_analysis:
 	else \
 		make --no-print-directory analyze_$(MODULE_CL) ; \
 	fi ;
+norm_check:
+	@clang-format -i $$(fd '.*\.[ch]$$' ./ )
+	@sed 's/^ \*\*\//**\//' -i $$(fd '.*\.[ch]$$' ./ )
+	@if ! git diff --quiet --diff-filter=ACMR -- '*.c' '*.h' ; then \
+		$(PRINT) "norm_checking error: the following files are not clang-format compliant:\n" ; \
+		git --no-pager diff --name-only --diff-filter=ACMR -- '*.c' '*.h' ; \
+		exit 1 ; \
+	fi
+	@$(PRINT) "norm_checking: all files are clang-format compliant\n"
 single_file:
 	@if [ -z "$(MODULE_CL)" ] ; then \
 		$(PRINT) '$(RED)Invalid$(RESET). Please use `single_file` rule with a module (eg: `make single_file MODULE=<module_name>`)'; \
@@ -224,6 +234,7 @@ help:
 	$(PRINT) "tests_run: build and run every module's tests under valgrind"
 	$(PRINT) "valgrind: build and run tests under valgrind (module aware via MODULE=<name>)"
 	$(PRINT) "static_analysis: run the static analyzer (module aware via MODULE=<name>)"
+	$(PRINT) "norm_check: check that every C/H file is clang-format compliant"
 	$(PRINT) "single_file: amalgamate MODULE into a single stb style header (via MODULE=<name>)"
 	$(PRINT) "coverage: run coverage pass using llvm tooling (debug via DEBUG_LVL=<value>)"
 	$(PRINT) "documentation: run documentation generation using doxygen"
@@ -232,4 +243,4 @@ help:
 	$(PRINT) "re: re-compile the project using rule fclean and all"
 	$(PRINT) "remove_module: removes a specified module from the project"
 	$(PRINT) "help: print this help message"
-.PHONY: re clean fclean tests tests_run valgrind static_analysis single_file remove_module help
+.PHONY: re clean fclean tests tests_run valgrind static_analysis norm_check single_file remove_module help
