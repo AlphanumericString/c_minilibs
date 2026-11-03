@@ -4,9 +4,9 @@
 
 NO_COV void test_da_grow(void) {
 	t_da         da;
-	const size_t dflt_size   = C_MINI_DA__NB_ELEM_DFLT;
-	const size_t first_size  = dflt_size * C_MINI_DA__GROWTH;
-	const size_t second_size = first_size * C_MINI_DA__GROWTH;
+	const size_t dflt_size   = C_MINI__DA_NB_ELEM_DFLT;
+	const size_t first_size  = dflt_size * C_MINI__DA_GROWTH;
+	const size_t second_size = first_size * C_MINI__DA_GROWTH;
 	t_da         da_no_size  = {
 	             .array = (int *)arr_5,
 	             .cap_e = 5,
@@ -34,7 +34,7 @@ NO_COV void test_da_grow(void) {
 	assert(da.array == NULL && da.cap_e == 0 && da.nb_e == 0 && da.sz_e == 0);
 	da.sz_e = sizeof(int);
 	assert(da_grow(&da) == true);
-	assert(da.cap_e == C_MINI_DA__NB_ELEM_DFLT);
+	assert(da.cap_e == C_MINI__DA_NB_ELEM_DFLT);
 	da_destroy(&da);
 
 	assert(da_grow(&da_no_size) == false);
@@ -58,7 +58,7 @@ NO_COV void test_da_grow_for_size(void) {
 	};
 
 	da_init(&da, sizeof(int));
-	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 0)
+	ASSERT_DA_STATE(da, sizeof(int), C_MINI__DA_NB_ELEM_DFLT, 0)
 	assert(da_grow_for_size(&da, 20) == true);
 	assert(da.cap_e >= 20), assert(da.sz_e == sizeof(int));
 	assert(da.nb_e == 0), assert(da.array != NULL);

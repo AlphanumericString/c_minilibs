@@ -19,7 +19,7 @@ static inline void memnxor(void *a, const void *b, size_t n) {
  * \ingroup da
 **/
 bool da_swap(const t_da *da, size_t pos_a, size_t pos_b) {
-	unsigned char  sized_buffer[C_MINI_DA__SZ_ELEM_DFLT];
+	unsigned char  sized_buffer[C_MINI__DA_SZ_ELEM_DFLT];
 	unsigned char *sa;
 	unsigned char *sb;
 
@@ -29,7 +29,7 @@ bool da_swap(const t_da *da, size_t pos_a, size_t pos_b) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (false);
 	}
-	if (da->sz_e > C_MINI_DA__SZ_ELEM_DFLT) {
+	if (da->sz_e > C_MINI__DA_SZ_ELEM_DFLT) {
 		memnxor(sa, sb, da->sz_e);
 		memnxor(sb, sa, da->sz_e);
 		memnxor(sa, sb, da->sz_e);
@@ -52,7 +52,7 @@ bool da_swap(const t_da *da, size_t pos_a, size_t pos_b) {
  * \ingroup da
 **/
 bool da_nswap(const t_da *da, size_t n, size_t pos_a, size_t pos_b) {
-	unsigned char  sized_buffer[C_MINI_DA__SZ_ELEM_DFLT];
+	unsigned char  sized_buffer[C_MINI__DA_SZ_ELEM_DFLT];
 	unsigned char *sa;
 	unsigned char *sb;
 
@@ -71,7 +71,7 @@ bool da_nswap(const t_da *da, size_t n, size_t pos_a, size_t pos_b) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SWAP, n, pos_a, pos_b)
 		return (true);
 	}
-	if ((da->sz_e * n) > C_MINI_DA__SZ_ELEM_DFLT) {
+	if ((da->sz_e * n) > C_MINI__DA_SZ_ELEM_DFLT) {
 		memnxor(sa, sb, da->sz_e * n);
 		memnxor(sb, sa, da->sz_e * n);
 		memnxor(sa, sb, da->sz_e * n);

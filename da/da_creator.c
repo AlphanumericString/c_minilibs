@@ -43,12 +43,12 @@ t_da *da_init(t_da *ret, size_t sz_elem) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return ((t_da *)NULL);
 	}
-	data = (void *)calloc(sz_elem, C_MINI_DA__NB_ELEM_DFLT);
+	data = (void *)calloc(sz_elem, C_MINI__DA_NB_ELEM_DFLT);
 	if (!data) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__DA_LOG_EALLOC)
 		return ((t_da *)NULL);
 	}
-	da_from_array(ret, data, C_MINI_DA__NB_ELEM_DFLT, sz_elem);
+	da_from_array(ret, data, C_MINI__DA_NB_ELEM_DFLT, sz_elem);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
 	return (ret);
 }

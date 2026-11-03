@@ -69,7 +69,7 @@ NO_COV void test_da_dup_to(void) {
 
 	da_init(&dst, sizeof(int));
 	da_dup_to(&dst, &da);
-	ASSERT_DA_STATE(dst, da.sz_e, C_MINI_DA__NB_ELEM_DFLT, da.nb_e)
+	ASSERT_DA_STATE(dst, da.sz_e, C_MINI__DA_NB_ELEM_DFLT, da.nb_e)
 	assert(*(int *)da_at(&da, 0) == *(int *)da_at(&dst, 0));
 
 	prev = small2.array;
@@ -111,7 +111,7 @@ NO_COV void test_da_ndup_to(void) {
 
 	prev = dst.array;
 	assert(da_ndup_to(&dst, 2, &da) == &dst);
-	ASSERT_DA_STATE(dst, da.sz_e, C_MINI_DA__NB_ELEM_DFLT, 2)
+	ASSERT_DA_STATE(dst, da.sz_e, C_MINI__DA_NB_ELEM_DFLT, 2)
 	assert(prev == dst.array); // no need to grow
 	assert(*(int *)da_at(&dst, 0) == *(int *)da_at(&da, 0));
 	assert(*(int *)da_at(&dst, 1) == *(int *)da_at(&da, 1));

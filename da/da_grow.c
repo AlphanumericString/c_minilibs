@@ -18,8 +18,8 @@ bool da_grow(t_da *da) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (false);
 	}
-	new_size = da->cap_e * C_MINI_DA__GROWTH;
-	if (!new_size) new_size = C_MINI_DA__NB_ELEM_DFLT;
+	new_size = da->cap_e * C_MINI__DA_GROWTH;
+	if (!new_size) new_size = C_MINI__DA_NB_ELEM_DFLT;
 	tmp = malloc(da->sz_e * new_size);
 	if (!tmp) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__DA_LOG_EALLOC)
@@ -53,9 +53,9 @@ bool da_grow_for_size(t_da *da, size_t minimal_free_elems) {
 		return (false);
 	}
 	new_size = da->cap_e;
-	if (new_size < 2) new_size = C_MINI_DA__NB_ELEM_DFLT;
+	if (new_size < 2) new_size = C_MINI__DA_NB_ELEM_DFLT;
 	while ((new_size - da->nb_e) < minimal_free_elems)
-		new_size *= C_MINI_DA__GROWTH;
+		new_size *= C_MINI__DA_GROWTH;
 	tmp = malloc(da->sz_e * new_size);
 	if (!tmp) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__DA_LOG_EALLOC)

@@ -9,7 +9,7 @@ NO_COV void test_da_init(void) {
 
 	ret = da_init(&da, sizeof(int));
 	assert(ret != NULL && ret == &da);
-	ASSERT_DA_STATE(da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 0)
+	ASSERT_DA_STATE(da, sizeof(int), C_MINI__DA_NB_ELEM_DFLT, 0)
 	da_destroy(&da);
 	assert(da_init(NULL, sizeof(int)) == NULL);
 	assert(da_init(&da, 0) == NULL);
@@ -55,7 +55,7 @@ NO_COV void test_da_new(void) {
 	assert(nb_alloc == 0);
 	da = da_new(sizeof(int));
 	assert(nb_alloc == 2);
-	ASSERT_DA_STATE(*da, sizeof(int), C_MINI_DA__NB_ELEM_DFLT, 0)
+	ASSERT_DA_STATE(*da, sizeof(int), C_MINI__DA_NB_ELEM_DFLT, 0)
 	da_free(da);
 	assert(da_new(0) == NULL);
 	alloc_reset_counter();
