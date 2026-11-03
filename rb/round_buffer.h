@@ -107,9 +107,7 @@ t_rb  *rb_grow(const t_rb *rb, size_t nb_elem_added);
 
 #ifdef C_MINI__RB_INTERNAL
 
-static void *rbi_get_pos(const t_rb *rb, size_t pos) {
-	return ((unsigned char *)rb->array + pos * rb.sz_e);
-}
+void *rbi_get_pos(const t_rb *rb, size_t pos);
 
 /**
  * The rb positions (i_pos, o_pos) and count are atomic in multi-threaded

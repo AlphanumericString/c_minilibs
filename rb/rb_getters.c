@@ -55,3 +55,6 @@ size_t rb_remaining_space(t_rb rb) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 	return (rb_capacity(rb) - rb_size(rb));
 }
+void *rbi_get_pos(const t_rb *rb, size_t pos) {
+	return ((unsigned char *)rb->array + pos * rb->sz_e);
+}
