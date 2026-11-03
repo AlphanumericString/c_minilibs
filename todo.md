@@ -19,11 +19,11 @@ General todo
  - [ ] sptr
  - [ ] rb
 ### DOC
-- [ ] Add README.md
- - [ ] why c_minilib
- - [ ] presentation of modules
- - [ ] what i learned
-- [ ] doxygen ok?
+- [x] Add README.md
+ - [x] why c_minilib
+ - [x] presentation of modules
+ - [x] what i learned
+- [x] doxygen ok?
  - [ ] comment why rb grow create new rb
 - [ ] example directory w small example per module
  - [ ] da

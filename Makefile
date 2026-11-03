@@ -48,12 +48,16 @@ TFLAGS	?= $(CFLAGS)	-O0 -I./	\
 TLINKER_FLAGS = -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc \
 				-Wl,--wrap=clock_gettime
 VGFLAGS		?= $(filter-out -fprofile-instr-generate -ftest-coverage \
-				-fcoverage-mapping,$(TFLAGS))
+				-fcoverage-mapping -DC_MINI__DEBUG_LEVEL=0,$(TFLAGS)) \
+				-g3 -DC_MINI__TESTS -DC_MINI__DEBUG_LEVEL=99
 # Tools flags
+CPPCHECK_LOG_LOC=$(BUILD_DIR)/cppcheck_checks_ran.txt
+
 CHECK_FLAGS	?= --enable=all --std=$(CHECK_STD) --language=c --inline-suppr \
 				-I. --suppress=missingIncludeSystem --suppress=unusedFunction \
 				--suppress=staticFunction --suppress=variableScope \
-				--check-level=exhaustive --quiet --checkers-report=report
+				--check-level=exhaustive --quiet \
+				--checkers-report=$(CPPCHECK_LOG_LOC)
 VFLAGS		:= --leak-check=full --show-leak-kinds=all --track-fds=yes \
 				--trace-children=yes --track-origins=yes --read-var-info=yes \
 				--show-reachable=yes --undef-value-errors=yes
@@ -105,8 +109,9 @@ $(BUILD_DIR)/$(TST_DIR)/$1_tests/%.o: $(TST_DIR)/$1_tests/%.c
 	$(CC) $(TFLAGS) -c $$< -o $$@
 # static analysis
 analyze_$1:
+	@mkdir -p $$(dir $(CPPCHECK_LOG_LOC))
 	@$(CPPCHECK) $(CHECK_FLAGS) -I./$1 $1
-	@$(PRINT) "static analysis: $1 done\n"
+	@$(PRINT) "static analysis: $1 done (checks ran disponible at $(CPPCHECK_LOG_LOC))\n"
 
 # TARGETS
 # base target
@@ -161,8 +166,6 @@ $(DOC_DIR)/html/index.html: Doxyfile
 # tests_run: build and run every module's tests under valgrind
 # valgrind: build and run tests under valgrind (module aware via MODULE=<name>)
 # static_analysis: run the static analyzer (module aware via MODULE=<name>)
-# tests_mt: build the threaded tests of every module that provides some
-# tests_mt_run: build and run the threaded tests
 # single_file: amalgamate MODULE into a single stb style header (MODULE required)
 # coverage: run coverage pass using llvm tooling (debug via DEBUG_LVL=<value>)
 # documentation: run documentation generation using doxygen
@@ -177,11 +180,18 @@ tests_run: $(VG_PROGS)
 	@for t in $^; do \
 		valgrind $(VFLAGS) -q ./$$t; \
 	done
-valgrind: $(addprefix test_,$(addsuffix .vg.out,$(SELECTED_MODULES)))
+valgrind: $(addprefix test_,$(addsuffix .vg.out,$(MODULE_CL)))
 	@for t in $^; do \
 		valgrind $(VFLAGS) -q ./$$t; \
 	done
-static_analysis: $(addprefix analyze_,$(SELECTED_MODULES))
+static_analysis:
+	@if [ -z "$(MODULE_CL)" ] ; then \
+		for m in $(MODULES) ; do \
+			make --no-print-directory analyze_$$m ; \
+		done ; \
+	else \
+		make --no-print-directory analyze_$(MODULE_CL) ; \
+	fi ;
 single_file:
 	@if [ -z "$(MODULE_CL)" ] ; then \
 		$(PRINT) '$(RED)Invalid$(RESET). Please use `single_file` rule with a module (eg: `make single_file MODULE=<module_name>`)'; \
@@ -208,4 +218,18 @@ remove_module:
 		sh scripts/remove_module.sh $(MODULE_CL) ./Makefile ; \
 		$(PRINT) "removed module: $(MODULE_CL)\n" ; \
 	fi
-.PHONY: re clean fclean tests tests_run valgrind static_analysis single_file remove_module
+help:
+	$(PRINT) "all: compiles every module into it's own lib named lib<module_name>.a (debug via DEBUG_LVL=<value>)"
+	$(PRINT) "tests: compiles every module's tests (debug via DEBUG_LVL=<value>)"
+	$(PRINT) "tests_run: build and run every module's tests under valgrind"
+	$(PRINT) "valgrind: build and run tests under valgrind (module aware via MODULE=<name>)"
+	$(PRINT) "static_analysis: run the static analyzer (module aware via MODULE=<name>)"
+	$(PRINT) "single_file: amalgamate MODULE into a single stb style header (via MODULE=<name>)"
+	$(PRINT) "coverage: run coverage pass using llvm tooling (debug via DEBUG_LVL=<value>)"
+	$(PRINT) "documentation: run documentation generation using doxygen"
+	$(PRINT) "fclean: rm output dirs and final targets created by makefile"
+	$(PRINT) "clean: rm final targets create by makefile"
+	$(PRINT) "re: re-compile the project using rule fclean and all"
+	$(PRINT) "remove_module: removes a specified module from the project"
+	$(PRINT) "help: print this help message"
+.PHONY: re clean fclean tests tests_run valgrind static_analysis single_file remove_module help
