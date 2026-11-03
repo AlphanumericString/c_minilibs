@@ -104,6 +104,9 @@ NO_COV void test_fbox_init(void) {
 	assert(box.dtor == fbox_dt);
 	assert(sptr_fb_get_count(&box) == 0);
 	assert(sptri_wc_get(&box) == 0);
+
+	res = sptr_fb_init(NULL, data, fbox_dt);
+	assert(res == NULL);
 }
 
 NO_COV void test_fbox_new(void) {
