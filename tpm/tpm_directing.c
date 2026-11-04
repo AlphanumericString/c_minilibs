@@ -39,8 +39,9 @@ static void wait_thread_queues_empty(t_tpm *tpm) {
 
 	for (size_t i = 0; i < tpm->nb_threads; i++) {
 		break_order = false;
+#if defined(C_MINI__TESTS) ||                                                  \
+    defined(C_MINI__DEBUG_LEVEL) && C_MINI__DEBUG_LEVEL != 0
 
-#ifdef CM_LOG
 		pthread_mutex_lock(&tpm->threads[i].job_cache_lock);
 		CM_LOG(C_MINI__LEVEL_INFO,
 		       "Waiting thread#%zu {start,end}: {%hhu, %hhu}", i,

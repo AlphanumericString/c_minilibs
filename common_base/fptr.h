@@ -90,4 +90,32 @@ typedef void *(*t_cm_merger)(void *elem, void *arg);
 
 #endif // !C_MINI__T_MERGER
 
+#ifndef C_MINI__T_CALL
+#	define C_MINI__T_CALL
+
+/**
+ * \typedef t_cm_call
+ * \brief function pointer for non-returning functions executing and not yelding
+ * any values
+ * \param arg pointer to the value given to the call
+ * \note made for thread pool manager
+**/
+typedef void (*t_cm_call)(void *arg);
+
+#endif // !C_MINI__T_CALL
+
+#ifndef C_MINI__T_WORK
+#	define C_MINI__T_WORK
+
+/**
+ * \typedef t_cm_work
+ * \brief function pointer for functions yielding a value as a return.
+ * \param arg pointer to the value given to the work function
+ * \return the result of the work done on arg
+ * \note made for thread pool manager
+**/
+typedef void *(*t_cm_work)(void *arg);
+
+#endif // !C_MINI__T_WORK
+
 #endif // !C_MINI__COMMON_FPTR

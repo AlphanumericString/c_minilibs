@@ -1,6 +1,15 @@
 #ifndef THREAD_POOL_MANAGER_H
 #define THREAD_POOL_MANAGER_H
 
+// tldr: thread pool manager
+// collect WNB work in a main queue (can grow w/ bounds)
+// dispatch TNB thread to do said jobs (max THREAD_MAX_NB threads)
+// worker threads can take up to TRD_JOB_CACHE_LEN jobs inside them
+//  but they take only 2/3 of their possible cache from main queue of jobs
+// if any thread in the next STEAL_WINDOW threads has more than 2 jobs and
+//  more jobs than them, steal.
+// if a thread is idle try to steal jobs every STEAL_RETRY_NS.
+
 #include <pthread.h>
 #include <stdatomic.h>
 #include <stdbool.h>
@@ -8,6 +17,7 @@
 #include <stdint.h>
 
 #define C_MINI__LOG_THREADSAFE
+#include "common_base/fptr.h"
 #include "common_base/log.h"
 
 #ifdef C_MINI__TESTS
@@ -16,10 +26,12 @@
 #	define C_MINI__TPM_LOG_EARG     C_MINI__LOG_EARG
 #	define C_MINI__TPM_LOG_EALLOC   C_MINI__LOG_EALLOC
 #	define C_MINI__TPM_LOG_ETHREADS C_MINI__LOG_F_PREFIX "Thread error."
-#	define C_MINI__TPM_LOG_ECLOCK   C_MINI__LOG_F_PREFIX "Clock."
-#	define C_MINI__TPM_LOG_ESPACE   C_MINI__LOG_F_PREFIX "Not enough space."
-#	define C_MINI__TPM_LOG_ECB      C_MINI__LOG_F_PREFIX "Callback."
-#	define C_MINI__TPM_LOG_EDOWN    C_MINI__LOG_F_PREFIX "Shutdown."
+#	define C_MINI__TPM_LOG_CATTR                                              \
+		C_MINI__LOG_F_PREFIX "Condition attribute error."
+#	define C_MINI__TPM_LOG_ECLOCK C_MINI__LOG_F_PREFIX "Clock."
+#	define C_MINI__TPM_LOG_ESPACE C_MINI__LOG_F_PREFIX "Not enough space."
+#	define C_MINI__TPM_LOG_ECB    C_MINI__LOG_F_PREFIX "Callback."
+#	define C_MINI__TPM_LOG_EDOWN  C_MINI__LOG_F_PREFIX "Shutdown."
 
 #	define C_MINI__TPM_LOG_SUCCESS C_MINI__LOG_SUCCESS
 
@@ -31,42 +43,49 @@
 
 // -- constants
 #ifndef C_MINI__TPM_PAGE_SIZE
-#	define C_MINI__TPM_PAGE_SIZE 4096
+#	define C_MINI__TPM_PAGE_SIZE 4096 // standard unix system pagesize
+#endif
+#ifndef C_MINI__2MS_AS_NS
+#	define C_MINI__2MS_AS_NS 2000000L
 #endif
 
-// -- threads numbers
-#ifndef TPM_THREADS_MAX_NB
-#	define TPM_THREADS_MAX_NB 255
+// -- thread pool manager variables: threads numbers
+// arbitrary cap on the number of thread, feel free to change
+#ifndef C_MINI__TPM_THREADS_MAX_NB
+#	define C_MINI__TPM_THREADS_MAX_NB 255
 #endif
-#ifndef TPM_THREADS_DFLT_NB
-#	define TPM_THREADS_DFLT_NB 16
+// default
+#ifndef C_MINI__TPM_THREADS_DFLT_NB
+#	define C_MINI__TPM_THREADS_DFLT_NB 16
 #endif
 
-// // --batches
-// #ifndef TPM_BATCH_MAX_SIZE
-// #	define TPM_BATCH_MAX_SIZE 255 // max batch size 255
-// #endif
-// #ifndef TPM_BATCH_DEFAULT_SIZE
-// #	define TPM_BATCH_DEFAULT_SIZE 16 // default
-// #endif
-
-// -- heartbeat
-// HEARTBEAT_RYTHM -> wake every X seconds even without jobs to send info to
-// main thread about state HBM_Inactive -> maximum number of heartbeats without
-// jobs
-//		before thread gets recalled
-#ifndef C_MINI__TPM_HEARTBEAT_RYTHM
-#	define C_MINI__TPM_HEARTBEAT_RYTHM 2
+// -- thread internal variables: cache and steal
+// internal thread local job cache len
+#ifndef C_MINI__TPM_TRD_JOB_CACHE_LEN
+#	define C_MINI__TPM_TRD_JOB_CACHE_LEN 8
 #endif
-#ifndef C_MINI__TPM_HBM_INACTIVE
-#	define C_MINI__TPM_HBM_INACTIVE 16
+// number of jobs taken from main queue by worker threads
+#ifndef C_MINI__TPM_TRD_MGET_NB
+#	define C_MINI__TPM_TRD_MGET_NB (C_MINI__TPM_TRD_JOB_CACHE_LEN * 2 / 3)
+#endif
+// number of thread to try to steal from for each threads (round robin style)
+#ifndef C_MINI__TPM_STEAL_WINDOW
+#	define C_MINI__TPM_STEAL_WINDOW 4
+#endif
+// number of NS to wait before trying to steal if thread is "sleeping"
+#ifndef C_MINI__TPM_STEAL_RETRY_NS
+#	define C_MINI__TPM_STEAL_RETRY_NS C_MINI__2MS_AS_NS
 #endif
 
 // -- checks
-// #if (TPM_THREADS_DFLT_NB > TPM_THREADS_MAX_NB) || \
-//     (TPM_BATCH_DEFAULT_SIZE > TPM_BATCH_MAX_SIZE)
-// #	error "default size is bigger than max size"
-// #endif // !checks
+#if (C_MINI__TPM_TRD_JOB_CACHE_LEN < C_MINI__TPM_TRD_MGET_NB)
+#	error "thread will try to take more jobs that they can hold." \
+	" if you want to pursue, modify the other variable too."
+#endif
+#if (C_MINI__TPM_THREADS_DFLT_NB > C_MINI__TPM_THREADS_MAX_NB)
+#	error "default size is bigger than max size"
+#endif
+// !checks
 
 typedef struct s_tpm_base_job {
 	void *(*func)(void *);
@@ -76,10 +95,6 @@ typedef struct s_tpm_base_job {
 	} infos;
 } t_tpm_job;
 
-// job container
-// -- > split for batching later ...
-//	-> batching size + other infos about it stored here
-//	-> keeps job struct clean
 typedef struct s_tpm_job {
 	t_tpm_job         job;
 	struct s_tpm_job *next;
@@ -90,13 +105,8 @@ typedef struct s_tpm_job {
 
 typedef struct s_thread_pool_manager t_tpm;
 
-// -- Thread local job caching
-#ifndef C_MINI__TPM_THRD_JOBS_CACHE
-#	define C_MINI__TPM_THRD_JOBS_CACHE 8
-#endif // !C_MINI__TPM_THRD_JOBS_CACHE
-
 typedef struct s_tpm_thread_internal {
-	t_tpm_jc       *jc[C_MINI__TPM_THRD_JOBS_CACHE];
+	t_tpm_jc       *jc[C_MINI__TPM_TRD_JOB_CACHE_LEN];
 	uint8_t         start;
 	uint8_t         end;
 	pthread_mutex_t job_cache_lock;
@@ -106,19 +116,6 @@ typedef struct s_tpm_thread_internal {
 	size_t    id_sequential; // pool thread id (debug, work stealing)
 } t_tpmi_thread;
 
-// -- jobs main queue pool
-#ifndef C_MINI__TPM_MAX_JOBS
-#	define C_MINI__TPM_MAX_JOBS C_MINI__TPM_PAGE_SIZE / sizeof(t_tpm_jc)
-#endif // !C_MINI__TPM_MAX_JOBS
-
-#ifndef C_MINI__TPM_NB_JOBS
-#	define C_MINI__TPM_NB_JOBS C_MINI__TPM_MAX_JOBS
-#endif // !C_MINI__TPM_NB_JOBS
-
-#ifndef C_MINI__TPM_BUCKETS
-#	define C_MINI__TPM_BUCKETS C_MINI__TPM_NB_JOBS / 2
-#endif
-
 struct s_tpm_stats {
 	size_t total_jobs_completed;
 	size_t total_jobs_failed;
@@ -126,10 +123,11 @@ struct s_tpm_stats {
 };
 
 typedef struct s_thread_pool_manager {
-	t_tpmi_thread threads[C_MINI__TPM_NB_JOBS]; // threads
-	atomic_int    nb_threads;
+	t_tpmi_thread threads[C_MINI__TPM_THREADS_MAX_NB]; // threads
+	atomic_size_t nb_threads;
 
-	t_tpm_jc       *q_buckets[C_MINI__TPM_BUCKETS];
+	//	t_tpm_jc      **hash_jobs; // job removal/cancelation - unused for now
+	//	atomic_int		size_hash; // nb of buckets
 	t_tpm_jc       *q_start;
 	t_tpm_jc       *q_end;
 	pthread_mutex_t q_lock;
@@ -144,7 +142,6 @@ typedef struct s_thread_pool_manager {
 } t_tpm;
 
 // TODO: (non-ordered)
-// 1. fix error. losing jobs.
 //
 // 3. heartbeat system -> clock heartbeat
 //				monitor thread-> if threads[nb%max].hb - now > hb_steps*hb !
@@ -164,15 +161,13 @@ typedef struct s_thread_pool_manager {
 //				add job-> takes free func
 //				add jobs-> takes free funcs
 //
-// attack plan : 4 & 5
-//				-> 3 rest of the week
-//				-> 6 if time
-// 4 - later
 // 5. future for then chaining and await
 //				future_create-> alloc new struct, take a job_handle
 //				job struct-> field for future
-//				worker->job exec end -> if future 'then' pass return to func
-//				worker->job exec end -> if future 'await' ptread_cond
+//				worker->job exec end -> if future 'then' pass return to given
+//				 func
+//				worker->job exec end -> if future 'await' ptread_cond for a
+//				 wakup
 //				void *(*then_function)(void *);
 //				?future cancelling if task is cancelled
 //				?independant future cancelling
@@ -180,38 +175,34 @@ typedef struct s_thread_pool_manager {
 //				-> problem cant use jc as return to user since operations on
 //					them might invalidate them
 //				idea -> future struct, pass it when job creation
-
-// func typdefs
-#ifndef C_MINI__CALL
-#	define C_MINI__CALL
-
-typedef void (*t_call)(void *arg);
-
-#endif // !C_MINI__CALL
-#ifndef C_MINI__WORK
-#	define C_MINI__WORK
-
-typedef void *(*t_work)(void *arg);
-
-#endif // !C_MINI__WORK
+// -- heartbeat impl idea
+// HEARTBEAT_RYTHM -> wake every X seconds even without jobs to send info to
+// main thread about state HBM_Inactive -> maximum number of heartbeats without
+// jobs before thread gets recalled
+// #ifndef C_MINI__TPM_HEARTBEAT_RYTHM
+// #	define C_MINI__TPM_HEARTBEAT_RYTHM 2
+// #endif
+// #ifndef C_MINI__TPM_HBM_INACTIVE
+// #	define C_MINI__TPM_HBM_INACTIVE 16
+// #endif
 
 // create
 t_tpm *tpm_new(size_t nb_thread);
 t_tpm *tpm_init(t_tpm *tpm, size_t nb_thread);
 
 // delete
-void tpm_delete(t_tpm *tpm, t_call arg_cleanup);
-void tpm_free(t_tpm *tpm, t_call arg_cleanup);
-void tpm_clear_job_list(t_tpm_jc *head, t_call arg_cleanup);
+void tpm_delete(t_tpm *tpm, t_cm_call arg_cleanup);
+void tpm_free(t_tpm *tpm, t_cm_call arg_cleanup);
+void tpm_clear_job_list(t_tpm_jc *head, t_cm_call arg_cleanup);
 
 // add
-t_tpm_jc *tpm_add_job(t_tpm *tpm, t_work work, void *arg);
-t_tpm_jc *tpm_add_reccuring_job(t_tpm *tpm, t_work work, void *arg);
-t_tpm_jc *tpm_add_batch(t_tpm *tpm, size_t nb, t_work work, void **args);
+t_tpm_jc *tpm_add_job(t_tpm *tpm, t_cm_work work, void *arg);
+// t_tpm_jc *tpm_add_reccuring_job(t_tpm *tpm, t_cm_work work, void *arg);
+t_tpm_jc *tpm_add_batch(t_tpm *tpm, size_t nb, t_cm_work work, void **args);
 
 // info
 struct s_tpm_stats tpm_get_stats(t_tpm *tpm);
-int                tpm_get_nbthread(const t_tpm *tpm);
+size_t             tpm_get_nbthread(const t_tpm *tpm);
 
 // directing
 bool tpm_stop(t_tpm *tpm);
@@ -221,15 +212,14 @@ bool tpm_wait_end(t_tpm *tpm);
 
 // worker specific
 void     *tpmi_worker(void *tpm);
-t_tpm_jc *tpmi_create_job(t_work w_func, void *a);
+t_tpm_jc *tpmi_create_job(t_cm_work w_func, void *a);
 
 // job handling - consider lock as caller responsability
 bool     tpmi_job_push(t_tpm_jc *to_push, t_tpm_jc **head, t_tpm_jc **tail,
                        bool queu_down);
 t_tpm_jc tpmi_job_pop(t_tpm *tpm);
-int      tpmi_job_thrd_cache_pop(t_tpm    *tpm,
-                                 t_tpm_jc *buffer[C_MINI__TPM_THRD_JOBS_CACHE],
-                                 size_t    start);
+int      tpmi_job_thrd_cache_pop(t_tpm *tpm, t_tpm_jc **buffer, size_t start,
+                                 size_t max);
 
 #endif // C_MINI__TPM_INTERNAL
 

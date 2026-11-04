@@ -13,10 +13,11 @@ struct s_tpm_stats tpm_get_stats(t_tpm *tpm) {
 	pthread_mutex_lock(&tpm->q_lock);
 	r = tpm->stats;
 	pthread_mutex_unlock(&tpm->q_lock);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__TPM_LOG_SUCCESS)
 	return (r);
 }
-int tpm_get_nbthread(const t_tpm *tpm) {
-	int nb;
+size_t tpm_get_nbthread(const t_tpm *tpm) {
+	size_t nb;
 
 	if (!tpm) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG)
