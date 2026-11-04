@@ -37,12 +37,12 @@ CHECK_STD	?= c17
 CFLAGS		:= -Wall -Wextra -MMD -MP --std=$(STD) -Werror
 
 ifeq ($(DEBUG_LVL), 0)
-	CFLAGS += -DC_MINI__DEBUG_LEVEL=0
+	CFLAGS += -DC_MINI__DEBUG_LEVEL=0 -O2
 else
 	CFLAGS += -g3 -DC_MINI__TESTS -DC_MINI__DEBUG_LEVEL=$(DEBUG_LVL)
 endif
 
-TFLAGS	?= $(CFLAGS)	-O0 -I./	\
+TFLAGS	?= $(filter-out -O2 -O3 -O1, $(CFLAGS))	-O0 -I./	\
 			-fprofile-instr-generate -ftest-coverage -fcoverage-mapping \
 			-fno-inline -fno-inline-functions -DC_MINI__TESTS
 TLINKER_FLAGS = -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc \
