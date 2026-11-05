@@ -9,7 +9,7 @@
  * \return true on success, false on failure
  * \ingroup da
 **/
-bool da_add(t_da *da, const void *elem) {
+bool da_add(t_cm_da *da, const void *elem) {
 	if (!elem || !da_is_not_null(da)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (false);
@@ -30,7 +30,7 @@ bool da_add(t_da *da, const void *elem) {
  * \return true on success, false on failure
  * \ingroup da
 **/
-bool da_cat_array(t_da *da, const void *arr, size_t nb_e, size_t sz_e) {
+bool da_cat_array(t_cm_da *da, const void *arr, size_t nb_e, size_t sz_e) {
 	if (!arr || !da_is_not_null(da) || sz_e != da->sz_e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (false);

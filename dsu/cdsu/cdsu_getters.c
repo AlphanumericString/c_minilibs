@@ -6,7 +6,7 @@
  * \return the max depth
  * \ingroup cdsu
 **/
-int cdsu_max_depth(const t_cdsu *cdsu) {
+int cdsu_max_depth(const t_cm_cdsu *cdsu) {
 	unsigned int max = 0;
 	size_t       i   = 0;
 
@@ -22,7 +22,7 @@ int cdsu_max_depth(const t_cdsu *cdsu) {
  * \return the number of elems
  * \ingroup cdsu
 **/
-size_t cdsu_size(const t_cdsu *cdsu) {
+size_t cdsu_size(const t_cm_cdsu *cdsu) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CDSU_LOG_SUCCESS)
 	return (cdsu->size);
 }
@@ -32,7 +32,7 @@ size_t cdsu_size(const t_cdsu *cdsu) {
  * \return the number of components
  * \ingroup cdsu
 **/
-size_t cdsu_nb_components(const t_cdsu *cdsu) {
+size_t cdsu_nb_components(const t_cm_cdsu *cdsu) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CDSU_LOG_SUCCESS)
 	return (cdsu->components);
 }

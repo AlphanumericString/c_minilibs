@@ -3,10 +3,10 @@
 
 #include "rb_tests.h"
 
-NO_COV void test_rb_map(void) {
-	t_rb rb     = {0};
-	int  arr[3] = {1, 2, 3};
-	int *out[3] = {0};
+NO_COV void test_cm_rb_map(void) {
+	t_cm_rb rb     = {0};
+	int     arr[3] = {1, 2, 3};
+	int    *out[3] = {0};
 
 	rb_init(&rb, sizeof(int));
 	rb_npush(&rb, arr, 3);
@@ -25,10 +25,10 @@ NO_COV void test_rb_map(void) {
 	rb_destroy(&rb);
 }
 
-NO_COV void test_rb_nmap(void) {
-	t_rb rb     = {0};
-	int  arr[4] = {1, 2, 3, 4};
-	int *out[4] = {0};
+NO_COV void test_cm_rb_nmap(void) {
+	t_cm_rb rb     = {0};
+	int     arr[4] = {1, 2, 3, 4};
+	int    *out[4] = {0};
 
 	rb_init(&rb, sizeof(int));
 	rb_npush(&rb, arr, 4);

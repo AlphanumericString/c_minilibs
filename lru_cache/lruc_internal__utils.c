@@ -7,9 +7,9 @@
 
 // is node in list of keys of lruc
 // [very slow] [used for debug] [not production code]
-t_lruc_keynode *lruci_keyinlist(const t_lruc *c, const void *key,
-                                size_t key_len) {
-	t_lruc_keynode *node;
+t_cm_lruc_keynode *lruci_keyinlist(const t_cm_lruc *c, const void *key,
+                                   size_t key_len) {
+	t_cm_lruc_keynode *node;
 
 	for (node = c->MRU; node; node = node->lru_next)
 		if (node->kv.k_len == key_len &&
@@ -18,10 +18,10 @@ t_lruc_keynode *lruci_keyinlist(const t_lruc *c, const void *key,
 	return (NULL);
 }
 // _out -> bucket offset
-t_lruc_keynode *lruci_keyinhash(const t_lruc *c, const void *key,
-                                size_t key_len, size_t *_out) {
-	size_t          hash;
-	t_lruc_keynode *node;
+t_cm_lruc_keynode *lruci_keyinhash(const t_cm_lruc *c, const void *key,
+                                   size_t key_len, size_t *_out) {
+	size_t             hash;
+	t_cm_lruc_keynode *node;
 
 	if (!_out) _out = &hash;
 	hash = lruci_hash_djb2(key, key_len) % c->buckets_nb;
@@ -32,7 +32,7 @@ t_lruc_keynode *lruci_keyinhash(const t_lruc *c, const void *key,
 	return (*_out = hash, NULL);
 }
 
-void lruci_unlink_node(t_lruc *c, t_lruc_keynode *n, size_t h) {
+void lruci_unlink_node(t_cm_lruc *c, t_cm_lruc_keynode *n, size_t h) {
 	lruci_lru_pop(c, n);
 	lruci_hsh_pop(c, n, h);
 	if (c->minHeap[0] == n) {
@@ -55,7 +55,8 @@ size_t lruci_hash_djb2(const void *key, size_t size) {
 uint64_t lruci_timeto64(struct timespec t) {
 	return (t.tv_sec * 1000ULL + t.tv_nsec / 1000000ULL);
 }
-bool lruci_node_eq(const t_lruc_keynode *node_1, const t_lruc_keynode *node_2) {
+bool lruci_node_eq(const t_cm_lruc_keynode *node_1,
+                   const t_cm_lruc_keynode *node_2) {
 	return (node_1 == node_2 || lruci_key_eq(node_1->kv.key, node_1->kv.k_len,
 	                                         node_2->kv.key, node_2->kv.k_len));
 }

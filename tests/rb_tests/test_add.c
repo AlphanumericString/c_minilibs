@@ -2,11 +2,11 @@
 
 #include "rb_tests.h"
 
-NO_COV void test_rb_push(void) {
-	t_rb rb   = {0};
-	int  val1 = 42;
-	int  val2 = 43;
-	int  val3 = 44;
+NO_COV void test_cm_rb_push(void) {
+	t_cm_rb rb   = {0};
+	int     val1 = 42;
+	int     val2 = 43;
+	int     val3 = 44;
 
 	rb_create(&rb, sizeof(int), 2);
 
@@ -31,10 +31,10 @@ NO_COV void test_rb_push(void) {
 	rb_destroy(&rb);
 }
 
-NO_COV void test_rb_npush(void) {
-	t_rb rb          = {0};
-	int  arr[3]      = {1, 2, 3};
-	int  arr_large[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+NO_COV void test_cm_rb_npush(void) {
+	t_cm_rb rb          = {0};
+	int     arr[3]      = {1, 2, 3};
+	int     arr_large[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 
 	rb_create(&rb, sizeof(int), 4);
 
@@ -71,9 +71,9 @@ NO_COV void test_rb_npush(void) {
 	rb_destroy(&rb);
 }
 
-NO_COV void test_rb_push_safe(void) {
-	t_rb rb  = {0};
-	int  val = 42;
+NO_COV void test_cm_rb_push_safe(void) {
+	t_cm_rb rb  = {0};
+	int     val = 42;
 
 	rb_create(&rb, sizeof(int), 2);
 
@@ -86,9 +86,9 @@ NO_COV void test_rb_push_safe(void) {
 	rb_destroy(&rb);
 }
 
-NO_COV void test_rb_npush_safe(void) {
-	t_rb rb     = {0};
-	int  arr[3] = {1, 2, 3};
+NO_COV void test_cm_rb_npush_safe(void) {
+	t_cm_rb rb     = {0};
+	int     arr[3] = {1, 2, 3};
 
 	rb_create(&rb, sizeof(int), 2);
 

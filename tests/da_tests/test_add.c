@@ -2,8 +2,8 @@
 
 #include "da_tests.h"
 
-NO_COV void test_da_add(void) {
-	t_da         da;
+NO_COV void test_cm_da_add(void) {
+	t_cm_da      da;
 	int          a;
 	const size_t first_growth = C_MINI__DA_NB_ELEM_DFLT * C_MINI__DA_GROWTH;
 
@@ -32,17 +32,17 @@ NO_COV void test_da_add(void) {
 	da_destroy(&da);
 
 	da_add(NULL, &a);
-	da = (t_da){.array = (void *)0xDEAD, .cap_e = 0, .nb_e = 99, .sz_e = 1};
+	da = (t_cm_da){.array = (void *)0xDEAD, .cap_e = 0, .nb_e = 99, .sz_e = 1};
 	da_add(&da, NULL);
-	da = (t_da){.array = NULL, .cap_e = 99, .nb_e = 99, .sz_e = 1};
+	da = (t_cm_da){.array = NULL, .cap_e = 99, .nb_e = 99, .sz_e = 1};
 	da_add(&da, (void *)0xDEAD);
-	da = (t_da){.array = (void *)0xDEAD, .cap_e = 0, .nb_e = 99, .sz_e = 1};
+	da = (t_cm_da){.array = (void *)0xDEAD, .cap_e = 0, .nb_e = 99, .sz_e = 1};
 	da_add(&da, (void *)0xDEAD);
 }
-NO_COV void test_da_cat_array(void) {
-	t_da da;
-	int  arr[]  = {1, 2, 3};
-	int  arr2[] = {4, 5, 6};
+NO_COV void test_cm_da_cat_array(void) {
+	t_cm_da da;
+	int     arr[]  = {1, 2, 3};
+	int     arr2[] = {4, 5, 6};
 
 	da_init(&da, sizeof(int));
 	da_cat_array(&da, arr, 3, sizeof(int));
@@ -60,12 +60,12 @@ NO_COV void test_da_cat_array(void) {
 	assert(((int *)da.array)[5] == arr2[2]);
 	da_destroy(&da);
 
-	da = (t_da){.array = (void *)0xDEAD, .cap_e = 99, .nb_e = 99, .sz_e = 1};
+	da = (t_cm_da){.array = (void *)0xDEAD, .cap_e = 99, .nb_e = 99, .sz_e = 1};
 	da_cat_array(&da, NULL, 12, 1);
 	da_cat_array(NULL, (void *)0xDEAD, 12, 1);
 	da_cat_array(&da, (void *)0xDEAD, 12, 0);
-	da = (t_da){.array = NULL, .cap_e = 99, .nb_e = 99, .sz_e = 1};
+	da = (t_cm_da){.array = NULL, .cap_e = 99, .nb_e = 99, .sz_e = 1};
 	da_cat_array(&da, (void *)0xDEAD, 12, 1);
-	da = (t_da){.array = (void *)0xDEAD, .cap_e = 99, .nb_e = 99, .sz_e = 1};
+	da = (t_cm_da){.array = (void *)0xDEAD, .cap_e = 99, .nb_e = 99, .sz_e = 1};
 	da_cat_array(&da, (void *)0xDEAD, 12, 12);
 }

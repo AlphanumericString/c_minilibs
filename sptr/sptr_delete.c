@@ -13,7 +13,7 @@
  * weak count reach 0
  * \ingroup sptr
 **/
-bool sptr_deletes(t_strong_ptr *ptr) {
+bool sptr_deletes(t_cm_strong_ptr *ptr) {
 	if (!ptr || !ptr->meta || !sptr_get_rc(ptr)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (false);
@@ -26,7 +26,7 @@ bool sptr_deletes(t_strong_ptr *ptr) {
 		if (!sptri_wc_get(ptr->meta)) free(ptr->meta);
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
-	*ptr = (t_strong_ptr){0};
+	*ptr = (t_cm_strong_ptr){0};
 	return (true);
 }
 /**
@@ -37,7 +37,7 @@ bool sptr_deletes(t_strong_ptr *ptr) {
  * reach 0
  * \ingroup sptr
 **/
-bool sptr_deletew(t_weak_ptr *ptr) {
+bool sptr_deletew(t_cm_weak_ptr *ptr) {
 	if (!ptr || !ptr->meta || !sptr_get_wc(ptr)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (false);
@@ -45,7 +45,7 @@ bool sptr_deletew(t_weak_ptr *ptr) {
 	sptri_wc_dec(ptr->meta);
 	if (!sptri_wc_get(ptr->meta) && !sptri_rc_get(ptr->meta)) free(ptr->meta);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
-	*ptr = (t_weak_ptr){0};
+	*ptr = (t_cm_weak_ptr){0};
 	return (true);
 }
 /**
@@ -57,7 +57,7 @@ bool sptr_deletew(t_weak_ptr *ptr) {
  * count and weak count reach 0
  * \ingroup sptr
 **/
-bool sptr_deleteo(t_owned_ptr *ptr) {
+bool sptr_deleteo(t_cm_owned_ptr *ptr) {
 	if (!ptr || !ptr->meta || (!ptr->owner && !sptri_wc_get(ptr->meta))) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (false);
@@ -76,7 +76,7 @@ bool sptr_deleteo(t_owned_ptr *ptr) {
 	}
 	if (!sptri_wc_get(ptr->meta) && !sptri_rc_get(ptr->meta)) free(ptr->meta);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
-	*ptr = (t_owned_ptr){0};
+	*ptr = (t_cm_owned_ptr){0};
 	return (true);
 }
 /**
@@ -86,13 +86,13 @@ bool sptr_deleteo(t_owned_ptr *ptr) {
  * \note all fields are zeroed out for safety
  * \ingroup sptr
 **/
-bool sptr_deleteu(t_uniq_ptr *ptr) {
+bool sptr_deleteu(t_cm_uniq_ptr *ptr) {
 	if (!ptr || !ptr->data) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (false);
 	}
 	if (ptr->dtor) ptr->dtor(ptr->data);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
-	*ptr = (t_uniq_ptr){0};
+	*ptr = (t_cm_uniq_ptr){0};
 	return (true);
 }

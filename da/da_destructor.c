@@ -7,7 +7,7 @@
  * \param ret pointer to the dynamic array
  * \ingroup da
 **/
-void da_clr(t_da *ret) {
+void da_clr(t_cm_da *ret) {
 	if (!ret) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return;
@@ -20,13 +20,13 @@ void da_clr(t_da *ret) {
  * \param ret pointer to the dynamic array
  * \ingroup da
 **/
-void da_destroy(t_da *ret) {
+void da_destroy(t_cm_da *ret) {
 	if (!ret) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return;
 	}
 	if (ret->array) free(ret->array);
-	*ret = (t_da){0};
+	*ret = (t_cm_da){0};
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
 }
 /**
@@ -34,7 +34,7 @@ void da_destroy(t_da *ret) {
  * \param da pointer to the dynamic array
  * \ingroup da
 **/
-void da_free(t_da *da) {
+void da_free(t_cm_da *da) {
 	if (!da) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return;

@@ -3,9 +3,9 @@
 
 #include "cdsu_tests.h"
 
-NO_COV void test_cdsu_grow(void) {
-	t_cdsu *cdsu = cdsu_new(5);
-	t_cdsu  malicious;
+NO_COV void test_cm_cdsu_grow(void) {
+	t_cm_cdsu *cdsu = cdsu_new(5);
+	t_cm_cdsu  malicious;
 
 	assert(cdsu->size == 5);
 	assert(cdsu_grow(cdsu, 5) == true);
@@ -41,11 +41,11 @@ NO_COV void test_cdsu_grow(void) {
 	}
 	cdsu_free(&cdsu);
 
-	malicious        = (t_cdsu){.components      = 10,
-	                            .parent          = (void *)((long)rand()),
-	                            .rank            = (void *)((long)rand()),
-	                            .rp_single_alloc = false,
-	                            .size            = 10};
+	malicious        = (t_cm_cdsu){.components      = 10,
+	                               .parent          = (void *)((long)rand()),
+	                               .rank            = (void *)((long)rand()),
+	                               .rp_single_alloc = false,
+	                               .size            = 10};
 	malicious.parent = NULL;
 	assert(cdsu_grow(&malicious, 5) == false);
 	malicious.parent = (void *)((long)rand());

@@ -2,16 +2,16 @@
 #define C_MINI__SPTR_INTERNAL
 #include "smart_pointer.h"
 
-size_t sptr_fb_get_count(const t_fbox *f) {
+size_t sptr_fb_get_count(const t_cm_fbox *f) {
 	if (!f) return (0);
 	return (sptri_rc_get(f));
 }
-bool sptr_fb_increment(t_fbox *f) {
+bool sptr_fb_increment(t_cm_fbox *f) {
 	if (!f) return (false);
 	if (!sptri_rc_get(f)) return (false);
 	return (sptri_rc_inc(f), true);
 }
-bool sptr_fb_decrement(t_fbox *f) {
+bool sptr_fb_decrement(t_cm_fbox *f) {
 	if (!f) return (false);
 	if (!sptri_rc_get(f)) return (false);
 	sptri_rc_dec(f);
@@ -22,10 +22,10 @@ bool sptr_fb_decrement(t_fbox *f) {
 	}
 	return (true);
 }
-bool sptr_fb_get_data(const t_fbox *f) {
+bool sptr_fb_get_cm_data(const t_cm_fbox *f) {
 	return (f->data);
 }
-t_fbox *sptr_fb_init(t_fbox *f, void *d, t_cm_dtor dt) {
+t_cm_fbox *sptr_fb_init(t_cm_fbox *f, void *d, t_cm_dtor dt) {
 	if (!f) return (NULL);
 	f->data = d;
 	f->dtor = dt;
@@ -33,8 +33,8 @@ t_fbox *sptr_fb_init(t_fbox *f, void *d, t_cm_dtor dt) {
 	f->wc   = 0;
 	return (f);
 }
-t_fbox *sptr_fb_new(void *d, t_cm_dtor dt) {
-	t_fbox *f;
+t_cm_fbox *sptr_fb_new(void *d, t_cm_dtor dt) {
+	t_cm_fbox *f;
 
 	f = calloc(sizeof(*f), 1);
 	return (sptr_fb_init(f, d, dt));

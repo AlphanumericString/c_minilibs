@@ -2,10 +2,10 @@
 
 #include "ill_tests.h"
 
-NO_COV void test_idl_find_prev(void) {
-	t_test_dnode n1, n2, n3;
-	t_idl       *head = NULL;
-	t_idl       *prev, *prev_head, *prev_not_found;
+NO_COV void test_cm_idl_find_prev(void) {
+	t_cm_test_dnode n1, n2, n3;
+	t_cm_idl       *head = NULL;
+	t_cm_idl       *prev, *prev_head, *prev_not_found;
 
 	INIT_DNODE(n1, 42, 1);
 	INIT_DNODE(n2, 43, 2);

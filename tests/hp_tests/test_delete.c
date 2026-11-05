@@ -3,9 +3,9 @@
 
 #include "hp_tests.h"
 
-NO_COV void test_hp_clear(void) {
-	t_hp hp;
-	int  v = 0xDEAD;
+NO_COV void test_cm_hp_clear(void) {
+	t_cm_hp hp;
+	int     v = 0xDEAD;
 
 	hp_init(&hp, 32, sizeof(int), cb_cmp_int);
 	assert(hp.elems != NULL);
@@ -20,9 +20,9 @@ NO_COV void test_hp_clear(void) {
 	hp_delete(&hp);
 	assert(hp_clear(NULL) == false);
 }
-NO_COV void test_hp_delete(void) {
-	t_hp hp;
-	int  v = 0xDEAD;
+NO_COV void test_cm_hp_delete(void) {
+	t_cm_hp hp;
+	int     v = 0xDEAD;
 
 	hp_init(&hp, 32, sizeof(int), cb_cmp_int);
 	assert(hp.elems != NULL);
@@ -34,15 +34,16 @@ NO_COV void test_hp_delete(void) {
 	assert(hp.nb == 0);
 	assert(hp.sz_e == 0);
 	assert(hp_delete(NULL) == false);
-	hp = (t_hp){.elems = NULL, .capacity = 12, .cmp = NULL, .nb = 6, .sz_e = 4};
+	hp = (t_cm_hp){
+	    .elems = NULL, .capacity = 12, .cmp = NULL, .nb = 6, .sz_e = 4};
 	assert(hp_delete(&hp) == true);
 	assert(hp.capacity == 0 && hp.cmp == NULL && hp.nb == 0 &&
 	       hp.elems == NULL && hp.sz_e == 0);
 }
-NO_COV void test_hp_free(void) {
-	t_hp *hp;
-	void *no_leaks;
-	int   v = 0xDEAD;
+NO_COV void test_cm_hp_free(void) {
+	t_cm_hp *hp;
+	void    *no_leaks;
+	int      v = 0xDEAD;
 
 	hp = hp_create(32, sizeof(int), cb_cmp_int);
 	assert(hp);

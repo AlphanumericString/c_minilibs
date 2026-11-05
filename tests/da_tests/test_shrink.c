@@ -2,8 +2,8 @@
 
 #include "da_tests.h"
 
-NO_COV void test_da_shrink(void) {
-	t_da da;
+NO_COV void test_cm_da_shrink(void) {
+	t_cm_da da;
 
 	da_init(&da, sizeof(int));
 	ASSERT_DA_STATE(da, sizeof(int), C_MINI__DA_NB_ELEM_DFLT, 0)
@@ -19,8 +19,8 @@ NO_COV void test_da_shrink(void) {
 	da_destroy(&da);
 	assert(da_shrink(NULL) == false);
 }
-NO_COV void test_da_shrink_min(void) {
-	t_da da;
+NO_COV void test_cm_da_shrink_min(void) {
+	t_cm_da da;
 
 	da_init(&da, sizeof(int));
 	ASSERT_DA_STATE(da, sizeof(int), C_MINI__DA_NB_ELEM_DFLT, 0)

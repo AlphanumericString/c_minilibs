@@ -2,10 +2,10 @@
 
 #include "ill_tests.h"
 
-NO_COV void test_ill_remove_after(void) {
-	t_test_node n2, n3;
-	t_ill      *head = NULL;
-	t_ill      *rm_after;
+NO_COV void test_cm_ill_remove_after(void) {
+	t_cm_test_node n2, n3;
+	t_cm_ill      *head = NULL;
+	t_cm_ill      *rm_after;
 
 	INIT_NODE(n2, 42, 2);
 	INIT_NODE(n3, 43, 3);

@@ -6,7 +6,7 @@
  * \return A pointer to the last node in the list, or NULL if the list is empty.
  * \ingroup ill
 **/
-t_ill *ill_get_tail(t_ill *head) {
+t_cm_ill *ill_get_tail(t_cm_ill *head) {
 	if (!head) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return NULL;
@@ -14,5 +14,5 @@ t_ill *ill_get_tail(t_ill *head) {
 	while (head->next)
 		head = head->next;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
-	return (t_ill *)head;
+	return (t_cm_ill *)head;
 }

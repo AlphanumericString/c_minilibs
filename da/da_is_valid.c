@@ -6,7 +6,7 @@
  * \return true on success, false otherwise
  * \ingroup da
 **/
-bool da_is_valid(const t_da *da) {
+bool da_is_valid(const t_cm_da *da) {
 	return (da && da->array && da->sz_e && da->nb_e <= da->cap_e);
 }
 /**
@@ -16,7 +16,7 @@ bool da_is_valid(const t_da *da) {
  * \note return false if ANY field is zeroed out
  * \ingroup da
 **/
-bool da_is_not_null(const t_da *da) {
+bool da_is_not_null(const t_cm_da *da) {
 	return (da && da->array && da->cap_e && da->sz_e);
 }
 /**
@@ -25,7 +25,7 @@ bool da_is_not_null(const t_da *da) {
  * \return true on success, false otherwise
  * \ingroup da
 **/
-bool da_is_empty(const t_da *da) {
+bool da_is_empty(const t_cm_da *da) {
 	return (da && da->nb_e == 0);
 }
 /**
@@ -34,6 +34,6 @@ bool da_is_empty(const t_da *da) {
  * \return true on success, false otherwise
  * \ingroup da
 **/
-bool da_is_full(const t_da *da) {
+bool da_is_full(const t_cm_da *da) {
 	return (da_is_valid(da) && da->nb_e == da->cap_e);
 }

@@ -12,7 +12,8 @@
  * \return true on success, false if an element couldn't be duplicated
  * \ingroup rb
 **/
-bool rb_nmap(const t_rb *rb, size_t n, t_cm_duplicator dup, void **out_buff) {
+bool rb_nmap(const t_cm_rb *rb, size_t n, t_cm_duplicator dup,
+             void **out_buff) {
 	size_t      i = 0;
 	size_t      pos;
 	size_t      count;
@@ -55,7 +56,7 @@ bool rb_nmap(const t_rb *rb, size_t n, t_cm_duplicator dup, void **out_buff) {
  * \return true on success, false if an element couldn't be duplicated
  * \ingroup rb
 **/
-bool rb_map(const t_rb *rb, t_cm_duplicator dup, void **out_buff) {
+bool rb_map(const t_cm_rb *rb, t_cm_duplicator dup, void **out_buff) {
 	bool r;
 
 	if (!rb || !dup || !out_buff) {

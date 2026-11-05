@@ -14,18 +14,18 @@ pthread_key_t vtls_key;
 // TLDR: ignore coverage report, bug on cov report toolchain
 
 static void COV_IGNORE vtls_cleanup(void *a) {
-	t_vtls *vtls = a;
+	t_cm_vtls *vtls = a;
 
 	if (vtls->data) free(vtls->data);
 	free(vtls);
 }
 void COV_IGNORE __attribute__((destructor())) destroy_vtls_array(void) {
-	t_vtls *vtls = pthread_getspecific(vtls_key);
+	t_cm_vtls *vtls = pthread_getspecific(vtls_key);
 
 	if (vtls) vtls_cleanup(vtls);
 	pthread_key_delete(vtls_key);
 }
-void __attribute__((constructor())) init_vtls(void) {
+void __attribute__((constructor())) init_cm_vtls(void) {
 	pthread_key_create(&vtls_key, vtls_cleanup);
 }
 
@@ -36,7 +36,7 @@ void __attribute__((constructor())) init_vtls(void) {
  * \ingroup vtls
 **/
 bool vtls_dump(const char *v_name, int fd) {
-	const t_vtls *vtls = pthread_getspecific(vtls_key);
+	const t_cm_vtls *vtls = pthread_getspecific(vtls_key);
 
 	if (!v_name || fd < 0) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__VTLS_EARG);
@@ -63,7 +63,7 @@ bool vtls_dump(const char *v_name, int fd) {
  * \ingroup vtls
 **/
 ssize_t vtls_dump_all(int fd) {
-	const t_vtls *vtls = pthread_getspecific(vtls_key);
+	const t_cm_vtls *vtls = pthread_getspecific(vtls_key);
 
 	if (fd < 0) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__VTLS_EARG);

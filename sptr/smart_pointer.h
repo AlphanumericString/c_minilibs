@@ -57,7 +57,7 @@ typedef struct {
 	size_t rc;
 	size_t wc;
 #endif
-} t_fbox;
+} t_cm_fbox;
 
 /**
  * \brief generic box for pointer handling, coupling dtor and data
@@ -68,7 +68,7 @@ typedef struct {
 typedef struct {
 	void     *data;
 	t_cm_dtor dtor;
-} t_box;
+} t_cm_box;
 
 /**
  * \brief strong shared smart pointer
@@ -77,9 +77,9 @@ typedef struct {
  * \ingroup sptr
 **/
 typedef struct {
-	void   *data;
-	t_fbox *meta;
-} t_strong_ptr;
+	void      *data;
+	t_cm_fbox *meta;
+} t_cm_strong_ptr;
 
 /**
  * \brief owned shared smart pointer
@@ -88,11 +88,11 @@ typedef struct {
  * \param owner ownership boolean
  * \ingroup sptr
 **/
-typedef struct s_rsptr {
-	void   *data;
-	t_fbox *meta;
-	bool    owner;
-} t_owned_ptr;
+typedef struct s_cm_rsptr {
+	void      *data;
+	t_cm_fbox *meta;
+	bool       owner;
+} t_cm_owned_ptr;
 
 /**
  * \brief shared weak smart pointer
@@ -101,21 +101,23 @@ typedef struct s_rsptr {
  * \ingroup sptr
 **/
 typedef struct {
-	t_fbox *meta;
-} t_weak_ptr;
+	t_cm_fbox *meta;
+} t_cm_weak_ptr;
 
 /**
- * \brief re-define of t_box to dedicated t_uniq_ptr for clarity
+ * \brief re-define of t_cm_box to dedicated t_cm_uniq_ptr for clarity
  * \ingroup sptr
 **/
-typedef t_box t_uniq_ptr;
+typedef t_cm_box t_cm_uniq_ptr;
 
-t_strong_ptr sptr_make_shared_from_raw(void *raw_ptr, t_cm_dtor d);
-t_strong_ptr sptr_make_shared_from_weak(t_weak_ptr *weak_ptr, t_cm_dtor d);
-t_strong_ptr sptr_make_shared_from_strong(t_strong_ptr *strong_ptr,
-                                          t_cm_dtor     d);
-t_strong_ptr sptr_make_shared_from_owned(t_owned_ptr *owned, t_cm_dtor d);
-t_strong_ptr sptr_make_shared_from_uniq(t_uniq_ptr *uniq_ptr, t_cm_dtor d);
+t_cm_strong_ptr sptr_make_shared_from_raw(void *raw_ptr, t_cm_dtor d);
+t_cm_strong_ptr sptr_make_shared_from_weak(t_cm_weak_ptr *weak_ptr,
+                                           t_cm_dtor      d);
+t_cm_strong_ptr sptr_make_shared_from_strong(t_cm_strong_ptr *strong_ptr,
+                                             t_cm_dtor        d);
+t_cm_strong_ptr sptr_make_shared_from_owned(t_cm_owned_ptr *owned, t_cm_dtor d);
+t_cm_strong_ptr sptr_make_shared_from_uniq(t_cm_uniq_ptr *uniq_ptr,
+                                           t_cm_dtor      d);
 /**
  * \def sptr_make_shared(pointer, dtor)
  * \brief _generic macro to re-direct to sptr_make_shared*
@@ -127,14 +129,14 @@ t_strong_ptr sptr_make_shared_from_uniq(t_uniq_ptr *uniq_ptr, t_cm_dtor d);
 **/
 #define sptr_make_shared(pointer, dtor)                                        \
 	_Generic((pointer),                                                        \
-	    t_weak_ptr *: sptr_make_shared_from_weak,                              \
-	    t_strong_ptr *: sptr_make_shared_from_strong,                          \
-	    t_owned_ptr *: sptr_make_shared_from_owned,                            \
-	    t_uniq_ptr *: sptr_make_shared_from_uniq,                              \
+	    t_cm_weak_ptr *: sptr_make_shared_from_weak,                           \
+	    t_cm_strong_ptr *: sptr_make_shared_from_strong,                       \
+	    t_cm_owned_ptr *: sptr_make_shared_from_owned,                         \
+	    t_cm_uniq_ptr *: sptr_make_shared_from_uniq,                           \
 	    default: sptr_make_shared_from_raw)(pointer, dtor)
 
-t_weak_ptr sptr_make_weak_from_weak(t_weak_ptr *w);
-t_weak_ptr sptr_make_weak_from_strong(t_strong_ptr *s);
+t_cm_weak_ptr sptr_make_weak_from_weak(t_cm_weak_ptr *w);
+t_cm_weak_ptr sptr_make_weak_from_strong(t_cm_strong_ptr *s);
 /**
  * \def sptr_make_weak(pointer)
  * \brief _generic macro to re-direct to sptr_make_weak_from_*
@@ -145,55 +147,56 @@ t_weak_ptr sptr_make_weak_from_strong(t_strong_ptr *s);
 **/
 #define sptr_make_weak(pointer)                                                \
 	_Generic((pointer),                                                        \
-	    t_weak_ptr *: sptr_make_weak_from_weak,                                \
-	    t_strong_ptr *: sptr_make_weak_from_strong)(pointer)
+	    t_cm_weak_ptr *: sptr_make_weak_from_weak,                             \
+	    t_cm_strong_ptr *: sptr_make_weak_from_strong)(pointer)
 
-t_owned_ptr sptr_make_owned_from_raw(void *raw_ptr, t_cm_dtor d);
-t_owned_ptr sptr_make_owned_from_strong(t_strong_ptr *strong_ptr, t_cm_dtor d);
-t_owned_ptr sptr_make_owned_from_owned(t_owned_ptr *owned, t_cm_dtor d);
-t_owned_ptr sptr_make_owned_from_uniq(t_uniq_ptr *uniq_ptr, t_cm_dtor d);
+t_cm_owned_ptr sptr_make_owned_from_raw(void *raw_ptr, t_cm_dtor d);
+t_cm_owned_ptr sptr_make_owned_from_strong(t_cm_strong_ptr *strong_ptr,
+                                           t_cm_dtor        d);
+t_cm_owned_ptr sptr_make_owned_from_owned(t_cm_owned_ptr *owned, t_cm_dtor d);
+t_cm_owned_ptr sptr_make_owned_from_uniq(t_cm_uniq_ptr *uniq_ptr, t_cm_dtor d);
 /**
  * \def sptr_make_owned(pointer, dtor)
  * \brief _generic macro to re-direct to sptr_make_owned*
  * \param pointer pointer to wrap (raw pointer, strong ptr, or owned ptr)
  * \param dtor destructor callback to call when freeing pointer
- * \return owned pointer struct (t_owned_ptr)
+ * \return owned pointer struct (t_cm_owned_ptr)
  * \note for specifics, check the doc for sptr_make_owned_from_<type>
  * \ingroup sptr
 **/
 #define sptr_make_owned(pointer, dtor)                                         \
 	_Generic((pointer),                                                        \
-	    t_strong_ptr *: sptr_make_owned_from_strong,                           \
-	    t_owned_ptr *: sptr_make_owned_from_owned,                             \
-	    t_uniq_ptr *: sptr_make_owned_from_uniq,                               \
+	    t_cm_strong_ptr *: sptr_make_owned_from_strong,                        \
+	    t_cm_owned_ptr *: sptr_make_owned_from_owned,                          \
+	    t_cm_uniq_ptr *: sptr_make_owned_from_uniq,                            \
 	    default: sptr_make_owned_from_raw)(pointer, dtor)
 
-t_uniq_ptr sptr_make_uniq_from_raw(void *raw, t_cm_dtor d);
-t_uniq_ptr sptr_make_uniq_from_weak(const t_weak_ptr *wptr, t_cm_dtor d);
-t_uniq_ptr sptr_make_uniq_from_strong(t_strong_ptr *sptr, t_cm_dtor d);
-t_uniq_ptr sptr_make_uniq_from_owned(t_owned_ptr *optr, t_cm_dtor d);
-t_uniq_ptr sptr_make_uniq_from_uniq(t_uniq_ptr *uptr, t_cm_dtor d);
+t_cm_uniq_ptr sptr_make_uniq_from_raw(void *raw, t_cm_dtor d);
+t_cm_uniq_ptr sptr_make_uniq_from_weak(const t_cm_weak_ptr *wptr, t_cm_dtor d);
+t_cm_uniq_ptr sptr_make_uniq_from_strong(t_cm_strong_ptr *sptr, t_cm_dtor d);
+t_cm_uniq_ptr sptr_make_uniq_from_owned(t_cm_owned_ptr *optr, t_cm_dtor d);
+t_cm_uniq_ptr sptr_make_uniq_from_uniq(t_cm_uniq_ptr *uptr, t_cm_dtor d);
 /**
  * \def sptr_make_uniq(pointer, dtor)
  * \brief _generic macro to re-direct to sptr_make_uniq*
  * \param pointer pointer to wrap (raw pointer, strong ptr, or uniq ptr)
  * \param dtor destructor callback to call when freeing pointer
- * \return unique pointer struct (t_owned_ptr)
+ * \return unique pointer struct (t_cm_owned_ptr)
  * \note for specifics, check the doc for sptr_make_uniq_from_<type>
  * \ingroup sptr
 **/
 #define sptr_make_uniq(pointer, dtor)                                          \
 	_Generic((pointer),                                                        \
-	    t_weak_ptr *: sptr_make_uniq_from_weak,                                \
-	    t_strong_ptr *: sptr_make_uniq_from_strong,                            \
-	    t_owned_ptr *: sptr_make_uniq_from_owned,                              \
-	    t_uniq_ptr *: sptr_make_uniq_from_uniq,                                \
+	    t_cm_weak_ptr *: sptr_make_uniq_from_weak,                             \
+	    t_cm_strong_ptr *: sptr_make_uniq_from_strong,                         \
+	    t_cm_owned_ptr *: sptr_make_uniq_from_owned,                           \
+	    t_cm_uniq_ptr *: sptr_make_uniq_from_uniq,                             \
 	    default: sptr_make_uniq_from_raw)(pointer, dtor)
 
-bool sptr_is_uniqs(const t_strong_ptr *strong_ptr);
-bool sptr_is_uniqw(const t_weak_ptr *weak_ptr);
-bool sptr_is_uniqo(const t_owned_ptr *owned_ptr);
-bool sptr_is_uniqu(const t_uniq_ptr *u);
+bool sptr_is_uniqs(const t_cm_strong_ptr *strong_ptr);
+bool sptr_is_uniqw(const t_cm_weak_ptr *weak_ptr);
+bool sptr_is_uniqo(const t_cm_owned_ptr *owned_ptr);
+bool sptr_is_uniqu(const t_cm_uniq_ptr *u);
 /**
  * \def sptr_is_uniq(pointer)
  * \brief _generic macro to re-direct to sptr_is_uniq*
@@ -204,19 +207,19 @@ bool sptr_is_uniqu(const t_uniq_ptr *u);
 **/
 #define sptr_is_uniq(pointer)                                                  \
 	_Generic((pointer),                                                        \
-	    t_weak_ptr *: sptr_is_uniqw,                                           \
-	    t_strong_ptr *: sptr_is_uniqs,                                         \
-	    t_uniq_ptr *: sptr_is_uniqu,                                           \
-	    t_owned_ptr *: sptr_is_uniqo,                                          \
-	    const t_weak_ptr *: sptr_is_uniqw,                                     \
-	    const t_strong_ptr *: sptr_is_uniqs,                                   \
-	    const t_uniq_ptr *: sptr_is_uniqu,                                     \
-	    const t_owned_ptr *: sptr_is_uniqo)(pointer)
+	    t_cm_weak_ptr *: sptr_is_uniqw,                                        \
+	    t_cm_strong_ptr *: sptr_is_uniqs,                                      \
+	    t_cm_uniq_ptr *: sptr_is_uniqu,                                        \
+	    t_cm_owned_ptr *: sptr_is_uniqo,                                       \
+	    const t_cm_weak_ptr *: sptr_is_uniqw,                                  \
+	    const t_cm_strong_ptr *: sptr_is_uniqs,                                \
+	    const t_cm_uniq_ptr *: sptr_is_uniqu,                                  \
+	    const t_cm_owned_ptr *: sptr_is_uniqo)(pointer)
 
-bool sptr_is_shareds(const t_strong_ptr *smart_ptr);
-bool sptr_is_sharedw(const t_weak_ptr *weak_ptr);
-bool sptr_is_sharedo(const t_owned_ptr *owned_ptr);
-bool sptr_is_sharedu(const t_uniq_ptr *u);
+bool sptr_is_shareds(const t_cm_strong_ptr *smart_ptr);
+bool sptr_is_sharedw(const t_cm_weak_ptr *weak_ptr);
+bool sptr_is_sharedo(const t_cm_owned_ptr *owned_ptr);
+bool sptr_is_sharedu(const t_cm_uniq_ptr *u);
 /**
  * \def sptr_is_shared(pointer)
  * \brief _generic macro to re-direct to sptr_is_shared*
@@ -228,19 +231,19 @@ bool sptr_is_sharedu(const t_uniq_ptr *u);
 **/
 #define sptr_is_shared(pointer)                                                \
 	_Generic((pointer),                                                        \
-	    t_weak_ptr *: sptr_is_sharedw,                                         \
-	    t_strong_ptr *: sptr_is_shareds,                                       \
-	    t_uniq_ptr *: sptr_is_sharedu,                                         \
-	    t_owned_ptr *: sptr_is_sharedo,                                        \
-	    const t_weak_ptr *: sptr_is_sharedw,                                   \
-	    const t_strong_ptr *: sptr_is_shareds,                                 \
-	    const t_uniq_ptr *: sptr_is_sharedu,                                   \
-	    const t_owned_ptr *: sptr_is_sharedo)(pointer)
+	    t_cm_weak_ptr *: sptr_is_sharedw,                                      \
+	    t_cm_strong_ptr *: sptr_is_shareds,                                    \
+	    t_cm_uniq_ptr *: sptr_is_sharedu,                                      \
+	    t_cm_owned_ptr *: sptr_is_sharedo,                                     \
+	    const t_cm_weak_ptr *: sptr_is_sharedw,                                \
+	    const t_cm_strong_ptr *: sptr_is_shareds,                              \
+	    const t_cm_uniq_ptr *: sptr_is_sharedu,                                \
+	    const t_cm_owned_ptr *: sptr_is_sharedo)(pointer)
 
-bool sptr_deletes(t_strong_ptr *strong_ptr);
-bool sptr_deletew(t_weak_ptr *weak_ptr);
-bool sptr_deleteo(t_owned_ptr *owned_ptr);
-bool sptr_deleteu(t_uniq_ptr *u);
+bool sptr_deletes(t_cm_strong_ptr *strong_ptr);
+bool sptr_deletew(t_cm_weak_ptr *weak_ptr);
+bool sptr_deleteo(t_cm_owned_ptr *owned_ptr);
+bool sptr_deleteu(t_cm_uniq_ptr *u);
 /**
  * \def sptr_delete(pointer)
  * \brief _generic macro to re-direct to sptr_delete*
@@ -252,21 +255,21 @@ bool sptr_deleteu(t_uniq_ptr *u);
 **/
 #define sptr_delete(pointer)                                                   \
 	_Generic((pointer),                                                        \
-	    t_weak_ptr *: sptr_deletew,                                            \
-	    t_strong_ptr *: sptr_deletes,                                          \
-	    t_uniq_ptr *: sptr_deleteu,                                            \
-	    t_owned_ptr *: sptr_deleteo)(pointer)
+	    t_cm_weak_ptr *: sptr_deletew,                                         \
+	    t_cm_strong_ptr *: sptr_deletes,                                       \
+	    t_cm_uniq_ptr *: sptr_deleteu,                                         \
+	    t_cm_owned_ptr *: sptr_deleteo)(pointer)
 
 // Const get
-const void *sptr_getsc(const t_strong_ptr *sptr);
-const void *sptr_getwc(const t_weak_ptr *sptr);
-const void *sptr_getoc(const t_owned_ptr *sptr);
-const void *sptr_getuc(const t_uniq_ptr *u);
+const void *sptr_getsc(const t_cm_strong_ptr *sptr);
+const void *sptr_getwc(const t_cm_weak_ptr *sptr);
+const void *sptr_getoc(const t_cm_owned_ptr *sptr);
+const void *sptr_getuc(const t_cm_uniq_ptr *u);
 // non-const get
-void       *sptr_gets(t_strong_ptr *sptr);
-void       *sptr_getw(t_weak_ptr *sptr);
-void       *sptr_geto(t_owned_ptr *sptr);
-void       *sptr_getu(t_uniq_ptr *u);
+void       *sptr_gets(t_cm_strong_ptr *sptr);
+void       *sptr_getw(t_cm_weak_ptr *sptr);
+void       *sptr_geto(t_cm_owned_ptr *sptr);
+void       *sptr_getu(t_cm_uniq_ptr *u);
 /**
  * \def sptr_get(pointer)
  * \brief _generic macro to re-direct to sptr_get*
@@ -277,19 +280,19 @@ void       *sptr_getu(t_uniq_ptr *u);
 **/
 #define sptr_get(pointer)                                                      \
 	_Generic((pointer),                                                        \
-	    t_weak_ptr *: sptr_getw,                                               \
-	    t_strong_ptr *: sptr_gets,                                             \
-	    t_owned_ptr *: sptr_geto,                                              \
-	    t_uniq_ptr *: sptr_getu,                                               \
-	    const t_weak_ptr *: sptr_getwc,                                        \
-	    const t_strong_ptr *: sptr_getsc,                                      \
-	    const t_owned_ptr *: sptr_getoc,                                       \
-	    const t_uniq_ptr *: sptr_getuc)(pointer)
+	    t_cm_weak_ptr *: sptr_getw,                                            \
+	    t_cm_strong_ptr *: sptr_gets,                                          \
+	    t_cm_owned_ptr *: sptr_geto,                                           \
+	    t_cm_uniq_ptr *: sptr_getu,                                            \
+	    const t_cm_weak_ptr *: sptr_getwc,                                     \
+	    const t_cm_strong_ptr *: sptr_getsc,                                   \
+	    const t_cm_owned_ptr *: sptr_getoc,                                    \
+	    const t_cm_uniq_ptr *: sptr_getuc)(pointer)
 
-size_t sptr_get_strongcount_s(const t_strong_ptr *sptr);
-size_t sptr_get_strongcount_w(const t_weak_ptr *wptr);
-size_t sptr_get_strongcount_o(const t_owned_ptr *optr);
-size_t sptr_get_strongcount_u(const t_uniq_ptr *uptr);
+size_t sptr_get_strongcount_s(const t_cm_strong_ptr *sptr);
+size_t sptr_get_strongcount_w(const t_cm_weak_ptr *wptr);
+size_t sptr_get_strongcount_o(const t_cm_owned_ptr *optr);
+size_t sptr_get_strongcount_u(const t_cm_uniq_ptr *uptr);
 /**
  * \def sptr_get_rc(pointer)
  * \brief _generic macro to re-direct to sptr_get_strongcount_*
@@ -300,19 +303,19 @@ size_t sptr_get_strongcount_u(const t_uniq_ptr *uptr);
 **/
 #define sptr_get_rc(pointer)                                                   \
 	_Generic((pointer),                                                        \
-	    t_weak_ptr *: sptr_get_strongcount_w,                                  \
-	    t_strong_ptr *: sptr_get_strongcount_s,                                \
-	    t_uniq_ptr *: sptr_get_strongcount_u,                                  \
-	    t_owned_ptr *: sptr_get_strongcount_o,                                 \
-	    const t_weak_ptr *: sptr_get_strongcount_w,                            \
-	    const t_strong_ptr *: sptr_get_strongcount_s,                          \
-	    const t_uniq_ptr *: sptr_get_strongcount_u,                            \
-	    const t_owned_ptr *: sptr_get_strongcount_o)(pointer)
+	    t_cm_weak_ptr *: sptr_get_strongcount_w,                               \
+	    t_cm_strong_ptr *: sptr_get_strongcount_s,                             \
+	    t_cm_uniq_ptr *: sptr_get_strongcount_u,                               \
+	    t_cm_owned_ptr *: sptr_get_strongcount_o,                              \
+	    const t_cm_weak_ptr *: sptr_get_strongcount_w,                         \
+	    const t_cm_strong_ptr *: sptr_get_strongcount_s,                       \
+	    const t_cm_uniq_ptr *: sptr_get_strongcount_u,                         \
+	    const t_cm_owned_ptr *: sptr_get_strongcount_o)(pointer)
 
-size_t sptr_get_weakcount_s(const t_strong_ptr *sptr);
-size_t sptr_get_weakcount_w(const t_weak_ptr *wptr);
-size_t sptr_get_weakcount_o(const t_owned_ptr *optr);
-size_t sptr_get_weakcount_u(const t_uniq_ptr *uptr);
+size_t sptr_get_weakcount_s(const t_cm_strong_ptr *sptr);
+size_t sptr_get_weakcount_w(const t_cm_weak_ptr *wptr);
+size_t sptr_get_weakcount_o(const t_cm_owned_ptr *optr);
+size_t sptr_get_weakcount_u(const t_cm_uniq_ptr *uptr);
 /**
  * \def sptr_get_wc(pointer)
  * \brief _generic macro to re-direct to sptr_get_weakcount_*
@@ -323,19 +326,19 @@ size_t sptr_get_weakcount_u(const t_uniq_ptr *uptr);
 **/
 #define sptr_get_wc(pointer)                                                   \
 	_Generic((pointer),                                                        \
-	    t_weak_ptr *: sptr_get_weakcount_w,                                    \
-	    t_strong_ptr *: sptr_get_weakcount_s,                                  \
-	    t_uniq_ptr *: sptr_get_weakcount_u,                                    \
-	    t_owned_ptr *: sptr_get_weakcount_o,                                   \
-	    const t_weak_ptr *: sptr_get_weakcount_w,                              \
-	    const t_strong_ptr *: sptr_get_weakcount_s,                            \
-	    const t_uniq_ptr *: sptr_get_weakcount_u,                              \
-	    const t_owned_ptr *: sptr_get_weakcount_o)(pointer)
+	    t_cm_weak_ptr *: sptr_get_weakcount_w,                                 \
+	    t_cm_strong_ptr *: sptr_get_weakcount_s,                               \
+	    t_cm_uniq_ptr *: sptr_get_weakcount_u,                                 \
+	    t_cm_owned_ptr *: sptr_get_weakcount_o,                                \
+	    const t_cm_weak_ptr *: sptr_get_weakcount_w,                           \
+	    const t_cm_strong_ptr *: sptr_get_weakcount_s,                         \
+	    const t_cm_uniq_ptr *: sptr_get_weakcount_u,                           \
+	    const t_cm_owned_ptr *: sptr_get_weakcount_o)(pointer)
 
-t_cm_dtor sptr_get_dtors(const t_strong_ptr *ptr);
-t_cm_dtor sptr_get_dtorw(const t_weak_ptr *ptr);
-t_cm_dtor sptr_get_dtoro(const t_owned_ptr *ptr);
-t_cm_dtor sptr_get_dtoru(const t_uniq_ptr *ptr);
+t_cm_dtor sptr_get_dtors(const t_cm_strong_ptr *ptr);
+t_cm_dtor sptr_get_dtorw(const t_cm_weak_ptr *ptr);
+t_cm_dtor sptr_get_dtoro(const t_cm_owned_ptr *ptr);
+t_cm_dtor sptr_get_dtoru(const t_cm_uniq_ptr *ptr);
 /**
  * \def sptr_get_dtor(pointer)
  * \brief _generic macro to re-direct to sptr_get_dtor*
@@ -346,19 +349,19 @@ t_cm_dtor sptr_get_dtoru(const t_uniq_ptr *ptr);
 **/
 #define sptr_get_dtor(pointer)                                                 \
 	_Generic((pointer),                                                        \
-	    t_weak_ptr *: sptr_get_dtorw,                                          \
-	    t_strong_ptr *: sptr_get_dtors,                                        \
-	    t_uniq_ptr *: sptr_get_dtoru,                                          \
-	    t_owned_ptr *: sptr_get_dtoro,                                         \
-	    const t_weak_ptr *: sptr_get_dtorw,                                    \
-	    const t_strong_ptr *: sptr_get_dtors,                                  \
-	    const t_uniq_ptr *: sptr_get_dtoru,                                    \
-	    const t_owned_ptr *: sptr_get_dtoro)(pointer)
+	    t_cm_weak_ptr *: sptr_get_dtorw,                                       \
+	    t_cm_strong_ptr *: sptr_get_dtors,                                     \
+	    t_cm_uniq_ptr *: sptr_get_dtoru,                                       \
+	    t_cm_owned_ptr *: sptr_get_dtoro,                                      \
+	    const t_cm_weak_ptr *: sptr_get_dtorw,                                 \
+	    const t_cm_strong_ptr *: sptr_get_dtors,                               \
+	    const t_cm_uniq_ptr *: sptr_get_dtoru,                                 \
+	    const t_cm_owned_ptr *: sptr_get_dtoro)(pointer)
 
-bool sptr_set_dtors(t_strong_ptr *ptr, t_cm_dtor dtor);
-bool sptr_set_dtorw(t_weak_ptr *ptr, t_cm_dtor dtor);
-bool sptr_set_dtoro(t_owned_ptr *ptr, t_cm_dtor dtor);
-bool sptr_set_dtoru(t_uniq_ptr *ptr, t_cm_dtor dtor);
+bool sptr_set_dtors(t_cm_strong_ptr *ptr, t_cm_dtor dtor);
+bool sptr_set_dtorw(t_cm_weak_ptr *ptr, t_cm_dtor dtor);
+bool sptr_set_dtoro(t_cm_owned_ptr *ptr, t_cm_dtor dtor);
+bool sptr_set_dtoru(t_cm_uniq_ptr *ptr, t_cm_dtor dtor);
 /**
  * \def sptr_set_dtor(pointer, dtor)
  * \brief _generic macro to re-direct to sptr_set_dtor*
@@ -370,34 +373,34 @@ bool sptr_set_dtoru(t_uniq_ptr *ptr, t_cm_dtor dtor);
 **/
 #define sptr_set_dtor(pointer, dtor)                                           \
 	_Generic((pointer),                                                        \
-	    t_weak_ptr *: sptr_set_dtorw,                                          \
-	    t_strong_ptr *: sptr_set_dtors,                                        \
-	    t_uniq_ptr *: sptr_set_dtoru,                                          \
-	    t_owned_ptr *: sptr_set_dtoro)(pointer, dtor)
+	    t_cm_weak_ptr *: sptr_set_dtorw,                                       \
+	    t_cm_strong_ptr *: sptr_set_dtors,                                     \
+	    t_cm_uniq_ptr *: sptr_set_dtoru,                                       \
+	    t_cm_owned_ptr *: sptr_set_dtoro)(pointer, dtor)
 
-t_strong_ptr *sptr_copys(t_strong_ptr *sptr);
-t_weak_ptr   *sptr_copyw(t_weak_ptr *weak_ptr);
-t_owned_ptr   sptr_copyo(t_owned_ptr *owned_ptr);
-t_uniq_ptr    sptr_copyu(t_uniq_ptr *ptr);
+t_cm_strong_ptr *sptr_copys(t_cm_strong_ptr *sptr);
+t_cm_weak_ptr   *sptr_copyw(t_cm_weak_ptr *weak_ptr);
+t_cm_owned_ptr   sptr_copyo(t_cm_owned_ptr *owned_ptr);
+t_cm_uniq_ptr    sptr_copyu(t_cm_uniq_ptr *ptr);
 /**
  * \def sptr_copy(pointer)
  * \brief _generic macro to re-direct to sptr_copy*
  * \param pointer smart pointer to copy
- * \return copied smart pointer (or empty t_owned_ptr on error)
+ * \return copied smart pointer (or empty t_cm_owned_ptr on error)
  * \note for specifics, check the doc for sptr_copy<type's letter>
  * \ingroup sptr
 **/
 #define sptr_copy(pointer)                                                     \
 	_Generic((pointer),                                                        \
-	    t_weak_ptr *: sptr_copyw,                                              \
-	    t_strong_ptr *: sptr_copys,                                            \
-	    t_uniq_ptr *: sptr_copyu,                                              \
-	    t_owned_ptr *: sptr_copyo)(pointer)
+	    t_cm_weak_ptr *: sptr_copyw,                                           \
+	    t_cm_strong_ptr *: sptr_copys,                                         \
+	    t_cm_uniq_ptr *: sptr_copyu,                                           \
+	    t_cm_owned_ptr *: sptr_copyo)(pointer)
 
-bool sptr_dumps(int fd, const t_strong_ptr *ptr);
-bool sptr_dumpw(int fd, const t_weak_ptr *ptr);
-bool sptr_dumpo(int fd, const t_owned_ptr *ptr);
-bool sptr_dumpu(int fd, const t_uniq_ptr *ptr);
+bool sptr_dumps(int fd, const t_cm_strong_ptr *ptr);
+bool sptr_dumpw(int fd, const t_cm_weak_ptr *ptr);
+bool sptr_dumpo(int fd, const t_cm_owned_ptr *ptr);
+bool sptr_dumpu(int fd, const t_cm_uniq_ptr *ptr);
 /**
  * \def sptr_dump(fd, pointer)
  * \brief _generic macro to re-direct to sptr_dump*
@@ -409,19 +412,19 @@ bool sptr_dumpu(int fd, const t_uniq_ptr *ptr);
 **/
 #define sptr_dump(fd, pointer)                                                 \
 	_Generic((pointer),                                                        \
-	    t_weak_ptr *: sptr_dumpw,                                              \
-	    t_strong_ptr *: sptr_dumps,                                            \
-	    t_uniq_ptr *: sptr_dumpu,                                              \
-	    t_owned_ptr *: sptr_dumpo,                                             \
-	    const t_weak_ptr *: sptr_dumpw,                                        \
-	    const t_strong_ptr *: sptr_dumps,                                      \
-	    const t_uniq_ptr *: sptr_dumpu,                                        \
-	    const t_owned_ptr *: sptr_dumpo)(fd, pointer)
+	    t_cm_weak_ptr *: sptr_dumpw,                                           \
+	    t_cm_strong_ptr *: sptr_dumps,                                         \
+	    t_cm_uniq_ptr *: sptr_dumpu,                                           \
+	    t_cm_owned_ptr *: sptr_dumpo,                                          \
+	    const t_cm_weak_ptr *: sptr_dumpw,                                     \
+	    const t_cm_strong_ptr *: sptr_dumps,                                   \
+	    const t_cm_uniq_ptr *: sptr_dumpu,                                     \
+	    const t_cm_owned_ptr *: sptr_dumpo)(fd, pointer)
 
-char *sptr_to_strings(const t_strong_ptr *sptr);
-char *sptr_to_stringw(const t_weak_ptr *sptr);
-char *sptr_to_stringo(const t_owned_ptr *sptr);
-char *sptr_to_stringu(const t_uniq_ptr *sptr);
+char *sptr_to_strings(const t_cm_strong_ptr *sptr);
+char *sptr_to_stringw(const t_cm_weak_ptr *sptr);
+char *sptr_to_stringo(const t_cm_owned_ptr *sptr);
+char *sptr_to_stringu(const t_cm_uniq_ptr *sptr);
 /**
  * \brief turns a smart pointer to a string
  * \param pointer the smart pointer to turn to a string
@@ -431,38 +434,38 @@ char *sptr_to_stringu(const t_uniq_ptr *sptr);
 **/
 #define sptr_to_string(pointer)                                                \
 	_Generic((pointer),                                                        \
-	    t_weak_ptr *: sptr_to_stringw,                                         \
-	    t_strong_ptr *: sptr_to_strings,                                       \
-	    t_uniq_ptr *: sptr_to_stringu,                                         \
-	    t_owned_ptr *: sptr_to_stringo,                                        \
-	    const t_weak_ptr *: sptr_to_stringw,                                   \
-	    const t_strong_ptr *: sptr_to_strings,                                 \
-	    const t_uniq_ptr *: sptr_to_stringu,                                   \
-	    const t_owned_ptr *: sptr_to_stringo)(pointer)
+	    t_cm_weak_ptr *: sptr_to_stringw,                                      \
+	    t_cm_strong_ptr *: sptr_to_strings,                                    \
+	    t_cm_uniq_ptr *: sptr_to_stringu,                                      \
+	    t_cm_owned_ptr *: sptr_to_stringo,                                     \
+	    const t_cm_weak_ptr *: sptr_to_stringw,                                \
+	    const t_cm_strong_ptr *: sptr_to_strings,                              \
+	    const t_cm_uniq_ptr *: sptr_to_stringu,                                \
+	    const t_cm_owned_ptr *: sptr_to_stringo)(pointer)
 
 // -- non generic functions
 
-t_strong_ptr sptr_into_strong(t_weak_ptr *sptr);
-t_weak_ptr   sptr_into_weak(t_strong_ptr *sptr);
-bool         sptr_transfer_ownership(t_owned_ptr *to, t_owned_ptr *from);
-bool         sptr_move_ownership(t_owned_ptr *to, t_owned_ptr *from);
-t_uniq_ptr  *sptr_uniq_yield(t_uniq_ptr *dst, t_uniq_ptr *from);
-bool         sptr_uniq_swap(t_uniq_ptr *sw1, t_uniq_ptr *sw2);
+t_cm_strong_ptr sptr_into_strong(t_cm_weak_ptr *sptr);
+t_cm_weak_ptr   sptr_into_weak(t_cm_strong_ptr *sptr);
+bool sptr_transfer_ownership(t_cm_owned_ptr *to, t_cm_owned_ptr *from);
+bool sptr_move_ownership(t_cm_owned_ptr *to, t_cm_owned_ptr *from);
+t_cm_uniq_ptr *sptr_uniq_yield(t_cm_uniq_ptr *dst, t_cm_uniq_ptr *from);
+bool           sptr_uniq_swap(t_cm_uniq_ptr *sw1, t_cm_uniq_ptr *sw2);
 
 // -- fbox functions
-size_t  sptr_fb_get_count(const t_fbox *f);
-bool    sptr_fb_increment(t_fbox *f);
-bool    sptr_fb_decrement(t_fbox *f);
-bool    sptr_fb_get_data(const t_fbox *f);
-t_fbox *sptr_fb_init(t_fbox *f, void *d, t_cm_dtor dt);
-t_fbox *sptr_fb_new(void *d, t_cm_dtor dt);
+size_t     sptr_fb_get_count(const t_cm_fbox *f);
+bool       sptr_fb_increment(t_cm_fbox *f);
+bool       sptr_fb_decrement(t_cm_fbox *f);
+bool       sptr_fb_get_cm_data(const t_cm_fbox *f);
+t_cm_fbox *sptr_fb_init(t_cm_fbox *f, void *d, t_cm_dtor dt);
+t_cm_fbox *sptr_fb_new(void *d, t_cm_dtor dt);
 
 #ifdef C_MINI__SPTR_INTERNAL
 
-bool sptri_is_sole_box_owns(const t_strong_ptr *ptr);
-bool sptri_is_sole_box_ownw(const t_weak_ptr *ptr);
-bool sptri_is_sole_box_owno(const t_owned_ptr *ptr);
-bool sptri_is_sole_box_ownu(const t_uniq_ptr *u);
+bool sptri_is_sole_box_owns(const t_cm_strong_ptr *ptr);
+bool sptri_is_sole_box_ownw(const t_cm_weak_ptr *ptr);
+bool sptri_is_sole_box_owno(const t_cm_owned_ptr *ptr);
+bool sptri_is_sole_box_ownu(const t_cm_uniq_ptr *u);
 /**
  * \def sptr_is_sole_box_owner(pointer)
  * \brief _generic macro to re-direct to sptr_is_sole_box_own*
@@ -474,14 +477,14 @@ bool sptri_is_sole_box_ownu(const t_uniq_ptr *u);
 **/
 #	define sptr_is_sole_box_owner(pointer)                                    \
 		_Generic((pointer),                                                    \
-		    t_weak_ptr *: sptri_is_sole_box_ownw,                              \
-		    t_strong_ptr *: sptri_is_sole_box_owns,                            \
-		    t_uniq_ptr *: sptri_is_sole_box_ownu,                              \
-		    t_owned_ptr *: sptri_is_sole_box_owno,                             \
-		    const t_weak_ptr *: sptri_is_sole_box_ownw,                        \
-		    const t_strong_ptr *: sptri_is_sole_box_owns,                      \
-		    const t_uniq_ptr *: sptri_is_sole_box_ownu,                        \
-		    const t_owned_ptr *: sptri_is_sole_box_owno)(pointer)
+		    t_cm_weak_ptr *: sptri_is_sole_box_ownw,                           \
+		    t_cm_strong_ptr *: sptri_is_sole_box_owns,                         \
+		    t_cm_uniq_ptr *: sptri_is_sole_box_ownu,                           \
+		    t_cm_owned_ptr *: sptri_is_sole_box_owno,                          \
+		    const t_cm_weak_ptr *: sptri_is_sole_box_ownw,                     \
+		    const t_cm_strong_ptr *: sptri_is_sole_box_owns,                   \
+		    const t_cm_uniq_ptr *: sptri_is_sole_box_ownu,                     \
+		    const t_cm_owned_ptr *: sptri_is_sole_box_owno)(pointer)
 
 // defined functions documentation here due to multiple [wr]c_[inc|dec|get]
 //		implementation for atomic and non-atomic and other variations of rc/wc
@@ -492,14 +495,14 @@ bool sptri_is_sole_box_ownu(const t_uniq_ptr *u);
  * \note variation exists for : base size_t, atomic size_t
  * \ingroup sptr
 **/
-void sptri_rc_inc(t_fbox *b);
+void sptri_rc_inc(t_cm_fbox *b);
 /**
  * \brief decrease the strong count (rc) of a meta info box
  * \param b the box to decrease the strong count (rc) of
  * \note variation exists for : base size_t, atomic size_t
  * \ingroup sptr
 **/
-void sptri_rc_dec(t_fbox *b);
+void sptri_rc_dec(t_cm_fbox *b);
 
 /**
  * \brief increase the weak count (wc) of a meta info box
@@ -507,14 +510,14 @@ void sptri_rc_dec(t_fbox *b);
  * \note variation exists for : base size_t, atomic size_t
  * \ingroup sptr
 **/
-void sptri_wc_inc(t_fbox *b);
+void sptri_wc_inc(t_cm_fbox *b);
 /**
  * \brief decrease the weak count (wc) of a meta info box
  * \param b the box to decrease the weak count (wc) of
  * \note variation exists for : base size_t, atomic size_t
  * \ingroup sptr
 **/
-void sptri_wc_dec(t_fbox *b);
+void sptri_wc_dec(t_cm_fbox *b);
 
 /**
  * \brief get the strong count (rc) of a meta info box
@@ -523,7 +526,7 @@ void sptri_wc_dec(t_fbox *b);
  * \note variation exists for : base size_t, atomic size_t
  * \ingroup sptr
 **/
-size_t sptri_rc_get(const t_fbox *b);
+size_t sptri_rc_get(const t_cm_fbox *b);
 /**
  * \brief get the weak count (wc) of a meta info box
  * \param b the box to get the weak count (wc) of
@@ -531,7 +534,7 @@ size_t sptri_rc_get(const t_fbox *b);
  * \note variation exists for : base size_t, atomic size_t
  * \ingroup sptr
 **/
-size_t sptri_wc_get(const t_fbox *b);
+size_t sptri_wc_get(const t_cm_fbox *b);
 
 #endif // !C_MINI__SPTR_INTERNAL
 
@@ -541,27 +544,27 @@ size_t sptri_wc_get(const t_fbox *b);
  * out of scope
  * \ingroup sptr
 **/
-#define auto_strong __attribute__((cleanup(sptr_deletes))) t_strong_ptr
+#define auto_strong __attribute__((cleanup(sptr_deletes))) t_cm_strong_ptr
 /**
  * \def auto_weak
  * \brief shortcut to declare an auto deleted weak pointer when variable goes
  * out of scope
  * \ingroup sptr
 **/
-#define auto_weak   __attribute__((cleanup(sptr_deletew))) t_weak_ptr
+#define auto_weak   __attribute__((cleanup(sptr_deletew))) t_cm_weak_ptr
 /**
  * \def auto_owned
  * \brief shortcut to declare an auto deleted owned pointer when variable goes
  * out of scope
  * \ingroup sptr
 **/
-#define auto_owned  __attribute__((cleanup(sptr_deleteo))) t_owned_ptr
+#define auto_owned  __attribute__((cleanup(sptr_deleteo))) t_cm_owned_ptr
 /**
  * \def auto_uniq
  * \brief shortcut to declare an auto deleted unique pointer when variable goes
  * out of scope
  * \ingroup sptr
 **/
-#define auto_uniq   __attribute__((cleanup(sptr_deleteu))) t_uniq_ptr
+#define auto_uniq   __attribute__((cleanup(sptr_deleteu))) t_cm_uniq_ptr
 
 #endif //! C_MINI__SPTR

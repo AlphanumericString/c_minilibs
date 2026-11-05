@@ -8,7 +8,7 @@
  * \ingroup ctls
 **/
 bool ctls_has(const char *s) {
-	const t_ctlsv *ctls = pthread_getspecific(ctls_key);
+	const t_cm_ctlsv *ctls = pthread_getspecific(ctls_key);
 
 	if (!ctls) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CTLS_FAILLURE);

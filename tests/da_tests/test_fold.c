@@ -3,9 +3,9 @@
 
 #include "da_tests.h"
 
-NO_COV void test_da_fold(void) {
-	int  sum = 0;
-	t_da da  = {
+NO_COV void test_cm_da_fold(void) {
+	int     sum = 0;
+	t_cm_da da  = {
 	     .array = (void *)arr_5,
 	     .cap_e = 5,
 	     .nb_e  = 1,
@@ -22,8 +22,8 @@ NO_COV void test_da_fold(void) {
 	assert(da_fold(&da, cb_merger, NULL) == NULL);
 	assert(da_fold(&da, NULL, &sum) == NULL);
 }
-NO_COV void test_da_nfold(void) {
-	t_da da = {
+NO_COV void test_cm_da_nfold(void) {
+	t_cm_da da = {
 	    .array = (void *)arr_5,
 	    .cap_e = 5,
 	    .nb_e  = 5,
@@ -46,9 +46,9 @@ NO_COV void test_da_nfold(void) {
 	assert(da_nfold(&da, -1, NULL, &sum) == NULL);
 	assert(da_nfold(&da, -1, cb_merger, NULL) == NULL);
 }
-NO_COV void test_da_reduce(void) {
-	int *res;
-	t_da da = {
+NO_COV void test_cm_da_reduce(void) {
+	int    *res;
+	t_cm_da da = {
 	    .array = (void *)arr_5,
 	    .cap_e = 5,
 	    .nb_e  = 1,
@@ -70,9 +70,9 @@ NO_COV void test_da_reduce(void) {
 	assert(da_reduce(NULL, cb_merger) == NULL);
 	assert(da_reduce(&da, NULL) == NULL);
 }
-NO_COV void test_da_nreduce(void) {
-	int *res;
-	t_da da = {
+NO_COV void test_cm_da_nreduce(void) {
+	int    *res;
+	t_cm_da da = {
 	    .array = (void *)arr_5,
 	    .cap_e = 5,
 	    .nb_e  = 5,

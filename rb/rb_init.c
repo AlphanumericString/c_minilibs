@@ -11,7 +11,7 @@
  * \return the populated round buffer or NULL on failure
  * \ingroup rb
 **/
-t_rb *rb_create(t_rb *rb, size_t sz_elem, size_t nb_e) {
+t_cm_rb *rb_create(t_cm_rb *rb, size_t sz_elem, size_t nb_e) {
 	if (!rb || !sz_elem || !nb_e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return (NULL);
@@ -37,8 +37,8 @@ t_rb *rb_create(t_rb *rb, size_t sz_elem, size_t nb_e) {
  * \return the populated round buffer or NULL on failure
  * \ingroup rb
 **/
-t_rb *rb_init(t_rb *rb, size_t sz_elem) {
-	t_rb *ret;
+t_cm_rb *rb_init(t_cm_rb *rb, size_t sz_elem) {
+	t_cm_rb *ret;
 
 	ret = rb_create(rb, sz_elem, C_MINI__RB_NBE_DFLT);
 	if (!ret) {
@@ -57,7 +57,8 @@ t_rb *rb_init(t_rb *rb, size_t sz_elem) {
  * \return the populated round buffer
  * \ingroup rb
 **/
-t_rb *rb_from_array(t_rb *rb, void *array, size_t arr_cap, size_t sz_elem) {
+t_cm_rb *rb_from_array(t_cm_rb *rb, void *array, size_t arr_cap,
+                       size_t sz_elem) {
 	if (!rb || !array || !arr_cap || !sz_elem) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return (NULL);
@@ -80,14 +81,14 @@ t_rb *rb_from_array(t_rb *rb, void *array, size_t arr_cap, size_t sz_elem) {
  * \return the newly allocated round buffer or NULL on failure
  * \ingroup rb
 **/
-t_rb *rb_new(size_t sz_elem) {
-	t_rb *ret;
+t_cm_rb *rb_new(size_t sz_elem) {
+	t_cm_rb *ret;
 
 	if (!sz_elem) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return (NULL);
 	}
-	ret = malloc(sizeof(t_rb));
+	ret = malloc(sizeof(t_cm_rb));
 	if (rb_init(ret, sz_elem) == NULL) {
 		if (ret) free(ret);
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RB_LOG_EALLOC)

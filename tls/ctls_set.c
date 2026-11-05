@@ -12,9 +12,9 @@
  * \return true on success, false otherwise
  * \ingroup ctls
 **/
-bool ctls_set(const char *name, t_ctls_typewrap init_val) {
-	t_ctlsv *ctls = pthread_getspecific(ctls_key);
-	size_t   i;
+bool ctls_set(const char *name, t_cm_ctls_typewrap init_val) {
+	t_cm_ctlsv *ctls = pthread_getspecific(ctls_key);
+	size_t      i;
 
 	if (!ctls) {
 		ctls = calloc(1, sizeof(*ctls));

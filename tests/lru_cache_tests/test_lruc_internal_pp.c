@@ -4,30 +4,30 @@
 
 #include "lru_cache_tests.h"
 
-NO_COV void test_lruci_rsvrd_push(void) {
-	t_lruc         c  = (t_lruc){0};
-	t_lruc_keynode kv = (t_lruc_keynode){
+NO_COV void test_cm_lruci_rsvrd_push(void) {
+	t_cm_lruc         c  = (t_cm_lruc){0};
+	t_cm_lruc_keynode kv = (t_cm_lruc_keynode){
 	    .hash_next  = NULL,
 	    .lru_next   = NULL,
 	    .heap_index = 0,
 	    .lru_prev   = NULL,
 	    .time       = lruci_timenow(),
-	    .kv         = (t_keyvalue){0},
+	    .kv         = (t_cm_keyvalue){0},
 	};
 
 	assert(c.reserved_nodes == NULL);
 	assert(lruci_rsrvd_push(&c, &kv));
 	assert(c.reserved_nodes == &kv);
 }
-NO_COV void test_lruci_rsvrd_pop(void) {
-	t_lruc         c  = (t_lruc){0};
-	t_lruc_keynode kv = (t_lruc_keynode){
+NO_COV void test_cm_lruci_rsvrd_pop(void) {
+	t_cm_lruc         c  = (t_cm_lruc){0};
+	t_cm_lruc_keynode kv = (t_cm_lruc_keynode){
 	    .hash_next  = NULL,
 	    .lru_next   = NULL,
 	    .heap_index = 0,
 	    .lru_prev   = NULL,
 	    .time       = lruci_timenow(),
-	    .kv         = (t_keyvalue){0},
+	    .kv         = (t_cm_keyvalue){0},
 	};
 
 	c.reserved_nodes = &kv;
@@ -36,23 +36,23 @@ NO_COV void test_lruci_rsvrd_pop(void) {
 	assert(lruci_rsrvd_pop(&c) == NULL);
 }
 
-NO_COV void test_lruci_hsh_pop(void) {
-	t_lruc          c;
-	const char     *key1 = "hsh_pop key";
-	const char     *key2 = "different key";
-	t_lruc_keynode *kvn_ptr;
-	t_lruc_keynode  kvn_bad = (t_lruc_keynode){
+NO_COV void test_cm_lruci_hsh_pop(void) {
+	t_cm_lruc          c;
+	const char        *key1 = "hsh_pop key";
+	const char        *key2 = "different key";
+	t_cm_lruc_keynode *kvn_ptr;
+	t_cm_lruc_keynode  kvn_bad = (t_cm_lruc_keynode){
 	     .hash_next  = NULL,
 	     .lru_next   = NULL,
 	     .heap_index = 0,
 	     .lru_prev   = NULL,
 	     .time       = lruci_timenow(),
 	     .kv =
-            (t_keyvalue){
-	                     .k_len = strlen(key2),
-	                     .key   = key2,
-	                     .value = (void *)0xDEADCAFE,
-	                     },
+            (t_cm_keyvalue){
+	                        .k_len = strlen(key2),
+	                        .key   = key2,
+	                        .value = (void *)0xDEADCAFE,
+	                        },
     };
 	size_t hash_kvn_bad;
 	size_t hash_MRU;

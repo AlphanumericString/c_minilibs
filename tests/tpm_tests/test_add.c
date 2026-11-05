@@ -3,8 +3,8 @@
 
 #include "tpm_tests.h"
 
-NO_COV void test_tpm_add_job(void) {
-	t_tpm *t = tpm_new(2);
+NO_COV void test_cm_tpm_add_job(void) {
+	t_cm_tpm *t = tpm_new(2);
 
 	cb_reset_counter();
 	assert(tpm_add_job(t, cb_work_incr, NULL) != NULL);
@@ -19,8 +19,8 @@ NO_COV void test_tpm_add_job(void) {
 	tpm_free(t, NULL);
 }
 
-NO_COV void test_tpm_add_job_errors(void) {
-	t_tpm *t = tpm_new(2);
+NO_COV void test_cm_tpm_add_job_errors(void) {
+	t_cm_tpm *t = tpm_new(2);
 
 	assert(tpm_add_job(NULL, cb_work_incr, NULL) == NULL);
 	assert(tpm_add_job(t, NULL, NULL) == NULL);
@@ -34,9 +34,9 @@ NO_COV void test_tpm_add_job_errors(void) {
 	tpm_free(t, NULL);
 }
 
-NO_COV void test_tpm_add_batch(void) {
-	t_tpm *t = tpm_new(2);
-	void  *args[5];
+NO_COV void test_cm_tpm_add_batch(void) {
+	t_cm_tpm *t = tpm_new(2);
+	void     *args[5];
 
 	for (int i = 0; i < 5; i++)
 		args[i] = (void *)(uintptr_t)i;
@@ -50,9 +50,9 @@ NO_COV void test_tpm_add_batch(void) {
 	tpm_free(t, NULL);
 }
 
-NO_COV void test_tpm_add_batch_errors(void) {
-	t_tpm *t       = tpm_new(2);
-	void  *args[3] = {NULL, NULL, NULL};
+NO_COV void test_cm_tpm_add_batch_errors(void) {
+	t_cm_tpm *t       = tpm_new(2);
+	void     *args[3] = {NULL, NULL, NULL};
 
 	assert(tpm_add_batch(NULL, 3, cb_work_incr, args) == NULL);
 	assert(tpm_add_batch(t, 3, NULL, args) == NULL);

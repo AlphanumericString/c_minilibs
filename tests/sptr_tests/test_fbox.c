@@ -9,12 +9,15 @@ static void fbox_dt(void *p) {
 	g_fbox_dtor_calls++;
 }
 
-NO_COV void test_fbox_get_count(void) {
+NO_COV void test_cm_fbox_get_count(void) {
 	void *data = (void *)0xDEAD;
 
-	t_fbox b0_rc0  = (t_fbox){.data = data, .dtor = fbox_dt, .rc = 0, .wc = 0};
-	t_fbox b1_rc1  = (t_fbox){.data = data, .dtor = fbox_dt, .rc = 1, .wc = 0};
-	t_fbox b2_rc42 = (t_fbox){.data = data, .dtor = fbox_dt, .rc = 42, .wc = 0};
+	t_cm_fbox b0_rc0 =
+	    (t_cm_fbox){.data = data, .dtor = fbox_dt, .rc = 0, .wc = 0};
+	t_cm_fbox b1_rc1 =
+	    (t_cm_fbox){.data = data, .dtor = fbox_dt, .rc = 1, .wc = 0};
+	t_cm_fbox b2_rc42 =
+	    (t_cm_fbox){.data = data, .dtor = fbox_dt, .rc = 42, .wc = 0};
 
 	size_t res[] = {
 	    sptr_fb_get_count(&b0_rc0),
@@ -29,11 +32,13 @@ NO_COV void test_fbox_get_count(void) {
 	assert(res[3] == 0);
 }
 
-NO_COV void test_fbox_increment(void) {
+NO_COV void test_cm_fbox_increment(void) {
 	void *data = (void *)0xDEAD;
 
-	t_fbox b0_rc0 = (t_fbox){.data = data, .dtor = fbox_dt, .rc = 0, .wc = 0};
-	t_fbox b1_rc1 = (t_fbox){.data = data, .dtor = fbox_dt, .rc = 1, .wc = 0};
+	t_cm_fbox b0_rc0 =
+	    (t_cm_fbox){.data = data, .dtor = fbox_dt, .rc = 0, .wc = 0};
+	t_cm_fbox b1_rc1 =
+	    (t_cm_fbox){.data = data, .dtor = fbox_dt, .rc = 1, .wc = 0};
 
 	bool res[] = {
 	    sptr_fb_increment(NULL),
@@ -48,13 +53,17 @@ NO_COV void test_fbox_increment(void) {
 	assert(sptr_fb_get_count(&b1_rc1) == 2);
 }
 
-NO_COV void test_fbox_decrement(void) {
+NO_COV void test_cm_fbox_decrement(void) {
 	void *data = (void *)0xDEAD;
 
-	t_fbox b0_rc0  = (t_fbox){.data = data, .dtor = fbox_dt, .rc = 0, .wc = 0};
-	t_fbox b1_rc2  = (t_fbox){.data = data, .dtor = fbox_dt, .rc = 2, .wc = 0};
-	t_fbox b2_rc1  = (t_fbox){.data = data, .dtor = fbox_dt, .rc = 1, .wc = 0};
-	t_fbox b3_nodt = (t_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 0};
+	t_cm_fbox b0_rc0 =
+	    (t_cm_fbox){.data = data, .dtor = fbox_dt, .rc = 0, .wc = 0};
+	t_cm_fbox b1_rc2 =
+	    (t_cm_fbox){.data = data, .dtor = fbox_dt, .rc = 2, .wc = 0};
+	t_cm_fbox b2_rc1 =
+	    (t_cm_fbox){.data = data, .dtor = fbox_dt, .rc = 1, .wc = 0};
+	t_cm_fbox b3_nodt =
+	    (t_cm_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 0};
 
 	g_fbox_dtor_calls = 0;
 
@@ -83,21 +92,23 @@ NO_COV void test_fbox_decrement(void) {
 	assert(!b3_nodt.data && !b3_nodt.dtor);
 }
 
-NO_COV void test_fbox_get_data(void) {
+NO_COV void test_cm_fbox_get_cm_data(void) {
 	void *data = (void *)0xDEAD;
 
-	t_fbox b0_ok   = (t_fbox){.data = data, .dtor = fbox_dt, .rc = 1, .wc = 0};
-	t_fbox b1_null = (t_fbox){.data = NULL, .dtor = fbox_dt, .rc = 1, .wc = 0};
+	t_cm_fbox b0_ok =
+	    (t_cm_fbox){.data = data, .dtor = fbox_dt, .rc = 1, .wc = 0};
+	t_cm_fbox b1_null =
+	    (t_cm_fbox){.data = NULL, .dtor = fbox_dt, .rc = 1, .wc = 0};
 
-	assert(sptr_fb_get_data(&b0_ok) == true);
-	assert(sptr_fb_get_data(&b1_null) == false);
+	assert(sptr_fb_get_cm_data(&b0_ok) == true);
+	assert(sptr_fb_get_cm_data(&b1_null) == false);
 }
 
-NO_COV void test_fbox_init(void) {
+NO_COV void test_cm_fbox_init(void) {
 	void *data = (void *)0xDEAD;
 
-	t_fbox  box = (t_fbox){.data = NULL, .dtor = NULL, .rc = 42, .wc = 42};
-	t_fbox *res = sptr_fb_init(&box, data, fbox_dt);
+	t_cm_fbox box = (t_cm_fbox){.data = NULL, .dtor = NULL, .rc = 42, .wc = 42};
+	t_cm_fbox *res = sptr_fb_init(&box, data, fbox_dt);
 
 	assert(res == &box);
 	assert(box.data == data);
@@ -109,10 +120,10 @@ NO_COV void test_fbox_init(void) {
 	assert(res == NULL);
 }
 
-NO_COV void test_fbox_new(void) {
+NO_COV void test_cm_fbox_new(void) {
 	void *data = (void *)0xDEAD;
 
-	t_fbox *res = sptr_fb_new(data, fbox_dt);
+	t_cm_fbox *res = sptr_fb_new(data, fbox_dt);
 
 	assert(res != NULL);
 	assert(res->data == data);

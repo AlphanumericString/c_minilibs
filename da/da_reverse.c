@@ -7,7 +7,7 @@
  * \param da pointer to the dynamic array
  * \ingroup da
 **/
-void da_reverse(const t_da *da) {
+void da_reverse(const t_cm_da *da) {
 	da_nreverse(da, -1);
 }
 /**
@@ -16,7 +16,7 @@ void da_reverse(const t_da *da) {
  * \param n number of elements to reverse
  * \ingroup da
 **/
-void da_nreverse(const t_da *da, size_t n) {
+void da_nreverse(const t_cm_da *da, size_t n) {
 	size_t i;
 
 	if (!da_is_valid(da)) {
@@ -37,7 +37,7 @@ void da_nreverse(const t_da *da, size_t n) {
  * \param n number of elements to reverse
  * \ingroup da
 **/
-void da_b_nreverse(const t_da *da, size_t n) {
+void da_b_nreverse(const t_cm_da *da, size_t n) {
 	size_t i;
 	size_t m;
 

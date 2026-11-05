@@ -14,7 +14,7 @@
  * \warning rb_get assume that buffer is always correctly sized.
  * \ingroup rb
 **/
-void *rb_get(const t_rb *rb, t_cm_comparator comp, const void *arg,
+void *rb_get(const t_cm_rb *rb, t_cm_comparator comp, const void *arg,
              void *buffer) {
 	const void *elem;
 
@@ -44,8 +44,8 @@ void *rb_get(const t_rb *rb, t_cm_comparator comp, const void *arg,
  * \warning rb_get assume that buffer is always correctly sized.
  * \ingroup rb
 **/
-void *rb_nget(const t_rb *rb, size_t n, t_cm_comparator comp, const void *arg,
-              void *buffer) {
+void *rb_nget(const t_cm_rb *rb, size_t n, t_cm_comparator comp,
+              const void *arg, void *buffer) {
 	size_t i = 0;
 	size_t pos;
 	size_t count;
@@ -87,8 +87,8 @@ void *rb_nget(const t_rb *rb, size_t n, t_cm_comparator comp, const void *arg,
  * \warning rb_getn assume that buffer is always correctly sized.
  * \ingroup rb
 **/
-void *rb_getn(const t_rb *rb, size_t n, t_cm_comparator comp, const void *arg,
-              void *buffer) {
+void *rb_getn(const t_cm_rb *rb, size_t n, t_cm_comparator comp,
+              const void *arg, void *buffer) {
 	size_t i = 0;
 	size_t pos;
 	size_t count;

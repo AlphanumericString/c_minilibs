@@ -6,8 +6,8 @@
  * \return The removed node, or NULL if 'prev' has no next node.
  * \ingroup idl
 **/
-t_idl *idl_remove_after(t_idl *prev) {
-	t_idl *to_remove;
+t_cm_idl *idl_remove_after(t_cm_idl *prev) {
+	t_cm_idl *to_remove;
 
 	if (!prev || !prev->next) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -29,8 +29,8 @@ t_idl *idl_remove_after(t_idl *prev) {
  * \return true if the node was successfully removed, false otherwise.
  * \ingroup idl
 **/
-bool idl_remove_node(t_idl **head, t_idl *target) {
-	const t_idl *curr;
+bool idl_remove_node(t_cm_idl **head, t_cm_idl *target) {
+	const t_cm_idl *curr;
 
 	if (!head || !target || !*head) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)

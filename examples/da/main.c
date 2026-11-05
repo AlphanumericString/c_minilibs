@@ -23,11 +23,11 @@ static void *sum_int(void *elem, void *acc) {
 }
 
 int main(void) {
-	t_da  da;
-	int   seed[] = {5, 3, 8, 1, 9, 2, 7, 4};
-	int   needle = 8;
-	int   found  = 0;
-	void *pos;
+	t_cm_da da;
+	int     seed[] = {5, 3, 8, 1, 9, 2, 7, 4};
+	int     needle = 8;
+	int     found  = 0;
+	void   *pos;
 
 	da_init(&da, sizeof(int));
 	da_cat_array(&da, seed, sizeof(seed) / sizeof(seed[0]), sizeof(int));

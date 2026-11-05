@@ -5,15 +5,15 @@
 
 #include "lru_cache/least_recently_used_cache.h"
 
-static bool print_entry(t_keyvalue *kv, void *arg) {
+static bool print_entry(t_cm_keyvalue *kv, void *arg) {
 	(void)arg;
 	printf(" %.*s=%s", (int)kv->k_len, (const char *)kv->key,
 	       (const char *)kv->value);
 	return (true);
 }
 
-static void show(t_lruc *c, const char *label) {
-	t_lruc_stats s = lruc_stats(c);
+static void show(t_cm_lruc *c, const char *label) {
+	t_cm_lruc_stats s = lruc_stats(c);
 
 	printf("%-22s size=%zu hits=%zu misses=%zu expired=%zu :", label,
 	       lruc_size(c), s.hit, s.misses, s.expired);
@@ -22,7 +22,7 @@ static void show(t_lruc *c, const char *label) {
 }
 
 int main(void) {
-	t_lruc *cache = lruc_create(3, free);
+	t_cm_lruc *cache = lruc_create(3, free);
 
 	lruc_put(cache, "alpha", 5, strdup("A"));
 	lruc_put(cache, "beta", 4, strdup("B"));

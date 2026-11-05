@@ -19,14 +19,16 @@ static void test_sptr_strengthen_errors(void) {
 	void     *data = (void *)0xDEAD;
 	t_cm_dtor dtor = local_dtor;
 
-	t_fbox b0_no_wc = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
-	t_fbox b1_no_rc = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
+	t_cm_fbox b0_no_wc =
+	    (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_cm_fbox b1_no_rc =
+	    (t_cm_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
 
-	t_weak_ptr w0_no_wc     = (t_weak_ptr){&b0_no_wc};
-	t_weak_ptr w1_no_rc     = (t_weak_ptr){&b1_no_rc};
-	t_weak_ptr w2_meta_null = (t_weak_ptr){NULL};
+	t_cm_weak_ptr w0_no_wc     = (t_cm_weak_ptr){&b0_no_wc};
+	t_cm_weak_ptr w1_no_rc     = (t_cm_weak_ptr){&b1_no_rc};
+	t_cm_weak_ptr w2_meta_null = (t_cm_weak_ptr){NULL};
 
-	t_strong_ptr res[] = {
+	t_cm_strong_ptr res[] = {
 	    sptr_into_strong(NULL),
 	    sptr_into_strong(&w0_no_wc),
 	    sptr_into_strong(&w1_no_rc),
@@ -43,13 +45,13 @@ static void test_sptr_strengthen_ok(void) {
 	void     *data = (void *)0xDEAD;
 	t_cm_dtor dtor = local_dtor;
 
-	t_fbox b0 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
-	t_fbox b1 = (t_fbox){.data = data, .dtor = dtor, .rc = 2, .wc = 3};
+	t_cm_fbox b0 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
+	t_cm_fbox b1 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 2, .wc = 3};
 
-	t_weak_ptr w0 = (t_weak_ptr){&b0};
-	t_weak_ptr w1 = (t_weak_ptr){&b1};
+	t_cm_weak_ptr w0 = (t_cm_weak_ptr){&b0};
+	t_cm_weak_ptr w1 = (t_cm_weak_ptr){&b1};
 
-	t_strong_ptr res[] = {
+	t_cm_strong_ptr res[] = {
 	    sptr_into_strong(&w0),
 	    sptr_into_strong(&w1),
 	};
@@ -72,12 +74,13 @@ static void test_sptr_weaken_errors(void) {
 	void     *data = (void *)0xDEAD;
 	t_cm_dtor dtor = local_dtor;
 
-	t_fbox b0_no_rc = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
+	t_cm_fbox b0_no_rc =
+	    (t_cm_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
 
-	t_strong_ptr s0_no_rc     = (t_strong_ptr){b0_no_rc.data, &b0_no_rc};
-	t_strong_ptr s1_meta_null = (t_strong_ptr){data, NULL};
+	t_cm_strong_ptr s0_no_rc     = (t_cm_strong_ptr){b0_no_rc.data, &b0_no_rc};
+	t_cm_strong_ptr s1_meta_null = (t_cm_strong_ptr){data, NULL};
 
-	t_weak_ptr res[] = {
+	t_cm_weak_ptr res[] = {
 	    sptr_into_weak(NULL),
 	    sptr_into_weak(&s0_no_rc),
 	    sptr_into_weak(&s1_meta_null),
@@ -91,19 +94,20 @@ static void test_sptr_weaken_errors(void) {
 static void test_sptr_weaken_ok(void) {
 	void *data = (void *)0xDEAD;
 
-	t_fbox b0_rc2 =
-	    (t_fbox){.data = data, .dtor = change_dummy_dtor, .rc = 2, .wc = 0};
-	t_fbox b1_rc1 =
-	    (t_fbox){.data = data, .dtor = change_dummy_dtor, .rc = 1, .wc = 1};
-	t_fbox b2_no_dt = (t_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 1};
+	t_cm_fbox b0_rc2 =
+	    (t_cm_fbox){.data = data, .dtor = change_dummy_dtor, .rc = 2, .wc = 0};
+	t_cm_fbox b1_rc1 =
+	    (t_cm_fbox){.data = data, .dtor = change_dummy_dtor, .rc = 1, .wc = 1};
+	t_cm_fbox b2_no_dt =
+	    (t_cm_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 1};
 
-	t_strong_ptr s0 = (t_strong_ptr){b0_rc2.data, &b0_rc2};
-	t_strong_ptr s1 = (t_strong_ptr){b1_rc1.data, &b1_rc1};
-	t_strong_ptr s2 = (t_strong_ptr){b2_no_dt.data, &b2_no_dt};
+	t_cm_strong_ptr s0 = (t_cm_strong_ptr){b0_rc2.data, &b0_rc2};
+	t_cm_strong_ptr s1 = (t_cm_strong_ptr){b1_rc1.data, &b1_rc1};
+	t_cm_strong_ptr s2 = (t_cm_strong_ptr){b2_no_dt.data, &b2_no_dt};
 
 	g_change_dtor_calls = 0;
 
-	t_weak_ptr res[] = {
+	t_cm_weak_ptr res[] = {
 	    sptr_into_weak(&s0),
 	    sptr_into_weak(&s1),
 	    sptr_into_weak(&s2),
@@ -138,14 +142,14 @@ static void test_sptr_transfer_o_errors(void) {
 	void     *data = (void *)0xDEAD;
 	t_cm_dtor dtor = local_dtor;
 
-	t_fbox b0 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
-	t_fbox b1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
+	t_cm_fbox b0 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
+	t_cm_fbox b1 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
 
-	t_owned_ptr o0_owner_b0  = (t_owned_ptr){b0.data, &b0, true};
-	t_owned_ptr o1_borrow_b0 = (t_owned_ptr){b0.data, &b0, false};
-	t_owned_ptr o2_owner2_b0 = (t_owned_ptr){b0.data, &b0, true};
-	t_owned_ptr o3_borrow_b1 = (t_owned_ptr){b1.data, &b1, false};
-	t_owned_ptr o4_meta_null = (t_owned_ptr){data, NULL, true};
+	t_cm_owned_ptr o0_owner_b0  = (t_cm_owned_ptr){b0.data, &b0, true};
+	t_cm_owned_ptr o1_borrow_b0 = (t_cm_owned_ptr){b0.data, &b0, false};
+	t_cm_owned_ptr o2_owner2_b0 = (t_cm_owned_ptr){b0.data, &b0, true};
+	t_cm_owned_ptr o3_borrow_b1 = (t_cm_owned_ptr){b1.data, &b1, false};
+	t_cm_owned_ptr o4_meta_null = (t_cm_owned_ptr){data, NULL, true};
 
 	bool res[] = {
 	    sptr_transfer_ownership(NULL, NULL),
@@ -174,10 +178,10 @@ static void test_sptr_transfer_o_ok(void) {
 	void     *data = (void *)0xDEAD;
 	t_cm_dtor dtor = local_dtor;
 
-	t_fbox b0 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
+	t_cm_fbox b0 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
 
-	t_owned_ptr o_to   = (t_owned_ptr){b0.data, &b0, false};
-	t_owned_ptr o_from = (t_owned_ptr){b0.data, &b0, true};
+	t_cm_owned_ptr o_to   = (t_cm_owned_ptr){b0.data, &b0, false};
+	t_cm_owned_ptr o_from = (t_cm_owned_ptr){b0.data, &b0, true};
 
 	bool res = sptr_transfer_ownership(&o_to, &o_from);
 
@@ -196,20 +200,23 @@ static void test_sptr_move_o_errors(void) {
 	void     *data = (void *)0xDEAD;
 	t_cm_dtor dtor = local_dtor;
 
-	t_fbox b0_not_owner =
-	    (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
-	t_fbox b1_no_rc   = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
-	t_fbox b2_rc_many = (t_fbox){.data = data, .dtor = dtor, .rc = 2, .wc = 1};
-	t_fbox b3_ok      = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_cm_fbox b0_not_owner =
+	    (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
+	t_cm_fbox b1_no_rc =
+	    (t_cm_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
+	t_cm_fbox b2_rc_many =
+	    (t_cm_fbox){.data = data, .dtor = dtor, .rc = 2, .wc = 1};
+	t_cm_fbox b3_ok = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
 
-	t_owned_ptr o0_dst = (t_owned_ptr){0};
-	t_owned_ptr o1_not_owner =
-	    (t_owned_ptr){b0_not_owner.data, &b0_not_owner, false};
-	t_owned_ptr o2_no_rc   = (t_owned_ptr){b1_no_rc.data, &b1_no_rc, true};
-	t_owned_ptr o3_rc_many = (t_owned_ptr){b2_rc_many.data, &b2_rc_many, true};
-	t_owned_ptr o4_src_meta_nil = (t_owned_ptr){data, NULL, true};
-	t_owned_ptr o5_dst_non_null = (t_owned_ptr){data, &b2_rc_many, true};
-	t_owned_ptr o6_ok           = (t_owned_ptr){data, &b3_ok, true};
+	t_cm_owned_ptr o0_dst = (t_cm_owned_ptr){0};
+	t_cm_owned_ptr o1_not_owner =
+	    (t_cm_owned_ptr){b0_not_owner.data, &b0_not_owner, false};
+	t_cm_owned_ptr o2_no_rc = (t_cm_owned_ptr){b1_no_rc.data, &b1_no_rc, true};
+	t_cm_owned_ptr o3_rc_many =
+	    (t_cm_owned_ptr){b2_rc_many.data, &b2_rc_many, true};
+	t_cm_owned_ptr o4_src_meta_nil = (t_cm_owned_ptr){data, NULL, true};
+	t_cm_owned_ptr o5_dst_non_null = (t_cm_owned_ptr){data, &b2_rc_many, true};
+	t_cm_owned_ptr o6_ok           = (t_cm_owned_ptr){data, &b3_ok, true};
 
 	bool res[] = {
 	    sptr_move_ownership(NULL, NULL),
@@ -237,9 +244,9 @@ static void test_sptr_move_o_ok(void) {
 	t_cm_dtor dtor = local_dtor;
 
 	// Case 1: to has meta == NULL
-	t_fbox      b0    = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
-	t_owned_ptr to0   = (t_owned_ptr){0};
-	t_owned_ptr from0 = (t_owned_ptr){b0.data, &b0, true};
+	t_cm_fbox b0 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_cm_owned_ptr to0   = (t_cm_owned_ptr){0};
+	t_cm_owned_ptr from0 = (t_cm_owned_ptr){b0.data, &b0, true};
 
 	bool res0 = sptr_move_ownership(&to0, &from0);
 
@@ -252,12 +259,12 @@ static void test_sptr_move_o_ok(void) {
 
 	// Case 2: to has an existing box with wc > 0 (so sptr_deleteo doesn't free
 	// stack)
-	t_fbox b_old =
-	    (t_fbox){.data = (void *)0x1234, .dtor = NULL, .rc = 1, .wc = 1};
-	t_fbox b1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_cm_fbox b_old =
+	    (t_cm_fbox){.data = (void *)0x1234, .dtor = NULL, .rc = 1, .wc = 1};
+	t_cm_fbox b1 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
 
-	t_owned_ptr to1   = (t_owned_ptr){b_old.data, &b_old, true};
-	t_owned_ptr from1 = (t_owned_ptr){b1.data, &b1, true};
+	t_cm_owned_ptr to1   = (t_cm_owned_ptr){b_old.data, &b_old, true};
+	t_cm_owned_ptr from1 = (t_cm_owned_ptr){b1.data, &b1, true};
 
 	bool res1 = sptr_move_ownership(&to1, &from1);
 
@@ -277,10 +284,10 @@ NO_COV void test_sptr_move_o(void) {
 
 // yield (sptr_uniq_yield)
 static void test_sptr_yield_errors(void) {
-	void      *data = (void *)0xDEAD;
-	t_uniq_ptr u    = (t_uniq_ptr){.data = data, .dtor = NULL};
+	void         *data = (void *)0xDEAD;
+	t_cm_uniq_ptr u    = (t_cm_uniq_ptr){.data = data, .dtor = NULL};
 
-	t_uniq_ptr *res[] = {
+	t_cm_uniq_ptr *res[] = {
 	    sptr_uniq_yield(NULL, NULL),
 	    sptr_uniq_yield(&u, NULL),
 	    sptr_uniq_yield(NULL, &u),
@@ -296,11 +303,12 @@ static void test_sptr_yield_ok(void) {
 	void *data2 = (void *)0xBEEF;
 
 	// Case 1: dst has data (should be deleted / dtor called)
-	t_uniq_ptr dst1 = (t_uniq_ptr){.data = data1, .dtor = change_dummy_dtor};
-	t_uniq_ptr src1 = (t_uniq_ptr){.data = data2, .dtor = NULL};
+	t_cm_uniq_ptr dst1 =
+	    (t_cm_uniq_ptr){.data = data1, .dtor = change_dummy_dtor};
+	t_cm_uniq_ptr src1 = (t_cm_uniq_ptr){.data = data2, .dtor = NULL};
 
 	g_change_dtor_calls = 0;
-	t_uniq_ptr *r1      = sptr_uniq_yield(&dst1, &src1);
+	t_cm_uniq_ptr *r1   = sptr_uniq_yield(&dst1, &src1);
 
 	assert(r1 == &dst1);
 	assert(dst1.data == data2 && !dst1.dtor);
@@ -308,10 +316,10 @@ static void test_sptr_yield_ok(void) {
 	assert(g_change_dtor_calls == 1);
 
 	// Case 2: dst has no data
-	t_uniq_ptr dst2 = (t_uniq_ptr){0};
-	t_uniq_ptr src2 = (t_uniq_ptr){.data = data1, .dtor = local_dtor};
+	t_cm_uniq_ptr dst2 = (t_cm_uniq_ptr){0};
+	t_cm_uniq_ptr src2 = (t_cm_uniq_ptr){.data = data1, .dtor = local_dtor};
 
-	t_uniq_ptr *r2 = sptr_uniq_yield(&dst2, &src2);
+	t_cm_uniq_ptr *r2 = sptr_uniq_yield(&dst2, &src2);
 
 	assert(r2 == &dst2);
 	assert(dst2.data == data1 && dst2.dtor == local_dtor);
@@ -325,8 +333,8 @@ NO_COV void test_sptr_yield(void) {
 
 // swap (sptr_uniq_swap)
 static void test_sptr_swap_errors(void) {
-	void      *data = (void *)0xDEAD;
-	t_uniq_ptr u    = (t_uniq_ptr){.data = data, .dtor = NULL};
+	void         *data = (void *)0xDEAD;
+	t_cm_uniq_ptr u    = (t_cm_uniq_ptr){.data = data, .dtor = NULL};
 
 	bool res[] = {
 	    sptr_uniq_swap(NULL, NULL),
@@ -345,8 +353,8 @@ static void test_sptr_swap_ok(void) {
 	t_cm_dtor dtor1 = local_dtor;
 	t_cm_dtor dtor2 = other_dtor;
 
-	t_uniq_ptr sw1 = (t_uniq_ptr){.data = data1, .dtor = dtor1};
-	t_uniq_ptr sw2 = (t_uniq_ptr){.data = data2, .dtor = dtor2};
+	t_cm_uniq_ptr sw1 = (t_cm_uniq_ptr){.data = data1, .dtor = dtor1};
+	t_cm_uniq_ptr sw2 = (t_cm_uniq_ptr){.data = data2, .dtor = dtor2};
 
 	bool res = sptr_uniq_swap(&sw1, &sw2);
 

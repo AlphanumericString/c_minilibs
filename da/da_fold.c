@@ -10,7 +10,7 @@
  * \return the folded value
  * \ingroup da
 **/
-void *da_fold(const t_da *da, t_cm_merger m, void *data) {
+void *da_fold(const t_cm_da *da, t_cm_merger m, void *data) {
 	if (!da_is_valid(da) || !m || !data) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (NULL);
@@ -26,7 +26,7 @@ void *da_fold(const t_da *da, t_cm_merger m, void *data) {
  * \return the folded value
  * \ingroup da
 **/
-void *da_nfold(const t_da *da, size_t n, t_cm_merger m, void *data) {
+void *da_nfold(const t_cm_da *da, size_t n, t_cm_merger m, void *data) {
 	if (!da_is_valid(da) || !m || !data) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (NULL);
@@ -45,7 +45,7 @@ void *da_nfold(const t_da *da, size_t n, t_cm_merger m, void *data) {
  * \return the reduced value or null if any error
  * \ingroup da
 **/
-void *da_reduce(const t_da *da, t_cm_merger m) {
+void *da_reduce(const t_cm_da *da, t_cm_merger m) {
 	void *r;
 
 	if (!da_is_valid(da) || !m) {
@@ -69,7 +69,7 @@ void *da_reduce(const t_da *da, t_cm_merger m) {
  * \return the reduced value or null if any error
  * \ingroup da
 **/
-void *da_nreduce(const t_da *da, size_t n, t_cm_merger m) {
+void *da_nreduce(const t_cm_da *da, size_t n, t_cm_merger m) {
 	void *bag;
 
 	if (!da_is_valid(da) || !m) {

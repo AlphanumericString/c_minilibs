@@ -6,7 +6,7 @@
  * \return true on success, false otherwise
  * \ingroup hp
 **/
-bool hp_is_valid(const t_hp *hp) {
+bool hp_is_valid(const t_cm_hp *hp) {
 	return (hp && hp->elems && hp->cmp && hp->sz_e && hp->nb <= hp->capacity);
 }
 /**
@@ -15,7 +15,7 @@ bool hp_is_valid(const t_hp *hp) {
  * \return true on success, false otherwise
  * \ingroup hp
 **/
-bool hp_is_empty(const t_hp *hp) {
+bool hp_is_empty(const t_cm_hp *hp) {
 	return (hp && hp->nb == 0);
 }
 /**
@@ -24,6 +24,6 @@ bool hp_is_empty(const t_hp *hp) {
  * \return true on success, false otherwise
  * \ingroup hp
 **/
-bool hp_is_full(const t_hp *hp) {
+bool hp_is_full(const t_cm_hp *hp) {
 	return (hp_is_valid(hp) && hp->nb == hp->capacity);
 }

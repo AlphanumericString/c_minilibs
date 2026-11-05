@@ -10,10 +10,11 @@
  * \return The number of elements moved into *filtered.
  * \ingroup ill
 **/
-size_t ill_filter(t_ill **head, t_cm_callback cb, void *arg, t_ill **filtered) {
-	size_t  count = 0;
-	t_ill **link;
-	t_ill  *ftail;
+size_t ill_filter(t_cm_ill **head, t_cm_callback cb, void *arg,
+                  t_cm_ill **filtered) {
+	size_t     count = 0;
+	t_cm_ill **link;
+	t_cm_ill  *ftail;
 
 	if (!head || !cb || !filtered) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
@@ -23,7 +24,7 @@ size_t ill_filter(t_ill **head, t_cm_callback cb, void *arg, t_ill **filtered) {
 	link      = head;
 	ftail     = NULL;
 	while (*link) {
-		t_ill *moved;
+		t_cm_ill *moved;
 		if (cb(ill_ntoe(*link), arg)) {
 			link = &(*link)->next;
 			continue;
@@ -50,11 +51,11 @@ size_t ill_filter(t_ill **head, t_cm_callback cb, void *arg, t_ill **filtered) {
  * \return The number of elements moved into *filtered.
  * \ingroup ill
 **/
-size_t ill_filter_out(t_ill **head, t_cm_callback cb, void *arg,
-                      t_ill **filtered) {
-	size_t  count = 0;
-	t_ill **link;
-	t_ill  *ftail;
+size_t ill_filter_out(t_cm_ill **head, t_cm_callback cb, void *arg,
+                      t_cm_ill **filtered) {
+	size_t     count = 0;
+	t_cm_ill **link;
+	t_cm_ill  *ftail;
 
 	if (!head || !cb || !filtered) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
@@ -64,7 +65,7 @@ size_t ill_filter_out(t_ill **head, t_cm_callback cb, void *arg,
 	link      = head;
 	ftail     = NULL;
 	while (*link) {
-		t_ill *moved;
+		t_cm_ill *moved;
 		if (!cb(ill_ntoe(*link), arg)) {
 			link = &(*link)->next;
 			continue;
@@ -91,9 +92,9 @@ size_t ill_filter_out(t_ill **head, t_cm_callback cb, void *arg,
  * \return The number of elements removed.
  * \ingroup ill
 **/
-size_t ill_rm_if(t_ill **head, t_cm_callback cb, void *arg, t_cm_dtor d) {
-	size_t  count = 0;
-	t_ill **link;
+size_t ill_rm_if(t_cm_ill **head, t_cm_callback cb, void *arg, t_cm_dtor d) {
+	size_t     count = 0;
+	t_cm_ill **link;
 
 	if (!head || !cb) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
@@ -101,7 +102,7 @@ size_t ill_rm_if(t_ill **head, t_cm_callback cb, void *arg, t_cm_dtor d) {
 	}
 	link = head;
 	while (*link) {
-		t_ill *rm;
+		t_cm_ill *rm;
 		if (cb(ill_ntoe(*link), arg)) {
 			link = &(*link)->next;
 			continue;

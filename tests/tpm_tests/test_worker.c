@@ -29,12 +29,12 @@ NO_COV static void *w_blocking(void *arg) {
 	return (NULL);
 }
 
-NO_COV void test_tpmi_worker_null(void) {
+NO_COV void test_cm_tpmi_worker_null(void) {
 	assert(tpmi_worker(NULL) == NULL);
 }
 
-NO_COV void test_tpmi_worker_runs_jobs(void) {
-	t_tpm *t = tpm_new(4);
+NO_COV void test_cm_tpmi_worker_runs_jobs(void) {
+	t_cm_tpm *t = tpm_new(4);
 
 	cb_reset_counter();
 	for (int i = 0; i < 64; i++)
@@ -45,9 +45,9 @@ NO_COV void test_tpmi_worker_runs_jobs(void) {
 	tpm_free(t, NULL);
 }
 
-NO_COV void test_tpmi_worker_steals(void) {
+NO_COV void test_cm_tpmi_worker_steals(void) {
 	const size_t nb = C_MINI__TPM_TRD_MGET_NB;
-	t_tpm       *t  = tpm_new(3);
+	t_cm_tpm    *t  = tpm_new(3);
 	void        *args[C_MINI__TPM_TRD_MGET_NB];
 	int          spins = 0;
 

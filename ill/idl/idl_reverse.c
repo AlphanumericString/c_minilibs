@@ -6,13 +6,13 @@
  * \return The new head of the reversed list.
  * \ingroup idl
 **/
-t_idl *idl_reverse(t_idl *head) {
-	t_idl *temp;
-	t_idl *curr;
+t_cm_idl *idl_reverse(t_cm_idl *head) {
+	t_cm_idl *temp;
+	t_cm_idl *curr;
 
 	if (!head) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
-		return ((t_idl *)NULL);
+		return ((t_cm_idl *)NULL);
 	}
 	curr = head;
 	while (curr) {

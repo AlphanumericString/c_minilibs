@@ -35,9 +35,9 @@ static int ctls_tests(void) {
 
 static int ftls_tests(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Get", )
-	test_ftls_get();
+	test_cm_ftls_get();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Separate", )
-	test_ftls_separate();
+	test_cm_ftls_separate();
 
 	printf("All ftls tests completed successfully.\n");
 	return (EXIT_SUCCESS);
@@ -45,20 +45,20 @@ static int ftls_tests(void) {
 
 static int vtls_tests(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Dump", )
-	test_vtls_dump();
-	test_vtls_dump_all();
+	test_cm_vtls_dump();
+	test_cm_vtls_dump_all();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Rm", )
-	test_vtls_rm();
+	test_cm_vtls_rm();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Get", )
-	test_vtls_get();
-	test_vtls_sizeof();
-	test_vtls_getout();
+	test_cm_vtls_get();
+	test_cm_vtls_sizeof();
+	test_cm_vtls_getout();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Lenght", )
-	test_vtls_len();
+	test_cm_vtls_len();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Has", )
-	test_vtls_has();
+	test_cm_vtls_has();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Set", )
-	test_vtls_set();
+	test_cm_vtls_set();
 
 	printf("All vtls tests completed successfully.\n");
 	return (EXIT_SUCCESS);

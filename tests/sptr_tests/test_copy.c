@@ -10,12 +10,12 @@ static void local_dtor(void *_) {
 static void test_sptr_copys_errors(void) {
 	void *data = (void *)0xDEAD;
 
-	t_fbox b0_no_rc = (t_fbox){.data = data, .rc = 0, .wc = 0};
+	t_cm_fbox b0_no_rc = (t_cm_fbox){.data = data, .rc = 0, .wc = 0};
 
-	t_strong_ptr s0_no_rc     = (t_strong_ptr){b0_no_rc.data, &b0_no_rc};
-	t_strong_ptr s1_meta_null = (t_strong_ptr){data, NULL};
+	t_cm_strong_ptr s0_no_rc     = (t_cm_strong_ptr){b0_no_rc.data, &b0_no_rc};
+	t_cm_strong_ptr s1_meta_null = (t_cm_strong_ptr){data, NULL};
 
-	t_strong_ptr *res[] = {
+	t_cm_strong_ptr *res[] = {
 	    sptr_copys(NULL),
 	    sptr_copys(&s0_no_rc),
 	    sptr_copys(&s1_meta_null),
@@ -29,13 +29,13 @@ static void test_sptr_copys_errors(void) {
 static void test_sptr_copys_ok(void) {
 	void *data = (void *)0xDEAD;
 
-	t_fbox b0 = (t_fbox){.data = data, .rc = 1, .wc = 0};
-	t_fbox b1 = (t_fbox){.data = data, .rc = 5, .wc = 2};
+	t_cm_fbox b0 = (t_cm_fbox){.data = data, .rc = 1, .wc = 0};
+	t_cm_fbox b1 = (t_cm_fbox){.data = data, .rc = 5, .wc = 2};
 
-	t_strong_ptr s0 = (t_strong_ptr){b0.data, &b0};
-	t_strong_ptr s1 = (t_strong_ptr){b1.data, &b1};
+	t_cm_strong_ptr s0 = (t_cm_strong_ptr){b0.data, &b0};
+	t_cm_strong_ptr s1 = (t_cm_strong_ptr){b1.data, &b1};
 
-	t_strong_ptr *res[] = {
+	t_cm_strong_ptr *res[] = {
 	    sptr_copys(&s0),
 	    sptr_copys(&s1),
 	};
@@ -56,12 +56,12 @@ NO_COV void test_sptr_copys(void) {
 static void test_sptr_copyw_errors(void) {
 	void *data = (void *)0xDEAD;
 
-	t_fbox b0_no_wc = (t_fbox){.data = data, .rc = 1, .wc = 0};
+	t_cm_fbox b0_no_wc = (t_cm_fbox){.data = data, .rc = 1, .wc = 0};
 
-	t_weak_ptr w0_no_wc     = (t_weak_ptr){&b0_no_wc};
-	t_weak_ptr w1_meta_null = (t_weak_ptr){NULL};
+	t_cm_weak_ptr w0_no_wc     = (t_cm_weak_ptr){&b0_no_wc};
+	t_cm_weak_ptr w1_meta_null = (t_cm_weak_ptr){NULL};
 
-	t_weak_ptr *res[] = {
+	t_cm_weak_ptr *res[] = {
 	    sptr_copyw(NULL),
 	    sptr_copyw(&w0_no_wc),
 	    sptr_copyw(&w1_meta_null),
@@ -75,13 +75,13 @@ static void test_sptr_copyw_errors(void) {
 static void test_sptr_copyw_ok(void) {
 	void *data = (void *)0xDEAD;
 
-	t_fbox b0 = (t_fbox){.data = data, .rc = 1, .wc = 1};
-	t_fbox b1 = (t_fbox){.data = data, .rc = 1, .wc = 9};
+	t_cm_fbox b0 = (t_cm_fbox){.data = data, .rc = 1, .wc = 1};
+	t_cm_fbox b1 = (t_cm_fbox){.data = data, .rc = 1, .wc = 9};
 
-	t_weak_ptr w0 = (t_weak_ptr){&b0};
-	t_weak_ptr w1 = (t_weak_ptr){&b1};
+	t_cm_weak_ptr w0 = (t_cm_weak_ptr){&b0};
+	t_cm_weak_ptr w1 = (t_cm_weak_ptr){&b1};
 
-	t_weak_ptr *res[] = {
+	t_cm_weak_ptr *res[] = {
 	    sptr_copyw(&w0),
 	    sptr_copyw(&w1),
 	};
@@ -102,12 +102,12 @@ NO_COV void test_sptr_copyw(void) {
 static void test_sptr_copyo_errors(void) {
 	void *data = (void *)0xDEAD;
 
-	t_fbox b0_no_rc = (t_fbox){.data = data, .rc = 0, .wc = 0};
+	t_cm_fbox b0_no_rc = (t_cm_fbox){.data = data, .rc = 0, .wc = 0};
 
-	t_owned_ptr o0_no_rc     = (t_owned_ptr){b0_no_rc.data, &b0_no_rc, true};
-	t_owned_ptr o1_meta_null = (t_owned_ptr){data, NULL, true};
+	t_cm_owned_ptr o0_no_rc = (t_cm_owned_ptr){b0_no_rc.data, &b0_no_rc, true};
+	t_cm_owned_ptr o1_meta_null = (t_cm_owned_ptr){data, NULL, true};
 
-	t_owned_ptr res[] = {
+	t_cm_owned_ptr res[] = {
 	    sptr_copyo(NULL),
 	    sptr_copyo(&o0_no_rc),
 	    sptr_copyo(&o1_meta_null),
@@ -122,13 +122,13 @@ static void test_sptr_copyo_ok(void) {
 	void     *data = (void *)0xDEAD;
 	t_cm_dtor dtor = local_dtor;
 
-	t_fbox b0 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
-	t_fbox b1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 3};
+	t_cm_fbox b0 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_cm_fbox b1 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 3};
 
-	t_owned_ptr o0_owner    = (t_owned_ptr){b0.data, &b0, true};
-	t_owned_ptr o1_borrower = (t_owned_ptr){b1.data, &b1, false};
+	t_cm_owned_ptr o0_owner    = (t_cm_owned_ptr){b0.data, &b0, true};
+	t_cm_owned_ptr o1_borrower = (t_cm_owned_ptr){b1.data, &b1, false};
 
-	t_owned_ptr res[] = {
+	t_cm_owned_ptr res[] = {
 	    sptr_copyo(&o0_owner),
 	    sptr_copyo(&o1_borrower),
 	};
@@ -153,7 +153,7 @@ NO_COV void test_sptr_copyo(void) {
 
 // copyu
 static void test_sptr_copyu_errors(void) {
-	t_uniq_ptr res[] = {
+	t_cm_uniq_ptr res[] = {
 	    sptr_copyu(NULL),
 	};
 
@@ -164,10 +164,10 @@ static void test_sptr_copyu_ok(void) {
 	void     *data = (void *)0xDEAD;
 	t_cm_dtor dtor = local_dtor;
 
-	t_uniq_ptr u0 = (t_uniq_ptr){.data = data, .dtor = dtor};
-	t_uniq_ptr u1 = (t_uniq_ptr){.data = data, .dtor = NULL};
+	t_cm_uniq_ptr u0 = (t_cm_uniq_ptr){.data = data, .dtor = dtor};
+	t_cm_uniq_ptr u1 = (t_cm_uniq_ptr){.data = data, .dtor = NULL};
 
-	t_uniq_ptr res[] = {
+	t_cm_uniq_ptr res[] = {
 	    sptr_copyu(&u0),
 	    sptr_copyu(&u1),
 	};

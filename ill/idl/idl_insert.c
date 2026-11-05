@@ -6,7 +6,7 @@
  * \param node The node to insert.
  * \ingroup idl
 **/
-void idl_append(t_idl *anchor, t_idl *node) {
+void idl_append(t_cm_idl *anchor, t_cm_idl *node) {
 	if (!anchor || !node) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return;
@@ -23,8 +23,8 @@ void idl_append(t_idl *anchor, t_idl *node) {
  * \param nodes The head of the list of nodes to insert.
  * \ingroup idl
 **/
-void idl_nappend(t_idl *anchor, t_idl *nodes) {
-	t_idl *first_node, *last_node;
+void idl_nappend(t_cm_idl *anchor, t_cm_idl *nodes) {
+	t_cm_idl *first_node, *last_node;
 
 	if (!anchor || !nodes) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -46,7 +46,7 @@ void idl_nappend(t_idl *anchor, t_idl *nodes) {
  * \param node The node to insert.
  * \ingroup idl
 **/
-void idl_prepend(t_idl *anchor, t_idl *node) {
+void idl_prepend(t_cm_idl *anchor, t_cm_idl *node) {
 	if (!anchor || !node) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return;
@@ -64,8 +64,8 @@ void idl_prepend(t_idl *anchor, t_idl *node) {
  * \param nodes The head of the list of nodes to insert.
  * \ingroup idl
 **/
-void idl_nprepend(t_idl *anchor, t_idl *nodes) {
-	t_idl *last_node, *first_node;
+void idl_nprepend(t_cm_idl *anchor, t_cm_idl *nodes) {
+	t_cm_idl *last_node, *first_node;
 
 	if (!anchor || !nodes) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)

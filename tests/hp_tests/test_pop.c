@@ -2,12 +2,12 @@
 
 #include "hp_tests.h"
 
-NO_COV void test_hp_min_pop(void) {
-	t_hp hp;
-	int  v40 = 0x40;
-	int  v41 = 0x41;
-	int  v42 = 0x42;
-	int  out = 0x1234;
+NO_COV void test_cm_hp_min_pop(void) {
+	t_cm_hp hp;
+	int     v40 = 0x40;
+	int     v41 = 0x41;
+	int     v42 = 0x42;
+	int     out = 0x1234;
 
 	assert(hp_init(&hp, 32, sizeof(int), cb_cmp_int) == &hp);
 	assert(hp.elems != NULL);
@@ -34,12 +34,12 @@ NO_COV void test_hp_min_pop(void) {
 	hp_delete(&hp);
 	return;
 }
-NO_COV void test_hp_max_pop(void) {
-	t_hp hp;
-	int  v40 = 0x40;
-	int  v41 = 0x41;
-	int  v42 = 0x42;
-	int  out = 0x1234;
+NO_COV void test_cm_hp_max_pop(void) {
+	t_cm_hp hp;
+	int     v40 = 0x40;
+	int     v41 = 0x41;
+	int     v42 = 0x42;
+	int     out = 0x1234;
 
 	assert(hp_init(&hp, 32, sizeof(int), cb_cmp_int) == &hp);
 	assert(hp.elems != NULL);

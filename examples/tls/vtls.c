@@ -8,7 +8,7 @@
 typedef struct {
 	int    a;
 	double b;
-} t_pair;
+} t_cm_pair;
 
 static void *worker(void *arg) {
 	long id = (long)(intptr_t)arg;
@@ -23,11 +23,11 @@ static void *worker(void *arg) {
 int main(void) {
 	pthread_t th[2];
 
-	int    i   = 42;
-	char   c   = 'z';
-	long   l   = 123456789L;
-	t_pair p   = {.a = 7, .b = 3.5};
-	char   s[] = "hello";
+	int       i   = 42;
+	char      c   = 'z';
+	long      l   = 123456789L;
+	t_cm_pair p   = {.a = 7, .b = 3.5};
+	char      s[] = "hello";
 
 	vtls_set("int", &i, sizeof(i));
 	vtls_set("char", &c, sizeof(c));
@@ -39,11 +39,11 @@ int main(void) {
 	fflush(stdout);
 	vtls_dump_all(1);
 
-	int    oi;
-	char   oc;
-	long   ol;
-	t_pair op;
-	char   os[16];
+	int       oi;
+	char      oc;
+	long      ol;
+	t_cm_pair op;
+	char      os[16];
 	vtls_getout("int", &oi);
 	vtls_getout("char", &oc);
 	vtls_getout("long", &ol);

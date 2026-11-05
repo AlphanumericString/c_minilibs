@@ -7,8 +7,8 @@
 static void *worker(void *arg) {
 	long id = (long)(intptr_t)arg;
 
-	ctls_set("who", (t_ctls_typewrap){.type = CTLS_LONG, .value.l = id});
-	ctls_set("visited", (t_ctls_typewrap){.type = CTLS_INT, .value.i = 1});
+	ctls_set("who", (t_cm_ctls_typewrap){.type = CTLS_LONG, .value.l = id});
+	ctls_set("visited", (t_cm_ctls_typewrap){.type = CTLS_INT, .value.i = 1});
 
 	printf("thread %ld sees who=%ld len=%zu\n", id, ctls_get("who")->value.l,
 	       ctls_len());
@@ -18,11 +18,12 @@ static void *worker(void *arg) {
 int main(void) {
 	pthread_t th[3];
 
-	ctls_set("counter", (t_ctls_typewrap){.type = CTLS_LONG, .value.l = 0});
-	ctls_set("who", (t_ctls_typewrap){.type = CTLS_LONG, .value.l = 42});
-	ctls_set("tag", (t_ctls_typewrap){.type = CTLS_CHAR, .value.c = 'x'});
-	ctls_set("handle", (t_ctls_typewrap){.type    = CTLS_PTR,
-	                                     .value.p = (void *)(intptr_t)0xBEEF});
+	ctls_set("counter", (t_cm_ctls_typewrap){.type = CTLS_LONG, .value.l = 0});
+	ctls_set("who", (t_cm_ctls_typewrap){.type = CTLS_LONG, .value.l = 42});
+	ctls_set("tag", (t_cm_ctls_typewrap){.type = CTLS_CHAR, .value.c = 'x'});
+	ctls_set("handle",
+	         (t_cm_ctls_typewrap){.type    = CTLS_PTR,
+	                              .value.p = (void *)(intptr_t)0xBEEF});
 
 	printf("main dump (len=%zu):\n", ctls_len());
 	fflush(stdout);

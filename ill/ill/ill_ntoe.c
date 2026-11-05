@@ -6,7 +6,7 @@
  * \return A pointer to the user's element structure.
  * \ingroup ill
 **/
-void *ill_ntoe(const t_ill *node) {
+void *ill_ntoe(const t_cm_ill *node) {
 	if (!node) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return (NULL);
@@ -21,11 +21,11 @@ void *ill_ntoe(const t_ill *node) {
  * \return A pointer to the intrusive node.
  * \ingroup ill
 **/
-t_ill *ill_eton(void *e, size_t offset) {
+t_cm_ill *ill_eton(void *e, size_t offset) {
 	if (!e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return (NULL);
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
-	return ((t_ill *)((char *)e + offset));
+	return ((t_cm_ill *)((char *)e + offset));
 }

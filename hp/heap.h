@@ -28,7 +28,7 @@
 **/
 
 /**
- * \typedef t_hp
+ * \typedef t_cm_hp
  * \brief The heap structure is a representation of a heap, min or max depends
  * on the user's usage of said heap.
  * \param nb the number of elements currently present in the heap
@@ -38,49 +38,50 @@
  * \param cmp comparator function
  * \ingroup hp
 **/
-typedef struct s_heap {
+typedef struct s_cm_heap {
 	size_t          nb;
 	size_t          capacity;
 	size_t          sz_e;
 	void           *elems;
 	t_cm_comparator cmp;
-} t_hp;
+} t_cm_hp;
 
-t_hp *hp_create(size_t nb_elems, size_t sz_elem, t_cm_comparator cmp);
-t_hp *hp_init(t_hp *hp, size_t nb_elems, size_t sz_elem, t_cm_comparator cmp);
+t_cm_hp *hp_create(size_t nb_elems, size_t sz_elem, t_cm_comparator cmp);
+t_cm_hp *hp_init(t_cm_hp *hp, size_t nb_elems, size_t sz_elem,
+                 t_cm_comparator cmp);
 
-t_hp *hp_new_from_array(void *arr, size_t nb_elems, size_t sz_elem,
-                        t_cm_comparator cmp);
-t_hp *hp_init_from_array(t_hp *hp, void *arr, size_t nb_elems, size_t sz_elem,
-                         t_cm_comparator cmp);
+t_cm_hp *hp_new_from_array(void *arr, size_t nb_elems, size_t sz_elem,
+                           t_cm_comparator cmp);
+t_cm_hp *hp_init_from_array(t_cm_hp *hp, void *arr, size_t nb_elems,
+                            size_t sz_elem, t_cm_comparator cmp);
 
-bool hp_delete(t_hp *hp);
-bool hp_free(t_hp **hp);
-bool hp_clear(t_hp *hp);
+bool hp_delete(t_cm_hp *hp);
+bool hp_free(t_cm_hp **hp);
+bool hp_clear(t_cm_hp *hp);
 
-bool hp_is_empty(const t_hp *hp);
-bool hp_is_full(const t_hp *hp);
-bool hp_is_valid(const t_hp *hp);
+bool hp_is_empty(const t_cm_hp *hp);
+bool hp_is_full(const t_cm_hp *hp);
+bool hp_is_valid(const t_cm_hp *hp);
 
-t_cm_comparator hp_get_cmp(const t_hp *hp);
-size_t          hp_get_cap(const t_hp *hp);
-size_t          hp_get_current_size(const t_hp *hp);
-size_t          hp_get_elem_size(const t_hp *hp);
-void           *hp_get_elems_array(const t_hp *hp);
-void           *hp_at(const t_hp *hp, size_t pos);
+t_cm_comparator hp_get_cmp(const t_cm_hp *hp);
+size_t          hp_get_cap(const t_cm_hp *hp);
+size_t          hp_get_current_size(const t_cm_hp *hp);
+size_t          hp_get_elem_size(const t_cm_hp *hp);
+void           *hp_get_elems_array(const t_cm_hp *hp);
+void           *hp_at(const t_cm_hp *hp, size_t pos);
 
-bool hp_min_push(t_hp *h, const void *e);
-bool hp_max_push(t_hp *h, const void *e);
+bool hp_min_push(t_cm_hp *h, const void *e);
+bool hp_max_push(t_cm_hp *h, const void *e);
 
-bool hp_min_pop(t_hp *h, void *out);
-bool hp_max_pop(t_hp *h, void *out);
+bool hp_min_pop(t_cm_hp *h, void *out);
+bool hp_max_pop(t_cm_hp *h, void *out);
 
-bool hp_min_rm(t_hp *h, size_t n, void *out);
-bool hp_max_rm(t_hp *h, size_t n, void *out);
+bool hp_min_rm(t_cm_hp *h, size_t n, void *out);
+bool hp_max_rm(t_cm_hp *h, size_t n, void *out);
 
-bool hp_foreach(const t_hp *h, t_cm_callback cb, void *u_arg);
-bool hp_foreach_in(t_hp *h, t_cm_callback cb, void *u_arg);
-bool hp_foreach_pre(t_hp *h, t_cm_callback cb, void *u_arg);
-bool hp_foreach_post(t_hp *h, t_cm_callback cb, void *u_arg);
+bool hp_foreach(const t_cm_hp *h, t_cm_callback cb, void *u_arg);
+bool hp_foreach_in(t_cm_hp *h, t_cm_callback cb, void *u_arg);
+bool hp_foreach_pre(t_cm_hp *h, t_cm_callback cb, void *u_arg);
+bool hp_foreach_post(t_cm_hp *h, t_cm_callback cb, void *u_arg);
 
 #endif // !C_MINI__HP

@@ -6,7 +6,7 @@
  * \return The number of nodes in the list.
  * \ingroup ill
 **/
-size_t ill_length(const t_ill *head) {
+size_t ill_length(const t_cm_ill *head) {
 	size_t len = 0;
 
 	while (head) {
@@ -24,7 +24,7 @@ size_t ill_length(const t_ill *head) {
  * \return The bounded length.
  * \ingroup ill
 **/
-size_t ill_nlength(const t_ill *head, size_t n) {
+size_t ill_nlength(const t_cm_ill *head, size_t n) {
 	size_t len = 0;
 
 	while (head && n) {
@@ -44,7 +44,7 @@ size_t ill_nlength(const t_ill *head, size_t n) {
  * \return The number of matching elements.
  * \ingroup ill
 **/
-size_t ill_match_nb(const t_ill *head, t_cm_callback matcher, void *arg) {
+size_t ill_match_nb(const t_cm_ill *head, t_cm_callback matcher, void *arg) {
 	size_t count = 0;
 
 	if (!matcher) {

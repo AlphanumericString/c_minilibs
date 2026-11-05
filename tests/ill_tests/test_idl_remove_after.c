@@ -2,9 +2,9 @@
 
 #include "ill_tests.h"
 
-NO_COV void test_idl_remove_after(void) {
-	t_test_dnode n1, n2, n3, n4;
-	t_idl       *rm_after_res;
+NO_COV void test_cm_idl_remove_after(void) {
+	t_cm_test_dnode n1, n2, n3, n4;
+	t_cm_idl       *rm_after_res;
 
 	INIT_STD_DNODES(n1, n2, n3, n4);
 	LINK_UP_DNODES(&n3.dnode, &n4.dnode);

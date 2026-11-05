@@ -2,18 +2,18 @@
 
 #include "ill_tests.h"
 
-NO_COV static void check_sorted(t_ill *head) {
+NO_COV static void check_sorted(t_cm_ill *head) {
 	while (head && head->next) {
 		assert(cb_ill_cmp_min_max(ill_ntoe(head), ill_ntoe(head->next)) <= 0);
 		head = head->next;
 	}
 }
 
-NO_COV static void check_values(t_ill *head, const int *exp, size_t n) {
+NO_COV static void check_values(t_cm_ill *head, const int *exp, size_t n) {
 	size_t i = 0;
 
 	while (head && i < n) {
-		assert(((t_test_node *)ill_ntoe(head))->value == exp[i]);
+		assert(((t_cm_test_node *)ill_ntoe(head))->value == exp[i]);
 		head = head->next;
 		i++;
 	}
@@ -21,18 +21,18 @@ NO_COV static void check_values(t_ill *head, const int *exp, size_t n) {
 	assert(head == NULL);
 }
 
-NO_COV void test_ill_sort(void) {
-	t_test_node nodes[5];
-	t_test_node a[3];
-	t_test_node b[3];
-	t_test_node solo;
-	t_ill      *head;
-	t_ill      *la        = NULL;
-	t_ill      *lb        = NULL;
-	int         values[5] = {5, 1, 4, 2, 3};
-	int         exp[5]    = {1, 2, 3, 4, 5};
-	int         expm[6]   = {1, 2, 3, 4, 5, 6};
-	size_t      i;
+NO_COV void test_cm_ill_sort(void) {
+	t_cm_test_node nodes[5];
+	t_cm_test_node a[3];
+	t_cm_test_node b[3];
+	t_cm_test_node solo;
+	t_cm_ill      *head;
+	t_cm_ill      *la        = NULL;
+	t_cm_ill      *lb        = NULL;
+	int            values[5] = {5, 1, 4, 2, 3};
+	int            exp[5]    = {1, 2, 3, 4, 5};
+	int            expm[6]   = {1, 2, 3, 4, 5, 6};
+	size_t         i;
 
 	head = NULL;
 	for (i = 0; i < 5; i++) {
@@ -49,7 +49,7 @@ NO_COV void test_ill_sort(void) {
 	check_values(head, exp, 5);
 	INIT_NODE(solo, 7, 9);
 	{
-		t_ill *sh = &solo.node;
+		t_cm_ill *sh = &solo.node;
 		ill_sort(&sh, cb_ill_cmp_min_max);
 		assert(sh == &solo.node);
 	}

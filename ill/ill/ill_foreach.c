@@ -9,9 +9,9 @@
  * \return true if the callback returned true for all elements, false otherwise.
  * \ingroup ill
 **/
-bool ill_foreach(t_ill *head, t_cm_callback c, void *u_data) {
-	t_ill *curr;
-	t_ill *nxt;
+bool ill_foreach(t_cm_ill *head, t_cm_callback c, void *u_data) {
+	t_cm_ill *curr;
+	t_cm_ill *nxt;
 
 	if (!c || !head) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
@@ -40,9 +40,9 @@ bool ill_foreach(t_ill *head, t_cm_callback c, void *u_data) {
  * otherwise.
  * \ingroup ill
 **/
-bool ill_for(t_ill *head, size_t n, t_cm_callback c, void *u_data) {
-	t_ill *curr;
-	t_ill *nxt;
+bool ill_for(t_cm_ill *head, size_t n, t_cm_callback c, void *u_data) {
+	t_cm_ill *curr;
+	t_cm_ill *nxt;
 
 	if (!c || !head) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)

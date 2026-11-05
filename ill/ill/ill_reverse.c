@@ -6,10 +6,10 @@
  * \return The new head of the reversed list.
  * \ingroup ill
 **/
-t_ill *ill_reverse(t_ill *head) {
-	t_ill *prev;
-	t_ill *curr;
-	t_ill *nxt;
+t_cm_ill *ill_reverse(t_cm_ill *head) {
+	t_cm_ill *prev;
+	t_cm_ill *curr;
+	t_cm_ill *nxt;
 
 	if (!head) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)

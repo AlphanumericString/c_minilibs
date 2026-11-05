@@ -2,11 +2,11 @@
 
 #include "da_tests.h"
 
-NO_COV void test_da_clr(void) {
-	t_da   da;
-	size_t sz;
-	size_t cap;
-	void  *arr;
+NO_COV void test_cm_da_clr(void) {
+	t_cm_da da;
+	size_t  sz;
+	size_t  cap;
+	void   *arr;
 
 	da_init(&da, sizeof(int));
 	da_cat_array(&da, (int *)arr_3, 3, sizeof(int));

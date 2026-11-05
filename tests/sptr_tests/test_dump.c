@@ -6,14 +6,14 @@
 #include "sptr_tests.h"
 
 NO_COV void test_sptr_to_string_s(void) {
-	const t_fbox       b1  = (t_fbox){(void *)0xDEAD, NULL, 1, 0};
-	const t_fbox       b2  = (t_fbox){(void *)0xBEEF, (t_cm_dtor)0x42, 1, 0};
-	const t_fbox       b3  = (t_fbox){(void *)0xFACE, NULL, 1, 1};
-	const t_strong_ptr s[] = {
-	    (const t_strong_ptr){b1.data, (t_fbox *)&b1},
-	    (const t_strong_ptr){b2.data, (t_fbox *)&b2},
-	    (const t_strong_ptr){b3.data, (t_fbox *)&b3},
-	    (const t_strong_ptr){NULL,    NULL         }
+	const t_cm_fbox b1 = (t_cm_fbox){(void *)0xDEAD, NULL, 1, 0};
+	const t_cm_fbox b2 = (t_cm_fbox){(void *)0xBEEF, (t_cm_dtor)0x42, 1, 0};
+	const t_cm_fbox b3 = (t_cm_fbox){(void *)0xFACE, NULL, 1, 1};
+	const t_cm_strong_ptr s[] = {
+	    (const t_cm_strong_ptr){b1.data, (t_cm_fbox *)&b1},
+	    (const t_cm_strong_ptr){b2.data, (t_cm_fbox *)&b2},
+	    (const t_cm_strong_ptr){b3.data, (t_cm_fbox *)&b3},
+	    (const t_cm_strong_ptr){NULL,    NULL            }
     };
 	const char *e[sizeof(s) / sizeof(s[0]) + 1] = {
 	    "SPTR STRONG { data 0xdead, count 1 (weak:0), dtor (nil)}",
@@ -40,18 +40,19 @@ NO_COV void test_sptr_to_string_s(void) {
 	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
 NO_COV void test_sptr_to_string_w(void) {
-	const t_fbox f1 = (t_fbox){(void *)0xDEAD, NULL, 1, 1};
-	const t_fbox f2 = (t_fbox){(void *)0xBEEF, (t_cm_dtor)0x42, 1, 2};
-	const t_fbox f3 = (t_fbox){NULL, NULL, 0, 1};
+	const t_cm_fbox f1 = (t_cm_fbox){(void *)0xDEAD, NULL, 1, 1};
+	const t_cm_fbox f2 = (t_cm_fbox){(void *)0xBEEF, (t_cm_dtor)0x42, 1, 2};
+	const t_cm_fbox f3 = (t_cm_fbox){NULL, NULL, 0, 1};
 
-	const t_weak_ptr w[] = {
-	    (const t_weak_ptr){(t_fbox *)&f1}, (const t_weak_ptr){(t_fbox *)&f2},
-	    (const t_weak_ptr){(t_fbox *)&f3}, (const t_weak_ptr){NULL}};
-	const char *e_str[sizeof(w) / sizeof(w[0])] = {
-	    "SPTR WEAK { data 0xdead, count 1 (weak:1), dtor (nil)}",
-	    "SPTR WEAK { data 0xbeef, count 1 (weak:2), dtor 0x42}",
-	    "SPTR WEAK { data (nil), count 0 (weak:1), dtor (nil)}",
-	    "SPTR WEAK (nil)"};
+	const t_cm_weak_ptr w[] = {(const t_cm_weak_ptr){(t_cm_fbox *)&f1},
+	                           (const t_cm_weak_ptr){(t_cm_fbox *)&f2},
+	                           (const t_cm_weak_ptr){(t_cm_fbox *)&f3},
+	                           (const t_cm_weak_ptr){NULL}};
+	const char         *e_str[sizeof(w) / sizeof(w[0])] = {
+        "SPTR WEAK { data 0xdead, count 1 (weak:1), dtor (nil)}",
+        "SPTR WEAK { data 0xbeef, count 1 (weak:2), dtor 0x42}",
+        "SPTR WEAK { data (nil), count 0 (weak:1), dtor (nil)}",
+        "SPTR WEAK (nil)"};
 	char *res[sizeof(w) / sizeof(w[0])] = {
 	    sptr_to_stringw(&w[0]),
 	    sptr_to_stringw(&w[1]),
@@ -73,13 +74,13 @@ NO_COV void test_sptr_to_string_w(void) {
 	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
 NO_COV void test_sptr_to_string_o(void) {
-	t_fbox            f1  = {(void *)0xDEAD, NULL, 1, 0};
-	t_fbox            f2  = {(void *)0xBEEF, (t_cm_dtor)0x42, 1, 1};
-	const t_owned_ptr o[] = {
-	    (t_owned_ptr){.owner = true,  .meta = &f1,  .data = f1.data},
-	    (t_owned_ptr){.owner = true,  .meta = &f2,  .data = f2.data},
-	    (t_owned_ptr){.owner = false, .meta = &f2,  .data = f2.data},
-	    (t_owned_ptr){.owner = true,  .meta = NULL, .data = NULL   }
+	t_cm_fbox            f1  = {(void *)0xDEAD, NULL, 1, 0};
+	t_cm_fbox            f2  = {(void *)0xBEEF, (t_cm_dtor)0x42, 1, 1};
+	const t_cm_owned_ptr o[] = {
+	    (t_cm_owned_ptr){.owner = true,  .meta = &f1,  .data = f1.data},
+	    (t_cm_owned_ptr){.owner = true,  .meta = &f2,  .data = f2.data},
+	    (t_cm_owned_ptr){.owner = false, .meta = &f2,  .data = f2.data},
+	    (t_cm_owned_ptr){.owner = true,  .meta = NULL, .data = NULL   }
     };
 	const char *e[sizeof(o) / sizeof(o[0]) + 1] = {
 	    "SPTR OWND owned { data 0xdead, count 1 (weak:0), dtor (nil)}",
@@ -106,9 +107,9 @@ NO_COV void test_sptr_to_string_o(void) {
 	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
 NO_COV void test_sptr_to_string_u(void) {
-	const t_uniq_ptr u[] = {
-	    (t_uniq_ptr){(void *)0xDEAD, NULL           },
-	    (t_uniq_ptr){(void *)0xBEEF, (t_cm_dtor)0x42}
+	const t_cm_uniq_ptr u[] = {
+	    (t_cm_uniq_ptr){(void *)0xDEAD, NULL           },
+	    (t_cm_uniq_ptr){(void *)0xBEEF, (t_cm_dtor)0x42}
     };
 	const char *e[sizeof(u) / sizeof(u[0]) + 1] = {
 	    "SPTR UNIQ { data 0xdead, dtor (nil)}",
@@ -131,9 +132,10 @@ NO_COV void test_sptr_to_string_u(void) {
 // set dtor at 0x42 for test instead of using real func (eg:free) as free is
 // loaded at random mem space.
 NO_COV void test_sptr_dumps(void) {
-	const t_fbox       b1 = (t_fbox){(void *)0xDEAD, (t_cm_dtor)NULL, 1, 0};
-	const t_strong_ptr s  = (const t_strong_ptr){b1.data, (t_fbox *)&b1};
-	const char        *s_str =
+	const t_cm_fbox b1 = (t_cm_fbox){(void *)0xDEAD, (t_cm_dtor)NULL, 1, 0};
+	const t_cm_strong_ptr s =
+	    (const t_cm_strong_ptr){b1.data, (t_cm_fbox *)&b1};
+	const char *s_str =
 	    "SPTR STRONG { data 0xdead, count 1 (weak:0), dtor (nil)}\n";
 	const char *null_str = "SPTR STRONG (nil)\n";
 	int         pfd[2];
@@ -170,9 +172,9 @@ NO_COV void test_sptr_dumps(void) {
 }
 
 NO_COV void test_sptr_dumpw(void) {
-	const t_fbox     f1 = (t_fbox){(void *)0xDEAD, NULL, 1, 1};
-	const t_weak_ptr w  = (const t_weak_ptr){(t_fbox *)&f1};
-	const char      *w_str =
+	const t_cm_fbox     f1 = (t_cm_fbox){(void *)0xDEAD, NULL, 1, 1};
+	const t_cm_weak_ptr w  = (const t_cm_weak_ptr){(t_cm_fbox *)&f1};
+	const char         *w_str =
 	    "SPTR WEAK { data 0xdead, count 1 (weak:1), dtor (nil)}\n";
 	const char *null_str = "SPTR WEAK (nil)\n";
 	int         pfd[2];
@@ -209,9 +211,9 @@ NO_COV void test_sptr_dumpw(void) {
 }
 
 NO_COV void test_sptr_dumpo(void) {
-	t_fbox            f1 = {(void *)0xDEAD, NULL, 1, 0};
-	const t_owned_ptr o =
-	    (t_owned_ptr){.owner = true, .meta = &f1, .data = f1.data};
+	t_cm_fbox            f1 = {(void *)0xDEAD, NULL, 1, 0};
+	const t_cm_owned_ptr o =
+	    (t_cm_owned_ptr){.owner = true, .meta = &f1, .data = f1.data};
 	const char *o_str =
 	    "SPTR OWND owned { data 0xdead, count 1 (weak:0), dtor (nil)}\n";
 	const char *null_str = "SPTR OWND (nil)\n";
@@ -249,11 +251,11 @@ NO_COV void test_sptr_dumpo(void) {
 }
 
 NO_COV void test_sptr_dumpu(void) {
-	const t_uniq_ptr u        = (t_uniq_ptr){(void *)0xDEAD, NULL};
-	const char      *u_str    = "SPTR UNIQ { data 0xdead, dtor (nil)}\n";
-	const char      *null_str = "SPTR UNIQ (nil)\n";
-	int              pfd[2];
-	char             buf[256] = {0};
+	const t_cm_uniq_ptr u        = (t_cm_uniq_ptr){(void *)0xDEAD, NULL};
+	const char         *u_str    = "SPTR UNIQ { data 0xdead, dtor (nil)}\n";
+	const char         *null_str = "SPTR UNIQ (nil)\n";
+	int                 pfd[2];
+	char                buf[256] = {0};
 
 	sptr_dumpu(-1, &u);
 	sptr_dumpu(-1, NULL);

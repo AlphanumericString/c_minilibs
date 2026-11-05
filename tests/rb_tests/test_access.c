@@ -3,9 +3,9 @@
 
 #include "rb_tests.h"
 
-NO_COV void test_rb_at(void) {
-	t_rb rb     = {0};
-	int  arr[3] = {1, 2, 3};
+NO_COV void test_cm_rb_at(void) {
+	t_cm_rb rb     = {0};
+	int     arr[3] = {1, 2, 3};
 
 	rb_init(&rb, sizeof(int));
 	rb_npush(&rb, arr, 3);
@@ -18,15 +18,15 @@ NO_COV void test_rb_at(void) {
 	assert(*(int *)rb_at(rb, 2) == 3);
 
 	assert(rb_at(rb, 999) == NULL);
-	assert(rb_at((t_rb){0}, 2) == NULL);
+	assert(rb_at((t_cm_rb){0}, 2) == NULL);
 
 	rb_destroy(&rb);
 }
 
-NO_COV void test_rb_nat(void) {
-	t_rb rb     = {0};
-	int  arr[4] = {1, 2, 3, 4};
-	int  out[4] = {0};
+NO_COV void test_cm_rb_nat(void) {
+	t_cm_rb rb     = {0};
+	int     arr[4] = {1, 2, 3, 4};
+	int     out[4] = {0};
 
 	rb_init(&rb, sizeof(int));
 	rb_npush(&rb, arr, 4);
@@ -75,7 +75,7 @@ NO_COV void test_rb_nat(void) {
 	assert(rb_nat(rb, 0, 2, NULL) == NULL);
 	assert(out[0] == -1);
 	assert(out[1] == -1);
-	assert(rb_nat((t_rb){0}, 2, 2, out) == NULL);
+	assert(rb_nat((t_cm_rb){0}, 2, 2, out) == NULL);
 	assert(out[0] == -1);
 	assert(out[1] == -1);
 	assert(rb_nat(rb, 2, 0, out) == NULL);

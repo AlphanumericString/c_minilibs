@@ -2,7 +2,7 @@
 
 #include "heap.h"
 
-static void *hp_elem_ptr(const t_hp *h, size_t idx) {
+static void *hp_elem_ptr(const t_cm_hp *h, size_t idx) {
 	return ((char *)h->elems + h->sz_e * idx);
 }
 
@@ -18,12 +18,12 @@ static void hp_swap_bytes(void *a, void *b, size_t n) {
 	}
 }
 
-static void heap_swap(const t_hp *h, size_t pos1, size_t pos2) {
+static void heap_swap(const t_cm_hp *h, size_t pos1, size_t pos2) {
 	hp_swap_bytes(hp_elem_ptr(h, pos1), hp_elem_ptr(h, pos2), h->sz_e);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_SWAP, pos1, pos2)
 }
 // heapup in max or min mode, both works
-static void heap_up(t_hp *h, size_t idx, bool max) {
+static void heap_up(t_cm_hp *h, size_t idx, bool max) {
 	size_t parent;
 
 	for (int cmp_res; idx;) {
@@ -38,7 +38,7 @@ static void heap_up(t_hp *h, size_t idx, bool max) {
 // h: heap to heap down
 // max: is max heap
 // heapdown in max or min mode, both works
-static void heap_down(t_hp *h, size_t idx, bool max) {
+static void heap_down(t_cm_hp *h, size_t idx, bool max) {
 	int cmp_res;
 
 	for (size_t l, r, target; 1; idx = target) {
@@ -65,7 +65,7 @@ static void heap_down(t_hp *h, size_t idx, bool max) {
  * \return true on success, false otherwise
  * \ingroup hp
 **/
-bool hp_min_push(t_hp *h, const void *e) {
+bool hp_min_push(t_cm_hp *h, const void *e) {
 	if (!h || !e || !h->sz_e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (false);
@@ -85,7 +85,7 @@ bool hp_min_push(t_hp *h, const void *e) {
  * \return true on success, false otherwise
  * \ingroup hp
 **/
-bool hp_max_push(t_hp *h, const void *e) {
+bool hp_max_push(t_cm_hp *h, const void *e) {
 	if (!h || !e || !h->sz_e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (false);
@@ -106,7 +106,7 @@ bool hp_max_push(t_hp *h, const void *e) {
  * \return true on success, false otherwise
  * \ingroup hp
 **/
-bool hp_min_pop(t_hp *h, void *out) {
+bool hp_min_pop(t_cm_hp *h, void *out) {
 	if (!h || !out || !h->nb || !h->sz_e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (false);
@@ -126,7 +126,7 @@ bool hp_min_pop(t_hp *h, void *out) {
  * \return true on success, false otherwise
  * \ingroup hp
 **/
-bool hp_max_pop(t_hp *h, void *out) {
+bool hp_max_pop(t_cm_hp *h, void *out) {
 	if (!h || !out || !h->nb || !h->sz_e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (false);
@@ -148,7 +148,7 @@ bool hp_max_pop(t_hp *h, void *out) {
  * \return true on success, false otherwise
  * \ingroup hp
 **/
-bool hp_min_rm(t_hp *h, size_t n, void *out) {
+bool hp_min_rm(t_cm_hp *h, size_t n, void *out) {
 	if (!h || !out || !h->nb) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (false);
@@ -167,7 +167,7 @@ bool hp_min_rm(t_hp *h, size_t n, void *out) {
  * \return true on success, false otherwise
  * \ingroup hp
 **/
-bool hp_max_rm(t_hp *h, size_t n, void *out) {
+bool hp_max_rm(t_cm_hp *h, size_t n, void *out) {
 	if (!h || !out || !h->nb) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (false);

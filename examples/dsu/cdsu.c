@@ -2,7 +2,7 @@
 
 #include "dsu/cdsu/compact_disjointed_set_union.h"
 
-static void dump(const t_cdsu *d) {
+static void dump(const t_cm_cdsu *d) {
 	printf("components=%zu depth=%d :", cdsu_nb_components(d),
 	       cdsu_max_depth(d));
 	for (size_t i = 0; i < cdsu_size(d); i++)
@@ -12,7 +12,7 @@ static void dump(const t_cdsu *d) {
 
 int main(void) {
 	enum { N = 8 };
-	t_cdsu *d = cdsu_new(N);
+	t_cm_cdsu *d = cdsu_new(N);
 
 	printf("fresh dsu\n");
 	dump(d);

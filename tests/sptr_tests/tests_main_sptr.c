@@ -114,12 +114,12 @@ NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Fbox", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
-	test_fbox_get_count();
-	test_fbox_increment();
-	test_fbox_decrement();
-	test_fbox_get_data();
-	test_fbox_init();
-	test_fbox_new();
+	test_cm_fbox_get_count();
+	test_cm_fbox_increment();
+	test_cm_fbox_decrement();
+	test_cm_fbox_get_cm_data();
+	test_cm_fbox_init();
+	test_cm_fbox_new();
 
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "All SPTR tests completed successfully.", )
 

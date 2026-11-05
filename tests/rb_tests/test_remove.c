@@ -2,9 +2,9 @@
 
 #include "rb_tests.h"
 
-NO_COV void test_rb_drop(void) {
-	t_rb rb  = {0};
-	int  val = 42;
+NO_COV void test_cm_rb_drop(void) {
+	t_cm_rb rb  = {0};
+	int     val = 42;
 
 	rb_init(&rb, sizeof(int));
 	rb_push(&rb, &val);
@@ -21,10 +21,10 @@ NO_COV void test_rb_drop(void) {
 	rb_destroy(&rb);
 }
 
-NO_COV void test_rb_pop(void) {
-	t_rb  rb   = {0};
-	int   val1 = 42, val2 = 84, out = 0;
-	void *p, *p2;
+NO_COV void test_cm_rb_pop(void) {
+	t_cm_rb rb   = {0};
+	int     val1 = 42, val2 = 84, out = 0;
+	void   *p, *p2;
 
 	rb_init(&rb, sizeof(int));
 	rb_push(&rb, &val1);
@@ -52,11 +52,11 @@ NO_COV void test_rb_pop(void) {
 	rb_destroy(&rb);
 }
 
-NO_COV void test_rb_npop(void) {
-	t_rb  rb   = {0};
-	int   val1 = 1, val2 = 2, val3 = 3;
-	int   out[2] = {0};
-	void *p;
+NO_COV void test_cm_rb_npop(void) {
+	t_cm_rb rb   = {0};
+	int     val1 = 1, val2 = 2, val3 = 3;
+	int     out[2] = {0};
+	void   *p;
 
 	rb_init(&rb, sizeof(int));
 	rb_push(&rb, &val1);
@@ -82,10 +82,10 @@ NO_COV void test_rb_npop(void) {
 	rb_destroy(&rb);
 }
 
-NO_COV void test_rb_peek(void) {
-	t_rb  rb   = {0};
-	int   val1 = 42, out = 0;
-	void *p;
+NO_COV void test_cm_rb_peek(void) {
+	t_cm_rb rb   = {0};
+	int     val1 = 42, out = 0;
+	void   *p;
 
 	rb_init(&rb, sizeof(int));
 	rb_push(&rb, &val1);
@@ -102,17 +102,17 @@ NO_COV void test_rb_peek(void) {
 	assert(out == 99);
 	assert(rb_size(rb) == 1);
 
-	assert(rb_peek((t_rb){0}, &out) == NULL);
+	assert(rb_peek((t_cm_rb){0}, &out) == NULL);
 	rb_destroy(&rb);
 }
 
-NO_COV void test_rb_npeek(void) {
-	t_rb  rb = {0};
-	t_rb  malicious;
-	int   vals[]                                  = {1, 2, 3};
-	int   out[2]                                  = {0};
-	int   out_big[sizeof(vals) / sizeof(vals[0])] = {0};
-	void *p;
+NO_COV void test_cm_rb_npeek(void) {
+	t_cm_rb rb = {0};
+	t_cm_rb malicious;
+	int     vals[]                                  = {1, 2, 3};
+	int     out[2]                                  = {0};
+	int     out_big[sizeof(vals) / sizeof(vals[0])] = {0};
+	void   *p;
 
 	rb_from_array(&rb, vals, 3, sizeof(int));
 	rb.count = 3;
@@ -147,5 +147,5 @@ NO_COV void test_rb_npeek(void) {
 	malicious.count = 0;
 	assert(rb_npeek(malicious, 2, out) == NULL);
 	assert(rb_npeek(rb, 0, out) == NULL);
-	assert(rb_npeek((t_rb){0}, 2, out) == NULL);
+	assert(rb_npeek((t_cm_rb){0}, 2, out) == NULL);
 }

@@ -5,10 +5,10 @@
 
 #define CACHE_LEN C_MINI__TPM_TRD_JOB_CACHE_LEN
 
-int tpmi_job_thrd_cache_pop(t_tpm *tpm, t_tpm_jc **buffer, size_t start,
+int tpmi_job_thrd_cache_pop(t_cm_tpm *tpm, t_cm_tpm_jc **buffer, size_t start,
                             size_t max) {
-	size_t    i = 0;
-	t_tpm_jc *it;
+	size_t       i = 0;
+	t_cm_tpm_jc *it;
 
 	if (!tpm || !buffer) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG)
@@ -39,9 +39,9 @@ int tpmi_job_thrd_cache_pop(t_tpm *tpm, t_tpm_jc **buffer, size_t start,
  * \note the returned handle is only valid until the job completes
  * \ingroup tpm
 **/
-t_tpm_jc *tpm_add_job(t_tpm *tpm, t_cm_work work, void *arg) {
-	t_tpm_jc *j;
-	bool      r;
+t_cm_tpm_jc *tpm_add_job(t_cm_tpm *tpm, t_cm_work work, void *arg) {
+	t_cm_tpm_jc *j;
+	bool         r;
 
 	if (!tpm || !work) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG)
@@ -62,9 +62,8 @@ t_tpm_jc *tpm_add_job(t_tpm *tpm, t_cm_work work, void *arg) {
 	return (j);
 }
 // not implemented yet
-// t_tpm_jc *tpm_add_reccuring_job(t_tpm *tpm, t_cm_work work, void *arg) {
-// 	t_tpm_jc *j;
-// 	bool           r;
+// t_cm_tpm_jc *tpm_add_reccuring_job(t_cm_tpm *tpm, t_cm_work work, void *arg)
+// { 	t_cm_tpm_jc *j; 	bool           r;
 //
 // 	if (!tpm || !work) {
 // 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG)
@@ -96,10 +95,11 @@ t_tpm_jc *tpm_add_job(t_tpm *tpm, t_cm_work work, void *arg) {
  * \note if the pool is shutting down the batch is rejected
  * \ingroup tpm
 **/
-t_tpm_jc *tpm_add_batch(t_tpm *tpm, size_t nb, t_cm_work work, void **args) {
-	t_tpm_jc *local_head;
-	t_tpm_jc *it;
-	bool      shuttingdown;
+t_cm_tpm_jc *tpm_add_batch(t_cm_tpm *tpm, size_t nb, t_cm_work work,
+                           void **args) {
+	t_cm_tpm_jc *local_head;
+	t_cm_tpm_jc *it;
+	bool         shuttingdown;
 
 	if (!tpm || !work || !args) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG)
@@ -147,8 +147,8 @@ t_tpm_jc *tpm_add_batch(t_tpm *tpm, size_t nb, t_cm_work work, void **args) {
  * be NULL
  * \ingroup tpm
 **/
-void tpm_clear_job_list(t_tpm_jc *head, t_cm_call cleanup) {
-	for (t_tpm_jc *nxt; head; head = nxt) {
+void tpm_clear_job_list(t_cm_tpm_jc *head, t_cm_call cleanup) {
+	for (t_cm_tpm_jc *nxt; head; head = nxt) {
 		nxt = head->next;
 		if (cleanup) cleanup(head->job.arg);
 		free(head);

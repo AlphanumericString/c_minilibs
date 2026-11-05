@@ -2,24 +2,24 @@
 
 #include "ill_tests.h"
 
-NO_COV static size_t collect(t_ill *head, int *out, size_t cap) {
+NO_COV static size_t collect(t_cm_ill *head, int *out, size_t cap) {
 	size_t n = 0;
 
 	while (head && n < cap) {
-		out[n++] = ((t_test_node *)ill_ntoe(head))->value;
+		out[n++] = ((t_cm_test_node *)ill_ntoe(head))->value;
 		head     = head->next;
 	}
 	return n;
 }
 
-NO_COV void test_ill_filter(void) {
-	t_test_node nodes[6];
-	t_ill      *head = NULL;
-	t_ill      *filtered;
-	int         out[6];
-	int         exp_keep[3]     = {2, 4, 6};
-	int         exp_filtered[3] = {1, 3, 5};
-	size_t      i, n;
+NO_COV void test_cm_ill_filter(void) {
+	t_cm_test_node nodes[6];
+	t_cm_ill      *head = NULL;
+	t_cm_ill      *filtered;
+	int            out[6];
+	int            exp_keep[3]     = {2, 4, 6};
+	int            exp_filtered[3] = {1, 3, 5};
+	size_t         i, n;
 
 	for (i = 0; i < 6; i++) {
 		INIT_NODE(nodes[i], (int)(i + 1), (int)i);
@@ -37,8 +37,8 @@ NO_COV void test_ill_filter(void) {
 
 	// all elements moved out => head becomes NULL
 	{
-		t_test_node e1, e2, e3;
-		t_ill      *h = NULL;
+		t_cm_test_node e1, e2, e3;
+		t_cm_ill      *h = NULL;
 
 		INIT_NODE(e1, 1, 1);
 		INIT_NODE(e2, 3, 2);
@@ -59,14 +59,14 @@ NO_COV void test_ill_filter(void) {
 	assert(ill_filter(&head, cb_ill_is_even, NULL, NULL) == 0);
 }
 
-NO_COV void test_ill_filter_out(void) {
-	t_test_node nodes[6];
-	t_ill      *head = NULL;
-	t_ill      *filtered;
-	int         out[6];
-	int         exp_keep[3]     = {1, 3, 5};
-	int         exp_filtered[3] = {2, 4, 6};
-	size_t      i, n;
+NO_COV void test_cm_ill_filter_out(void) {
+	t_cm_test_node nodes[6];
+	t_cm_ill      *head = NULL;
+	t_cm_ill      *filtered;
+	int            out[6];
+	int            exp_keep[3]     = {1, 3, 5};
+	int            exp_filtered[3] = {2, 4, 6};
+	size_t         i, n;
 
 	for (i = 0; i < 6; i++) {
 		INIT_NODE(nodes[i], (int)(i + 1), (int)i);
@@ -83,8 +83,8 @@ NO_COV void test_ill_filter_out(void) {
 
 	// head that would be "out" is now moved out
 	{
-		t_test_node e1, e2, e3;
-		t_ill      *h = NULL;
+		t_cm_test_node e1, e2, e3;
+		t_cm_ill      *h = NULL;
 
 		INIT_NODE(e1, 2, 1);
 		INIT_NODE(e2, 4, 2);

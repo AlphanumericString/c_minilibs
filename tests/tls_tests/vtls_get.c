@@ -2,7 +2,7 @@
 
 #include "tls_tests.h"
 
-NO_COV void test_vtls_get(void) {
+NO_COV void test_cm_vtls_get(void) {
 	void *data;
 	assert(vtls_get(NULL) == NULL);
 	assert(vtls_get("a") == NULL);
@@ -19,7 +19,7 @@ NO_COV void test_vtls_get(void) {
 
 	vtls_rm("a");
 }
-NO_COV void test_vtls_sizeof(void) {
+NO_COV void test_cm_vtls_sizeof(void) {
 	void *prev = pthread_getspecific(vtls_key);
 
 	vtls_set("foo", (void *)0x42, 42);
@@ -40,7 +40,7 @@ NO_COV void test_vtls_sizeof(void) {
 	vtls_rm("foo1");
 	vtls_rm("foo2");
 }
-NO_COV void test_vtls_getout(void) {
+NO_COV void test_cm_vtls_getout(void) {
 	void *prev = pthread_getspecific(vtls_key);
 	char  out[42];
 	int   v0 = 42;
@@ -80,7 +80,7 @@ NO_COV void test_vtls_getout(void) {
 	vtls_rm("key3");
 }
 
-NO_COV void test_vtls_len(void) {
+NO_COV void test_cm_vtls_len(void) {
 	void *data;
 
 	assert(vtls_len() == 0);

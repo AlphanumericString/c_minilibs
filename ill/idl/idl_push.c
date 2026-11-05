@@ -7,7 +7,7 @@
  * \return The new head of the list.
  * \ingroup idl
 **/
-t_idl *idl_push(t_idl **head, t_idl *node) {
+t_cm_idl *idl_push(t_cm_idl **head, t_cm_idl *node) {
 	if (!head || !node) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return (NULL);
@@ -26,13 +26,13 @@ t_idl *idl_push(t_idl **head, t_idl *node) {
  * \return The new head of the list.
  * \ingroup idl
 **/
-t_idl *idl_npush(t_idl **head, t_idl *nodes) {
+t_cm_idl *idl_npush(t_cm_idl **head, t_cm_idl *nodes) {
 	if (!head || !nodes) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return (NULL);
 	}
-	t_idl *tail = idl_get_tail(nodes);
-	tail->next  = *head;
+	t_cm_idl *tail = idl_get_tail(nodes);
+	tail->next     = *head;
 	if (*head) (*head)->prev = tail;
 	nodes->prev = NULL;
 	*head       = nodes;
@@ -46,7 +46,7 @@ t_idl *idl_npush(t_idl **head, t_idl *nodes) {
  * \return The head of the list.
  * \ingroup idl
 **/
-t_idl *idl_push_back(t_idl **head, t_idl *node) {
+t_cm_idl *idl_push_back(t_cm_idl **head, t_cm_idl *node) {
 	if (!head || !node) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return (NULL);
@@ -56,10 +56,10 @@ t_idl *idl_push_back(t_idl **head, t_idl *node) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 		return (*head);
 	}
-	t_idl *tail = idl_get_tail(*head);
-	tail->next  = node;
-	node->prev  = tail;
-	node->next  = NULL;
+	t_cm_idl *tail = idl_get_tail(*head);
+	tail->next     = node;
+	node->prev     = tail;
+	node->next     = NULL;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (*head);
 }

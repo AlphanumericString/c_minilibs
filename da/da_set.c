@@ -10,7 +10,7 @@
  * \return true on success, false on failure
  * \ingroup da
 **/
-bool da_set(const t_da *da, size_t pos, const void *elem) {
+bool da_set(const t_cm_da *da, size_t pos, const void *elem) {
 	if (!da_is_valid(da) || !elem || pos >= da->nb_e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (false);
@@ -29,7 +29,7 @@ bool da_set(const t_da *da, size_t pos, const void *elem) {
  * \return true on success, false on failure
  * \ingroup da
 **/
-bool da_nset(const t_da *da, size_t n, size_t pos, const void *elems) {
+bool da_nset(const t_cm_da *da, size_t n, size_t pos, const void *elems) {
 	if (!da_is_valid(da) || (pos + n) >= da->nb_e || !elems) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (false);

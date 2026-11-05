@@ -2,10 +2,10 @@
 
 #include "da_tests.h"
 
-NO_COV void test_da_apply(void) {
-	t_da  da;
-	int   a    = 1;
-	void *data = (void *)0xDEAD;
+NO_COV void test_cm_da_apply(void) {
+	t_cm_da da;
+	int     a    = 1;
+	void   *data = (void *)0xDEAD;
 
 	da_init(&da, sizeof(int));
 	da_add(&da, &a);
@@ -18,15 +18,15 @@ NO_COV void test_da_apply(void) {
 	da_destroy(&da);
 
 	assert(da_apply(NULL, cb_add_one, data) == data);
-	da = (t_da){.array = data, .cap_e = 12, .sz_e = 1, .nb_e = 12};
+	da = (t_cm_da){.array = data, .cap_e = 12, .sz_e = 1, .nb_e = 12};
 	assert(da_apply(&da, NULL, data) == data);
-	da = (t_da){.array = data, .cap_e = 12, .sz_e = 1, .nb_e = 0};
+	da = (t_cm_da){.array = data, .cap_e = 12, .sz_e = 1, .nb_e = 0};
 	assert(da_apply(&da, cb_add_one, data) == data);
 }
-NO_COV void test_da_napply(void) {
-	t_da  da;
-	int   a    = 1;
-	void *data = (void *)0xDEAD;
+NO_COV void test_cm_da_napply(void) {
+	t_cm_da da;
+	int     a    = 1;
+	void   *data = (void *)0xDEAD;
 
 	da_init(&da, sizeof(int));
 	da_add(&da, &a);
@@ -47,16 +47,16 @@ NO_COV void test_da_napply(void) {
 	da_destroy(&da);
 
 	assert(da_napply(NULL, 3, cb_add_one, data) == data);
-	da = (t_da){.array = NULL, .cap_e = 12, .nb_e = 12, .sz_e = 2};
+	da = (t_cm_da){.array = NULL, .cap_e = 12, .nb_e = 12, .sz_e = 2};
 	assert(da_napply(&da, 3, cb_add_one, data) == data);
-	da = (t_da){.array = (void *)0xCAFE, .cap_e = 12, .nb_e = 0, .sz_e = 2};
+	da = (t_cm_da){.array = (void *)0xCAFE, .cap_e = 12, .nb_e = 0, .sz_e = 2};
 	assert(da_napply(&da, 3, cb_add_one, data) == data);
-	da = (t_da){.array = (void *)0xCAFE, .cap_e = 12, .nb_e = 12, .sz_e = 2};
+	da = (t_cm_da){.array = (void *)0xCAFE, .cap_e = 12, .nb_e = 12, .sz_e = 2};
 	assert(da_napply(&da, 0, cb_add_one, data) == data);
 	assert(da_napply(&da, 12, NULL, data) == data);
 }
-NO_COV void test_da_apply_it(void) {
-	t_da da;
+NO_COV void test_cm_da_apply_it(void) {
+	t_cm_da da;
 
 	da_init(&da, sizeof(int));
 	da_cat_array(&da, (int *)arr_5, 5, sizeof(int));
@@ -75,13 +75,13 @@ NO_COV void test_da_apply_it(void) {
 
 	da_destroy(&da);
 	da_apply_it(NULL, cb_it_add_it_to_arg, (void *)3UL);
-	da = (t_da){.array = (void *)0xCAFE, .cap_e = 12, .nb_e = 0, .sz_e = 2};
+	da = (t_cm_da){.array = (void *)0xCAFE, .cap_e = 12, .nb_e = 0, .sz_e = 2};
 	da_apply_it(&da, cb_it_add_it_to_arg, (void *)3UL);
-	da = (t_da){.array = (void *)0xCAFE, .cap_e = 12, .nb_e = 12, .sz_e = 2};
+	da = (t_cm_da){.array = (void *)0xCAFE, .cap_e = 12, .nb_e = 12, .sz_e = 2};
 	da_apply_it(&da, NULL, (void *)3UL);
 }
-NO_COV void test_da_napply_it(void) {
-	t_da da;
+NO_COV void test_cm_da_napply_it(void) {
+	t_cm_da da;
 
 	da_init(&da, sizeof(int));
 	da_cat_array(&da, (int *)arr_5, 5, sizeof(int));
@@ -119,9 +119,9 @@ NO_COV void test_da_napply_it(void) {
 	da_destroy(&da);
 
 	da_napply_it(NULL, 1, cb_it_add_it_to_arg, (void *)3UL);
-	da = (t_da){.array = (void *)0xCAFE, .cap_e = 12, .nb_e = 0, .sz_e = 2};
+	da = (t_cm_da){.array = (void *)0xCAFE, .cap_e = 12, .nb_e = 0, .sz_e = 2};
 	da_napply_it(&da, 1, cb_it_add_it_to_arg, (void *)3UL);
-	da = (t_da){.array = (void *)0xCAFE, .cap_e = 12, .nb_e = 12, .sz_e = 2};
+	da = (t_cm_da){.array = (void *)0xCAFE, .cap_e = 12, .nb_e = 12, .sz_e = 2};
 	da_napply_it(&da, 1, NULL, (void *)3UL);
 	da_napply_it(&da, 0, cb_it_add_it_to_arg, (void *)3UL);
 }

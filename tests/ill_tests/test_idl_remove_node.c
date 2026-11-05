@@ -3,9 +3,9 @@
 #include "ill_tests.h"
 
 NO_COV static void remove_on_many_elem(void) {
-	t_test_dnode n1, n2, n3, n4;
-	t_idl       *head = NULL;
-	bool         rm_node;
+	t_cm_test_dnode n1, n2, n3, n4;
+	t_cm_idl       *head = NULL;
+	bool            rm_node;
 
 	INIT_STD_DNODES(n1, n2, n3, n4);
 	idl_push_back(&head, &n1.dnode);
@@ -73,9 +73,9 @@ NO_COV static void remove_on_many_elem(void) {
 }
 
 NO_COV static void remove_on_2_elem(void) {
-	t_test_dnode n1, n2;
-	t_idl       *head = NULL;
-	bool         rm_node;
+	t_cm_test_dnode n1, n2;
+	t_cm_idl       *head = NULL;
+	bool            rm_node;
 
 	INIT_DNODE(n1, 42, 1);
 	INIT_DNODE(n2, 43, 2);
@@ -100,9 +100,9 @@ NO_COV static void remove_on_2_elem(void) {
 }
 
 NO_COV static void remove_on_1_elem(void) {
-	t_test_dnode n1;
-	t_idl       *head = NULL;
-	bool         rm_node;
+	t_cm_test_dnode n1;
+	t_cm_idl       *head = NULL;
+	bool            rm_node;
 
 	INIT_DNODE(n1, 42, 1);
 
@@ -114,11 +114,11 @@ NO_COV static void remove_on_1_elem(void) {
 	assert(head == NULL);
 }
 
-NO_COV void test_idl_remove_node(void) {
-	t_test_dnode n1;
-	t_idl       *head           = NULL;
-	t_idl       *null_head      = NULL;
-	void        *random_address = (void *)0xDEAD;
+NO_COV void test_cm_idl_remove_node(void) {
+	t_cm_test_dnode n1;
+	t_cm_idl       *head           = NULL;
+	t_cm_idl       *null_head      = NULL;
+	void           *random_address = (void *)0xDEAD;
 
 	remove_on_2_elem();
 	remove_on_many_elem();

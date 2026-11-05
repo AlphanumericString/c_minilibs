@@ -8,7 +8,7 @@
  * \return true if related, false otherwise
  * \ingroup cdsu
 **/
-bool cdsu_is_related(t_cdsu *ds, size_t x, size_t y) {
+bool cdsu_is_related(t_cm_cdsu *ds, size_t x, size_t y) {
 	if (!ds || (x > y ? x : y) > ds->size) return (false);
 	return (cdsu_find(ds, x) == cdsu_find(ds, y));
 }
@@ -21,7 +21,7 @@ bool cdsu_is_related(t_cdsu *ds, size_t x, size_t y) {
  * \return true if related, false otherwise
  * \ingroup cdsu
 **/
-bool cdsu_strict_is_related(const t_cdsu *ds, size_t x, size_t y) {
+bool cdsu_strict_is_related(const t_cm_cdsu *ds, size_t x, size_t y) {
 	if ((x > y ? x : y) > ds->size) return (false);
 	return (cdsu_strict_find(ds, x) == cdsu_strict_find(ds, y));
 }
@@ -31,7 +31,7 @@ bool cdsu_strict_is_related(const t_cdsu *ds, size_t x, size_t y) {
  * \return true if valid, false otherwise
  * \ingroup cdsu
 **/
-bool cdsu_validate(const t_cdsu *cdsu) {
+bool cdsu_validate(const t_cm_cdsu *cdsu) {
 	if (!cdsu || !cdsu->size || !cdsu->rank || !cdsu->parent) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG)
 		return (false);

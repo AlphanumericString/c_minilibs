@@ -12,12 +12,12 @@ static void other_dtor(void *_) {
 }
 
 NO_COV void test_sptr_make_shared_from_raw(void) {
-	void        *data = (void *)0xDEAD;
-	t_cm_dtor    dtor = local_dtor;
-	t_strong_ptr s1   = sptr_make_shared(data, NULL);
-	t_strong_ptr s2   = sptr_make_shared(data, dtor);
-	t_strong_ptr s3   = sptr_make_shared(NULL, NULL);
-	t_strong_ptr s4;
+	void           *data = (void *)0xDEAD;
+	t_cm_dtor       dtor = local_dtor;
+	t_cm_strong_ptr s1   = sptr_make_shared(data, NULL);
+	t_cm_strong_ptr s2   = sptr_make_shared(data, dtor);
+	t_cm_strong_ptr s3   = sptr_make_shared(NULL, NULL);
+	t_cm_strong_ptr s4;
 
 	alloc_set_call_limit(0);
 	s4 = sptr_make_shared_from_raw(data, dtor);
@@ -45,17 +45,20 @@ static void test_sptr_make_shared_from_weak_errors(void) {
 	t_cm_dtor dtor     = local_dtor;
 	t_cm_dtor not_dtor = other_dtor;
 
-	t_fbox good_box  = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
-	t_fbox no_rc_box = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 9};
-	t_fbox no_c_box  = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 0};
+	t_cm_fbox good_box =
+	    (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
+	t_cm_fbox no_rc_box =
+	    (t_cm_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 9};
+	t_cm_fbox no_c_box =
+	    (t_cm_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 0};
 
 	// dt = dtor a=arg, s=source, neq=not equal, none=null;
-	t_weak_ptr w1_dt_as_neq = (t_weak_ptr){&good_box};
-	t_weak_ptr w2_meta_none = (t_weak_ptr){NULL};
-	t_weak_ptr w4_no_c      = (t_weak_ptr){&no_c_box};
-	t_weak_ptr w5_no_rc     = (t_weak_ptr){&no_rc_box};
+	t_cm_weak_ptr w1_dt_as_neq = (t_cm_weak_ptr){&good_box};
+	t_cm_weak_ptr w2_meta_none = (t_cm_weak_ptr){NULL};
+	t_cm_weak_ptr w4_no_c      = (t_cm_weak_ptr){&no_c_box};
+	t_cm_weak_ptr w5_no_rc     = (t_cm_weak_ptr){&no_rc_box};
 
-	t_strong_ptr res[] = {
+	t_cm_strong_ptr res[] = {
 	    sptr_make_shared_from_weak(&w1_dt_as_neq, not_dtor),
 	    sptr_make_shared_from_weak(&w2_meta_none, NULL),
 	    sptr_make_shared_from_weak(&w4_no_c, NULL),
@@ -76,21 +79,21 @@ static void test_sptr_make_shared_from_weak_ok(void) {
 	void     *data = (void *)0xDEAD;
 	t_cm_dtor dtor = local_dtor;
 
-	t_fbox b0 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
-	t_fbox b1 = (t_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 1};
-	t_fbox b2 = (t_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 1};
-	t_fbox b3 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
-	t_fbox b4 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 99};
-	t_fbox b5 = (t_fbox){.data = data, .dtor = dtor, .rc = 99, .wc = 1};
+	t_cm_fbox b0 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
+	t_cm_fbox b1 = (t_cm_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 1};
+	t_cm_fbox b2 = (t_cm_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 1};
+	t_cm_fbox b3 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_cm_fbox b4 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 99};
+	t_cm_fbox b5 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 99, .wc = 1};
 
-	t_weak_ptr w0_dt_match         = (t_weak_ptr){&b0};
-	t_weak_ptr w1_override_on_null = (t_weak_ptr){&b1};
-	t_weak_ptr w2_left_to_null     = (t_weak_ptr){&b2};
-	t_weak_ptr w3_wc_none          = (t_weak_ptr){&b3};
-	t_weak_ptr w4_wc_many          = (t_weak_ptr){&b4};
-	t_weak_ptr w5_rc_many          = (t_weak_ptr){&b5};
+	t_cm_weak_ptr w0_dt_match         = (t_cm_weak_ptr){&b0};
+	t_cm_weak_ptr w1_override_on_null = (t_cm_weak_ptr){&b1};
+	t_cm_weak_ptr w2_left_to_null     = (t_cm_weak_ptr){&b2};
+	t_cm_weak_ptr w3_wc_none          = (t_cm_weak_ptr){&b3};
+	t_cm_weak_ptr w4_wc_many          = (t_cm_weak_ptr){&b4};
+	t_cm_weak_ptr w5_rc_many          = (t_cm_weak_ptr){&b5};
 
-	t_strong_ptr res[] = {
+	t_cm_strong_ptr res[] = {
 	    sptr_make_shared_from_weak(&w0_dt_match, dtor),
 	    sptr_make_shared_from_weak(&w1_override_on_null, dtor),
 	    sptr_make_shared_from_weak(&w2_left_to_null, NULL),
@@ -133,22 +136,23 @@ static void test_sptr_make_shared_from_strong_errors(void) {
 	t_cm_dtor dtor     = local_dtor;
 	t_cm_dtor not_dtor = other_dtor;
 
-	t_fbox b0 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
-	t_fbox b1 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 9};
-	t_fbox b2 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 0};
-	t_fbox b3 = b0;
-	b3.data   = &b3;
+	t_cm_fbox b0 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_cm_fbox b1 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 9};
+	t_cm_fbox b2 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 0};
+	t_cm_fbox b3 = b0;
+	b3.data      = &b3;
 
-	t_strong_ptr s1_dt_as_neq     = (t_strong_ptr){b0.data, &b0};
-	t_strong_ptr s2_data_meta_neq = (t_strong_ptr){(void *)(b0.data + 12), &b0};
-	t_strong_ptr s3_data_null     = (t_strong_ptr){NULL, &b0};
-	t_strong_ptr s4_meta_none     = (t_strong_ptr){b0.data, NULL};
-	t_strong_ptr s5_data_meta_none = (t_strong_ptr){NULL, NULL};
-	t_strong_ptr s6_data_is_meta   = (t_strong_ptr){&b3, &b3};
-	t_strong_ptr s7_no_c           = (t_strong_ptr){&b2.data, &b2};
-	t_strong_ptr s8_no_rc          = (t_strong_ptr){&b1.data, &b1};
+	t_cm_strong_ptr s1_dt_as_neq = (t_cm_strong_ptr){b0.data, &b0};
+	t_cm_strong_ptr s2_data_meta_neq =
+	    (t_cm_strong_ptr){(void *)(b0.data + 12), &b0};
+	t_cm_strong_ptr s3_data_null      = (t_cm_strong_ptr){NULL, &b0};
+	t_cm_strong_ptr s4_meta_none      = (t_cm_strong_ptr){b0.data, NULL};
+	t_cm_strong_ptr s5_data_meta_none = (t_cm_strong_ptr){NULL, NULL};
+	t_cm_strong_ptr s6_data_is_meta   = (t_cm_strong_ptr){&b3, &b3};
+	t_cm_strong_ptr s7_no_c           = (t_cm_strong_ptr){&b2.data, &b2};
+	t_cm_strong_ptr s8_no_rc          = (t_cm_strong_ptr){&b1.data, &b1};
 
-	t_strong_ptr res[] = {
+	t_cm_strong_ptr res[] = {
 	    sptr_make_shared_from_strong(&s1_dt_as_neq, not_dtor),
 	    sptr_make_shared_from_strong(&s2_data_meta_neq, not_dtor),
 	    sptr_make_shared_from_strong(&s3_data_null, not_dtor),
@@ -176,22 +180,22 @@ static void test_sptr_make_shared_from_strong_ok(void) {
 	void     *data = (void *)0xDEAD;
 	t_cm_dtor dtor = local_dtor;
 
-	t_fbox b0 = (t_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 0};
-	t_fbox b1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
-	t_fbox b2 = (t_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 0};
-	t_fbox b3 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
-	t_fbox b4 = (t_fbox){.data = data, .dtor = dtor, .rc = 99, .wc = 0};
-	t_fbox b5 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 99};
+	t_cm_fbox b0 = (t_cm_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 0};
+	t_cm_fbox b1 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_cm_fbox b2 = (t_cm_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 0};
+	t_cm_fbox b3 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_cm_fbox b4 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 99, .wc = 0};
+	t_cm_fbox b5 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 99};
 
 	// dt = dtor a=arg, s=source, neq=not equal, none=null;
-	t_strong_ptr s0_dt_override_null = (t_strong_ptr){b0.data, &b0};
-	t_strong_ptr s1_dt_left_as_is    = (t_strong_ptr){b1.data, &b1};
-	t_strong_ptr s2_dt_left_as_null  = (t_strong_ptr){b2.data, &b2};
-	t_strong_ptr s3_dt_match         = (t_strong_ptr){b3.data, &b3};
-	t_strong_ptr s4_rc_many          = (t_strong_ptr){b4.data, &b4};
-	t_strong_ptr s5_wc_many          = (t_strong_ptr){b5.data, &b5};
+	t_cm_strong_ptr s0_dt_override_null = (t_cm_strong_ptr){b0.data, &b0};
+	t_cm_strong_ptr s1_dt_left_as_is    = (t_cm_strong_ptr){b1.data, &b1};
+	t_cm_strong_ptr s2_dt_left_as_null  = (t_cm_strong_ptr){b2.data, &b2};
+	t_cm_strong_ptr s3_dt_match         = (t_cm_strong_ptr){b3.data, &b3};
+	t_cm_strong_ptr s4_rc_many          = (t_cm_strong_ptr){b4.data, &b4};
+	t_cm_strong_ptr s5_wc_many          = (t_cm_strong_ptr){b5.data, &b5};
 
-	t_strong_ptr res[] = {
+	t_cm_strong_ptr res[] = {
 	    sptr_make_shared_from_strong(&s0_dt_override_null, dtor),
 	    sptr_make_shared_from_strong(&s1_dt_left_as_is, NULL),
 	    sptr_make_shared_from_strong(&s2_dt_left_as_null, NULL),
@@ -231,33 +235,34 @@ static void test_sptr_make_shared_from_owned_error(void) {
 	t_cm_dtor dtor     = local_dtor;
 	t_cm_dtor not_dtor = other_dtor;
 
-	t_fbox       b0 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
-	t_fbox       b1 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 0};
-	t_fbox       b2 = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
-	t_fbox       b3 = (t_fbox){.data = data, .dtor = dtor, .rc = 99, .wc = 0};
-	t_fbox       b4 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
-	t_fbox       b5 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
-	t_fbox       b6 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
-	t_fbox       b7 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
-	const t_fbox exp_b0 = b0; // byte copy
-	const t_fbox exp_b1 = b1;
-	const t_fbox exp_b2 = b2;
-	const t_fbox exp_b3 = b3;
-	const t_fbox exp_b4 = b4;
-	const t_fbox exp_b5 = b5;
-	const t_fbox exp_b6 = b6;
-	const t_fbox exp_b7 = b7;
+	t_cm_fbox b0 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_cm_fbox b1 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 0};
+	t_cm_fbox b2 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
+	t_cm_fbox b3 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 99, .wc = 0};
+	t_cm_fbox b4 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_cm_fbox b5 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_cm_fbox b6 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_cm_fbox b7 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	const t_cm_fbox exp_b0 = b0; // byte copy
+	const t_cm_fbox exp_b1 = b1;
+	const t_cm_fbox exp_b2 = b2;
+	const t_cm_fbox exp_b3 = b3;
+	const t_cm_fbox exp_b4 = b4;
+	const t_cm_fbox exp_b5 = b5;
+	const t_cm_fbox exp_b6 = b6;
+	const t_cm_fbox exp_b7 = b7;
 
-	t_owned_ptr no_own    = (t_owned_ptr){b0.data, &b0, false};
-	t_owned_ptr no_c      = (t_owned_ptr){b1.data, &b1, true};
-	t_owned_ptr no_rc     = (t_owned_ptr){b2.data, &b2, true};
-	t_owned_ptr many_rc   = (t_owned_ptr){b3.data, &b3, true};
-	t_owned_ptr data_null = (t_owned_ptr){NULL, &b4, true};
-	t_owned_ptr data_diff = (t_owned_ptr){(void *)(b5.data + 12), &b5, true};
-	t_owned_ptr dtor_mismatch = (t_owned_ptr){b6.data, &b6, true};
-	t_owned_ptr no_meta       = (t_owned_ptr){b7.data, NULL, true};
+	t_cm_owned_ptr no_own    = (t_cm_owned_ptr){b0.data, &b0, false};
+	t_cm_owned_ptr no_c      = (t_cm_owned_ptr){b1.data, &b1, true};
+	t_cm_owned_ptr no_rc     = (t_cm_owned_ptr){b2.data, &b2, true};
+	t_cm_owned_ptr many_rc   = (t_cm_owned_ptr){b3.data, &b3, true};
+	t_cm_owned_ptr data_null = (t_cm_owned_ptr){NULL, &b4, true};
+	t_cm_owned_ptr data_diff =
+	    (t_cm_owned_ptr){(void *)(b5.data + 12), &b5, true};
+	t_cm_owned_ptr dtor_mismatch = (t_cm_owned_ptr){b6.data, &b6, true};
+	t_cm_owned_ptr no_meta       = (t_cm_owned_ptr){b7.data, NULL, true};
 
-	t_strong_ptr res[] = {
+	t_cm_strong_ptr res[] = {
 	    sptr_make_shared_from_owned(&no_own, NULL),
 	    sptr_make_shared_from_owned(&no_c, NULL),
 	    sptr_make_shared_from_owned(&no_rc, NULL),
@@ -278,34 +283,34 @@ static void test_sptr_make_shared_from_owned_error(void) {
 	assert(!res[6].data && !res[6].meta);
 	assert(!res[7].data && !res[7].meta);
 	assert(!res[8].data && !res[8].meta);
-	assert(memcmp(&exp_b0, &b0, sizeof(t_fbox)) == 0);
-	assert(memcmp(&exp_b1, &b1, sizeof(t_fbox)) == 0);
-	assert(memcmp(&exp_b2, &b2, sizeof(t_fbox)) == 0);
-	assert(memcmp(&exp_b3, &b3, sizeof(t_fbox)) == 0);
-	assert(memcmp(&exp_b4, &b4, sizeof(t_fbox)) == 0);
-	assert(memcmp(&exp_b5, &b5, sizeof(t_fbox)) == 0);
-	assert(memcmp(&exp_b6, &b6, sizeof(t_fbox)) == 0);
-	assert(memcmp(&exp_b7, &b7, sizeof(t_fbox)) == 0);
+	assert(memcmp(&exp_b0, &b0, sizeof(t_cm_fbox)) == 0);
+	assert(memcmp(&exp_b1, &b1, sizeof(t_cm_fbox)) == 0);
+	assert(memcmp(&exp_b2, &b2, sizeof(t_cm_fbox)) == 0);
+	assert(memcmp(&exp_b3, &b3, sizeof(t_cm_fbox)) == 0);
+	assert(memcmp(&exp_b4, &b4, sizeof(t_cm_fbox)) == 0);
+	assert(memcmp(&exp_b5, &b5, sizeof(t_cm_fbox)) == 0);
+	assert(memcmp(&exp_b6, &b6, sizeof(t_cm_fbox)) == 0);
+	assert(memcmp(&exp_b7, &b7, sizeof(t_cm_fbox)) == 0);
 }
 static void test_sptr_make_shared_from_owned_ok(void) {
 	void     *data = (void *)0xDEAD;
 	t_cm_dtor dtor = local_dtor;
 
-	t_fbox b0 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
-	t_fbox b1 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 99};
-	t_fbox b2 = (t_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 0};
-	t_fbox b3 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
-	t_fbox b4 = (t_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 0};
-	t_fbox b5 = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_cm_fbox b0 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_cm_fbox b1 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 99};
+	t_cm_fbox b2 = (t_cm_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 0};
+	t_cm_fbox b3 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_cm_fbox b4 = (t_cm_fbox){.data = data, .dtor = NULL, .rc = 1, .wc = 0};
+	t_cm_fbox b5 = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
 
-	t_owned_ptr o0_wc_none     = (t_owned_ptr){b0.data, &b0, true};
-	t_owned_ptr o1_wc_many     = (t_owned_ptr){b1.data, &b1, true};
-	t_owned_ptr o2_dt_none     = (t_owned_ptr){b2.data, &b2, true};
-	t_owned_ptr o3_dt_s        = (t_owned_ptr){b3.data, &b3, true};
-	t_owned_ptr o4_dt_a        = (t_owned_ptr){b4.data, &b4, true};
-	t_owned_ptr o5_dt_as_match = (t_owned_ptr){b5.data, &b5, true};
+	t_cm_owned_ptr o0_wc_none     = (t_cm_owned_ptr){b0.data, &b0, true};
+	t_cm_owned_ptr o1_wc_many     = (t_cm_owned_ptr){b1.data, &b1, true};
+	t_cm_owned_ptr o2_dt_none     = (t_cm_owned_ptr){b2.data, &b2, true};
+	t_cm_owned_ptr o3_dt_s        = (t_cm_owned_ptr){b3.data, &b3, true};
+	t_cm_owned_ptr o4_dt_a        = (t_cm_owned_ptr){b4.data, &b4, true};
+	t_cm_owned_ptr o5_dt_as_match = (t_cm_owned_ptr){b5.data, &b5, true};
 
-	t_strong_ptr res[] = {
+	t_cm_strong_ptr res[] = {
 	    sptr_make_shared_from_owned(&o0_wc_none, NULL),
 	    sptr_make_shared_from_owned(&o1_wc_many, NULL),
 	    sptr_make_shared_from_owned(&o2_dt_none, NULL),
@@ -359,13 +364,13 @@ static void test_sptr_make_shared_from_uniq_error(void) {
 	t_cm_dtor dtor     = local_dtor;
 	t_cm_dtor not_dtor = other_dtor;
 
-	t_uniq_ptr u0 = (t_uniq_ptr){.data = data, .dtor = dtor};
+	t_cm_uniq_ptr u0 = (t_cm_uniq_ptr){.data = data, .dtor = dtor};
 
-	t_strong_ptr res[] = {
+	t_cm_strong_ptr res[] = {
 	    sptr_make_shared_from_uniq(&u0, not_dtor),
 	    sptr_make_shared_from_uniq(NULL, NULL),
 	    sptr_make_shared_from_uniq(NULL, dtor),
-	    (t_strong_ptr){0},
+	    (t_cm_strong_ptr){0},
 	};
 
 	alloc_set_call_limit(0);
@@ -380,12 +385,12 @@ static void test_sptr_make_shared_from_uniq_ok(void) {
 	void     *data = (void *)0xDEAD;
 	t_cm_dtor dtor = local_dtor;
 
-	t_uniq_ptr u0 = (t_uniq_ptr){.data = data, .dtor = dtor}; // left
-	t_uniq_ptr u1 = (t_uniq_ptr){.data = data, .dtor = dtor}; // match
-	t_uniq_ptr u2 = (t_uniq_ptr){.data = data, .dtor = NULL}; // override
-	t_uniq_ptr u3 = (t_uniq_ptr){.data = data, .dtor = NULL}; // left-null
+	t_cm_uniq_ptr u0 = (t_cm_uniq_ptr){.data = data, .dtor = dtor}; // left
+	t_cm_uniq_ptr u1 = (t_cm_uniq_ptr){.data = data, .dtor = dtor}; // match
+	t_cm_uniq_ptr u2 = (t_cm_uniq_ptr){.data = data, .dtor = NULL}; // override
+	t_cm_uniq_ptr u3 = (t_cm_uniq_ptr){.data = data, .dtor = NULL}; // left-null
 
-	t_strong_ptr res[] = {
+	t_cm_strong_ptr res[] = {
 	    sptr_make_shared_from_uniq(&u0, NULL),
 	    sptr_make_shared_from_uniq(&u1, dtor),
 	    sptr_make_shared_from_uniq(&u2, dtor),
@@ -426,26 +431,31 @@ NO_COV void test_sptr_make_weak_from_weak(void) {
 	void     *data = (void *)0xDEAD;
 	t_cm_dtor dtor = local_dtor;
 
-	t_fbox b0_rw_ok   = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
-	t_fbox b1_rc_none = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
-	t_fbox b2_rc_many = (t_fbox){.data = data, .dtor = dtor, .rc = 99, .wc = 1};
-	t_fbox b3_wc_many = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 99};
-	t_fbox b4_wc_none = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_cm_fbox b0_rw_ok =
+	    (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
+	t_cm_fbox b1_rc_none =
+	    (t_cm_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
+	t_cm_fbox b2_rc_many =
+	    (t_cm_fbox){.data = data, .dtor = dtor, .rc = 99, .wc = 1};
+	t_cm_fbox b3_wc_many =
+	    (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 99};
+	t_cm_fbox b4_wc_none =
+	    (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
 
-	t_weak_ptr w0_rw_ok     = (t_weak_ptr){.meta = &b0_rw_ok};
-	t_weak_ptr w1_rc_none   = (t_weak_ptr){.meta = &b1_rc_none};
-	t_weak_ptr w2_rc_many   = (t_weak_ptr){.meta = &b2_rc_many};
-	t_weak_ptr w3_wc_many   = (t_weak_ptr){.meta = &b3_wc_many};
-	t_weak_ptr w4_wc_none   = (t_weak_ptr){.meta = &b4_wc_none};
-	t_weak_ptr w5_meta_none = (t_weak_ptr){.meta = NULL};
+	t_cm_weak_ptr w0_rw_ok     = (t_cm_weak_ptr){.meta = &b0_rw_ok};
+	t_cm_weak_ptr w1_rc_none   = (t_cm_weak_ptr){.meta = &b1_rc_none};
+	t_cm_weak_ptr w2_rc_many   = (t_cm_weak_ptr){.meta = &b2_rc_many};
+	t_cm_weak_ptr w3_wc_many   = (t_cm_weak_ptr){.meta = &b3_wc_many};
+	t_cm_weak_ptr w4_wc_none   = (t_cm_weak_ptr){.meta = &b4_wc_none};
+	t_cm_weak_ptr w5_meta_none = (t_cm_weak_ptr){.meta = NULL};
 
-	t_weak_ptr res[] = {sptr_make_weak_from_weak(&w0_rw_ok),
-	                    sptr_make_weak_from_weak(&w1_rc_none),
-	                    sptr_make_weak_from_weak(&w2_rc_many),
-	                    sptr_make_weak_from_weak(&w3_wc_many),
-	                    sptr_make_weak_from_weak(&w4_wc_none),
-	                    sptr_make_weak_from_weak(&w5_meta_none),
-	                    sptr_make_weak_from_weak(NULL)};
+	t_cm_weak_ptr res[] = {sptr_make_weak_from_weak(&w0_rw_ok),
+	                       sptr_make_weak_from_weak(&w1_rc_none),
+	                       sptr_make_weak_from_weak(&w2_rc_many),
+	                       sptr_make_weak_from_weak(&w3_wc_many),
+	                       sptr_make_weak_from_weak(&w4_wc_none),
+	                       sptr_make_weak_from_weak(&w5_meta_none),
+	                       sptr_make_weak_from_weak(NULL)};
 	assert(res[0].meta != NULL && res[0].meta == &b0_rw_ok);
 	assert(res[1].meta != NULL && res[1].meta == &b1_rc_none);
 	assert(res[2].meta != NULL && res[2].meta == &b2_rc_many);
@@ -470,32 +480,42 @@ NO_COV void test_sptr_make_weak_from_strong(void) {
 	void     *data = (void *)0xDEAD;
 	t_cm_dtor dtor = local_dtor;
 
-	t_fbox b0_rw_ok   = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
-	t_fbox b1_wc_none = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
-	t_fbox b2_rc_many = (t_fbox){.data = data, .dtor = dtor, .rc = 99, .wc = 1};
-	t_fbox b3_wc_many = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 99};
-	t_fbox b4_rc_none = (t_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
-	t_fbox b6_ok      = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
-	t_fbox b7_ok      = (t_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
+	t_cm_fbox b0_rw_ok =
+	    (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
+	t_cm_fbox b1_wc_none =
+	    (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 0};
+	t_cm_fbox b2_rc_many =
+	    (t_cm_fbox){.data = data, .dtor = dtor, .rc = 99, .wc = 1};
+	t_cm_fbox b3_wc_many =
+	    (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 99};
+	t_cm_fbox b4_rc_none =
+	    (t_cm_fbox){.data = data, .dtor = dtor, .rc = 0, .wc = 1};
+	t_cm_fbox b6_ok = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
+	t_cm_fbox b7_ok = (t_cm_fbox){.data = data, .dtor = dtor, .rc = 1, .wc = 1};
 
-	t_strong_ptr s0_rw_ok   = (t_strong_ptr){.data = data, .meta = &b0_rw_ok};
-	t_strong_ptr s1_wc_none = (t_strong_ptr){.data = data, .meta = &b1_wc_none};
-	t_strong_ptr s2_rc_many = (t_strong_ptr){.data = data, .meta = &b2_rc_many};
-	t_strong_ptr s3_wc_many = (t_strong_ptr){.data = data, .meta = &b3_wc_many};
-	t_strong_ptr s4_rc_none = (t_strong_ptr){.data = data, .meta = &b4_rc_none};
-	t_strong_ptr s5_data_diff = (t_strong_ptr){data + 12, .meta = &b7_ok};
-	t_strong_ptr s6_data_none = (t_strong_ptr){NULL, .meta = &b6_ok};
-	t_strong_ptr s7_meta_none = (t_strong_ptr){data, .meta = NULL};
+	t_cm_strong_ptr s0_rw_ok =
+	    (t_cm_strong_ptr){.data = data, .meta = &b0_rw_ok};
+	t_cm_strong_ptr s1_wc_none =
+	    (t_cm_strong_ptr){.data = data, .meta = &b1_wc_none};
+	t_cm_strong_ptr s2_rc_many =
+	    (t_cm_strong_ptr){.data = data, .meta = &b2_rc_many};
+	t_cm_strong_ptr s3_wc_many =
+	    (t_cm_strong_ptr){.data = data, .meta = &b3_wc_many};
+	t_cm_strong_ptr s4_rc_none =
+	    (t_cm_strong_ptr){.data = data, .meta = &b4_rc_none};
+	t_cm_strong_ptr s5_data_diff = (t_cm_strong_ptr){data + 12, .meta = &b7_ok};
+	t_cm_strong_ptr s6_data_none = (t_cm_strong_ptr){NULL, .meta = &b6_ok};
+	t_cm_strong_ptr s7_meta_none = (t_cm_strong_ptr){data, .meta = NULL};
 
-	t_weak_ptr res[] = {sptr_make_weak_from_strong(&s0_rw_ok),
-	                    sptr_make_weak_from_strong(&s1_wc_none),
-	                    sptr_make_weak_from_strong(&s2_rc_many),
-	                    sptr_make_weak_from_strong(&s3_wc_many),
-	                    sptr_make_weak_from_strong(&s4_rc_none),
-	                    sptr_make_weak_from_strong(&s5_data_diff),
-	                    sptr_make_weak_from_strong(&s6_data_none),
-	                    sptr_make_weak_from_strong(&s7_meta_none),
-	                    sptr_make_weak_from_strong(NULL)};
+	t_cm_weak_ptr res[] = {sptr_make_weak_from_strong(&s0_rw_ok),
+	                       sptr_make_weak_from_strong(&s1_wc_none),
+	                       sptr_make_weak_from_strong(&s2_rc_many),
+	                       sptr_make_weak_from_strong(&s3_wc_many),
+	                       sptr_make_weak_from_strong(&s4_rc_none),
+	                       sptr_make_weak_from_strong(&s5_data_diff),
+	                       sptr_make_weak_from_strong(&s6_data_none),
+	                       sptr_make_weak_from_strong(&s7_meta_none),
+	                       sptr_make_weak_from_strong(NULL)};
 	assert(res[0].meta != NULL && res[0].meta == &b0_rw_ok);
 	assert(res[1].meta != NULL && res[1].meta == &b1_wc_none);
 	assert(res[2].meta != NULL && res[2].meta == &b2_rc_many);

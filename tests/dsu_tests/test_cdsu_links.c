@@ -2,9 +2,9 @@
 
 #include "cdsu_tests.h"
 
-NO_COV void test_cdsu_union(void) {
-	t_cdsu *cdsu = cdsu_new(5);
-	t_cdsu  no_rank, no_parents, no_size;
+NO_COV void test_cm_cdsu_union(void) {
+	t_cm_cdsu *cdsu = cdsu_new(5);
+	t_cm_cdsu  no_rank, no_parents, no_size;
 
 	assert(cdsu_nb_components(cdsu) == 5); // start state
 	assert(cdsu->rank[0] == 0 && cdsu->parent[0] == 0);
@@ -74,9 +74,9 @@ NO_COV void test_cdsu_union(void) {
 	cdsu_free(&cdsu);
 }
 
-NO_COV void test_cdsu_find(void) {
-	t_cdsu *cdsu = cdsu_new(5);
-	t_cdsu  intact_copy;
+NO_COV void test_cm_cdsu_find(void) {
+	t_cm_cdsu *cdsu = cdsu_new(5);
+	t_cm_cdsu  intact_copy;
 
 	assert(cdsu_find(cdsu, 0) == 0);
 	assert(cdsu_find(cdsu, 1) == 1);
@@ -129,9 +129,9 @@ NO_COV void test_cdsu_find(void) {
 	cdsu_free(&cdsu);
 }
 
-NO_COV void test_cdsu_strict_find(void) {
-	t_cdsu *cdsu = cdsu_new(5);
-	t_cdsu  intact_copy;
+NO_COV void test_cm_cdsu_strict_find(void) {
+	t_cm_cdsu *cdsu = cdsu_new(5);
+	t_cm_cdsu  intact_copy;
 
 	assert(cdsu_strict_find(cdsu, 0) == 0);
 	assert(cdsu_strict_find(cdsu, 1) == 1);
@@ -183,9 +183,9 @@ NO_COV void test_cdsu_strict_find(void) {
 	cdsu_free(&cdsu);
 }
 
-NO_COV void test_cdsu_compress_all(void) {
-	t_cdsu *cdsu = cdsu_new(5);
-	t_cdsu  intact_copy;
+NO_COV void test_cm_cdsu_compress_all(void) {
+	t_cm_cdsu *cdsu = cdsu_new(5);
+	t_cm_cdsu  intact_copy;
 
 	cdsu->parent[0] = 0;
 	cdsu->parent[1] = 0;

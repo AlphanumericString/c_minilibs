@@ -17,7 +17,7 @@ NO_COV bool cb_fail_at(void *e, void *a) {
 	return (*(int *)e != *(int *)a);
 }
 NO_COV bool cb_log_int(void *e, void *a) {
-	t_order_ctx *ctx = (t_order_ctx *)a;
+	t_cm_order_ctx *ctx = (t_cm_order_ctx *)a;
 
 	if (ctx->n < HP_ORDER_MAX) ctx->vals[ctx->n++] = *(int *)e;
 	return (true);

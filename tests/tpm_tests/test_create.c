@@ -3,9 +3,9 @@
 
 #include "tpm_tests.h"
 
-NO_COV void test_tpm_init(void) {
-	t_tpm  t;
-	t_tpm *ret;
+NO_COV void test_cm_tpm_init(void) {
+	t_cm_tpm  t;
+	t_cm_tpm *ret;
 
 	ret = tpm_init(&t, 2);
 	assert(ret == &t);
@@ -18,8 +18,8 @@ NO_COV void test_tpm_init(void) {
 	assert(tpm_init(&t, (size_t)C_MINI__TPM_THREADS_MAX_NB + 1) == NULL);
 }
 
-NO_COV void test_tpm_new(void) {
-	t_tpm *t;
+NO_COV void test_cm_tpm_new(void) {
+	t_cm_tpm *t;
 
 	t = tpm_new(3);
 	assert(t != NULL);
@@ -36,8 +36,8 @@ NO_COV void test_tpm_new(void) {
 	assert(tpm_new((size_t)C_MINI__TPM_THREADS_MAX_NB + 1) == NULL);
 }
 
-NO_COV void test_tpm_new_default(void) {
-	t_tpm *t;
+NO_COV void test_cm_tpm_new_default(void) {
+	t_cm_tpm *t;
 
 	t = tpm_new(0);
 	assert(t != NULL);

@@ -18,7 +18,7 @@ static inline void memnxor(void *a, const void *b, size_t n) {
  * \return true on success, false on failure
  * \ingroup da
 **/
-bool da_swap(const t_da *da, size_t pos_a, size_t pos_b) {
+bool da_swap(const t_cm_da *da, size_t pos_a, size_t pos_b) {
 	unsigned char  sized_buffer[C_MINI__DA_SZ_ELEM_DFLT];
 	unsigned char *sa;
 	unsigned char *sb;
@@ -51,7 +51,7 @@ bool da_swap(const t_da *da, size_t pos_a, size_t pos_b) {
  * \return true on success, false otherwise
  * \ingroup da
 **/
-bool da_nswap(const t_da *da, size_t n, size_t pos_a, size_t pos_b) {
+bool da_nswap(const t_cm_da *da, size_t n, size_t pos_a, size_t pos_b) {
 	unsigned char  sized_buffer[C_MINI__DA_SZ_ELEM_DFLT];
 	unsigned char *sa;
 	unsigned char *sb;

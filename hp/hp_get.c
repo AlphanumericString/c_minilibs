@@ -6,7 +6,7 @@
  * \return the comparator or NULL on failure
  * \ingroup hp
 **/
-t_cm_comparator hp_get_cmp(const t_hp *hp) {
+t_cm_comparator hp_get_cmp(const t_cm_hp *hp) {
 	if (!hp) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (NULL);
@@ -20,7 +20,7 @@ t_cm_comparator hp_get_cmp(const t_hp *hp) {
  * \return the capacity or 0 on failure
  * \ingroup hp
 **/
-size_t hp_get_cap(const t_hp *hp) {
+size_t hp_get_cap(const t_cm_hp *hp) {
 	if (!hp) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (0);
@@ -34,7 +34,7 @@ size_t hp_get_cap(const t_hp *hp) {
  * \return the number of elements or 0 on failure
  * \ingroup hp
 **/
-size_t hp_get_current_size(const t_hp *hp) {
+size_t hp_get_current_size(const t_cm_hp *hp) {
 	if (!hp) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (0);
@@ -48,7 +48,7 @@ size_t hp_get_current_size(const t_hp *hp) {
  * \return the size of one element or 0 on failure
  * \ingroup hp
 **/
-size_t hp_get_elem_size(const t_hp *hp) {
+size_t hp_get_elem_size(const t_cm_hp *hp) {
 	if (!hp) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (0);
@@ -62,7 +62,7 @@ size_t hp_get_elem_size(const t_hp *hp) {
  * \return pointer to the raw inner array or NULL on failure
  * \ingroup hp
 **/
-void *hp_get_elems_array(const t_hp *hp) {
+void *hp_get_elems_array(const t_cm_hp *hp) {
 	if (!hp) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (NULL);
@@ -78,7 +78,7 @@ void *hp_get_elems_array(const t_hp *hp) {
  * \return pointer to the element at the specified position or NULL on failure
  * \ingroup hp
 **/
-void *hp_at(const t_hp *hp, size_t pos) {
+void *hp_at(const t_cm_hp *hp, size_t pos) {
 	if (!hp || !hp->elems || !hp->sz_e || pos >= hp->nb) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (NULL);

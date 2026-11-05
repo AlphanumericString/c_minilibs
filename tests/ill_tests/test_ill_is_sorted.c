@@ -2,9 +2,9 @@
 
 #include "ill_tests.h"
 
-NO_COV void test_ill_is_sorted(void) {
-	t_test_node n1, n2, n3;
-	t_test_node isolated_node;
+NO_COV void test_cm_ill_is_sorted(void) {
+	t_cm_test_node n1, n2, n3;
+	t_cm_test_node isolated_node;
 
 	INIT_NODE(n1, 10, 1);
 	INIT_NODE(n2, 20, 2);

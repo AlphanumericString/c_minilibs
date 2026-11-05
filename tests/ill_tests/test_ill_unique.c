@@ -2,21 +2,21 @@
 
 #include "ill_tests.h"
 
-NO_COV static size_t collect(t_ill *head, int *out, size_t cap) {
+NO_COV static size_t collect(t_cm_ill *head, int *out, size_t cap) {
 	size_t n = 0;
 
 	while (head && n < cap) {
-		out[n++] = ((t_test_node *)ill_ntoe(head))->value;
+		out[n++] = ((t_cm_test_node *)ill_ntoe(head))->value;
 		head     = head->next;
 	}
 	return n;
 }
 
-NO_COV void test_ill_unique(void) {
-	t_test_node nodes[6];
-	t_test_node nodup[4];
-	t_ill      *head        = NULL;
-	int         values[][6] = {
+NO_COV void test_cm_ill_unique(void) {
+	t_cm_test_node nodes[6];
+	t_cm_test_node nodup[4];
+	t_cm_ill      *head        = NULL;
+	int            values[][6] = {
         {1, 1, 2, 2, 2, 3},
         {1, 1, 2, 2, 3, 3},
     };

@@ -11,8 +11,8 @@ pthread_mutex_t console_lock = PTHREAD_MUTEX_INITIALIZER;
 // queue into the worker's local cache (appended at `th->end`).
 // Caller holds `th->job_cache_lock` and `tpm->q_lock`.
 // false: nothing taken, true: at least one job taken.
-static inline bool batch_refill_from_mainqueue(t_tpm *tpm, t_tpmi_thread *th,
-                                               size_t max) {
+static inline bool
+batch_refill_from_mainqueue(t_cm_tpm *tpm, t_cm_tpmi_thread *th, size_t max) {
 	int nb_jbs;
 
 	nb_jbs = tpmi_job_thrd_cache_pop(tpm, th->jc, th->end, max);
@@ -30,15 +30,15 @@ static inline bool batch_refill_from_mainqueue(t_tpm *tpm, t_tpmi_thread *th,
 // note: using trylock to (1) reduce contention (2) skip lock currently busy
 // with filling up their own works (3) avoid dead-lock problems
 // note: th's own jc lock must be set before calling this.
-static inline bool steal_work(t_tpm *tpm, t_tpmi_thread *th) {
-	size_t         nb         = atomic_load(&tpm->nb_threads);
-	size_t         free_space = C_MINI__TPM_TRD_JOB_CACHE_LEN - th->end;
-	size_t         mine       = th->end - th->start;
-	const size_t   window     = MIN(C_MINI__TPM_STEAL_WINDOW, (nb - 1));
-	bool           stole      = false;
-	t_tpmi_thread *th_stolen;
-	size_t         other_count;
-	size_t         nb_to_steal;
+static inline bool steal_work(t_cm_tpm *tpm, t_cm_tpmi_thread *th) {
+	size_t            nb         = atomic_load(&tpm->nb_threads);
+	size_t            free_space = C_MINI__TPM_TRD_JOB_CACHE_LEN - th->end;
+	size_t            mine       = th->end - th->start;
+	const size_t      window     = MIN(C_MINI__TPM_STEAL_WINDOW, (nb - 1));
+	bool              stole      = false;
+	t_cm_tpmi_thread *th_stolen;
+	size_t            other_count;
+	size_t            nb_to_steal;
 
 	if (nb <= 1) return (false);
 	for (size_t a = 0; a < window && free_space; a++) {
@@ -50,7 +50,7 @@ static inline bool steal_work(t_tpm *tpm, t_tpmi_thread *th) {
 			if (nb_to_steal > free_space) nb_to_steal = free_space;
 			th_stolen->end -= nb_to_steal;
 			memcpy(&th->jc[th->end], &th_stolen->jc[th_stolen->end],
-			       nb_to_steal * sizeof(t_tpm_jc *));
+			       nb_to_steal * sizeof(t_cm_tpm_jc *));
 			th->end    += nb_to_steal;
 			free_space -= nb_to_steal;
 			mine       += nb_to_steal;
@@ -72,7 +72,7 @@ static inline bool steal_work(t_tpm *tpm, t_tpmi_thread *th) {
 // (keeps a slice of the cache free for stolen work), then try to steal from
 // neighbours. If nothing could be stolen the free space is useless, so top it
 // up from the main queue. Caller holds `tpm->q_lock`.
-static bool get_new_jobs(t_tpm *tpm, t_tpmi_thread *th) {
+static bool get_new_jobs(t_cm_tpm *tpm, t_cm_tpmi_thread *th) {
 	const size_t cache_len = C_MINI__TPM_TRD_JOB_CACHE_LEN;
 	bool         stole;
 
@@ -97,7 +97,7 @@ static bool get_new_jobs(t_tpm *tpm, t_tpmi_thread *th) {
 // checks if work disponible if not try to wait STEAL_RETRY_NS and then check
 // for work again, if clock fails, just wait for the main q_cond to signal when
 // an event happened
-static inline void wait_job_opportunity(t_tpm *tpm, size_t thread_id) {
+static inline void wait_job_opportunity(t_cm_tpm *tpm, size_t thread_id) {
 	struct timespec wake;
 
 	if (!tpm->internal_val.shutting_down && !tpm->q_start) {
@@ -118,10 +118,10 @@ static inline void wait_job_opportunity(t_tpm *tpm, size_t thread_id) {
 
 // split into function for easier loggin / job related stuff to be put here
 // (such as future and give return back to user later)
-static inline void *job_launcher_hook(t_tpm_jc *jc, size_t thread_id) {
-	t_tpm_jc *j  = jc;
-	t_cm_work fn = j->job.func;
-	void     *jr;
+static inline void *job_launcher_hook(t_cm_tpm_jc *jc, size_t thread_id) {
+	t_cm_tpm_jc *j  = jc;
+	t_cm_work    fn = j->job.func;
+	void        *jr;
 
 	jr = fn(j->job.arg);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__TPM_LOG_TRD_INFO "{job=%p, return=%p}",
@@ -132,11 +132,11 @@ static inline void *job_launcher_hook(t_tpm_jc *jc, size_t thread_id) {
 }
 
 void *tpmi_worker(void *t) {
-	t_tpmi_thread *tpi = (t_tpmi_thread *)t;
-	bool           linkedin;
-	size_t         i;
-	void          *jr;
-	t_tpm         *tpm;
+	t_cm_tpmi_thread *tpi = (t_cm_tpmi_thread *)t;
+	bool              linkedin;
+	size_t            i;
+	void             *jr;
+	t_cm_tpm         *tpm;
 
 	if (!t) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__TPM_LOG_EARG)

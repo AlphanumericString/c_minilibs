@@ -2,17 +2,17 @@
 #include <stdint.h>
 #include <stdio.h>
 
-struct s_mine {
+struct s_cm_mine {
 	long counter;
 	long id;
 };
 
-#define C_MINI__FTLS_STRUCT struct s_mine
+#define C_MINI__FTLS_STRUCT struct s_cm_mine
 #define C_MINI__FTLS_GET
 #include "tls/fast_thread_local_storage.h"
 
 static void *worker(void *arg) {
-	t_ftls *tls = ftls_get();
+	t_cm_ftls *tls = ftls_get();
 
 	tls->id = (long)(intptr_t)arg;
 	for (int i = 0; i < 5; i++)
@@ -23,8 +23,8 @@ static void *worker(void *arg) {
 }
 
 int main(void) {
-	pthread_t th[3];
-	t_ftls   *tls = ftls_get();
+	pthread_t  th[3];
+	t_cm_ftls *tls = ftls_get();
 
 	tls->counter = 100;
 	tls->id      = 0;

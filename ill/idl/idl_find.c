@@ -8,8 +8,8 @@
  * is head.
  * \ingroup idl
 **/
-t_idl *idl_find_prev(t_idl *head, const t_idl *target) {
-	t_idl *curr;
+t_cm_idl *idl_find_prev(t_cm_idl *head, const t_cm_idl *target) {
+	t_cm_idl *curr;
 
 	if (!head || !target || head == target) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -33,8 +33,8 @@ t_idl *idl_find_prev(t_idl *head, const t_idl *target) {
  * \return A pointer to the target node if found, or NULL otherwise.
  * \ingroup idl
 **/
-t_idl *idl_find(t_idl *head, const t_idl *target) {
-	t_idl *curr;
+t_cm_idl *idl_find(t_cm_idl *head, const t_cm_idl *target) {
+	t_cm_idl *curr;
 
 	if (!head || !target) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -60,8 +60,8 @@ t_idl *idl_find(t_idl *head, const t_idl *target) {
  * not found.
  * \ingroup idl
 **/
-t_idl *idl_get_prev(t_idl *head, t_cm_comparator c, const void *arg) {
-	t_idl *curr;
+t_cm_idl *idl_get_prev(t_cm_idl *head, t_cm_comparator c, const void *arg) {
+	t_cm_idl *curr;
 
 	if (!head || !c) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -87,8 +87,8 @@ t_idl *idl_get_prev(t_idl *head, t_cm_comparator c, const void *arg) {
  * \return A pointer to the matched node, or NULL if not found.
  * \ingroup idl
 **/
-t_idl *idl_get(t_idl *head, t_cm_comparator c, const void *arg) {
-	t_idl *curr;
+t_cm_idl *idl_get(t_cm_idl *head, t_cm_comparator c, const void *arg) {
+	t_cm_idl *curr;
 
 	if (!head || !c) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)

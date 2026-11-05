@@ -16,9 +16,9 @@
  * zero-filled structure on failure
  * \ingroup sptr
 **/
-t_owned_ptr sptr_make_owned_from_raw(void *raw_ptr, t_cm_dtor d) {
-	t_owned_ptr ret = (t_owned_ptr){0};
-	t_fbox     *f;
+t_cm_owned_ptr sptr_make_owned_from_raw(void *raw_ptr, t_cm_dtor d) {
+	t_cm_owned_ptr ret = (t_cm_owned_ptr){0};
+	t_cm_fbox     *f;
 
 	if (!raw_ptr) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
@@ -29,8 +29,8 @@ t_owned_ptr sptr_make_owned_from_raw(void *raw_ptr, t_cm_dtor d) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__SPTR_LOG_EALLOC)
 		return (ret);
 	}
-	*f  = (t_fbox){.data = raw_ptr, .dtor = d, .rc = 1, .wc = 0};
-	ret = (t_owned_ptr){.owner = true, .meta = f, .data = raw_ptr};
+	*f  = (t_cm_fbox){.data = raw_ptr, .dtor = d, .rc = 1, .wc = 0};
+	ret = (t_cm_owned_ptr){.owner = true, .meta = f, .data = raw_ptr};
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (ret);
 }
@@ -44,8 +44,8 @@ t_owned_ptr sptr_make_owned_from_raw(void *raw_ptr, t_cm_dtor d) {
  * strong_ptr
  * \ingroup sptr
 **/
-t_owned_ptr sptr_make_owned_from_strong(t_strong_ptr *sp, t_cm_dtor d) {
-	t_owned_ptr ret = (t_owned_ptr){0};
+t_cm_owned_ptr sptr_make_owned_from_strong(t_cm_strong_ptr *sp, t_cm_dtor d) {
+	t_cm_owned_ptr ret = (t_cm_owned_ptr){0};
 
 	if (!sp || sptr_get_rc(sp) != 1) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
@@ -55,10 +55,10 @@ t_owned_ptr sptr_make_owned_from_strong(t_strong_ptr *sp, t_cm_dtor d) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_ILL)
 		return (ret);
 	}
-	ret = (t_owned_ptr){.owner = true, .meta = sp->meta, .data = sp->data};
+	ret = (t_cm_owned_ptr){.owner = true, .meta = sp->meta, .data = sp->data};
 	if (d) ret.meta->dtor = d;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
-	*sp = (t_strong_ptr){0};
+	*sp = (t_cm_strong_ptr){0};
 	return (ret);
 }
 /**
@@ -72,8 +72,8 @@ t_owned_ptr sptr_make_owned_from_strong(t_strong_ptr *sp, t_cm_dtor d) {
  * false
  * \ingroup sptr
 **/
-t_owned_ptr sptr_make_owned_from_owned(t_owned_ptr *owned, t_cm_dtor d) {
-	t_owned_ptr ret = (t_owned_ptr){0};
+t_cm_owned_ptr sptr_make_owned_from_owned(t_cm_owned_ptr *owned, t_cm_dtor d) {
+	t_cm_owned_ptr ret = (t_cm_owned_ptr){0};
 
 	if (!owned || !owned->meta) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
@@ -100,9 +100,9 @@ t_owned_ptr sptr_make_owned_from_owned(t_owned_ptr *owned, t_cm_dtor d) {
  * \note clears out uptr internal values
  * \ingroup sptr
 **/
-t_owned_ptr sptr_make_owned_from_uniq(t_uniq_ptr *uptr, t_cm_dtor d) {
-	t_owned_ptr ret = (t_owned_ptr){0};
-	t_fbox     *f;
+t_cm_owned_ptr sptr_make_owned_from_uniq(t_cm_uniq_ptr *uptr, t_cm_dtor d) {
+	t_cm_owned_ptr ret = (t_cm_owned_ptr){0};
+	t_cm_fbox     *f;
 
 	if (!uptr) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
@@ -117,11 +117,11 @@ t_owned_ptr sptr_make_owned_from_uniq(t_uniq_ptr *uptr, t_cm_dtor d) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EALLOC)
 		return (ret);
 	}
-	*f  = (t_fbox){.data = uptr->data, .dtor = uptr->dtor, 1, 0};
-	ret = (t_owned_ptr){.owner = true, .meta = f, .data = f->data};
+	*f  = (t_cm_fbox){.data = uptr->data, .dtor = uptr->dtor, 1, 0};
+	ret = (t_cm_owned_ptr){.owner = true, .meta = f, .data = f->data};
 	if (d) f->dtor = d;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
-	*uptr = (t_uniq_ptr){0};
+	*uptr = (t_cm_uniq_ptr){0};
 	return (ret);
 }
 
@@ -136,13 +136,13 @@ t_owned_ptr sptr_make_owned_from_uniq(t_uniq_ptr *uptr, t_cm_dtor d) {
  * \return the newly created uniq pointer or a zeroed out uniq pointer
  * \ingroup sptr
 **/
-t_uniq_ptr sptr_make_uniq_from_raw(void *ptr, t_cm_dtor d) {
+t_cm_uniq_ptr sptr_make_uniq_from_raw(void *ptr, t_cm_dtor d) {
 	if (!ptr) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
-		return ((t_uniq_ptr){0});
+		return ((t_cm_uniq_ptr){0});
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
-	return ((t_uniq_ptr){.data = ptr, .dtor = d});
+	return ((t_cm_uniq_ptr){.data = ptr, .dtor = d});
 }
 /**
  * \brief create a new uniq pointer from a weak pointer
@@ -152,13 +152,13 @@ t_uniq_ptr sptr_make_uniq_from_raw(void *ptr, t_cm_dtor d) {
  * \warning this is an illegal operation. Implemented purely to warn people.
  * \ingroup sptr
 **/
-t_uniq_ptr sptr_make_uniq_from_weak(const t_weak_ptr *ptr, t_cm_dtor _) {
+t_cm_uniq_ptr sptr_make_uniq_from_weak(const t_cm_weak_ptr *ptr, t_cm_dtor _) {
 	if (!ptr) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
-		return ((t_uniq_ptr){0});
+		return ((t_cm_uniq_ptr){0});
 	}
 	CM_LOG(C_MINI__LEVEL_ERR, C_MINI__SPTR_LOG_ILL)
-	return ((t_uniq_ptr){0});
+	return ((t_cm_uniq_ptr){0});
 }
 /**
  * \brief create a new uniq pointer from a strong pointer
@@ -169,23 +169,23 @@ t_uniq_ptr sptr_make_uniq_from_weak(const t_weak_ptr *ptr, t_cm_dtor _) {
  * \note zeroes out the fields of ptr for data and dtor.
  * \ingroup sptr
 **/
-t_uniq_ptr sptr_make_uniq_from_strong(t_strong_ptr *ptr, t_cm_dtor d) {
-	t_uniq_ptr ret;
+t_cm_uniq_ptr sptr_make_uniq_from_strong(t_cm_strong_ptr *ptr, t_cm_dtor d) {
+	t_cm_uniq_ptr ret;
 
 	if (!ptr || sptr_get_rc(ptr) != 1 || !ptr->data) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
-		return ((t_uniq_ptr){0});
+		return ((t_cm_uniq_ptr){0});
 	}
 	if (d && sptr_get_dtor(ptr) && sptr_get_dtor(ptr) != d) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_ILL)
-		return ((t_uniq_ptr){0});
+		return ((t_cm_uniq_ptr){0});
 	}
-	ret = (t_uniq_ptr){.data = sptr_get(ptr), .dtor = sptr_get_dtor(ptr)};
+	ret = (t_cm_uniq_ptr){.data = sptr_get(ptr), .dtor = sptr_get_dtor(ptr)};
 	sptri_rc_dec(ptr->meta);
 	if (!sptri_wc_get(ptr->meta)) free(ptr->meta);
 	if (d) sptr_set_dtor(&ret, d);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
-	*ptr = (t_strong_ptr){0};
+	*ptr = (t_cm_strong_ptr){0};
 	return (ret);
 }
 /**
@@ -197,49 +197,49 @@ t_uniq_ptr sptr_make_uniq_from_strong(t_strong_ptr *ptr, t_cm_dtor d) {
  * \note zeroes out the fields of ptr for data and dtor.
  * \ingroup sptr
 **/
-t_uniq_ptr sptr_make_uniq_from_owned(t_owned_ptr *ptr, t_cm_dtor d) {
-	t_uniq_ptr ret;
+t_cm_uniq_ptr sptr_make_uniq_from_owned(t_cm_owned_ptr *ptr, t_cm_dtor d) {
+	t_cm_uniq_ptr ret;
 
 	if (!ptr || !ptr->owner || sptr_get_rc(ptr) != 1 || !sptr_get(ptr)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
-		return ((t_uniq_ptr){0});
+		return ((t_cm_uniq_ptr){0});
 	}
 	if (d && sptr_get_dtor(ptr) && sptr_get_dtor(ptr) != d) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_ILL)
-		return ((t_uniq_ptr){0});
+		return ((t_cm_uniq_ptr){0});
 	}
-	ret = (t_uniq_ptr){.data = sptr_get(ptr), .dtor = sptr_get_dtor(ptr)};
+	ret = (t_cm_uniq_ptr){.data = sptr_get(ptr), .dtor = sptr_get_dtor(ptr)};
 	sptri_rc_dec(ptr->meta);
 	ptr->owner = false;
 	if (!sptri_wc_get(ptr->meta)) free(ptr->meta);
 	if (d) ret.dtor = d;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
-	*ptr = (t_owned_ptr){0};
+	*ptr = (t_cm_owned_ptr){0};
 	return (ret);
 }
 /**
  * \brief make a uniq pointer from an other uniq pointer
  * \param ptr the source uniq pointer to replace
  * \param d the dtor to try to set. (if d != ptr.dtor, fails)
- * \return the t_uniq_ptr containing the values of ptr and updated dtor or
+ * \return the t_cm_uniq_ptr containing the values of ptr and updated dtor or
  * zeroed uniq pointer
  * \note empties out the source uniq pointer ptr.
  * \ingroup sptr
 **/
-t_uniq_ptr sptr_make_uniq_from_uniq(t_uniq_ptr *ptr, t_cm_dtor d) {
-	t_uniq_ptr ret;
+t_cm_uniq_ptr sptr_make_uniq_from_uniq(t_cm_uniq_ptr *ptr, t_cm_dtor d) {
+	t_cm_uniq_ptr ret;
 
 	if (!ptr || !ptr->data) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
-		return ((t_uniq_ptr){0});
+		return ((t_cm_uniq_ptr){0});
 	}
 	if (d && sptr_get_dtor(ptr) && sptr_get_dtor(ptr) != d) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_ILL)
-		return ((t_uniq_ptr){0});
+		return ((t_cm_uniq_ptr){0});
 	}
-	ret = (t_uniq_ptr){.data = ptr->data, .dtor = ptr->dtor};
+	ret = (t_cm_uniq_ptr){.data = ptr->data, .dtor = ptr->dtor};
 	if (d) ret.dtor = d;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
-	*ptr = (t_uniq_ptr){0};
+	*ptr = (t_cm_uniq_ptr){0};
 	return (ret);
 }

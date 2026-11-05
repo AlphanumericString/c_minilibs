@@ -6,7 +6,7 @@
  * \param offset The offset of the node within its container structure.
  * \ingroup idl
 **/
-void idl_init(t_idl *node, size_t offset) {
+void idl_init(t_cm_idl *node, size_t offset) {
 	if (!node) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return;
@@ -18,12 +18,12 @@ void idl_init(t_idl *node, size_t offset) {
 }
 
 static void clean_chain(const void *nh, size_t offset, t_cm_dtor dtor) {
-	t_idl *curr;
+	t_cm_idl *curr;
 
 	if (!nh || !dtor) return;
 	curr = idl_eton(nh, offset);
 	while (curr) {
-		t_idl *nxt = curr->next;
+		t_cm_idl *nxt = curr->next;
 		dtor(idl_ntoe(curr));
 		curr = nxt;
 	}
@@ -40,11 +40,11 @@ static void clean_chain(const void *nh, size_t offset, t_cm_dtor dtor) {
  * on failure.
  * \ingroup idl
 **/
-void *idl_copy(const t_idl *head, t_cm_duplicator d, t_cm_dtor dtor) {
-	size_t offset;
-	t_idl *ret;
-	void  *elem;
-	void  *nh = NULL;
+void *idl_copy(const t_cm_idl *head, t_cm_duplicator d, t_cm_dtor dtor) {
+	size_t    offset;
+	t_cm_idl *ret;
+	void     *elem;
+	void     *nh = NULL;
 
 	if (!head || !d) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)

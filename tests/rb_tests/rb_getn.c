@@ -3,10 +3,10 @@
 
 #include "rb_tests.h"
 
-NO_COV void test_rb_getn(void) {
-	t_rb rb     = {0};
-	int  arr[4] = {1, 2, 1, 3};
-	int  out[4] = {0};
+NO_COV void test_cm_rb_getn(void) {
+	t_cm_rb rb     = {0};
+	int     arr[4] = {1, 2, 1, 3};
+	int     out[4] = {0};
 
 	const int target            = 1;
 	const int target_only_once  = 2;

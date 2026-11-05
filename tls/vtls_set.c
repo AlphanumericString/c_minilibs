@@ -14,9 +14,9 @@
  * \ingroup vtls
 **/
 bool vtls_set(const char *v_name, void *v_val, size_t v_size) {
-	t_vtls     *vtls = pthread_getspecific(vtls_key);
-	size_t      i    = 0;
-	t_vtls_key *growth;
+	t_cm_vtls     *vtls = pthread_getspecific(vtls_key);
+	size_t         i    = 0;
+	t_cm_vtls_key *growth;
 
 	if (!v_name) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__VTLS_EARG);
@@ -38,7 +38,7 @@ bool vtls_set(const char *v_name, void *v_val, size_t v_size) {
 	}
 	if (vtls->len == vtls->cap) { // check space => grow
 		i      = (!vtls->cap ? C_MINI__VTLS_START_SIZE : vtls->cap * 2);
-		growth = realloc(vtls->data, sizeof(t_vtls_key) * i);
+		growth = realloc(vtls->data, sizeof(t_cm_vtls_key) * i);
 		if (!growth) {
 			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__VTLS_EALLOC);
 			return (false);
@@ -46,7 +46,7 @@ bool vtls_set(const char *v_name, void *v_val, size_t v_size) {
 		vtls->data = growth;
 		vtls->cap  = i;
 	}
-	vtls->data[vtls->len++] = (t_vtls_key){
+	vtls->data[vtls->len++] = (t_cm_vtls_key){
 	    .var    = v_val,
 	    .size_e = v_size,
 	    .v_name = v_name,

@@ -4,10 +4,10 @@
 
 #include "tpm_tests.h"
 
-NO_COV void test_tpm_clear_job_list(void) {
-	t_tpm_jc *a = tpmi_create_job(cb_work_incr, (void *)(uintptr_t)0x1);
-	t_tpm_jc *b = tpmi_create_job(cb_work_incr, (void *)(uintptr_t)0x2);
-	t_tpm_jc *c = tpmi_create_job(cb_work_incr, (void *)(uintptr_t)0x3);
+NO_COV void test_cm_tpm_clear_job_list(void) {
+	t_cm_tpm_jc *a = tpmi_create_job(cb_work_incr, (void *)(uintptr_t)0x1);
+	t_cm_tpm_jc *b = tpmi_create_job(cb_work_incr, (void *)(uintptr_t)0x2);
+	t_cm_tpm_jc *c = tpmi_create_job(cb_work_incr, (void *)(uintptr_t)0x3);
 
 	a->next = b;
 	b->prev = a;
@@ -23,8 +23,8 @@ NO_COV void test_tpm_clear_job_list(void) {
 	assert(cb_get_cleanups() == 3);
 }
 
-NO_COV void test_tpm_delete(void) {
-	t_tpm t;
+NO_COV void test_cm_tpm_delete(void) {
+	t_cm_tpm t;
 
 	tpm_init(&t, 2);
 	cb_reset_counter();
@@ -37,8 +37,8 @@ NO_COV void test_tpm_delete(void) {
 	tpm_delete(NULL, NULL);
 }
 
-NO_COV void test_tpm_delete_pending(void) {
-	t_tpm t = {0};
+NO_COV void test_cm_tpm_delete_pending(void) {
+	t_cm_tpm t = {0};
 
 	// a pool with no worker threads: the whole main queue is dropped and each
 	// job's cleanup runs exactly once (guards the former double-free of the
@@ -58,8 +58,8 @@ NO_COV void test_tpm_delete_pending(void) {
 	pthread_mutex_destroy(&t.q_lock);
 }
 
-NO_COV void test_tpm_free(void) {
-	t_tpm *t = tpm_new(2);
+NO_COV void test_cm_tpm_free(void) {
+	t_cm_tpm *t = tpm_new(2);
 
 	cb_reset_counter();
 	assert(tpm_add_job(t, cb_work_incr, NULL) != NULL);

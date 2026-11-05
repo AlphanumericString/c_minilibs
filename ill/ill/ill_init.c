@@ -6,7 +6,7 @@
  * \param offset The offset of the node within its container structure.
  * \ingroup ill
 **/
-void ill_init(t_ill *node, size_t offset) {
+void ill_init(t_cm_ill *node, size_t offset) {
 	if (!node) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return;
@@ -16,18 +16,19 @@ void ill_init(t_ill *node, size_t offset) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 }
 
-static inline void setup_chain(t_ill *to_setup, t_ill *nxt, size_t offset) {
+static inline void setup_chain(t_cm_ill *to_setup, t_cm_ill *nxt,
+                               size_t offset) {
 	to_setup->next   = nxt;
 	to_setup->offset = offset;
 }
 
 static void clean_chain(void *nh, size_t offset, t_cm_dtor dtor) {
-	t_ill *curr;
+	t_cm_ill *curr;
 
 	if (!nh || !dtor) return;
 	curr = ill_eton(nh, offset);
 	while (curr) {
-		t_ill *nxt = curr->next;
+		t_cm_ill *nxt = curr->next;
 		dtor(ill_ntoe(curr));
 		curr = nxt;
 	}
@@ -44,11 +45,11 @@ static void clean_chain(void *nh, size_t offset, t_cm_dtor dtor) {
  * on failure.
  * \ingroup ill
 **/
-void *ill_copy(const t_ill *head, t_cm_duplicator dupper, t_cm_dtor dtor) {
-	size_t offset;
-	void  *e_cpy = NULL;
-	t_ill *prev  = NULL;
-	void  *nh    = NULL;
+void *ill_copy(const t_cm_ill *head, t_cm_duplicator dupper, t_cm_dtor dtor) {
+	size_t    offset;
+	void     *e_cpy = NULL;
+	t_cm_ill *prev  = NULL;
+	void     *nh    = NULL;
 
 	if (!head || !dupper) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)

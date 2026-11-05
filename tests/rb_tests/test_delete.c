@@ -2,8 +2,8 @@
 
 #include "rb_tests.h"
 
-NO_COV void test_rb_free(void) {
-	t_rb *rb = rb_new(sizeof(int));
+NO_COV void test_cm_rb_free(void) {
+	t_cm_rb *rb = rb_new(sizeof(int));
 
 	assert(rb != NULL);
 	rb_free(&rb);
@@ -12,8 +12,8 @@ NO_COV void test_rb_free(void) {
 	assert(rb == NULL);
 	rb_free(NULL);
 }
-NO_COV void test_rb_destroy(void) {
-	t_rb rb = {0};
+NO_COV void test_cm_rb_destroy(void) {
+	t_cm_rb rb = {0};
 
 	rb_init(&rb, sizeof(int));
 
@@ -38,9 +38,9 @@ NO_COV void test_rb_destroy(void) {
 	rb_destroy(NULL);
 }
 
-NO_COV void test_rb_clr(void) {
-	t_rb rb  = {0};
-	int  val = 42;
+NO_COV void test_cm_rb_clr(void) {
+	t_cm_rb rb  = {0};
+	int     val = 42;
 
 	rb_init(&rb, sizeof(int));
 	rb_push(&rb, &val);

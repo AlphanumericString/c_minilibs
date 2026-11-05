@@ -8,9 +8,10 @@
  * \return The head of the merged sorted list.
  * \ingroup ill
 **/
-t_ill *ill_sorted_merge(t_ill *list1, t_ill *list2, t_cm_comparator comp) {
-	t_ill  dummy;
-	t_ill *tail;
+t_cm_ill *ill_sorted_merge(t_cm_ill *list1, t_cm_ill *list2,
+                           t_cm_comparator comp) {
+	t_cm_ill  dummy;
+	t_cm_ill *tail;
 
 	if (!comp) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
@@ -32,10 +33,10 @@ t_ill *ill_sorted_merge(t_ill *list1, t_ill *list2, t_cm_comparator comp) {
 	return dummy.next;
 }
 
-static t_ill *split_list(t_ill *head) {
-	t_ill *slow;
-	t_ill *fast;
-	t_ill *mid;
+static t_cm_ill *split_list(t_cm_ill *head) {
+	t_cm_ill *slow;
+	t_cm_ill *fast;
+	t_cm_ill *mid;
 
 	slow = head;
 	fast = head->next;
@@ -48,8 +49,8 @@ static t_ill *split_list(t_ill *head) {
 	return mid;
 }
 
-static t_ill *merge_sort(t_ill *head, t_cm_comparator comp) {
-	t_ill *mid;
+static t_cm_ill *merge_sort(t_cm_ill *head, t_cm_comparator comp) {
+	t_cm_ill *mid;
 
 	if (!head->next) return head;
 	mid  = split_list(head);
@@ -64,7 +65,7 @@ static t_ill *merge_sort(t_ill *head, t_cm_comparator comp) {
  * \param comp The comparator function.
  * \ingroup ill
 **/
-void ill_sort(t_ill **head, t_cm_comparator comp) {
+void ill_sort(t_cm_ill **head, t_cm_comparator comp) {
 	if (!head || !*head || !comp) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return;

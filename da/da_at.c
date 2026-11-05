@@ -7,7 +7,7 @@
  * \return pointer to the element at the specified position
  * \ingroup da
 **/
-void *da_at(const t_da *da, size_t pos) {
+void *da_at(const t_cm_da *da, size_t pos) {
 	if (!da_is_valid(da) || pos >= da->nb_e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (NULL);

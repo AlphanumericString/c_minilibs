@@ -2,7 +2,7 @@
 
 #include "dsu/rdsu/rewindable_disjointed_set_union.h"
 
-static void dump(const t_rdsu *d) {
+static void dump(const t_cm_rdsu *d) {
 	printf("components=%zu :", rdsu_nb_components(d));
 	for (size_t i = 0; i < rdsu_size(d); i++)
 		printf(" %u", rdsu_find(d, i));
@@ -10,8 +10,8 @@ static void dump(const t_rdsu *d) {
 }
 
 int main(void) {
-	t_rdsu     *d = rdsu_new(6);
-	t_rdsu_log *checkpoint;
+	t_cm_rdsu     *d = rdsu_new(6);
+	t_cm_rdsu_log *checkpoint;
 
 	rdsu_union(d, 0, 1);
 	rdsu_union(d, 1, 2);

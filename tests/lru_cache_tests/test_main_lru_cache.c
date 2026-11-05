@@ -7,60 +7,60 @@
 NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Create", )
-	test_lruc_create();
-	test_lruc_init();
-	test_lruc_destroy();
-	test_lruc_free();
-	test_lruc_reserve();
+	test_cm_lruc_create();
+	test_cm_lruc_init();
+	test_cm_lruc_destroy();
+	test_cm_lruc_free();
+	test_cm_lruc_reserve();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Put", )
-	test_lruc_put_kv();
-	test_lruc_put();
-	test_lruc_put_ttl();
+	test_cm_lruc_put_kv();
+	test_cm_lruc_put();
+	test_cm_lruc_put_ttl();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Get", )
-	test_lruc_get();
-	test_lruc_get_lru();
+	test_cm_lruc_get();
+	test_cm_lruc_get_lru();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Rm", )
-	test_lruc_clear();
-	test_lruc_clear_reserved();
-	test_lruc_clear_to_reserved();
-	test_lruc_remove();
+	test_cm_lruc_clear();
+	test_cm_lruc_clear_reserved();
+	test_cm_lruc_clear_to_reserved();
+	test_cm_lruc_remove();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Has", )
-	test_lruc_has();
+	test_cm_lruc_has();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Expired", )
-	test_lruc_isexpired();
-	test_lruc_cleanup();
-	test_lruc_setttl();
+	test_cm_lruc_isexpired();
+	test_cm_lruc_cleanup();
+	test_cm_lruc_setttl();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Info", )
-	test_lruc_expired();
-	test_lruc_size();
-	test_lruc_hits();
-	test_lruc_misses();
-	test_lruc_stats();
-	test_lruc_is_valid();
-	test_lruc_reserved_nb();
-	test_lruc_has_reserved();
-	test_lruc_max_reserve();
+	test_cm_lruc_expired();
+	test_cm_lruc_size();
+	test_cm_lruc_hits();
+	test_cm_lruc_misses();
+	test_cm_lruc_stats();
+	test_cm_lruc_is_valid();
+	test_cm_lruc_reserved_nb();
+	test_cm_lruc_has_reserved();
+	test_cm_lruc_max_reserve();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Internals", )
-	test_lruci_hp_pop();
-	test_lruci_hp_pop_nth();
-	test_lruci_keyinhash();
-	test_lruci_keyinlist();
-	test_lruci_node_eq();
-	test_lruci_hsh_pop();
-	test_lruci_rsvrd_push();
-	test_lruci_rsvrd_pop();
+	test_cm_lruci_hp_pop();
+	test_cm_lruci_hp_pop_nth();
+	test_cm_lruci_keyinhash();
+	test_cm_lruci_keyinlist();
+	test_cm_lruci_node_eq();
+	test_cm_lruci_hsh_pop();
+	test_cm_lruci_rsvrd_push();
+	test_cm_lruci_rsvrd_pop();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Foreach", )
-	test_lruc_foreach();
-	test_lruc_foreach_ru_ordered();
-	test_lruc_foreach_ttl_ordered();
+	test_cm_lruc_foreach();
+	test_cm_lruc_foreach_ru_ordered();
+	test_cm_lruc_foreach_ttl_ordered();
 
 	CM_LOG(C_MINI__LEVEL_ALWAYS,
 	       "All LRU CACHE tests completed successfully.", )

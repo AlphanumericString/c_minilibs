@@ -19,7 +19,7 @@ static void *heavy_job(void *arg) {
 int main(void) {
 	const size_t threads = 4;
 	const size_t jobs    = 24;
-	t_tpm       *pool    = tpm_new(threads);
+	t_cm_tpm    *pool    = tpm_new(threads);
 
 	printf("pool started with %zu worker threads\n", tpm_get_nbthread(pool));
 

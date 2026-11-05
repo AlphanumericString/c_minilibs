@@ -11,9 +11,9 @@ static bool cb_is_even(void *elem, void *arg) {
 	return (*(int *)elem % 2) == 0;
 }
 
-NO_COV void test_rb_filter(void) {
-	t_rb rb     = {0};
-	int  arr[4] = {1, 2, 3, 4};
+NO_COV void test_cm_rb_filter(void) {
+	t_cm_rb rb     = {0};
+	int     arr[4] = {1, 2, 3, 4};
 
 	rb_init(&rb, sizeof(int));
 	rb_npush(&rb, arr, 4);

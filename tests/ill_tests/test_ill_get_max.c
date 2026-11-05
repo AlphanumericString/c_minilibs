@@ -2,9 +2,9 @@
 
 #include "ill_tests.h"
 
-NO_COV void test_ill_get_max(void) {
-	t_test_node n1, n2, n3;
-	t_ill      *head = NULL;
+NO_COV void test_cm_ill_get_max(void) {
+	t_cm_test_node n1, n2, n3;
+	t_cm_ill      *head = NULL;
 
 	INIT_NODE(n1, 10, 1);
 	INIT_NODE(n2, 20, 2);

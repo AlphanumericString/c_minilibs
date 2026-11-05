@@ -9,7 +9,7 @@
  * \param rb the round buffer to destroy
  * \ingroup rb
 **/
-void rb_destroy(t_rb *rb) {
+void rb_destroy(t_cm_rb *rb) {
 	if (!rb) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return;
@@ -29,7 +29,7 @@ void rb_destroy(t_rb *rb) {
  * \param rb the round buffer to clear
  * \ingroup rb
 **/
-void rb_clr(t_rb *rb) {
+void rb_clr(t_cm_rb *rb) {
 	if (!rb) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return;
@@ -44,7 +44,7 @@ void rb_clr(t_rb *rb) {
  * \param rb the round buffer to free
  * \ingroup rb
 **/
-void rb_free(t_rb **rb) {
+void rb_free(t_cm_rb **rb) {
 	if (!rb || !*rb) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return;

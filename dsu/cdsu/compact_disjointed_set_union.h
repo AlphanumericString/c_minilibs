@@ -21,7 +21,7 @@
 **/
 
 /**
- * \typedef t_cdsu
+ * \typedef t_cm_cdsu
  * \brief cdsu struct represents a compact dsu (disjointed set union)
  * \param parent list of ids for the parent of nodes
  * \param rank   rank of a node, closer to 0 = closer to the source
@@ -31,38 +31,38 @@
  * from a single contiguous allocation
  * \ingroup cdsu
 **/
-typedef struct s_compact_disjointed_set_union {
+typedef struct s_cm_compact_disjointed_set_union {
 	uint16_t *parent;
 	uint16_t *rank;
 
 	size_t size;
 	size_t components;
 	bool   rp_single_alloc;
-} t_cdsu;
+} t_cm_cdsu;
 
-t_cdsu *cdsu_new(size_t n);
-t_cdsu *cdsu_new_from_array(size_t n, uint16_t *parents, uint16_t *rank);
-t_cdsu *cdsu_init(t_cdsu *to_init, size_t n);
-t_cdsu *cdsu_init_from_arrays(t_cdsu *to_init, size_t size, uint16_t *parent,
-                              uint16_t *rank);
+t_cm_cdsu *cdsu_new(size_t n);
+t_cm_cdsu *cdsu_new_from_array(size_t n, uint16_t *parents, uint16_t *rank);
+t_cm_cdsu *cdsu_init(t_cm_cdsu *to_init, size_t n);
+t_cm_cdsu *cdsu_init_from_arrays(t_cm_cdsu *to_init, size_t size,
+                                 uint16_t *parent, uint16_t *rank);
 
-bool cdsu_grow(t_cdsu *to_init, size_t n);
+bool cdsu_grow(t_cm_cdsu *to_init, size_t n);
 
-bool cdsu_clr(t_cdsu *dsu);
-void cdsu_destroy(t_cdsu *ds);
-void cdsu_free(t_cdsu **ds);
+bool cdsu_clr(t_cm_cdsu *dsu);
+void cdsu_destroy(t_cm_cdsu *ds);
+void cdsu_free(t_cm_cdsu **ds);
 
-int    cdsu_max_depth(const t_cdsu *dsu);
-size_t cdsu_size(const t_cdsu *dsu);
-size_t cdsu_nb_components(const t_cdsu *dsu);
+int    cdsu_max_depth(const t_cm_cdsu *dsu);
+size_t cdsu_size(const t_cm_cdsu *dsu);
+size_t cdsu_nb_components(const t_cm_cdsu *dsu);
 
-bool cdsu_is_related(t_cdsu *ds, size_t x, size_t y);
-bool cdsu_strict_is_related(const t_cdsu *ds, size_t x, size_t y);
-bool cdsu_validate(const t_cdsu *dsu);
+bool cdsu_is_related(t_cm_cdsu *ds, size_t x, size_t y);
+bool cdsu_strict_is_related(const t_cm_cdsu *ds, size_t x, size_t y);
+bool cdsu_validate(const t_cm_cdsu *dsu);
 
-bool   cdsu_union(t_cdsu *ds, size_t x, size_t y);
-size_t cdsu_find(t_cdsu *ds, size_t x);
-size_t cdsu_strict_find(const t_cdsu *ds, size_t x);
-size_t cdsu_compress_all(t_cdsu *ds);
+bool   cdsu_union(t_cm_cdsu *ds, size_t x, size_t y);
+size_t cdsu_find(t_cm_cdsu *ds, size_t x);
+size_t cdsu_strict_find(const t_cm_cdsu *ds, size_t x);
+size_t cdsu_compress_all(t_cm_cdsu *ds);
 
 #endif // !C_MINI__CDSU

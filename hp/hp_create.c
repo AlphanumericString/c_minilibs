@@ -7,13 +7,13 @@
  * \param nb_elems max number of elements
  * \param sz_elem size of one element
  * \param cmp comparator function
- * \return t_hp* or NULL if failed
+ * \return t_cm_hp* or NULL if failed
  * \ingroup hp
 **/
-t_hp *hp_create(size_t nb_elems, size_t sz_elem, t_cm_comparator cmp) {
-	t_hp *hp;
+t_cm_hp *hp_create(size_t nb_elems, size_t sz_elem, t_cm_comparator cmp) {
+	t_cm_hp *hp;
 
-	hp = malloc(sizeof(t_hp));
+	hp = malloc(sizeof(t_cm_hp));
 	if (!hp || hp_init(hp, nb_elems, sz_elem, cmp) == NULL) {
 		if (hp) free(hp);
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EALLOC)
@@ -29,10 +29,11 @@ t_hp *hp_create(size_t nb_elems, size_t sz_elem, t_cm_comparator cmp) {
  * \param nb_elems max number of elements
  * \param sz_elem size of one element
  * \param cmp comparator function (elem is always on the left, arg on the right)
- * \return t_hp* or NULL if failed
+ * \return t_cm_hp* or NULL if failed
  * \ingroup hp
 **/
-t_hp *hp_init(t_hp *hp, size_t nb_elems, size_t sz_elem, t_cm_comparator cmp) {
+t_cm_hp *hp_init(t_cm_hp *hp, size_t nb_elems, size_t sz_elem,
+                 t_cm_comparator cmp) {
 	if (!hp || !sz_elem) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (NULL);

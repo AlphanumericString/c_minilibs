@@ -3,18 +3,18 @@
 
 #include "tls_tests.h"
 
-NO_COV void test_vtls_dump(void) {
-	void       *d1       = (void *)0xDEAD;
-	void       *d2       = (void *)0x42;
-	void       *d3       = (void *)0xBEEF;
-	void       *d4       = (void *)0xDEADCAFEBEEFBEAD;
-	void       *d5       = (void *)0x0;
-	const char *expected = "a:{           0xdead 3 }\n"
-	                       "b:{             0x42 12 }\n"
-	                       "c:{           0xbeef 1 }\n"
-	                       "d:{           0xbeef 0 }\n"
-	                       "f:{            (nil) 3 }\n";
-	t_vtls_key  keys[]   = {
+NO_COV void test_cm_vtls_dump(void) {
+	void         *d1       = (void *)0xDEAD;
+	void         *d2       = (void *)0x42;
+	void         *d3       = (void *)0xBEEF;
+	void         *d4       = (void *)0xDEADCAFEBEEFBEAD;
+	void         *d5       = (void *)0x0;
+	const char   *expected = "a:{           0xdead 3 }\n"
+	                         "b:{             0x42 12 }\n"
+	                         "c:{           0xbeef 1 }\n"
+	                         "d:{           0xbeef 0 }\n"
+	                         "f:{            (nil) 3 }\n";
+	t_cm_vtls_key keys[]   = {
         {.v_name = "a",  .var = d1, .size_e = 3 },
         {.v_name = "b",  .var = d2, .size_e = 12},
         {.v_name = "c",  .var = d3, .size_e = 1 },
@@ -22,12 +22,12 @@ NO_COV void test_vtls_dump(void) {
         {.v_name = NULL, .var = d4, .size_e = 3 },
         {.v_name = "f",  .var = d5, .size_e = 3 },
     };
-	const t_vtls  empty_vtls = (t_vtls){0};
-	const t_vtls  vtls       = (t_vtls){.len = 6, .cap = 12, .data = keys};
-	const t_vtls *prev       = pthread_getspecific(vtls_key);
-	int           pipe_fd[2];
-	char          buff[4096] = {0};
-	int           n;
+	const t_cm_vtls  empty_vtls = (t_cm_vtls){0};
+	const t_cm_vtls  vtls = (t_cm_vtls){.len = 6, .cap = 12, .data = keys};
+	const t_cm_vtls *prev = pthread_getspecific(vtls_key);
+	int              pipe_fd[2];
+	char             buff[4096] = {0};
+	int              n;
 
 	assert(pipe((int *)&pipe_fd) >= 0);
 	pthread_setspecific(vtls_key, &vtls);
@@ -57,13 +57,13 @@ NO_COV void test_vtls_dump(void) {
 	assert(n >= 0);
 	assert(!strcmp(buff, expected));
 }
-NO_COV void test_vtls_dump_all(void) {
-	void      *d1     = (void *)0xDEAD;
-	void      *d2     = (void *)0x42;
-	void      *d3     = (void *)0xBEEF;
-	void      *d4     = (void *)0xDEADCAFEBEEFBEAD;
-	void      *d5     = (void *)0x0;
-	t_vtls_key keys[] = {
+NO_COV void test_cm_vtls_dump_all(void) {
+	void         *d1     = (void *)0xDEAD;
+	void         *d2     = (void *)0x42;
+	void         *d3     = (void *)0xBEEF;
+	void         *d4     = (void *)0xDEADCAFEBEEFBEAD;
+	void         *d5     = (void *)0x0;
+	t_cm_vtls_key keys[] = {
 	    {.v_name = "a",  .var = d1, .size_e = 3 },
 	    {.v_name = "b",  .var = d2, .size_e = 12},
 	    {.v_name = "c",  .var = d3, .size_e = 1 },
@@ -71,18 +71,18 @@ NO_COV void test_vtls_dump_all(void) {
 	    {.v_name = NULL, .var = d4, .size_e = 3 },
 	    {.v_name = "f",  .var = d5, .size_e = 3 },
 	};
-	const char   *expected   = "a:{           0xdead 3 }\n"
-	                           "b:{             0x42 12 }\n"
-	                           "c:{           0xbeef 1 }\n"
-	                           "d:{           0xbeef 0 }\n"
-	                           "(null):{ 0xdeadcafebeefbead 3 }\n"
-	                           "f:{            (nil) 3 }\n";
-	const t_vtls  empty_vtls = (t_vtls){0};
-	const t_vtls  vtls       = (t_vtls){.len = 6, .cap = 12, .data = keys};
-	const t_vtls *prev       = pthread_getspecific(vtls_key);
-	int           pipe_fd[2];
-	char          buff[4096] = {0};
-	int           n;
+	const char      *expected   = "a:{           0xdead 3 }\n"
+	                              "b:{             0x42 12 }\n"
+	                              "c:{           0xbeef 1 }\n"
+	                              "d:{           0xbeef 0 }\n"
+	                              "(null):{ 0xdeadcafebeefbead 3 }\n"
+	                              "f:{            (nil) 3 }\n";
+	const t_cm_vtls  empty_vtls = (t_cm_vtls){0};
+	const t_cm_vtls  vtls = (t_cm_vtls){.len = 6, .cap = 12, .data = keys};
+	const t_cm_vtls *prev = pthread_getspecific(vtls_key);
+	int              pipe_fd[2];
+	char             buff[4096] = {0};
+	int              n;
 
 	assert(pipe((int *)&pipe_fd) >= 0);
 	pthread_setspecific(vtls_key, &vtls);

@@ -2,9 +2,9 @@
 
 #include "tls_tests.h"
 
-NO_COV void test_ftls_get(void) {
-	t_ftls *val;
-	void   *prev;
+NO_COV void test_cm_ftls_get(void) {
+	t_cm_ftls *val;
+	void      *prev;
 
 	val          = ftls_get();
 	val->value_a = 42;

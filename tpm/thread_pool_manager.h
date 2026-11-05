@@ -91,7 +91,7 @@
 // !checks
 
 /**
- * \typedef t_tpm_job
+ * \typedef t_cm_tpm_job
  * \brief the handle for jobs inside the thread pool manager system
  * \param func the function to execute for the job
  * \param arg the argument to call the work function with
@@ -100,18 +100,18 @@
  * thread recurring
  * \ingroup tpm
 **/
-typedef struct s_tpm_base_job {
+typedef struct s_cm_tpm_base_job {
 	void *(*func)(void *);
 	void *arg;
-	struct s_job_infos {
+	struct s_cm_job_infos {
 		bool reccuring;
 	} infos;
-} t_tpm_job;
+} t_cm_tpm_job;
 
 /* \var hash_colision not used yet, belongs to the bucket system for fast
  * retrival of jobs without scouring the whole list */
 /**
- * \typedef t_tpm_jc
+ * \typedef t_cm_tpm_jc
  * \brief this is the thread pool manager job container
  * \param job the job contained
  * \param next next job in the queue, used by main queue
@@ -120,17 +120,17 @@ typedef struct s_tpm_base_job {
  * random access speed
  * \ingroup tpm
 **/
-typedef struct s_tpm_job {
-	t_tpm_job         job;
-	struct s_tpm_job *next;
-	struct s_tpm_job *prev;
-	//	struct s_tpm_job *hash_colision;
-} t_tpm_jc;
+typedef struct s_cm_tpm_job {
+	t_cm_tpm_job         job;
+	struct s_cm_tpm_job *next;
+	struct s_cm_tpm_job *prev;
+	//	struct s_cm_tpm_job *hash_colision;
+} t_cm_tpm_jc;
 
-typedef struct s_thread_pool_manager t_tpm;
+typedef struct s_cm_thread_pool_manager t_cm_tpm;
 
 /**
- * \typedef t_tpmi_thread
+ * \typedef t_cm_tpmi_thread
  * \brief internal thread structure for the thread pool manager
  * \param jc local job cache for the thread
  * \param start begining of jobs in the local cache
@@ -149,31 +149,31 @@ typedef struct s_thread_pool_manager t_tpm;
  * If no job were stolen fill the remainer 1/3 by taking tpm main queue jobs
  * \ingroup tpm
 **/
-typedef struct s_tpm_thread_internal {
-	t_tpm_jc       *jc[C_MINI__TPM_TRD_JOB_CACHE_LEN];
+typedef struct s_cm_tpm_thread_internal {
+	t_cm_tpm_jc    *jc[C_MINI__TPM_TRD_JOB_CACHE_LEN];
 	uint8_t         start;
 	uint8_t         end;
 	pthread_mutex_t job_cache_lock;
-	t_tpm          *pool;
+	t_cm_tpm       *pool;
 	pthread_t       id_absolute;
 	size_t          id_sequential;
-} t_tpmi_thread;
+} t_cm_tpmi_thread;
 
 /**
- * \struct s_tpm_stats
+ * \struct s_cm_tpm_stats
  * \brief thread pool manager stats structure
  * \param total_jobs_completed number of jobs completed
  * \param total_jobs_failed number of jobs failed
  * \note TODO: add other stats
  * \ingroup tpm
 **/
-struct s_tpm_stats {
+struct s_cm_tpm_stats {
 	size_t total_jobs_completed;
 	size_t total_jobs_failed;
 };
 
 /**
- * \typedef t_tpm
+ * \typedef t_cm_tpm
  * \brief thread pool manager main structure
  * \param threads internal threads to dispatch for the works
  * \param nb_threads number of threads
@@ -186,25 +186,25 @@ struct s_tpm_stats {
  * \note TODO: add hash map for jobs for retrival/deletion
  * \ingroup tpm
 **/
-typedef struct s_thread_pool_manager {
-	t_tpmi_thread threads[C_MINI__TPM_THREADS_MAX_NB]; // threads
-	atomic_size_t nb_threads;
+typedef struct s_cm_thread_pool_manager {
+	t_cm_tpmi_thread threads[C_MINI__TPM_THREADS_MAX_NB]; // threads
+	atomic_size_t    nb_threads;
 
-	//	t_tpm_jc      **hash_jobs; // job removal/cancelation - unused for now
-	//	atomic_int		size_hash; // nb of buckets
+	//	t_cm_tpm_jc      **hash_jobs; // job removal/cancelation - unused for
+	// now 	atomic_int		size_hash; // nb of buckets
 
-	t_tpm_jc       *q_start;
-	t_tpm_jc       *q_end;
+	t_cm_tpm_jc    *q_start;
+	t_cm_tpm_jc    *q_end;
 	pthread_mutex_t q_lock;
 	pthread_cond_t  q_cond; // sleep / wakeup
 
-	struct s_tpm_internal {
+	struct s_cm_tpm_internal {
 		uint8_t num_threads;
 		bool    shutting_down;
 		bool    queue_closed;
 	} internal_val;
-	struct s_tpm_stats stats;
-} t_tpm;
+	struct s_cm_tpm_stats stats;
+} t_cm_tpm;
 
 // TODO: (non-ordered)
 // 3. heartbeat system -> clock heartbeat
@@ -251,39 +251,40 @@ typedef struct s_thread_pool_manager {
 // #endif
 
 // create
-t_tpm *tpm_new(size_t nb_thread);
-t_tpm *tpm_init(t_tpm *tpm, size_t nb_thread);
+t_cm_tpm *tpm_new(size_t nb_thread);
+t_cm_tpm *tpm_init(t_cm_tpm *tpm, size_t nb_thread);
 
 // delete
-void tpm_delete(t_tpm *tpm, t_cm_call arg_cleanup);
-void tpm_free(t_tpm *tpm, t_cm_call arg_cleanup);
-void tpm_clear_job_list(t_tpm_jc *head, t_cm_call arg_cleanup);
+void tpm_delete(t_cm_tpm *tpm, t_cm_call arg_cleanup);
+void tpm_free(t_cm_tpm *tpm, t_cm_call arg_cleanup);
+void tpm_clear_job_list(t_cm_tpm_jc *head, t_cm_call arg_cleanup);
 
 // add
-t_tpm_jc *tpm_add_job(t_tpm *tpm, t_cm_work work, void *arg);
-// t_tpm_jc *tpm_add_reccuring_job(t_tpm *tpm, t_cm_work work, void *arg);
-t_tpm_jc *tpm_add_batch(t_tpm *tpm, size_t nb, t_cm_work work, void **args);
+t_cm_tpm_jc *tpm_add_job(t_cm_tpm *tpm, t_cm_work work, void *arg);
+// t_cm_tpm_jc *tpm_add_reccuring_job(t_cm_tpm *tpm, t_cm_work work, void *arg);
+t_cm_tpm_jc *tpm_add_batch(t_cm_tpm *tpm, size_t nb, t_cm_work work,
+                           void **args);
 
 // info
-struct s_tpm_stats tpm_get_stats(t_tpm *tpm);
-size_t             tpm_get_nbthread(const t_tpm *tpm);
+struct s_cm_tpm_stats tpm_get_stats(t_cm_tpm *tpm);
+size_t                tpm_get_nbthread(const t_cm_tpm *tpm);
 
 // directing
-bool tpm_stop(t_tpm *tpm);
-bool tpm_wait_end(t_tpm *tpm);
+bool tpm_stop(t_cm_tpm *tpm);
+bool tpm_wait_end(t_cm_tpm *tpm);
 
 #ifdef C_MINI__TPM_INTERNAL
 
 // worker specific
-void     *tpmi_worker(void *tpm);
-t_tpm_jc *tpmi_create_job(t_cm_work w_func, void *a);
+void        *tpmi_worker(void *tpm);
+t_cm_tpm_jc *tpmi_create_job(t_cm_work w_func, void *a);
 
 // job handling - consider lock as caller responsability
-bool     tpmi_job_push(t_tpm_jc *to_push, t_tpm_jc **head, t_tpm_jc **tail,
-                       bool queu_down);
-t_tpm_jc tpmi_job_pop(t_tpm *tpm);
-int      tpmi_job_thrd_cache_pop(t_tpm *tpm, t_tpm_jc **buffer, size_t start,
-                                 size_t max);
+bool tpmi_job_push(t_cm_tpm_jc *to_push, t_cm_tpm_jc **head, t_cm_tpm_jc **tail,
+                   bool queu_down);
+t_cm_tpm_jc tpmi_job_pop(t_cm_tpm *tpm);
+int tpmi_job_thrd_cache_pop(t_cm_tpm *tpm, t_cm_tpm_jc **buffer, size_t start,
+                            size_t max);
 
 #endif // C_MINI__TPM_INTERNAL
 

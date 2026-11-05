@@ -9,7 +9,7 @@
  * \param data the element to push
  * \ingroup rb
 **/
-void rb_push(t_rb *rb, const void *data) {
+void rb_push(t_cm_rb *rb, const void *data) {
 	if (!rb || !data) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return;
@@ -30,7 +30,7 @@ void rb_push(t_rb *rb, const void *data) {
  * \param n number of elements to push
  * \ingroup rb
 **/
-void rb_npush(t_rb *rb, const void *data, size_t n) {
+void rb_npush(t_cm_rb *rb, const void *data, size_t n) {
 	const unsigned char *sdata;
 
 	if (!rb || !data) {
@@ -53,7 +53,7 @@ void rb_npush(t_rb *rb, const void *data, size_t n) {
  * \return true on success, false if overwrite would happen
  * \ingroup rb
 **/
-bool rb_push_safe(t_rb *rb, const void *data) {
+bool rb_push_safe(t_cm_rb *rb, const void *data) {
 	if (!rb || !data) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return (false);
@@ -74,7 +74,7 @@ bool rb_push_safe(t_rb *rb, const void *data) {
  * \return true on success, false if overwrite would happen
  * \ingroup rb
 **/
-bool rb_npush_safe(t_rb *rb, const void *data, size_t n) {
+bool rb_npush_safe(t_cm_rb *rb, const void *data, size_t n) {
 	size_t i = 0;
 
 	if (!rb || !data || n > rb->nb_max) {

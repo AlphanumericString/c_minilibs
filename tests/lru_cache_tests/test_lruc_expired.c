@@ -7,8 +7,8 @@
 
 #include "lru_cache_tests.h"
 
-NO_COV void test_lruc_isexpired(void) {
-	t_lruc      c;
+NO_COV void test_cm_lruc_isexpired(void) {
+	t_cm_lruc   c;
 	const char *k1 = "zod";
 	void       *v1;
 
@@ -37,8 +37,8 @@ NO_COV void test_lruc_isexpired(void) {
 	lruc_destroy(&c);
 	return;
 }
-NO_COV void test_lruc_cleanup(void) {
-	t_lruc      c, intact_copy;
+NO_COV void test_cm_lruc_cleanup(void) {
+	t_cm_lruc   c, intact_copy;
 	const char *key1 = "abc", *key2 = "def", *key3 = "ghi", *key4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
 
@@ -108,8 +108,8 @@ NO_COV void test_lruc_cleanup(void) {
 	lruc_destroy(&c);
 	return;
 }
-NO_COV void test_lruc_setttl(void) {
-	t_lruc cache;
+NO_COV void test_cm_lruc_setttl(void) {
+	t_cm_lruc cache;
 
 	lruc_init(&cache, 4, free);
 	assert(cache.ttl_glob == LONG_MAX);

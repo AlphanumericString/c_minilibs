@@ -3,8 +3,8 @@
 #define C_MINI__TPM_INTERNAL
 #include "thread_pool_manager.h"
 
-t_tpm_jc *tpmi_create_job(t_cm_work w_func, void *a) {
-	t_tpm_jc *container;
+t_cm_tpm_jc *tpmi_create_job(t_cm_work w_func, void *a) {
+	t_cm_tpm_jc *container;
 
 	container = malloc(sizeof(*container));
 	if (!container) {
@@ -12,14 +12,14 @@ t_tpm_jc *tpmi_create_job(t_cm_work w_func, void *a) {
 		return (NULL);
 	}
 	container->job =
-	    (t_tpm_job){.func = w_func, .arg = a, .infos = {.reccuring = false}};
+	    (t_cm_tpm_job){.func = w_func, .arg = a, .infos = {.reccuring = false}};
 	container->next = NULL;
 	container->prev = NULL;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__TPM_LOG_SUCCESS)
 	return (container);
 }
 
-bool tpmi_job_push(t_tpm_jc *to_push, t_tpm_jc **head, t_tpm_jc **tail,
+bool tpmi_job_push(t_cm_tpm_jc *to_push, t_cm_tpm_jc **head, t_cm_tpm_jc **tail,
                    bool queue_down) {
 	assert(!(*head == NULL ^ *tail == NULL)); // sanity check
 	if (queue_down == true) {
@@ -37,13 +37,13 @@ bool tpmi_job_push(t_tpm_jc *to_push, t_tpm_jc **head, t_tpm_jc **tail,
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__TPM_LOG_SUCCESS)
 	return (true);
 }
-t_tpm_jc tpmi_job_pop(t_tpm *tpm) {
-	t_tpm_jc *node;
-	t_tpm_jc  ret;
+t_cm_tpm_jc tpmi_job_pop(t_cm_tpm *tpm) {
+	t_cm_tpm_jc *node;
+	t_cm_tpm_jc  ret;
 
 	if (!tpm->q_end) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG)
-		return ((t_tpm_jc){0});
+		return ((t_cm_tpm_jc){0});
 	}
 	node       = tpm->q_end;
 	tpm->q_end = tpm->q_end->prev;

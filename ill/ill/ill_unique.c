@@ -9,8 +9,8 @@
  * duplicates.
  * \ingroup ill
 **/
-void ill_unique(t_ill *head, t_cm_comparator c, t_cm_dtor d) {
-	t_ill *dup;
+void ill_unique(t_cm_ill *head, t_cm_comparator c, t_cm_dtor d) {
+	t_cm_ill *dup;
 
 	if (!head || !c) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)

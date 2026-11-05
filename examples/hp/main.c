@@ -13,10 +13,10 @@ static bool print_int(void *elem, void *arg) {
 }
 
 int main(void) {
-	int   values[] = {42, 17, 99, 3, 56, 8, 71, 24};
-	t_hp *min      = hp_create(16, sizeof(int), cmp_int);
-	t_hp *max      = hp_create(16, sizeof(int), cmp_int);
-	int   out;
+	int      values[] = {42, 17, 99, 3, 56, 8, 71, 24};
+	t_cm_hp *min      = hp_create(16, sizeof(int), cmp_int);
+	t_cm_hp *max      = hp_create(16, sizeof(int), cmp_int);
+	int      out;
 
 	for (size_t i = 0; i < sizeof(values) / sizeof(values[0]); i++) {
 		hp_min_push(min, &values[i]);

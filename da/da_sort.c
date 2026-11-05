@@ -9,7 +9,7 @@
  * \return true on success, false otherwise
  * \ingroup da
 **/
-bool da_sort(t_da *da, t_cm_comparator c) {
+bool da_sort(t_cm_da *da, t_cm_comparator c) {
 	if (!da_is_valid(da) || !c) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (false);
@@ -27,7 +27,7 @@ bool da_sort(t_da *da, t_cm_comparator c) {
  * \return true on success, false otherwise
  * \ingroup da
 **/
-bool da_nsort(t_da *da, size_t n, t_cm_comparator c) {
+bool da_nsort(t_cm_da *da, size_t n, t_cm_comparator c) {
 	if (!da_is_valid(da) || !c) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (false);

@@ -24,7 +24,7 @@ static void *dup_int(const void *elem) {
 	return (copy);
 }
 
-static void dump(const t_rb *rb, const char *label) {
+static void dump(const t_cm_rb *rb, const char *label) {
 	printf("%-18s size=%zu cap=%zu free=%zu :", label, rb_size(*rb),
 	       rb_capacity(*rb), rb_remaining_space(*rb));
 	rb_apply(rb, print_int, NULL);
@@ -32,8 +32,8 @@ static void dump(const t_rb *rb, const char *label) {
 }
 
 int main(void) {
-	t_rb rb     = {0};
-	int  seed[] = {1, 2, 3, 4, 5, 6};
+	t_cm_rb rb     = {0};
+	int     seed[] = {1, 2, 3, 4, 5, 6};
 
 	rb_create(&rb, sizeof(int), 4);
 	for (size_t i = 0; i < 3; i++)
@@ -80,7 +80,7 @@ int main(void) {
 		printf("\n");
 	}
 
-	t_rb *bigger = rb_grow(&rb, 4);
+	t_cm_rb *bigger = rb_grow(&rb, 4);
 	rb_destroy(&rb);
 	rb = *bigger;
 	free(bigger);

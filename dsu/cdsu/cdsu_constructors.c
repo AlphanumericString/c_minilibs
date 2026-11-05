@@ -6,30 +6,30 @@
 /**
  * \brief init by allocating both the return and the internals
  * \param n size of the cdsu
- * \return the new t_cdsu
+ * \return the new t_cm_cdsu
  * \ingroup cdsu
 **/
-t_cdsu *cdsu_new(size_t n) {
-	t_cdsu   *ret;
-	uint16_t *buffer;
+t_cm_cdsu *cdsu_new(size_t n) {
+	t_cm_cdsu *ret;
+	uint16_t  *buffer;
 
 	if (!n) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG)
-		return ((t_cdsu *)NULL);
+		return ((t_cm_cdsu *)NULL);
 	}
 	// note: left alloc split for growth cappabilities.
 	// otherwise growth function would need to also re-alloc the control struct
-	ret = (t_cdsu *)malloc(sizeof(*ret));
+	ret = (t_cm_cdsu *)malloc(sizeof(*ret));
 	if (!ret) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__CDSU_LOG_EALLOC)
-		return ((t_cdsu *)NULL);
+		return ((t_cm_cdsu *)NULL);
 	}
-	*ret   = (t_cdsu){0};
+	*ret   = (t_cm_cdsu){0};
 	buffer = malloc(sizeof(uint16_t) * n * 2);
 	if (!buffer) {
 		free(ret);
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__CDSU_LOG_EALLOC)
-		return ((t_cdsu *)NULL);
+		return ((t_cm_cdsu *)NULL);
 	}
 	cdsu_init_from_arrays(ret, n, buffer, (buffer + n));
 	ret->rp_single_alloc = true;
@@ -38,22 +38,22 @@ t_cdsu *cdsu_new(size_t n) {
 }
 /**
  * \brief init by allocating the internals
- * \param to_init the t_cdsu to init
+ * \param to_init the t_cm_cdsu to init
  * \param n size of the cdsu
- * \return the initialized t_cdsu
+ * \return the initialized t_cm_cdsu
  * \ingroup cdsu
 **/
-t_cdsu *cdsu_init(t_cdsu *to_init, size_t n) {
+t_cm_cdsu *cdsu_init(t_cm_cdsu *to_init, size_t n) {
 	uint16_t *buffer;
 
 	if (!n || !to_init) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG)
-		return ((t_cdsu *)NULL);
+		return ((t_cm_cdsu *)NULL);
 	}
 	buffer = calloc(sizeof(uint16_t), n * 2);
 	if (!buffer) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__CDSU_LOG_EALLOC)
-		return ((t_cdsu *)NULL);
+		return ((t_cm_cdsu *)NULL);
 	}
 	cdsu_init_from_arrays(to_init, n, buffer, buffer + n);
 	to_init->rp_single_alloc = true;
@@ -62,24 +62,25 @@ t_cdsu *cdsu_init(t_cdsu *to_init, size_t n) {
 	return (to_init);
 }
 /**
- * \brief init by allocating a t_cdsu and using provided values
+ * \brief init by allocating a t_cm_cdsu and using provided values
  * \param size size of the cdsu
  * \param parents the parents array
  * \param ranks the ranks array
- * \return the new t_cdsu
+ * \return the new t_cm_cdsu
  * \ingroup cdsu
 **/
-t_cdsu *cdsu_new_from_array(size_t size, uint16_t *parents, uint16_t *ranks) {
-	t_cdsu *ret;
+t_cm_cdsu *cdsu_new_from_array(size_t size, uint16_t *parents,
+                               uint16_t *ranks) {
+	t_cm_cdsu *ret;
 
 	if (!size || !parents || !ranks || ranks == parents) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG)
-		return ((t_cdsu *)NULL);
+		return ((t_cm_cdsu *)NULL);
 	}
-	ret = (t_cdsu *)malloc(sizeof(t_cdsu));
+	ret = (t_cm_cdsu *)malloc(sizeof(t_cm_cdsu));
 	if (!ret) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__CDSU_LOG_EALLOC)
-		return ((t_cdsu *)NULL);
+		return ((t_cm_cdsu *)NULL);
 	}
 	ret->rank            = (uint16_t *)ranks;
 	ret->parent          = (uint16_t *)parents;
@@ -91,19 +92,19 @@ t_cdsu *cdsu_new_from_array(size_t size, uint16_t *parents, uint16_t *ranks) {
 	return (ret);
 }
 /**
- * \brief init t_cdsu using provided values (no allocs)
- * \param ret the t_cdsu to init
+ * \brief init t_cm_cdsu using provided values (no allocs)
+ * \param ret the t_cm_cdsu to init
  * \param size size of the cdsu
  * \param parents the parents array
  * \param ranks the ranks array
- * \return the initialized t_cdsu
+ * \return the initialized t_cm_cdsu
  * \ingroup cdsu
 **/
-t_cdsu *cdsu_init_from_arrays(t_cdsu *ret, size_t size, uint16_t *parents,
-                              uint16_t *ranks) {
+t_cm_cdsu *cdsu_init_from_arrays(t_cm_cdsu *ret, size_t size, uint16_t *parents,
+                                 uint16_t *ranks) {
 	if (!ret || !size || !parents || !ranks || parents == ranks) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG)
-		return ((t_cdsu *)NULL);
+		return ((t_cm_cdsu *)NULL);
 	}
 	ret->rank            = (uint16_t *)ranks;
 	ret->parent          = (uint16_t *)parents;
@@ -119,12 +120,12 @@ t_cdsu *cdsu_init_from_arrays(t_cdsu *ret, size_t size, uint16_t *parents,
  *
  * (warning: will realocate. if you used local buffers durring construction
  * via from_arrays methods do not use).
- * \param cdsu the t_cdsu to grow
+ * \param cdsu the t_cm_cdsu to grow
  * \param n the number of values to add
  * \return true if the dsu has grown at least n spaces, false otherwise
  * \ingroup cdsu
 **/
-bool cdsu_grow(t_cdsu *cdsu, size_t n) {
+bool cdsu_grow(t_cm_cdsu *cdsu, size_t n) {
 	uint16_t *replacement_buffer;
 	uint16_t *rank_offset;
 	size_t    i;

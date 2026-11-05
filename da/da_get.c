@@ -11,7 +11,7 @@
  * \return 1 on success, -1 on failure
  * \ingroup da
 **/
-int da_get(const t_da *da, size_t pos, void *out_elem) {
+int da_get(const t_cm_da *da, size_t pos, void *out_elem) {
 	if (!da_is_valid(da) || pos >= da->nb_e || !out_elem) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (-1);
@@ -29,7 +29,7 @@ int da_get(const t_da *da, size_t pos, void *out_elem) {
  * \return the number of elements copied, or -1 on failure
  * \ingroup da
 **/
-int da_nget(const t_da *da, size_t n, size_t pos, void *out_buffer) {
+int da_nget(const t_cm_da *da, size_t n, size_t pos, void *out_buffer) {
 	if (!da_is_valid(da) || pos >= da->nb_e || !out_buffer) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (-1);
@@ -46,7 +46,7 @@ int da_nget(const t_da *da, size_t n, size_t pos, void *out_buffer) {
  * \return pointer to the raw inner array or null on failure
  * \ingroup da
 **/
-void *da_array(const t_da *da) {
+void *da_array(const t_cm_da *da) {
 	if (!da) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (NULL);

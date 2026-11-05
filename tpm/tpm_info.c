@@ -8,13 +8,13 @@
  * \return stats snapshot; on error both fields are set to (size_t)-1
  * \ingroup tpm
 **/
-struct s_tpm_stats tpm_get_stats(t_tpm *tpm) {
-	struct s_tpm_stats r;
+struct s_cm_tpm_stats tpm_get_stats(t_cm_tpm *tpm) {
+	struct s_cm_tpm_stats r;
 
 	if (!tpm) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG)
-		return ((struct s_tpm_stats){.total_jobs_failed    = -1,
-		                             .total_jobs_completed = -1});
+		return ((struct s_cm_tpm_stats){.total_jobs_failed    = -1,
+		                                .total_jobs_completed = -1});
 	}
 	pthread_mutex_lock(&tpm->q_lock);
 	r = tpm->stats;
@@ -28,7 +28,7 @@ struct s_tpm_stats tpm_get_stats(t_tpm *tpm) {
  * \return number of worker threads, 0 if tpm is NULL
  * \ingroup tpm
 **/
-size_t tpm_get_nbthread(const t_tpm *tpm) {
+size_t tpm_get_nbthread(const t_cm_tpm *tpm) {
 	size_t nb;
 
 	if (!tpm) {

@@ -8,9 +8,10 @@
  * \return The head of the merged sorted list.
  * \ingroup idl
 **/
-t_idl *idl_sorted_merge(t_idl *list1, t_idl *list2, t_cm_comparator comp) {
-	t_idl  dummy;
-	t_idl *tail;
+t_cm_idl *idl_sorted_merge(t_cm_idl *list1, t_cm_idl *list2,
+                           t_cm_comparator comp) {
+	t_cm_idl  dummy;
+	t_cm_idl *tail;
 
 	if (!comp) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -37,10 +38,10 @@ t_idl *idl_sorted_merge(t_idl *list1, t_idl *list2, t_cm_comparator comp) {
 	return dummy.next;
 }
 
-static t_idl *split_list(t_idl *head) {
-	t_idl *slow;
-	t_idl *fast;
-	t_idl *mid;
+static t_cm_idl *split_list(t_cm_idl *head) {
+	t_cm_idl *slow;
+	t_cm_idl *fast;
+	t_cm_idl *mid;
 
 	slow = head;
 	fast = head->next;
@@ -54,8 +55,8 @@ static t_idl *split_list(t_idl *head) {
 	return mid;
 }
 
-static t_idl *merge_sort(t_idl *head, t_cm_comparator comp) {
-	t_idl *mid;
+static t_cm_idl *merge_sort(t_cm_idl *head, t_cm_comparator comp) {
+	t_cm_idl *mid;
 
 	if (!head->next) return head;
 	mid  = split_list(head);
@@ -70,7 +71,7 @@ static t_idl *merge_sort(t_idl *head, t_cm_comparator comp) {
  * \param comp The comparator function.
  * \ingroup idl
 **/
-void idl_sort(t_idl **head, t_cm_comparator comp) {
+void idl_sort(t_cm_idl **head, t_cm_comparator comp) {
 	if (!head || !*head || !comp) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return;

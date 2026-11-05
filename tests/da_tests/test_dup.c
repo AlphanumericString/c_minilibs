@@ -3,14 +3,14 @@
 
 #include "da_tests.h"
 
-NO_COV void test_da_dup(void) {
-	const t_da da = {
+NO_COV void test_cm_da_dup(void) {
+	const t_cm_da da = {
 	    .array = (void *)arr_3,
 	    .cap_e = 3,
 	    .nb_e  = 3,
 	    .sz_e  = sizeof(int),
 	};
-	t_da dup;
+	t_cm_da dup;
 
 	alloc_set_call_limit(0);
 	dup = da_dup(&da);
@@ -25,14 +25,14 @@ NO_COV void test_da_dup(void) {
 	assert(dup.array == NULL && dup.cap_e == 0 && dup.nb_e == 0 &&
 	       dup.sz_e == 0);
 }
-NO_COV void test_da_ndup(void) {
-	const t_da da = {
+NO_COV void test_cm_da_ndup(void) {
+	const t_cm_da da = {
 	    .array = (void *)arr_3,
 	    .cap_e = 3,
 	    .nb_e  = 3,
 	    .sz_e  = sizeof(int),
 	};
-	t_da dup;
+	t_cm_da dup;
 
 	alloc_set_call_limit(0);
 	dup = da_ndup(&da, 2);
@@ -51,15 +51,15 @@ NO_COV void test_da_ndup(void) {
 	assert(dup.array == NULL && dup.cap_e == 0 && dup.nb_e == 0 &&
 	       dup.sz_e == 0);
 }
-NO_COV void test_da_dup_to(void) {
-	const t_da da = {
+NO_COV void test_cm_da_dup_to(void) {
+	const t_cm_da da = {
 	    .array = (void *)arr_3,
 	    .cap_e = 3,
 	    .nb_e  = 3,
 	    .sz_e  = sizeof(int),
 	};
-	t_da dst;
-	t_da small2 = {
+	t_cm_da dst;
+	t_cm_da small2 = {
 	    .array = calloc(sizeof(int), 1),
 	    .cap_e = 1,
 	    .nb_e  = 0,
@@ -85,21 +85,21 @@ NO_COV void test_da_dup_to(void) {
 	da_destroy(&dst);
 	da_destroy(&small2);
 }
-NO_COV void test_da_ndup_to(void) {
-	const t_da da = {
+NO_COV void test_cm_da_ndup_to(void) {
+	const t_cm_da da = {
 	    .array = (void *)arr_3,
 	    .cap_e = 3,
 	    .nb_e  = 3,
 	    .sz_e  = sizeof(int),
 	};
-	t_da dst;
-	t_da small1 = {
+	t_cm_da dst;
+	t_cm_da small1 = {
 	    .array = calloc(sizeof(int), 1),
 	    .cap_e = 1,
 	    .nb_e  = 0,
 	    .sz_e  = sizeof(int),
 	};
-	t_da small2 = {
+	t_cm_da small2 = {
 	    .array = calloc(sizeof(int), 1),
 	    .cap_e = 1,
 	    .nb_e  = 0,

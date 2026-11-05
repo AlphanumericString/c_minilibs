@@ -2,16 +2,16 @@
 
 #include "hp_tests.h"
 
-NO_COV static void build_max(t_hp *h, int *vals) {
+NO_COV static void build_max(t_cm_hp *h, int *vals) {
 	for (size_t i = 0; i < 5; i++)
 		assert(hp_max_push(h, &vals[i]) == true);
 }
 
-NO_COV void test_hp_foreach(void) {
-	t_order_ctx ctx = {0};
-	t_hp        h;
-	int         in[]       = {0x40, 0x41, 0x42, 0x43, 0x44};
-	int         expected[] = {0x44, 0x43, 0x41, 0x40, 0x42};
+NO_COV void test_cm_hp_foreach(void) {
+	t_cm_order_ctx ctx = {0};
+	t_cm_hp        h;
+	int            in[]       = {0x40, 0x41, 0x42, 0x43, 0x44};
+	int            expected[] = {0x44, 0x43, 0x41, 0x40, 0x42};
 
 	hp_init(&h, 5, sizeof(int), cb_cmp_int);
 	build_max(&h, in);
@@ -29,11 +29,11 @@ NO_COV void test_hp_foreach(void) {
 
 	hp_delete(&h);
 }
-NO_COV void test_hp_foreach_in(void) {
-	t_order_ctx ctx = {0};
-	t_hp        h;
-	int         in[]       = {0x40, 0x41, 0x42, 0x43, 0x44};
-	int         expected[] = {0x40, 0x43, 0x42, 0x44, 0x41};
+NO_COV void test_cm_hp_foreach_in(void) {
+	t_cm_order_ctx ctx = {0};
+	t_cm_hp        h;
+	int            in[]       = {0x40, 0x41, 0x42, 0x43, 0x44};
+	int            expected[] = {0x40, 0x43, 0x42, 0x44, 0x41};
 
 	hp_init(&h, 5, sizeof(int), cb_cmp_int);
 	build_max(&h, in);
@@ -51,11 +51,11 @@ NO_COV void test_hp_foreach_in(void) {
 
 	hp_delete(&h);
 }
-NO_COV void test_hp_foreach_pre(void) {
-	t_order_ctx ctx = {0};
-	t_hp        h;
-	int         in[]       = {0x40, 0x41, 0x42, 0x43, 0x44};
-	int         expected[] = {0x40, 0x42, 0x43, 0x41, 0x44};
+NO_COV void test_cm_hp_foreach_pre(void) {
+	t_cm_order_ctx ctx = {0};
+	t_cm_hp        h;
+	int            in[]       = {0x40, 0x41, 0x42, 0x43, 0x44};
+	int            expected[] = {0x40, 0x42, 0x43, 0x41, 0x44};
 
 	hp_init(&h, 5, sizeof(int), cb_cmp_int);
 	build_max(&h, in);
@@ -73,11 +73,11 @@ NO_COV void test_hp_foreach_pre(void) {
 
 	hp_delete(&h);
 }
-NO_COV void test_hp_foreach_post(void) {
-	t_order_ctx ctx = {0};
-	t_hp        h;
-	int         in[]       = {0x40, 0x41, 0x42, 0x43, 0x44};
-	int         expected[] = {0x44, 0x43, 0x40, 0x42, 0x41};
+NO_COV void test_cm_hp_foreach_post(void) {
+	t_cm_order_ctx ctx = {0};
+	t_cm_hp        h;
+	int            in[]       = {0x40, 0x41, 0x42, 0x43, 0x44};
+	int            expected[] = {0x44, 0x43, 0x40, 0x42, 0x41};
 
 	hp_init(&h, 5, sizeof(int), cb_cmp_int);
 	build_max(&h, in);

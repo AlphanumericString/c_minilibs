@@ -3,8 +3,8 @@
 
 #include "da_tests.h"
 
-NO_COV void test_da_destroy(void) {
-	t_da da;
+NO_COV void test_cm_da_destroy(void) {
+	t_cm_da da;
 
 	da_init(&da, sizeof(int));
 	da_cat_array(&da, (int *)arr_5, 5, sizeof(int));
@@ -18,13 +18,13 @@ NO_COV void test_da_destroy(void) {
 	da_destroy(NULL);
 }
 
-NO_COV void test_da_free(void) {
-	t_da *da;
+NO_COV void test_cm_da_free(void) {
+	t_cm_da *da;
 
 	da = da_new(sizeof(int));
 	da_free(da);
-	da  = (t_da *)malloc(sizeof(t_da));
-	*da = (t_da){0};
+	da  = (t_cm_da *)malloc(sizeof(t_cm_da));
+	*da = (t_cm_da){0};
 	da_free(da); // check valgrind for no leaks
 	da_free(NULL);
 }
