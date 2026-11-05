@@ -15,7 +15,9 @@ stb-style header.
 ## Why
 
 Because the best way to understand a data structure or a threading primitive is
-to build it, break it, and then test it under fault injection.
+to build it, break it, and then test it again.
+This also serves as a primitive to other project hence the `remove_module` rule
+in the makefile for quickly removin un-needed dependencies.
 
 ## Building
 
@@ -39,7 +41,40 @@ running tests under valgrind, static analysis with cppcheck, doxygen docs, and
 making optional paths (debug logging, fault injection, atomics, threaded tests)
 selectable through macros rather than edits.
 
-## Modules
+## What's missing / faults of the project
+`common_base` : Module are described as independant yet all depends on these.
+even though this is only for base defines and nothing complex this shoots the
+"independance" of modules right in the foot.
+`da` : It's described as a primitive and it feels like it. Nothing unique under
+the sun and it shows. Lack distinc algorithms or function to be notable.
+`dsu` : Log allocation are **the** slowest piece of the rdsu yet logs info are
+not batched inside. Makes new linking have an unknown time and slows drasticly
+the structure with malloc lookups (even if mitigated by reserve nodes this is
+not enough)
+`hp` : Not enough functions. The 'heap_up' and 'heap_down' accepting to run in
+both min/max direction is ending up costing more in maintainer sanity than it's
+worth.
+`ill` : After all that not one circular list? No api consistency reguarding
+head, elem function not implemented leading to user having to call exposed node
+elem in their structs each time.
+`lru_cache` : Time in ms? really? The structure try to merge an LRU and a TTL
+cache, it utlimately succeed but the code/definitions endup feeling mushed and
+hodgepoged together rather than a cohesive whole.
+`rb` : not enough functions, feels restrictive. no multi threaded tests to
+tests with the classic setup of producer-consumer thread.
+`sptr` : generics render the lib unusable by older version of c and doesn't
+bring "that" much to compensate. c is **not** a generic language. period.
+Unique and other smart pointer implemented cant guard against byte-copy
+rendering this inherently moot if not used as pointer.
+`tls` : no hashmapt over infinitely growing vtls neuter the capacity and
+utility of the struct in real use cases. ftls can only bind one single struct
+rendering it's own use case quite small unless you re-comp with multiple name
+and a bit of surgery (Xmacros would've helped).
+`tpm` : doesn't have job batching, even though thread count is atomic thread
+number is never changed, no repporting if job crashes, heartbeat system not
+implemented, futures not implemented.
+
+## Modules presentation
 
 ### `common_base`
 Shared, zero-dependency building blocks: generic function-pointer typedefs
@@ -107,10 +142,9 @@ lifetime management.
 
 ### `tpm` — Thread Pool Manager
 A work-stealing thread pool: a shared job queue with mutex/condition-variable
-sleep-wake, per-thread job caches, recurring jobs, batching, statistics and a
-lifecycle (stop/wait). **Skill:** producer/consumer concurrency, condition
-variables, work-stealing, thread lifecycle and graceful shutdown — and the
-humility of debugging a race that "loses jobs".
+sleep-wake, per-thread job caches, recurring jobs, statistics and a lifecycle
+(stop/wait). **Skill:** producer/consumer concurrency, condition variables,
+work-stealing, thread lifecycle and graceful shutdown.
 
 ## Layout
 
