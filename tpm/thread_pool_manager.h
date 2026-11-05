@@ -2,12 +2,13 @@
 #define THREAD_POOL_MANAGER_H
 
 // tldr: thread pool manager
-// collect WNB work in a main queue (can grow w/ bounds)
+// collect NB work in a main queue (can grow w/ bounds)
 // dispatch TNB thread to do said jobs (max THREAD_MAX_NB threads)
 // worker threads can take up to TRD_JOB_CACHE_LEN jobs inside them
 //  but they take only 2/3 of their possible cache from main queue of jobs
 // if any thread in the next STEAL_WINDOW threads has more than 2 jobs and
-//  more jobs than them, steal.
+//  more jobs than them, steal. if nothing was stolen take 1/3 remaining from
+//  main queue.
 // if a thread is idle try to steal jobs every STEAL_RETRY_NS.
 
 #include <pthread.h>
@@ -39,7 +40,9 @@
 
 #endif // !C_MINI__TESTS
 
-// BASE DEFINES
+/**
+ * \defgroup tpm Thread Pool Manager
+ **/
 
 // -- constants
 #ifndef C_MINI__TPM_PAGE_SIZE
@@ -87,6 +90,16 @@
 #endif
 // !checks
 
+/**
+ * \typedef t_tpm_job
+ * \brief the handle for jobs inside the thread pool manager system
+ * \param func the function to execute for the job
+ * \param arg the argument to call the work function with
+ * \param infos infos specific to the job fields.
+ * \note TODO: infos is not really finished, but it's there we put infos eg
+ * thread recurring
+ * \ingroup tpm
+ **/
 typedef struct s_tpm_base_job {
 	void *(*func)(void *);
 	void *arg;
@@ -95,39 +108,90 @@ typedef struct s_tpm_base_job {
 	} infos;
 } t_tpm_job;
 
+/* \var hash_colision not used yet, belongs to the bucket system for fast
+ * retrival of jobs without scouring the whole list */
+/**
+ * \typedef t_tpm_jc
+ * \brief this is the thread pool manager job container
+ * \param job the job contained
+ * \param next next job in the queue, used by main queue
+ * \param prev prev job in the queue, used by main queue
+ * \note TODO: this is at this stage we batch jobs, add the h_map system for
+ * random access speed
+ * \ingroup tpm
+ **/
 typedef struct s_tpm_job {
 	t_tpm_job         job;
 	struct s_tpm_job *next;
 	struct s_tpm_job *prev;
-
-	struct s_tpm_job *hash_colision;
+	//	struct s_tpm_job *hash_colision;
 } t_tpm_jc;
 
 typedef struct s_thread_pool_manager t_tpm;
 
+/**
+ * \typedef t_tpmi_thread
+ * \brief internal thread structure for the thread pool manager
+ * \param jc local job cache for the thread
+ * \param start begining of jobs in the local cache
+ * \param end stop of jobs in the local cache (modified by other thread when
+ * stealing jobs)
+ * \param job_cache_lock mutex lock for local cache lock contention
+ * \param pool pointer to the main thread pool manager
+ * \param id_absolute relative id for the other threads in the thread pool manager
+ * \param id_sequential absolute id of the thread for the OS
+ * \note work stealing policy: collect TRD_MGET_NB (2/3 of cache len) from the
+ * main queue, then try to steal from STEAL_WINDOW for the remaining 1/3.
+ * Only steal if neighboring thread has strictly more than 1 jobs AND more jobs
+ * than it, steal. If a thread is idle, wake up and try to steal jobs every
+ * STEAL_RETRY_NS.
+ * If no job were stolen fill the remainer 1/3 by taking tpm main queue jobs
+ * \ingroup tpm
+ **/
 typedef struct s_tpm_thread_internal {
 	t_tpm_jc       *jc[C_MINI__TPM_TRD_JOB_CACHE_LEN];
 	uint8_t         start;
 	uint8_t         end;
 	pthread_mutex_t job_cache_lock;
-
-	t_tpm    *pool;        // parent struct for work-stealing
-	pthread_t id_absolute; // linux thread id (attribute setting, debug, infos)
-	size_t    id_sequential; // pool thread id (debug, work stealing)
+	t_tpm          *pool;
+	pthread_t       id_absolute;
+	size_t          id_sequential;
 } t_tpmi_thread;
 
+/**
+ * \struct s_tpm_stats
+ * \brief thread pool manager stats structure
+ * \param total_jobs_completed number of jobs completed
+ * \param total_jobs_failed number of jobs failed
+ * \note TODO: add other stats
+ * \ingroup tpm
+ **/
 struct s_tpm_stats {
 	size_t total_jobs_completed;
 	size_t total_jobs_failed;
-	// ... to be determined
 };
 
+/**
+ * \typedef t_tpm
+ * \brief thread pool manager main structure
+ * \param threads internal threads to dispatch for the works
+ * \param nb_threads number of threads
+ * \param q_start start of queue of jobs
+ * \param q_end end of queue of jobs
+ * \param q_lock mutex for queue contention
+ * \param q_cond condition for to notify sub threads for wakeup/sleep
+ * \param internal_val internal values for the thread pool manager
+ * \param stats statistics for the thread pool manager
+ * \note TODO: add hash map for jobs for retrival/deletion
+ * \ingroup tpm
+ **/
 typedef struct s_thread_pool_manager {
 	t_tpmi_thread threads[C_MINI__TPM_THREADS_MAX_NB]; // threads
 	atomic_size_t nb_threads;
 
 	//	t_tpm_jc      **hash_jobs; // job removal/cancelation - unused for now
 	//	atomic_int		size_hash; // nb of buckets
+
 	t_tpm_jc       *q_start;
 	t_tpm_jc       *q_end;
 	pthread_mutex_t q_lock;
@@ -142,7 +206,6 @@ typedef struct s_thread_pool_manager {
 } t_tpm;
 
 // TODO: (non-ordered)
-//
 // 3. heartbeat system -> clock heartbeat
 //				monitor thread-> if threads[nb%max].hb - now > hb_steps*hb !
 //				monitor thread-> sleep for (hb_steps - 1) hb between cycles

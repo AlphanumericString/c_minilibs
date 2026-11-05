@@ -30,6 +30,15 @@ int tpmi_job_thrd_cache_pop(t_tpm *tpm, t_tpm_jc **buffer, size_t start,
 	return ((int)i);
 }
 
+/**
+ * \brief enqueue a single job in the thread pool manager
+ * \param tpm thread pool manager to enqueue the job in
+ * \param work function to execute as the job
+ * \param arg argument passed to work when the job runs
+ * \return handle to the job container, NULL on failure
+ * \note the returned handle is only valid until the job completes
+ * \ingroup tpm
+**/
 t_tpm_jc *tpm_add_job(t_tpm *tpm, t_cm_work work, void *arg) {
 	t_tpm_jc *j;
 	bool      r;
@@ -76,6 +85,17 @@ t_tpm_jc *tpm_add_job(t_tpm *tpm, t_cm_work work, void *arg) {
 // 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__TPM_LOG_SUCCESS)
 // 	return (j);
 // }
+/**
+ * \brief enqueue a batch of nb jobs sharing the same work function
+ * \param tpm thread pool manager to enqueue the jobs in
+ * \param nb number of jobs to create
+ * \param work function executed by every job of the batch
+ * \param args array of nb arguments, args[i] is passed to the i-th job
+ * \return always NULL; the batch is enqueued in order. A failed allocation
+ * returns NULL without leaving any partially built batch behind
+ * \note if the pool is shutting down the batch is rejected
+ * \ingroup tpm
+**/
 t_tpm_jc *tpm_add_batch(t_tpm *tpm, size_t nb, t_cm_work work, void **args) {
 	t_tpm_jc *local_head;
 	t_tpm_jc *it;
@@ -120,6 +140,13 @@ t_tpm_jc *tpm_add_batch(t_tpm *tpm, size_t nb, t_cm_work work, void **args) {
 	return (NULL);
 }
 
+/**
+ * \brief free a chain of job containers
+ * \param head first job container of the chain to free
+ * \param cleanup callback called on each job argument before it is freed, may
+ * be NULL
+ * \ingroup tpm
+**/
 void tpm_clear_job_list(t_tpm_jc *head, t_cm_call cleanup) {
 	for (t_tpm_jc *nxt; head; head = nxt) {
 		nxt = head->next;

@@ -5,6 +5,14 @@
 #include "thread_pool_manager.h"
 
 // directing
+/**
+ * \brief request a graceful shutdown of the pool
+ * \param tpm thread pool manager to stop
+ * \return true on success, false if tpm is NULL
+ * \note closes the job queue and wakes every worker so they exit once their
+ * current work is done. Jobs still in the main queue are left for tpm_delete
+ * \ingroup tpm
+**/
 bool tpm_stop(t_tpm *tpm) {
 	if (!tpm) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG)
@@ -62,6 +70,13 @@ static void wait_thread_queues_empty(t_tpm *tpm) {
 	}
 }
 
+/**
+ * \brief close the job queue and wait until all queued jobs have run
+ * \param tpm thread pool manager to wait for
+ * \return true on success, false if tpm is NULL or the monotonic clock failed
+ * \note call this before tpm_delete to drain the pool
+ * \ingroup tpm
+**/
 bool tpm_wait_end(t_tpm *tpm) {
 	struct timespec t;
 	size_t          step = 1;
