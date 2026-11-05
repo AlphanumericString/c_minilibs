@@ -42,7 +42,7 @@
 
 /**
  * \defgroup tpm Thread Pool Manager
- **/
+**/
 
 // -- constants
 #ifndef C_MINI__TPM_PAGE_SIZE
@@ -99,7 +99,7 @@
  * \note TODO: infos is not really finished, but it's there we put infos eg
  * thread recurring
  * \ingroup tpm
- **/
+**/
 typedef struct s_tpm_base_job {
 	void *(*func)(void *);
 	void *arg;
@@ -119,7 +119,7 @@ typedef struct s_tpm_base_job {
  * \note TODO: this is at this stage we batch jobs, add the h_map system for
  * random access speed
  * \ingroup tpm
- **/
+**/
 typedef struct s_tpm_job {
 	t_tpm_job         job;
 	struct s_tpm_job *next;
@@ -138,7 +138,8 @@ typedef struct s_thread_pool_manager t_tpm;
  * stealing jobs)
  * \param job_cache_lock mutex lock for local cache lock contention
  * \param pool pointer to the main thread pool manager
- * \param id_absolute relative id for the other threads in the thread pool manager
+ * \param id_absolute relative id for the other threads in the thread pool
+ * manager
  * \param id_sequential absolute id of the thread for the OS
  * \note work stealing policy: collect TRD_MGET_NB (2/3 of cache len) from the
  * main queue, then try to steal from STEAL_WINDOW for the remaining 1/3.
@@ -147,7 +148,7 @@ typedef struct s_thread_pool_manager t_tpm;
  * STEAL_RETRY_NS.
  * If no job were stolen fill the remainer 1/3 by taking tpm main queue jobs
  * \ingroup tpm
- **/
+**/
 typedef struct s_tpm_thread_internal {
 	t_tpm_jc       *jc[C_MINI__TPM_TRD_JOB_CACHE_LEN];
 	uint8_t         start;
@@ -165,7 +166,7 @@ typedef struct s_tpm_thread_internal {
  * \param total_jobs_failed number of jobs failed
  * \note TODO: add other stats
  * \ingroup tpm
- **/
+**/
 struct s_tpm_stats {
 	size_t total_jobs_completed;
 	size_t total_jobs_failed;
@@ -184,7 +185,7 @@ struct s_tpm_stats {
  * \param stats statistics for the thread pool manager
  * \note TODO: add hash map for jobs for retrival/deletion
  * \ingroup tpm
- **/
+**/
 typedef struct s_thread_pool_manager {
 	t_tpmi_thread threads[C_MINI__TPM_THREADS_MAX_NB]; // threads
 	atomic_size_t nb_threads;
