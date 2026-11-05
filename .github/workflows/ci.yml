@@ -25,7 +25,7 @@ jobs:
         run: make norm_check
 
       - name: Build
-        run: make all
+        run: make all -j
 
       - name: Run tests
-        run: make tests_run
+        run: make tests_run -j
