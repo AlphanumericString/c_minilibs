@@ -8,7 +8,7 @@
  * \ingroup idl
 **/
 void *idl_advance_it(const void *e, size_t offset) {
-	const t_idl *node;
+	const t_cm_idl *node;
 
 	if (!e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -33,7 +33,7 @@ void *idl_advance_it(const void *e, size_t offset) {
  * \ingroup idl
 **/
 void *idl_recede_it(const void *e, size_t offset) {
-	const t_idl *node;
+	const t_cm_idl *node;
 
 	if (!e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -55,7 +55,7 @@ void *idl_recede_it(const void *e, size_t offset) {
  * \return The next node, or NULL if there is none.
  * \ingroup idl
 **/
-t_idl *idl_advance_it_node(const t_idl *it) {
+t_cm_idl *idl_advance_it_node(const t_cm_idl *it) {
 	if (!it) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return (NULL);
@@ -70,7 +70,7 @@ t_idl *idl_advance_it_node(const t_idl *it) {
  * \return The previous node, or NULL if there is none.
  * \ingroup idl
 **/
-t_idl *idl_recede_it_node(const t_idl *it) {
+t_cm_idl *idl_recede_it_node(const t_cm_idl *it) {
 	if (!it) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return (NULL);

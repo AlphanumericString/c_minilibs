@@ -7,14 +7,14 @@
  * \param ds the cdsu to destroy
  * \ingroup cdsu
 **/
-void cdsu_destroy(t_cdsu *ds) {
+void cdsu_destroy(t_cm_cdsu *ds) {
 	if (!ds) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG)
 		return;
 	}
 	free(ds->parent);
 	if (!ds->rp_single_alloc) free(ds->rank);
-	*ds = (t_cdsu){0};
+	*ds = (t_cm_cdsu){0};
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CDSU_LOG_SUCCESS)
 }
 /**
@@ -22,7 +22,7 @@ void cdsu_destroy(t_cdsu *ds) {
  * \param cdsu the cdsu to clear
  * \ingroup cdsu
 **/
-bool cdsu_clr(t_cdsu *cdsu) {
+bool cdsu_clr(t_cm_cdsu *cdsu) {
 	size_t i;
 
 	if (!cdsu) {
@@ -48,7 +48,7 @@ bool cdsu_clr(t_cdsu *cdsu) {
  * \param ds the cdsu to clean
  * \ingroup cdsu
 **/
-void cdsu_free(t_cdsu **ds) {
+void cdsu_free(t_cm_cdsu **ds) {
 	if (!ds || !*ds) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG)
 		return;

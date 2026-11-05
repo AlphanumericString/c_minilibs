@@ -2,14 +2,14 @@
 
 #include "tls_tests.h"
 
-void dump_mine_node(struct s_mine a) {
+void dump_mine_node(struct s_cm_mine a) {
 	printf("value_a:%d\tvalue_b:%d\n", a.value_a, a.value_b);
 }
 
 void *ftls_dummy(void *__arg) {
-	char   *thrd_name = (char *)__arg;
-	size_t  i         = 15;
-	t_ftls *a;
+	char      *thrd_name = (char *)__arg;
+	size_t     i         = 15;
+	t_cm_ftls *a;
 
 	while (i--) {
 		a = ftls_get();

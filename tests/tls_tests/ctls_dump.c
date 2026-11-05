@@ -11,8 +11,8 @@ NO_COV void test_ctls_dump_all(void) {
 	                       "e:{ \"ptr\", 0x42 }\n"
 	                       "f:{ \"long\", 999 }\n";
 
-	const t_ctlsv empty_ctls = (t_ctlsv){0};
-	const t_ctlsv clts       = (t_ctlsv){
+	const t_cm_ctlsv empty_ctls = (t_cm_ctlsv){0};
+	const t_cm_ctlsv clts       = (t_cm_ctlsv){
 	          .len = 6,
 	          .vals =
             {
@@ -25,10 +25,10 @@ NO_COV void test_ctls_dump_all(void) {
 	               },
 	          .v_name = {"a", "b", "c", "d", "e", "f"}
     };
-	t_ctlsv *prev;
-	int      pipe_fd[2];
-	char     buff[6096] = {0};
-	int      n;
+	t_cm_ctlsv *prev;
+	int         pipe_fd[2];
+	char        buff[6096] = {0};
+	int         n;
 
 	prev = pthread_getspecific(ctls_key);
 
@@ -53,13 +53,13 @@ NO_COV void test_ctls_dump_all(void) {
 }
 
 NO_COV void test_ctls_dump_typewrap(void) {
-	const t_ctls_typewrap vars[] = {
-	    (t_ctls_typewrap){.type = CTLS_INT,  .value.i = -1              },
-	    (t_ctls_typewrap){.type = CTLS_CHAR, .value.c = 'd'             },
-	    (t_ctls_typewrap){.type = 99,        .value.p = (void *)0xDEAD  },
-	    (t_ctls_typewrap){.type = CTLS_PTR,  .value.l = (long)0xDEADBEEF},
-	    (t_ctls_typewrap){.type = CTLS_PTR,  .value.i = (int)0x42       },
-	    (t_ctls_typewrap){.type = CTLS_LONG, .value.l = (long)999       },
+	const t_cm_ctls_typewrap vars[] = {
+	    (t_cm_ctls_typewrap){.type = CTLS_INT,  .value.i = -1              },
+	    (t_cm_ctls_typewrap){.type = CTLS_CHAR, .value.c = 'd'             },
+	    (t_cm_ctls_typewrap){.type = 99,        .value.p = (void *)0xDEAD  },
+	    (t_cm_ctls_typewrap){.type = CTLS_PTR,  .value.l = (long)0xDEADBEEF},
+	    (t_cm_ctls_typewrap){.type = CTLS_PTR,  .value.i = (int)0x42       },
+	    (t_cm_ctls_typewrap){.type = CTLS_LONG, .value.l = (long)999       },
 	};
 	const char *expected = "{ \"int\", -1 }"
 	                       "{ \"char\", d (100) }"
@@ -78,7 +78,7 @@ NO_COV void test_ctls_dump_typewrap(void) {
 	assert(ctls_dump_typewrap(vars[3], pipe_fd[1]) == true);
 	assert(ctls_dump_typewrap(vars[4], pipe_fd[1]) == true);
 	assert(ctls_dump_typewrap(vars[5], pipe_fd[1]) == true);
-	assert(ctls_dump_typewrap((t_ctls_typewrap){0}, -1) == false);
+	assert(ctls_dump_typewrap((t_cm_ctls_typewrap){0}, -1) == false);
 	assert(ctls_dump_typewrap(vars[1], -1) == false);
 	close(pipe_fd[1]);
 	n = read(pipe_fd[0], buff, sizeof(buff) / sizeof(buff[0]));

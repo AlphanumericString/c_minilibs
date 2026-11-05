@@ -7,13 +7,13 @@
  * \param hp heap pointer
  * \ingroup hp
 **/
-bool hp_delete(t_hp *hp) {
+bool hp_delete(t_cm_hp *hp) {
 	if (!hp) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (false);
 	}
 	if (hp->elems) free(hp->elems);
-	*hp = (t_hp){0};
+	*hp = (t_cm_hp){0};
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_SUCCESS)
 	return (true);
 }
@@ -23,7 +23,7 @@ bool hp_delete(t_hp *hp) {
  * \param hp heap pointer
  * \ingroup hp
 **/
-bool hp_free(t_hp **hp) {
+bool hp_free(t_cm_hp **hp) {
 	if (!hp) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (false);
@@ -42,7 +42,7 @@ bool hp_free(t_hp **hp) {
  * \param hp heap pointer
  * \ingroup hp
 **/
-bool hp_clear(t_hp *hp) {
+bool hp_clear(t_cm_hp *hp) {
 	if (!hp) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (false);

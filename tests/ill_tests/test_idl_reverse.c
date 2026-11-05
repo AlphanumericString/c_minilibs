@@ -2,9 +2,9 @@
 
 #include "ill_tests.h"
 
-NO_COV void test_idl_reverse(void) {
-	t_test_dnode n1, n2, n3;
-	t_idl       *head = NULL;
+NO_COV void test_cm_idl_reverse(void) {
+	t_cm_test_dnode n1, n2, n3;
+	t_cm_idl       *head = NULL;
 
 	INIT_DNODE(n1, 42, 1);
 	INIT_DNODE(n2, 43, 2);
@@ -14,7 +14,7 @@ NO_COV void test_idl_reverse(void) {
 	idl_push_back(&head, &n2.dnode);
 	idl_push_back(&head, &n3.dnode);
 
-	t_idl *reversed = idl_reverse(head);
+	t_cm_idl *reversed = idl_reverse(head);
 	assert(reversed == &n3.dnode);
 	assert(n3.dnode.next == &n2.dnode);
 	assert(n3.dnode.prev == NULL);
@@ -23,7 +23,7 @@ NO_COV void test_idl_reverse(void) {
 	assert(n1.dnode.next == NULL);
 	assert(n1.dnode.prev == &n2.dnode);
 
-	t_idl *reversed_back = idl_reverse(reversed);
+	t_cm_idl *reversed_back = idl_reverse(reversed);
 	assert(reversed_back == &n1.dnode);
 	assert(n1.dnode.next == &n2.dnode);
 	assert(n1.dnode.prev == NULL);

@@ -3,9 +3,9 @@
 
 #include "da_tests.h"
 
-NO_COV void test_da_init(void) {
-	t_da  da;
-	t_da *ret;
+NO_COV void test_cm_da_init(void) {
+	t_cm_da  da;
+	t_cm_da *ret;
 
 	ret = da_init(&da, sizeof(int));
 	assert(ret != NULL && ret == &da);
@@ -14,9 +14,9 @@ NO_COV void test_da_init(void) {
 	assert(da_init(NULL, sizeof(int)) == NULL);
 	assert(da_init(&da, 0) == NULL);
 }
-NO_COV void test_da_ninit(void) {
-	t_da  da;
-	t_da *ret;
+NO_COV void test_cm_da_ninit(void) {
+	t_cm_da  da;
+	t_cm_da *ret;
 
 	alloc_reset_counter();
 	ret = da_ninit(&da, 10, sizeof(int));
@@ -34,10 +34,10 @@ NO_COV void test_da_ninit(void) {
 	assert(da_ninit(&da, 10, sizeof(int)) == NULL);
 	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
-NO_COV void test_da_from_array(void) {
-	t_da  da;
-	int  *arr = (int *)calloc(5, sizeof(int));
-	t_da *ret;
+NO_COV void test_cm_da_from_array(void) {
+	t_cm_da  da;
+	int     *arr = (int *)calloc(5, sizeof(int));
+	t_cm_da *ret;
 
 	ret = da_from_array(&da, arr, 5, sizeof(int));
 	assert(ret != NULL && ret == &da);
@@ -48,8 +48,8 @@ NO_COV void test_da_from_array(void) {
 	assert(da_from_array(&da, NULL, 5, sizeof(int)) == NULL);
 	assert(da_from_array(&da, arr, 5, 0) == NULL);
 }
-NO_COV void test_da_new(void) {
-	t_da *da;
+NO_COV void test_cm_da_new(void) {
+	t_cm_da *da;
 
 	alloc_reset_counter();
 	assert(nb_alloc == 0);

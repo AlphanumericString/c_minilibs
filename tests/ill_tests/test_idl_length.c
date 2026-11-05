@@ -2,9 +2,9 @@
 
 #include "ill_tests.h"
 
-NO_COV void test_idl_length(void) {
-	t_test_dnode n1, n2, n3, n4;
-	t_idl       *head = NULL;
+NO_COV void test_cm_idl_length(void) {
+	t_cm_test_dnode n1, n2, n3, n4;
+	t_cm_idl       *head = NULL;
 
 	INIT_STD_DNODES(n1, n2, n3, n4);
 

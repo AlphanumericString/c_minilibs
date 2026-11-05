@@ -2,24 +2,24 @@
 
 #include "ill_tests.h"
 
-NO_COV static size_t collect(t_idl *head, int *out, size_t cap) {
-	size_t n    = 0;
-	t_idl *prev = NULL;
+NO_COV static size_t collect(t_cm_idl *head, int *out, size_t cap) {
+	size_t    n    = 0;
+	t_cm_idl *prev = NULL;
 
 	while (head && n < cap) {
 		assert(head->prev == prev);
-		out[n++] = ((t_test_dnode *)idl_ntoe(head))->value;
+		out[n++] = ((t_cm_test_dnode *)idl_ntoe(head))->value;
 		prev     = head;
 		head     = head->next;
 	}
 	return n;
 }
 
-NO_COV void test_idl_unique(void) {
-	t_test_dnode nodes[6];
-	t_test_dnode nodup[4];
-	t_idl       *head        = NULL;
-	int          values[][6] = {
+NO_COV void test_cm_idl_unique(void) {
+	t_cm_test_dnode nodes[6];
+	t_cm_test_dnode nodup[4];
+	t_cm_idl       *head        = NULL;
+	int             values[][6] = {
         {1, 1, 2, 2, 2, 3},
         {1, 1, 2, 2, 3, 3},
     };

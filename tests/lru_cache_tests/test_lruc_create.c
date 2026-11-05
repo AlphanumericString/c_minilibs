@@ -9,10 +9,10 @@ static void free_function(void *_) {
 	return;
 }
 
-NO_COV void test_lruc_create(void) {
-	t_lruc            *lru;
-	const t_lruc_stats cmp = (t_lruc_stats){0};
-	t_cm_dtor          dt  = free_function;
+NO_COV void test_cm_lruc_create(void) {
+	t_cm_lruc            *lru;
+	const t_cm_lruc_stats cmp = (t_cm_lruc_stats){0};
+	t_cm_dtor             dt  = free_function;
 
 	lru = lruc_create(3, dt);
 	assert(lru != NULL);
@@ -31,10 +31,10 @@ NO_COV void test_lruc_create(void) {
 	assert(lruc_create(3, dt) == NULL);
 	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
-NO_COV void test_lruc_init(void) {
-	t_lruc             lru;
-	const t_lruc_stats cmp = (t_lruc_stats){0};
-	t_cm_dtor          dt  = free_function;
+NO_COV void test_cm_lruc_init(void) {
+	t_cm_lruc             lru;
+	const t_cm_lruc_stats cmp = (t_cm_lruc_stats){0};
+	t_cm_dtor             dt  = free_function;
 
 	assert(lruc_init(&lru, 3, dt) == &lru);
 	assert(memcmp(&lru.stats, &cmp, sizeof(lru.stats)) == 0);
@@ -51,8 +51,8 @@ NO_COV void test_lruc_init(void) {
 	assert(lruc_init(NULL, 3, dt) == NULL);
 	assert(lruc_init(&lru, 0, dt) == NULL);
 }
-NO_COV void test_lruc_destroy(void) {
-	t_lruc    lru;
+NO_COV void test_cm_lruc_destroy(void) {
+	t_cm_lruc lru;
 	t_cm_dtor dt = free_function;
 
 	lruc_init(&lru, 3, dt);
@@ -66,9 +66,9 @@ NO_COV void test_lruc_destroy(void) {
 	assert(lru.buckets_nb == 0);
 	lruc_destroy(NULL);
 }
-NO_COV void test_lruc_free(void) {
-	t_lruc   *lru;
-	t_cm_dtor dt = free_function;
+NO_COV void test_cm_lruc_free(void) {
+	t_cm_lruc *lru;
+	t_cm_dtor  dt = free_function;
 
 	lru = lruc_create(3, dt);
 	assert(lru != NULL);
@@ -78,8 +78,8 @@ NO_COV void test_lruc_free(void) {
 	lruc_free(NULL);
 }
 
-NO_COV void test_lruc_reserve(void) {
-	t_lruc c, intact_copy;
+NO_COV void test_cm_lruc_reserve(void) {
+	t_cm_lruc c, intact_copy;
 
 	{ // simple reservation
 		lruc_init(&c, 4, NULL);

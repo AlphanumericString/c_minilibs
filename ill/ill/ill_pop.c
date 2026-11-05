@@ -6,8 +6,8 @@
  * \return The removed head node, or NULL if the list was empty.
  * \ingroup ill
 **/
-t_ill *ill_pop(t_ill **head) {
-	t_ill *to_remove;
+t_cm_ill *ill_pop(t_cm_ill **head) {
+	t_cm_ill *to_remove;
 
 	if (!head || !*head) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
@@ -25,9 +25,9 @@ t_ill *ill_pop(t_ill **head) {
  * \return The removed tail node, or NULL if the list was empty.
  * \ingroup ill
 **/
-t_ill *ill_pop_back(t_ill **head) {
-	t_ill *to_remove;
-	t_ill *ret;
+t_cm_ill *ill_pop_back(t_cm_ill **head) {
+	t_cm_ill *to_remove;
+	t_cm_ill *ret;
 
 	if (!head || !*head) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)

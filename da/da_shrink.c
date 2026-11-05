@@ -10,7 +10,7 @@
  * \return true on success, false otherwise
  * \ingroup da
 **/
-bool da_shrink(t_da *da) {
+bool da_shrink(t_cm_da *da) {
 	bool r;
 
 	if (!da_is_valid(da)) {
@@ -34,7 +34,7 @@ bool da_shrink(t_da *da) {
  * \return true on success, false otherwise
  * \ingroup da
 **/
-bool da_shrink_min(t_da *da, size_t keep_n) {
+bool da_shrink_min(t_cm_da *da, size_t keep_n) {
 	void *tmp;
 
 	if (!da_is_valid(da)) {

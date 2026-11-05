@@ -163,6 +163,8 @@ $(DOC_DIR)/html/index.html: Doxyfile
 # DOCUMENTATION
 # all: compiles every module into it's own lib named lib<module_name>.a (debug via DEBUG_LVL=<value>)
 # tests: compiles every module's tests (debug via DEBUG_LVL=<value>)
+# module: compiles specified module's lib (modules aware via MODULE=<name>)
+# test_module: compiles specified module's tests (modules aware via MODULE=<name>)
 # tests_run: build and run every module's tests under valgrind
 # valgrind: build and run tests under valgrind (module aware via MODULE=<name>)
 # static_analysis: run the static analyzer (module aware via MODULE=<name>)
@@ -170,13 +172,28 @@ $(DOC_DIR)/html/index.html: Doxyfile
 # single_file: amalgamate MODULE into a single stb style header (MODULE required)
 # coverage: run coverage pass using llvm tooling (debug via DEBUG_LVL=<value>)
 # documentation: run documentation generation using doxygen
+# examples: compile every example in the examples/ directory
 # fclean: rm output dirs and final targets created by makefile
 # clean: rm final targets create by makefile
 # re: re-compile the project using rule fclean and all
 # remove_module: removes a specified module from the project
 #
-all: $(LIB_FILES)
-tests: $(TST_PROGS)
+all:$(LIB_FILES)
+tests:$(LIB_FILES)
+module:
+	@if [ -z "$(MODULE_CL)" ] ; then \
+		$(PRINT) '$(RED)Invalid$(RESET). Please use `module` rule with a module (eg: `make module "MODULE=module1[ module2...]"`)'; \
+		exit 1 ; \
+	else \
+		make --no-print-directory $(addprefix lib, $(addsuffix .a, $(MODULE_CL))) ; \
+	fi ;
+test_module:
+	@if [ -z "$(MODULE_CL)" ] ; then \
+		$(PRINT) '$(RED)Invalid$(RESET). Please use `test_module` rule with a module (eg: `make test_module "MODULE=module1[ module2...]"`)'; \
+		exit 1 ; \
+	else \
+		make --no-print-directory $(addprefix test_, $(addsuffix .out, $(MODULE_CL))) ; \
+	fi ;
 tests_run: $(VG_PROGS)
 	@for t in $^; do \
 		valgrind $(VFLAGS) -q ./$$t; \
@@ -191,7 +208,9 @@ static_analysis:
 			make --no-print-directory analyze_$$m ; \
 		done ; \
 	else \
-		make --no-print-directory analyze_$(MODULE_CL) ; \
+		for m in $(MODULES_CL) ; do \
+			make --no-print-directory analyze_$$m ; \
+		done ; \
 	fi ;
 norm_check:
 	@clang-format -i $$(fd '.*\.[ch]$$' ./ )
@@ -204,7 +223,7 @@ norm_check:
 	@$(PRINT) "norm_checking: all files are clang-format compliant\n"
 single_file:
 	@if [ -z "$(MODULE_CL)" ] ; then \
-		$(PRINT) '$(RED)Invalid$(RESET). Please use `single_file` rule with a module (eg: `make single_file MODULE=<module_name>`)'; \
+		$(PRINT) '$(RED)Invalid$(RESET). Please use `single_file` rule with a module (eg: `make single_file "MODULE=module1[ module2...]"`)'; \
 		exit 1 ; \
 	fi
 	@mkdir -p $(SINGLE_DIR)
@@ -212,6 +231,16 @@ single_file:
 	@$(PRINT) "single file: $(SINGLE_DIR)/$(MODULE_CL).h\n"
 coverage: $(COV_DIR)/index.html
 documentation:$(DOC_DIR)/html/index.html
+examples: all
+	@mkdir -p $(BUILD_DIR)
+	@for m in $(MODULES) ; do \
+		for e in $$(find examples/$$m/*.c) ; do \
+			$(CC) -Wall -Wextra -I. $$e \
+				-o $(BUILD_DIR)/"$${m}_$$(basename $$e).example.out" \
+				-L. -l:lib$$m.a ; \
+			echo "made: $(BUILD_DIR)$${m}_$$(basename $$e).example.out" ; \
+		done; \
+	done;
 fclean:clean
 	$(RM) -r $(BUILD_DIR) $(DOC_DIR) $(COV_DIR) $(SINGLE_DIR)
 clean:
@@ -220,17 +249,17 @@ re:fclean
 	@make --no-print-directory all
 remove_module:
 	@if [ -z "$(MODULE_CL)" ] ; then \
-		$(PRINT) "$(RED)Invalid$(RESET). Please use \`remove_module\` %s%s\n" \
-		"rule with an argument on remove_module (eg: \`make remove_module " \
-		"MODULE=<module_name>\`)"; \
+		$(PRINT) '$(RED)Invalid$(RESET). Please use `remove_module` rule with a module (eg: `make remove_module "MODULE=module1[ module2...]"`)'; \
 		exit 1 ; \
 	else \
 		sh scripts/remove_module.sh $(MODULE_CL) ./Makefile ; \
 		$(PRINT) "removed module: $(MODULE_CL)\n" ; \
 	fi
 help:
-	$(PRINT) "all: compiles every module into it's own lib named lib<module_name>.a (debug via DEBUG_LVL=<value>)"
-	$(PRINT) "tests: compiles every module's tests (debug via DEBUG_LVL=<value>)"
+	$(PRINT) "all: compiles ALL modules into it's own lib named lib<module_name>.a (debug via DEBUG_LVL=<value>)"
+	$(PRINT) "tests: compiles ALL module's tests (debug via DEBUG_LVL=<value>)"
+	$(PRINT) "module: compiles specified module's lib (modules aware via MODULE=<name>)"
+	$(PRINT) "test_module: compiles specified module's tests (modules aware via MODULE=<name>)"
 	$(PRINT) "tests_run: build and run every module's tests under valgrind"
 	$(PRINT) "valgrind: build and run tests under valgrind (module aware via MODULE=<name>)"
 	$(PRINT) "static_analysis: run the static analyzer (module aware via MODULE=<name>)"
@@ -238,9 +267,10 @@ help:
 	$(PRINT) "single_file: amalgamate MODULE into a single stb style header (via MODULE=<name>)"
 	$(PRINT) "coverage: run coverage pass using llvm tooling (debug via DEBUG_LVL=<value>)"
 	$(PRINT) "documentation: run documentation generation using doxygen"
+	$(PRINT) "examples: compile every example in the examples/ directory"
 	$(PRINT) "fclean: rm output dirs and final targets created by makefile"
 	$(PRINT) "clean: rm final targets create by makefile"
 	$(PRINT) "re: re-compile the project using rule fclean and all"
 	$(PRINT) "remove_module: removes a specified module from the project"
 	$(PRINT) "help: print this help message"
-.PHONY: re clean fclean tests tests_run valgrind static_analysis norm_check single_file remove_module help
+.PHONY: re clean fclean tests tests_run valgrind static_analysis norm_check single_file remove_module help examples

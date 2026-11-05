@@ -2,8 +2,8 @@
 
 #include "rb_tests.h"
 
-NO_COV void test_rb_create(void) {
-	t_rb rb = {0};
+NO_COV void test_cm_rb_create(void) {
+	t_cm_rb rb = {0};
 
 	assert(rb_create(&rb, sizeof(int), 10) != NULL);
 	ASSERT_RB_STATE(rb, sizeof(int), 10, 0, 0)
@@ -17,8 +17,8 @@ NO_COV void test_rb_create(void) {
 	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
 
-NO_COV void test_rb_init(void) {
-	t_rb rb = {0};
+NO_COV void test_cm_rb_init(void) {
+	t_cm_rb rb = {0};
 
 	assert(rb_init(&rb, sizeof(int)) != NULL);
 	ASSERT_RB_STATE(rb, sizeof(int), C_MINI__RB_NBE_DFLT, 0, 0)
@@ -31,9 +31,9 @@ NO_COV void test_rb_init(void) {
 	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
 
-NO_COV void test_rb_from_array(void) {
-	t_rb rb     = {0};
-	int  arr[5] = {1, 2, 3, 4, 5};
+NO_COV void test_cm_rb_from_array(void) {
+	t_cm_rb rb     = {0};
+	int     arr[5] = {1, 2, 3, 4, 5};
 
 	assert(rb_from_array(&rb, arr, 5, sizeof(int)) != NULL);
 	ASSERT_RB_STATE(rb, sizeof(int), 5, 0, 0)
@@ -46,8 +46,8 @@ NO_COV void test_rb_from_array(void) {
 	assert(rb_from_array(&rb, arr, 5, 0) == NULL);
 }
 
-NO_COV void test_rb_new(void) {
-	t_rb *rb = NULL;
+NO_COV void test_cm_rb_new(void) {
+	t_cm_rb *rb = NULL;
 
 	rb = rb_new(sizeof(int));
 	ASSERT_RB_STATE(*rb, sizeof(int), C_MINI__RB_NBE_DFLT, 0, 0)

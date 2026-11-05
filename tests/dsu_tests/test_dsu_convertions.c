@@ -3,9 +3,9 @@
 #include "dsuc_tests.h"
 
 // -- cdsu --
-NO_COV void test_cdsu_new_from_rdsu(void) {
-	t_rdsu *rdsu;
-	t_cdsu *cdsu;
+NO_COV void test_cm_cdsu_new_from_rdsu(void) {
+	t_cm_rdsu *rdsu;
+	t_cm_cdsu *cdsu;
 
 	rdsu = rdsu_new(5);
 	assert(rdsu != NULL);
@@ -36,10 +36,10 @@ NO_COV void test_cdsu_new_from_rdsu(void) {
 	rdsu_free(&rdsu);
 }
 
-NO_COV void test_cdsu_init_from_rdsu(void) {
-	t_rdsu *rdsu;
-	t_cdsu *cdsu;
-	t_cdsu *small;
+NO_COV void test_cm_cdsu_init_from_rdsu(void) {
+	t_cm_rdsu *rdsu;
+	t_cm_cdsu *cdsu;
+	t_cm_cdsu *small;
 
 	rdsu = rdsu_new(5);
 	assert(rdsu != NULL);
@@ -68,9 +68,9 @@ NO_COV void test_cdsu_init_from_rdsu(void) {
 	cdsu_free(&cdsu);
 	rdsu_free(&rdsu);
 }
-NO_COV void test_cdsu_to_rdsu(void) {
-	t_cdsu *cdsu = cdsu_new(5);
-	t_rdsu *rdsu;
+NO_COV void test_cm_cdsu_to_rdsu(void) {
+	t_cm_cdsu *cdsu = cdsu_new(5);
+	t_cm_rdsu *rdsu;
 
 	assert(cdsu != NULL);
 	assert(cdsu_union(cdsu, 0, 1) == true);
@@ -95,9 +95,9 @@ NO_COV void test_cdsu_to_rdsu(void) {
 }
 
 // -- rdsu --
-NO_COV void test_rdsu_new_from_cdsu(void) {
-	t_cdsu *cdsu;
-	t_rdsu *rdsu;
+NO_COV void test_cm_rdsu_new_from_cdsu(void) {
+	t_cm_cdsu *cdsu;
+	t_cm_rdsu *rdsu;
 
 	cdsu = cdsu_new(5);
 	assert(cdsu != NULL);
@@ -129,10 +129,10 @@ NO_COV void test_rdsu_new_from_cdsu(void) {
 	cdsu_free(&cdsu);
 }
 
-NO_COV void test_rdsu_init_from_cdsu(void) {
-	t_cdsu *cdsu;
-	t_rdsu *rdsu;
-	t_rdsu *small;
+NO_COV void test_cm_rdsu_init_from_cdsu(void) {
+	t_cm_cdsu *cdsu;
+	t_cm_rdsu *rdsu;
+	t_cm_rdsu *small;
 
 	cdsu = cdsu_new(5);
 	assert(cdsu != NULL);
@@ -180,9 +180,9 @@ NO_COV void test_rdsu_init_from_cdsu(void) {
 	rdsu_free(&rdsu);
 	cdsu_free(&cdsu);
 }
-void test_rdsu_to_cdsu(void) {
-	t_rdsu *rdsu = rdsu_new(5);
-	t_cdsu *cdsu;
+void test_cm_rdsu_to_cdsu(void) {
+	t_cm_rdsu *rdsu = rdsu_new(5);
+	t_cm_cdsu *cdsu;
 
 	assert(rdsu != NULL);
 	assert(rdsu_union(rdsu, 0, 1) == true);

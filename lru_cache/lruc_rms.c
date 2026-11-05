@@ -11,7 +11,7 @@
  * \param cache cache pointer
  * \ingroup lruc
 **/
-bool lruc_clear_reserved(t_lruc *cache) {
+bool lruc_clear_reserved(t_cm_lruc *cache) {
 	if (!cache) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
 		return (false);
@@ -22,7 +22,7 @@ bool lruc_clear_reserved(t_lruc *cache) {
 	return (true);
 }
 
-static inline void clear_node(t_lruc_keynode *node, t_lruc_keynode **nxt,
+static inline void clear_node(t_cm_lruc_keynode *node, t_cm_lruc_keynode **nxt,
                               void (*dtor)(void *), bool lru) {
 	if (dtor) dtor(node->kv.value);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_DELETEVAL, node->kv.key,
@@ -36,8 +36,8 @@ static inline void clear_node(t_lruc_keynode *node, t_lruc_keynode **nxt,
  * \param c cache pointer
  * \ingroup lruc
 **/
-void lruc_clear_to_reserved(t_lruc *c) {
-	t_lruc_keynode *nxt;
+void lruc_clear_to_reserved(t_cm_lruc *c) {
+	t_cm_lruc_keynode *nxt;
 
 	if (!lruc_is_valid(c) || !c->node_nb) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
@@ -45,7 +45,7 @@ void lruc_clear_to_reserved(t_lruc *c) {
 	}
 	if ((c->buckets_nb / c->node_nb) >= C_MINI__LRUC_HASH_SKIP) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_LFREE)
-		for (t_lruc_keynode *node = c->MRU; node; node = nxt) {
+		for (t_cm_lruc_keynode *node = c->MRU; node; node = nxt) {
 			clear_node(node, &nxt, c->dtor, true);
 			c->node_nb--;
 			lruci_rsrvd_push(c, node);
@@ -54,7 +54,7 @@ void lruc_clear_to_reserved(t_lruc *c) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_HFREE)
 		for (size_t i = 0; i < c->buckets_nb; i++) {
 			if (!c->buckets[i]) continue;
-			for (t_lruc_keynode *node = c->buckets[i]; node; node = nxt) {
+			for (t_cm_lruc_keynode *node = c->buckets[i]; node; node = nxt) {
 				clear_node(node, &nxt, c->dtor, false);
 				c->node_nb--;
 				lruci_rsrvd_push(c, node);
@@ -66,15 +66,15 @@ void lruc_clear_to_reserved(t_lruc *c) {
 	c->LRU     = NULL;
 	c->MRU     = NULL;
 	c->node_nb = 0;
-	c->stats   = (t_lruc_stats){0};
+	c->stats   = (t_cm_lruc_stats){0};
 }
 /**
  * \brief Clear the cache (cleared nodes are not push into reserved nodes)
  * \param c cache pointer
  * \ingroup lruc
 **/
-void lruc_clear(t_lruc *c) {
-	t_lruc_keynode *nxt;
+void lruc_clear(t_cm_lruc *c) {
+	t_cm_lruc_keynode *nxt;
 
 	if (!lruc_is_valid(c) || !c->node_nb) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
@@ -82,7 +82,7 @@ void lruc_clear(t_lruc *c) {
 	}
 	if ((c->buckets_nb / c->node_nb) >= C_MINI__LRUC_HASH_SKIP) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_LFREE)
-		for (t_lruc_keynode *node = c->MRU; node; node = nxt) {
+		for (t_cm_lruc_keynode *node = c->MRU; node; node = nxt) {
 			clear_node(node, &nxt, c->dtor, true);
 			c->node_nb--;
 			free(node);
@@ -91,7 +91,7 @@ void lruc_clear(t_lruc *c) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_HFREE)
 		for (size_t i = 0; i < c->buckets_nb; i++) {
 			if (!c->buckets[i]) continue;
-			for (t_lruc_keynode *node = c->buckets[i]; node; node = nxt) {
+			for (t_cm_lruc_keynode *node = c->buckets[i]; node; node = nxt) {
 				clear_node(node, &nxt, c->dtor, false);
 				c->node_nb--;
 				free(node);
@@ -103,7 +103,7 @@ void lruc_clear(t_lruc *c) {
 	c->LRU     = NULL;
 	c->MRU     = NULL;
 	c->node_nb = 0;
-	c->stats   = (t_lruc_stats){0};
+	c->stats   = (t_cm_lruc_stats){0};
 }
 /**
  * \brief Remove a key from the cache
@@ -113,9 +113,9 @@ void lruc_clear(t_lruc *c) {
  * \return 0 on success, -1 on failure
  * \ingroup lruc
 **/
-int lruc_remove(t_lruc *c, const void *key, size_t key_len) {
-	t_lruc_keynode *node;
-	size_t          pos;
+int lruc_remove(t_cm_lruc *c, const void *key, size_t key_len) {
+	t_cm_lruc_keynode *node;
+	size_t             pos;
 
 	if (!lruc_is_valid(c) || !c->node_nb) return (-1);
 	node = lruci_keyinhash(c, key, key_len, &pos);

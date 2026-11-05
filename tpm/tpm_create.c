@@ -14,8 +14,8 @@
  * \note nb must not exceed C_MINI__TPM_THREADS_MAX_NB
  * \ingroup tpm
 **/
-t_tpm *tpm_new(size_t nb) {
-	t_tpm *ret;
+t_cm_tpm *tpm_new(size_t nb) {
+	t_cm_tpm *ret;
 
 	if (!nb) nb = C_MINI__TPM_THREADS_DFLT_NB;
 	if (nb > C_MINI__TPM_THREADS_MAX_NB) {
@@ -37,7 +37,7 @@ t_tpm *tpm_new(size_t nb) {
 // note:
 // CLOCK_MONOTONIC so the timed waits (steal retry and graceful
 // shutdown) are immune to wall clock changes.
-static inline bool init_q(t_tpm *tpm) {
+static inline bool init_q(t_cm_tpm *tpm) {
 	pthread_condattr_t cattr;
 
 	tpm->q_lock = (pthread_mutex_t)PTHREAD_MUTEX_INITIALIZER;
@@ -53,7 +53,8 @@ static inline bool init_q(t_tpm *tpm) {
 	return (true);
 }
 
-static inline void init_trd(t_tpmi_thread *th, size_t id, t_tpm *const tpm) {
+static inline void init_trd(t_cm_tpmi_thread *th, size_t id,
+                            t_cm_tpm *const tpm) {
 	th->pool           = tpm;
 	th->id_sequential  = id;
 	th->job_cache_lock = (pthread_mutex_t)PTHREAD_MUTEX_INITIALIZER;
@@ -69,14 +70,14 @@ static inline void init_trd(t_tpmi_thread *th, size_t id, t_tpm *const tpm) {
  * nb_threads is set to -1
  * \ingroup tpm
 **/
-t_tpm *tpm_init(t_tpm *tpm, size_t nb_thread) {
+t_cm_tpm *tpm_init(t_cm_tpm *tpm, size_t nb_thread) {
 
 	if (!nb_thread) nb_thread = C_MINI__TPM_THREADS_DFLT_NB;
 	if (!tpm || nb_thread > C_MINI__TPM_THREADS_MAX_NB) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG)
 		return (NULL);
 	}
-	*tpm = (t_tpm){0};
+	*tpm = (t_cm_tpm){0};
 	if (init_q(tpm) != true) {
 		CM_LOG(C_MINI__LEVEL_INFO, "CATTR INIT FAIL: %s", strerror(errno))
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__TPM_LOG_CATTR);

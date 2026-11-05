@@ -14,7 +14,7 @@
  * \note fields printed: data, strong count, weak count, dtor
  * \ingroup sptr
 **/
-char *sptr_to_strings(const t_strong_ptr *sptr) {
+char *sptr_to_strings(const t_cm_strong_ptr *sptr) {
 	char       *ret = NULL;
 	size_t      len;
 	const char *fmt = "SPTR STRONG { data %p, count %zu (weak:%zu), dtor %p}";
@@ -37,7 +37,7 @@ char *sptr_to_strings(const t_strong_ptr *sptr) {
  * \note fields printed: data, strong count, weak count, dtor
  * \ingroup sptr
 **/
-char *sptr_to_stringw(const t_weak_ptr *sptr) {
+char *sptr_to_stringw(const t_cm_weak_ptr *sptr) {
 	char       *ret = NULL;
 	size_t      len;
 	const char *fmt = "SPTR WEAK { data %p, count %zu (weak:%zu), dtor %p}";
@@ -59,7 +59,7 @@ char *sptr_to_stringw(const t_weak_ptr *sptr) {
  * \note fields printed: ownership status, data, strong count, weak count, dtor
  * \ingroup sptr
 **/
-char *sptr_to_stringo(const t_owned_ptr *sptr) {
+char *sptr_to_stringo(const t_cm_owned_ptr *sptr) {
 	char       *ret = NULL;
 	size_t      len;
 	const char *fmt = "SPTR OWND %s { data %p, count %zu (weak:%zu), dtor %p}";
@@ -83,7 +83,7 @@ char *sptr_to_stringo(const t_owned_ptr *sptr) {
  * \note fields printed: data, dtor
  * \ingroup sptr
 **/
-char *sptr_to_stringu(const t_uniq_ptr *sptr) {
+char *sptr_to_stringu(const t_cm_uniq_ptr *sptr) {
 	char       *ret = NULL;
 	size_t      len;
 	const char *fmt = "SPTR UNIQ { data %p, dtor %p}";
@@ -105,7 +105,7 @@ char *sptr_to_stringu(const t_uniq_ptr *sptr) {
  * \note prints information using the sptr_to_string format
  * \ingroup sptr
 **/
-bool sptr_dumps(int fd, const t_strong_ptr *sptr) {
+bool sptr_dumps(int fd, const t_cm_strong_ptr *sptr) {
 	char *s;
 
 	if (fd < 0) {
@@ -130,7 +130,7 @@ bool sptr_dumps(int fd, const t_strong_ptr *sptr) {
  * \note prints information using the sptr_to_string format
  * \ingroup sptr
 **/
-bool sptr_dumpw(int fd, const t_weak_ptr *wptr) {
+bool sptr_dumpw(int fd, const t_cm_weak_ptr *wptr) {
 	char *s;
 
 	if (fd < 0) {
@@ -154,7 +154,7 @@ bool sptr_dumpw(int fd, const t_weak_ptr *wptr) {
  * \note prints information using the sptr_to_string format
  * \ingroup sptr
 **/
-bool sptr_dumpo(int fd, const t_owned_ptr *optr) {
+bool sptr_dumpo(int fd, const t_cm_owned_ptr *optr) {
 	char *s;
 
 	if (fd < 0) {
@@ -178,7 +178,7 @@ bool sptr_dumpo(int fd, const t_owned_ptr *optr) {
  * \note prints information using the sptr_to_string format
  * \ingroup sptr
 **/
-bool sptr_dumpu(int fd, const t_uniq_ptr *uptr) {
+bool sptr_dumpu(int fd, const t_cm_uniq_ptr *uptr) {
 	char *s;
 
 	if (fd < 0) {

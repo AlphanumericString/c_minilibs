@@ -10,10 +10,11 @@
  * \return The number of elements moved into *filtered.
  * \ingroup idl
 **/
-size_t idl_filter(t_idl **head, t_cm_callback cb, void *arg, t_idl **filtered) {
-	size_t  count = 0;
-	t_idl **link;
-	t_idl  *ftail;
+size_t idl_filter(t_cm_idl **head, t_cm_callback cb, void *arg,
+                  t_cm_idl **filtered) {
+	size_t     count = 0;
+	t_cm_idl **link;
+	t_cm_idl  *ftail;
 
 	if (!head || !cb || !filtered) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -23,7 +24,7 @@ size_t idl_filter(t_idl **head, t_cm_callback cb, void *arg, t_idl **filtered) {
 	link      = head;
 	ftail     = NULL;
 	while (*link) {
-		t_idl *moved;
+		t_cm_idl *moved;
 		if (cb(idl_ntoe(*link), arg)) {
 			link = &(*link)->next;
 			continue;
@@ -52,11 +53,11 @@ size_t idl_filter(t_idl **head, t_cm_callback cb, void *arg, t_idl **filtered) {
  * \return The number of elements moved into *filtered.
  * \ingroup idl
 **/
-size_t idl_filter_out(t_idl **head, t_cm_callback cb, void *arg,
-                      t_idl **filtered) {
-	size_t  count = 0;
-	t_idl **link;
-	t_idl  *ftail;
+size_t idl_filter_out(t_cm_idl **head, t_cm_callback cb, void *arg,
+                      t_cm_idl **filtered) {
+	size_t     count = 0;
+	t_cm_idl **link;
+	t_cm_idl  *ftail;
 
 	if (!head || !cb || !filtered) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -66,7 +67,7 @@ size_t idl_filter_out(t_idl **head, t_cm_callback cb, void *arg,
 	link      = head;
 	ftail     = NULL;
 	while (*link) {
-		t_idl *moved;
+		t_cm_idl *moved;
 		if (!cb(idl_ntoe(*link), arg)) {
 			link = &(*link)->next;
 			continue;
@@ -95,9 +96,9 @@ size_t idl_filter_out(t_idl **head, t_cm_callback cb, void *arg,
  * \return The number of elements removed.
  * \ingroup idl
 **/
-size_t idl_rm_if(t_idl **head, t_cm_callback cb, void *arg, t_cm_dtor d) {
-	size_t  count = 0;
-	t_idl **link;
+size_t idl_rm_if(t_cm_idl **head, t_cm_callback cb, void *arg, t_cm_dtor d) {
+	size_t     count = 0;
+	t_cm_idl **link;
 
 	if (!head || !cb) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -105,7 +106,7 @@ size_t idl_rm_if(t_idl **head, t_cm_callback cb, void *arg, t_cm_dtor d) {
 	}
 	link = head;
 	while (*link) {
-		t_idl *rm;
+		t_cm_idl *rm;
 		if (cb(idl_ntoe(*link), arg)) {
 			link = &(*link)->next;
 			continue;

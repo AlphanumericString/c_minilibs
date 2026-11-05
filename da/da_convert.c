@@ -11,7 +11,7 @@
  * copy. *YOU* need to free it.
  * \ingroup da
 **/
-void *da_to_array(const t_da *da) {
+void *da_to_array(const t_cm_da *da) {
 	void *data;
 
 	if (!da_is_valid(da)) {
@@ -34,7 +34,7 @@ void *da_to_array(const t_da *da) {
  * \return pointer to the target array (arr), or NULL on failure
  * \ingroup da
 **/
-void *da_to_loc_array(const t_da *da, void *arr) {
+void *da_to_loc_array(const t_cm_da *da, void *arr) {
 	if (!da_is_valid(da) || !arr) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (NULL);

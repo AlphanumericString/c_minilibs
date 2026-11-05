@@ -16,9 +16,9 @@
  * \return pointer to the value
  * \ingroup lruc
 **/
-void *lruc_get_lru(t_lruc *c, const void *key, size_t key_len) {
-	t_lruc_keynode *node;
-	size_t          pos;
+void *lruc_get_lru(t_cm_lruc *c, const void *key, size_t key_len) {
+	t_cm_lruc_keynode *node;
+	size_t             pos;
 
 	if (!lruc_is_valid(c) || !c->node_nb) return (NULL);
 	node = lruci_keyinhash(c, key, key_len, &pos);
@@ -41,10 +41,10 @@ void *lruc_get_lru(t_lruc *c, const void *key, size_t key_len) {
  * \return pointer to the value
  * \ingroup lruc
 **/
-void *lruc_get(t_lruc *c, const void *key, size_t len) {
-	uint64_t        now;
-	t_lruc_keynode *node;
-	size_t          pos;
+void *lruc_get(t_cm_lruc *c, const void *key, size_t len) {
+	uint64_t           now;
+	t_cm_lruc_keynode *node;
+	size_t             pos;
 
 	if (!lruc_is_valid(c) || !c->node_nb) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)

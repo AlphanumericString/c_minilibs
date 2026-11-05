@@ -6,10 +6,10 @@
  * \return A pointer to the user's element structure.
  * \ingroup idl
 **/
-void *idl_ntoe(const t_idl *node) {
+void *idl_ntoe(const t_cm_idl *node) {
 	if (!node) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
-		return ((t_idl *)NULL);
+		return ((t_cm_idl *)NULL);
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return ((void *)(((const char *)node) - node->offset));
@@ -21,11 +21,11 @@ void *idl_ntoe(const t_idl *node) {
  * \return A pointer to the intrusive node.
  * \ingroup idl
 **/
-t_idl *idl_eton(const void *e, size_t offset) {
+t_cm_idl *idl_eton(const void *e, size_t offset) {
 	if (!e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
-		return ((t_idl *)NULL);
+		return ((t_cm_idl *)NULL);
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
-	return ((t_idl *)((char *)e + offset));
+	return ((t_cm_idl *)((char *)e + offset));
 }

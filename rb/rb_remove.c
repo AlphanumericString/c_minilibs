@@ -10,7 +10,7 @@
  * \return true if removes n elements, false otherwise
  * \ingroup rb
 **/
-bool rb_drop(t_rb *rb, size_t n) {
+bool rb_drop(t_cm_rb *rb, size_t n) {
 	if (!rb || !n) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return (false);
@@ -33,7 +33,7 @@ bool rb_drop(t_rb *rb, size_t n) {
  * \return pointer to the element in the buffer
  * \ingroup rb
 **/
-void *rb_peek(t_rb rb, void *elem_out) {
+void *rb_peek(t_cm_rb rb, void *elem_out) {
 	unsigned char *pos;
 
 	pos = rb_at(rb, 0);
@@ -57,7 +57,7 @@ void *rb_peek(t_rb rb, void *elem_out) {
  * \return pointer to the first element in the buffer
  * \ingroup rb
 **/
-void *rb_npeek(t_rb rb, size_t n, void *elem_out) {
+void *rb_npeek(t_cm_rb rb, size_t n, void *elem_out) {
 	unsigned char *pos;
 	size_t         left_size;
 
@@ -93,7 +93,7 @@ void *rb_npeek(t_rb rb, size_t n, void *elem_out) {
  * \return pointer to the removed element in the buffer
  * \ingroup rb
 **/
-void *rb_pop(t_rb *rb, void *elem_out) {
+void *rb_pop(t_cm_rb *rb, void *elem_out) {
 	void *return_val;
 
 	if (!rb) {
@@ -118,7 +118,7 @@ void *rb_pop(t_rb *rb, void *elem_out) {
  * \return pointer to the first removed element in the buffer
  * \ingroup rb
 **/
-void *rb_npop(t_rb *rb, size_t n, void *elem_out) {
+void *rb_npop(t_cm_rb *rb, size_t n, void *elem_out) {
 	void *return_val;
 
 	if (!rb || !n) {

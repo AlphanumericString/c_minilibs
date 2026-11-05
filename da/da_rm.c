@@ -13,7 +13,7 @@
  * \return true on success, false on failure
  * \ingroup da
 **/
-bool da_rm_order(t_da *da, size_t pos) {
+bool da_rm_order(t_cm_da *da, size_t pos) {
 	if (!da_is_valid(da) || da->nb_e < pos) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (false);
@@ -35,7 +35,7 @@ bool da_rm_order(t_da *da, size_t pos) {
  * \return true on success, false on failure
  * \ingroup da
 **/
-bool da_rms_order(t_da *da, size_t start, size_t end) {
+bool da_rms_order(t_cm_da *da, size_t start, size_t end) {
 	if (!da_is_valid(da) || end < start || da->nb_e <= start) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (false);
@@ -57,7 +57,7 @@ bool da_rms_order(t_da *da, size_t start, size_t end) {
  * \return true on success, false on failure
  * \ingroup da
 **/
-bool da_rm(t_da *da, size_t pos) {
+bool da_rm(t_cm_da *da, size_t pos) {
 	if (!da_is_valid(da) || da->nb_e < pos) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (false);
@@ -77,7 +77,7 @@ bool da_rm(t_da *da, size_t pos) {
  * \return true on success, false on failure
  * \ingroup da
 **/
-bool da_rms(t_da *da, size_t start, size_t end) {
+bool da_rms(t_cm_da *da, size_t start, size_t end) {
 	if (end < start || !da_is_valid(da) || da->nb_e <= start) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (false);

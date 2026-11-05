@@ -7,9 +7,9 @@
 
 #include "lru_cache_tests.h"
 
-NO_COV void test_lruc_put_kv(void) {
-	t_lruc          c;
-	t_lruc_keynode *kv;
+NO_COV void test_cm_lruc_put_kv(void) {
+	t_cm_lruc          c;
+	t_cm_lruc_keynode *kv;
 
 	char *key1 = "toto";
 	char *key2 = "titi";
@@ -21,11 +21,11 @@ NO_COV void test_lruc_put_kv(void) {
 	void *val4 = (void *)0x69420;
 	void *val5 = (void *)0x3141592;
 
-	t_keyvalue kv1_ok      = {.key = key1, .value = val1, strlen(key1)};
-	t_keyvalue kv2_ok      = {.key = key2, .value = val2, strlen(key2)};
-	t_keyvalue kv3_ok      = {.key = key3, .value = val3, strlen(key3)};
-	t_keyvalue kv4_no_key  = {.key = NULL, .value = val4, 12};
-	t_keyvalue kv5_no_klen = {.key = key5, .value = val5, 0};
+	t_cm_keyvalue kv1_ok      = {.key = key1, .value = val1, strlen(key1)};
+	t_cm_keyvalue kv2_ok      = {.key = key2, .value = val2, strlen(key2)};
+	t_cm_keyvalue kv3_ok      = {.key = key3, .value = val3, strlen(key3)};
+	t_cm_keyvalue kv4_no_key  = {.key = NULL, .value = val4, 12};
+	t_cm_keyvalue kv5_no_klen = {.key = key5, .value = val5, 0};
 
 	{ // simple MRU/LRU checks
 		lruc_init(&c, 2, NULL);
@@ -168,8 +168,8 @@ NO_COV void test_lruc_put_kv(void) {
 	}
 	return;
 }
-NO_COV void test_lruc_put(void) {
-	t_lruc      c;
+NO_COV void test_cm_lruc_put(void) {
+	t_cm_lruc   c;
 	const char *key1   = "toto";
 	const char *key2   = "titi";
 	const char *key3   = "tutu";
@@ -338,8 +338,8 @@ NO_COV void test_lruc_put(void) {
 	}
 	return;
 }
-NO_COV void test_lruc_put_ttl(void) {
-	t_lruc      c;
+NO_COV void test_cm_lruc_put_ttl(void) {
+	t_cm_lruc   c;
 	const char *k1 = "luigi au pay des shtroumpfs";
 	const char *k2 = "squalala";
 	const char *k3 = "on attend toujours wtc 38";

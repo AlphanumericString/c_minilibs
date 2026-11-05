@@ -9,8 +9,8 @@
  * duplicates.
  * \ingroup idl
 **/
-void idl_unique(t_idl *head, t_cm_comparator c, t_cm_dtor d) {
-	t_idl *dup;
+void idl_unique(t_cm_idl *head, t_cm_comparator c, t_cm_dtor d) {
+	t_cm_idl *dup;
 
 	if (!head || !c) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)

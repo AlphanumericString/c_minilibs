@@ -24,47 +24,47 @@ void *cb_dup(const void *elem);
 void *cb_dup_fail3(const void *elem);
 void  cb_destroy(void *elem);
 
-void test_rb_create(void);
-void test_rb_init(void);
-void test_rb_from_array(void);
-void test_rb_new(void);
+void test_cm_rb_create(void);
+void test_cm_rb_init(void);
+void test_cm_rb_from_array(void);
+void test_cm_rb_new(void);
 
-void test_rb_free(void);
-void test_rb_destroy(void);
-void test_rb_clr(void);
+void test_cm_rb_free(void);
+void test_cm_rb_destroy(void);
+void test_cm_rb_clr(void);
 
-void test_rb_full(void);
-void test_rb_empty(void);
-void test_rb_size(void);
-void test_rb_capacity(void);
-void test_rb_remaining_space(void);
+void test_cm_rb_full(void);
+void test_cm_rb_empty(void);
+void test_cm_rb_size(void);
+void test_cm_rb_capacity(void);
+void test_cm_rb_remaining_space(void);
 
-void test_rb_drop(void);
-void test_rb_pop(void);
-void test_rb_npop(void);
-void test_rb_peek(void);
-void test_rb_npeek(void);
+void test_cm_rb_drop(void);
+void test_cm_rb_pop(void);
+void test_cm_rb_npop(void);
+void test_cm_rb_peek(void);
+void test_cm_rb_npeek(void);
 
-void test_rb_push(void);
-void test_rb_npush(void);
-void test_rb_push_safe(void);
-void test_rb_npush_safe(void);
+void test_cm_rb_push(void);
+void test_cm_rb_npush(void);
+void test_cm_rb_push_safe(void);
+void test_cm_rb_npush_safe(void);
 
-void test_rb_apply(void);
-void test_rb_naplly(void);
+void test_cm_rb_apply(void);
+void test_cm_rb_naplly(void);
 
-void test_rb_filter(void);
+void test_cm_rb_filter(void);
 
-void test_rb_at(void);
-void test_rb_nat(void);
+void test_cm_rb_at(void);
+void test_cm_rb_nat(void);
 
-void test_rb_get(void);
-void test_rb_nget(void);
-void test_rb_getn(void);
+void test_cm_rb_get(void);
+void test_cm_rb_nget(void);
+void test_cm_rb_getn(void);
 
-void test_rb_find(void);
+void test_cm_rb_find(void);
 
-void test_rb_map(void);
-void test_rb_nmap(void);
+void test_cm_rb_map(void);
+void test_cm_rb_nmap(void);
 
-void test_rb_grow(void);
+void test_cm_rb_grow(void);

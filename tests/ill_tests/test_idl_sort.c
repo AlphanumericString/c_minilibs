@@ -2,8 +2,8 @@
 
 #include "ill_tests.h"
 
-NO_COV static void check_sorted(t_idl *head) {
-	t_idl *prev = NULL;
+NO_COV static void check_sorted(t_cm_idl *head) {
+	t_cm_idl *prev = NULL;
 
 	while (head) {
 		assert(head->prev == prev);
@@ -16,11 +16,11 @@ NO_COV static void check_sorted(t_idl *head) {
 	}
 }
 
-NO_COV static void check_values(t_idl *head, const int *exp, size_t n) {
+NO_COV static void check_values(t_cm_idl *head, const int *exp, size_t n) {
 	size_t i = 0;
 
 	while (head && i < n) {
-		assert(((t_test_dnode *)idl_ntoe(head))->value == exp[i]);
+		assert(((t_cm_test_dnode *)idl_ntoe(head))->value == exp[i]);
 		head = head->next;
 		i++;
 	}
@@ -28,18 +28,18 @@ NO_COV static void check_values(t_idl *head, const int *exp, size_t n) {
 	assert(head == NULL);
 }
 
-NO_COV void test_idl_sort(void) {
-	t_test_dnode nodes[5];
-	t_test_dnode a[3];
-	t_test_dnode b[3];
-	t_test_dnode solo;
-	t_idl       *head      = NULL;
-	t_idl       *la        = NULL;
-	t_idl       *lb        = NULL;
-	int          values[5] = {5, 1, 4, 2, 3};
-	int          exp[5]    = {1, 2, 3, 4, 5};
-	int          expm[6]   = {1, 2, 3, 4, 5, 6};
-	size_t       i;
+NO_COV void test_cm_idl_sort(void) {
+	t_cm_test_dnode nodes[5];
+	t_cm_test_dnode a[3];
+	t_cm_test_dnode b[3];
+	t_cm_test_dnode solo;
+	t_cm_idl       *head      = NULL;
+	t_cm_idl       *la        = NULL;
+	t_cm_idl       *lb        = NULL;
+	int             values[5] = {5, 1, 4, 2, 3};
+	int             exp[5]    = {1, 2, 3, 4, 5};
+	int             expm[6]   = {1, 2, 3, 4, 5, 6};
+	size_t          i;
 
 	head = NULL;
 	for (i = 0; i < 5; i++) {
@@ -56,7 +56,7 @@ NO_COV void test_idl_sort(void) {
 	check_values(head, exp, 5);
 	INIT_DNODE(solo, 7, 9);
 	{
-		t_idl *sh = &solo.dnode;
+		t_cm_idl *sh = &solo.dnode;
 		idl_sort(&sh, cb_idl_cmp_min_max);
 		assert(sh == &solo.dnode);
 	}

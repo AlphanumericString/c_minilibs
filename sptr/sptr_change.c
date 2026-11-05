@@ -14,15 +14,15 @@
  * strong pointer
  * \ingroup sptr
 **/
-t_strong_ptr sptr_into_strong(t_weak_ptr *sptr) {
+t_cm_strong_ptr sptr_into_strong(t_cm_weak_ptr *sptr) {
 	if (!sptr || sptr_get_wc(sptr) == 0 || sptr_get_rc(sptr) == 0) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_ILLDATA)
-		return ((t_strong_ptr){0});
+		return ((t_cm_strong_ptr){0});
 	}
 	sptri_rc_inc(sptr->meta);
 	sptri_wc_dec(sptr->meta);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
-	return ((t_strong_ptr){.meta = sptr->meta, .data = sptr->meta->data});
+	return ((t_cm_strong_ptr){.meta = sptr->meta, .data = sptr->meta->data});
 }
 /**
  * \brief weakens a strong pointer to a weak pointer
@@ -35,10 +35,10 @@ t_strong_ptr sptr_into_strong(t_weak_ptr *sptr) {
  * returned weak pointer
  * \ingroup sptr
 **/
-t_weak_ptr sptr_into_weak(t_strong_ptr *sptr) {
+t_cm_weak_ptr sptr_into_weak(t_cm_strong_ptr *sptr) {
 	if (!sptr || sptr_get_rc(sptr) == 0) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
-		return ((t_weak_ptr){0});
+		return ((t_cm_weak_ptr){0});
 	}
 	sptri_rc_dec(sptr->meta);
 	if (!sptri_rc_get(sptr->meta)) {
@@ -47,7 +47,7 @@ t_weak_ptr sptr_into_weak(t_strong_ptr *sptr) {
 	}
 	sptri_wc_inc(sptr->meta);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
-	return ((t_weak_ptr){sptr->meta});
+	return ((t_cm_weak_ptr){sptr->meta});
 }
 /**
  * \brief steals the ownership of a owned pointer
@@ -58,7 +58,7 @@ t_weak_ptr sptr_into_weak(t_strong_ptr *sptr) {
  * fails if to is already owner, from is not owner, or boxes differ
  * \ingroup sptr
 **/
-bool sptr_transfer_ownership(t_owned_ptr *to, t_owned_ptr *from) {
+bool sptr_transfer_ownership(t_cm_owned_ptr *to, t_cm_owned_ptr *from) {
 	if (!to || !from || !to->meta || !from->meta || from->owner == false ||
 	    to->owner == true) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
@@ -84,8 +84,8 @@ bool sptr_transfer_ownership(t_owned_ptr *to, t_owned_ptr *from) {
  * the variable is zeroed out.
  * \return true on success, false otherwise.
 **/
-bool sptr_move_ownership(t_owned_ptr *dest, t_owned_ptr *from) {
-	t_owned_ptr r;
+bool sptr_move_ownership(t_cm_owned_ptr *dest, t_cm_owned_ptr *from) {
+	t_cm_owned_ptr r;
 
 	if (!dest || !from || !from->meta || !from->owner ||
 	    sptr_get_rc(from) != 1) {
@@ -97,7 +97,7 @@ bool sptr_move_ownership(t_owned_ptr *dest, t_owned_ptr *from) {
 		return (false);
 	}
 	r     = *from;
-	*from = (t_owned_ptr){0};
+	*from = (t_cm_owned_ptr){0};
 	*dest = r;
 	return (true);
 }
@@ -110,14 +110,14 @@ bool sptr_move_ownership(t_owned_ptr *dest, t_owned_ptr *from) {
  * beforehand
  * \ingroup sptr
 **/
-t_uniq_ptr *sptr_uniq_yield(t_uniq_ptr *dst, t_uniq_ptr *src) {
+t_cm_uniq_ptr *sptr_uniq_yield(t_cm_uniq_ptr *dst, t_cm_uniq_ptr *src) {
 	if (!dst || !src) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (NULL);
 	}
 	if (dst->data) sptr_delete(dst);
 	*dst = *src;
-	*src = (t_uniq_ptr){0};
+	*src = (t_cm_uniq_ptr){0};
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (dst);
 }
@@ -128,8 +128,8 @@ t_uniq_ptr *sptr_uniq_yield(t_uniq_ptr *dst, t_uniq_ptr *src) {
  * \return true on success, false on error
  * \ingroup sptr
 **/
-bool sptr_uniq_swap(t_uniq_ptr *sw1, t_uniq_ptr *sw2) {
-	t_uniq_ptr tmp;
+bool sptr_uniq_swap(t_cm_uniq_ptr *sw1, t_cm_uniq_ptr *sw2) {
+	t_cm_uniq_ptr tmp;
 
 	if (!sw1 || !sw2) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)

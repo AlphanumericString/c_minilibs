@@ -5,8 +5,8 @@
 
 #define RDSU_BAD____TYPE 999
 
-NO_COV void test_rdsu_save_state(void) {
-	t_rdsu rdsu;
+NO_COV void test_cm_rdsu_save_state(void) {
+	t_cm_rdsu rdsu;
 
 	rdsu_init(&rdsu, 10);
 	assert(rdsu_save_state(&rdsu) == NULL);
@@ -17,10 +17,10 @@ NO_COV void test_rdsu_save_state(void) {
 	assert(rdsu_save_state(&rdsu) == NULL);
 	return;
 }
-NO_COV void test_rdsu_rewind(void) {
-	t_rdsu     rdsu;
-	t_rdsu     intact_copy;
-	t_rdsu_log malicious_log;
+NO_COV void test_cm_rdsu_rewind(void) {
+	t_cm_rdsu     rdsu;
+	t_cm_rdsu     intact_copy;
+	t_cm_rdsu_log malicious_log;
 
 	rdsu_init(&rdsu, 5);
 	rdsu_union(&rdsu, 1, 2);
@@ -57,7 +57,7 @@ NO_COV void test_rdsu_rewind(void) {
 	assert(rdsu_rewind(&rdsu) == false);
 	rdsu = intact_copy;
 
-	malicious_log = (t_rdsu_log){
+	malicious_log = (t_cm_rdsu_log){
 	    .elem = 0,
 	    .nxt  = rdsu.change_log,
 	    .p    = 0,
@@ -85,10 +85,10 @@ NO_COV void test_rdsu_rewind(void) {
 	assert(rdsu_rewind(NULL) == false);
 	return;
 }
-NO_COV void test_rdsu_rewind_to_state(void) {
-	t_rdsu_log *log;
-	t_rdsu      rdsu;
-	t_rdsu_log  malicious_log;
+NO_COV void test_cm_rdsu_rewind_to_state(void) {
+	t_cm_rdsu_log *log;
+	t_cm_rdsu      rdsu;
+	t_cm_rdsu_log  malicious_log;
 
 	rdsu_init(&rdsu, 5);
 	rdsu_union(&rdsu, 1, 2); // 0 1-2 3 4
@@ -114,7 +114,7 @@ NO_COV void test_rdsu_rewind_to_state(void) {
 	assert(rdsu_find(&rdsu, 4) == 4);
 	assert(rdsu_nb_components(&rdsu) == 4);
 
-	malicious_log = (t_rdsu_log){
+	malicious_log = (t_cm_rdsu_log){
 	    .elem = 0,
 	    .nxt  = rdsu.change_log,
 	    .p    = 0,
@@ -148,8 +148,8 @@ NO_COV void test_rdsu_rewind_to_state(void) {
 	rdsu_destroy(&rdsu);
 	return;
 }
-NO_COV void test_rdsu_rewind_clear(void) {
-	t_rdsu rdsu;
+NO_COV void test_cm_rdsu_rewind_clear(void) {
+	t_cm_rdsu rdsu;
 
 	rdsu_init(&rdsu, 10);
 	assert(rdsu.change_log == NULL);
@@ -168,8 +168,8 @@ NO_COV void test_rdsu_rewind_clear(void) {
 	rdsu_destroy(&rdsu);
 	return;
 }
-NO_COV void test_rdsui_log_reuse(void) {
-	t_rdsu rdsu;
+NO_COV void test_cm_rdsui_log_reuse(void) {
+	t_cm_rdsu rdsu;
 
 	rdsu_init(&rdsu, 10);
 	assert(rdsu.change_log == NULL);

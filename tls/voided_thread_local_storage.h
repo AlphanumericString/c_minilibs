@@ -33,32 +33,32 @@
 #	endif // !C_MINI__VTLS_START_SIZE
 
 /**
- * \typedef t_vtls
+ * \typedef t_cm_vtls
  * \brief the vtls key-value structure
  * \var v_name the name of the variable
  * \var var the value to associate the name with, (memory ptr)
  * \var size_e the size of the data to save
  * \ingroup vtls
 **/
-typedef struct s_vtls {
+typedef struct s_cm_vtls {
 	const char *v_name;
 	void       *var;
 	size_t      size_e;
-} t_vtls_key;
+} t_cm_vtls_key;
 
 /**
- * \typedef t_vtls_array
+ * \typedef t_cm_vtls_array
  * \brief the vtls key-value holder structure
  * \var data the array of key-values
  * \var len the length of current key-value
  * \var cap maximum number of elements
  * \ingroup vtls
 **/
-typedef struct s_tlsv_array {
-	t_vtls_key *data;
-	size_t      len;
-	size_t      cap;
-} t_vtls;
+typedef struct s_cm_tlsv_array {
+	t_cm_vtls_key *data;
+	size_t         len;
+	size_t         cap;
+} t_cm_vtls;
 
 /**
  * \var vtls_key tls key for the vtls system

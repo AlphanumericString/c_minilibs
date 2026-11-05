@@ -2,10 +2,10 @@
 
 #include "ill_tests.h"
 
-NO_COV void test_idl_npush(void) {
-	t_test_dnode n1, n2, n3, n4;
-	t_test_dnode n7, n8;
-	t_idl       *head = NULL;
+NO_COV void test_cm_idl_npush(void) {
+	t_cm_test_dnode n1, n2, n3, n4;
+	t_cm_test_dnode n7, n8;
+	t_cm_idl       *head = NULL;
 
 	INIT_STD_DNODES(n1, n2, n3, n4);
 	idl_push_back(&head, &n1.dnode);

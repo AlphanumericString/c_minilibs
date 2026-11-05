@@ -10,8 +10,8 @@
  * found
  * \ingroup ctls
 **/
-t_ctls_typewrap *ctls_get(const char *s) {
-	t_ctlsv *ctls = pthread_getspecific(ctls_key);
+t_cm_ctls_typewrap *ctls_get(const char *s) {
+	t_cm_ctlsv *ctls = pthread_getspecific(ctls_key);
 
 	if (!ctls) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CTLS_EARG);
@@ -33,7 +33,7 @@ t_ctls_typewrap *ctls_get(const char *s) {
  * \ingroup ctls
 **/
 size_t ctls_len(void) {
-	const t_ctlsv *ctls = pthread_getspecific(ctls_key);
+	const t_cm_ctlsv *ctls = pthread_getspecific(ctls_key);
 
 	if (!ctls) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__CTLS_FAILLURE);

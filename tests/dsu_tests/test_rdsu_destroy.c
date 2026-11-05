@@ -2,9 +2,9 @@
 
 #include "rdsu_tests.h"
 
-NO_COV void test_rdsu_clr(void) {
-	t_rdsu *rdsu = rdsu_new(10);
-	t_rdsu  intact_copy;
+NO_COV void test_cm_rdsu_clr(void) {
+	t_cm_rdsu *rdsu = rdsu_new(10);
+	t_cm_rdsu  intact_copy;
 
 	rdsu->parent[0]  = 5;
 	rdsu->rank[0]    = 2;
@@ -27,8 +27,8 @@ NO_COV void test_rdsu_clr(void) {
 	*rdsu = intact_copy;
 	rdsu_free(&rdsu);
 }
-NO_COV void test_rdsu_destroy(void) {
-	t_rdsu rdsu;
+NO_COV void test_cm_rdsu_destroy(void) {
+	t_cm_rdsu rdsu;
 
 	rdsu_init(&rdsu, 10);
 	rdsu_union(&rdsu, 2, 0);
@@ -40,8 +40,8 @@ NO_COV void test_rdsu_destroy(void) {
 	rdsu_destroy(&rdsu);
 	rdsu_destroy(NULL);
 }
-NO_COV void test_rdsu_free(void) {
-	t_rdsu *d = rdsu_new(10);
+NO_COV void test_cm_rdsu_free(void) {
+	t_cm_rdsu *d = rdsu_new(10);
 
 	assert(d != NULL);
 	rdsu_free(&d);

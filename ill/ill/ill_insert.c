@@ -6,7 +6,7 @@
  * \param node The node to insert.
  * \ingroup ill
 **/
-void ill_append(t_ill *anchor, t_ill *node) {
+void ill_append(t_cm_ill *anchor, t_cm_ill *node) {
 	if (!anchor || !node) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return;
@@ -21,7 +21,7 @@ void ill_append(t_ill *anchor, t_ill *node) {
  * \param nodes The head of the list of nodes to insert.
  * \ingroup ill
 **/
-void ill_nappend(t_ill *anchor, t_ill *nodes) {
+void ill_nappend(t_cm_ill *anchor, t_cm_ill *nodes) {
 	if (!anchor || !nodes) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return;

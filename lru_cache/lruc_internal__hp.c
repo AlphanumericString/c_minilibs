@@ -1,10 +1,10 @@
 #define C_MINI__LRUC_INTERNAL
 #include "least_recently_used_cache.h"
 
-typedef bool (*Comparator)(t_lruc_keynode a, t_lruc_keynode b);
+typedef bool (*Comparator)(t_cm_lruc_keynode a, t_cm_lruc_keynode b);
 
-static inline void lruci_heap_swap(t_lruc *c, size_t a, size_t b) {
-	t_lruc_keynode *temp = c->minHeap[a];
+static inline void lruci_heap_swap(t_cm_lruc *c, size_t a, size_t b) {
+	t_cm_lruc_keynode *temp = c->minHeap[a];
 
 	c->minHeap[a]             = c->minHeap[b];
 	c->minHeap[b]             = temp;
@@ -12,11 +12,12 @@ static inline void lruci_heap_swap(t_lruc *c, size_t a, size_t b) {
 	c->minHeap[b]->heap_index = b;
 }
 
-static inline bool compare(const t_lruc_keynode *a, const t_lruc_keynode *b) {
+static inline bool compare(const t_cm_lruc_keynode *a,
+                           const t_cm_lruc_keynode *b) {
 	return (a->time < b->time);
 }
 
-static void lruci_hp_up(t_lruc *c, size_t index) {
+static void lruci_hp_up(t_cm_lruc *c, size_t index) {
 	size_t parent;
 
 	while (index > 0) {
@@ -29,7 +30,7 @@ static void lruci_hp_up(t_lruc *c, size_t index) {
 		}
 	}
 }
-static void lruci_hp_down(t_lruc *c, size_t index) {
+static void lruci_hp_down(t_cm_lruc *c, size_t index) {
 	size_t L;
 	size_t R;
 	size_t target;
@@ -53,15 +54,15 @@ static void lruci_hp_down(t_lruc *c, size_t index) {
 	}
 }
 
-void lruci_hp_push(t_lruc *c, t_lruc_keynode *value) {
+void lruci_hp_push(t_cm_lruc *c, t_cm_lruc_keynode *value) {
 	c->minHeap[c->node_nb]             = value;
 	c->minHeap[c->node_nb]->heap_index = c->node_nb;
 	lruci_hp_up(c, c->node_nb);
 	c->node_nb++;
 }
 
-t_lruc_keynode *lruci_hp_pop(t_lruc *c) {
-	t_lruc_keynode *root_value = NULL;
+t_cm_lruc_keynode *lruci_hp_pop(t_cm_lruc *c) {
+	t_cm_lruc_keynode *root_value = NULL;
 
 	if (!c->node_nb || !c->minHeap) return NULL;
 	root_value                = c->minHeap[0];
@@ -73,7 +74,7 @@ t_lruc_keynode *lruci_hp_pop(t_lruc *c) {
 	root_value->heap_index = -1;
 	return (root_value);
 }
-t_lruc_keynode *lruci_hp_pop_nth(t_lruc *c, size_t n) {
+t_cm_lruc_keynode *lruci_hp_pop_nth(t_cm_lruc *c, size_t n) {
 	if (!c->node_nb || !c->minHeap) return NULL;
 	if (n > (c->node_nb - 1)) n = c->node_nb - 1;
 	lruci_heap_swap(c, 0, n);

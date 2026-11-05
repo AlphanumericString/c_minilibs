@@ -4,8 +4,8 @@
 
 #include "tpm_tests.h"
 
-NO_COV void test_tpmi_create_job(void) {
-	t_tpm_jc *j = tpmi_create_job(cb_work_incr, (void *)(uintptr_t)0x42);
+NO_COV void test_cm_tpmi_create_job(void) {
+	t_cm_tpm_jc *j = tpmi_create_job(cb_work_incr, (void *)(uintptr_t)0x42);
 
 	assert(j != NULL);
 	assert(j->job.func == cb_work_incr);
@@ -16,11 +16,11 @@ NO_COV void test_tpmi_create_job(void) {
 	free(j);
 }
 
-NO_COV void test_tpmi_job_push(void) {
-	t_tpm_jc *head = NULL;
-	t_tpm_jc *tail = NULL;
-	t_tpm_jc *a    = tpmi_create_job(cb_work_incr, (void *)(uintptr_t)0x1);
-	t_tpm_jc *b    = tpmi_create_job(cb_work_incr, (void *)(uintptr_t)0x2);
+NO_COV void test_cm_tpmi_job_push(void) {
+	t_cm_tpm_jc *head = NULL;
+	t_cm_tpm_jc *tail = NULL;
+	t_cm_tpm_jc *a    = tpmi_create_job(cb_work_incr, (void *)(uintptr_t)0x1);
+	t_cm_tpm_jc *b    = tpmi_create_job(cb_work_incr, (void *)(uintptr_t)0x2);
 
 	assert(tpmi_job_push(a, &head, &tail, false) == true);
 	assert(head == a && tail == a);
@@ -38,11 +38,11 @@ NO_COV void test_tpmi_job_push(void) {
 	tpm_clear_job_list(head, NULL);
 }
 
-NO_COV void test_tpmi_job_pop(void) {
-	t_tpm     t = {0};
-	t_tpm_jc *a = tpmi_create_job(cb_work_incr, (void *)(uintptr_t)0x1);
-	t_tpm_jc *b = tpmi_create_job(cb_work_incr, (void *)(uintptr_t)0x2);
-	t_tpm_jc  r;
+NO_COV void test_cm_tpmi_job_pop(void) {
+	t_cm_tpm     t = {0};
+	t_cm_tpm_jc *a = tpmi_create_job(cb_work_incr, (void *)(uintptr_t)0x1);
+	t_cm_tpm_jc *b = tpmi_create_job(cb_work_incr, (void *)(uintptr_t)0x2);
+	t_cm_tpm_jc  r;
 
 	// popping an empty queue yields an empty job
 	r = tpmi_job_pop(&t);
@@ -62,10 +62,10 @@ NO_COV void test_tpmi_job_pop(void) {
 	assert(t.q_start == NULL && t.q_end == NULL);
 }
 
-NO_COV void test_tpmi_job_thrd_cache_pop(void) {
-	t_tpm        t = {0};
-	t_tpm_jc    *buffer[C_MINI__TPM_TRD_JOB_CACHE_LEN];
-	t_tpm_jc    *jobs[C_MINI__TPM_TRD_JOB_CACHE_LEN + 2];
+NO_COV void test_cm_tpmi_job_thrd_cache_pop(void) {
+	t_cm_tpm     t = {0};
+	t_cm_tpm_jc *buffer[C_MINI__TPM_TRD_JOB_CACHE_LEN];
+	t_cm_tpm_jc *jobs[C_MINI__TPM_TRD_JOB_CACHE_LEN + 2];
 	const size_t cache_len = C_MINI__TPM_TRD_JOB_CACHE_LEN;
 	const size_t total     = C_MINI__TPM_TRD_JOB_CACHE_LEN + 2;
 	int          got;
@@ -80,7 +80,7 @@ NO_COV void test_tpmi_job_thrd_cache_pop(void) {
 	got = tpmi_job_thrd_cache_pop(&t, buffer, 0, cache_len);
 	assert(got == (int)cache_len);
 	nb = 0;
-	for (t_tpm_jc *it = t.q_start; it; it = it->next)
+	for (t_cm_tpm_jc *it = t.q_start; it; it = it->next)
 		nb++;
 	assert(nb == (size_t)2);
 	assert((t.q_start == NULL) == (t.q_end == NULL));

@@ -3,8 +3,8 @@
 #include "tls_tests.h"
 
 NO_COV void test_ctls_rm(void) {
-	t_ctls_typewrap val;
-	void           *data;
+	t_cm_ctls_typewrap val;
+	void              *data;
 
 	val.value.i = 42;
 	val.type    = CTLS_INT;

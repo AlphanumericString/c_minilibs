@@ -2,10 +2,10 @@
 
 #include "da_tests.h"
 
-NO_COV void test_da_set(void) {
-	int  data[5] = {0};
-	t_da da      = {.array = data, .cap_e = 5, .nb_e = 5, .sz_e = sizeof(int)};
-	int  b       = 1;
+NO_COV void test_cm_da_set(void) {
+	int     data[5] = {0};
+	t_cm_da da = {.array = data, .cap_e = 5, .nb_e = 5, .sz_e = sizeof(int)};
+	int     b  = 1;
 
 	da_set(&da, 0, &b);
 	b++;
@@ -23,10 +23,10 @@ NO_COV void test_da_set(void) {
 	da_set(NULL, 0, &b);
 	da_set(&da, 3, NULL);
 }
-NO_COV void test_da_nset(void) {
-	t_da da;
-	int  b       = 2;
-	int  buff[2] = {3, 4};
+NO_COV void test_cm_da_nset(void) {
+	t_cm_da da;
+	int     b       = 2;
+	int     buff[2] = {3, 4};
 
 	da_init(&da, sizeof(int));
 	da_cat_array(&da, (int *)arr_3, 3, sizeof(int));

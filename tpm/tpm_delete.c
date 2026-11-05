@@ -11,7 +11,7 @@
  * pool must no longer be used
  * \ingroup tpm
 **/
-void tpm_delete(t_tpm *tpm, t_cm_call cleanup) {
+void tpm_delete(t_cm_tpm *tpm, t_cm_call cleanup) {
 	void  *val;
 	size_t nb;
 
@@ -41,7 +41,7 @@ void tpm_delete(t_tpm *tpm, t_cm_call cleanup) {
  * \note calls tpm_delete then releases the tpm structure
  * \ingroup tpm
 **/
-void tpm_free(t_tpm *tpm, t_cm_call cleanup) {
+void tpm_free(t_cm_tpm *tpm, t_cm_call cleanup) {
 	if (!tpm) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG)
 		return;

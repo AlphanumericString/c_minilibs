@@ -11,18 +11,18 @@
  * \param cmp comparator function
  * \warning 'from_array' takes ownership of 'arr', do not use a non-allocated
  * or still referenced array.
- * \return t_hp* or NULL if failed
+ * \return t_cm_hp* or NULL if failed
  * \ingroup hp
 **/
-t_hp *hp_new_from_array(void *arr, size_t nb_elems, size_t sz_elem,
-                        t_cm_comparator cmp) {
-	t_hp *hp;
+t_cm_hp *hp_new_from_array(void *arr, size_t nb_elems, size_t sz_elem,
+                           t_cm_comparator cmp) {
+	t_cm_hp *hp;
 
 	if (!arr || !nb_elems || !sz_elem || !cmp) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (NULL);
 	}
-	hp = malloc(sizeof(t_hp));
+	hp = malloc(sizeof(t_cm_hp));
 	if (!hp) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__HP_LOG_EALLOC)
 		return (NULL);
@@ -41,11 +41,11 @@ t_hp *hp_new_from_array(void *arr, size_t nb_elems, size_t sz_elem,
  * \param cmp comparator function (elem is always on the left, arg on the right)
  * \warning 'from_array' takes ownership of 'arr', do not use a non-allocated
  * or still referenced array.
- * \return t_hp* or NULL if failed
+ * \return t_cm_hp* or NULL if failed
  * \ingroup hp
 **/
-t_hp *hp_init_from_array(t_hp *hp, void *arr, size_t nb_elems, size_t sz_elem,
-                         t_cm_comparator cmp) {
+t_cm_hp *hp_init_from_array(t_cm_hp *hp, void *arr, size_t nb_elems,
+                            size_t sz_elem, t_cm_comparator cmp) {
 	if (!hp || !arr || !nb_elems || !sz_elem || !cmp) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (NULL);

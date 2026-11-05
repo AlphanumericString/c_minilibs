@@ -2,8 +2,8 @@
 
 #include "hp_tests.h"
 
-NO_COV void test_hp_create(void) {
-	t_hp *h;
+NO_COV void test_cm_hp_create(void) {
+	t_cm_hp *h;
 
 	h = hp_create(32, sizeof(int), cb_cmp_int);
 	assert(h != NULL);
@@ -22,8 +22,8 @@ NO_COV void test_hp_create(void) {
 
 	assert(hp_create(32, 0, cb_cmp_int) == NULL);
 }
-NO_COV void test_hp_init(void) {
-	t_hp h;
+NO_COV void test_cm_hp_init(void) {
+	t_cm_hp h;
 
 	assert(hp_init(&h, 32, sizeof(int), cb_cmp_int) == &h);
 	assert(h.elems != NULL);

@@ -2,10 +2,10 @@
 
 #include "rb_tests.h"
 
-NO_COV void test_rb_get(void) {
-	t_rb rb     = {0};
-	int  arr[4] = {1, 2, 3, 4};
-	int  out    = 0;
+NO_COV void test_cm_rb_get(void) {
+	t_cm_rb rb     = {0};
+	int     arr[4] = {1, 2, 3, 4};
+	int     out    = 0;
 
 	const int target            = 3;
 	const int target_not_in_set = 99;
@@ -24,10 +24,10 @@ NO_COV void test_rb_get(void) {
 	rb_destroy(&rb);
 }
 
-NO_COV void test_rb_nget(void) {
-	t_rb rb     = {0};
-	int  arr[4] = {1, 2, 3, 4};
-	int  out[2] = {0};
+NO_COV void test_cm_rb_nget(void) {
+	t_cm_rb rb     = {0};
+	int     arr[4] = {1, 2, 3, 4};
+	int     out[2] = {0};
 
 	int       target            = 2;
 	const int target_not_in_set = 99;

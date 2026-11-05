@@ -6,15 +6,17 @@
 # Removes:
 #   - the implementation directory  ./<module_name>
 #   - the associated tests          ./tests/<module_name>_tests
+#   - the associated examples       ./examples/<module_name>
 #   - the amalgamated single header ./single/<module_name>.h
-# and, when a Makefile is given, the module from its MODULES list.
+# and, when a Makefile is given, the module from its MODULES list
+# (which also drives the doxygen INPUT via `make documentation`).
 
 set -eu
 
 name=${1:?missing module name}
 makefile=${2:-}
 
-rm -rf -- "$name" "tests/${name}_tests" "single/${name}.h"
+rm -rf -- "$name" "tests/${name}_tests" "examples/${name}" "single/${name}.h"
 
 if [ -n "$makefile" ] && [ -f "$makefile" ]; then
 	NAME="$name" perl -i -pe '

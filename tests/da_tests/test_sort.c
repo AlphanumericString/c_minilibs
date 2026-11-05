@@ -2,8 +2,8 @@
 
 #include "da_tests.h"
 
-NO_COV void test_da_sort(void) {
-	t_da da;
+NO_COV void test_cm_da_sort(void) {
+	t_cm_da da;
 
 	da_init(&da, sizeof(int));
 	da_cat_array(&da, (int *)arr_5, 5, sizeof(int));
@@ -20,8 +20,8 @@ NO_COV void test_da_sort(void) {
 	assert(da_sort(&da, NULL) == false);
 	da_destroy(&da);
 }
-NO_COV void test_da_nsort(void) {
-	t_da da;
+NO_COV void test_cm_da_nsort(void) {
+	t_cm_da da;
 
 	da_init(&da, sizeof(int));
 	da_cat_array(&da, (int[]){3, 2, 1, 4, 5}, 5, sizeof(int));

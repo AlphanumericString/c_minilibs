@@ -3,14 +3,14 @@
 
 #include "da_tests.h"
 
-NO_COV void test_da_to_array(void) {
-	const t_da da = {
+NO_COV void test_cm_da_to_array(void) {
+	const t_cm_da da = {
 	    .array = (void *)&arr_5,
 	    .cap_e = 5,
 	    .nb_e  = 5,
 	    .sz_e  = sizeof(int),
 	};
-	const t_da da_err = {
+	const t_cm_da da_err = {
 	    .array = NULL,
 	    .cap_e = 99,
 	    .nb_e  = 56,
@@ -33,14 +33,14 @@ NO_COV void test_da_to_array(void) {
 	assert(da_to_array(NULL) == NULL);
 	assert(da_to_array(&da_err) == NULL);
 }
-NO_COV void test_da_to_loc_array(void) {
-	const t_da da = {
+NO_COV void test_cm_da_to_loc_array(void) {
+	const t_cm_da da = {
 	    .array = (void *)&arr_5,
 	    .cap_e = 5,
 	    .nb_e  = 1,
 	    .sz_e  = sizeof(int),
 	};
-	const t_da da2 = {
+	const t_cm_da da2 = {
 	    .array = (void *)&arr_5,
 	    .cap_e = 5,
 	    .nb_e  = 5,

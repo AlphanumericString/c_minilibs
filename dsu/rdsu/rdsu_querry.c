@@ -8,7 +8,7 @@
  * \return true if related, false otherwise
  * \ingroup rdsu
 **/
-bool rdsu_is_related(const t_rdsu *ds, size_t x, size_t y) {
+bool rdsu_is_related(const t_cm_rdsu *ds, size_t x, size_t y) {
 	if (!ds || (x > y ? x : y) > ds->size) return (false);
 	return (rdsu_find(ds, x) == rdsu_find(ds, y));
 }
@@ -18,7 +18,7 @@ bool rdsu_is_related(const t_rdsu *ds, size_t x, size_t y) {
  * \return true if valid, false otherwise
  * \ingroup rdsu
 **/
-bool rdsu_validate(const t_rdsu *rdsu) {
+bool rdsu_validate(const t_cm_rdsu *rdsu) {
 
 	if (!rdsu || !rdsu->size || !rdsu->rank || !rdsu->parent) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)

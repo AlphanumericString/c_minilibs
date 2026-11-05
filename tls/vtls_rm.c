@@ -12,8 +12,8 @@
  * \ingroup vtls
 **/
 bool vtls_rm(const char *v_name) {
-	t_vtls *vtls = pthread_getspecific(vtls_key);
-	size_t  i    = 0;
+	t_cm_vtls *vtls = pthread_getspecific(vtls_key);
+	size_t     i    = 0;
 
 	if (!v_name) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__VTLS_EARG);
@@ -29,7 +29,8 @@ bool vtls_rm(const char *v_name) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__VTLS_FAILLURE);
 		return (false);
 	}
-	memcpy(&(vtls->data[i]), &(vtls->data[vtls->len - 1]), sizeof(t_vtls_key));
+	memcpy(&(vtls->data[i]), &(vtls->data[vtls->len - 1]),
+	       sizeof(t_cm_vtls_key));
 	vtls->len--;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__VTLS_SUCCESS);
 	return (true);

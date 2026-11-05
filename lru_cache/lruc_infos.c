@@ -6,7 +6,7 @@
  * \return true if the cache is valid, false otherwise
  * \ingroup lruc
 **/
-bool lruc_is_valid(const t_lruc *cache) {
+bool lruc_is_valid(const t_cm_lruc *cache) {
 	return (cache && cache->buckets && cache->minHeap && cache->buckets_nb &&
 	        cache->node_nb <= cache->buckets_nb &&
 	        (!cache->node_nb || (cache->MRU && cache->LRU)));
@@ -17,7 +17,7 @@ bool lruc_is_valid(const t_lruc *cache) {
  * \return size of the cache
  * \ingroup lruc
 **/
-size_t lruc_size(const t_lruc *cache) {
+size_t lruc_size(const t_cm_lruc *cache) {
 	return (cache->node_nb);
 }
 /**
@@ -26,7 +26,7 @@ size_t lruc_size(const t_lruc *cache) {
  * \return number of hits
  * \ingroup lruc
 **/
-uint64_t lruc_hits(const t_lruc *cache) {
+uint64_t lruc_hits(const t_cm_lruc *cache) {
 	return (cache->stats.hit);
 }
 /**
@@ -35,7 +35,7 @@ uint64_t lruc_hits(const t_lruc *cache) {
  * \return number of misses
  * \ingroup lruc
 **/
-uint64_t lruc_misses(const t_lruc *cache) {
+uint64_t lruc_misses(const t_cm_lruc *cache) {
 	return (cache->stats.misses);
 }
 /**
@@ -44,7 +44,7 @@ uint64_t lruc_misses(const t_lruc *cache) {
  * \return number of expired elements
  * \ingroup lruc
 **/
-uint64_t lruc_expired(const t_lruc *cache) {
+uint64_t lruc_expired(const t_cm_lruc *cache) {
 	return (cache->stats.expired);
 }
 /**
@@ -53,7 +53,7 @@ uint64_t lruc_expired(const t_lruc *cache) {
  * \return statistics of the cache
  * \ingroup lruc
 **/
-t_lruc_stats lruc_stats(const t_lruc *cache) {
+t_cm_lruc_stats lruc_stats(const t_cm_lruc *cache) {
 	return (cache->stats);
 }
 /**
@@ -62,7 +62,7 @@ t_lruc_stats lruc_stats(const t_lruc *cache) {
  * \return number of reserved (pre-allocated) nodes
  * \ingroup lruc
 **/
-size_t lruc_reserved_nb(const t_lruc *cache) {
+size_t lruc_reserved_nb(const t_cm_lruc *cache) {
 	return (cache->reserved_nodes_nb);
 }
 /**
@@ -71,7 +71,7 @@ size_t lruc_reserved_nb(const t_lruc *cache) {
  * \return true if at least one reserved node is available, false otherwise
  * \ingroup lruc
 **/
-bool lruc_has_reserved(const t_lruc *cache) {
+bool lruc_has_reserved(const t_cm_lruc *cache) {
 	return (cache->reserved_nodes_nb > 0);
 }
 /**
@@ -80,6 +80,6 @@ bool lruc_has_reserved(const t_lruc *cache) {
  * \return maximum number of reservable nodes
  * \ingroup lruc
 **/
-size_t lruc_max_reserve(const t_lruc *cache) {
+size_t lruc_max_reserve(const t_cm_lruc *cache) {
 	return (cache->buckets_nb - (cache->node_nb + cache->reserved_nodes_nb));
 }

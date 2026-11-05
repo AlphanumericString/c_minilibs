@@ -3,8 +3,8 @@
 
 #include "lru_cache_tests.h"
 
-NO_COV void test_lruci_keyinhash(void) {
-	t_lruc      c;
+NO_COV void test_cm_lruci_keyinhash(void) {
+	t_cm_lruc   c;
 	size_t      returnd_hash, actual_hash;
 	const char *key1 = "big key";
 	const char *key2 = "small key";
@@ -34,8 +34,8 @@ NO_COV void test_lruci_keyinhash(void) {
 	assert(returnd_hash == actual_hash % c.buckets_nb);
 	lruc_destroy(&c);
 }
-NO_COV void test_lruci_keyinlist(void) {
-	t_lruc      c;
+NO_COV void test_cm_lruci_keyinlist(void) {
+	t_cm_lruc   c;
 	const char *key1 = "big key";
 	const char *val1 = "big door";
 	const char *key2 = "small key";
@@ -54,11 +54,11 @@ NO_COV void test_lruci_keyinlist(void) {
 	assert(lruci_keyinlist(&c, key4, strlen(key4)) == NULL);
 	lruc_destroy(&c);
 }
-NO_COV void test_lruci_node_eq(void) {
-	const char    *key1 = "aaaaAAAAAAAAAAAAAAAAa";
-	const char    *key2 = "bbbbBBBBBBBBBBBBBbbbb";
-	t_lruc_keynode kv1  = {0};
-	t_lruc_keynode kv2  = kv1;
+NO_COV void test_cm_lruci_node_eq(void) {
+	const char       *key1 = "aaaaAAAAAAAAAAAAAAAAa";
+	const char       *key2 = "bbbbBBBBBBBBBBBBBbbbb";
+	t_cm_lruc_keynode kv1  = {0};
+	t_cm_lruc_keynode kv2  = kv1;
 
 	assert(lruci_node_eq(&kv1, &kv1) == true);
 	assert(lruci_node_eq(&kv2, &kv2) == true);

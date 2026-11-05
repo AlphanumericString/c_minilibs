@@ -6,7 +6,7 @@
 
 static char *to_add = "zod_";
 
-static bool forward_stradd_cache(t_keyvalue *value, void *u_val) {
+static bool forward_stradd_cache(t_cm_keyvalue *value, void *u_val) {
 	char *s;
 
 	assert(value);
@@ -20,10 +20,10 @@ static bool forward_stradd_cache(t_keyvalue *value, void *u_val) {
 	return (true);
 }
 
-NO_COV void test_lruc_foreach(void) {
+NO_COV void test_cm_lruc_foreach(void) {
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
-	t_lruc      c;
+	t_cm_lruc   c;
 
 	v1 = strdup("toto_1");
 	v2 = strdup("toto_2");
@@ -43,7 +43,7 @@ NO_COV void test_lruc_foreach(void) {
 	return;
 }
 
-static bool record_order_cb(t_keyvalue *value, void *u_val) {
+static bool record_order_cb(t_cm_keyvalue *value, void *u_val) {
 	const char **order = u_val;
 	int          i     = 0;
 	while (order[i] != NULL)
@@ -52,10 +52,10 @@ static bool record_order_cb(t_keyvalue *value, void *u_val) {
 	return true;
 }
 
-NO_COV void test_lruc_foreach_ru_ordered(void) {
+NO_COV void test_cm_lruc_foreach_ru_ordered(void) {
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
-	t_lruc      c;
+	t_cm_lruc   c;
 	const char *order[5] = {NULL};
 
 	v1 = strdup("1");
@@ -78,10 +78,10 @@ NO_COV void test_lruc_foreach_ru_ordered(void) {
 	lruc_destroy(&c);
 }
 
-NO_COV void test_lruc_foreach_ttl_ordered(void) {
+NO_COV void test_cm_lruc_foreach_ttl_ordered(void) {
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
-	t_lruc      c;
+	t_cm_lruc   c;
 	char       *order[5] = {NULL};
 
 	v1 = strdup("1");

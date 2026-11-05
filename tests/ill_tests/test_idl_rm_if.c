@@ -2,25 +2,25 @@
 
 #include "ill_tests.h"
 
-NO_COV static size_t collect(t_idl *head, int *out, size_t cap) {
-	size_t n    = 0;
-	t_idl *prev = NULL;
+NO_COV static size_t collect(t_cm_idl *head, int *out, size_t cap) {
+	size_t    n    = 0;
+	t_cm_idl *prev = NULL;
 
 	while (head && n < cap) {
 		assert(head->prev == prev);
-		out[n++] = ((t_test_dnode *)idl_ntoe(head))->value;
+		out[n++] = ((t_cm_test_dnode *)idl_ntoe(head))->value;
 		prev     = head;
 		head     = head->next;
 	}
 	return n;
 }
 
-NO_COV void test_idl_rm_if(void) {
-	t_test_dnode nodes[6];
-	t_idl       *head = NULL;
-	int          out[6];
-	int          exp_keep[3] = {2, 4, 6};
-	size_t       i, n;
+NO_COV void test_cm_idl_rm_if(void) {
+	t_cm_test_dnode nodes[6];
+	t_cm_idl       *head = NULL;
+	int             out[6];
+	int             exp_keep[3] = {2, 4, 6};
+	size_t          i, n;
 
 	for (i = 0; i < 6; i++) {
 		INIT_DNODE(nodes[i], (int)(i + 1), (int)i);

@@ -2,9 +2,9 @@
 
 #include "rdsu_tests.h"
 
-NO_COV void test_rdsu_union(void) {
-	t_rdsu *rdsu = rdsu_new(5);
-	t_rdsu  no_rank, no_parent, no_size;
+NO_COV void test_cm_rdsu_union(void) {
+	t_cm_rdsu *rdsu = rdsu_new(5);
+	t_cm_rdsu  no_rank, no_parent, no_size;
 
 	assert(rdsu_nb_components(rdsu) == 5); // start state
 	assert(rdsu->rank[0] == 0 && rdsu->parent[0] == 0);
@@ -82,9 +82,9 @@ NO_COV void test_rdsu_union(void) {
 	rdsu_free(&rdsu);
 }
 
-NO_COV void test_rdsu_find(void) {
-	t_rdsu *rdsu = rdsu_new(5);
-	t_rdsu  intact_copy;
+NO_COV void test_cm_rdsu_find(void) {
+	t_cm_rdsu *rdsu = rdsu_new(5);
+	t_cm_rdsu  intact_copy;
 
 	assert(rdsu_find(rdsu, 0) == 0);
 	assert(rdsu_find(rdsu, 1) == 1);
@@ -109,9 +109,9 @@ NO_COV void test_rdsu_find(void) {
 	rdsu_free(&rdsu);
 }
 
-NO_COV void test_rdsu_compress_all(void) {
-	t_rdsu *rdsu = rdsu_new(5);
-	t_rdsu  intact_copy;
+NO_COV void test_cm_rdsu_compress_all(void) {
+	t_cm_rdsu *rdsu = rdsu_new(5);
+	t_cm_rdsu  intact_copy;
 
 	rdsu->rank[0]   = 42;
 	rdsu->parent[0] = 1;

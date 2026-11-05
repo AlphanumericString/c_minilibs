@@ -3,17 +3,18 @@
 #define C_MINI__RDSU_INTERNAL
 #include "rewindable_disjointed_set_union.h"
 
-static inline bool is_log_valid(const t_rdsu *rdsu, const t_rdsu_log *log) {
+static inline bool is_log_valid(const t_cm_rdsu     *rdsu,
+                                const t_cm_rdsu_log *log) {
 	return (rdsu->size > log->elem && rdsu->size > log->p &&
 	        ((log->type == RDSU_LOG_YESRANK && rdsu->size > log->r) ||
 	         log->type == RDSU_LOG_NAYRANK));
 }
 
-t_rdsu_log *rdsui_peek_rewind(const t_rdsu *rdsu) {
+t_cm_rdsu_log *rdsui_peek_rewind(const t_cm_rdsu *rdsu) {
 	return (rdsu->change_log);
 }
-t_rdsu_log *rdsui_pop_rewind(t_rdsu *rdsu) {
-	t_rdsu_log *ret;
+t_cm_rdsu_log *rdsui_pop_rewind(t_cm_rdsu *rdsu) {
+	t_cm_rdsu_log *ret;
 
 	if (!rdsu || !rdsu->parent || !rdsu->rank) return (NULL);
 	ret = rdsui_peek_rewind(rdsu);
@@ -23,7 +24,7 @@ t_rdsu_log *rdsui_pop_rewind(t_rdsu *rdsu) {
 	rdsu->reserved_logs = ret;
 	return (ret);
 }
-static inline bool execute_rewind(t_rdsu *rdsu, t_rdsu_log lg) {
+static inline bool execute_rewind(t_cm_rdsu *rdsu, t_cm_rdsu_log lg) {
 
 	if (is_log_valid(rdsu, &lg) == false) return (false);
 	rdsu->parent[lg.elem] = lg.p;
@@ -36,8 +37,9 @@ static inline bool execute_rewind(t_rdsu *rdsu, t_rdsu_log lg) {
 
 #ifdef C_MINI__RDSU_LOG_CHECK_STRICT
 // horrible performance.
-static inline bool is_log_in_book(const t_rdsu *rdsu, const t_rdsu_log *log) {
-	const t_rdsu_log *entry = rdsu->change_log;
+static inline bool is_log_in_book(const t_cm_rdsu     *rdsu,
+                                  const t_cm_rdsu_log *log) {
+	const t_cm_rdsu_log *entry = rdsu->change_log;
 
 	for (; entry && entry != log; entry = entry->nxt)
 		;
@@ -52,8 +54,8 @@ static inline bool is_log_in_book(const t_rdsu *rdsu, const t_rdsu_log *log) {
  * are given (eg: null rdsu) returns null.
  * \ingroup rdsu
 **/
-t_rdsu_log *rdsu_save_state(const t_rdsu *rdsu) {
-	t_rdsu_log *r;
+t_cm_rdsu_log *rdsu_save_state(const t_cm_rdsu *rdsu) {
+	t_cm_rdsu_log *r;
 
 	if (!rdsu) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
@@ -69,9 +71,9 @@ t_rdsu_log *rdsu_save_state(const t_rdsu *rdsu) {
  * \return true if the operation was successful otherwise false.
  * \ingroup rdsu
 **/
-bool rdsu_rewind(t_rdsu *rdsu) {
-	t_rdsu_log *entry = rdsui_pop_rewind(rdsu);
-	bool        ret;
+bool rdsu_rewind(t_cm_rdsu *rdsu) {
+	t_cm_rdsu_log *entry = rdsui_pop_rewind(rdsu);
+	bool           ret;
 
 	if (!rdsu || !rdsu->parent || !rdsu->rank) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
@@ -101,9 +103,9 @@ bool rdsu_rewind(t_rdsu *rdsu) {
  * log, in case this is false it'll rewind up to null and return false.
  * \ingroup rdsu
 **/
-bool rdsu_rewind_to_state(t_rdsu *rdsu, const t_rdsu_log *lg) {
-	t_rdsu_log *entry;
-	bool        res;
+bool rdsu_rewind_to_state(t_cm_rdsu *rdsu, const t_cm_rdsu_log *lg) {
+	t_cm_rdsu_log *entry;
+	bool           res;
 
 	if (!rdsu) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
@@ -141,8 +143,8 @@ bool rdsu_rewind_to_state(t_rdsu *rdsu, const t_rdsu_log *lg) {
  * \param rdsu the rdsu to clear the log off
  * \ingroup rdsu
 **/
-void rdsu_rewind_clear(t_rdsu *rdsu) {
-	t_rdsu_log *entry;
+void rdsu_rewind_clear(t_cm_rdsu *rdsu) {
+	t_cm_rdsu_log *entry;
 
 	if (!rdsu) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)

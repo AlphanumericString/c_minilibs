@@ -13,23 +13,23 @@
  * \return pointer to the cache
  * \ingroup lruc
 **/
-t_lruc *lruc_init(t_lruc *cache, size_t cap, void (*dtor)(void *)) {
+t_cm_lruc *lruc_init(t_cm_lruc *cache, size_t cap, void (*dtor)(void *)) {
 	if (!cache || !cap) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
 		return (NULL);
 	}
 	bzero(cache, sizeof(*cache));
 	bzero(&cache->stats, sizeof(cache->stats));
-	cache->buckets = calloc(sizeof(t_lruc_keynode *), cap * 2);
+	cache->buckets = calloc(sizeof(t_cm_lruc_keynode *), cap * 2);
 	if (!cache->buckets) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_EALLOC)
 		return (NULL);
 	}
 	cache->minHeap = cache->buckets + cap;
-	bzero(cache->minHeap, sizeof(t_lruc_keynode *) * cap);
+	bzero(cache->minHeap, sizeof(t_cm_lruc_keynode *) * cap);
 	cache->buckets_nb = cap;
 	cache->ttl_glob   = (uint64_t)C_MINI__LRUC_TTL_DFLT;
-	cache->stats      = (t_lruc_stats){0};
+	cache->stats      = (t_cm_lruc_stats){0};
 	cache->dtor       = dtor;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS)
 	return (cache);
@@ -42,8 +42,8 @@ t_lruc *lruc_init(t_lruc *cache, size_t cap, void (*dtor)(void *)) {
  * \return pointer to the new cache
  * \ingroup lruc
 **/
-t_lruc *lruc_create(size_t cap, void (*dtor)(void *)) {
-	t_lruc *ret;
+t_cm_lruc *lruc_create(size_t cap, void (*dtor)(void *)) {
+	t_cm_lruc *ret;
 
 	if (!cap) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
@@ -67,7 +67,7 @@ t_lruc *lruc_create(size_t cap, void (*dtor)(void *)) {
  * \param cache pointer to the cache
  * \ingroup lruc
 **/
-void lruc_destroy(t_lruc *cache) {
+void lruc_destroy(t_cm_lruc *cache) {
 	if (!cache) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
 		return;
@@ -85,7 +85,7 @@ void lruc_destroy(t_lruc *cache) {
  * \param cache the cache to free.
  * \ingroup lruc
 **/
-void lruc_free(t_lruc **cache) {
+void lruc_free(t_cm_lruc **cache) {
 	if (!cache || !*cache) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
 		return;
@@ -105,10 +105,10 @@ void lruc_free(t_lruc **cache) {
  * light for fast access
  * \ingroup lruc
 **/
-size_t lruc_reserve(t_lruc *cache, size_t nb_nodes) {
-	size_t          reserved = 0;
-	size_t          max;
-	t_lruc_keynode *node;
+size_t lruc_reserve(t_cm_lruc *cache, size_t nb_nodes) {
+	size_t             reserved = 0;
+	size_t             max;
+	t_cm_lruc_keynode *node;
 
 	if (!lruc_is_valid(cache)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUC_LOG_EARG)
@@ -117,7 +117,7 @@ size_t lruc_reserve(t_lruc *cache, size_t nb_nodes) {
 	max = lruc_max_reserve(cache);
 	if (nb_nodes > max) nb_nodes = max;
 	while (reserved < nb_nodes) {
-		node = calloc(sizeof(t_lruc_keynode), 1);
+		node = calloc(sizeof(t_cm_lruc_keynode), 1);
 		if (!node) {
 			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_EALLOC)
 			break;

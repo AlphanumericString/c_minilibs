@@ -2,8 +2,8 @@
 
 #include "cdsu_tests.h"
 
-NO_COV void test_cdsu_clr(void) {
-	t_cdsu *cdsu     = cdsu_new(10);
+NO_COV void test_cm_cdsu_clr(void) {
+	t_cm_cdsu *cdsu  = cdsu_new(10);
 	cdsu->parent[0]  = 5;
 	cdsu->rank[0]    = 2;
 	cdsu->components = 4;
@@ -19,8 +19,8 @@ NO_COV void test_cdsu_clr(void) {
 	cdsu_free(&cdsu);
 }
 
-NO_COV void test_cdsu_destroy(void) {
-	t_cdsu cdsu;
+NO_COV void test_cm_cdsu_destroy(void) {
+	t_cm_cdsu cdsu;
 	cdsu_init(&cdsu, 10);
 	cdsu_destroy(&cdsu);
 	assert(cdsu.parent == NULL);
@@ -29,8 +29,8 @@ NO_COV void test_cdsu_destroy(void) {
 	cdsu_destroy(NULL);
 }
 
-NO_COV void test_cdsu_free(void) {
-	t_cdsu *d = cdsu_new(10);
+NO_COV void test_cm_cdsu_free(void) {
+	t_cm_cdsu *d = cdsu_new(10);
 
 	assert(d != NULL);
 	cdsu_free(&d);

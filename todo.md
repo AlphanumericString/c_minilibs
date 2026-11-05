@@ -1,56 +1,43 @@
 # TODO
-
+- `x` done
+- `~` running
+- `:` paused
+- ` ` not started
 General todo
-- [ ] current
-    - [ ] fixes
-    - [ ] coverage
-    - [ ] doc
-    - [ ] impl
-- [ ] new modules
-    - [ ] add ressources for todo new modules
+- [~] current
+    - [~] coverage
+    - [~] impl
+- [:] new modules
+    - [:] add ressources for todo new modules
 
 ## CURRENT MODULES
 ### FIXES
-- [ ] tpm
- - [ ] where the fuck are we loosing jobs?!
 ### COVERAGE
-- [ ] tpm - paused (find lost jobs)
+- [~] tpm
 - [ ] multi threaded tests (needs re-comp for #ifdef branches)
  - [ ] sptr
  - [ ] rb
 ### DOC
-- [x] Add README.md
- - [x] why c_minilib
- - [x] presentation of modules
- - [x] what i learned
-- [x] doxygen ok?
- - [ ] comment why rb grow create new rb
-- [ ] example directory w small example per module
- - [ ] da
- - [ ] dsu
- - [ ] hp
- - [ ] ill
- - [ ] lru_cache
- - [ ] rb
- - [ ] sptr
- - [ ] tls
- - [ ] tpm - paused (find lost jobs)
 ### IMPLEMENTATION
-- [ ] add github CICD rules for merge w main
- - [ ] how
- - [ ] where
- - [ ] how many $/h ?
-- [ ] makefile rules to recomp w multi threaded and merge into coverage
- - [ ] exec tests
-- [ ] ill
- - [ ] elem based functions
- - [ ] set elem based functions as default and node ones as `_node()`
-- [ ] rename all struct/typedef all w `[s|t|e]_cm_` in front for colision resiliency (skip functions name, unlikely)
+- [~] add github CICD rules for merge w main
+ - [x] deploy
+ - [ ] add doxygen step
+  - [ ] check:doxygen does not err out
+  - [:] check:non-internal api for module have doxygen doc
+ - [:] add cppcheck step
+ - [ ] restrict to run only on modules affected by the push (if none found run on all)
+- [:] makefile rules to recomp w multi threaded and merge into coverage
+ - [:] add multi threaded tests
+  - [:] restrict to specific modules
+ - [:] add multi thread tests to coverage mapping
+- [:] ill
+ - [:] elem based functions
+ - [:] set elem based functions as default and node ones as `_node()`
 
 note: new module paused. finish tpm first.
 note: new module paused. finish school project first.
 
-## NEW MODULES
+## NEW MODULES - PAUSED
 sorted by personal familiarity w subject/ ease of project
 - [~] HASHMAPS
  - [x] research - already made a small impl in other project & lruc

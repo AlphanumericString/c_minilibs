@@ -5,10 +5,10 @@
 
 #include "lru_cache_tests.h"
 
-NO_COV void test_lruc_get_lru(void) {
+NO_COV void test_cm_lruc_get_lru(void) {
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
-	t_lruc      c, intact_copy;
+	t_cm_lruc   c, intact_copy;
 
 	v1 = strdup("toto_1");
 	v2 = strdup("toto_2");
@@ -63,10 +63,10 @@ NO_COV void test_lruc_get_lru(void) {
 	lruc_destroy(&c);
 	return;
 }
-NO_COV void test_lruc_get(void) {
+NO_COV void test_cm_lruc_get(void) {
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
-	t_lruc      c, intact_copy;
+	t_cm_lruc   c, intact_copy;
 
 	v1 = strdup("toto_1");
 	v2 = strdup("toto_2");

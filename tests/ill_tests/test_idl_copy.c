@@ -6,7 +6,7 @@
 static int loc_count = 0;
 
 NO_COV static void *foo(const void *e) {
-	static t_test_dnode no_leak = {0};
+	static t_cm_test_dnode no_leak = {0};
 
 	(void)e;
 	if (loc_count++ < 1) return (&no_leak);
@@ -14,8 +14,8 @@ NO_COV static void *foo(const void *e) {
 }
 
 NO_COV static void copy_cleanup_on_failure(void) {
-	t_test_dnode n1, n2, n3;
-	void        *head;
+	t_cm_test_dnode n1, n2, n3;
+	void           *head;
 
 	INIT_DNODE(n1, 42, 1);
 	INIT_DNODE(n2, 84, 2);
@@ -34,9 +34,9 @@ NO_COV static void copy_cleanup_on_failure(void) {
 	assert(head == NULL);
 }
 
-NO_COV void test_idl_copy(void) {
-	t_test_dnode  n1, n2;
-	t_test_dnode *copy, *copy_next;
+NO_COV void test_cm_idl_copy(void) {
+	t_cm_test_dnode  n1, n2;
+	t_cm_test_dnode *copy, *copy_next;
 
 	INIT_DNODE(n1, 42, 1);
 	INIT_DNODE(n2, 84, 2);

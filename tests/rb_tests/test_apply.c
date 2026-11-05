@@ -2,9 +2,9 @@
 
 #include "rb_tests.h"
 
-NO_COV void test_rb_apply(void) {
-	t_rb rb     = {0};
-	int  arr[3] = {1, 2, 3};
+NO_COV void test_cm_rb_apply(void) {
+	t_cm_rb rb     = {0};
+	int     arr[3] = {1, 2, 3};
 
 	rb_init(&rb, sizeof(int));
 	rb_npush(&rb, arr, 3);
@@ -20,10 +20,10 @@ NO_COV void test_rb_apply(void) {
 	rb_destroy(&rb);
 }
 
-NO_COV void test_rb_naplly(void) {
-	t_rb rb     = {0};
-	int  arr[3] = {1, 2, 3};
-	int  out    = 0;
+NO_COV void test_cm_rb_naplly(void) {
+	t_cm_rb rb     = {0};
+	int     arr[3] = {1, 2, 3};
+	int     out    = 0;
 
 	rb_init(&rb, sizeof(int));
 	rb_npush(&rb, arr, 3);

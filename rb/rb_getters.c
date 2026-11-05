@@ -7,7 +7,7 @@
  * \return true if full, false otherwise (also false if !array)
  * \ingroup rb
 **/
-bool rb_full(t_rb rb) {
+bool rb_full(t_cm_rb rb) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 	return (rb.array && rbi_count_get(&rb) == rb.nb_max);
 }
@@ -17,7 +17,7 @@ bool rb_full(t_rb rb) {
  * \return true if empty or no array, false otherwise
  * \ingroup rb
 **/
-bool rb_empty(t_rb rb) {
+bool rb_empty(t_cm_rb rb) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 	return (!rb.array || rbi_count_get(&rb) == 0);
 }
@@ -27,7 +27,7 @@ bool rb_empty(t_rb rb) {
  * \return number of elements in the buffer
  * \ingroup rb
 **/
-size_t rb_size(t_rb rb) {
+size_t rb_size(t_cm_rb rb) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 	return (rbi_count_get(&rb));
 }
@@ -37,7 +37,7 @@ size_t rb_size(t_rb rb) {
  * \return the maximum capacity
  * \ingroup rb
 **/
-size_t rb_capacity(t_rb rb) {
+size_t rb_capacity(t_cm_rb rb) {
 	if (!rb.array) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return (0);
@@ -51,10 +51,10 @@ size_t rb_capacity(t_rb rb) {
  * \return number of free slots
  * \ingroup rb
 **/
-size_t rb_remaining_space(t_rb rb) {
+size_t rb_remaining_space(t_cm_rb rb) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 	return (rb_capacity(rb) - rb_size(rb));
 }
-void *rbi_get_pos(const t_rb *rb, size_t pos) {
+void *rbi_get_pos(const t_cm_rb *rb, size_t pos) {
 	return ((unsigned char *)rb->array + pos * rb->sz_e);
 }

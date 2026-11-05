@@ -5,8 +5,8 @@
 
 #include "lru_cache_tests.h"
 
-NO_COV void test_lruc_size(void) {
-	t_lruc      c;
+NO_COV void test_cm_lruc_size(void) {
+	t_cm_lruc   c;
 	const char *k1 = "titi", *k2 = "toto", *k3 = "tutu";
 
 	lruc_init(&c, 4, free);
@@ -26,8 +26,8 @@ NO_COV void test_lruc_size(void) {
 	lruc_destroy(&c);
 	return;
 }
-NO_COV void test_lruc_hits(void) {
-	t_lruc      c;
+NO_COV void test_cm_lruc_hits(void) {
+	t_cm_lruc   c;
 	const char *k1 = "titi", *k2 = "toto", *k3 = "tutu";
 
 	lruc_init(&c, 4, free);
@@ -52,8 +52,8 @@ NO_COV void test_lruc_hits(void) {
 	lruc_destroy(&c);
 	return;
 }
-NO_COV void test_lruc_misses(void) {
-	t_lruc      c;
+NO_COV void test_cm_lruc_misses(void) {
+	t_cm_lruc   c;
 	const char *k1 = "titi", *k2 = "toto", *k3 = "tutu";
 
 	lruc_init(&c, 4, free);
@@ -79,8 +79,8 @@ NO_COV void test_lruc_misses(void) {
 	return;
 }
 
-NO_COV void test_lruc_expired(void) {
-	t_lruc      c;
+NO_COV void test_cm_lruc_expired(void) {
+	t_cm_lruc   c;
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
 
@@ -106,10 +106,10 @@ NO_COV void test_lruc_expired(void) {
 	return;
 }
 
-NO_COV void test_lruc_stats(void) {
-	t_lruc       c;
-	t_lruc_stats st;
-	const char  *k1 = "titi", *k2 = "toto", *k3 = "tutu";
+NO_COV void test_cm_lruc_stats(void) {
+	t_cm_lruc       c;
+	t_cm_lruc_stats st;
+	const char     *k1 = "titi", *k2 = "toto", *k3 = "tutu";
 
 	lruc_init(&c, 4, free);
 	assert(c.node_nb == 0);
@@ -140,8 +140,8 @@ NO_COV void test_lruc_stats(void) {
 	return;
 }
 
-NO_COV void test_lruc_is_valid(void) {
-	t_lruc      c, intact_copy;
+NO_COV void test_cm_lruc_is_valid(void) {
+	t_cm_lruc   c, intact_copy;
 	const char *k1 = "titi", *k2 = "toto";
 
 	lruc_init(&c, 4, free);
@@ -183,8 +183,8 @@ NO_COV void test_lruc_is_valid(void) {
 	return;
 }
 
-NO_COV void test_lruc_reserved_nb(void) {
-	t_lruc      c;
+NO_COV void test_cm_lruc_reserved_nb(void) {
+	t_cm_lruc   c;
 	const char *k1 = "titi";
 
 	lruc_init(&c, 4, free);
@@ -201,8 +201,8 @@ NO_COV void test_lruc_reserved_nb(void) {
 	return;
 }
 
-NO_COV void test_lruc_has_reserved(void) {
-	t_lruc      c;
+NO_COV void test_cm_lruc_has_reserved(void) {
+	t_cm_lruc   c;
 	const char *k1 = "titi";
 
 	lruc_init(&c, 4, free);
@@ -217,8 +217,8 @@ NO_COV void test_lruc_has_reserved(void) {
 	return;
 }
 
-NO_COV void test_lruc_max_reserve(void) {
-	t_lruc      c;
+NO_COV void test_cm_lruc_max_reserve(void) {
+	t_cm_lruc   c;
 	const char *k1 = "titi";
 
 	lruc_init(&c, 4, free);

@@ -6,8 +6,8 @@
  * \return The removed head node, or NULL if the list was empty.
  * \ingroup idl
 **/
-t_idl *idl_pop(t_idl **head) {
-	t_idl *to_remove;
+t_cm_idl *idl_pop(t_cm_idl **head) {
+	t_cm_idl *to_remove;
 
 	if (!head || !*head) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -27,8 +27,8 @@ t_idl *idl_pop(t_idl **head) {
  * \return The removed tail node, or NULL if the list was empty.
  * \ingroup idl
 **/
-t_idl *idl_pop_back(t_idl **head) {
-	t_idl *ret;
+t_cm_idl *idl_pop_back(t_cm_idl **head) {
+	t_cm_idl *ret;
 
 	if (!head || !*head) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)

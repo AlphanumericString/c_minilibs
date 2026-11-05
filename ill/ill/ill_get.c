@@ -7,9 +7,9 @@
  * \return A pointer to the minimum element, or NULL if the list is empty.
  * \ingroup ill
 **/
-void *ill_get_min(const t_ill *head, t_cm_comparator c) {
-	const t_ill *curr;
-	const t_ill *min;
+void *ill_get_min(const t_cm_ill *head, t_cm_comparator c) {
+	const t_cm_ill *curr;
+	const t_cm_ill *min;
 
 	if (!head || !c) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
@@ -32,9 +32,9 @@ void *ill_get_min(const t_ill *head, t_cm_comparator c) {
  * \return A pointer to the maximum element, or NULL if the list is empty.
  * \ingroup ill
 **/
-void *ill_get_max(const t_ill *head, t_cm_comparator c) {
-	const t_ill *curr;
-	const t_ill *max;
+void *ill_get_max(const t_cm_ill *head, t_cm_comparator c) {
+	const t_cm_ill *curr;
+	const t_cm_ill *max;
 
 	if (!head || !c) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
@@ -57,8 +57,8 @@ void *ill_get_max(const t_ill *head, t_cm_comparator c) {
  * \return A pointer to the k-th element, or NULL if the index is out of bounds.
  * \ingroup ill
 **/
-void *ill_get_kth(const t_ill *head, size_t k) {
-	const t_ill *curr;
+void *ill_get_kth(const t_cm_ill *head, size_t k) {
+	const t_cm_ill *curr;
 
 	if (!head) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)

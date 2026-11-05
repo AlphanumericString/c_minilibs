@@ -3,13 +3,13 @@
 
 #include "hp_tests.h"
 
-NO_COV void test_hp_init_from_array(void) {
-	t_hp hp;
-	int *arr  = malloc(sizeof(int) * 5);
-	int *arr2 = malloc(sizeof(int) * 5);
-	int  a    = 0x42;
-	int  b    = 0x40;
-	int  out;
+NO_COV void test_cm_hp_init_from_array(void) {
+	t_cm_hp hp;
+	int    *arr  = malloc(sizeof(int) * 5);
+	int    *arr2 = malloc(sizeof(int) * 5);
+	int     a    = 0x42;
+	int     b    = 0x40;
+	int     out;
 
 	assert(arr != NULL);
 	assert(arr2 != NULL);
@@ -32,10 +32,10 @@ NO_COV void test_hp_init_from_array(void) {
 	assert(hp_init_from_array(&hp, arr2, 5, sizeof(int), NULL) == NULL);
 	free(arr2);
 }
-NO_COV void test_hp_new_from_array(void) {
-	t_hp *hp;
-	int  *arr  = malloc(sizeof(int) * 5);
-	int  *arr2 = malloc(sizeof(int) * 5);
+NO_COV void test_cm_hp_new_from_array(void) {
+	t_cm_hp *hp;
+	int     *arr  = malloc(sizeof(int) * 5);
+	int     *arr2 = malloc(sizeof(int) * 5);
 
 	assert(arr != NULL);
 	assert(arr2 != NULL);

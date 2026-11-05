@@ -10,7 +10,7 @@
  * \return pointer to the element in the data array, or NULL if out of bounds
  * \ingroup rb
 **/
-void *rb_at(t_rb rb, size_t idx) {
+void *rb_at(t_cm_rb rb, size_t idx) {
 	size_t pos;
 
 	if (idx >= rb_size(rb)) {
@@ -34,7 +34,7 @@ void *rb_at(t_rb rb, size_t idx) {
  * \warning rb_nat assumes that buff is always correctly sized.
  * \ingroup rb
 **/
-void *rb_nat(t_rb rb, size_t idx, size_t n, void *buff) {
+void *rb_nat(t_cm_rb rb, size_t idx, size_t n, void *buff) {
 	size_t start_pos;
 	size_t max;
 	size_t first_chunk;

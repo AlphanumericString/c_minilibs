@@ -2,12 +2,12 @@
 
 #include "ill_tests.h"
 
-NO_COV void test_idl_nprepend(void) {
-	t_test_dnode n0, n1, n2, n3, n4;
-	t_test_dnode n7, n8;
-	t_test_dnode n_neg1, n_neg2;
-	t_idl       *head = NULL;
-	t_idl       *n0_before_op_prv;
+NO_COV void test_cm_idl_nprepend(void) {
+	t_cm_test_dnode n0, n1, n2, n3, n4;
+	t_cm_test_dnode n7, n8;
+	t_cm_test_dnode n_neg1, n_neg2;
+	t_cm_idl       *head = NULL;
+	t_cm_idl       *n0_before_op_prv;
 
 	INIT_DNODE(n0, 0, 0);
 	INIT_DNODE(n1, 1, 1);
@@ -46,7 +46,7 @@ NO_COV void test_idl_nprepend(void) {
 	       n0.dnode.prev == &n_neg1.dnode && n1.dnode.prev == &n0.dnode);
 	n0.dnode.prev = NULL;
 	n_neg1.dnode =
-	    (t_idl){.prev = NULL, .next = NULL, .offset = n_neg1.dnode.offset};
+	    (t_cm_idl){.prev = NULL, .next = NULL, .offset = n_neg1.dnode.offset};
 	// State assert: [NULL, n0, n1 ..] [n-1]
 	assert(n0.dnode.prev == NULL && n0.dnode.next == &n1.dnode);
 	assert(n_neg1.dnode.prev == NULL && n_neg1.dnode.next == NULL);

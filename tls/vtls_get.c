@@ -10,8 +10,8 @@
  * \ingroup vtls
 **/
 void *vtls_get(const char *v_name) {
-	const t_vtls *vtls = pthread_getspecific(vtls_key);
-	size_t        i    = 0;
+	const t_cm_vtls *vtls = pthread_getspecific(vtls_key);
+	size_t           i    = 0;
 
 	if (!vtls || !v_name) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__VTLS_EARG);
@@ -31,7 +31,7 @@ void *vtls_get(const char *v_name) {
  * \ingroup vtls
 **/
 size_t vtls_len(void) {
-	const t_vtls *vtls = pthread_getspecific(vtls_key);
+	const t_cm_vtls *vtls = pthread_getspecific(vtls_key);
 
 	if (!vtls) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__VTLS_FAILLURE);
@@ -47,8 +47,8 @@ size_t vtls_len(void) {
  * \ingroup vtls
 **/
 size_t vtls_sizeof(const char *v_name) {
-	const t_vtls *vtls = pthread_getspecific(vtls_key);
-	size_t        i    = 0;
+	const t_cm_vtls *vtls = pthread_getspecific(vtls_key);
+	size_t           i    = 0;
 
 	if (!vtls || !v_name) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__VTLS_EARG);
@@ -70,8 +70,8 @@ size_t vtls_sizeof(const char *v_name) {
  * \ingroup vtls
 **/
 bool vtls_getout(const char *v_name, void *out) {
-	const t_vtls *vtls = pthread_getspecific(vtls_key);
-	size_t        i    = 0;
+	const t_cm_vtls *vtls = pthread_getspecific(vtls_key);
+	size_t           i    = 0;
 
 	if (!vtls || !v_name) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__VTLS_EARG);

@@ -7,7 +7,7 @@
  * \return The new head of the list.
  * \ingroup ill
 **/
-t_ill *ill_push(t_ill **head, t_ill *node) {
+t_cm_ill *ill_push(t_cm_ill **head, t_cm_ill *node) {
 	if (!head || !node) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return (NULL);
@@ -24,7 +24,7 @@ t_ill *ill_push(t_ill **head, t_ill *node) {
  * \return The new head of the list.
  * \ingroup ill
 **/
-t_ill *ill_npush(t_ill **head, t_ill *nodes) {
+t_cm_ill *ill_npush(t_cm_ill **head, t_cm_ill *nodes) {
 	if (!head || !nodes) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return (NULL);
@@ -41,7 +41,7 @@ t_ill *ill_npush(t_ill **head, t_ill *nodes) {
  * \return The head of the list.
  * \ingroup ill
 **/
-t_ill *ill_push_back(t_ill **head, t_ill *node) {
+t_cm_ill *ill_push_back(t_cm_ill **head, t_cm_ill *node) {
 	if (!head || !node) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return (NULL);

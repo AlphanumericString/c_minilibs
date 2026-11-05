@@ -10,7 +10,7 @@
  * \return true on success, false otherwise
  * \ingroup da
 **/
-bool da_grow(t_da *da) {
+bool da_grow(t_cm_da *da) {
 	size_t new_size;
 	void  *tmp;
 
@@ -43,7 +43,7 @@ bool da_grow(t_da *da) {
  * \return true on success, false otherwise
  * \ingroup da
 **/
-bool da_grow_for_size(t_da *da, size_t minimal_free_elems) {
+bool da_grow_for_size(t_cm_da *da, size_t minimal_free_elems) {
 	size_t new_size;
 	void  *tmp;
 

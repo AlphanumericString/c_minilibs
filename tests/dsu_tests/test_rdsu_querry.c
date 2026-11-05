@@ -2,8 +2,8 @@
 
 #include "rdsu_tests.h"
 
-NO_COV void test_rdsu_is_related(void) {
-	t_rdsu *rdsu = rdsu_new(5);
+NO_COV void test_cm_rdsu_is_related(void) {
+	t_cm_rdsu *rdsu = rdsu_new(5);
 	assert(!rdsu_is_related(rdsu, 0, 1));
 	rdsu_union(rdsu, 0, 1);
 	assert(rdsu_is_related(rdsu, 0, 1));
@@ -14,9 +14,9 @@ NO_COV void test_rdsu_is_related(void) {
 	rdsu_free(&rdsu);
 }
 
-NO_COV void test_rdsu_validate(void) {
-	t_rdsu *rdsu = rdsu_new(5);
-	t_rdsu  intact_copy;
+NO_COV void test_cm_rdsu_validate(void) {
+	t_cm_rdsu *rdsu = rdsu_new(5);
+	t_cm_rdsu  intact_copy;
 
 	assert(rdsu_validate(rdsu));
 	rdsu_union(rdsu, 0, 1);

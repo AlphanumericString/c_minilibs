@@ -7,15 +7,16 @@
 #define C_MINI__LRUC_INTERNAL
 #include "least_recently_used_cache.h"
 
-static inline void lruci_hsh_push(t_lruc *c, t_lruc_keynode *n, size_t hash) {
+static inline void lruci_hsh_push(t_cm_lruc *c, t_cm_lruc_keynode *n,
+                                  size_t hash) {
 	hash             = hash % c->buckets_nb;
 	n->hash_next     = NULL;
 	n->hash_next     = c->buckets[hash];
 	c->buckets[hash] = n;
 }
 
-static bool insert_to_structs(t_lruc_keynode kv, t_lruc_keynode *node,
-                              t_lruc *c, size_t h_pos) {
+static bool insert_to_structs(t_cm_lruc_keynode kv, t_cm_lruc_keynode *node,
+                              t_cm_lruc *c, size_t h_pos) {
 	*node = kv;
 	lruci_lru_push(c, node);
 	lruci_hsh_push(c, node, h_pos);
@@ -23,17 +24,17 @@ static bool insert_to_structs(t_lruc_keynode kv, t_lruc_keynode *node,
 	lruci_hp_push(c, node);
 	return (true);
 }
-static t_lruc_keynode *get_node_to_update(t_lruc *c, t_lruc_keynode *node,
-                                          size_t hash_pos) {
+static t_cm_lruc_keynode *
+get_node_to_update(t_cm_lruc *c, t_cm_lruc_keynode *node, size_t hash_pos) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_UPDATEVAL, node->kv.key,
 	       node->kv.k_len)
 	lruci_unlink_node(c, node, hash_pos);
 	return (node);
 }
-static t_lruc_keynode *create_node(t_lruc *c, t_lruc_keynode *node) {
+static t_cm_lruc_keynode *create_node(t_cm_lruc *c, t_cm_lruc_keynode *node) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_CREATEVAL,
 	       node ? node->kv.key : NULL, node ? node->kv.k_len : -1)
-	node = calloc(sizeof(t_lruc_keynode), 1);
+	node = calloc(sizeof(t_cm_lruc_keynode), 1);
 	if (!node) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_EALLOC)
 		return (NULL);
@@ -41,9 +42,9 @@ static t_lruc_keynode *create_node(t_lruc *c, t_lruc_keynode *node) {
 	c->node_nb++;
 	return (node);
 }
-static t_lruc_keynode *reuse_node(t_lruc *c, size_t hash_pos) {
-	const uint64_t  now = lruci_timenow();
-	t_lruc_keynode *node;
+static t_cm_lruc_keynode *reuse_node(t_cm_lruc *c, size_t hash_pos) {
+	const uint64_t     now = lruci_timenow();
+	t_cm_lruc_keynode *node;
 
 	if (now == (uint64_t)-1 && c->ttl_glob != C_MINI__LRUC_TTL_DFLT) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK);
@@ -63,9 +64,9 @@ static t_lruc_keynode *reuse_node(t_lruc *c, size_t hash_pos) {
 	lruci_unlink_node(c, node, hash_pos);
 	return (node);
 }
-static t_lruc_keynode *get_node(t_lruc *c, t_lruc_keynode add_val,
-                                size_t *hash_pos) {
-	t_lruc_keynode *node;
+static t_cm_lruc_keynode *get_node(t_cm_lruc *c, t_cm_lruc_keynode add_val,
+                                   size_t *hash_pos) {
+	t_cm_lruc_keynode *node;
 
 	node = lruci_keyinhash(c, add_val.kv.key, add_val.kv.k_len, hash_pos);
 	if (node != NULL) {
@@ -80,9 +81,9 @@ static t_lruc_keynode *get_node(t_lruc *c, t_lruc_keynode add_val,
 	}
 	return (node);
 }
-static bool cache_put_internal(t_lruc *c, t_lruc_keynode to_add) {
-	t_lruc_keynode *node = NULL;
-	size_t          hash_pos;
+static bool cache_put_internal(t_cm_lruc *c, t_cm_lruc_keynode to_add) {
+	t_cm_lruc_keynode *node = NULL;
+	size_t             hash_pos;
 
 	if (!lruc_is_valid(c) || !to_add.kv.key || !to_add.kv.k_len ||
 	    to_add.kv.k_len == (size_t)-1) {
@@ -100,7 +101,7 @@ static bool cache_put_internal(t_lruc *c, t_lruc_keynode to_add) {
  * \return 0 on success, -1 on failure
  * \ingroup lruc
 **/
-bool lruc_put_kv(t_lruc *cache, t_keyvalue kv) {
+bool lruc_put_kv(t_cm_lruc *cache, t_cm_keyvalue kv) {
 	uint64_t now;
 
 	if (cache && cache->ttl_glob != C_MINI__LRUC_TTL_DFLT) {
@@ -110,7 +111,7 @@ bool lruc_put_kv(t_lruc *cache, t_keyvalue kv) {
 			return (false);
 		}
 	} else now = 0;
-	return (cache_put_internal(cache, (t_lruc_keynode){
+	return (cache_put_internal(cache, (t_cm_lruc_keynode){
 	                                      .kv         = kv,
 	                                      .time       = now,
 	                                      .lru_next   = 0,
@@ -128,7 +129,7 @@ bool lruc_put_kv(t_lruc *cache, t_keyvalue kv) {
  * \return 0 on success, -1 on failure
  * \ingroup lruc
 **/
-bool lruc_put(t_lruc *cache, const void *key, size_t key_len,
+bool lruc_put(t_cm_lruc *cache, const void *key, size_t key_len,
               const void *value) {
 	uint64_t now;
 
@@ -139,16 +140,16 @@ bool lruc_put(t_lruc *cache, const void *key, size_t key_len,
 			return (false);
 		}
 	} else now = 0;
-	return (cache_put_internal(cache,
-	                           (t_lruc_keynode){
-	                               .kv       = (t_keyvalue){.key   = (void *)key,
-	                                                        .k_len = key_len,
-	                                                        .value = (void *)value},
-	                               .time     = now,
-	                               .lru_next = NULL,
-	                               .lru_prev = NULL,
-	                               .heap_index = 0,
-	                               .hash_next  = NULL,
+	return (cache_put_internal(
+	    cache, (t_cm_lruc_keynode){
+	               .kv         = (t_cm_keyvalue){.key   = (void *)key,
+	                                             .k_len = key_len,
+	                                             .value = (void *)value},
+	               .time       = now,
+	               .lru_next   = NULL,
+	               .lru_prev   = NULL,
+	               .heap_index = 0,
+	               .hash_next  = NULL,
     }));
 }
 /**
@@ -161,7 +162,7 @@ bool lruc_put(t_lruc *cache, const void *key, size_t key_len,
  * \return 0 on success, -1 on failure
  * \ingroup lruc
 **/
-bool lruc_put_ttl(t_lruc *cache, const void *key, size_t key_len,
+bool lruc_put_ttl(t_cm_lruc *cache, const void *key, size_t key_len,
                   const void *value, uint64_t ttl_ms) {
 	uint64_t now;
 
@@ -170,15 +171,15 @@ bool lruc_put_ttl(t_lruc *cache, const void *key, size_t key_len,
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK)
 		return (false);
 	}
-	return (cache_put_internal(cache,
-	                           (t_lruc_keynode){
-	                               .kv       = (t_keyvalue){.key   = (void *)key,
-	                                                        .k_len = key_len,
-	                                                        .value = (void *)value},
-	                               .time     = now + ttl_ms,
-	                               .lru_next = NULL,
-	                               .lru_prev = NULL,
-	                               .heap_index = 0,
-	                               .hash_next  = NULL,
+	return (cache_put_internal(
+	    cache, (t_cm_lruc_keynode){
+	               .kv         = (t_cm_keyvalue){.key   = (void *)key,
+	                                             .k_len = key_len,
+	                                             .value = (void *)value},
+	               .time       = now + ttl_ms,
+	               .lru_next   = NULL,
+	               .lru_prev   = NULL,
+	               .heap_index = 0,
+	               .hash_next  = NULL,
     }));
 }

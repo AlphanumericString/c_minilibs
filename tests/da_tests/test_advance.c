@@ -2,8 +2,8 @@
 
 #include "da_tests.h"
 
-NO_COV void test_da_advance(void) {
-	t_da da;
+NO_COV void test_cm_da_advance(void) {
+	t_cm_da da;
 
 	da_init(&da, sizeof(int));
 	da_cat_array(&da, (int *)arr_5, 5, sizeof(int));

@@ -3,8 +3,8 @@
 
 #include "cdsu_tests.h"
 
-NO_COV void test_cdsu_is_related(void) {
-	t_cdsu *cdsu = cdsu_new(5);
+NO_COV void test_cm_cdsu_is_related(void) {
+	t_cm_cdsu *cdsu = cdsu_new(5);
 	assert(!cdsu_is_related(cdsu, 0, 1));
 	cdsu_union(cdsu, 0, 1);
 	assert(cdsu_is_related(cdsu, 0, 1));
@@ -15,8 +15,8 @@ NO_COV void test_cdsu_is_related(void) {
 	cdsu_free(&cdsu);
 }
 
-NO_COV void test_cdsu_strict_is_related(void) {
-	t_cdsu *cdsu = cdsu_new(5);
+NO_COV void test_cm_cdsu_strict_is_related(void) {
+	t_cm_cdsu *cdsu = cdsu_new(5);
 	assert(!cdsu_strict_is_related(cdsu, 0, 1));
 	cdsu_union(cdsu, 0, 1);
 	assert(cdsu_strict_is_related(cdsu, 0, 1));
@@ -26,9 +26,9 @@ NO_COV void test_cdsu_strict_is_related(void) {
 	cdsu_free(&cdsu);
 }
 
-NO_COV void test_cdsu_validate(void) {
-	t_cdsu *cdsu = cdsu_new(5);
-	t_cdsu  intact_copy;
+NO_COV void test_cm_cdsu_validate(void) {
+	t_cm_cdsu *cdsu = cdsu_new(5);
+	t_cm_cdsu  intact_copy;
 
 	assert(cdsu_validate(cdsu));
 	cdsu_union(cdsu, 0, 1);

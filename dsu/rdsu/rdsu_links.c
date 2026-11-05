@@ -7,7 +7,7 @@
 /*
  * push a log
  */
-static inline bool rdsui_push_rewind(t_rdsu *rdsu, t_rdsu_log *entry) {
+static inline bool rdsui_push_rewind(t_cm_rdsu *rdsu, t_cm_rdsu_log *entry) {
 	entry->nxt       = rdsu->change_log;
 	rdsu->change_log = entry;
 	return (true);
@@ -15,18 +15,18 @@ static inline bool rdsui_push_rewind(t_rdsu *rdsu, t_rdsu_log *entry) {
 /*
  * init a log
  */
-static inline t_rdsu_log rdsui_init_log(size_t elem, uint16_t value,
-                                        uint16_t             rank,
-                                        enum s_rdsu_log_type type) {
-	return ((t_rdsu_log){
+static inline t_cm_rdsu_log rdsui_init_log(size_t elem, uint16_t value,
+                                           uint16_t                rank,
+                                           enum s_cm_rdsu_log_type type) {
+	return ((t_cm_rdsu_log){
 	    .type = type, .elem = elem, .p = value, .r = rank, .nxt = NULL});
 }
 
 /*
  * get a log from the reserved pile or create a new one
  */
-static inline t_rdsu_log *rdsui_get_log(t_rdsu *rdsu) {
-	t_rdsu_log *ret;
+static inline t_cm_rdsu_log *rdsui_get_log(t_cm_rdsu *rdsu) {
+	t_cm_rdsu_log *ret;
 
 	if (rdsu->reserved_logs) {
 		ret                 = rdsu->reserved_logs;
@@ -34,7 +34,7 @@ static inline t_rdsu_log *rdsui_get_log(t_rdsu *rdsu) {
 		ret->nxt            = NULL;
 		return (ret);
 	}
-	return ((t_rdsu_log *)calloc(sizeof(t_rdsu_log), 1));
+	return ((t_cm_rdsu_log *)calloc(sizeof(t_cm_rdsu_log), 1));
 }
 // ----------
 
@@ -45,10 +45,10 @@ static inline t_rdsu_log *rdsui_get_log(t_rdsu *rdsu) {
  * \param y second element to link
  * \ingroup rdsu
 **/
-bool rdsu_union(t_rdsu *ds, size_t x, size_t y) {
-	t_rdsu_log *entry;
-	uint16_t    root_x;
-	uint16_t    root_y;
+bool rdsu_union(t_cm_rdsu *ds, size_t x, size_t y) {
+	t_cm_rdsu_log *entry;
+	uint16_t       root_x;
+	uint16_t       root_y;
 
 	if (!ds || !ds->rank || !ds->parent || !ds->size || y == x ||
 	    x >= ds->size || y >= ds->size) {
@@ -101,7 +101,7 @@ bool rdsu_union(t_rdsu *ds, size_t x, size_t y) {
  * \return the parent of x
  * \ingroup rdsu
 **/
-uint16_t rdsu_find(const t_rdsu *ds, size_t x) {
+uint16_t rdsu_find(const t_cm_rdsu *ds, size_t x) {
 	if (!ds || !ds->size || !ds->parent || !ds->rank || x > ds->size) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
 		return (-1);
@@ -119,7 +119,7 @@ uint16_t rdsu_find(const t_rdsu *ds, size_t x) {
  * \note invalidates all rdsu log entries
  * \ingroup rdsu
 **/
-size_t rdsu_compress_all(t_rdsu *ds) {
+size_t rdsu_compress_all(t_cm_rdsu *ds) {
 
 	if (!ds || !ds->size || !ds->parent) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)

@@ -13,16 +13,16 @@
 // | OVERRIDE THIS TO SET YOUR OWN STRUCT NAME INSTEAD |
 // +---------------------------------------------------+
 #ifndef C_MINI__FTLS_STRUCT
-#	define C_MINI__FTLS_STRUCT struct s_tls_ftls_node
+#	define C_MINI__FTLS_STRUCT struct s_cm_tls_ftls_node
 #endif
 
 /**
  * \brief the ftls is the fastest of the tls and provides type safety but can
  * ONLY be set at compile time.
  * \note please override with your own struct (or alternatively, name your own
- * struct s_tls_ftls_node).
+ * struct s_cm_tls_ftls_node).
 **/
-typedef C_MINI__FTLS_STRUCT t_ftls;
+typedef C_MINI__FTLS_STRUCT t_cm_ftls;
 
 #if defined(C_MINI__FTLS_INTERNAL) || defined(C_MINI__FTLS_GET)
 /**
@@ -32,7 +32,7 @@ typedef C_MINI__FTLS_STRUCT t_ftls;
 extern pthread_key_t ftls_key;
 #endif // C_MINI__FTLS_INTERNAL
 
-t_ftls *ftls_get(void);
+t_cm_ftls *ftls_get(void);
 
 #ifdef C_MINI__FTLS_GET
 #	include <stdlib.h>
@@ -56,7 +56,7 @@ static void COV_IGNORE __attribute__((destructor())) ftls_dtor(void) {
  * \note check the tests for an example.
  * \ingroup ftls
 **/
-void __attribute__((constructor())) init_ftls(void) {
+void __attribute__((constructor())) init_cm_ftls(void) {
 	pthread_key_create(&ftls_key, free);
 }
 
@@ -66,8 +66,8 @@ void __attribute__((constructor())) init_ftls(void) {
  * \note check the tests for an example.
  * \ingroup ftls
 **/
-t_ftls *ftls_get(void) {
-	t_ftls *ftls = pthread_getspecific(ftls_key);
+t_cm_ftls *ftls_get(void) {
+	t_cm_ftls *ftls = pthread_getspecific(ftls_key);
 
 	if (!ftls) {
 		ftls = calloc(1, sizeof(*ftls));

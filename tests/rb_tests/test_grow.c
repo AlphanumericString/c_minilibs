@@ -3,11 +3,11 @@
 
 #include "rb_tests.h"
 
-NO_COV void test_rb_grow(void) {
-	int   arr[] = {1, 2, 3, 4, 5, 6, 7, 8};
-	t_rb  rb    = {0};
-	t_rb  malicious;
-	t_rb *p;
+NO_COV void test_cm_rb_grow(void) {
+	int      arr[] = {1, 2, 3, 4, 5, 6, 7, 8};
+	t_cm_rb  rb    = {0};
+	t_cm_rb  malicious;
+	t_cm_rb *p;
 
 	rb_create(&rb, sizeof(int), 2);
 	rb_npush(&rb, arr, 2);

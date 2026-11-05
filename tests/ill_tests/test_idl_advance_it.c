@@ -2,12 +2,12 @@
 
 #include "ill_tests.h"
 
-NO_COV void test_idl_advance_it(void) {
-	t_test_dnode n1, n2, n3;
-	t_idl       *head = NULL;
-	t_idl       *it;
-	void        *e;
-	size_t       off = offsetof(t_test_dnode, dnode);
+NO_COV void test_cm_idl_advance_it(void) {
+	t_cm_test_dnode n1, n2, n3;
+	t_cm_idl       *head = NULL;
+	t_cm_idl       *it;
+	void           *e;
+	size_t          off = offsetof(t_cm_test_dnode, dnode);
 
 	INIT_DNODE(n1, 10, 1);
 	INIT_DNODE(n2, 20, 2);

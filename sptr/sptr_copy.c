@@ -8,7 +8,7 @@
  * \note fails if strong_ptr is NULL or its strong count is 0
  * \ingroup sptr
 **/
-t_strong_ptr *sptr_copys(t_strong_ptr *strong_ptr) {
+t_cm_strong_ptr *sptr_copys(t_cm_strong_ptr *strong_ptr) {
 	if (!strong_ptr) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (NULL);
@@ -28,7 +28,7 @@ t_strong_ptr *sptr_copys(t_strong_ptr *strong_ptr) {
  * \note fails if argument is NULL or its weak count is 0
  * \ingroup sptr
 **/
-t_weak_ptr *sptr_copyw(t_weak_ptr *weak_ptr) {
+t_cm_weak_ptr *sptr_copyw(t_cm_weak_ptr *weak_ptr) {
 	if (!weak_ptr) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
 		return (NULL);
@@ -50,16 +50,16 @@ t_weak_ptr *sptr_copyw(t_weak_ptr *weak_ptr) {
  * weak count; fails if argument is NULL or strong count is 0
  * \ingroup sptr
 **/
-t_owned_ptr sptr_copyo(t_owned_ptr *owned_ptr) {
-	t_owned_ptr ret;
+t_cm_owned_ptr sptr_copyo(t_cm_owned_ptr *owned_ptr) {
+	t_cm_owned_ptr ret;
 
 	if (!owned_ptr || !owned_ptr->meta) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
-		return ((t_owned_ptr){0});
+		return ((t_cm_owned_ptr){0});
 	}
 	if (!sptr_get_rc(owned_ptr)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_ILLDATA)
-		return ((t_owned_ptr){0});
+		return ((t_cm_owned_ptr){0});
 	}
 	sptri_wc_inc(owned_ptr->meta);
 	ret       = *owned_ptr;
@@ -74,15 +74,15 @@ t_owned_ptr sptr_copyo(t_owned_ptr *owned_ptr) {
  * \note the uniq source pointer given is zeroed out
  * \ingroup sptr
 **/
-t_uniq_ptr sptr_copyu(t_uniq_ptr *ptr) {
-	t_uniq_ptr ret;
+t_cm_uniq_ptr sptr_copyu(t_cm_uniq_ptr *ptr) {
+	t_cm_uniq_ptr ret;
 
 	if (!ptr) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__SPTR_LOG_EARG)
-		return ((t_uniq_ptr){0});
+		return ((t_cm_uniq_ptr){0});
 	}
-	ret  = (t_uniq_ptr){.data = ptr->data, .dtor = ptr->dtor};
-	*ptr = (t_uniq_ptr){0};
+	ret  = (t_cm_uniq_ptr){.data = ptr->data, .dtor = ptr->dtor};
+	*ptr = (t_cm_uniq_ptr){0};
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__SPTR_LOG_SUCCESS)
 	return (ret);
 }

@@ -6,10 +6,10 @@
 #include "tls_tests.h"
 
 void *ctls_dummy_increment(void *a) {
-	size_t           i = (size_t)a;
-	t_ctls_typewrap *v;
+	size_t              i = (size_t)a;
+	t_cm_ctls_typewrap *v;
 
-	ctls_set("a", (t_ctls_typewrap){.value.l = 0, .type = CTLS_LONG});
+	ctls_set("a", (t_cm_ctls_typewrap){.value.l = 0, .type = CTLS_LONG});
 	v = ctls_get("a");
 	while (i--) {
 		v->value.l += 32;
@@ -23,10 +23,10 @@ void *ctls_dummy_increment(void *a) {
 }
 
 void *ctls_dummy_decrement(void *a) {
-	size_t           i = (size_t)a;
-	t_ctls_typewrap *v;
+	size_t              i = (size_t)a;
+	t_cm_ctls_typewrap *v;
 
-	ctls_set("a", (t_ctls_typewrap){.value.l = 0, .type = CTLS_LONG});
+	ctls_set("a", (t_cm_ctls_typewrap){.value.l = 0, .type = CTLS_LONG});
 	v = ctls_get("a");
 	while (i--) {
 		v->value.l -= 32;

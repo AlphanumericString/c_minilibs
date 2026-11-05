@@ -9,8 +9,8 @@
  * \note fields: 'ranks, parents' must match types between cdsu and rdsu
  * \ingroup cdsu
 **/
-t_rdsu *rdsu_new_from_cdsu(const t_cdsu *src) {
-	t_rdsu *ret;
+t_cm_rdsu *rdsu_new_from_cdsu(const t_cm_cdsu *src) {
+	t_cm_rdsu *ret;
 
 	if (!src) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG);
@@ -32,7 +32,7 @@ t_rdsu *rdsu_new_from_cdsu(const t_cdsu *src) {
  * \note fields: 'ranks, parents' must match types between cdsu and rdsu
  * \ingroup cdsu
 **/
-t_rdsu *rdsu_init_from_cdsu(t_rdsu *to, const t_cdsu *src) {
+t_cm_rdsu *rdsu_init_from_cdsu(t_cm_rdsu *to, const t_cm_cdsu *src) {
 	_Static_assert((sizeof(*to->rank) == sizeof(*src->rank) ||
 	                sizeof(*to->parent) == sizeof(*src->parent)),
 	               "Internal array sizes must be equal");
@@ -56,8 +56,8 @@ t_rdsu *rdsu_init_from_cdsu(t_rdsu *to, const t_cdsu *src) {
  * \note fields: 'ranks, parents' must match types between cdsu and rdsu
  * \ingroup cdsu
 **/
-t_cdsu *rdsu_to_cdsu(t_rdsu **src) {
-	t_cdsu *ret;
+t_cm_cdsu *rdsu_to_cdsu(t_cm_rdsu **src) {
+	t_cm_cdsu *ret;
 
 	if (!src || !rdsu_validate(*src)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG);

@@ -2,27 +2,27 @@
 
 #include "ill_tests.h"
 
-NO_COV static size_t collect(t_idl *head, int *out, size_t cap) {
-	size_t n    = 0;
-	t_idl *prev = NULL;
+NO_COV static size_t collect(t_cm_idl *head, int *out, size_t cap) {
+	size_t    n    = 0;
+	t_cm_idl *prev = NULL;
 
 	while (head && n < cap) {
 		assert(head->prev == prev);
-		out[n++] = ((t_test_dnode *)idl_ntoe(head))->value;
+		out[n++] = ((t_cm_test_dnode *)idl_ntoe(head))->value;
 		prev     = head;
 		head     = head->next;
 	}
 	return n;
 }
 
-NO_COV void test_idl_filter(void) {
-	t_test_dnode nodes[6];
-	t_idl       *head = NULL;
-	t_idl       *filtered;
-	int          out[6];
-	int          exp_keep[3]     = {2, 4, 6};
-	int          exp_filtered[3] = {1, 3, 5};
-	size_t       i, n;
+NO_COV void test_cm_idl_filter(void) {
+	t_cm_test_dnode nodes[6];
+	t_cm_idl       *head = NULL;
+	t_cm_idl       *filtered;
+	int             out[6];
+	int             exp_keep[3]     = {2, 4, 6};
+	int             exp_filtered[3] = {1, 3, 5};
+	size_t          i, n;
 
 	for (i = 0; i < 6; i++) {
 		INIT_DNODE(nodes[i], (int)(i + 1), (int)i);
@@ -40,8 +40,8 @@ NO_COV void test_idl_filter(void) {
 
 	// all elements moved out => head becomes NULL
 	{
-		t_test_dnode e1, e2, e3;
-		t_idl       *h = NULL;
+		t_cm_test_dnode e1, e2, e3;
+		t_cm_idl       *h = NULL;
 
 		INIT_DNODE(e1, 1, 1);
 		INIT_DNODE(e2, 3, 2);
@@ -62,14 +62,14 @@ NO_COV void test_idl_filter(void) {
 	assert(idl_filter(&head, cb_idl_is_even, NULL, NULL) == 0);
 }
 
-NO_COV void test_idl_filter_out(void) {
-	t_test_dnode nodes[6];
-	t_idl       *head = NULL;
-	t_idl       *filtered;
-	int          out[6];
-	int          exp_keep[3]     = {1, 3, 5};
-	int          exp_filtered[3] = {2, 4, 6};
-	size_t       i, n;
+NO_COV void test_cm_idl_filter_out(void) {
+	t_cm_test_dnode nodes[6];
+	t_cm_idl       *head = NULL;
+	t_cm_idl       *filtered;
+	int             out[6];
+	int             exp_keep[3]     = {1, 3, 5};
+	int             exp_filtered[3] = {2, 4, 6};
+	size_t          i, n;
 
 	for (i = 0; i < 6; i++) {
 		INIT_DNODE(nodes[i], (int)(i + 1), (int)i);
@@ -86,8 +86,8 @@ NO_COV void test_idl_filter_out(void) {
 
 	// head that would be "out" is now moved out
 	{
-		t_test_dnode e1, e2, e3;
-		t_idl       *h = NULL;
+		t_cm_test_dnode e1, e2, e3;
+		t_cm_idl       *h = NULL;
 
 		INIT_DNODE(e1, 2, 1);
 		INIT_DNODE(e2, 4, 2);

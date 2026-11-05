@@ -2,8 +2,8 @@
 
 #include "da_tests.h"
 
-NO_COV void test_da_at(void) {
-	const t_da da = {
+NO_COV void test_cm_da_at(void) {
+	const t_cm_da da = {
 	    .array = (void *)&arr_3,
 	    .cap_e = 3,
 	    .nb_e  = 3,
@@ -16,8 +16,8 @@ NO_COV void test_da_at(void) {
 	assert(da_at(NULL, 0) == NULL);
 	assert(da_at(&da, 99) == NULL);
 }
-NO_COV void test_da_get(void) {
-	const t_da da = {
+NO_COV void test_cm_da_get(void) {
+	const t_cm_da da = {
 	    .array = (void *)&arr_3,
 	    .cap_e = 3,
 	    .nb_e  = 3,
@@ -39,8 +39,8 @@ NO_COV void test_da_get(void) {
 	assert(da_get(&da, 1, NULL) == -1);
 	assert(da_get(NULL, 1, &out) == -1);
 }
-NO_COV void test_da_nget(void) {
-	const t_da da = {
+NO_COV void test_cm_da_nget(void) {
+	const t_cm_da da = {
 	    .array = (void *)&arr_3,
 	    .cap_e = 3,
 	    .nb_e  = 3,
@@ -64,8 +64,8 @@ NO_COV void test_da_nget(void) {
 	assert(da_nget(&da, -1, 0, NULL) == -1);
 	assert(da_nget(&da, 1, 99, &buff) == -1);
 }
-NO_COV void test_da_array(void) {
-	const t_da da = {
+NO_COV void test_cm_da_array(void) {
+	const t_cm_da da = {
 	    .array = (void *)&arr_3,
 	    .cap_e = 3,
 	    .nb_e  = 3,

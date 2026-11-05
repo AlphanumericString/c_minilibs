@@ -2,18 +2,18 @@
 
 #include "da_tests.h"
 
-NO_COV void test_da_grow(void) {
-	t_da         da;
+NO_COV void test_cm_da_grow(void) {
+	t_cm_da      da;
 	const size_t dflt_size   = C_MINI__DA_NB_ELEM_DFLT;
 	const size_t first_size  = dflt_size * C_MINI__DA_GROWTH;
 	const size_t second_size = first_size * C_MINI__DA_GROWTH;
-	t_da         da_no_size  = {
-	             .array = (int *)arr_5,
-	             .cap_e = 5,
-	             .nb_e  = 5,
-	             .sz_e  = 0,
+	t_cm_da      da_no_size  = {
+	          .array = (int *)arr_5,
+	          .cap_e = 5,
+	          .nb_e  = 5,
+	          .sz_e  = 0,
     };
-	t_da da_nb_sup_capacity = {
+	t_cm_da da_nb_sup_capacity = {
 	    .array = (int *)arr_5,
 	    .cap_e = 0,
 	    .nb_e  = 5,
@@ -41,16 +41,16 @@ NO_COV void test_da_grow(void) {
 	assert(da_grow(&da_nb_sup_capacity) == false);
 	assert(da_grow(NULL) == false);
 }
-NO_COV void test_da_grow_for_size(void) {
-	t_da  da;
-	void *prev;
-	t_da  da_no_size = {
-	     .array = (int *)arr_5,
-	     .cap_e = 5,
-	     .nb_e  = 5,
-	     .sz_e  = 0,
-    };
-	t_da da_nb_sup_capacity = {
+NO_COV void test_cm_da_grow_for_size(void) {
+	t_cm_da da;
+	void   *prev;
+	t_cm_da da_no_size = {
+	    .array = (int *)arr_5,
+	    .cap_e = 5,
+	    .nb_e  = 5,
+	    .sz_e  = 0,
+	};
+	t_cm_da da_nb_sup_capacity = {
 	    .array = (int *)arr_5,
 	    .cap_e = 0,
 	    .nb_e  = 5,

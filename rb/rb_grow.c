@@ -8,17 +8,18 @@
  * \brief duplicates the round buffer with nb_elem_added new empty slots
  * \param rb the old round buffer
  * \param nb_elem_added number of additional elements
- * \return newly allocated t_rb or NULL if alloc fails
+ * \return newly allocated t_cm_rb or NULL if alloc fails
+ * \note yeld a newly grown rb to not invalidate i_pos and o_pos
  * \ingroup rb
 **/
-t_rb *rb_grow(const t_rb *rb, size_t nb_elem_added) {
-	t_rb *new_rb;
+t_cm_rb *rb_grow(const t_cm_rb *rb, size_t nb_elem_added) {
+	t_cm_rb *new_rb;
 
 	if (!rb) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return NULL;
 	}
-	new_rb = malloc(sizeof(t_rb));
+	new_rb = malloc(sizeof(t_cm_rb));
 	if (!rb_create(new_rb, rb->sz_e, rb->nb_max + nb_elem_added)) {
 		if (new_rb) free(new_rb);
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RB_LOG_EALLOC)

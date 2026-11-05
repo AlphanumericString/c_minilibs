@@ -47,7 +47,7 @@ extern pthread_key_t ctls_key;
  * \param CTLS_PTR pointer representation value
  * \ingroup ctls
 **/
-enum e_ctls_type {
+enum e_cm_ctls_type {
 	CTLS_CHAR = 0,
 	CTLS_INT,
 	CTLS_LONG,
@@ -61,14 +61,14 @@ enum e_ctls_type {
  * \ingroup ctls
 **/
 typedef struct {
-	enum e_ctls_type type;
+	enum e_cm_ctls_type type;
 	union {
 		char  c;
 		int   i;
 		long  l;
 		void *p;
 	} value;
-} t_ctls_typewrap;
+} t_cm_ctls_typewrap;
 
 #ifdef C_MINI__CTLS_INTERNAL
 /**
@@ -81,20 +81,20 @@ typedef struct {
  * go over 256
  * \ingroup ctls
 **/
-typedef struct s_ctlsv {
-	const char     *v_name[C_MINI__CTLS_CAP];
-	t_ctls_typewrap vals[C_MINI__CTLS_CAP];
-	size_t          len;
-} t_ctlsv;
+typedef struct s_cm_ctlsv {
+	const char        *v_name[C_MINI__CTLS_CAP];
+	t_cm_ctls_typewrap vals[C_MINI__CTLS_CAP];
+	size_t             len;
+} t_cm_ctlsv;
 
 #endif // C_MINI__CTLS_INTERNAL
 
-bool             ctls_rm(const char *name);
-bool             ctls_has(const char *name);
-bool             ctls_set(const char *name, t_ctls_typewrap init_val);
-t_ctls_typewrap *ctls_get(const char *name);
-size_t           ctls_len(void);
-bool             ctls_dump_typewrap(t_ctls_typewrap t, int fd);
-ssize_t          ctls_dump_all(int fd);
+bool                ctls_rm(const char *name);
+bool                ctls_has(const char *name);
+bool                ctls_set(const char *name, t_cm_ctls_typewrap init_val);
+t_cm_ctls_typewrap *ctls_get(const char *name);
+size_t              ctls_len(void);
+bool                ctls_dump_typewrap(t_cm_ctls_typewrap t, int fd);
+ssize_t             ctls_dump_all(int fd);
 
 #endif // !C_MINI__CTLS

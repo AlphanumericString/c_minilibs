@@ -4,9 +4,9 @@
 
 #include "rdsu_tests.h"
 
-NO_COV void test_rdsu_grow(void) {
-	t_rdsu *rdsu = rdsu_new(5);
-	t_rdsu  intact_copy, no_parent, no_rank, no_size;
+NO_COV void test_cm_rdsu_grow(void) {
+	t_cm_rdsu *rdsu = rdsu_new(5);
+	t_cm_rdsu  intact_copy, no_parent, no_rank, no_size;
 
 	// normal
 	assert(rdsu->size == 5);

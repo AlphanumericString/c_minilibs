@@ -13,7 +13,8 @@
  * \note filter might not keep order to keep order use n variant
  * \ingroup da
 **/
-bool da_filter(t_da *da, t_cm_callback filter, void *arg, t_cm_callback del) {
+bool da_filter(t_cm_da *da, t_cm_callback filter, void *arg,
+               t_cm_callback del) {
 	if (!filter || !da_is_valid(da) || !da->nb_e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
 		return (false);
@@ -38,7 +39,7 @@ bool da_filter(t_da *da, t_cm_callback filter, void *arg, t_cm_callback del) {
  * \return true on success, false otherwise
  * \ingroup da
 **/
-bool da_nfilter(t_da *da, size_t n, t_cm_callback filter, void *data,
+bool da_nfilter(t_cm_da *da, size_t n, t_cm_callback filter, void *data,
                 t_cm_callback del) {
 	if (!filter || !da_is_valid(da) || !da->nb_e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
@@ -67,7 +68,7 @@ bool da_nfilter(t_da *da, size_t n, t_cm_callback filter, void *data,
  * \note filter might not keep order to keep order use n variant
  * \ingroup da
 **/
-bool da_filter_out(t_da *da, t_cm_callback filter, void *data,
+bool da_filter_out(t_cm_da *da, t_cm_callback filter, void *data,
                    t_cm_callback del) {
 	if (!filter || !da_is_valid(da) || !da->nb_e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
@@ -93,7 +94,7 @@ bool da_filter_out(t_da *da, t_cm_callback filter, void *data,
  * \return true on success, false otherwise
  * \ingroup da
 **/
-bool da_nfilter_out(t_da *da, size_t n, t_cm_callback filter, void *data,
+bool da_nfilter_out(t_cm_da *da, size_t n, t_cm_callback filter, void *data,
                     t_cm_callback del) {
 	if (!filter || !da_is_valid(da) || !da->nb_e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)

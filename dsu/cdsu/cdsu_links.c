@@ -7,7 +7,7 @@
  * \param y second element to link
  * \ingroup cdsu
 **/
-bool cdsu_union(t_cdsu *ds, size_t x, size_t y) {
+bool cdsu_union(t_cm_cdsu *ds, size_t x, size_t y) {
 	size_t root_x;
 	size_t root_y;
 
@@ -49,7 +49,7 @@ bool cdsu_union(t_cdsu *ds, size_t x, size_t y) {
  * \return the parent of x
  * \ingroup cdsu
 **/
-size_t cdsu_find(t_cdsu *ds, size_t x) {
+size_t cdsu_find(t_cm_cdsu *ds, size_t x) {
 	if (!ds || !ds->size || !ds->parent || x > ds->size) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG)
 		return (-1);
@@ -68,7 +68,7 @@ size_t cdsu_find(t_cdsu *ds, size_t x) {
  * \return the parent of x
  * \ingroup cdsu
 **/
-size_t cdsu_strict_find(const t_cdsu *ds, size_t x) {
+size_t cdsu_strict_find(const t_cm_cdsu *ds, size_t x) {
 	if (!ds->size || !ds->parent || x > ds->size) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG)
 		return (-1);
@@ -85,7 +85,7 @@ size_t cdsu_strict_find(const t_cdsu *ds, size_t x) {
  * \return the number of elements processed
  * \ingroup cdsu
 **/
-size_t cdsu_compress_all(t_cdsu *ds) {
+size_t cdsu_compress_all(t_cm_cdsu *ds) {
 	size_t y;
 
 	if (!ds || !ds->size || !ds->parent) {

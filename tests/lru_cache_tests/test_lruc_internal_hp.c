@@ -4,11 +4,11 @@
 
 #include "lru_cache_tests.h"
 
-NO_COV void test_lruci_hp_pop(void) {
-	t_lruc          c, intact_copy;
-	t_lruc_keynode *kv1, *kv2;
-	void           *key  = "quatorze";
-	void           *key2 = "quinze";
+NO_COV void test_cm_lruci_hp_pop(void) {
+	t_cm_lruc          c, intact_copy;
+	t_cm_lruc_keynode *kv1, *kv2;
+	void              *key  = "quatorze";
+	void              *key2 = "quinze";
 
 	lruc_init(&c, 2, free);
 	lruc_put(&c, key, strlen(key), malloc(14));
@@ -40,12 +40,12 @@ NO_COV void test_lruci_hp_pop(void) {
 	free(kv1), free(kv2);
 	free(c.buckets);
 }
-NO_COV void test_lruci_hp_pop_nth(void) {
-	t_lruc          c, intact_copy;
-	t_lruc_keynode *kv1, *kv2, *kv3;
-	void           *key1 = "quatorze";
-	void           *key2 = "quinze";
-	void           *key3 = "quaize";
+NO_COV void test_cm_lruci_hp_pop_nth(void) {
+	t_cm_lruc          c, intact_copy;
+	t_cm_lruc_keynode *kv1, *kv2, *kv3;
+	void              *key1 = "quatorze";
+	void              *key2 = "quinze";
+	void              *key3 = "quaize";
 
 	lruc_init(&c, 3, free);
 	lruc_put_ttl(&c, key1, strlen(key1), malloc(14), 100);

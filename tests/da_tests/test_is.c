@@ -2,14 +2,14 @@
 
 #include "da_tests.h"
 
-NO_COV void test_da_is_valid(void) {
-	const t_da da_ok1 = {
+NO_COV void test_cm_da_is_valid(void) {
+	const t_cm_da da_ok1 = {
 	    .array = (int *)arr_5, .cap_e = 5, .nb_e = 5, .sz_e = sizeof(int)};
-	const t_da cap_inf_nb_e = {
+	const t_cm_da cap_inf_nb_e = {
 	    .array = (int *)arr_5, .cap_e = 4, .nb_e = 5, .sz_e = sizeof(int)};
-	const t_da no_arr = {
+	const t_cm_da no_arr = {
 	    .array = NULL, .cap_e = 5, .nb_e = 5, .sz_e = sizeof(int)};
-	const t_da no_size_e = {
+	const t_cm_da no_size_e = {
 	    .array = (int *)arr_5, .cap_e = 5, .nb_e = 5, .sz_e = 0};
 
 	assert(da_is_valid(&da_ok1) == true);
@@ -18,14 +18,14 @@ NO_COV void test_da_is_valid(void) {
 	assert(da_is_valid(&no_size_e) == false);
 	assert(da_is_valid(NULL) == false);
 }
-NO_COV void test_da_is_not_null(void) {
-	const t_da da_ok1 = {
+NO_COV void test_cm_da_is_not_null(void) {
+	const t_cm_da da_ok1 = {
 	    .array = (int *)arr_5, .cap_e = 5, .nb_e = 5, .sz_e = sizeof(int)};
-	const t_da no_arr = {
+	const t_cm_da no_arr = {
 	    .array = NULL, .cap_e = 5, .nb_e = 5, .sz_e = sizeof(int)};
-	const t_da no_sz = {
+	const t_cm_da no_sz = {
 	    .array = (int *)arr_5, .cap_e = 5, .nb_e = 5, .sz_e = 0};
-	const t_da no_cap = {
+	const t_cm_da no_cap = {
 	    .array = (int *)arr_5, .cap_e = 0, .nb_e = 5, .sz_e = sizeof(int)};
 
 	assert(da_is_not_null(&da_ok1) == true);
@@ -34,16 +34,16 @@ NO_COV void test_da_is_not_null(void) {
 	assert(da_is_not_null(&no_sz) == false);
 	assert(da_is_not_null(&no_cap) == false);
 }
-NO_COV void test_da_is_empty(void) {
-	const t_da da_ok1 = {
+NO_COV void test_cm_da_is_empty(void) {
+	const t_cm_da da_ok1 = {
 	    .array = (int *)arr_5, .cap_e = 5, .nb_e = 5, .sz_e = sizeof(int)};
-	const t_da da_empty = {
+	const t_cm_da da_empty = {
 	    .array = (int *)arr_5, .cap_e = 5, .nb_e = 0, .sz_e = sizeof(int)};
-	const t_da no_arr = {
+	const t_cm_da no_arr = {
 	    .array = NULL, .cap_e = 5, .nb_e = 5, .sz_e = sizeof(int)};
-	const t_da no_sz = {
+	const t_cm_da no_sz = {
 	    .array = (int *)arr_5, .cap_e = 5, .nb_e = 5, .sz_e = 0};
-	const t_da no_cap = {
+	const t_cm_da no_cap = {
 	    .array = (int *)arr_5, .cap_e = 0, .nb_e = 5, .sz_e = sizeof(int)};
 
 	assert(da_is_empty(&da_ok1) == false);
@@ -53,16 +53,16 @@ NO_COV void test_da_is_empty(void) {
 	assert(da_is_empty(&no_sz) == false);
 	assert(da_is_empty(&no_cap) == false);
 }
-NO_COV void test_da_is_full(void) {
-	const t_da da_full = {
+NO_COV void test_cm_da_is_full(void) {
+	const t_cm_da da_full = {
 	    .array = (int *)arr_5, .cap_e = 5, .nb_e = 5, .sz_e = sizeof(int)};
-	const t_da da_empty = {
+	const t_cm_da da_empty = {
 	    .array = (int *)arr_5, .cap_e = 5, .nb_e = 0, .sz_e = sizeof(int)};
-	const t_da no_arr = {
+	const t_cm_da no_arr = {
 	    .array = NULL, .cap_e = 5, .nb_e = 5, .sz_e = sizeof(int)};
-	const t_da no_sz = {
+	const t_cm_da no_sz = {
 	    .array = (int *)arr_5, .cap_e = 5, .nb_e = 5, .sz_e = 0};
-	const t_da no_cap = {
+	const t_cm_da no_cap = {
 	    .array = (int *)arr_5, .cap_e = 0, .nb_e = 5, .sz_e = sizeof(int)};
 
 	assert(da_is_full(&da_full) == true);

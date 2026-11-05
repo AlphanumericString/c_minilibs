@@ -4,8 +4,8 @@
 #include "tls_tests.h"
 
 NO_COV void test_ctls_set(void) {
-	t_ctls_typewrap val;
-	const char     *names[C_MINI__CTLS_CAP + 1] = {
+	t_cm_ctls_typewrap val;
+	const char        *names[C_MINI__CTLS_CAP + 1] = {
         "a", "b", "c", "d", "e", "f", "g", "h", "i",
         "j", "k", "l", "m", "n", "o", "p", "q",
     };

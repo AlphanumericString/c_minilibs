@@ -7,28 +7,28 @@
 /**
  * \brief init by allocating both the return and the internals
  * \param n size of the rdsu
- * \return the new t_rdsu
+ * \return the new t_cm_rdsu
  * \ingroup rdsu
 **/
-t_rdsu *rdsu_new(size_t n) {
-	t_rdsu   *ret;
-	uint16_t *buffer;
+t_cm_rdsu *rdsu_new(size_t n) {
+	t_cm_rdsu *ret;
+	uint16_t  *buffer;
 
 	if (!n) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
-		return ((t_rdsu *)NULL);
+		return ((t_cm_rdsu *)NULL);
 	}
-	ret = (t_rdsu *)malloc(sizeof(*ret));
+	ret = (t_cm_rdsu *)malloc(sizeof(*ret));
 	if (!ret) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RDSU_LOG_EALLOC)
-		return ((t_rdsu *)NULL);
+		return ((t_cm_rdsu *)NULL);
 	}
-	*ret   = (t_rdsu){0};
+	*ret   = (t_cm_rdsu){0};
 	buffer = (uint16_t *)malloc(sizeof(uint16_t) * n * 2);
 	if (!buffer) {
 		free(ret);
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RDSU_LOG_EALLOC)
-		return ((t_rdsu *)NULL);
+		return ((t_cm_rdsu *)NULL);
 	}
 	rdsu_init_from_arrays(ret, n, buffer, buffer + n);
 	ret->rp_single_alloc = true;
@@ -37,22 +37,22 @@ t_rdsu *rdsu_new(size_t n) {
 }
 /**
  * \brief init by allocating the internals
- * \param to_init the t_rdsu to init
+ * \param to_init the t_cm_rdsu to init
  * \param n size of the rdsu
- * \return the initialized t_rdsu
+ * \return the initialized t_cm_rdsu
  * \ingroup rdsu
 **/
-t_rdsu *rdsu_init(t_rdsu *to_init, size_t n) {
+t_cm_rdsu *rdsu_init(t_cm_rdsu *to_init, size_t n) {
 	uint16_t *buffer;
 
 	if (!n || !to_init) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
-		return ((t_rdsu *)NULL);
+		return ((t_cm_rdsu *)NULL);
 	}
 	buffer = (uint16_t *)calloc(sizeof(uint16_t), n * 2);
 	if (!buffer) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RDSU_LOG_EALLOC)
-		return ((t_rdsu *)NULL);
+		return ((t_cm_rdsu *)NULL);
 	}
 	rdsu_init_from_arrays(to_init, n, buffer, buffer + n);
 	to_init->rp_single_alloc = true;
@@ -61,24 +61,25 @@ t_rdsu *rdsu_init(t_rdsu *to_init, size_t n) {
 	return (to_init);
 }
 /**
- * \brief init by allocating a t_rdsu and using provided values
+ * \brief init by allocating a t_cm_rdsu and using provided values
  * \param size size of the rdsu
  * \param parents the parents array
  * \param ranks the ranks array
- * \return the new t_rdsu
+ * \return the new t_cm_rdsu
  * \ingroup rdsu
 **/
-t_rdsu *rdsu_new_from_arrays(size_t size, uint16_t *parents, uint16_t *ranks) {
-	t_rdsu *ret;
+t_cm_rdsu *rdsu_new_from_arrays(size_t size, uint16_t *parents,
+                                uint16_t *ranks) {
+	t_cm_rdsu *ret;
 
 	if (!size || !parents || !ranks) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
-		return ((t_rdsu *)NULL);
+		return ((t_cm_rdsu *)NULL);
 	}
-	ret = (t_rdsu *)malloc(sizeof(t_rdsu));
+	ret = (t_cm_rdsu *)malloc(sizeof(t_cm_rdsu));
 	if (!ret) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RDSU_LOG_EALLOC)
-		return ((t_rdsu *)NULL);
+		return ((t_cm_rdsu *)NULL);
 	}
 	ret->rank            = (uint16_t *)ranks;
 	ret->parent          = (uint16_t *)parents;
@@ -92,19 +93,19 @@ t_rdsu *rdsu_new_from_arrays(size_t size, uint16_t *parents, uint16_t *ranks) {
 	return (ret);
 }
 /**
- * \brief init t_rdsu using provided values (no allocs)
- * \param ret the t_rdsu to init
+ * \brief init t_cm_rdsu using provided values (no allocs)
+ * \param ret the t_cm_rdsu to init
  * \param size size of the rdsu
  * \param parents the parents array
  * \param ranks the ranks array
- * \return the initialized t_rdsu
+ * \return the initialized t_cm_rdsu
  * \ingroup rdsu
 **/
-t_rdsu *rdsu_init_from_arrays(t_rdsu *ret, size_t size, uint16_t *parents,
-                              uint16_t *ranks) {
+t_cm_rdsu *rdsu_init_from_arrays(t_cm_rdsu *ret, size_t size, uint16_t *parents,
+                                 uint16_t *ranks) {
 	if (!ret || !size || !parents || !ranks) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
-		return ((t_rdsu *)NULL);
+		return ((t_cm_rdsu *)NULL);
 	}
 	ret->rank            = (uint16_t *)ranks;
 	ret->parent          = (uint16_t *)parents;
@@ -122,12 +123,12 @@ t_rdsu *rdsu_init_from_arrays(t_rdsu *ret, size_t size, uint16_t *parents,
  *
  * (warning: will realocate. if you used local buffers durring construction
  * via from_arrays methods do not use).
- * \param rdsu the t_rdsu to grow
+ * \param rdsu the t_cm_rdsu to grow
  * \param n the number of values to add
- * \return the grown t_rdsu
+ * \return the grown t_cm_rdsu
  * \ingroup rdsu
 **/
-bool rdsu_grow(t_rdsu *rdsu, size_t n) {
+bool rdsu_grow(t_cm_rdsu *rdsu, size_t n) {
 	uint16_t *replacement_buffer;
 	uint16_t *rank_offset;
 	size_t    i;

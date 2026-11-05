@@ -56,7 +56,7 @@ typedef struct {
 	size_t misses;
 	size_t hit;
 	size_t expired;
-} t_lruc_stats;
+} t_cm_lruc_stats;
 
 /**
  * \brief the key value pair that lives in the cache
@@ -69,7 +69,7 @@ typedef struct {
 	const void *key;
 	void       *value;
 	size_t      k_len;
-} t_keyvalue;
+} t_cm_keyvalue;
 
 #ifdef C_MINI__LRUC_INTERNAL
 
@@ -89,33 +89,33 @@ typedef struct {
  * this interface. it MAY CHANGE AT ANY MOMENT WITHOUT ANY NOTICE.
  * \ingroup lruc
 **/
-typedef struct s_keycache {
-	t_keyvalue         kv;
-	uint64_t           time;
-	struct s_keycache *hash_next;
-	size_t             heap_index;
-	struct s_keycache *lru_prev;
-	struct s_keycache *lru_next;
-} t_lruc_keynode;
+typedef struct s_cm_keycache {
+	t_cm_keyvalue         kv;
+	uint64_t              time;
+	struct s_cm_keycache *hash_next;
+	size_t                heap_index;
+	struct s_cm_keycache *lru_prev;
+	struct s_cm_keycache *lru_next;
+} t_cm_lruc_keynode;
 
 typedef struct {
 	size_t buckets_nb;
 	size_t node_nb;
 
-	t_lruc_keynode **buckets;
-	t_lruc_keynode **minHeap;
+	t_cm_lruc_keynode **buckets;
+	t_cm_lruc_keynode **minHeap;
 
-	t_lruc_keynode *MRU;
-	t_lruc_keynode *LRU;
+	t_cm_lruc_keynode *MRU;
+	t_cm_lruc_keynode *LRU;
 
-	size_t          reserved_nodes_nb;
-	t_lruc_keynode *reserved_nodes;
+	size_t             reserved_nodes_nb;
+	t_cm_lruc_keynode *reserved_nodes;
 
 	uint64_t ttl_glob;
 
-	void         (*dtor)(void *);
-	t_lruc_stats stats;
-} t_lruc;
+	void            (*dtor)(void *);
+	t_cm_lruc_stats stats;
+} t_cm_lruc;
 
 #else // || C_MINI__LRU_INTERNAL
 
@@ -133,7 +133,7 @@ typedef struct {
  * inf) in ms
  * \param dtor destructor for stored values. Does not get called on keys. Not
  * mandatory to set.
- * \param stats statistics of the lru-cache (see t_lruc_stats for more
+ * \param stats statistics of the lru-cache (see t_cm_lruc_stats for more
  * precisions)
  * \ingroup lruc
 **/
@@ -152,9 +152,9 @@ typedef struct {
 
 	uint64_t ttl_glob;
 
-	void         (*dtor)(void *);
-	t_lruc_stats stats;
-} t_lruc;
+	void            (*dtor)(void *);
+	t_cm_lruc_stats stats;
+} t_cm_lruc;
 
 #endif // !C_MINI__LRU_INTERNAL
 
@@ -168,76 +168,81 @@ typedef struct {
  * \param arg argument passed "as is" from user, given from user
  * \return expected to return true on success, false otherwise
 **/
-typedef bool (*t_kvcallback)(t_keyvalue *elem, void *arg);
+typedef bool (*t_cm_kvcallback)(t_cm_keyvalue *elem, void *arg);
 
 #endif // CMINI__T_CALLBAKC_DEFINE
 
-t_lruc *lruc_create(size_t capacity, void (*free_er)(void *));
-t_lruc *lruc_init(t_lruc *cache, size_t capacity, void (*free_er)(void *));
-void    lruc_destroy(t_lruc *cache);
-void    lruc_free(t_lruc **cache);
+t_cm_lruc *lruc_create(size_t capacity, void (*free_er)(void *));
+t_cm_lruc *lruc_init(t_cm_lruc *cache, size_t capacity,
+                     void (*free_er)(void *));
+void       lruc_destroy(t_cm_lruc *cache);
+void       lruc_free(t_cm_lruc **cache);
 
-bool lruc_put_kv(t_lruc *c, t_keyvalue kv);
-bool lruc_put(t_lruc *c, const void *key, size_t k_len, const void *value);
-bool lruc_put_ttl(t_lruc *c, const void *key, size_t k_len, const void *val,
+bool lruc_put_kv(t_cm_lruc *c, t_cm_keyvalue kv);
+bool lruc_put(t_cm_lruc *c, const void *key, size_t k_len, const void *value);
+bool lruc_put_ttl(t_cm_lruc *c, const void *key, size_t k_len, const void *val,
                   uint64_t ttl_ms);
 
-void *lruc_get(t_lruc *cache, const void *key, size_t key_len);
-void *lruc_get_lru(t_lruc *cache, const void *key, size_t key_len);
+void *lruc_get(t_cm_lruc *cache, const void *key, size_t key_len);
+void *lruc_get_lru(t_cm_lruc *cache, const void *key, size_t key_len);
 
-void lruc_clear(t_lruc *cache);
-int  lruc_remove(t_lruc *cache, const void *key, size_t key_len);
-bool lruc_clear_reserved(t_lruc *cache);
-void lruc_clear_to_reserved(t_lruc *c);
+void lruc_clear(t_cm_lruc *cache);
+int  lruc_remove(t_cm_lruc *cache, const void *key, size_t key_len);
+bool lruc_clear_reserved(t_cm_lruc *cache);
+void lruc_clear_to_reserved(t_cm_lruc *c);
 
-size_t lruc_reserve(t_lruc *cache, size_t nb_nodes);
+size_t lruc_reserve(t_cm_lruc *cache, size_t nb_nodes);
 
-bool lruc_has(const t_lruc *cache, const void *key, size_t key_len);
+bool lruc_has(const t_cm_lruc *cache, const void *key, size_t key_len);
 
-bool lruc_isexpired(const t_lruc *cache, const void *key, size_t key_len);
-void lruc_cleanup(t_lruc *cache);
-void lruc_setttl(t_lruc *cache, unsigned long ttl_ms);
+bool lruc_isexpired(const t_cm_lruc *cache, const void *key, size_t key_len);
+void lruc_cleanup(t_cm_lruc *cache);
+void lruc_setttl(t_cm_lruc *cache, unsigned long ttl_ms);
 
-bool lruc_is_valid(const t_lruc *cache);
+bool lruc_is_valid(const t_cm_lruc *cache);
 
-size_t       lruc_size(const t_lruc *cache);
-uint64_t     lruc_hits(const t_lruc *cache);
-uint64_t     lruc_misses(const t_lruc *cache);
-uint64_t     lruc_expired(const t_lruc *cache);
-t_lruc_stats lruc_stats(const t_lruc *cache);
+size_t          lruc_size(const t_cm_lruc *cache);
+uint64_t        lruc_hits(const t_cm_lruc *cache);
+uint64_t        lruc_misses(const t_cm_lruc *cache);
+uint64_t        lruc_expired(const t_cm_lruc *cache);
+t_cm_lruc_stats lruc_stats(const t_cm_lruc *cache);
 
-size_t lruc_reserved_nb(const t_lruc *cache);
-bool   lruc_has_reserved(const t_lruc *cache);
-size_t lruc_max_reserve(const t_lruc *cache);
+size_t lruc_reserved_nb(const t_cm_lruc *cache);
+bool   lruc_has_reserved(const t_cm_lruc *cache);
+size_t lruc_max_reserve(const t_cm_lruc *cache);
 
-void lruc_foreach(const t_lruc *cache, t_kvcallback fn, void *u_data);
-void lruc_foreach_ru_ordered(const t_lruc *c, t_kvcallback fn, void *u_data);
-void lruc_foreach_ttl_ordered(const t_lruc *c, t_kvcallback fn, void *u_data);
+void lruc_foreach(const t_cm_lruc *cache, t_cm_kvcallback fn, void *u_data);
+void lruc_foreach_ru_ordered(const t_cm_lruc *c, t_cm_kvcallback fn,
+                             void *u_data);
+void lruc_foreach_ttl_ordered(const t_cm_lruc *c, t_cm_kvcallback fn,
+                              void *u_data);
 
 #ifdef C_MINI__LRUC_INTERNAL
 uint64_t lruci_timeto64(struct timespec t);
 uint64_t lruci_timenow(void);
 bool lruci_key_eq(const void *k1, size_t k1_len, const void *k2, size_t k2_len);
-bool lruci_node_eq(const t_lruc_keynode *node_1, const t_lruc_keynode *node_2);
-void lruci_unlink_node(t_lruc *c, t_lruc_keynode *node, size_t hash);
+bool lruci_node_eq(const t_cm_lruc_keynode *node_1,
+                   const t_cm_lruc_keynode *node_2);
+void lruci_unlink_node(t_cm_lruc *c, t_cm_lruc_keynode *node, size_t hash);
 
 size_t lruci_hash_djb2(const void *key, size_t size);
 
-t_lruc_keynode *lruci_keyinhash(const t_lruc *c, const void *key,
-                                size_t key_len, size_t *_pos);
-t_lruc_keynode *lruci_keyinlist(const t_lruc *c, const void *key,
-                                size_t key_len);
+t_cm_lruc_keynode *lruci_keyinhash(const t_cm_lruc *c, const void *key,
+                                   size_t key_len, size_t *_pos);
+t_cm_lruc_keynode *lruci_keyinlist(const t_cm_lruc *c, const void *key,
+                                   size_t key_len);
 
-void            lruci_lru_push(t_lruc *c, t_lruc_keynode *node);
-t_lruc_keynode *lruci_lru_pop(t_lruc *c, t_lruc_keynode *node);
+void               lruci_lru_push(t_cm_lruc *c, t_cm_lruc_keynode *node);
+t_cm_lruc_keynode *lruci_lru_pop(t_cm_lruc *c, t_cm_lruc_keynode *node);
 
-t_lruc_keynode *lruci_hsh_pop(t_lruc *c, t_lruc_keynode *n, size_t hash);
-t_lruc_keynode *lruci_rsrvd_pop(t_lruc *c);
-bool            lruci_rsrvd_push(t_lruc *c, t_lruc_keynode *n);
+t_cm_lruc_keynode *lruci_hsh_pop(t_cm_lruc *c, t_cm_lruc_keynode *n,
+                                 size_t hash);
+t_cm_lruc_keynode *lruci_rsrvd_pop(t_cm_lruc *c);
+bool               lruci_rsrvd_push(t_cm_lruc *c, t_cm_lruc_keynode *n);
 
-void            lruci_hp_push(t_lruc *c, t_lruc_keynode *value);
-t_lruc_keynode *lruci_hp_pop(t_lruc *c);
-t_lruc_keynode *lruci_hp_pop_nth(t_lruc *c, size_t n);
+void               lruci_hp_push(t_cm_lruc *c, t_cm_lruc_keynode *value);
+t_cm_lruc_keynode *lruci_hp_pop(t_cm_lruc *c);
+t_cm_lruc_keynode *lruci_hp_pop_nth(t_cm_lruc *c, size_t n);
 
 #endif // !C_MINI__LRUC_INTERNAL
 

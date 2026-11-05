@@ -5,8 +5,8 @@
 #include "tls_tests.h"
 
 static void *ftls_dummy_decrease(void *arg) {
-	size_t  i = (size_t)arg;
-	t_ftls *a;
+	size_t     i = (size_t)arg;
+	t_cm_ftls *a;
 
 	while (i--) {
 		a = ftls_get();
@@ -18,8 +18,8 @@ static void *ftls_dummy_decrease(void *arg) {
 	return (NULL);
 }
 static void *ftls_dummy_increase(void *arg) {
-	size_t  i = (size_t)arg;
-	t_ftls *a;
+	size_t     i = (size_t)arg;
+	t_cm_ftls *a;
 
 	while (i--) {
 		a = ftls_get();
@@ -33,7 +33,7 @@ static void *ftls_dummy_increase(void *arg) {
 	return (NULL);
 }
 
-NO_COV void test_ftls_separate(void) {
+NO_COV void test_cm_ftls_separate(void) {
 	pthread_t t1 = 0, t2 = 0;
 	void     *ret      = NULL;
 	size_t    nb_steps = 10;

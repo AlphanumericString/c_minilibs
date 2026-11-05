@@ -13,7 +13,7 @@
  * current work is done. Jobs still in the main queue are left for tpm_delete
  * \ingroup tpm
 **/
-bool tpm_stop(t_tpm *tpm) {
+bool tpm_stop(t_cm_tpm *tpm) {
 	if (!tpm) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EARG)
 		return (false);
@@ -27,7 +27,7 @@ bool tpm_stop(t_tpm *tpm) {
 	return (true);
 }
 
-static void wait_main_queue_empty(t_tpm *tpm, struct timespec *t,
+static void wait_main_queue_empty(t_cm_tpm *tpm, struct timespec *t,
                                   size_t *step) {
 	struct timespec c;
 
@@ -42,7 +42,7 @@ static void wait_main_queue_empty(t_tpm *tpm, struct timespec *t,
 	pthread_mutex_unlock(&tpm->q_lock);
 }
 
-static void wait_thread_queues_empty(t_tpm *tpm) {
+static void wait_thread_queues_empty(t_cm_tpm *tpm) {
 	bool break_order;
 
 	for (size_t i = 0; i < tpm->nb_threads; i++) {
@@ -77,7 +77,7 @@ static void wait_thread_queues_empty(t_tpm *tpm) {
  * \note call this before tpm_delete to drain the pool
  * \ingroup tpm
 **/
-bool tpm_wait_end(t_tpm *tpm) {
+bool tpm_wait_end(t_cm_tpm *tpm) {
 	struct timespec t;
 	size_t          step = 1;
 

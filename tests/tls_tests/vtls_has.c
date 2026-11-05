@@ -2,7 +2,7 @@
 
 #include "tls_tests.h"
 
-NO_COV void test_vtls_has(void) {
+NO_COV void test_cm_vtls_has(void) {
 	void *data;
 
 	assert(vtls_has(NULL) == false);
