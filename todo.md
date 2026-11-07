@@ -5,10 +5,20 @@ general todo for the project
 - `:` paused
 - ` ` not started
 General todo:
-- [~] current
-    - [x] doc
-    - [~] coverage
-    - [~] impl
+- [x] current modules
+- [:] refactor
+ - [ ] lruc .time refactor
+ - [ ] da->check todo impl, add functs to module
+ - [ ] dsu-> rdsu -> reserve func
+ - [ ] hp-> more funcs
+ - [ ] ill->circular lists, api consistency around head, elem centric funcs
+ - [ ] lruc->ms to ns, make a separate lru only cache similar to dsu/
+ - [ ] rb->example w producer/consumer setup, add functs to module
+ - [ ] rptr->package _generic in ifdef blocks and check compile ok for c older version
+ - [ ] tls->vtls->hmaps. tls->ftls->xmacros for more than 1 struct
+ - [ ] tpm->crash catch, job batching on stress conditions, atomic thrd nb - increase/remove thrd control handle, auto increase thrd nb on stress
+- [:] coverage
+- [:] impl
 - [:] new modules
     - [:] add ressources for todo new modules
 
@@ -27,16 +37,15 @@ General todo:
         if (!time || !ns_gap || .ns_gap + .time < now) call `fun`, update val, reset last_set, update .ns_gap
 - [:] refactors
 transferred from the readme.md "what's missing / faults of the project" section
-    - [ ] common_base: modules are described as independant yet all depend on it (only base defines, but it shoots module independance in the foot)
-    - [ ] da: primitive and feels like it, lacks distinctive/notable algorithms
-    - [ ] dsu: rdsu log allocations are the slowest piece and are not batched; new links have unknown time; malloc lookups slow the structure
-    - [ ] hp: not enough functions; heap_up/heap_down running both min/max costs more maintainer sanity than it is worth
-    - [ ] ill: no circular list; no api consistency around head; elem functions not implemented (user must call exposed node elem each time)
-    - [ ] lru_cache: time in ms; LRU + TTL merge succeeds but feels mushed and hodgepodge rather than a cohesive whole
-    - [ ] rb: not enough functions, feels restrictive; no multi threaded tests with the classic producer-consumer setup
-    - [ ] sptr: generics unusable by older c and not worth it; byte-copy cannot be guarded making it moot if not used as pointer
-    - [ ] tls: no hashmap over infinitely growing vtls; ftls binds a single type of struct
-    - [ ] tpm: no job batching; atomic thread count never changed; no crash reporting; no heartbeat system; no futures
+ - [ ] da->check todo impl, add functs to module
+ - [ ] dsu-> rdsu -> reserve func
+ - [ ] hp-> more funcs
+ - [ ] ill->circular lists, api consistency around head, elem centric funcs
+ - [ ] lruc->ms to ns, make a separate lru only cache similar to dsu/
+ - [ ] rb->example w producer/consumer setup, add functs to module
+ - [ ] rptr->package _generic in ifdef blocks and check compile ok for c older version
+ - [ ] tls->vtls->hmaps. tls->ftls->xmacros for more than 1 struct
+ - [ ] tpm->crash catch, job batching on stress conditions, atomic thrd nb - increase/remove thrd control handle, auto increase thrd nb on stress
 
 ### COVERAGE
 - [:] multi threaded tests (needs re-comp for #ifdef branches)
@@ -69,13 +78,8 @@ transferred from the readme.md "what's missing / faults of the project" section
   - [ ] tpm
 
 ### IMPLEMENTATION
-- [~] add github CICD rules for merge w main
- - [x] deploy
- - [ ] add doxygen step
-  - [ ] check:doxygen does not err out
-  - [:] check:non-internal api for module have doxygen doc
- - [:] add cppcheck step
- - [ ] restrict to run only on modules affected by the push (if none found run on all)
+- [:] add github CICD rules for merge w main
+ - [ ] add cppcheck step
 - [:] makefile rules to recomp w multi threaded and merge into coverage
  - [ ] add multi threaded tests
   - [ ] restrict to specific modules
