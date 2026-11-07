@@ -161,7 +161,7 @@ NO_COV void test_cm_tpmi_worker_steal_capped(void) {
 	t_cm_tpm  t;
 	pthread_t w;
 
-	fake_pool_init(&t, 2);
+	fake_pool_init(&t, 3);
 	// neighbour cache is full so half of it would overflow the worker's
 	// free space once it has already taken its main-queue slice.
 	t.threads[1].start = 0;
@@ -184,7 +184,7 @@ NO_COV void test_cm_tpmi_worker_steal_capped(void) {
 	for (size_t i = 0; i < t.threads[1].end; i++)
 		free(t.threads[1].jc[i]);
 	tpm_clear_job_list(t.q_start, NULL);
-	fake_pool_destroy(&t, 2);
+	fake_pool_destroy(&t, 3);
 }
 
 NO_COV void test_cm_tpmi_worker_steal_skip_small(void) {

@@ -54,13 +54,34 @@ NO_COV void test_cm_tpm_init_default(void) {
 	tpm_delete(&t, NULL);
 }
 
-// NOTE(coverage): tpm_create's remaining uncovered regions are the failure
-// paths of the pthread primitives, which no test can force today:
-//   - tpm_new: tpm_init() returning NULL (line 30)
-//   - init_q: pthread_cond_init() failing (lines 48-50)
-//   - tpm_init: init_q() failing (line 82)
-//   - tpm_init: pthread_create() failing mid-spawn (lines 91-99)
-// Covering them needs a __wrap_pthread_cond_init / __wrap_pthread_create pair
-// (same shape as the malloc/clock wrappers in common_base/tests.h) driven by a
-// call-limit counter. The tests themselves are then trivial: fail on the Nth
-// call and assert the pool is torn down and nb_threads is set to -1.
+NO_COV void test_cm_tpm_new_init_fail(void) {
+	// tpm_init's pthread_cond_init failure makes tpm_new free the pool and
+	// report the failure.
+	pthread_cond_init_set_call_limit(0);
+	assert(tpm_new(2) == NULL);
+	pthread_cond_init_set_call_limit(PTHREAD_DFT_LIMIT);
+}
+
+NO_COV void test_cm_tpm_init_cond_fail(void) {
+	t_cm_tpm t;
+
+	// init_q fails: nb_threads is flagged -1 and no worker is spawned.
+	pthread_cond_init_set_call_limit(0);
+	assert(tpm_init(&t, 2) == NULL);
+	assert(atomic_load(&t.nb_threads) == (size_t)-1);
+	pthread_cond_init_set_call_limit(PTHREAD_DFT_LIMIT);
+}
+
+NO_COV void test_cm_tpm_init_thread_fail(void) {
+	t_cm_tpm t;
+
+	// the first worker spawns, the second fails: the pool is stopped, the
+	// already-running worker is cancelled and nb_threads is flagged -1.
+	pthread_create_set_call_limit(1);
+	assert(tpm_init(&t, 2) == NULL);
+	assert(atomic_load(&t.nb_threads) == (size_t)-1);
+	pthread_join(t.threads[0].id_absolute, NULL);
+	pthread_create_set_call_limit(PTHREAD_DFT_LIMIT);
+	pthread_cond_destroy(&t.q_cond);
+	pthread_mutex_destroy(&t.q_lock);
+}

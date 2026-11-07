@@ -27,11 +27,6 @@ General todo:
         if (!time || !ns_gap || .ns_gap + .time < now) call `fun`, update val, reset last_set, update .ns_gap
 
 ### COVERAGE
-- [~] tpm
- - [x] funcs
- - [~] branches
-  - [ ] pthread_create and other init
-  - [x] system as is
 - [:] multi threaded tests (needs re-comp for #ifdef branches)
  - [ ] sptr
  - [ ] rb

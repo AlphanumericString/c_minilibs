@@ -3,18 +3,28 @@
 #ifdef C_MINI__TESTS
 #	include <bits/types/clockid_t.h>
 #	include <bits/types/struct_timespec.h>
+#	include <errno.h>
+#	include <pthread.h>
 #	include <time.h>
 
 #	include <stddef.h>
 #	include <stdint.h>
-#	define NO_COV          __attribute__((no_profile_instrument_function))
-#	define ALLOC_DFT_LIMIT SIZE_MAX
-#	define CLOCK_DFT_LIMIT SIZE_MAX
+#	define NO_COV            __attribute__((no_profile_instrument_function))
+#	define ALLOC_DFT_LIMIT   SIZE_MAX
+#	define CLOCK_DFT_LIMIT   SIZE_MAX
+#	define PTHREAD_DFT_LIMIT SIZE_MAX
 
 extern size_t nb_alloc;
 extern size_t nb_clock;
 extern size_t clock_limit;
 extern size_t alloc_limit;
+
+// per-primitive call budgets: the (limit+1)th call returns EAGAIN. The setters
+// reset the matching counter so a test only has to arm/re-arm the budget.
+extern size_t nb_pthread_create;
+extern size_t pthread_create_limit;
+extern size_t nb_pthread_cond_init;
+extern size_t pthread_cond_init_limit;
 
 // when enabled __wrap_clock_gettime reports this fixed time instead of the
 // real one, letting tests force deadlines to be in the past (or to overflow
@@ -26,12 +36,18 @@ NO_COV void *__wrap_calloc(size_t sz_e, size_t nb_e);
 NO_COV void *__wrap_malloc(size_t size);
 NO_COV void *__wrap_realloc(void *ptr, size_t new_size);
 NO_COV int   __wrap_clock_gettime(clockid_t __clock_id, struct timespec *__tp);
-NO_COV void  alloc_set_call_limit(size_t lim);
-NO_COV void  alloc_reset_counter(void);
-NO_COV void  clock_set_call_limit(size_t lim);
-NO_COV void  clock_reset_counter(void);
-NO_COV void  clock_set_fake_time(time_t sec, long nsec);
-NO_COV void  clock_clear_fake_time(void);
+NO_COV int  __wrap_pthread_create(pthread_t *thread, const pthread_attr_t *attr,
+                                  void *(*start_routine)(void *), void *arg);
+NO_COV int  __wrap_pthread_cond_init(pthread_cond_t           *cond,
+                                     const pthread_condattr_t *attr);
+NO_COV void alloc_set_call_limit(size_t lim);
+NO_COV void alloc_reset_counter(void);
+NO_COV void clock_set_call_limit(size_t lim);
+NO_COV void clock_reset_counter(void);
+NO_COV void clock_set_fake_time(time_t sec, long nsec);
+NO_COV void clock_clear_fake_time(void);
+NO_COV void pthread_create_set_call_limit(size_t lim);
+NO_COV void pthread_cond_init_set_call_limit(size_t lim);
 
 #	ifdef C_MINI__TWRAP_IMPL
 
@@ -43,10 +59,40 @@ size_t alloc_limit = ALLOC_DFT_LIMIT;
 int             fake_clock_enabled = 0;
 struct timespec fake_clock         = {0, 0};
 
+size_t nb_pthread_create       = 0;
+size_t pthread_create_limit    = PTHREAD_DFT_LIMIT;
+size_t nb_pthread_cond_init    = 0;
+size_t pthread_cond_init_limit = PTHREAD_DFT_LIMIT;
+
 extern void *__real_calloc(size_t, size_t);
 extern void *__real_malloc(size_t);
 extern void *__real_realloc(void *, size_t);
 extern int   __real_clock_gettime(clockid_t __clock_id, struct timespec *__tp);
+extern int __real_pthread_create(pthread_t *thread, const pthread_attr_t *attr,
+                                 void *(*start_routine)(void *), void *arg);
+extern int __real_pthread_cond_init(pthread_cond_t           *cond,
+                                    const pthread_condattr_t *attr);
+
+NO_COV int __wrap_pthread_create(pthread_t *thread, const pthread_attr_t *attr,
+                                 void *(*start_routine)(void *), void *arg) {
+	if (nb_pthread_create >= pthread_create_limit) return (EAGAIN);
+	nb_pthread_create++;
+	return __real_pthread_create(thread, attr, start_routine, arg);
+}
+NO_COV int __wrap_pthread_cond_init(pthread_cond_t           *cond,
+                                    const pthread_condattr_t *attr) {
+	if (nb_pthread_cond_init >= pthread_cond_init_limit) return (EAGAIN);
+	nb_pthread_cond_init++;
+	return __real_pthread_cond_init(cond, attr);
+}
+NO_COV void pthread_create_set_call_limit(size_t lim) {
+	pthread_create_limit = lim;
+	nb_pthread_create    = 0;
+}
+NO_COV void pthread_cond_init_set_call_limit(size_t lim) {
+	pthread_cond_init_limit = lim;
+	nb_pthread_cond_init    = 0;
+}
 
 NO_COV int __wrap_clock_gettime(clockid_t id, struct timespec *tp) {
 	if (fake_clock_enabled) {

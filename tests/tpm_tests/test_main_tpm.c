@@ -10,6 +10,9 @@ NO_COV int main(void) {
 	test_cm_tpm_new();
 	test_cm_tpm_new_default();
 	test_cm_tpm_init_default();
+	test_cm_tpm_new_init_fail();
+	test_cm_tpm_init_cond_fail();
+	test_cm_tpm_init_thread_fail();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Add", )
 	test_cm_tpm_add_job();

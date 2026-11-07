@@ -29,6 +29,9 @@ void test_cm_tpm_init(void);
 void test_cm_tpm_new(void);
 void test_cm_tpm_new_default(void);
 void test_cm_tpm_init_default(void);
+void test_cm_tpm_new_init_fail(void);
+void test_cm_tpm_init_cond_fail(void);
+void test_cm_tpm_init_thread_fail(void);
 
 // +----------------+
 // |ADD             |
