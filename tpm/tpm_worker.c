@@ -72,6 +72,10 @@ static inline bool steal_work(t_cm_tpm *tpm, t_cm_tpmi_thread *th) {
 // (keeps a slice of the cache free for stolen work), then try to steal from
 // neighbours. If nothing could be stolen the free space is useless, so top it
 // up from the main queue. Caller holds `tpm->q_lock`.
+// note: when nothing was stolen the slice reserved for stealing is useless, so
+// top up from the main queue. `end` is always < cache_len here: the first
+// refill can only add MGET_NB (< cache_len) and a failed steal never grows
+// the cache.
 static bool get_new_jobs(t_cm_tpm *tpm, t_cm_tpmi_thread *th) {
 	const size_t cache_len = C_MINI__TPM_TRD_JOB_CACHE_LEN;
 	bool         stole;
@@ -87,8 +91,7 @@ static bool get_new_jobs(t_cm_tpm *tpm, t_cm_tpmi_thread *th) {
 	       "Looking for work")
 	batch_refill_from_mainqueue(tpm, th, C_MINI__TPM_TRD_MGET_NB);
 	stole = steal_work(tpm, th);
-	if (!stole && th->end < cache_len)
-		batch_refill_from_mainqueue(tpm, th, cache_len - th->end);
+	if (!stole) batch_refill_from_mainqueue(tpm, th, cache_len - th->end);
 	stole = th->end > th->start;
 	pthread_mutex_unlock(&th->job_cache_lock);
 	return (stole);

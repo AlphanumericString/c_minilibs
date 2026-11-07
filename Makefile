@@ -46,7 +46,8 @@ TFLAGS	?= $(filter-out -O2 -O3 -O1, $(CFLAGS))	-O0 -I./	\
 			-fprofile-instr-generate -ftest-coverage -fcoverage-mapping \
 			-fno-inline -fno-inline-functions -DC_MINI__TESTS
 TLINKER_FLAGS = -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc \
-				-Wl,--wrap=clock_gettime
+				-Wl,--wrap=clock_gettime -Wl,--wrap=pthread_create \
+				-Wl,--wrap=pthread_cond_init
 VGFLAGS		?= $(filter-out -fprofile-instr-generate -ftest-coverage \
 				-fcoverage-mapping -DC_MINI__DEBUG_LEVEL=0,$(TFLAGS)) \
 				-g3 -DC_MINI__TESTS -DC_MINI__DEBUG_LEVEL=99

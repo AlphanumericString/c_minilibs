@@ -21,7 +21,10 @@ t_cm_tpm_jc *tpmi_create_job(t_cm_work w_func, void *a) {
 
 bool tpmi_job_push(t_cm_tpm_jc *to_push, t_cm_tpm_jc **head, t_cm_tpm_jc **tail,
                    bool queue_down) {
-	assert(!(*head == NULL ^ *tail == NULL)); // sanity check
+#ifndef C_MINI__TESTS
+	// sanity check: slow's exec speed so left only for dev/tests
+	assert(!(*head == NULL ^ *tail == NULL));
+#endif
 	if (queue_down == true) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__TPM_LOG_EDOWN)
 		return (false);
