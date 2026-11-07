@@ -95,9 +95,9 @@
  * \brief the handle for jobs inside the thread pool manager system
  * \param func the function to execute for the job
  * \param arg the argument to call the work function with
- * \param infos infos specific to the job fields.
- * \note TODO: infos is not really finished, but it's there we put infos eg
- * thread recurring
+ * \param infos job-specific metadata fields.
+ * \note TODO: infos is incomplete; it currently only carries the recurring
+ * flag.
  * \ingroup tpm
 **/
 typedef struct s_cm_tpm_base_job {
@@ -109,7 +109,7 @@ typedef struct s_cm_tpm_base_job {
 } t_cm_tpm_job;
 
 /* \var hash_colision not used yet, belongs to the bucket system for fast
- * retrival of jobs without scouring the whole list */
+ * retrieval of jobs without scouring the whole list */
 /**
  * \typedef t_cm_tpm_jc
  * \brief this is the thread pool manager job container
@@ -133,20 +133,19 @@ typedef struct s_cm_thread_pool_manager t_cm_tpm;
  * \typedef t_cm_tpmi_thread
  * \brief internal thread structure for the thread pool manager
  * \param jc local job cache for the thread
- * \param start begining of jobs in the local cache
+ * \param start beginning of jobs in the local cache
  * \param end stop of jobs in the local cache (modified by other thread when
  * stealing jobs)
  * \param job_cache_lock mutex lock for local cache lock contention
  * \param pool pointer to the main thread pool manager
- * \param id_absolute relative id for the other threads in the thread pool
- * manager
- * \param id_sequential absolute id of the thread for the OS
+ * \param id_absolute OS thread handle (pthread_t) of the worker
+ * \param id_sequential sequential index of the thread inside the pool
  * \note work stealing policy: collect TRD_MGET_NB (2/3 of cache len) from the
  * main queue, then try to steal from STEAL_WINDOW for the remaining 1/3.
- * Only steal if neighboring thread has strictly more than 1 jobs AND more jobs
- * than it, steal. If a thread is idle, wake up and try to steal jobs every
- * STEAL_RETRY_NS.
- * If no job were stolen fill the remainer 1/3 by taking tpm main queue jobs
+ * Only steal if a neighboring thread has strictly more than one job and more
+ * jobs than the stealer. If a thread is idle, wake up and try to steal jobs
+ * every STEAL_RETRY_NS.
+ * If no job was stolen, fill the remaining 1/3 by taking tpm main queue jobs
  * \ingroup tpm
 **/
 typedef struct s_cm_tpm_thread_internal {
@@ -180,10 +179,10 @@ struct s_cm_tpm_stats {
  * \param q_start start of queue of jobs
  * \param q_end end of queue of jobs
  * \param q_lock mutex for queue contention
- * \param q_cond condition for to notify sub threads for wakeup/sleep
+ * \param q_cond condition variable used to wake or sleep the worker threads
  * \param internal_val internal values for the thread pool manager
  * \param stats statistics for the thread pool manager
- * \note TODO: add hash map for jobs for retrival/deletion
+ * \note TODO: add hash map for jobs for retrieval/deletion
  * \ingroup tpm
 **/
 typedef struct s_cm_thread_pool_manager {

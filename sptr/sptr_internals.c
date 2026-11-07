@@ -57,7 +57,7 @@ size_t sptri_wc_get(const t_cm_fbox *b) {
  * \brief checks whether a shared (strong) pointer is the sole owner of an
  * internal box
  * \param ptr the shared (strong) pointer to check
- * \return true if he is sole owner, otherwise false
+ * \return true if it is the sole owner, otherwise false
  * \ingroup sptr
 **/
 bool sptri_is_sole_box_owns(const t_cm_strong_ptr *ptr) {
@@ -69,7 +69,7 @@ bool sptri_is_sole_box_owns(const t_cm_strong_ptr *ptr) {
  * \brief checks whether a shared (weak) pointer is the sole owner of an
  * internal box
  * \param ptr the shared (weak) pointer to check
- * \return true if he is sole owner, otherwise false
+ * \return true if it is the sole owner, otherwise false
  * \ingroup sptr
 **/
 bool sptri_is_sole_box_ownw(const t_cm_weak_ptr *ptr) {
@@ -80,7 +80,7 @@ bool sptri_is_sole_box_ownw(const t_cm_weak_ptr *ptr) {
 /**
  * \brief check whether the owned pointer is the sole owner of an internal box
  * \param ptr the owned pointer to check
- * \return true if he is sole owner, otherwise false
+ * \return true if it is the sole owner, otherwise false
  * \ingroup sptr
 **/
 bool sptri_is_sole_box_owno(const t_cm_owned_ptr *ptr) {

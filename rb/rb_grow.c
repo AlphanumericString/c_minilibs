@@ -9,7 +9,7 @@
  * \param rb the old round buffer
  * \param nb_elem_added number of additional elements
  * \return newly allocated t_cm_rb or NULL if alloc fails
- * \note yeld a newly grown rb to not invalidate i_pos and o_pos
+ * \note yields a newly grown rb to not invalidate i_pos and o_pos
  * \ingroup rb
 **/
 t_cm_rb *rb_grow(const t_cm_rb *rb, size_t nb_elem_added) {

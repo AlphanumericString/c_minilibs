@@ -27,7 +27,7 @@ size_t cdsu_size(const t_cm_cdsu *cdsu) {
 	return (cdsu->size);
 }
 /**
- * \brief return the number of distinc separate sets in the cdsu
+ * \brief return the number of distinct separate sets in the cdsu
  * \param cdsu the cdsu to query
  * \return the number of components
  * \ingroup cdsu

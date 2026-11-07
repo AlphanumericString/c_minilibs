@@ -41,7 +41,7 @@ void rdsu_clr(t_cm_rdsu *rdsu) {
 	rdsu->components = rdsu->size;
 }
 /**
- * \brief cleans up the structurre and then free's it
+ * \brief cleans up the structure and then frees it
  * \param ds the rdsu to clean
  * \ingroup rdsu
 **/

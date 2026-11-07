@@ -32,7 +32,7 @@ void __attribute__((constructor())) init_cm_vtls(void) {
 /**
  * \brief dumps a specific vtls variable at a designated fd
  * \param v_name the name of the variable to print
- * \param fd the place where to print all vtls infos
+ * \param fd the file descriptor where vtls info is written
  * \ingroup vtls
 **/
 bool vtls_dump(const char *v_name, int fd) {
@@ -59,7 +59,7 @@ bool vtls_dump(const char *v_name, int fd) {
 }
 /**
  * \brief dumps all vtls values at a designated fd
- * \param fd the place where to print all vtls infos
+ * \param fd the file descriptor where vtls info is written
  * \ingroup vtls
 **/
 ssize_t vtls_dump_all(int fd) {

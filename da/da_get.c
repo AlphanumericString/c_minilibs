@@ -3,8 +3,8 @@
 #include "dynamic_array.h"
 
 /**
- * \brief get element at offset pos respecting the size of elements and copies
- * it at out_elem
+ * \brief get element at offset pos respecting the size of elements and copy
+ * it to out_elem
  * \param da pointer to the dynamic array
  * \param pos index of the element
  * \param out_elem pointer where the element will be copied
@@ -21,7 +21,7 @@ int da_get(const t_cm_da *da, size_t pos, void *out_elem) {
 }
 /**
  * \brief get up to n elements starting at offset pos respecting the size of
- * elements and copies them at out_buffer
+ * elements and copy them to out_buffer
  * \param da pointer to the dynamic array
  * \param n number of elements to copy
  * \param pos index of the first element

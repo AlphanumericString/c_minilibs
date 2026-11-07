@@ -17,10 +17,11 @@
 #endif
 
 /**
- * \brief the ftls is the fastest of the tls and provides type safety but can
- * ONLY be set at compile time.
+ * \brief ftls is the fastest of the tls variants and provides type safety but
+ * can ONLY be set at compile time.
  * \note please override with your own struct (or alternatively, name your own
  * struct s_cm_tls_ftls_node).
+ * \ingroup ftls
 **/
 typedef C_MINI__FTLS_STRUCT t_cm_ftls;
 
@@ -62,7 +63,7 @@ void __attribute__((constructor())) init_cm_ftls(void) {
 
 /**
  * \brief return the Thread Local Storage structure we attached.
- * \return the struct attached to the tls, null is alloc fails.
+ * \return the struct attached to the tls, NULL if allocation fails.
  * \note check the tests for an example.
  * \ingroup ftls
 **/

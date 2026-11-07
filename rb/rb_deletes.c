@@ -40,7 +40,7 @@ void rb_clr(t_cm_rb *rb) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 }
 /**
- * \brief free's the rb inner and outer
+ * \brief frees the rb inner and outer
  * \param rb the round buffer to free
  * \ingroup rb
 **/

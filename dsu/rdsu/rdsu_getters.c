@@ -27,7 +27,7 @@ size_t rdsu_size(const t_cm_rdsu *rdsu) {
 	return (rdsu->size);
 }
 /**
- * \brief return the number of distinc separate sets in the rdsu
+ * \brief return the number of distinct separate sets in the rdsu
  * \param rdsu the rdsu to query
  * \return the number of components
  * \ingroup rdsu

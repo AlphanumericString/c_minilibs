@@ -62,7 +62,7 @@ typedef struct {
  * \brief the key value pair that lives in the cache
  * \param key pointer to key
  * \param k_len length to read from at pointer key
- * \param value stored value in associated to key
+ * \param value value stored and associated with the key
  * \ingroup lruc
 **/
 typedef struct {
@@ -129,6 +129,8 @@ typedef struct {
  * \param minHeap heap ordered nodes using the TTL (faster insert/remove)
  * \param MRU direct pointer to Most Recently Used node
  * \param LRU direct pointer to Least Recently Used node
+ * \param reserved_nodes_nb number of pre-allocated nodes currently reserved
+ * \param reserved_nodes singly linked list of pre-allocated, reusable nodes
  * \param ttl_glob default ttl grace period for elements (default LONG_MAX aka
  * inf) in ms
  * \param dtor destructor for stored values. Does not get called on keys. Not
@@ -167,6 +169,7 @@ typedef struct {
  * \param elem pointer to the key node element
  * \param arg argument passed "as is" from user, given from user
  * \return expected to return true on success, false otherwise
+ * \ingroup lruc
 **/
 typedef bool (*t_cm_kvcallback)(t_cm_keyvalue *elem, void *arg);
 

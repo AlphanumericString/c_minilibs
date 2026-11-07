@@ -121,7 +121,7 @@ t_cm_rdsu *rdsu_init_from_arrays(t_cm_rdsu *ret, size_t size, uint16_t *parents,
 /**
  * \brief grow the rdsu by N values
  *
- * (warning: will realocate. if you used local buffers durring construction
+ * (warning: will reallocate. if you used local buffers during construction
  * via from_arrays methods do not use).
  * \param rdsu the t_cm_rdsu to grow
  * \param n the number of values to add

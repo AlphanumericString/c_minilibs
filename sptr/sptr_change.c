@@ -50,7 +50,7 @@ t_cm_weak_ptr sptr_into_weak(t_cm_strong_ptr *sptr) {
 	return ((t_cm_weak_ptr){sptr->meta});
 }
 /**
- * \brief steals the ownership of a owned pointer
+ * \brief steals the ownership of an owned pointer
  * \param to owned pointer to transfer ownership to
  * \param from owned pointer to transfer ownership from
  * \return true if successful, false otherwise
@@ -74,15 +74,15 @@ bool sptr_transfer_ownership(t_cm_owned_ptr *to, t_cm_owned_ptr *from) {
 	return (true);
 }
 /**
- * \brief move ownership moves the smart pointer of from to the variable to
- * and switches who owns the data. If dest is not empty calls the delete
- * function on the smart pointer before moving the data. The variable from is
+ * \brief moves the owned smart pointer from `from` into `dest` and switches
+ * who owns the data. If dest is not empty, calls the delete function on it
+ * before moving the data. The variable from is zeroed out.
+ * \param dest the destination where the data is placed. If not zero filled,
+ * calls delete on it before moving the data in.
+ * \param from the source to move the data from. On success the variable is
  * zeroed out.
- * \param dest the destination of where to place the data. If not zero filled
- * calls delete before moving the data into it.
- * \param from the location to copy the data from. If copy is successfully made
- * the variable is zeroed out.
  * \return true on success, false otherwise.
+ * \ingroup sptr
 **/
 bool sptr_move_ownership(t_cm_owned_ptr *dest, t_cm_owned_ptr *from) {
 	t_cm_owned_ptr r;

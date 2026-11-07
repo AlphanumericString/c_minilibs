@@ -22,7 +22,7 @@ bool rb_empty(t_cm_rb rb) {
 	return (!rb.array || rbi_count_get(&rb) == 0);
 }
 /**
- * \brief return number of entries in rb not yet read/poped
+ * \brief return number of entries in rb not yet read/popped
  * \param rb the round buffer
  * \return number of elements in the buffer
  * \ingroup rb
