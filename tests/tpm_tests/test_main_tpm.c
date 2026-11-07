@@ -9,12 +9,15 @@ NO_COV int main(void) {
 	test_cm_tpm_init();
 	test_cm_tpm_new();
 	test_cm_tpm_new_default();
+	test_cm_tpm_init_default();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Add", )
 	test_cm_tpm_add_job();
 	test_cm_tpm_add_job_errors();
 	test_cm_tpm_add_batch();
 	test_cm_tpm_add_batch_errors();
+	test_cm_tpm_add_batch_shutdown();
+	test_cm_tpm_add_batch_append();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Jobs", )
 	test_cm_tpmi_create_job();
@@ -36,11 +39,22 @@ NO_COV int main(void) {
 	test_cm_tpm_stop();
 	test_cm_tpm_wait_end();
 	test_cm_tpm_wait_end_clock_fail();
+	test_cm_tpm_wait_end_thread_cache();
+	test_cm_tpm_wait_end_clock_fail_loop();
+	test_cm_tpm_wait_end_clock_regress();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Worker", )
 	test_cm_tpmi_worker_null();
 	test_cm_tpmi_worker_runs_jobs();
 	test_cm_tpmi_worker_steals();
+	test_cm_tpmi_worker_single();
+	test_cm_tpmi_worker_wide();
+	test_cm_tpmi_worker_held_lock();
+	test_cm_tpmi_worker_steal_capped();
+	test_cm_tpmi_worker_steal_skip_small();
+	test_cm_tpmi_worker_preloaded();
+	test_cm_tpmi_worker_wait_clock_fail();
+	test_cm_tpmi_worker_wait_clock_overflow();
 
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "All tpm tests completed successfully.", )
 	return (EXIT_SUCCESS);

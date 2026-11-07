@@ -118,4 +118,5 @@ NO_COV void test_cm_tpmi_job_thrd_cache_pop(void) {
 
 	// bad arguments
 	assert(tpmi_job_thrd_cache_pop(NULL, buffer, 0, 1) == -1);
+	assert(tpmi_job_thrd_cache_pop(&t, NULL, 0, 1) == -1);
 }

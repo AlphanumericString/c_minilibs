@@ -16,6 +16,12 @@ extern size_t nb_clock;
 extern size_t clock_limit;
 extern size_t alloc_limit;
 
+// when enabled __wrap_clock_gettime reports this fixed time instead of the
+// real one, letting tests force deadlines to be in the past (or to overflow
+// the nanosecond field) without touching wall/monotonic time.
+extern int             fake_clock_enabled;
+extern struct timespec fake_clock;
+
 NO_COV void *__wrap_calloc(size_t sz_e, size_t nb_e);
 NO_COV void *__wrap_malloc(size_t size);
 NO_COV void *__wrap_realloc(void *ptr, size_t new_size);
@@ -24,6 +30,8 @@ NO_COV void  alloc_set_call_limit(size_t lim);
 NO_COV void  alloc_reset_counter(void);
 NO_COV void  clock_set_call_limit(size_t lim);
 NO_COV void  clock_reset_counter(void);
+NO_COV void  clock_set_fake_time(time_t sec, long nsec);
+NO_COV void  clock_clear_fake_time(void);
 
 #	ifdef C_MINI__TWRAP_IMPL
 
@@ -32,12 +40,19 @@ size_t nb_alloc    = 0;
 size_t clock_limit = CLOCK_DFT_LIMIT;
 size_t alloc_limit = ALLOC_DFT_LIMIT;
 
+int             fake_clock_enabled = 0;
+struct timespec fake_clock         = {0, 0};
+
 extern void *__real_calloc(size_t, size_t);
 extern void *__real_malloc(size_t);
 extern void *__real_realloc(void *, size_t);
 extern int   __real_clock_gettime(clockid_t __clock_id, struct timespec *__tp);
 
 NO_COV int __wrap_clock_gettime(clockid_t id, struct timespec *tp) {
+	if (fake_clock_enabled) {
+		*tp = fake_clock;
+		return (0);
+	}
 	if (nb_clock >= clock_limit) return (-1);
 	nb_clock++;
 	return __real_clock_gettime(id, tp);
@@ -47,6 +62,14 @@ NO_COV void clock_set_call_limit(size_t lim) {
 }
 NO_COV void clock_reset_counter(void) {
 	nb_clock = 0;
+}
+NO_COV void clock_set_fake_time(time_t sec, long nsec) {
+	fake_clock.tv_sec  = sec;
+	fake_clock.tv_nsec = nsec;
+	fake_clock_enabled = 1;
+}
+NO_COV void clock_clear_fake_time(void) {
+	fake_clock_enabled = 0;
 }
 
 NO_COV void *__wrap_calloc(size_t y, size_t z) {

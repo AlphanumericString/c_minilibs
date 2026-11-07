@@ -28,22 +28,24 @@ General todo:
 
 ### COVERAGE
 - [~] tpm
- - [ ] funcs
- - [ ] branches
+ - [x] funcs
+ - [~] branches
+  - [ ] pthread_create and other init
+  - [x] system as is
 - [:] multi threaded tests (needs re-comp for #ifdef branches)
  - [ ] sptr
  - [ ] rb
 - [:] da
- - [:] iter
- - [:] oscilation around boudary with auto_shrink
+ - [ ] iter
+ - [ ] oscilation around boudary with auto_shrink
 
 ### DOC
 - [:] **MARKETING PART**
- - [:] da
-  - [:] Growth factor comparison (1.5x, 2x, fixed increment): realloc count and time.
-  - [:] Baselines: raw `realloc` loop and C++ `std::vector::push_back`.
-  - [:] Auto-shrink on vs off in an oscillating workload.
-  - [:] `make bench` that outputs CSV, plus a gnuplot/matplotlib script. Commit the PNGs to the README.
+ - [ ] da
+  - [ ] Growth factor comparison (1.5x, 2x, fixed increment): realloc count and time.
+  - [ ] Baselines: raw `realloc` loop and C++ `std::vector::push_back`.
+  - [ ] Auto-shrink on vs off in an oscillating workload.
+  - [ ] `make bench` that outputs CSV, plus a gnuplot/matplotlib script. Commit the PNGs to the README.
 - [ ] **POLISH**
  - [ ] README with complexity big-o notations, and graphs.
   - [ ] big-o
@@ -67,26 +69,26 @@ General todo:
  - [:] add cppcheck step
  - [ ] restrict to run only on modules affected by the push (if none found run on all)
 - [:] makefile rules to recomp w multi threaded and merge into coverage
- - [:] add multi threaded tests
-  - [:] restrict to specific modules
- - [:] add multi thread tests to coverage mapping
+ - [ ] add multi threaded tests
+  - [ ] restrict to specific modules
+ - [ ] add multi thread tests to coverage mapping
 - [:] ill
- - [:] elem based functions
- - [:] set elem based functions as default and node ones as `_node()`
+ - [ ] elem based functions
+ - [ ] set elem based functions as default and node ones as `_node()`
 - [:] rb
- - [:] magic rb
+ - [ ] magic rb
 - [:] da
- - [:] iter (eg: `iter(holder, start, end, &elem_it)`) -1 for end, otherwise start included end not, if end oob / -1 end included
- - [:] map(eg: `map(holder, fn, out_elem_size)`)
- - [:] nmap(eg: `nmap(holder, n, fn, out_elem_size)`)
- - [:] ifdef auto shrink (path on pop/rm) with (len <= cap/4 -> len = cap/2)
-  - [:] shrink on rm
-  - [:] shrink on pop
-- [ ] tpm
+ - [ ] iter (eg: `iter(holder, start, end, &elem_it)`) -1 for end, otherwise start included end not, if end oob / -1 end included
+ - [ ] map(eg: `map(holder, fn, out_elem_size)`)
+ - [ ] nmap(eg: `nmap(holder, n, fn, out_elem_size)`)
+ - [ ] ifdef auto shrink (path on pop/rm) with (len <= cap/4 -> len = cap/2)
+  - [ ] shrink on rm
+  - [ ] shrink on pop
+- [:] tpm
  - [ ] carsh jobs catch
- - [:] dispatch new jobs on spikes
- - [:] batch jobs on spikes
- - [:] heartbeat system
+ - [ ] dispatch new jobs on spikes
+ - [ ] batch jobs on spikes
+ - [ ] heartbeat system
 
 note: new module paused. finish tpm first.
 note: new module paused. finish school project first.

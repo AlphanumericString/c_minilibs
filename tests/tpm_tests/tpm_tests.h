@@ -28,6 +28,7 @@ int  cb_get_cleanups(void);
 void test_cm_tpm_init(void);
 void test_cm_tpm_new(void);
 void test_cm_tpm_new_default(void);
+void test_cm_tpm_init_default(void);
 
 // +----------------+
 // |ADD             |
@@ -36,6 +37,8 @@ void test_cm_tpm_add_job(void);
 void test_cm_tpm_add_job_errors(void);
 void test_cm_tpm_add_batch(void);
 void test_cm_tpm_add_batch_errors(void);
+void test_cm_tpm_add_batch_shutdown(void);
+void test_cm_tpm_add_batch_append(void);
 
 // +----------------+
 // |INTERNAL JOBS   |
@@ -65,6 +68,9 @@ void test_cm_tpm_get_nbthread(void);
 void test_cm_tpm_stop(void);
 void test_cm_tpm_wait_end(void);
 void test_cm_tpm_wait_end_clock_fail(void);
+void test_cm_tpm_wait_end_thread_cache(void);
+void test_cm_tpm_wait_end_clock_fail_loop(void);
+void test_cm_tpm_wait_end_clock_regress(void);
 
 // +----------------+
 // |WORKER          |
@@ -72,3 +78,11 @@ void test_cm_tpm_wait_end_clock_fail(void);
 void test_cm_tpmi_worker_null(void);
 void test_cm_tpmi_worker_runs_jobs(void);
 void test_cm_tpmi_worker_steals(void);
+void test_cm_tpmi_worker_single(void);
+void test_cm_tpmi_worker_wide(void);
+void test_cm_tpmi_worker_held_lock(void);
+void test_cm_tpmi_worker_steal_capped(void);
+void test_cm_tpmi_worker_steal_skip_small(void);
+void test_cm_tpmi_worker_preloaded(void);
+void test_cm_tpmi_worker_wait_clock_fail(void);
+void test_cm_tpmi_worker_wait_clock_overflow(void);
