@@ -53,6 +53,7 @@ VGFLAGS		?= $(filter-out -fprofile-instr-generate -ftest-coverage \
 				-g3 -DC_MINI__TESTS -DC_MINI__DEBUG_LEVEL=99
 # Tools flags
 CPPCHECK_LOG_LOC=$(BUILD_DIR)/cppcheck_checks_ran.txt
+DOXYCHECK_LOG_LOC=$(BUILD_DIR)/doxygen_check.log
 
 CHECK_FLAGS	?= --enable=all --std=$(CHECK_STD) --language=c --inline-suppr \
 				-I. --suppress=missingIncludeSystem --suppress=unusedFunction \
@@ -169,7 +170,8 @@ $(DOC_DIR)/html/index.html: Doxyfile
 # tests_run: build and run every module's tests under valgrind
 # valgrind: build and run tests under valgrind (module aware via MODULE=<name>)
 # static_analysis: run the static analyzer (module aware via MODULE=<name>)
-# norm_check: check that every C/H file is clang-format compliant
+# norm_check: check that every C/H file is clang-format compliant (file aware via FILES=<name>)
+# doxygen_check: fail on doxygen warnings/errors (module aware via MODULE=<name>, file aware via FILES=<name>)
 # single_file: amalgamate MODULE into a single stb style header (MODULE required)
 # coverage: run coverage pass using llvm tooling (debug via DEBUG_LVL=<value>)
 # documentation: run documentation generation using doxygen
@@ -213,15 +215,38 @@ static_analysis:
 			make --no-print-directory analyze_$$m ; \
 		done ; \
 	fi ;
+# file aware via FILES=<list of files> (defaults to every C/H file of the project)
 norm_check:
-	@clang-format -i $$(fd '.*\.[ch]$$' ./ )
-	@sed 's/^ \*\*\//**\//' -i $$(fd '.*\.[ch]$$' ./ )
-	@if ! git diff --quiet --diff-filter=ACMR -- '*.c' '*.h' ; then \
+	@files="$(if $(strip $(FILES)),$(FILES),$$(fd '.*\.[ch]$$' ./ ))" ; \
+	clang-format -i $$files ; \
+	sed 's/^ \*\*\//**\//' -i $$files ; \
+	if ! git diff --quiet --diff-filter=ACMR -- '*.c' '*.h' ; then \
 		$(PRINT) "norm_checking error: the following files are not clang-format compliant:\n" ; \
 		git --no-pager diff --name-only --diff-filter=ACMR -- '*.c' '*.h' ; \
 		exit 1 ; \
 	fi
 	@$(PRINT) "norm_checking: all files are clang-format compliant\n"
+# documentation check: fail on any doxygen warning/error (module aware via MODULE=<name>,
+# file aware via FILES=<files>, defaults to every module)
+doxygen_check:
+	@inputs="$(strip $(FILES))" ; \
+	if [ -z "$$inputs" ] ; then \
+		if [ -n "$(MODULE_CL)" ] ; then inputs="$(MODULE_CL)" ; else inputs="$(MODULES)" ; fi ; \
+	fi ; \
+	mkdir -p $(dir $(DOXYCHECK_LOG_LOC)) $(BUILD_DIR)/doxygen_check ; \
+	$(PRINT) "doxygen_check: checking [$$inputs] for documentation errors\n" ; \
+	{ cat Doxyfile ; \
+		$(PRINT) 'WARN_AS_ERROR = FAIL_ON_WARNINGS\n' ; \
+		$(PRINT) 'INPUT = %s\n' "$$inputs" ; \
+		$(PRINT) 'OUTPUT_DIRECTORY = $(BUILD_DIR)/doxygen_check\n' ; \
+		$(PRINT) 'QUIET = YES\n' ; \
+	} | doxygen - > $(DOXYCHECK_LOG_LOC) 2>&1 ; \
+	if [ $$? -ne 0 ] ; then \
+		$(PRINT) "doxygen_check error: documentation issues found:\n" ; \
+		grep -E 'error:|warning:' $(DOXYCHECK_LOG_LOC) || cat $(DOXYCHECK_LOG_LOC) ; \
+		exit 1 ; \
+	fi ; \
+	$(PRINT) "doxygen_check: no documentation errors found\n"
 single_file:
 	@if [ -z "$(MODULE_CL)" ] ; then \
 		$(PRINT) '$(RED)Invalid$(RESET). Please use `single_file` rule with a module (eg: `make single_file "MODULE=module1[ module2...]"`)'; \
@@ -264,7 +289,8 @@ help:
 	$(PRINT) "tests_run: build and run every module's tests under valgrind"
 	$(PRINT) "valgrind: build and run tests under valgrind (module aware via MODULE=<name>)"
 	$(PRINT) "static_analysis: run the static analyzer (module aware via MODULE=<name>)"
-	$(PRINT) "norm_check: check that every C/H file is clang-format compliant"
+	$(PRINT) "norm_check: check that every C/H file is clang-format compliant (file aware via FILES=<name>)"
+	$(PRINT) "doxygen_check: fail on doxygen warnings/errors (module aware via MODULE=<name>, file aware via FILES=<name>)"
 	$(PRINT) "single_file: amalgamate MODULE into a single stb style header (via MODULE=<name>)"
 	$(PRINT) "coverage: run coverage pass using llvm tooling (debug via DEBUG_LVL=<value>)"
 	$(PRINT) "documentation: run documentation generation using doxygen"
@@ -274,4 +300,4 @@ help:
 	$(PRINT) "re: re-compile the project using rule fclean and all"
 	$(PRINT) "remove_module: removes a specified module from the project"
 	$(PRINT) "help: print this help message"
-.PHONY: re clean fclean tests tests_run valgrind static_analysis norm_check single_file remove_module help examples
+.PHONY: re clean fclean tests tests_run valgrind static_analysis norm_check doxygen_check single_file remove_module help examples
