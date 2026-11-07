@@ -3,12 +3,131 @@ name: CI
 on:
   push:
     branches: [main]
+    paths:
+      - '**.c'
+      - '**.h'
+      - 'Makefile'
+      - 'Doxyfile'
+      - 'scripts/**'
+      - '.github/workflows/ci.yml'
   pull_request:
     branches: [main]
+    paths:
+      - '**.c'
+      - '**.h'
+      - 'Makefile'
+      - 'Doxyfile'
+      - 'scripts/**'
+      - '.github/workflows/ci.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  ci:
+  changes:
+    name: Detect changes
     runs-on: ubuntu-latest
+    outputs:
+      modules: ${{ steps.detect.outputs.modules }}
+      norm_files: ${{ steps.detect.outputs.norm_files }}
+      norm: ${{ steps.detect.outputs.norm }}
+      doxygen: ${{ steps.detect.outputs.doxygen }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed files and affected modules
+        id: detect
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          modules_all="$(sh scripts/list_modules.sh)"
+
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+            head="${{ github.event.pull_request.head.sha }}"
+            range="$base...$head"
+          else
+            base="${{ github.event.before }}"
+            head="${{ github.sha }}"
+            range="$base..$head"
+          fi
+
+          full=false
+          changed=""
+          if [ -z "$base" ] \
+             || [ "$base" = "0000000000000000000000000000000000000000" ] \
+             || ! git cat-file -e "${base}^{commit}" 2>/dev/null \
+             || ! changed="$(git diff --name-only --diff-filter=ACMR "$range" 2>/dev/null)"; then
+            full=true
+            changed=""
+          fi
+
+          # Cross-cutting changes force a full run since they affect every module.
+          if [ "$full" = false ] \
+             && printf '%s\n' "$changed" | grep -qE '^(common_base/|Makefile|Doxyfile|scripts/|\.github/)'; then
+            full=true
+          fi
+
+          modules=""
+          norm_files=""
+          norm=false
+          doxygen=false
+
+          if [ "$full" = true ]; then
+            modules="$modules_all"
+            norm=true
+            doxygen=true
+          else
+            while IFS= read -r f; do
+              [ -n "$f" ] || continue
+              case "$f" in
+                tests/*_tests/*)
+                  # tests/<module>_tests/... maps back to <module>
+                  m="${f#tests/}"
+                  m="${m%%_tests/*}"
+                  case " $modules_all " in
+                    *" $m "*) modules="${modules:+$modules }$m" ;;
+                  esac
+                  ;;
+                *)
+                  top="${f%%/*}"
+                  case " $modules_all " in
+                    *" $top "*) modules="${modules:+$modules }$top" ;;
+                  esac
+                  ;;
+              esac
+            done <<< "$changed"
+            modules="$(printf '%s' "$modules" | tr ' ' '\n' | sort -u | tr '\n' ' ')"
+            modules="${modules% }"
+
+            norm_files="$(printf '%s' "$changed" | grep -E '\.(c|h)$' || true)"
+            norm_files="$(printf '%s' "$norm_files" | tr '\n' ' ')"
+            norm_files="${norm_files% }"
+            [ -n "$norm_files" ] && norm=true
+
+            [ -n "$modules" ] && doxygen=true
+          fi
+
+          {
+            echo "modules=$modules"
+            echo "norm_files=$norm_files"
+            echo "norm=$norm"
+            echo "doxygen=$doxygen"
+          } >> "$GITHUB_OUTPUT"
+
+  norm:
+    name: Norm check
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.norm == 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -16,16 +135,53 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y clang valgrind fd-find
+          sudo apt-get install -y fd-find
           sudo ln -sf "$(command -v fdfind)" /usr/local/bin/fd
           python3 -m pip install --user clang-format==21.1.8
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
       - name: Norm check
-        run: make norm_check
+        env:
+          FILES: ${{ needs.changes.outputs.norm_files }}
+        run: make norm_check FILES="$FILES"
 
-      - name: Build
-        run: make all -j
+  doxygen:
+    name: Doxygen check
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.doxygen == 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Run tests
-        run: make tests_run -j
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y doxygen
+
+      - name: Doxygen check
+        env:
+          MODULES: ${{ needs.changes.outputs.modules }}
+        run: make doxygen_check MODULE="$MODULES"
+
+  build:
+    name: Build and test
+    runs-on: ubuntu-latest
+    needs: changes
+    if: needs.changes.outputs.modules != ''
+    env:
+      MODULES: ${{ needs.changes.outputs.modules }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang valgrind
+
+      - name: Build changed modules
+        run: make module MODULE="$MODULES" -j
+
+      - name: Run tests under valgrind
+        run: make valgrind MODULE="$MODULES" -j
