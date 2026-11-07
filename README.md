@@ -41,6 +41,10 @@ running tests under valgrind, static analysis with cppcheck, doxygen docs, and
 making optional paths (debug logging, fault injection, atomics, threaded tests)
 selectable through macros rather than edits.
 
+## Coverage
+
+![ coverage of the modules ](./coverage.png)
+
 ## Modules presentation
 
 ### `common_base`
