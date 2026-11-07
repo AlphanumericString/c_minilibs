@@ -1,23 +1,63 @@
 # TODO
+general todo for the project
 - `x` done
 - `~` running
 - `:` paused
 - ` ` not started
-General todo
+General todo:
 - [~] current
+    - [ ] doc
     - [~] coverage
     - [~] impl
 - [:] new modules
     - [:] add ressources for todo new modules
 
 ## CURRENT MODULES
-### FIXES
+
+### FIXES/REFACTOR
+- [:] lruc refactor
+    - [ ] rewrite lru_cache so that ttl is a size_t ns_gap in kv that is either -1 (no ttl) or a non null ns duration.
+    - [ ] rename current .time to .time_emitted
+    - [ ] setttl add ttl value to ns_gap instead of in .time_emitted
+    - [ ] when get/has/other add .time_emitted + .ns_gap, if < now then out else ok
+    - [ ] rename function get to try_get -> try, if ok ret val else ret NULL.
+    - [ ] add get function `get("key", klen, &fun)` if key ok then ret val, else if !key in lruc then call fun & set kv.
+    - [ ] add getttl func `getttl("key", klen, &fun, ttl_ns)`
+        if (!ttl_ns) -> call new version get();
+        if (!time || !ns_gap || .ns_gap + .time < now) call `fun`, update val, reset last_set, update .ns_gap
+
 ### COVERAGE
 - [~] tpm
-- [ ] multi threaded tests (needs re-comp for #ifdef branches)
+ - [ ] funcs
+ - [ ] branches
+- [:] multi threaded tests (needs re-comp for #ifdef branches)
  - [ ] sptr
  - [ ] rb
+- [:] da
+ - [:] iter
+ - [:] oscilation around boudary with auto_shrink
+
 ### DOC
+- [:] **MARKETING PART**
+ - [:] da
+  - [:] Growth factor comparison (1.5x, 2x, fixed increment): realloc count and time.
+  - [:] Baselines: raw `realloc` loop and C++ `std::vector::push_back`.
+  - [:] Auto-shrink on vs off in an oscillating workload.
+  - [:] `make bench` that outputs CSV, plus a gnuplot/matplotlib script. Commit the PNGs to the README.
+- [ ] **POLISH**
+ - [ ] README with complexity big-o notations, and graphs.
+  - [ ] big-o
+  - [:] graphs
+  - [ ] remove/re-formulate the "defaults" part of the readme.md
+   - [ ] transfer to the todo.md file
+   - [ ] remove
+ - [:] da
+  - [:] A small real use case, such as a tokenizer or CSV parser built on the library.
+  - [:] Small-buffer optimization, only if the benchmarks justify it. Write its tests afterward, since it changes the allocation paths.
+- [ ] doxygen
+ - [ ] grammar
+ - [ ] accuracy relation to func/struc/other
+
 ### IMPLEMENTATION
 - [~] add github CICD rules for merge w main
  - [x] deploy
@@ -33,11 +73,25 @@ General todo
 - [:] ill
  - [:] elem based functions
  - [:] set elem based functions as default and node ones as `_node()`
+- [:] rb
+ - [:] magic rb
+- [:] da
+ - [:] iter (eg: `iter(holder, start, end, &elem_it)`) -1 for end, otherwise start included end not, if end oob / -1 end included
+ - [:] map(eg: `map(holder, fn, out_elem_size)`)
+ - [:] nmap(eg: `nmap(holder, n, fn, out_elem_size)`)
+ - [:] ifdef auto shrink (path on pop/rm) with (len <= cap/4 -> len = cap/2)
+  - [:] shrink on rm
+  - [:] shrink on pop
+- [ ] tpm
+ - [ ] carsh jobs catch
+ - [:] dispatch new jobs on spikes
+ - [:] batch jobs on spikes
+ - [:] heartbeat system
 
 note: new module paused. finish tpm first.
 note: new module paused. finish school project first.
 
-## NEW MODULES - PAUSED
+## NEW MODULES - WHOLE MODULE PAUSED
 sorted by personal familiarity w subject/ ease of project
 - [~] HASHMAPS
  - [x] research - already made a small impl in other project & lruc
@@ -97,3 +151,45 @@ sorted by personal familiarity w subject/ ease of project
  - [ ] research
  - [ ] branch
  - [ ] minimal header
+
+## Ressources
+### DA : ressources
+
+**Reading**
+- Rustonomicon, "Implementing Vec": the same problem you solved (growth, alloc failure, ownership), explained well.
+- Folly's `FBVector` doc: why a 1.5x growth factor lets freed blocks get reused.
+- Drepper, *What Every Programmer Should Know About Memory*: why contiguous arrays win.
+- Linux kernel docs on XArray and kfifo, since you're borrowing their style.
+- Ryan Fleury, "Enter the Arena": arena allocators.
+
+**Related structures**
+- Magic ring buffer.
+- Gap buffer (text editors).
+- Chunked deque.
+- Arena/pool allocator: have your array allocate from one.
+- LLVM `SmallVector`: your small-buffer idea, studied in production.
+- Open-addressing hash table (Swiss table).
+- Bitset or sparse set.
+
+**Talks**
+- Mike Acton, "Data-Oriented Design and C++" (CppCon 2014)
+- Chandler Carruth, "Tuning C++: Benchmarks, and CPUs, and Compilers! Oh My!" (CppCon 2015), for making your benchmarks credible
+- Andrei Alexandrescu, "std::allocator Is to Allocation what std::vector Is to Vexation" (CppCon 2015)
+- Matt Kulukundis, "Designing a Fast, Efficient, Cache-friendly Hash Table, Step by Step" (CppCon 2017)
+
+### DSU : ressources
+
+### HP : ressources
+
+### ILL : ressources
+
+### LRU_CACHE : ressources
+
+### RB : ressources
+
+### SPTR : ressources
+
+### TLS : ressources
+
+### TPM : ressources
+
