@@ -44,7 +44,7 @@ bool cdsu_clr(t_cm_cdsu *cdsu) {
 	return (true);
 }
 /**
- * \brief cleans up the structurre and then free's it
+ * \brief cleans up the structure and then frees it
  * \param ds the cdsu to clean
  * \ingroup cdsu
 **/

@@ -9,7 +9,7 @@
 // *-----*
 
 /**
- * \brief create a owned pointer from a raw pointer
+ * \brief create an owned pointer from a raw pointer
  * \param raw_ptr pointer to the object to wrap
  * \param d destructor to use when the object will be deallocated
  * \return owned pointer with owner set to true on success, or
@@ -35,7 +35,7 @@ t_cm_owned_ptr sptr_make_owned_from_raw(void *raw_ptr, t_cm_dtor d) {
 	return (ret);
 }
 /**
- * \brief create a owned pointer from a strong pointer
+ * \brief create an owned pointer from a strong pointer
  * \param sp the strong pointer to convert
  * \param d destructor to use when the object will be deallocated
  * \return owned pointer with owner set to true on success, or
@@ -218,7 +218,7 @@ t_cm_uniq_ptr sptr_make_uniq_from_owned(t_cm_owned_ptr *ptr, t_cm_dtor d) {
 	return (ret);
 }
 /**
- * \brief make a uniq pointer from an other uniq pointer
+ * \brief make a uniq pointer from another uniq pointer
  * \param ptr the source uniq pointer to replace
  * \param d the dtor to try to set. (if d != ptr.dtor, fails)
  * \return the t_cm_uniq_ptr containing the values of ptr and updated dtor or

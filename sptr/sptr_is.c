@@ -26,7 +26,7 @@ bool sptr_is_uniqw(const t_cm_weak_ptr *ptr) {
 	return (sptr_get_rc(ptr) == 1);
 }
 /**
- * \brief check if a owned pointer is unique (strong count == 1)
+ * \brief check if an owned pointer is unique (strong count == 1)
  * \param ptr owned pointer to check
  * \return true if the owned pointer is unique, false otherwise
  * \ingroup sptr

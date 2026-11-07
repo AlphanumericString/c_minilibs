@@ -29,8 +29,8 @@ t_cm_da *da_new(size_t sz_elem) {
 	return (ret);
 }
 /**
- * \brief init a given da with the default number of elements(1024) of size
- * sz_elem
+ * \brief init a given da with the default number of elements
+ * (C_MINI__DA_NB_ELEM_DFLT) of size sz_elem
  * \param ret pointer to the dynamic array struct to init
  * \param sz_elem size of 1 element
  * \return pointer to the initialized dynamic array

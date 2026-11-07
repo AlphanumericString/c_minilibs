@@ -52,7 +52,7 @@ char *sptr_to_stringw(const t_cm_weak_ptr *sptr) {
 	return (ret);
 }
 /**
- * \brief convert a owned pointer to a string
+ * \brief convert an owned pointer to a string
  * \param sptr owned pointer to convert
  * \return string representation of the owned pointer
  * \warning caller is responsible for freeing the returned string
@@ -147,7 +147,7 @@ bool sptr_dumpw(int fd, const t_cm_weak_ptr *wptr) {
 	return true;
 }
 /**
- * \brief dump debug information for a owned pointer to a given file descriptor
+ * \brief dump debug information for an owned pointer to a given file descriptor
  * \param fd file descriptor to output to
  * \param optr owned pointer to dump
  * \return true on success, false otherwise

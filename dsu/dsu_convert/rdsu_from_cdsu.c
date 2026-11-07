@@ -4,10 +4,10 @@
 
 /**
  * \brief builds a rewindable dsu from a compact dsu
- * \param src the compact dsu to copy infos from
+ * \param src the compact dsu to copy info from
  * \return a newly allocated rdsu or null if any error occurred
  * \note fields: 'ranks, parents' must match types between cdsu and rdsu
- * \ingroup cdsu
+ * \ingroup rdsu
 **/
 t_cm_rdsu *rdsu_new_from_cdsu(const t_cm_cdsu *src) {
 	t_cm_rdsu *ret;
@@ -27,10 +27,10 @@ t_cm_rdsu *rdsu_new_from_cdsu(const t_cm_cdsu *src) {
 /**
  * \brief init a given rewindable dsu from a compact dsu
  * \param to the rewindable dsu to init
- * \param src the compact dsu to get infos from
+ * \param src the compact dsu to get info from
  * \return the address of the rewindable dsu or null if any error occurred
  * \note fields: 'ranks, parents' must match types between cdsu and rdsu
- * \ingroup cdsu
+ * \ingroup rdsu
 **/
 t_cm_rdsu *rdsu_init_from_cdsu(t_cm_rdsu *to, const t_cm_cdsu *src) {
 	_Static_assert((sizeof(*to->rank) == sizeof(*src->rank) ||
@@ -54,7 +54,7 @@ t_cm_rdsu *rdsu_init_from_cdsu(t_cm_rdsu *to, const t_cm_cdsu *src) {
  * success)
  * \return a newly allocated compact dsu or null if any error occurred
  * \note fields: 'ranks, parents' must match types between cdsu and rdsu
- * \ingroup cdsu
+ * \ingroup rdsu
 **/
 t_cm_cdsu *rdsu_to_cdsu(t_cm_rdsu **src) {
 	t_cm_cdsu *ret;

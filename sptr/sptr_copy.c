@@ -42,7 +42,7 @@ t_cm_weak_ptr *sptr_copyw(t_cm_weak_ptr *weak_ptr) {
 	return (weak_ptr);
 }
 /**
- * \brief create a borrowed (non-owning) copy of a owned pointer
+ * \brief create a borrowed (non-owning) copy of an owned pointer
  * \param owned_ptr owned pointer to copy
  * \return new non-owning owned pointer with incremented weak count, or
  * zero-filled owned pointer structure on failure

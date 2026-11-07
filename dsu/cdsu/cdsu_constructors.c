@@ -118,7 +118,7 @@ t_cm_cdsu *cdsu_init_from_arrays(t_cm_cdsu *ret, size_t size, uint16_t *parents,
 /**
  * \brief grow the cdsu by N values
  *
- * (warning: will realocate. if you used local buffers durring construction
+ * (warning: will reallocate. if you used local buffers during construction
  * via from_arrays methods do not use).
  * \param cdsu the t_cm_cdsu to grow
  * \param n the number of values to add

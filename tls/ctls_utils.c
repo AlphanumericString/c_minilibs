@@ -23,7 +23,7 @@ static void __attribute__((constructor())) init_ctls(void) {
 /**
  * \brief dumps the value contained in a type-safe wrapper
  * \param t the type to dump the value of
- * \param fd the filedescriptor where to output
+ * \param fd the file descriptor where to output
  * \note this dumps the value directly to fd and is viewed as a debug tool
  * \ingroup ctls
 **/
@@ -54,7 +54,7 @@ bool ctls_dump_typewrap(t_cm_ctls_typewrap t, int fd) {
 
 /**
  * \brief dumps all values contained in a type-safe wrapper
- * \param fd the filedescriptor where to output
+ * \param fd the file descriptor where to output
  * \note this dumps the values directly to fd
  * \ingroup ctls
 **/

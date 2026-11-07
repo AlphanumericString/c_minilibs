@@ -68,7 +68,7 @@ typedef void (*t_cm_dtor)(void *elem);
 
 /**
  * \typedef t_cm_duplicator
- * \brief duplication function pointer for datas
+ * \brief duplication function pointer for data
  * \param elem pointer to the duplication target
  * \return pointer to a valid copy of the data
 **/
@@ -81,7 +81,7 @@ typedef void *(*t_cm_duplicator)(const void *elem);
 
 /**
  * \typedef t_cm_merger
- * \brief merger function pointer for datas merging and other merge tasks
+ * \brief merger function pointer for data merging and other merge tasks
  * \param elem pointer to the accumulator
  * \param arg pointer to the value in the struct
  * \return pointer to a valid copy of the data
@@ -95,8 +95,8 @@ typedef void *(*t_cm_merger)(void *elem, void *arg);
 
 /**
  * \typedef t_cm_call
- * \brief function pointer for non-returning functions executing and not yelding
- * any values
+ * \brief function pointer for non-returning functions executing and not
+ * yielding any values
  * \param arg pointer to the value given to the call
  * \note made for thread pool manager
 **/

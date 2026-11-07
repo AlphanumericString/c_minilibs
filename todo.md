@@ -6,7 +6,7 @@ general todo for the project
 - ` ` not started
 General todo:
 - [~] current
-    - [ ] doc
+    - [x] doc
     - [~] coverage
     - [~] impl
 - [:] new modules
@@ -25,6 +25,18 @@ General todo:
     - [ ] add getttl func `getttl("key", klen, &fun, ttl_ns)`
         if (!ttl_ns) -> call new version get();
         if (!time || !ns_gap || .ns_gap + .time < now) call `fun`, update val, reset last_set, update .ns_gap
+- [:] refactors
+transferred from the readme.md "what's missing / faults of the project" section
+    - [ ] common_base: modules are described as independant yet all depend on it (only base defines, but it shoots module independance in the foot)
+    - [ ] da: primitive and feels like it, lacks distinctive/notable algorithms
+    - [ ] dsu: rdsu log allocations are the slowest piece and are not batched; new links have unknown time; malloc lookups slow the structure
+    - [ ] hp: not enough functions; heap_up/heap_down running both min/max costs more maintainer sanity than it is worth
+    - [ ] ill: no circular list; no api consistency around head; elem functions not implemented (user must call exposed node elem each time)
+    - [ ] lru_cache: time in ms; LRU + TTL merge succeeds but feels mushed and hodgepodge rather than a cohesive whole
+    - [ ] rb: not enough functions, feels restrictive; no multi threaded tests with the classic producer-consumer setup
+    - [ ] sptr: generics unusable by older c and not worth it; byte-copy cannot be guarded making it moot if not used as pointer
+    - [ ] tls: no hashmap over infinitely growing vtls; ftls binds a single type of struct
+    - [ ] tpm: no job batching; atomic thread count never changed; no crash reporting; no heartbeat system; no futures
 
 ### COVERAGE
 - [:] multi threaded tests (needs re-comp for #ifdef branches)
@@ -41,19 +53,20 @@ General todo:
   - [ ] Baselines: raw `realloc` loop and C++ `std::vector::push_back`.
   - [ ] Auto-shrink on vs off in an oscillating workload.
   - [ ] `make bench` that outputs CSV, plus a gnuplot/matplotlib script. Commit the PNGs to the README.
-- [ ] **POLISH**
- - [ ] README with complexity big-o notations, and graphs.
-  - [ ] big-o
-  - [:] graphs
-  - [ ] remove/re-formulate the "defaults" part of the readme.md
-   - [ ] transfer to the todo.md file
-   - [ ] remove
- - [:] da
-  - [:] A small real use case, such as a tokenizer or CSV parser built on the library.
-  - [:] Small-buffer optimization, only if the benchmarks justify it. Write its tests afterward, since it changes the allocation paths.
-- [ ] doxygen
- - [ ] grammar
- - [ ] accuracy relation to func/struc/other
+- [:] **POLISH**
+ - [ ] README with graphs or visible benchmarks.
+  - [ ] graphs
+  - [ ] da
+   - [ ] A small real use case, such as a tokenizer or CSV parser built on the library.
+   - [ ] Small-buffer optimization, only if the benchmarks justify it. Write its tests afterward, since it changes the allocation paths.
+  - [ ] dsu
+  - [ ] rb
+  - [ ] hp
+  - [ ] ill
+  - [ ] lruc
+  - [ ] sptr
+  - [ ] tls
+  - [ ] tpm
 
 ### IMPLEMENTATION
 - [~] add github CICD rules for merge w main

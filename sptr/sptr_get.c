@@ -39,7 +39,7 @@ const void *sptr_getwc(const t_cm_weak_ptr *sptr) {
 	return (sptr->meta->data);
 }
 /**
- * \brief get the const data from a owned pointer
+ * \brief get the const data from an owned pointer
  * \param o owned pointer to get the raw pointer from
  * \return the const pointer, or NULL if an error occurred
  * \ingroup sptr
@@ -93,7 +93,7 @@ void *sptr_getw(t_cm_weak_ptr *sptr) {
 	return ((void *)sptr_getwc(sptr));
 }
 /**
- * \brief get the raw pointer from a owned pointer
+ * \brief get the raw pointer from an owned pointer
  * \param o owned pointer to get the raw pointer from
  * \return the raw pointer (non-const), or NULL if an error occurred
  * \ingroup sptr

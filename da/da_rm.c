@@ -51,7 +51,7 @@ bool da_rms_order(t_cm_da *da, size_t start, size_t end) {
 }
 
 /**
- * \brief rm a single element (very fast) no garantee on order
+ * \brief rm a single element (very fast) no guarantee on order
  * \param da pointer to the dynamic array
  * \param pos index of the element to remove
  * \return true on success, false on failure
@@ -69,7 +69,7 @@ bool da_rm(t_cm_da *da, size_t pos) {
 	return (true);
 }
 /**
- * \brief rm elements (very fast) no garantee on order
+ * \brief rm elements (very fast) no guarantee on order
  * \param da pointer to the dynamic array
  * \param start index of the first element to remove
  * \param end index of the end element (exclusive)
