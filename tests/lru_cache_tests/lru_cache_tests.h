@@ -44,6 +44,7 @@ void test_cm_lruc_has_reserved(void);
 void test_cm_lruc_max_reserve(void);
 
 void test_cm_lruci_hp_pop(void);
+void test_cm_lruci_hp_pop_sift_right(void);
 void test_cm_lruci_hp_pop_nth(void);
 void test_cm_lruci_keyinhash(void);
 void test_cm_lruci_keyinlist(void);

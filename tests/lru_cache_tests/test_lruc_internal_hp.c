@@ -40,6 +40,32 @@ NO_COV void test_cm_lruci_hp_pop(void) {
 	free(kv1), free(kv2);
 	free(c.buckets);
 }
+NO_COV void test_cm_lruci_hp_pop_sift_right(void) {
+	t_cm_lruc         c;
+	t_cm_lruc_keynode n0 = {.time = 0};
+	t_cm_lruc_keynode n1 = {.time = 10};
+	t_cm_lruc_keynode n2 = {.time = 5};
+	t_cm_lruc_keynode n3 = {.time = 20};
+
+	lruc_init(&c, 4, NULL);
+	lruci_hp_push(&c, &n0);
+	lruci_hp_push(&c, &n1);
+	lruci_hp_push(&c, &n2);
+	lruci_hp_push(&c, &n3);
+	assert(c.node_nb == 4);
+	assert(c.minHeap[0] == &n0);
+	assert(c.minHeap[1] == &n1);
+	assert(c.minHeap[2] == &n2);
+	assert(c.minHeap[3] == &n3);
+
+	assert(lruci_hp_pop(&c) == &n0);
+	assert(c.node_nb == 3);
+	assert(c.minHeap[0] == &n2);
+	assert(c.minHeap[1] == &n1);
+	assert(c.minHeap[2] == &n3);
+
+	free(c.buckets);
+}
 NO_COV void test_cm_lruci_hp_pop_nth(void) {
 	t_cm_lruc          c, intact_copy;
 	t_cm_lruc_keynode *kv1, *kv2, *kv3;

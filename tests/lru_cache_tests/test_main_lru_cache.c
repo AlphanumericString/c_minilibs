@@ -49,6 +49,7 @@ NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Internals", )
 	test_cm_lruci_hp_pop();
+	test_cm_lruci_hp_pop_sift_right();
 	test_cm_lruci_hp_pop_nth();
 	test_cm_lruci_keyinhash();
 	test_cm_lruci_keyinlist();
