@@ -59,6 +59,7 @@ NO_COV void test_cm_lruc_get_lru(void) {
 	usleep(400 * 1000); // 1ms = 1k us
 	assert(lruc_get_lru(&c, k3, strlen(k3)) == v3);
 	assert(lruc_get_lru(&c, k4, strlen(k4)) == v4);
+	assert(lruc_get_lru(&c, "unknown", 7) == NULL); // present cache, absent key
 	intact_copy = c;
 
 	c.MRU = NULL;
@@ -154,6 +155,13 @@ NO_COV void test_cm_lruc_get(void) {
 	// errors
 	assert(lruc_get(NULL, k1, strlen(k1), gen_count, (void *)k1) == NULL);
 
+	// compute succeeds but storing fails (clock error on put)
+	lruc_setttl(&c, LRUC_MS_TO_NS(100));
+	clock_set_call_limit(0);
+	assert(lruc_get(&c, k2, strlen(k2), gen_count, (void *)k2) == NULL);
+	clock_set_call_limit(CLOCK_DFT_LIMIT);
+	lruc_setttl(&c, C_MINI__LRUC_TTL_DFLT);
+
 	lruc_destroy(&c);
 	return;
 }
@@ -205,6 +213,19 @@ NO_COV void test_cm_lruc_getttl(void) {
 	// errors
 	assert(lruc_getttl(NULL, k1, strlen(k1), gen_count, (void *)k1,
 	                   LRUC_MS_TO_NS(200)) == NULL);
+
+	// clock failure while checking a present, ttl'd entry
+	clock_set_call_limit(0);
+	assert(lruc_getttl(&c, k1, strlen(k1), gen_count, (void *)k1,
+	                   LRUC_MS_TO_NS(200)) == NULL);
+	clock_set_call_limit(CLOCK_DFT_LIMIT);
+
+	// compute succeeds but storing fails (clock error on put)
+	lruc_clear(&c);
+	clock_set_call_limit(0);
+	assert(lruc_getttl(&c, k2, strlen(k2), gen_count, (void *)k2,
+	                   LRUC_MS_TO_NS(200)) == NULL);
+	clock_set_call_limit(CLOCK_DFT_LIMIT);
 
 	lruc_destroy(&c);
 	return;

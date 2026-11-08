@@ -54,9 +54,12 @@ NO_COV int main(void) {
 	test_cm_lruci_hp_pop();
 	test_cm_lruci_hp_pop_sift_right();
 	test_cm_lruci_hp_pop_nth();
+	test_cm_lruci_hp_rebuild();
 	test_cm_lruci_keyinhash();
 	test_cm_lruci_keyinlist();
 	test_cm_lruci_node_eq();
+	test_cm_lruci_expiry();
+	test_cm_lruci_expired();
 	test_cm_lruci_hsh_pop();
 	test_cm_lruci_rsvrd_push();
 	test_cm_lruci_rsvrd_pop();

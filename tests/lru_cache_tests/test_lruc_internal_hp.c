@@ -112,3 +112,27 @@ NO_COV void test_cm_lruci_hp_pop_nth(void) {
 	free(kv1), free(kv2), free(kv3);
 	free(c.buckets);
 }
+NO_COV void test_cm_lruci_hp_rebuild(void) {
+	t_cm_lruc           c;
+	t_cm_lruc_keynode **saved;
+	const char         *ka = "a", *kb = "b", *kc = "c", *kd = "d";
+
+	lruc_init(&c, 4, NULL);
+	lruc_put_ttl(&c, ka, 1, "va", LRUC_MS_TO_NS(300));
+	lruc_put_ttl(&c, kb, 1, "vb", LRUC_MS_TO_NS(100));
+	lruc_put_ttl(&c, kc, 1, "vc", LRUC_MS_TO_NS(200));
+	lruc_put(&c, kd, 1, "vd"); // no ttl -> infinite expiry, sorts last
+
+	lruci_hp_rebuild(&c);
+	assert(c.node_nb == 4);
+	assert(c.minHeap[0]->kv.key == (void *)kb); // earliest expiry at root
+	assert(c.minHeap[c.node_nb - 1] != NULL);
+
+	// minHeap NULL -> early return
+	saved     = c.minHeap;
+	c.minHeap = NULL;
+	lruci_hp_rebuild(&c);
+	c.minHeap = saved;
+
+	lruc_destroy(&c);
+}
