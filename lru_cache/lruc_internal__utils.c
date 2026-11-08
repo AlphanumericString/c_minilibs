@@ -53,7 +53,18 @@ size_t lruci_hash_djb2(const void *key, size_t size) {
 	return (hash);
 }
 uint64_t lruci_timeto64(struct timespec t) {
-	return (t.tv_sec * 1000ULL + t.tv_nsec / 1000000ULL);
+	return (t.tv_sec * 1000000000ULL + t.tv_nsec);
+}
+uint64_t lruci_expiry(const t_cm_lruc_keynode *node) {
+	if (node->ns_gap == (size_t)-1) return ((uint64_t)-1);
+	if ((uint64_t)node->ns_gap > (uint64_t)-1 - node->time_emitted)
+		return ((uint64_t)-1);
+	return (node->time_emitted + (uint64_t)node->ns_gap);
+}
+bool lruci_expired(const t_cm_lruc_keynode *node, uint64_t now) {
+	if (node->ns_gap == (size_t)-1) return (false);
+	return (now > node->time_emitted &&
+	        (now - node->time_emitted) > (uint64_t)node->ns_gap);
 }
 bool lruci_node_eq(const t_cm_lruc_keynode *node_1,
                    const t_cm_lruc_keynode *node_2) {

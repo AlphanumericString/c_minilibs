@@ -43,7 +43,7 @@ NO_COV void test_cm_lruc_init(void) {
 	assert(lru.buckets_nb == 3);
 	assert(lru.dtor == dt);
 	assert(lru.buckets != NULL);
-	assert(lru.ttl_glob == (uint64_t)C_MINI__LRUC_TTL_DFLT);
+	assert(lru.ns_gap == C_MINI__LRUC_TTL_DFLT);
 	lruc_destroy(&lru);
 	alloc_set_call_limit(0);
 	assert(lruc_init(&lru, 3, dt) == NULL);

@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <time.h>
 
+#include "common_base/fptr.h"
 #include "common_base/log.h"
 
 #ifdef C_MINI__TESTS
@@ -18,7 +19,7 @@
 #	define C_MINI__LRUC_LOG_ENODEU   C_MINI__LOG_F_PREFIX "Unknown node"
 #	define C_MINI__LRUC_LOG_EVICTION                                          \
 		"Eviction: key=%p delta (%ld) >= ttl (%lu)"
-#	define C_MINI__LRUC_LOG_UPDATE "Update ttl: %lu->%lu"
+#	define C_MINI__LRUC_LOG_UPDATE "Update ttl: %zu->%zu"
 #	define C_MINI__LRUC_LOG_HIT    "Hit: hit=%zu, key:%p, key_len:%zu"
 #	define C_MINI__LRUC_LOG_MISS_LRU                                          \
 		C_MINI__LOG_F_PREFIX "LRU-Miss: miss=%zu, key:%p, key_len:%zu"
@@ -38,7 +39,7 @@
 #endif // !C_MINI__TESTS
 
 // ---------------------------------------------------
-// NOTE: ALL TIME IS SET/CONTROLLED IN MS (milliseconds)
+// NOTE: ALL TIME IS SET/CONTROLLED IN NS (nanoseconds)
 // ---------------------------------------------------
 
 /**
@@ -74,12 +75,13 @@ typedef struct {
 #ifdef C_MINI__LRUC_INTERNAL
 
 #	define C_MINI__LRUC_HASH_SKIP 10
-#	define C_MINI__LRUC_TTL_DFLT  LONG_MAX
+#	define C_MINI__LRUC_TTL_DFLT  ((size_t)-1)
 
 /**
  * \brief [INTERNAL] [MAY CHANGE] the caches internal node for each key
  * \param kv the key-value pair of the node
- * \param time the time of emission of the node in ms
+ * \param time_emitted the time of emission of the node in ns
+ * \param ns_gap the ttl grace period of the node in ns, (size_t)-1 means no ttl
  * \param hash_next next value associated with the same hash (collision
  * resolution)
  * \param heap_index index of the node in the TTL ordered minHeap
@@ -91,7 +93,8 @@ typedef struct {
 **/
 typedef struct s_cm_keycache {
 	t_cm_keyvalue         kv;
-	uint64_t              time;
+	uint64_t              time_emitted;
+	size_t                ns_gap;
 	struct s_cm_keycache *hash_next;
 	size_t                heap_index;
 	struct s_cm_keycache *lru_prev;
@@ -111,7 +114,7 @@ typedef struct {
 	size_t             reserved_nodes_nb;
 	t_cm_lruc_keynode *reserved_nodes;
 
-	uint64_t ttl_glob;
+	size_t ns_gap;
 
 	void            (*dtor)(void *);
 	t_cm_lruc_stats stats;
@@ -131,8 +134,8 @@ typedef struct {
  * \param LRU direct pointer to Least Recently Used node
  * \param reserved_nodes_nb number of pre-allocated nodes currently reserved
  * \param reserved_nodes singly linked list of pre-allocated, reusable nodes
- * \param ttl_glob default ttl grace period for elements (default LONG_MAX aka
- * inf) in ms
+ * \param ns_gap default ttl grace period for elements (default (size_t)-1 aka
+ * inf) in ns
  * \param dtor destructor for stored values. Does not get called on keys. Not
  * mandatory to set.
  * \param stats statistics of the lru-cache (see t_cm_lruc_stats for more
@@ -152,7 +155,7 @@ typedef struct {
 	size_t reserved_nodes_nb;
 	void  *reserved_nodes;
 
-	uint64_t ttl_glob;
+	size_t ns_gap;
 
 	void            (*dtor)(void *);
 	t_cm_lruc_stats stats;
@@ -184,9 +187,13 @@ void       lruc_free(t_cm_lruc **cache);
 bool lruc_put_kv(t_cm_lruc *c, t_cm_keyvalue kv);
 bool lruc_put(t_cm_lruc *c, const void *key, size_t k_len, const void *value);
 bool lruc_put_ttl(t_cm_lruc *c, const void *key, size_t k_len, const void *val,
-                  uint64_t ttl_ms);
+                  size_t ttl_ns);
 
-void *lruc_get(t_cm_lruc *cache, const void *key, size_t key_len);
+void *lruc_try_get(t_cm_lruc *cache, const void *key, size_t key_len);
+void *lruc_get(t_cm_lruc *cache, const void *key, size_t key_len, t_cm_work fun,
+               void *arg);
+void *lruc_getttl(t_cm_lruc *cache, const void *key, size_t key_len,
+                  t_cm_work fun, void *arg, size_t ttl_ns);
 void *lruc_get_lru(t_cm_lruc *cache, const void *key, size_t key_len);
 
 void lruc_clear(t_cm_lruc *cache);
@@ -197,10 +204,11 @@ void lruc_clear_to_reserved(t_cm_lruc *c);
 size_t lruc_reserve(t_cm_lruc *cache, size_t nb_nodes);
 
 bool lruc_has(const t_cm_lruc *cache, const void *key, size_t key_len);
+bool lruc_has_ttl(const t_cm_lruc *cache, const void *key, size_t key_len);
 
 bool lruc_isexpired(const t_cm_lruc *cache, const void *key, size_t key_len);
 void lruc_cleanup(t_cm_lruc *cache);
-void lruc_setttl(t_cm_lruc *cache, unsigned long ttl_ms);
+void lruc_setttl(t_cm_lruc *cache, size_t ttl_ns);
 
 bool lruc_is_valid(const t_cm_lruc *cache);
 
@@ -223,6 +231,8 @@ void lruc_foreach_ttl_ordered(const t_cm_lruc *c, t_cm_kvcallback fn,
 #ifdef C_MINI__LRUC_INTERNAL
 uint64_t lruci_timeto64(struct timespec t);
 uint64_t lruci_timenow(void);
+uint64_t lruci_expiry(const t_cm_lruc_keynode *node);
+bool     lruci_expired(const t_cm_lruc_keynode *node, uint64_t now);
 bool lruci_key_eq(const void *k1, size_t k1_len, const void *k2, size_t k2_len);
 bool lruci_node_eq(const t_cm_lruc_keynode *node_1,
                    const t_cm_lruc_keynode *node_2);
@@ -246,6 +256,7 @@ bool               lruci_rsrvd_push(t_cm_lruc *c, t_cm_lruc_keynode *n);
 void               lruci_hp_push(t_cm_lruc *c, t_cm_lruc_keynode *value);
 t_cm_lruc_keynode *lruci_hp_pop(t_cm_lruc *c);
 t_cm_lruc_keynode *lruci_hp_pop_nth(t_cm_lruc *c, size_t n);
+void               lruci_hp_rebuild(t_cm_lruc *c);
 
 #endif // !C_MINI__LRUC_INTERNAL
 

@@ -29,7 +29,7 @@ int main(void) {
 	lruc_put(cache, "gamma", 5, strdup("C"));
 	show(cache, "initial (3 entries)");
 
-	printf("get(alpha) -> %s\n", (char *)lruc_get(cache, "alpha", 5));
+	printf("get(alpha) -> %s\n", (char *)lruc_try_get(cache, "alpha", 5));
 	show(cache, "after get(alpha)");
 
 	lruc_put(cache, "delta", 5, strdup("D"));
@@ -41,13 +41,13 @@ int main(void) {
 	printf("remove(alpha) -> %d\n", lruc_remove(cache, "alpha", 5));
 	show(cache, "after remove(alpha)");
 
-	lruc_setttl(cache, 30);
+	lruc_setttl(cache, 30 * 1000000UL);
 	lruc_put(cache, "short", 5, strdup("S"));
 	printf("get(short) before expiry -> %s\n",
-	       (char *)lruc_get(cache, "short", 5));
+	       (char *)lruc_try_get(cache, "short", 5));
 	usleep(60 * 1000);
 	printf("get(short) after 60ms    -> %s\n",
-	       (char *)lruc_get(cache, "short", 5));
+	       (char *)lruc_try_get(cache, "short", 5));
 	lruc_cleanup(cache);
 	show(cache, "after cleanup");
 

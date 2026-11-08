@@ -28,7 +28,7 @@ t_cm_lruc *lruc_init(t_cm_lruc *cache, size_t cap, void (*dtor)(void *)) {
 	cache->minHeap = cache->buckets + cap;
 	bzero(cache->minHeap, sizeof(t_cm_lruc_keynode *) * cap);
 	cache->buckets_nb = cap;
-	cache->ttl_glob   = (uint64_t)C_MINI__LRUC_TTL_DFLT;
+	cache->ns_gap     = C_MINI__LRUC_TTL_DFLT;
 	cache->stats      = (t_cm_lruc_stats){0};
 	cache->dtor       = dtor;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS)

@@ -20,6 +20,8 @@ NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Get", )
 	test_cm_lruc_get();
+	test_cm_lruc_getttl();
+	test_cm_lruc_try_get();
 	test_cm_lruc_get_lru();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Rm", )
@@ -30,6 +32,7 @@ NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Has", )
 	test_cm_lruc_has();
+	test_cm_lruc_has_ttl();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Expired", )
 	test_cm_lruc_isexpired();

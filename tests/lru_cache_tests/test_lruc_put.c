@@ -157,7 +157,7 @@ NO_COV void test_cm_lruc_put_kv(void) {
 		lruc_setttl(&c, C_MINI__LRUC_TTL_DFLT);
 		// true, ttl not on, so clock fail is ignored
 		assert(lruc_put_kv(&c, kv1_ok) == true);
-		lruc_setttl(&c, 300);
+		lruc_setttl(&c, LRUC_MS_TO_NS(300));
 		// false clock fail not ignored
 		assert(lruc_put_kv(&c, kv1_ok) == false);
 		clock_set_call_limit(CLOCK_DFT_LIMIT);
@@ -294,7 +294,7 @@ NO_COV void test_cm_lruc_put(void) {
 		// set-up
 		lruc_put(&c, key1, strlen(key1), value1);
 		lruc_put(&c, key2, strlen(key2), value2);
-		lruc_setttl(&c, 300);
+		lruc_setttl(&c, LRUC_MS_TO_NS(300));
 
 		clock_reset_counter();
 		clock_set_call_limit(0);
@@ -310,7 +310,7 @@ NO_COV void test_cm_lruc_put(void) {
 		lruc_clear(&c); // reset cache
 		lruc_clear_reserved(&c);
 		// set-up
-		lruc_setttl(&c, 300);
+		lruc_setttl(&c, LRUC_MS_TO_NS(300));
 		lruc_put(&c, key1, strlen(key1), value1);
 		lruc_put(&c, key2, strlen(key2), value2);
 
@@ -346,22 +346,24 @@ NO_COV void test_cm_lruc_put_ttl(void) {
 
 	lruc_init(&c, 2, free);
 	{ // MRU/LRU and minHeap check
-		assert(lruc_put_ttl(&c, k2, strlen(k2), strdup("other"), 1000) == true);
+		assert(lruc_put_ttl(&c, k2, strlen(k2), strdup("other"),
+		                    LRUC_MS_TO_NS(1000)) == true);
 		assert(c.MRU->kv.key == k2);
 		assert(c.LRU->kv.key == k2);
 		assert(c.minHeap[0]->kv.key == k2);
 		assert(c.node_nb == 1);
-		assert(lruc_put_ttl(&c, k1, strlen(k1), strdup("result"), 2000) ==
-		       true);
+		assert(lruc_put_ttl(&c, k1, strlen(k1), strdup("result"),
+		                    LRUC_MS_TO_NS(2000)) == true);
 		assert(c.MRU->kv.key == k1);
 		assert(c.LRU->kv.key == k2);
 		assert(c.minHeap[0]->kv.key == k2);
 		assert(c.minHeap[1]->kv.key == k1);
 		assert(c.node_nb == 2);
 		lruc_clear(&c);
-		assert(lruc_put_ttl(&c, k1, strlen(k1), strdup("result"), 2000) ==
-		       true);
-		assert(lruc_put_ttl(&c, k2, strlen(k2), strdup("other"), 1000) == true);
+		assert(lruc_put_ttl(&c, k1, strlen(k1), strdup("result"),
+		                    LRUC_MS_TO_NS(2000)) == true);
+		assert(lruc_put_ttl(&c, k2, strlen(k2), strdup("other"),
+		                    LRUC_MS_TO_NS(1000)) == true);
 		assert(c.MRU->kv.key == k2);
 		assert(c.LRU->kv.key == k1);
 		assert(c.minHeap[0]->kv.key == k2);
@@ -369,21 +371,24 @@ NO_COV void test_cm_lruc_put_ttl(void) {
 		lruc_clear(&c);
 	}
 	{
-		lruc_setttl(&c, 10);
-		assert(lruc_put_ttl(&c, k1, strlen(k1), strdup("result"), 2000) ==
-		       true);
-		assert(lruc_put_ttl(&c, k2, strlen(k2), strdup("other"), 1000) == true);
+		lruc_setttl(&c, LRUC_MS_TO_NS(10));
+		assert(lruc_put_ttl(&c, k1, strlen(k1), strdup("result"),
+		                    LRUC_MS_TO_NS(2000)) == true);
+		assert(lruc_put_ttl(&c, k2, strlen(k2), strdup("other"),
+		                    LRUC_MS_TO_NS(1000)) == true);
 		uint64_t now_int = lruci_timenow();
 		assert(now_int != (uint64_t)-1);
-		assert(c.minHeap[0]->time - now_int >= 900);
-		assert(c.minHeap[c.node_nb - 1]->time - now_int >= 1900);
+		assert(lruci_expiry(c.minHeap[0]) - now_int >= LRUC_MS_TO_NS(900));
+		assert(lruci_expiry(c.minHeap[c.node_nb - 1]) - now_int >=
+		       LRUC_MS_TO_NS(1900));
 		lruc_clear(&c);
 	}
 	{
 		lruc_setttl(&c, 0);
-		assert(lruc_put_ttl(&c, k1, strlen(k1), strdup("result"), 1900) ==
-		       true);
-		assert(lruc_put_ttl(&c, k2, strlen(k2), strdup("other"), 900) == true);
+		assert(lruc_put_ttl(&c, k1, strlen(k1), strdup("result"),
+		                    LRUC_MS_TO_NS(1900)) == true);
+		assert(lruc_put_ttl(&c, k2, strlen(k2), strdup("other"),
+		                    LRUC_MS_TO_NS(900)) == true);
 		assert(lruc_isexpired(&c, k1, strlen(k1)) == false);
 		assert(lruc_isexpired(&c, k2, strlen(k2)) == false);
 		sleep(1);
@@ -395,17 +400,19 @@ NO_COV void test_cm_lruc_put_ttl(void) {
 		lruc_clear(&c);
 	}
 	{
-		lruc_setttl(&c, 2000);
-		assert(lruc_put_ttl(&c, k1, strlen(k1), strdup("result"), 1900) ==
-		       true);
-		assert(lruc_put_ttl(&c, k2, strlen(k2), strdup("other"), 900) == true);
+		lruc_setttl(&c, LRUC_MS_TO_NS(2000));
+		assert(lruc_put_ttl(&c, k1, strlen(k1), strdup("result"),
+		                    LRUC_MS_TO_NS(1900)) == true);
+		assert(lruc_put_ttl(&c, k2, strlen(k2), strdup("other"),
+		                    LRUC_MS_TO_NS(900)) == true);
 		assert(c.LRU->kv.key == k1);
 		assert(c.MRU->kv.key == k2);
 		assert(c.node_nb == 2);
 
 		// fail, can't set time on node init
 		clock_set_call_limit(0);
-		assert(lruc_put_ttl(&c, k3, strlen(k3), (void *)0xDEAD, 9000) == false);
+		assert(lruc_put_ttl(&c, k3, strlen(k3), (void *)0xDEAD,
+		                    LRUC_MS_TO_NS(9000)) == false);
 		assert(c.LRU->kv.key == k1);
 		assert(c.MRU->kv.key == k2);
 
@@ -413,7 +420,8 @@ NO_COV void test_cm_lruc_put_ttl(void) {
 		clock_reset_counter();
 		// 2nd clock call fails and instead taking of ttl/minHeap takes from LRU
 		// doesnt change anything on simple put but changes stuff on ttl side
-		assert(lruc_put_ttl(&c, k3, strlen(k3), (void *)0xDEAD, 9000) == false);
+		assert(lruc_put_ttl(&c, k3, strlen(k3), (void *)0xDEAD,
+		                    LRUC_MS_TO_NS(9000)) == false);
 		assert(c.LRU->kv.key == k1);
 		assert(c.MRU->kv.key == k2);
 
@@ -422,7 +430,8 @@ NO_COV void test_cm_lruc_put_ttl(void) {
 		lruc_setttl(&c, C_MINI__LRUC_TTL_DFLT);
 		// fell back on lru since ttl wasnt set at global and just discarded
 		// the validity of the minheap
-		assert(lruc_put_ttl(&c, k3, strlen(k3), strdup("works"), 9000) == true);
+		assert(lruc_put_ttl(&c, k3, strlen(k3), strdup("works"),
+		                    LRUC_MS_TO_NS(9000)) == true);
 		assert(c.LRU->kv.key == k2);
 		assert(c.MRU->kv.key == k3);
 

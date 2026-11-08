@@ -6,17 +6,17 @@ general todo for the project
 - ` ` not started
 General todo:
 - [x] current modules
-- [:] refactor
- - [ ] lruc .time refactor
- - [ ] da->check todo impl, add functs to module
- - [ ] dsu-> rdsu -> reserve func
- - [ ] hp-> more funcs
- - [ ] ill->circular lists, api consistency around head, elem centric funcs
- - [ ] lruc->ms to ns, make a separate lru only cache similar to dsu/
- - [ ] rb->example w producer/consumer setup, add functs to module
- - [ ] rptr->package _generic in ifdef blocks and check compile ok for c older version
- - [ ] tls->vtls->hmaps. tls->ftls->xmacros for more than 1 struct
- - [ ] tpm->crash catch, job batching on stress conditions, atomic thrd nb - increase/remove thrd control handle, auto increase thrd nb on stress
+- [~] refactor
+ - [x] lruc .time refactor
+ - [:] da->check todo impl, add functs to module
+ - [:] dsu-> rdsu -> reserve func
+ - [:] hp-> more funcs
+ - [:] ill->circular lists, api consistency around head, elem centric funcs
+ - [:] lruc->ms to ns, make a separate lru only cache similar to dsu/
+ - [:] rb->example w producer/consumer setup, add functs to module
+ - [:] rptr->package _generic in ifdef blocks and check compile ok for c older version
+ - [:] tls->vtls->hmaps. tls->ftls->xmacros for more than 1 struct
+ - [:] tpm->crash catch, job batching on stress conditions, atomic thrd nb - increase/remove thrd control handle, auto increase thrd nb on stress
 - [:] coverage
 - [:] impl
 - [:] new modules
@@ -25,16 +25,7 @@ General todo:
 ## CURRENT MODULES
 
 ### FIXES/REFACTOR
-- [:] lruc refactor
-    - [ ] rewrite lru_cache so that ttl is a size_t ns_gap in kv that is either -1 (no ttl) or a non null ns duration.
-    - [ ] rename current .time to .time_emitted
-    - [ ] setttl add ttl value to ns_gap instead of in .time_emitted
-    - [ ] when get/has/other add .time_emitted + .ns_gap, if < now then out else ok
-    - [ ] rename function get to try_get -> try, if ok ret val else ret NULL.
-    - [ ] add get function `get("key", klen, &fun)` if key ok then ret val, else if !key in lruc then call fun & set kv.
-    - [ ] add getttl func `getttl("key", klen, &fun, ttl_ns)`
-        if (!ttl_ns) -> call new version get();
-        if (!time || !ns_gap || .ns_gap + .time < now) call `fun`, update val, reset last_set, update .ns_gap
+- [x] lruc refactor
 - [:] refactors
 transferred from the readme.md "what's missing / faults of the project" section
  - [ ] da->check todo impl, add functs to module

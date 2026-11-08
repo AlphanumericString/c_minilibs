@@ -46,12 +46,12 @@ static t_cm_lruc_keynode *reuse_node(t_cm_lruc *c, size_t hash_pos) {
 	const uint64_t     now = lruci_timenow();
 	t_cm_lruc_keynode *node;
 
-	if (now == (uint64_t)-1 && c->ttl_glob != C_MINI__LRUC_TTL_DFLT) {
+	if (now == (uint64_t)-1 && c->ns_gap != C_MINI__LRUC_TTL_DFLT) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK);
 		return (NULL);
 	}
-	if (c->ttl_glob == C_MINI__LRUC_TTL_DFLT ||
-	    (c->minHeap[0]->time + c->ttl_glob) >= now) {
+	if (c->ns_gap == C_MINI__LRUC_TTL_DFLT ||
+	    !lruci_expired(c->minHeap[0], now)) {
 		node = c->LRU;
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_NODE_LRU)
 	} else {
@@ -102,22 +102,27 @@ static bool cache_put_internal(t_cm_lruc *c, t_cm_lruc_keynode to_add) {
  * \ingroup lruc
 **/
 bool lruc_put_kv(t_cm_lruc *cache, t_cm_keyvalue kv) {
-	uint64_t now;
+	uint64_t now = 0;
+	size_t   gap = C_MINI__LRUC_TTL_DFLT;
 
-	if (cache && cache->ttl_glob != C_MINI__LRUC_TTL_DFLT) {
-		now = lruci_timenow();
-		if (now == (uint64_t)-1) {
-			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK)
-			return (false);
+	if (cache) {
+		gap = cache->ns_gap;
+		if (gap != C_MINI__LRUC_TTL_DFLT) {
+			now = lruci_timenow();
+			if (now == (uint64_t)-1) {
+				CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK)
+				return (false);
+			}
 		}
-	} else now = 0;
+	}
 	return (cache_put_internal(cache, (t_cm_lruc_keynode){
-	                                      .kv         = kv,
-	                                      .time       = now,
-	                                      .lru_next   = 0,
-	                                      .lru_prev   = 0,
-	                                      .heap_index = 0,
-	                                      .hash_next  = NULL,
+	                                      .kv           = kv,
+	                                      .time_emitted = now,
+	                                      .ns_gap       = gap,
+	                                      .lru_next     = 0,
+	                                      .lru_prev     = 0,
+	                                      .heap_index   = 0,
+	                                      .hash_next    = NULL,
 	                                  }));
 }
 /**
@@ -131,25 +136,30 @@ bool lruc_put_kv(t_cm_lruc *cache, t_cm_keyvalue kv) {
 **/
 bool lruc_put(t_cm_lruc *cache, const void *key, size_t key_len,
               const void *value) {
-	uint64_t now;
+	uint64_t now = 0;
+	size_t   gap = C_MINI__LRUC_TTL_DFLT;
 
-	if (cache && cache->ttl_glob != C_MINI__LRUC_TTL_DFLT) {
-		now = lruci_timenow();
-		if (now == (uint64_t)-1) {
-			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK)
-			return (false);
+	if (cache) {
+		gap = cache->ns_gap;
+		if (gap != C_MINI__LRUC_TTL_DFLT) {
+			now = lruci_timenow();
+			if (now == (uint64_t)-1) {
+				CM_LOG(C_MINI__LEVEL_ERR, C_MINI__LRUC_LOG_ECLOCK)
+				return (false);
+			}
 		}
-	} else now = 0;
+	}
 	return (cache_put_internal(
 	    cache, (t_cm_lruc_keynode){
-	               .kv         = (t_cm_keyvalue){.key   = (void *)key,
-	                                             .k_len = key_len,
-	                                             .value = (void *)value},
-	               .time       = now,
-	               .lru_next   = NULL,
-	               .lru_prev   = NULL,
-	               .heap_index = 0,
-	               .hash_next  = NULL,
+	               .kv           = (t_cm_keyvalue){.key   = (void *)key,
+	                                               .k_len = key_len,
+	                                               .value = (void *)value},
+	               .time_emitted = now,
+	               .ns_gap       = gap,
+	               .lru_next     = NULL,
+	               .lru_prev     = NULL,
+	               .heap_index   = 0,
+	               .hash_next    = NULL,
     }));
 }
 /**
@@ -158,12 +168,12 @@ bool lruc_put(t_cm_lruc *cache, const void *key, size_t key_len,
  * \param key key to put
  * \param key_len key length
  * \param value value to put
- * \param ttl_ms time to live in milliseconds
+ * \param ttl_ns time to live in nanoseconds
  * \return 0 on success, -1 on failure
  * \ingroup lruc
 **/
 bool lruc_put_ttl(t_cm_lruc *cache, const void *key, size_t key_len,
-                  const void *value, uint64_t ttl_ms) {
+                  const void *value, size_t ttl_ns) {
 	uint64_t now;
 
 	now = lruci_timenow();
@@ -173,13 +183,14 @@ bool lruc_put_ttl(t_cm_lruc *cache, const void *key, size_t key_len,
 	}
 	return (cache_put_internal(
 	    cache, (t_cm_lruc_keynode){
-	               .kv         = (t_cm_keyvalue){.key   = (void *)key,
-	                                             .k_len = key_len,
-	                                             .value = (void *)value},
-	               .time       = now + ttl_ms,
-	               .lru_next   = NULL,
-	               .lru_prev   = NULL,
-	               .heap_index = 0,
-	               .hash_next  = NULL,
+	               .kv           = (t_cm_keyvalue){.key   = (void *)key,
+	                                               .k_len = key_len,
+	                                               .value = (void *)value},
+	               .time_emitted = now,
+	               .ns_gap       = ttl_ns,
+	               .lru_next     = NULL,
+	               .lru_prev     = NULL,
+	               .heap_index   = 0,
+	               .hash_next    = NULL,
     }));
 }

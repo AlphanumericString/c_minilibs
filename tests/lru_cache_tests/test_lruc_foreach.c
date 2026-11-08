@@ -37,8 +37,8 @@ NO_COV void test_cm_lruc_foreach(void) {
 	lruc_foreach(&c, forward_stradd_cache, to_add);
 	lruc_foreach(NULL, forward_stradd_cache, to_add);
 	lruc_foreach(&c, NULL, to_add);
-	assert(lruc_get(&c, k1, strlen(k1)) != NULL);
-	assert(strcmp(lruc_get(&c, k1, strlen(k1)), "zod_toto_1") == 0);
+	assert(lruc_try_get(&c, k1, strlen(k1)) != NULL);
+	assert(strcmp(lruc_try_get(&c, k1, strlen(k1)), "zod_toto_1") == 0);
 	lruc_destroy(&c);
 	return;
 }
@@ -89,10 +89,10 @@ NO_COV void test_cm_lruc_foreach_ttl_ordered(void) {
 	v3 = strdup("3");
 	v4 = strdup("4");
 	lruc_init(&c, 4, free);
-	lruc_put_ttl(&c, k1, strlen(k1), v1, 400);
-	lruc_put_ttl(&c, k2, strlen(k2), v2, 100);
-	lruc_put_ttl(&c, k3, strlen(k3), v3, 300);
-	lruc_put_ttl(&c, k4, strlen(k4), v4, 200);
+	lruc_put_ttl(&c, k1, strlen(k1), v1, LRUC_MS_TO_NS(400));
+	lruc_put_ttl(&c, k2, strlen(k2), v2, LRUC_MS_TO_NS(100));
+	lruc_put_ttl(&c, k3, strlen(k3), v3, LRUC_MS_TO_NS(300));
+	lruc_put_ttl(&c, k4, strlen(k4), v4, LRUC_MS_TO_NS(200));
 	lruc_foreach_ttl_ordered(&c, record_order_cb, order);
 	lruc_foreach_ttl_ordered(&c, NULL, order);
 	lruc_foreach_ttl_ordered(NULL, record_order_cb, order);
