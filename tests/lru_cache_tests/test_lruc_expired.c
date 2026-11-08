@@ -13,7 +13,7 @@ NO_COV void test_cm_lruc_isexpired(void) {
 	void       *v1;
 
 	lruc_init(&c, 4, free);
-	lruc_setttl(&c, 200);
+	lruc_setttl(&c, LRUC_MS_TO_NS(200));
 	assert(lruc_has(&c, k1, strlen(k1)) == false);
 	assert(lruc_isexpired(&c, k1, strlen(k1)) == false);
 	v1 = strdup("should not leak");
@@ -23,14 +23,14 @@ NO_COV void test_cm_lruc_isexpired(void) {
 	sleep(1);
 	assert(lruc_has(&c, k1, strlen(k1)) == true);
 	assert(lruc_isexpired(&c, k1, strlen(k1)) == true);
-	lruc_setttl(&c, LONG_MAX);
+	lruc_setttl(&c, C_MINI__LRUC_TTL_DFLT);
 	assert(lruc_isexpired(&c, k1, strlen(k1)) == false);
 
 	assert(lruc_isexpired(NULL, k1, strlen(k1)) == false);
 	clock_set_call_limit(0);
-	lruc_setttl(&c, 200);
+	lruc_setttl(&c, LRUC_MS_TO_NS(200));
 	assert(lruc_isexpired(&c, k1, strlen(k1)) == false);
-	lruc_setttl(&c, LONG_MAX);
+	lruc_setttl(&c, C_MINI__LRUC_TTL_DFLT);
 	assert(lruc_isexpired(&c, k1, strlen(k1)) == false);
 	clock_set_call_limit(CLOCK_DFT_LIMIT);
 
@@ -43,7 +43,7 @@ NO_COV void test_cm_lruc_cleanup(void) {
 	void       *v1, *v2, *v3, *v4;
 
 	lruc_init(&c, 4, free);
-	lruc_setttl(&c, 200);
+	lruc_setttl(&c, LRUC_MS_TO_NS(200));
 	lruc_put(&c, key1, strlen(key1), strdup("value_1"));
 	lruc_put(&c, key2, strlen(key2), strdup("value_2"));
 	lruc_put(&c, key3, strlen(key3), strdup("value_3"));
@@ -112,13 +112,23 @@ NO_COV void test_cm_lruc_setttl(void) {
 	t_cm_lruc cache;
 
 	lruc_init(&cache, 4, free);
-	assert(cache.ttl_glob == LONG_MAX);
-	lruc_setttl(&cache, 200);
-	assert(cache.ttl_glob == 200);
-	lruc_setttl(&cache, 3000);
-	assert(cache.ttl_glob == 3000);
-	lruc_setttl(&cache, 300000);
-	assert(cache.ttl_glob == 300000);
+	assert(cache.ns_gap == C_MINI__LRUC_TTL_DFLT);
+	lruc_setttl(&cache, LRUC_MS_TO_NS(200));
+	assert(cache.ns_gap == LRUC_MS_TO_NS(200));
+
+	// retroactive: existing entries get the new ttl
+	lruc_put(&cache, "k", 1, strdup("v"));
+	assert(cache.MRU != NULL);
+	assert(cache.MRU->ns_gap == LRUC_MS_TO_NS(200));
+	lruc_setttl(&cache, LRUC_MS_TO_NS(3000));
+	assert(cache.ns_gap == LRUC_MS_TO_NS(3000));
+	assert(cache.MRU->ns_gap == LRUC_MS_TO_NS(3000));
+	lruc_setttl(&cache, C_MINI__LRUC_TTL_DFLT);
+	assert(cache.ns_gap == C_MINI__LRUC_TTL_DFLT);
+	assert(cache.MRU->ns_gap == C_MINI__LRUC_TTL_DFLT);
+
+	lruc_setttl(NULL, LRUC_MS_TO_NS(200));
+
 	lruc_destroy(&cache);
 	return;
 }

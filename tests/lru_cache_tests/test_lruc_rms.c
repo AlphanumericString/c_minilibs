@@ -30,7 +30,7 @@ NO_COV void test_cm_lruc_clear(void) {
 		lruc_init(&c, 2, blank);
 		lruc_put(&c, (void *)&test_cm_lruc_clear, sizeof(void *),
 		         "his address");
-		lruc_get(&c, (void *)&test_cm_lruc_clear, sizeof(void *));
+		lruc_try_get(&c, (void *)&test_cm_lruc_clear, sizeof(void *));
 		lruc_clear(&c);
 		assert(c.LRU == NULL);
 		assert(c.MRU == NULL);
@@ -169,8 +169,8 @@ NO_COV void test_cm_lruc_remove(void) {
 	lruc_init(&c, 2, NULL);
 	assert(lruc_put(&c, k1, strlen(k1), (void *)0xdead) == true);
 	assert(lruc_put(&c, (void *)&k2, sizeof(int), (void *)0xbafa) == true);
-	assert(lruc_get(&c, k1, strlen(k1)) == (void *)0xdead);
-	assert(lruc_get(&c, (void *)&k2, sizeof(int)) == (void *)0xbafa);
+	assert(lruc_try_get(&c, k1, strlen(k1)) == (void *)0xdead);
+	assert(lruc_try_get(&c, (void *)&k2, sizeof(int)) == (void *)0xbafa);
 	assert(c.MRU != NULL), assert(c.MRU->kv.key == &k2);
 	assert(c.LRU != NULL), assert(c.LRU->kv.key == k1);
 	assert(c.node_nb == 2);
@@ -186,12 +186,12 @@ NO_COV void test_cm_lruc_remove(void) {
 	assert(c.MRU != NULL), assert(c.MRU->kv.key == &k2);
 	assert(c.LRU != NULL), assert(c.LRU->kv.key == &k2);
 	assert(c.node_nb == 1);
-	assert(lruc_get(&c, k1, strlen(k1)) == NULL);
+	assert(lruc_try_get(&c, k1, strlen(k1)) == NULL);
 	assert(lruc_remove(&c, &k2, sizeof(int)) == 0);
 	lruc_clear_reserved(&c);
 	assert(c.MRU == NULL), assert(c.LRU == NULL);
 	assert(c.node_nb == 0);
-	assert(lruc_get(&c, &k2, sizeof(int)) == NULL);
+	assert(lruc_try_get(&c, &k2, sizeof(int)) == NULL);
 
 	// errors
 	assert(lruc_remove(&c, &k2, sizeof(int)) != 0);

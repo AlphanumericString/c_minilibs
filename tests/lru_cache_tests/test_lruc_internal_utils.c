@@ -69,3 +69,32 @@ NO_COV void test_cm_lruci_node_eq(void) {
 	kv1.kv.key = key2;
 	assert(lruci_node_eq(&kv1, &kv2) == false);
 }
+NO_COV void test_cm_lruci_expiry(void) {
+	t_cm_lruc_keynode n = {.time_emitted = 0, .ns_gap = (size_t)-1};
+
+	// no ttl -> infinite expiry
+	assert(lruci_expiry(&n) == (uint64_t)-1);
+
+	// normal expiry is time_emitted + ns_gap
+	n.time_emitted = 10;
+	n.ns_gap       = 5;
+	assert(lruci_expiry(&n) == 15);
+
+	// huge ns_gap overflows -> saturates to infinite
+	n.time_emitted = 10;
+	n.ns_gap       = (size_t)-2;
+	assert(lruci_expiry(&n) == (uint64_t)-1);
+}
+NO_COV void test_cm_lruci_expired(void) {
+	t_cm_lruc_keynode n = {.time_emitted = 0, .ns_gap = (size_t)-1};
+
+	// no ttl -> never expired
+	assert(lruci_expired(&n, 100) == false);
+
+	n.time_emitted = 100;
+	n.ns_gap       = 50;
+	assert(lruci_expired(&n, 100) == false); // now == time_emitted
+	assert(lruci_expired(&n, 50) == false);  // now < time_emitted
+	assert(lruci_expired(&n, 140) == false); // not expired yet
+	assert(lruci_expired(&n, 151) == true);  // expired
+}

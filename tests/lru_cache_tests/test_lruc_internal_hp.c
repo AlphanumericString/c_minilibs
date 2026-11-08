@@ -42,10 +42,10 @@ NO_COV void test_cm_lruci_hp_pop(void) {
 }
 NO_COV void test_cm_lruci_hp_pop_sift_right(void) {
 	t_cm_lruc         c;
-	t_cm_lruc_keynode n0 = {.time = 0};
-	t_cm_lruc_keynode n1 = {.time = 10};
-	t_cm_lruc_keynode n2 = {.time = 5};
-	t_cm_lruc_keynode n3 = {.time = 20};
+	t_cm_lruc_keynode n0 = {.time_emitted = 0};
+	t_cm_lruc_keynode n1 = {.time_emitted = 10};
+	t_cm_lruc_keynode n2 = {.time_emitted = 5};
+	t_cm_lruc_keynode n3 = {.time_emitted = 20};
 
 	lruc_init(&c, 4, NULL);
 	lruci_hp_push(&c, &n0);
@@ -74,11 +74,11 @@ NO_COV void test_cm_lruci_hp_pop_nth(void) {
 	void              *key3 = "quaize";
 
 	lruc_init(&c, 3, free);
-	lruc_put_ttl(&c, key1, strlen(key1), malloc(14), 100);
+	lruc_put_ttl(&c, key1, strlen(key1), malloc(14), LRUC_MS_TO_NS(100));
 	kv1 = c.MRU;
-	lruc_put_ttl(&c, key2, strlen(key2), malloc(15), 200);
+	lruc_put_ttl(&c, key2, strlen(key2), malloc(15), LRUC_MS_TO_NS(200));
 	kv2 = c.MRU;
-	lruc_put_ttl(&c, key3, strlen(key3), malloc(16), 300);
+	lruc_put_ttl(&c, key3, strlen(key3), malloc(16), LRUC_MS_TO_NS(300));
 	kv3 = c.MRU;
 	assert(kv1 != NULL), assert(kv1->kv.key == key1);
 	assert(kv2 != NULL), assert(kv2->kv.key == key2);
@@ -111,4 +111,28 @@ NO_COV void test_cm_lruci_hp_pop_nth(void) {
 	free(kv1->kv.value), free(kv2->kv.value), free(kv3->kv.value);
 	free(kv1), free(kv2), free(kv3);
 	free(c.buckets);
+}
+NO_COV void test_cm_lruci_hp_rebuild(void) {
+	t_cm_lruc           c;
+	t_cm_lruc_keynode **saved;
+	const char         *ka = "a", *kb = "b", *kc = "c", *kd = "d";
+
+	lruc_init(&c, 4, NULL);
+	lruc_put_ttl(&c, ka, 1, "va", LRUC_MS_TO_NS(300));
+	lruc_put_ttl(&c, kb, 1, "vb", LRUC_MS_TO_NS(100));
+	lruc_put_ttl(&c, kc, 1, "vc", LRUC_MS_TO_NS(200));
+	lruc_put(&c, kd, 1, "vd"); // no ttl -> infinite expiry, sorts last
+
+	lruci_hp_rebuild(&c);
+	assert(c.node_nb == 4);
+	assert(c.minHeap[0]->kv.key == (void *)kb); // earliest expiry at root
+	assert(c.minHeap[c.node_nb - 1] != NULL);
+
+	// minHeap NULL -> early return
+	saved     = c.minHeap;
+	c.minHeap = NULL;
+	lruci_hp_rebuild(&c);
+	c.minHeap = saved;
+
+	lruc_destroy(&c);
 }

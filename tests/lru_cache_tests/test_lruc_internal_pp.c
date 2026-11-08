@@ -7,12 +7,12 @@
 NO_COV void test_cm_lruci_rsvrd_push(void) {
 	t_cm_lruc         c  = (t_cm_lruc){0};
 	t_cm_lruc_keynode kv = (t_cm_lruc_keynode){
-	    .hash_next  = NULL,
-	    .lru_next   = NULL,
-	    .heap_index = 0,
-	    .lru_prev   = NULL,
-	    .time       = lruci_timenow(),
-	    .kv         = (t_cm_keyvalue){0},
+	    .hash_next    = NULL,
+	    .lru_next     = NULL,
+	    .heap_index   = 0,
+	    .lru_prev     = NULL,
+	    .time_emitted = lruci_timenow(),
+	    .kv           = (t_cm_keyvalue){0},
 	};
 
 	assert(c.reserved_nodes == NULL);
@@ -22,12 +22,12 @@ NO_COV void test_cm_lruci_rsvrd_push(void) {
 NO_COV void test_cm_lruci_rsvrd_pop(void) {
 	t_cm_lruc         c  = (t_cm_lruc){0};
 	t_cm_lruc_keynode kv = (t_cm_lruc_keynode){
-	    .hash_next  = NULL,
-	    .lru_next   = NULL,
-	    .heap_index = 0,
-	    .lru_prev   = NULL,
-	    .time       = lruci_timenow(),
-	    .kv         = (t_cm_keyvalue){0},
+	    .hash_next    = NULL,
+	    .lru_next     = NULL,
+	    .heap_index   = 0,
+	    .lru_prev     = NULL,
+	    .time_emitted = lruci_timenow(),
+	    .kv           = (t_cm_keyvalue){0},
 	};
 
 	c.reserved_nodes = &kv;
@@ -42,11 +42,11 @@ NO_COV void test_cm_lruci_hsh_pop(void) {
 	const char        *key2 = "different key";
 	t_cm_lruc_keynode *kvn_ptr;
 	t_cm_lruc_keynode  kvn_bad = (t_cm_lruc_keynode){
-	     .hash_next  = NULL,
-	     .lru_next   = NULL,
-	     .heap_index = 0,
-	     .lru_prev   = NULL,
-	     .time       = lruci_timenow(),
+	     .hash_next    = NULL,
+	     .lru_next     = NULL,
+	     .heap_index   = 0,
+	     .lru_prev     = NULL,
+	     .time_emitted = lruci_timenow(),
 	     .kv =
             (t_cm_keyvalue){
 	                        .k_len = strlen(key2),

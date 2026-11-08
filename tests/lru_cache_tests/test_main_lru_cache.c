@@ -20,6 +20,8 @@ NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Get", )
 	test_cm_lruc_get();
+	test_cm_lruc_getttl();
+	test_cm_lruc_try_get();
 	test_cm_lruc_get_lru();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Rm", )
@@ -30,6 +32,7 @@ NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Has", )
 	test_cm_lruc_has();
+	test_cm_lruc_has_ttl();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Expired", )
 	test_cm_lruc_isexpired();
@@ -51,9 +54,12 @@ NO_COV int main(void) {
 	test_cm_lruci_hp_pop();
 	test_cm_lruci_hp_pop_sift_right();
 	test_cm_lruci_hp_pop_nth();
+	test_cm_lruci_hp_rebuild();
 	test_cm_lruci_keyinhash();
 	test_cm_lruci_keyinlist();
 	test_cm_lruci_node_eq();
+	test_cm_lruci_expiry();
+	test_cm_lruci_expired();
 	test_cm_lruci_hsh_pop();
 	test_cm_lruci_rsvrd_push();
 	test_cm_lruci_rsvrd_pop();

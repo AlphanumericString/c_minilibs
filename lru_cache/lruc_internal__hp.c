@@ -14,7 +14,7 @@ static inline void lruci_heap_swap(t_cm_lruc *c, size_t a, size_t b) {
 
 static inline bool compare(const t_cm_lruc_keynode *a,
                            const t_cm_lruc_keynode *b) {
-	return (a->time < b->time);
+	return (lruci_expiry(a) < lruci_expiry(b));
 }
 
 static void lruci_hp_up(t_cm_lruc *c, size_t index) {
@@ -79,4 +79,19 @@ t_cm_lruc_keynode *lruci_hp_pop_nth(t_cm_lruc *c, size_t n) {
 	if (n > (c->node_nb - 1)) n = c->node_nb - 1;
 	lruci_heap_swap(c, 0, n);
 	return (lruci_hp_pop(c));
+}
+
+void lruci_hp_rebuild(t_cm_lruc *c) {
+	size_t             i = 0;
+	t_cm_lruc_keynode *node;
+
+	if (!c->minHeap) return;
+	for (node = c->MRU; node; node = node->lru_next) {
+		c->minHeap[i]    = node;
+		node->heap_index = i;
+		i++;
+	}
+	if (i < c->buckets_nb) c->minHeap[i] = NULL;
+	for (i = c->node_nb / 2; i-- > 0;)
+		lruci_hp_down(c, i);
 }
