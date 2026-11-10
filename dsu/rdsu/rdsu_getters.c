@@ -27,6 +27,16 @@ size_t rdsu_size(const t_cm_rdsu *rdsu) {
 	return (rdsu->size);
 }
 /**
+ * \brief returns the number of log entries reserved for future linkings
+ * \param rdsu the rdsu to query
+ * \return the number of reserved logs
+ * \ingroup rdsu
+**/
+size_t rdsu_reserved_logs_nb(const t_cm_rdsu *rdsu) {
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS)
+	return (rdsu->reserved_logs_nb);
+}
+/**
  * \brief return the number of distinct separate sets in the rdsu
  * \param rdsu the rdsu to query
  * \return the number of components

@@ -1,17 +1,8 @@
-#include <stdlib.h>
 #define C_MINI__RDSU_INTERNAL
 #include "rewindable_disjointed_set_union.h"
 
 // -- local func
 
-/*
- * push a log
- */
-static inline bool rdsui_push_rewind(t_cm_rdsu *rdsu, t_cm_rdsu_log *entry) {
-	entry->nxt       = rdsu->change_log;
-	rdsu->change_log = entry;
-	return (true);
-}
 /*
  * init a log
  */
@@ -20,21 +11,6 @@ static inline t_cm_rdsu_log rdsui_init_log(size_t elem, uint16_t value,
                                            enum s_cm_rdsu_log_type type) {
 	return ((t_cm_rdsu_log){
 	    .type = type, .elem = elem, .p = value, .r = rank, .nxt = NULL});
-}
-
-/*
- * get a log from the reserved pile or create a new one
- */
-static inline t_cm_rdsu_log *rdsui_get_log(t_cm_rdsu *rdsu) {
-	t_cm_rdsu_log *ret;
-
-	if (rdsu->reserved_logs) {
-		ret                 = rdsu->reserved_logs;
-		rdsu->reserved_logs = ret->nxt;
-		ret->nxt            = NULL;
-		return (ret);
-	}
-	return ((t_cm_rdsu_log *)calloc(sizeof(t_cm_rdsu_log), 1));
 }
 // ----------
 
@@ -65,7 +41,7 @@ bool rdsu_union(t_cm_rdsu *ds, size_t x, size_t y) {
 		       ds->components, ds->components)
 		return (false);
 	}
-	entry = rdsui_get_log(ds);
+	entry = rdsui_log_get(ds);
 	if (!entry) return (false);
 	ds->components--;
 	if (ds->rank[root_x] < ds->rank[root_y]) {
@@ -89,7 +65,7 @@ bool rdsu_union(t_cm_rdsu *ds, size_t x, size_t y) {
 			ds->rank[root_y]++;
 		}
 	}
-	rdsui_push_rewind(ds, entry);
+	rdsui_log_push_rewind(ds, entry);
 	CM_LOG(C_MINI__LEVEL_INFO, "Link (r1:%zu, r2:%zu, components:%zu -> %zu)",
 	       x, y, ds->components + 1, ds->components)
 	return (true);

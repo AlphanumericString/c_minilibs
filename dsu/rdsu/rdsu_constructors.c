@@ -81,13 +81,14 @@ t_cm_rdsu *rdsu_new_from_arrays(size_t size, uint16_t *parents,
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RDSU_LOG_EALLOC)
 		return ((t_cm_rdsu *)NULL);
 	}
-	ret->rank            = (uint16_t *)ranks;
-	ret->parent          = (uint16_t *)parents;
-	ret->size            = size;
-	ret->rp_single_alloc = false;
-	ret->change_log      = NULL;
-	ret->reserved_logs   = NULL;
-	ret->components      = size;
+	ret->rank             = (uint16_t *)ranks;
+	ret->parent           = (uint16_t *)parents;
+	ret->size             = size;
+	ret->rp_single_alloc  = false;
+	ret->change_log       = NULL;
+	ret->reserved_logs    = NULL;
+	ret->reserved_logs_nb = 0;
+	ret->components       = size;
 	rdsu_clr(ret);
 	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (rdsu:%p, size:%zu)", (void *)ret, size)
 	return (ret);
@@ -107,13 +108,14 @@ t_cm_rdsu *rdsu_init_from_arrays(t_cm_rdsu *ret, size_t size, uint16_t *parents,
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
 		return ((t_cm_rdsu *)NULL);
 	}
-	ret->rank            = (uint16_t *)ranks;
-	ret->parent          = (uint16_t *)parents;
-	ret->size            = size;
-	ret->components      = size;
-	ret->rp_single_alloc = false;
-	ret->change_log      = NULL;
-	ret->reserved_logs   = NULL;
+	ret->rank             = (uint16_t *)ranks;
+	ret->parent           = (uint16_t *)parents;
+	ret->size             = size;
+	ret->components       = size;
+	ret->rp_single_alloc  = false;
+	ret->change_log       = NULL;
+	ret->reserved_logs    = NULL;
+	ret->reserved_logs_nb = 0;
 	rdsu_clr(ret);
 	CM_LOG(C_MINI__LEVEL_INFO, "New DSU (rdsu:%p, size:%zu)", (void *)ret, size)
 	return (ret);

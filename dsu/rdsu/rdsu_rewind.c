@@ -1,5 +1,3 @@
-#include <stdlib.h>
-
 #define C_MINI__RDSU_INTERNAL
 #include "rewindable_disjointed_set_union.h"
 
@@ -10,20 +8,6 @@ static inline bool is_log_valid(const t_cm_rdsu     *rdsu,
 	         log->type == RDSU_LOG_NAYRANK));
 }
 
-t_cm_rdsu_log *rdsui_peek_rewind(const t_cm_rdsu *rdsu) {
-	return (rdsu->change_log);
-}
-t_cm_rdsu_log *rdsui_pop_rewind(t_cm_rdsu *rdsu) {
-	t_cm_rdsu_log *ret;
-
-	if (!rdsu || !rdsu->parent || !rdsu->rank) return (NULL);
-	ret = rdsui_peek_rewind(rdsu);
-	if (!ret) return (NULL);
-	rdsu->change_log    = ret->nxt;
-	ret->nxt            = rdsu->reserved_logs;
-	rdsu->reserved_logs = ret;
-	return (ret);
-}
 static inline bool execute_rewind(t_cm_rdsu *rdsu, t_cm_rdsu_log lg) {
 
 	if (is_log_valid(rdsu, &lg) == false) return (false);
@@ -61,7 +45,7 @@ t_cm_rdsu_log *rdsu_save_state(const t_cm_rdsu *rdsu) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
 		return (NULL);
 	}
-	r = rdsui_peek_rewind(rdsu);
+	r = rdsu->change_log;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS)
 	return (r);
 }
@@ -72,25 +56,23 @@ t_cm_rdsu_log *rdsu_save_state(const t_cm_rdsu *rdsu) {
  * \ingroup rdsu
 **/
 bool rdsu_rewind(t_cm_rdsu *rdsu) {
-	t_cm_rdsu_log *entry = rdsui_pop_rewind(rdsu);
-	bool           ret;
+	t_cm_rdsu_log *entry;
 
 	if (!rdsu || !rdsu->parent || !rdsu->rank) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
 		return (false);
 	}
+	entry = rdsui_log_pop_rewind(rdsu);
 	if (!entry) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_ELOG)
 		return (false);
 	}
-	ret = execute_rewind(rdsu, *entry);
-	if (ret == false) {
-		rdsu->reserved_logs = entry->nxt;
-		entry->nxt          = rdsu->change_log;
-		rdsu->change_log    = entry;
+	if (execute_rewind(rdsu, *entry) == false) {
+		rdsui_log_push_rewind(rdsu, entry);
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_ELC)
-		return (ret);
+		return (false);
 	}
+	rdsui_log_push_reserved(rdsu, entry);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS)
 	return (true);
 }
@@ -123,13 +105,14 @@ bool rdsu_rewind_to_state(t_cm_rdsu *rdsu, const t_cm_rdsu_log *lg) {
 #endif
 	res = true;
 	while (rdsu->change_log != lg && res) {
-		entry = rdsui_pop_rewind(rdsu);
-		res   = execute_rewind(rdsu, *entry);
-		if (!res) {
-			rdsu->reserved_logs = entry->nxt;
-			entry->nxt          = rdsu->change_log;
-			rdsu->change_log    = entry;
+		entry = rdsui_log_pop_rewind(rdsu);
+		if (!entry) {
+			res = false;
+			break;
 		}
+		res = execute_rewind(rdsu, *entry);
+		if (res) rdsui_log_push_reserved(rdsu, entry);
+		else rdsui_log_push_rewind(rdsu, entry);
 	}
 	if (res == false) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_ELC)
@@ -144,21 +127,10 @@ bool rdsu_rewind_to_state(t_cm_rdsu *rdsu, const t_cm_rdsu_log *lg) {
  * \ingroup rdsu
 **/
 void rdsu_rewind_clear(t_cm_rdsu *rdsu) {
-	t_cm_rdsu_log *entry;
-
 	if (!rdsu) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
 		return;
 	}
-	while (rdsu->change_log) {
-		entry            = rdsu->change_log;
-		rdsu->change_log = entry->nxt;
-		free(entry);
-	}
-	while (rdsu->reserved_logs) {
-		entry               = rdsu->reserved_logs;
-		rdsu->reserved_logs = entry->nxt;
-		free(entry);
-	}
+	rdsui_log_clear(rdsu);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RDSU_LOG_SUCCESS)
 }

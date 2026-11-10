@@ -20,6 +20,7 @@ void test_cm_rdsu_size(void);
 void test_cm_rdsu_nb_components(void);
 
 void test_cm_rdsu_grow(void);
+void test_cm_rdsu_reserve(void);
 
 void test_cm_rdsu_union(void);
 void test_cm_rdsu_find(void);
@@ -33,3 +34,4 @@ void test_cm_rdsu_rewind(void);
 void test_cm_rdsu_rewind_to_state(void);
 void test_cm_rdsu_rewind_clear(void);
 void test_cm_rdsui_log_reuse(void);
+void test_cm_rdsui_log_stack(void);

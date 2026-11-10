@@ -61,6 +61,9 @@ NO_COV int rdsu_main_tests(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Grow", )
 	test_cm_rdsu_grow();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Reserve", )
+	test_cm_rdsu_reserve();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Links (union + compress)", )
 	test_cm_rdsu_find();
 	test_cm_rdsu_compress_all();
@@ -76,6 +79,7 @@ NO_COV int rdsu_main_tests(void) {
 	test_cm_rdsu_rewind_to_state();
 	test_cm_rdsu_rewind_clear();
 	test_cm_rdsui_log_reuse();
+	test_cm_rdsui_log_stack();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "All rdsu tests completed successfully.", )
 	return (EXIT_SUCCESS);
 }

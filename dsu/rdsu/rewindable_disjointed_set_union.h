@@ -84,6 +84,8 @@ typedef struct s_cm_rdsu_log {
  * \param change_log the stack of entries/changes in the rdsu
  * \param reserved_logs the stack of logs that where popped and can be re-used
  * for future linkings (reduces alloc/free churn on do/undo cycles)
+ * \param reserved_logs_nb number of logs currently available in
+ * reserved_logs
  * \ingroup rdsu
  * \note rdsu are not "auto" compacted, furthermore compacting impacts logs and
  * invalidates said logs. This means that unless you're sure you don't need to
@@ -99,6 +101,7 @@ typedef struct s_cm_rewindable_disjointed_set_union {
 
 	t_cm_rdsu_log *change_log;
 	t_cm_rdsu_log *reserved_logs;
+	size_t         reserved_logs_nb;
 } t_cm_rdsu;
 
 t_cm_rdsu *rdsu_new(size_t n);
@@ -108,6 +111,7 @@ t_cm_rdsu *rdsu_init_from_arrays(t_cm_rdsu *to_init, size_t size,
                                  uint16_t *parent, uint16_t *rank);
 
 bool rdsu_grow(t_cm_rdsu *to_init, size_t n);
+bool rdsu_reserve(t_cm_rdsu *rdsu, size_t n);
 
 // change to bool return
 void rdsu_clr(t_cm_rdsu *dsu);
@@ -116,6 +120,7 @@ void rdsu_free(t_cm_rdsu **ds);
 
 int    rdsu_max_depth(const t_cm_rdsu *dsu);
 size_t rdsu_size(const t_cm_rdsu *dsu);
+size_t rdsu_reserved_logs_nb(const t_cm_rdsu *dsu);
 size_t rdsu_nb_components(const t_cm_rdsu *dsu);
 
 bool rdsu_is_related(const t_cm_rdsu *ds, size_t x, size_t y);
@@ -132,8 +137,12 @@ void           rdsu_rewind_clear(t_cm_rdsu *rdsu);
 
 #ifdef C_MINI__RDSU_INTERNAL
 
-t_cm_rdsu_log *rdsui_peek_rewind(const t_cm_rdsu *rdsu);
-t_cm_rdsu_log *rdsui_pop_rewind(t_cm_rdsu *rdsu);
+void           rdsui_log_push_rewind(t_cm_rdsu *rdsu, t_cm_rdsu_log *entry);
+t_cm_rdsu_log *rdsui_log_pop_rewind(t_cm_rdsu *rdsu);
+void           rdsui_log_push_reserved(t_cm_rdsu *rdsu, t_cm_rdsu_log *entry);
+t_cm_rdsu_log *rdsui_log_pop_reserved(t_cm_rdsu *rdsu);
+t_cm_rdsu_log *rdsui_log_get(t_cm_rdsu *rdsu);
+void           rdsui_log_clear(t_cm_rdsu *rdsu);
 
 #endif // !C_MINI__RDSU_INTERNAL
 

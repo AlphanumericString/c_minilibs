@@ -45,6 +45,7 @@ NO_COV void test_cm_rdsu_rewind(void) {
 	assert(rdsu_find(&rdsu, 0) != rdsu_find(&rdsu, 4));
 	assert(rdsu_find(&rdsu, 3) != rdsu_find(&rdsu, 4));
 	assert(rdsu_nb_components(&rdsu) == 3);
+	assert(rdsu_reserved_logs_nb(&rdsu) == 1);
 	intact_copy = rdsu;
 
 	rdsu.parent = NULL;
@@ -79,6 +80,10 @@ NO_COV void test_cm_rdsu_rewind(void) {
 	assert(rdsu_rewind(&rdsu) == false);
 	malicious_log.elem = 0;
 
+	// failed rewinds leave the log stacks and reserve counter untouched
+	assert(rdsu_reserved_logs_nb(&rdsu) == 1);
+	assert(rdsu.change_log == &malicious_log);
+
 	rdsu.change_log = rdsu.change_log->nxt;
 	rdsu_destroy(&rdsu);
 	assert(rdsu_rewind(&rdsu) == false);
@@ -107,6 +112,7 @@ NO_COV void test_cm_rdsu_rewind_to_state(void) {
 	assert(rdsu_find(&rdsu, 0) != rdsu_find(&rdsu, 3));
 	assert(rdsu_nb_components(&rdsu) == 2);
 	assert(rdsu_rewind_to_state(&rdsu, log) == true);
+	assert(rdsu_reserved_logs_nb(&rdsu) == 2);
 	assert(log != NULL); // assert state 1
 	assert(rdsu_find(&rdsu, 0) == 0);
 	assert(rdsu_find(&rdsu, 1) == rdsu_find(&rdsu, 2));
@@ -132,6 +138,7 @@ NO_COV void test_cm_rdsu_rewind_to_state(void) {
 	// log w good type in change_log and bad log in change_log
 	assert(rdsu_rewind_to_state(&rdsu, log) == false);
 	assert(rdsu.change_log == &malicious_log);
+	assert(rdsu_reserved_logs_nb(&rdsu) == 2);
 	rdsu.change_log = rdsu.change_log->nxt;
 	// log w bad type as input and good in change_log
 	assert(rdsu_rewind_to_state(&rdsu, &malicious_log) == false);
