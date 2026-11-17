@@ -6,10 +6,8 @@ general todo for the project
 - ` ` not started
 General todo:
 - [x] current modules
-- [~] refactor
- - [x] lruc .time refactor
+- [:] refactor
  - [:] da->check todo impl, add functs to module
- - [:] dsu-> rdsu -> reserve func
  - [:] hp-> more funcs
  - [:] ill->circular lists, api consistency around head, elem centric funcs
  - [:] lruc->ms to ns, make a separate lru only cache similar to dsu/
@@ -29,7 +27,6 @@ General todo:
 - [:] refactors
 transferred from the readme.md "what's missing / faults of the project" section
  - [ ] da->check todo impl, add functs to module
- - [ ] dsu-> rdsu -> reserve func
  - [ ] hp-> more funcs
  - [ ] ill->circular lists, api consistency around head, elem centric funcs
  - [ ] lruc->ms to ns, make a separate lru only cache similar to dsu/
@@ -87,6 +84,10 @@ transferred from the readme.md "what's missing / faults of the project" section
  - [ ] ifdef auto shrink (path on pop/rm) with (len <= cap/4 -> len = cap/2)
   - [ ] shrink on rm
   - [ ] shrink on pop
+- [ ] dsu
+ - [:] cdsu reserve/up-front growth equivalent (no logs)
+ - [:] make rdsu_grow(..., 0) a successful no-op like cdsu_grow
+ - [:] validate the rewind log chain in rdsu_validate
 - [:] tpm
  - [ ] carsh jobs catch
  - [ ] dispatch new jobs on spikes

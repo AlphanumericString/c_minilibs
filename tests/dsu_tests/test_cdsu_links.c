@@ -118,6 +118,7 @@ NO_COV void test_cm_cdsu_find(void) {
 	assert(cdsu->rank[4] == 00 && cdsu->parent[4] == 4);
 
 	assert(cdsu_find(cdsu, 99) == (size_t)-1);
+	assert(cdsu_find(cdsu, cdsu->size) == (size_t)-1);
 	intact_copy  = *cdsu;
 	cdsu->parent = NULL;
 	assert(cdsu_find(cdsu, 0) == (size_t)-1);
@@ -173,6 +174,8 @@ NO_COV void test_cm_cdsu_strict_find(void) {
 	assert(cdsu->rank[4] == 00 && cdsu->parent[4] == 4);
 
 	assert(cdsu_strict_find(cdsu, 99) == (size_t)-1);
+	assert(cdsu_strict_find(cdsu, cdsu->size) == (size_t)-1);
+	assert(cdsu_strict_find(NULL, 99) == (size_t)-1);
 	intact_copy  = *cdsu;
 	cdsu->parent = NULL;
 	assert(cdsu_strict_find(cdsu, 0) == (size_t)-1);

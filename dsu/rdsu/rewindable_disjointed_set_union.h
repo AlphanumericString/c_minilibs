@@ -113,8 +113,7 @@ t_cm_rdsu *rdsu_init_from_arrays(t_cm_rdsu *to_init, size_t size,
 bool rdsu_grow(t_cm_rdsu *to_init, size_t n);
 bool rdsu_reserve(t_cm_rdsu *rdsu, size_t n);
 
-// change to bool return
-void rdsu_clr(t_cm_rdsu *dsu);
+bool rdsu_clr(t_cm_rdsu *dsu);
 void rdsu_destroy(t_cm_rdsu *ds);
 void rdsu_free(t_cm_rdsu **ds);
 

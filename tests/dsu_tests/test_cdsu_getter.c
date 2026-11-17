@@ -4,10 +4,18 @@
 
 NO_COV void test_cm_cdsu_max_depth(void) {
 	t_cm_cdsu *cdsu = cdsu_new(5);
+
 	assert(cdsu_max_depth(cdsu) == 0);
 	cdsu_union(cdsu, 0, 1);
 	assert(cdsu_max_depth(cdsu) == 1);
+	// chain 4->3->2->1->0: real depth (4) is way above the max rank (1)
+	cdsu->parent[1] = 0;
+	cdsu->parent[2] = 1;
+	cdsu->parent[3] = 2;
+	cdsu->parent[4] = 3;
+	assert(cdsu_max_depth(cdsu) == 4);
 	cdsu_free(&cdsu);
+	assert(cdsu_max_depth(cdsu) == -1);
 }
 
 NO_COV void test_cm_cdsu_size(void) {
@@ -15,6 +23,7 @@ NO_COV void test_cm_cdsu_size(void) {
 
 	assert(cdsu_size(cdsu) == 12);
 	cdsu_free(&cdsu);
+	assert(cdsu_size(cdsu) == 0);
 }
 
 NO_COV void test_cm_cdsu_nb_components(void) {
@@ -33,4 +42,5 @@ NO_COV void test_cm_cdsu_nb_components(void) {
 	assert(cdsu_nb_components(cdsu) == 42);
 
 	cdsu_free(&cdsu);
+	assert(cdsu_nb_components(cdsu) == 0);
 }

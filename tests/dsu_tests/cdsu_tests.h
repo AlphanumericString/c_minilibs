@@ -7,7 +7,7 @@
 #include "dsu/cdsu/compact_disjointed_set_union.h"
 
 void test_cm_cdsu_new(void);
-void test_cm_cdsu_new_from_array(void);
+void test_cm_cdsu_new_from_arrays(void);
 void test_cm_cdsu_init(void);
 void test_cm_cdsu_init_from_arrays(void);
 

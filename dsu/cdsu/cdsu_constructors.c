@@ -69,8 +69,8 @@ t_cm_cdsu *cdsu_init(t_cm_cdsu *to_init, size_t n) {
  * \return the new t_cm_cdsu
  * \ingroup cdsu
 **/
-t_cm_cdsu *cdsu_new_from_array(size_t size, uint16_t *parents,
-                               uint16_t *ranks) {
+t_cm_cdsu *cdsu_new_from_arrays(size_t size, uint16_t *parents,
+                                uint16_t *ranks) {
 	t_cm_cdsu *ret;
 
 	if (!size || !parents || !ranks || ranks == parents) {

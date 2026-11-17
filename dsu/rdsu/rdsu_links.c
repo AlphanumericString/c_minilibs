@@ -78,7 +78,7 @@ bool rdsu_union(t_cm_rdsu *ds, size_t x, size_t y) {
  * \ingroup rdsu
 **/
 uint16_t rdsu_find(const t_cm_rdsu *ds, size_t x) {
-	if (!ds || !ds->size || !ds->parent || !ds->rank || x > ds->size) {
+	if (!ds || !ds->size || !ds->parent || !ds->rank || x >= ds->size) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
 		return (-1);
 	}

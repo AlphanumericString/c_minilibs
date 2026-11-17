@@ -27,7 +27,7 @@ NO_COV void test_cm_cdsu_grow(void) {
 
 	void *buf_parents = malloc(sizeof(int) * 5);
 	void *buf_rank    = malloc(sizeof(int) * 5);
-	cdsu              = cdsu_new_from_array(5, buf_parents, buf_rank);
+	cdsu              = cdsu_new_from_arrays(5, buf_parents, buf_rank);
 	assert(cdsu != NULL && cdsu->size == 5 && cdsu->components == 5);
 	assert(cdsu->rp_single_alloc == false);
 	for (size_t i = 0; i < 5; i++) {

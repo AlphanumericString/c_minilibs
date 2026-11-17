@@ -41,7 +41,7 @@ typedef struct s_cm_compact_disjointed_set_union {
 } t_cm_cdsu;
 
 t_cm_cdsu *cdsu_new(size_t n);
-t_cm_cdsu *cdsu_new_from_array(size_t n, uint16_t *parents, uint16_t *rank);
+t_cm_cdsu *cdsu_new_from_arrays(size_t n, uint16_t *parents, uint16_t *rank);
 t_cm_cdsu *cdsu_init(t_cm_cdsu *to_init, size_t n);
 t_cm_cdsu *cdsu_init_from_arrays(t_cm_cdsu *to_init, size_t size,
                                  uint16_t *parent, uint16_t *rank);

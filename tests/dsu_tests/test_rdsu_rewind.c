@@ -148,7 +148,7 @@ NO_COV void test_cm_rdsu_rewind_to_state(void) {
 	// log w good type as input and good in change_log but not in change_log
 	// list
 	assert(rdsu_rewind_to_state(&rdsu, &malicious_log) == false);
-	rdsu_clr(&rdsu);
+	assert(rdsu_clr(&rdsu) == true);
 	// any log with empty change_log list
 	assert(rdsu_rewind_to_state(&rdsu, (void *)0xDEAD) == false);
 

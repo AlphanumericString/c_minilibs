@@ -11,6 +11,9 @@ NO_COV void test_cm_rdsu_is_related(void) {
 	assert(rdsu_is_related(NULL, 0, 99) == false);
 	assert(rdsu_is_related(rdsu, 0, 99) == false);
 	assert(rdsu_is_related(rdsu, 99, 1) == false);
+	assert(rdsu_is_related(rdsu, rdsu->size, 1) == false);
+	assert(rdsu_is_related(rdsu, 1, rdsu->size) == false);
+	assert(rdsu_is_related(rdsu, rdsu->size, rdsu->size) == false);
 	rdsu_free(&rdsu);
 }
 

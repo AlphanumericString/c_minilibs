@@ -53,7 +53,7 @@ NO_COV void test_cm_rdsu_union(void) {
 	//      | | |
 	//      3 1 4  : rank 0
 
-	rdsu_clr(rdsu);
+	assert(rdsu_clr(rdsu) == true);
 	no_parent = *rdsu;
 	no_rank   = *rdsu;
 	no_size   = *rdsu;
@@ -105,6 +105,7 @@ NO_COV void test_cm_rdsu_find(void) {
 	*rdsu = intact_copy;
 	assert(rdsu_find(NULL, 0) == (uint16_t)-1);
 	assert(rdsu_find(rdsu, 99) == (uint16_t)-1);
+	assert(rdsu_find(rdsu, rdsu->size) == (uint16_t)-1);
 
 	rdsu_free(&rdsu);
 }

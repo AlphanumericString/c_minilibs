@@ -9,7 +9,7 @@ NO_COV int cdsu_main_tests(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Create", )
 	test_cm_cdsu_new();
-	test_cm_cdsu_new_from_array();
+	test_cm_cdsu_new_from_arrays();
 	test_cm_cdsu_init();
 	test_cm_cdsu_init_from_arrays();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
@@ -44,7 +44,7 @@ NO_COV int rdsu_main_tests(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Create", )
 	test_cm_rdsu_new();
-	test_cm_rdsu_new_from_array();
+	test_cm_rdsu_new_from_arrays();
 	test_cm_rdsu_init();
 	test_cm_rdsu_init_from_arrays();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
@@ -56,6 +56,7 @@ NO_COV int rdsu_main_tests(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Infos", )
 	test_cm_rdsu_max_depth();
 	test_cm_rdsu_size();
+	test_cm_rdsu_reserved_logs_nb();
 	test_cm_rdsu_nb_components();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Grow", )

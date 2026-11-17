@@ -21,14 +21,17 @@ void rdsu_destroy(t_cm_rdsu *ds) {
 /**
  * \brief reset structure to a clean init state
  * \param rdsu the rdsu to clear
+ * \return true if the rdsu was cleared, false on bad arguments
+ * \note the arrays are always reset: the constructors rely on this to
+ * initialize freshly malloc'd buffers
  * \ingroup rdsu
 **/
-void rdsu_clr(t_cm_rdsu *rdsu) {
+bool rdsu_clr(t_cm_rdsu *rdsu) {
 	size_t i;
 
 	if (!rdsu || !rdsu->rank || !rdsu->parent) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RDSU_LOG_EARG)
-		return;
+		return (false);
 	}
 	i = 0;
 	while (i < rdsu->size) {
@@ -39,6 +42,7 @@ void rdsu_clr(t_cm_rdsu *rdsu) {
 	CM_LOG(C_MINI__LEVEL_INFO, "Clear (components:%zu -> %zu)",
 	       rdsu->components, rdsu->size)
 	rdsu->components = rdsu->size;
+	return (true);
 }
 /**
  * \brief cleans up the structure and then frees it

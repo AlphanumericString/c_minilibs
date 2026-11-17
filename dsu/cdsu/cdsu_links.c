@@ -50,7 +50,7 @@ bool cdsu_union(t_cm_cdsu *ds, size_t x, size_t y) {
  * \ingroup cdsu
 **/
 size_t cdsu_find(t_cm_cdsu *ds, size_t x) {
-	if (!ds || !ds->size || !ds->parent || x > ds->size) {
+	if (!ds || !ds->size || !ds->parent || x >= ds->size) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG)
 		return (-1);
 	}
@@ -69,7 +69,7 @@ size_t cdsu_find(t_cm_cdsu *ds, size_t x) {
  * \ingroup cdsu
 **/
 size_t cdsu_strict_find(const t_cm_cdsu *ds, size_t x) {
-	if (!ds->size || !ds->parent || x > ds->size) {
+	if (!ds || !ds->size || !ds->parent || x >= ds->size) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__CDSU_LOG_EARG)
 		return (-1);
 	}

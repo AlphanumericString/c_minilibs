@@ -23,7 +23,7 @@ NO_COV void test_cm_rdsu_new(void) {
 	assert(rdsu_new(32) == NULL);
 	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
-NO_COV void test_cm_rdsu_new_from_array(void) {
+NO_COV void test_cm_rdsu_new_from_arrays(void) {
 	t_cm_rdsu *rdsu;
 	uint16_t  *parents = malloc(sizeof(uint16_t) * 5);
 	uint16_t  *ranks   = malloc(sizeof(uint16_t) * 5);

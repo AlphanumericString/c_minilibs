@@ -12,6 +12,9 @@ NO_COV void test_cm_cdsu_is_related(void) {
 	assert(cdsu_is_related(cdsu, 99, 1) == false);
 	assert(cdsu_is_related(cdsu, 0, 99) == false);
 	assert(cdsu_is_related(cdsu, 99, 99) == false);
+	assert(cdsu_is_related(cdsu, cdsu->size, 1) == false);
+	assert(cdsu_is_related(cdsu, 1, cdsu->size) == false);
+	assert(cdsu_is_related(cdsu, cdsu->size, cdsu->size) == false);
 	cdsu_free(&cdsu);
 }
 
@@ -23,6 +26,10 @@ NO_COV void test_cm_cdsu_strict_is_related(void) {
 	assert(cdsu_strict_is_related(cdsu, 99, 1) == false);
 	assert(cdsu_strict_is_related(cdsu, 0, 99) == false);
 	assert(cdsu_strict_is_related(cdsu, 99, 99) == false);
+	assert(cdsu_strict_is_related(NULL, 0, 1) == false);
+	assert(cdsu_strict_is_related(cdsu, cdsu->size, 1) == false);
+	assert(cdsu_strict_is_related(cdsu, 1, cdsu->size) == false);
+	assert(cdsu_strict_is_related(cdsu, cdsu->size, cdsu->size) == false);
 	cdsu_free(&cdsu);
 }
 

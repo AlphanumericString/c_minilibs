@@ -9,7 +9,7 @@
  * \ingroup rdsu
 **/
 bool rdsu_is_related(const t_cm_rdsu *ds, size_t x, size_t y) {
-	if (!ds || (x > y ? x : y) > ds->size) return (false);
+	if (!ds || (x > y ? x : y) >= ds->size) return (false);
 	return (rdsu_find(ds, x) == rdsu_find(ds, y));
 }
 /**

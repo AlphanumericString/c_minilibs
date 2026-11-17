@@ -9,7 +9,7 @@
  * \ingroup cdsu
 **/
 bool cdsu_is_related(t_cm_cdsu *ds, size_t x, size_t y) {
-	if (!ds || (x > y ? x : y) > ds->size) return (false);
+	if (!ds || (x > y ? x : y) >= ds->size) return (false);
 	return (cdsu_find(ds, x) == cdsu_find(ds, y));
 }
 /**
@@ -22,7 +22,7 @@ bool cdsu_is_related(t_cm_cdsu *ds, size_t x, size_t y) {
  * \ingroup cdsu
 **/
 bool cdsu_strict_is_related(const t_cm_cdsu *ds, size_t x, size_t y) {
-	if ((x > y ? x : y) > ds->size) return (false);
+	if (!ds || (x > y ? x : y) >= ds->size) return (false);
 	return (cdsu_strict_find(ds, x) == cdsu_strict_find(ds, y));
 }
 /**

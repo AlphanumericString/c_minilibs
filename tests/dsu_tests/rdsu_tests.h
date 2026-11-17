@@ -7,7 +7,7 @@
 #include "common_base/tests.h"
 
 void test_cm_rdsu_new(void);
-void test_cm_rdsu_new_from_array(void);
+void test_cm_rdsu_new_from_arrays(void);
 void test_cm_rdsu_init(void);
 void test_cm_rdsu_init_from_arrays(void);
 
@@ -17,6 +17,7 @@ void test_cm_rdsu_free(void);
 
 void test_cm_rdsu_max_depth(void);
 void test_cm_rdsu_size(void);
+void test_cm_rdsu_reserved_logs_nb(void);
 void test_cm_rdsu_nb_components(void);
 
 void test_cm_rdsu_grow(void);

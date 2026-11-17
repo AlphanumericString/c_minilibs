@@ -27,25 +27,25 @@ NO_COV void test_cm_cdsu_new(void) {
 	assert(cdsu_new(32) == NULL);
 	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
-NO_COV void test_cm_cdsu_new_from_array(void) {
+NO_COV void test_cm_cdsu_new_from_arrays(void) {
 	t_cm_cdsu *cdsu;
 	uint16_t  *parents = malloc(sizeof(int) * 5);
 	uint16_t  *ranks   = malloc(sizeof(int) * 5);
 
-	cdsu = cdsu_new_from_array(5, parents, ranks);
+	cdsu = cdsu_new_from_arrays(5, parents, ranks);
 	assert(cdsu != NULL);
 	assert(cdsu->size == 5);
 	assert(cdsu->rp_single_alloc == false);
 	assert(cdsu->parent == (uint16_t *)parents);
 	assert(cdsu->rank == (uint16_t *)ranks);
 	cdsu_free(&cdsu);
-	assert(cdsu_new_from_array(99, parents, parents) == NULL);
-	assert(cdsu_new_from_array(99, ranks, ranks) == NULL);
-	assert(cdsu_new_from_array(0, parents, ranks) == NULL);
-	assert(cdsu_new_from_array(99, NULL, ranks) == NULL);
-	assert(cdsu_new_from_array(99, parents, NULL) == NULL);
+	assert(cdsu_new_from_arrays(99, parents, parents) == NULL);
+	assert(cdsu_new_from_arrays(99, ranks, ranks) == NULL);
+	assert(cdsu_new_from_arrays(0, parents, ranks) == NULL);
+	assert(cdsu_new_from_arrays(99, NULL, ranks) == NULL);
+	assert(cdsu_new_from_arrays(99, parents, NULL) == NULL);
 	alloc_set_call_limit(0);
-	assert(cdsu_new_from_array(5, (void *)0xDEAD, (void *)0xCAFE) == NULL);
+	assert(cdsu_new_from_arrays(5, (void *)0xDEAD, (void *)0xCAFE) == NULL);
 	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 }
 NO_COV void test_cm_cdsu_init(void) {
