@@ -65,6 +65,7 @@ bool da_grow_for_size(t_cm_da *da, size_t minimal_free_slots);
 
 bool da_shrink(t_cm_da *da);
 bool da_shrink_min(t_cm_da *da, size_t keep_n);
+bool da_shrink_auto(t_cm_da *da);
 
 void *da_at(const t_cm_da *da, size_t pos);
 int   da_get(const t_cm_da *da, size_t pos, void *elem);
@@ -81,6 +82,7 @@ bool da_rm_order(t_cm_da *da, size_t pos);
 bool da_rms_order(t_cm_da *da, size_t start, size_t end);
 bool da_rm(t_cm_da *da, size_t pos);
 bool da_rms(t_cm_da *da, size_t start, size_t end);
+bool da_pop(t_cm_da *da, void *out);
 
 void *da_to_array(const t_cm_da *da);
 void *da_to_loc_array(const t_cm_da *da, void *arr);
@@ -90,6 +92,12 @@ void *da_napply(const t_cm_da *da, size_t n, t_cm_callback c, void *u_data);
 void *da_apply_it(const t_cm_da *da, t_cm_callback_it func, void *u_val);
 void *da_napply_it(const t_cm_da *da, size_t n, t_cm_callback_it func,
                    void *u_val);
+void *da_iter(const t_cm_da *da, size_t start, size_t end,
+              t_cm_callback_it func, void *u_val);
+
+t_cm_da da_map(const t_cm_da *da, t_cm_mapper fn, size_t out_elem_size);
+t_cm_da da_nmap(const t_cm_da *da, size_t n, t_cm_mapper fn,
+                size_t out_elem_size);
 
 void *da_fold(const t_cm_da *da, t_cm_merger c, void *u_start_val);
 void *da_nfold(const t_cm_da *da, size_t n, t_cm_merger c, void *u_start_val);
@@ -127,5 +135,10 @@ bool da_is_full(const t_cm_da *da);
 #define C_MINI__DA_SZ_ELEM_DFLT 1024
 #define C_MINI__DA_NB_ELEM_DFLT 4
 #define C_MINI__DA_GROWTH       1.5
+/*
+ * Define C_MINI__DA_AUTO_SHRINK to make the removal paths (da_rm*, da_pop and
+ * da_filter*) halve the capacity whenever the array becomes at most 25% full.
+ */
+// #define C_MINI__DA_AUTO_SHRINK
 
 #endif // !C_MINI__DA

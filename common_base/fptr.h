@@ -90,6 +90,20 @@ typedef void *(*t_cm_merger)(void *elem, void *arg);
 
 #endif // !C_MINI__T_MERGER
 
+#ifndef C_MINI__T_MAPPER
+#	define C_MINI__T_MAPPER
+
+/**
+ * \typedef t_cm_mapper
+ * \brief map function pointer, transforms an element into a new value
+ * \param elem pointer to the source element
+ * \return pointer to a value of the requested output element size, or NULL on
+ * failure
+**/
+typedef void *(*t_cm_mapper)(const void *elem);
+
+#endif // !C_MINI__T_MAPPER
+
 #ifndef C_MINI__T_CALL
 #	define C_MINI__T_CALL
 

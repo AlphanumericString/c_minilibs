@@ -26,6 +26,15 @@ extern const int arr_3[];
 extern const int arr_5[];
 extern const int arr_2_5[];
 
+// iter helper state
+typedef struct s_da_iter_state {
+	size_t count;
+	size_t first_pos;
+	size_t last_pos;
+	size_t nb_last;
+	int    sum;
+} t_da_iter_state;
+
 // Helper callbacks
 NO_COV bool  cb_true(void *elem, void *arg);
 NO_COV bool  cb_dump_int(void *e, void *a);
@@ -34,9 +43,15 @@ NO_COV bool  cb_add_one(void *elem, void *arg);
 NO_COV bool  cb_false(void *elem, void *arg);
 NO_COV bool  cb_it_true(void *elem, void *arg, size_t pos, bool last);
 NO_COV bool  cb_it_add_it_to_arg(void *elem, void *arg, size_t pos, bool last);
+NO_COV bool  cb_it_record(void *elem, void *arg, size_t pos, bool last);
+NO_COV bool  cb_it_stop(void *elem, void *arg, size_t pos, bool last);
 NO_COV bool  cb_empty_deletor(void *elem, void *arg);
 NO_COV void *cb_merger(void *elem, void *arg);
 NO_COV int   cb_cmp(const void *a, const void *b);
+NO_COV void *cb_map_double(const void *elem);
+NO_COV void *cb_map_to_long(const void *elem);
+NO_COV void *cb_map_fail_on_3(const void *elem);
+NO_COV void *cb_map_null(const void *elem);
 
 void test_cm_da_init(void);
 void test_cm_da_ninit(void);
@@ -66,6 +81,7 @@ void test_cm_da_is_full(void);
 
 void test_cm_da_shrink(void);
 void test_cm_da_shrink_min(void);
+void test_cm_da_shrink_auto(void);
 
 void test_cm_da_at(void);
 void test_cm_da_get(void);
@@ -82,6 +98,7 @@ void test_cm_da_rm_order(void);
 void test_cm_da_rms_order(void);
 void test_cm_da_rm(void);
 void test_cm_da_rms(void);
+void test_cm_da_pop(void);
 
 void test_cm_da_to_array(void);
 void test_cm_da_to_loc_array(void);
@@ -90,6 +107,9 @@ void test_cm_da_apply(void);
 void test_cm_da_napply(void);
 void test_cm_da_apply_it(void);
 void test_cm_da_napply_it(void);
+void test_cm_da_iter(void);
+void test_cm_da_map(void);
+void test_cm_da_nmap(void);
 
 void test_cm_da_fold(void);
 void test_cm_da_nfold(void);

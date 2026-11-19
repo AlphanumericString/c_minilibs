@@ -43,6 +43,7 @@ int NO_COV main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Shrink", )
 	test_cm_da_shrink();
 	test_cm_da_shrink_min();
+	test_cm_da_shrink_auto();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Get", )
 	test_cm_da_at();
@@ -63,6 +64,7 @@ int NO_COV main(void) {
 	test_cm_da_rms_order();
 	test_cm_da_rm();
 	test_cm_da_rms();
+	test_cm_da_pop();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Convert", )
 	test_cm_da_to_array();
@@ -73,6 +75,9 @@ int NO_COV main(void) {
 	test_cm_da_napply();
 	test_cm_da_apply_it();
 	test_cm_da_napply_it();
+	test_cm_da_iter();
+	test_cm_da_map();
+	test_cm_da_nmap();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Fold", )
 	test_cm_da_fold();

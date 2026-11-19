@@ -17,6 +17,20 @@ static bool print_int(void *elem, void *arg) {
 	return (true);
 }
 
+static bool print_it(void *elem, void *arg, size_t pos, bool last) {
+	(void)last;
+	printf(" [%zu]=%d", pos, *(int *)elem);
+	(void)arg;
+	return (true);
+}
+
+static void *double_int(const void *elem) {
+	static int out;
+
+	out = *(const int *)elem * 2;
+	return (&out);
+}
+
 static void *sum_int(void *elem, void *acc) {
 	*(int *)acc += *(int *)elem;
 	return (acc);
@@ -58,6 +72,19 @@ int main(void) {
 	printf("reversed (first 3) :");
 	da_apply(&da, print_int, NULL);
 	printf("\n");
+
+	printf("iter [1,4)        :");
+	da_iter(&da, 1, 4, print_it, NULL);
+	printf("\n");
+
+	{
+		t_cm_da mapped = da_map(&da, double_int, sizeof(int));
+
+		printf("mapped (x2)       :");
+		da_apply(&mapped, print_int, NULL);
+		printf("\n");
+		da_destroy(&mapped);
+	}
 
 	da_filter(&da, is_even, NULL, NULL);
 	printf("even only          :");

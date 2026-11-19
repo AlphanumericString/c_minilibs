@@ -3,9 +3,11 @@
 #include "da_tests.h"
 
 NO_COV void test_cm_da_filter(void) {
-	int     arr[5] = {1, 2, 3, 4, 5};
-	t_cm_da da     = {.array = arr, .cap_e = 5, .nb_e = 5, .sz_e = sizeof(int)};
+	t_cm_da da;
 	int     bound;
+
+	da_init(&da, sizeof(int));
+	da_cat_array(&da, (int *)arr_5, 5, sizeof(int));
 
 	bound = 2;
 	assert(da_filter(&da, cb_filter_strict_inf, &bound, cb_empty_deletor) ==
@@ -29,13 +31,16 @@ NO_COV void test_cm_da_filter(void) {
 	       false);
 	da.nb_e = 0;
 	assert(da_filter(&da, cb_filter_strict_inf, &bound, NULL) == false);
+	da_destroy(&da);
 }
 NO_COV void test_cm_da_nfilter(void) {
-	int     arr[5] = {1, 2, 3, 4, 5};
-	t_cm_da da     = {.array = arr, .cap_e = 5, .nb_e = 5, .sz_e = sizeof(int)};
-	int     bound  = 1;
+	t_cm_da             da;
+	int                 bound       = 1;
 	t_cm_callback       func_filter = cb_filter_strict_inf;
 	const t_cm_callback del         = cb_empty_deletor;
+
+	da_init(&da, sizeof(int));
+	da_cat_array(&da, (int *)arr_5, 5, sizeof(int));
 
 	assert(da_nfilter(&da, 4, cb_false, &bound, del) == true);
 	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 1)
@@ -55,12 +60,13 @@ NO_COV void test_cm_da_nfilter(void) {
 	assert(da_nfilter(&da, 4, cb_true, &bound, del) == true);
 	assert(da.nb_e == 2);
 	assert(da_nfilter(&da, 4, cb_false, &bound, del) == true);
-	da.nb_e = 2;
+	da_cat_array(&da, (int *)arr_5, 2, sizeof(int));
 	assert(da_nfilter(&da, 4, cb_false, &bound, NULL) == true);
 	assert(da.nb_e == 0);
 	ASSERT_DA_STATE(da, sizeof(int), da.cap_e, 0)
 	assert(da_is_empty(&da) == true);
 	assert(da_nfilter(&da, 1, cb_true, &bound, del) == false);
+	da_destroy(&da);
 }
 NO_COV void test_cm_da_filter_out(void) {
 	t_cm_da da;

@@ -57,10 +57,10 @@ generic C and building testability into the code from day one.
 
 ### `da` — Dynamic Array
 A compile-time-generic growable array (`void *` + element size) with the full
-toolbox: create/dup/cat, get/set/add/remove, grow/shrink, sort, reverse, fold,
-filter, find, apply and array conversion. **Skill:** manual memory management
-and growth strategies, cache-friendly contiguous storage, and writing algorithms
-generically over raw bytes.
+toolbox: create/dup/cat, get/set/add/pop/remove, grow/shrink, sort, reverse,
+fold, filter, find, apply/iterate/map and array conversion. **Skill:** manual
+memory management and growth strategies, cache-friendly contiguous storage, and
+writing algorithms generically over raw bytes.
 **Complexity:** `da_add` amortized O(1) (1.5x growth), `da_at`/`da_set` O(1),
 middle insert/remove O(n), grow/shrink O(n) (realloc + copy), find/filter/apply
 O(n), sort O(n log n).

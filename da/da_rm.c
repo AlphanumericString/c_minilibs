@@ -20,11 +20,12 @@ bool da_rm_order(t_cm_da *da, size_t pos) {
 	}
 	if (da->nb_e > pos + 1) {
 		memmove(da_at(da, pos), da_at(da, pos + 1),
-		        da->sz_e * (da->nb_e - pos));
+		        da->sz_e * (da->nb_e - pos - 1));
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_RM, pos, (size_t)1UL, da->nb_e,
 	       da->nb_e - 1)
 	da->nb_e--;
+	(void)da_shrink_auto(da);
 	return (true);
 }
 /**
@@ -47,6 +48,7 @@ bool da_rms_order(t_cm_da *da, size_t start, size_t end) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_RM, start, end - start, da->nb_e,
 	       da->nb_e - (end - start))
 	da->nb_e -= end - start;
+	(void)da_shrink_auto(da);
 	return (true);
 }
 
@@ -66,6 +68,7 @@ bool da_rm(t_cm_da *da, size_t pos) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_RM, pos, (size_t)1UL, da->nb_e,
 	       da->nb_e - 1)
 	da->nb_e--;
+	(void)da_shrink_auto(da);
 	return (true);
 }
 /**
@@ -89,5 +92,6 @@ bool da_rms(t_cm_da *da, size_t start, size_t end) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_RM, start, end - start, da->nb_e,
 	       da->nb_e - (end - start))
 	da->nb_e -= end - start;
+	(void)da_shrink_auto(da);
 	return (true);
 }

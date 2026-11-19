@@ -26,6 +26,7 @@ bool da_filter(t_cm_da *da, t_cm_callback filter, void *arg,
 			i--;
 		}
 	}
+	(void)da_shrink_auto(da);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
 	return (true);
 }
@@ -54,6 +55,7 @@ bool da_nfilter(t_cm_da *da, size_t n, t_cm_callback filter, void *data,
 			n--;
 		}
 	}
+	(void)da_shrink_auto(da);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
 	return (true);
 }
@@ -81,6 +83,7 @@ bool da_filter_out(t_cm_da *da, t_cm_callback filter, void *data,
 			i--;
 		}
 	}
+	(void)da_shrink_auto(da);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
 	return (true);
 }
@@ -113,6 +116,7 @@ bool da_nfilter_out(t_cm_da *da, size_t n, t_cm_callback filter, void *data,
 			n--;
 		}
 	}
+	(void)da_shrink_auto(da);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
 	return (true);
 }

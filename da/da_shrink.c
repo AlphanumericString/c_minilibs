@@ -57,3 +57,41 @@ bool da_shrink_min(t_cm_da *da, size_t keep_n) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
 	return (true);
 }
+#ifndef C_MINI__DA_AUTO_SHRINK
+/**
+ * \brief no-op used by the removal paths when auto-shrink is disabled
+ * \param da unused
+ * \return true
+ * \note this keeps the call sites free of preprocessor branches
+ * \ingroup da
+**/
+bool da_shrink_auto(t_cm_da *da) {
+	(void)da;
+	return (true);
+}
+#else
+/**
+ * \brief automatically shrink the dynamic array when it becomes at most 25%
+ * full, halving its capacity
+ * \param da pointer to the dynamic array
+ * \return true on success (or when no shrink is needed), false on allocation
+ * failure
+ * \note the capacity never goes below 1 element so the da stays usable
+ * \ingroup da
+**/
+bool da_shrink_auto(t_cm_da *da) {
+	size_t new_cap;
+
+	if (!da_is_valid(da)) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__DA_LOG_EARG)
+		return (false);
+	}
+	if (da->nb_e > da->cap_e / 4) {
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__DA_LOG_SUCCESS)
+		return (true);
+	}
+	new_cap = da->cap_e / 2;
+	if (!new_cap) new_cap = 1;
+	return (da_shrink_min(da, new_cap - da->nb_e));
+}
+#endif // !C_MINI__DA_AUTO_SHRINK
