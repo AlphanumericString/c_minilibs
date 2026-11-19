@@ -1,103 +1,120 @@
 # TODO
+
 general todo for the project
-- `x` done
-- `~` running
+- `x` done (generally rm'ed)
+- `~` under way / running but not finished due to smthing else
 - `:` paused
-- ` ` not started
-General todo:
-- [x] current modules
-- [:] refactor
- - [:] da->check todo impl, add functs to module
- - [:] hp-> more funcs
- - [:] ill->circular lists, api consistency around head, elem centric funcs
- - [:] lruc->ms to ns, make a separate lru only cache similar to dsu/
- - [:] rb->example w producer/consumer setup, add functs to module
+- ` ` not started, to do
+- `>` current tasks
+
+## General TODO:
+- [>] refactor
+ - [>] rename the current da_iter into da_apply_range function, more apt nameing scheme + behavior consistency
+ - [:] ill-> api consistency around head
+ - [:] rb->example w producer/consumer setup
  - [:] rptr->package _generic in ifdef blocks and check compile ok for c older version
- - [:] tls->vtls->hmaps. tls->ftls->xmacros for more than 1 struct
- - [:] tpm->crash catch, job batching on stress conditions, atomic thrd nb - increase/remove thrd control handle, auto increase thrd nb on stress
-- [:] coverage
-- [:] impl
-- [:] new modules
-    - [:] add ressources for todo new modules
-
-## CURRENT MODULES
-
-### FIXES/REFACTOR
-- [x] lruc refactor
-- [:] refactors
-transferred from the readme.md "what's missing / faults of the project" section
- - [ ] da->check todo impl, add functs to module
- - [ ] hp-> more funcs
- - [ ] ill->circular lists, api consistency around head, elem centric funcs
- - [ ] lruc->ms to ns, make a separate lru only cache similar to dsu/
- - [ ] rb->example w producer/consumer setup, add functs to module
- - [ ] rptr->package _generic in ifdef blocks and check compile ok for c older version
- - [ ] tls->vtls->hmaps. tls->ftls->xmacros for more than 1 struct
- - [ ] tpm->crash catch, job batching on stress conditions, atomic thrd nb - increase/remove thrd control handle, auto increase thrd nb on stress
-
-### COVERAGE
-- [:] multi threaded tests (needs re-comp for #ifdef branches)
- - [ ] sptr
- - [ ] rb
-- [:] da
- - [ ] iter
- - [ ] oscilation around boudary with auto_shrink
-
-### DOC
-- [:] **MARKETING PART**
- - [ ] da
-  - [ ] Growth factor comparison (1.5x, 2x, fixed increment): realloc count and time.
-  - [ ] Baselines: raw `realloc` loop and C++ `std::vector::push_back`.
-  - [ ] Auto-shrink on vs off in an oscillating workload.
-  - [ ] `make bench` that outputs CSV, plus a gnuplot/matplotlib script. Commit the PNGs to the README.
-- [:] **POLISH**
- - [ ] README with graphs or visible benchmarks.
-  - [ ] graphs
-  - [ ] da
-   - [ ] A small real use case, such as a tokenizer or CSV parser built on the library.
-   - [ ] Small-buffer optimization, only if the benchmarks justify it. Write its tests afterward, since it changes the allocation paths.
-  - [ ] dsu
-  - [ ] rb
-  - [ ] hp
-  - [ ] ill
-  - [ ] lruc
+ - [:] tls->vtls->hmaps
+ - [:] tls->vtls->hmaps.
+- [~] coverage
+ - [:] multi threaded tests (needs re-comp for #ifdef branches)
   - [ ] sptr
-  - [ ] tls
-  - [ ] tpm
+  - [ ] rb
+ - [:] da
+  - [ ] oscilation around boudary with auto_shrink
+ - [x] keep at 100% for branch, lines, region, funcs
+- [:] example
+ - [:] rb->example w producer/consumer setup
+- [>] impl
+ - [~] tooling
+  - [~] github CICD
+   - [:] add cppcheck step
+   - [ ] add minimum coverage requireemnt before main
+   - [x] norm
+   - [x] restrict run to only needed
+ - [>] code
+  - [:] new modules (see bellow)
+  - [>] old module functionalities (detail bellow)
+   - [>] da-> more funcs to module, iterators
+   - [ ] hp-> more funcs, iterators
+   - [ ] lruc->make a separate lru only cache similar to dsu/
+   - [ ] ill->circular lists, elem centric funcs (dont take node, but elem containing the ill/idl ptr), iteraors
+   - [ ] rb->add functs to module, iterators
+   - [ ] tls->ftls->xmacros for more than 1 struct, vtls+ctls iterator
+   - [ ] tpm->crash catch, job batching on stress conditions, atomic thrd nb - increase/remove thrd control handle, auto increase thrd nb on stress
+ - [:] coverage
+  - [:] add multi threaded tests
+   - [:] restrict to specific modules
+   - [:] add multi thread tests to coverage mapping
+- [:] doc
+ - [:] ressources
+  - [:] add ressources for todo new modules
+  - [:] ressources on curr modules - read for ideas on what to add/do
+ - [>] polish
+  - [>] finish todo for current modules
+   - [>] check section and execute
+  - [:] da
+   - [:] A real example, such as a tokenizer or CSV parser built on the library.
+   - [:] Small-buffer optimization tests/benmarks since it changes the allocation paths.
+  - [:] dsu
+   - [:] A real example.
+  - [:] rb
+   - [:] A real example.
+  - [:] hp
+   - [:] A real example.
+  - [:] ill
+   - [:] A real example.
+  - [:] lruc
+   - [:] A real example.
+  - [:] sptr
+   - [:] A real example.
+  - [:] tls
+   - [:] A real example.
+  - [:] tpm
+   - [:] A real example.
+ - [:] marketing
+  - [:] da
+   - [:] Growth factor comparison (1.5x, 2x, fixed increment): realloc count and time.
+   - [:] Auto-shrink on vs off in an oscillating workload.
+  - [:] `make bench` that outputs CSV, plus a gnuplot/matplotlib script. Commit the PNGs to a BENCH.md docuement with all the graphs for all modules
+  - [:] Md file with graphs or visible benchmarks.
+   - [:] graphs
+    - [:] graph gen rule `make bench` -> csv + gnuplot script
+    - [:] graph setup -> modular for any module
+    - [:] graph display -> readme links to the newly md file created
 
 ### IMPLEMENTATION
-- [:] add github CICD rules for merge w main
- - [ ] add cppcheck step
-- [:] makefile rules to recomp w multi threaded and merge into coverage
- - [ ] add multi threaded tests
-  - [ ] restrict to specific modules
- - [ ] add multi thread tests to coverage mapping
+- [>] da
+ - [>] more useful funcs to module, take example from c++ vect
+ - [>] pop and no push? c'mon add a hook to just call da_add already
+ - [>] iterator (no new type use klib's form of `<type>_iter(handler, first_pos, last, &out_iter) -> bool` where we return true while we have something to iter over)
+- [:] hp
+ - [:] more funcs (eg map, filter) take example on da
+ - [:] iterator (no new type use klib's form of `<type>_iter(handler, first_pos, last, &out_iter) -> bool` where we return true while we have something to iter over)
+- [:] lru
+ - [:] split pure lru from the ttl+lru current setup and exec in a split setup like the rdsu/cdsu setup
+ - [:] iterator (no new type use klib's inspired form of `<type>_iter(handler, last, &out_iter) -> bool` where we return true while we have something to iter over and start is assumed to be 0 and runs the min heap list)
 - [:] ill
- - [ ] elem based functions
- - [ ] set elem based functions as default and node ones as `_node()`
+ - [:] elem based functions
+ - [:] set elem based functions as default and node ones as `_node()`
+ - [:] circular based functions eg ill_circ_foreach()
 - [:] rb
- - [ ] magic rb
-- [:] da
- - [ ] iter (eg: `iter(holder, start, end, &elem_it)`) -1 for end, otherwise start included end not, if end oob / -1 end included
- - [ ] map(eg: `map(holder, fn, out_elem_size)`)
- - [ ] nmap(eg: `nmap(holder, n, fn, out_elem_size)`)
- - [ ] ifdef auto shrink (path on pop/rm) with (len <= cap/4 -> len = cap/2)
-  - [ ] shrink on rm
-  - [ ] shrink on pop
-- [ ] dsu
+ - [:] magic rb
+ - [:] iterator (no new type use klib's inspired form of `<type>_iter(handler, last, &out_iter) -> bool` where we return true while we have something to iter over and start is assumed to be 0 and runs the min heap list)
+- [:] dsu
  - [:] cdsu reserve/up-front growth equivalent (no logs)
  - [:] make rdsu_grow(..., 0) a successful no-op like cdsu_grow
  - [:] validate the rewind log chain in rdsu_validate
 - [:] tpm
- - [ ] carsh jobs catch
- - [ ] dispatch new jobs on spikes
- - [ ] batch jobs on spikes
- - [ ] heartbeat system
+ - [:] carsh jobs catch
+ - [:] dispatch new jobs on spikes
+ - [:] batch jobs on spikes
+ - [:] heartbeat system
+
+## NEW MODULES - WHOLE MODULE PAUSED
 
 note: new module paused. finish tpm first.
 note: new module paused. finish school project first.
 
-## NEW MODULES - WHOLE MODULE PAUSED
 sorted by personal familiarity w subject/ ease of project
 - [~] HASHMAPS
  - [x] research - already made a small impl in other project & lruc
