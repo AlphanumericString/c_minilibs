@@ -8,8 +8,7 @@ general todo for the project
 - `>` current tasks
 
 ## General TODO:
-- [>] refactor
- - [x] rename the current da_iter into da_apply_range function, more apt nameing scheme + behavior consistency
+- [ ] refactor
  - [:] ill-> api consistency around head
  - [:] rb->example w producer/consumer setup
  - [:] rptr->package _generic in ifdef blocks and check compile ok for c older version
@@ -24,18 +23,17 @@ general todo for the project
  - [x] keep at 100% for branch, lines, region, funcs
 - [:] example
  - [:] rb->example w producer/consumer setup
-- [>] impl
+- [ ] impl
  - [~] tooling
   - [~] github CICD
    - [:] add cppcheck step
    - [ ] add minimum coverage requireemnt before main
-   - [x] norm
-   - [x] restrict run to only needed
+   - [ ] norm
+   - [ ] restrict run to only needed
  - [>] code
   - [:] new modules (see bellow)
-  - [>] old module functionalities (detail bellow)
-   - [x] da-> more funcs to module, iterators
-   - [ ] hp-> more funcs, iterators
+  - [ ] old module functionalities (detail bellow)
+   - [>] hp-> more funcs, iterators
    - [ ] lruc->make a separate lru only cache similar to dsu/
    - [ ] ill->circular lists, elem centric funcs (dont take node, but elem containing the ill/idl ptr), iteraors
    - [ ] rb->add functs to module, iterators
@@ -49,9 +47,15 @@ general todo for the project
  - [:] ressources
   - [:] add ressources for todo new modules
   - [:] ressources on curr modules - read for ideas on what to add/do
- - [>] polish
-  - [>] finish todo for current modules
-   - [>] check section and execute
+ - [ ] polish
+  - [ ] finish todo for current modules
+   - [ ] check section and execute
+    - [>] hp
+    - [ ] lruc
+    - [ ] ill
+    - [ ] rb
+    - [ ] tls
+    - [ ] tpm
   - [:] da
    - [:] A real example, such as a tokenizer or CSV parser built on the library.
    - [:] Small-buffer optimization tests/benmarks since it changes the allocation paths.
@@ -83,23 +87,19 @@ general todo for the project
     - [:] graph display -> readme links to the newly md file created
 
 ### IMPLEMENTATION
-- [x] da
- - [x] more useful funcs to module, take example from c++ vect
- - [x] pop and no push? c'mon add a hook to just call da_add already
- - [x] iterator (no new type use klib's form of `<type>_iter(handler, first_pos, last, &out_iter) -> bool` where we return true while we have something to iter over)
-- [:] hp
- - [:] more funcs (eg map, filter) take example on da
- - [:] iterator (no new type use klib's form of `<type>_iter(handler, first_pos, last, &out_iter) -> bool` where we return true while we have something to iter over)
+- [>] hp
+ - [ ] more funcs (eg map, filter, ...) take example on da
+ - [ ] iterator (take example on da)
 - [:] lru
  - [:] split pure lru from the ttl+lru current setup and exec in a split setup like the rdsu/cdsu setup
- - [:] iterator (no new type use klib's inspired form of `<type>_iter(handler, last, &out_iter) -> bool` where we return true while we have something to iter over and start is assumed to be 0 and runs the min heap list)
+ - [:] iterator (take example on da but iterate over ttl min heap, if lru only iterate over lru list)
 - [:] ill
  - [:] elem based functions
  - [:] set elem based functions as default and node ones as `_node()`
  - [:] circular based functions eg ill_circ_foreach()
 - [:] rb
  - [:] magic rb
- - [:] iterator (no new type use klib's inspired form of `<type>_iter(handler, last, &out_iter) -> bool` where we return true while we have something to iter over and start is assumed to be 0 and runs the min heap list)
+ - [:] iterator (take example on da)
 - [:] dsu
  - [:] cdsu reserve/up-front growth equivalent (no logs)
  - [:] make rdsu_grow(..., 0) a successful no-op like cdsu_grow
