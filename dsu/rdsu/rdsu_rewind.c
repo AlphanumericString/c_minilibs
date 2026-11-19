@@ -106,10 +106,12 @@ bool rdsu_rewind_to_state(t_cm_rdsu *rdsu, const t_cm_rdsu_log *lg) {
 	res = true;
 	while (rdsu->change_log != lg && res) {
 		entry = rdsui_log_pop_rewind(rdsu);
+#ifndef C_MINI__RDSU_LOG_CHECK_STRICT
 		if (!entry) {
 			res = false;
 			break;
 		}
+#endif
 		res = execute_rewind(rdsu, *entry);
 		if (res) rdsui_log_push_reserved(rdsu, entry);
 		else rdsui_log_push_rewind(rdsu, entry);
