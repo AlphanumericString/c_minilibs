@@ -50,7 +50,8 @@ selectable through macros rather than edits.
 ### `common_base`
 Shared, zero-dependency building blocks: generic function-pointer typedefs
 (callbacks, comparators, duplicators, destructors), the debug logging macros,
-small math helpers and the test harness (malloc/clock wrappers used to inject
+small math helpers (including the `CM_FORIT`/`CM_FORRIT` loop-header macros)
+and the test harness (malloc/clock wrappers used to inject
 allocation and timing failures). **Skill:** designing reusable interfaces for
 generic C and building testability into the code from day one.
 **Complexity:** not applicable — utility code, no container operations.
