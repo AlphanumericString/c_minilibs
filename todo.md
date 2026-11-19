@@ -9,7 +9,7 @@ general todo for the project
 
 ## General TODO:
 - [>] refactor
- - [>] rename the current da_iter into da_apply_range function, more apt nameing scheme + behavior consistency
+ - [x] rename the current da_iter into da_apply_range function, more apt nameing scheme + behavior consistency
  - [:] ill-> api consistency around head
  - [:] rb->example w producer/consumer setup
  - [:] rptr->package _generic in ifdef blocks and check compile ok for c older version
@@ -34,7 +34,7 @@ general todo for the project
  - [>] code
   - [:] new modules (see bellow)
   - [>] old module functionalities (detail bellow)
-   - [>] da-> more funcs to module, iterators
+   - [x] da-> more funcs to module, iterators
    - [ ] hp-> more funcs, iterators
    - [ ] lruc->make a separate lru only cache similar to dsu/
    - [ ] ill->circular lists, elem centric funcs (dont take node, but elem containing the ill/idl ptr), iteraors
@@ -83,10 +83,10 @@ general todo for the project
     - [:] graph display -> readme links to the newly md file created
 
 ### IMPLEMENTATION
-- [>] da
- - [>] more useful funcs to module, take example from c++ vect
- - [>] pop and no push? c'mon add a hook to just call da_add already
- - [>] iterator (no new type use klib's form of `<type>_iter(handler, first_pos, last, &out_iter) -> bool` where we return true while we have something to iter over)
+- [x] da
+ - [x] more useful funcs to module, take example from c++ vect
+ - [x] pop and no push? c'mon add a hook to just call da_add already
+ - [x] iterator (no new type use klib's form of `<type>_iter(handler, first_pos, last, &out_iter) -> bool` where we return true while we have something to iter over)
 - [:] hp
  - [:] more funcs (eg map, filter) take example on da
  - [:] iterator (no new type use klib's form of `<type>_iter(handler, first_pos, last, &out_iter) -> bool` where we return true while we have something to iter over)

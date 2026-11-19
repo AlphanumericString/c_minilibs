@@ -21,6 +21,17 @@ bool da_add(t_cm_da *da, const void *elem) {
 	return (true);
 }
 /**
+ * \brief push an element at the end of the dynamic array, growing it if needed
+ * \param da pointer to the dynamic array
+ * \param elem pointer to the element to push
+ * \return true on success, false on failure
+ * \note this is a thin alias over da_add kept for vector-like call sites
+ * \ingroup da
+**/
+bool da_push(t_cm_da *da, const void *elem) {
+	return (da_add(da, elem));
+}
+/**
  * \brief add nb_e elements of size sz_e from the array arr, if needed grows the
  * da
  * \param da pointer to the dynamic array

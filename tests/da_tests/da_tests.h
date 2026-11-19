@@ -27,13 +27,13 @@ extern const int arr_5[];
 extern const int arr_2_5[];
 
 // iter helper state
-typedef struct s_da_iter_state {
+typedef struct s_da_range_state {
 	size_t count;
 	size_t first_pos;
 	size_t last_pos;
 	size_t nb_last;
 	int    sum;
-} t_da_iter_state;
+} t_da_range_state;
 
 // Helper callbacks
 NO_COV bool  cb_true(void *elem, void *arg);
@@ -53,6 +53,8 @@ NO_COV void *cb_map_to_long(const void *elem);
 NO_COV void *cb_map_fail_on_3(const void *elem);
 NO_COV void *cb_map_null(const void *elem);
 
+void test_cm_math_forit(void);
+
 void test_cm_da_init(void);
 void test_cm_da_ninit(void);
 void test_cm_da_from_array(void);
@@ -69,7 +71,17 @@ void test_cm_da_destroy(void);
 void test_cm_da_free(void);
 
 void test_cm_da_add(void);
+void test_cm_da_push(void);
 void test_cm_da_cat_array(void);
+
+void test_cm_da_size(void);
+void test_cm_da_capacity(void);
+void test_cm_da_front(void);
+void test_cm_da_back(void);
+void test_cm_da_reserve(void);
+void test_cm_da_resize(void);
+void test_cm_da_insert(void);
+void test_cm_da_erase(void);
 
 void test_cm_da_grow(void);
 void test_cm_da_grow_for_size(void);
@@ -107,7 +119,11 @@ void test_cm_da_apply(void);
 void test_cm_da_napply(void);
 void test_cm_da_apply_it(void);
 void test_cm_da_napply_it(void);
+void test_cm_da_apply_range(void);
 void test_cm_da_iter(void);
+void test_cm_da_iter_rev(void);
+void test_cm_da_it_advance(void);
+void test_cm_da_it_back(void);
 void test_cm_da_map(void);
 void test_cm_da_nmap(void);
 

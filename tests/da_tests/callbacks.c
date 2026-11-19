@@ -45,7 +45,7 @@ NO_COV bool cb_it_add_it_to_arg(void *elem, void *arg, size_t pos, bool last) {
 }
 
 NO_COV bool cb_it_record(void *elem, void *arg, size_t pos, bool last) {
-	t_da_iter_state *s = (t_da_iter_state *)arg;
+	t_da_range_state *s = (t_da_range_state *)arg;
 
 	if (!s->count) s->first_pos = pos;
 	s->count++;

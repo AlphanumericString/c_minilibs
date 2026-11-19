@@ -28,7 +28,18 @@ int NO_COV main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Add", )
 	test_cm_da_add();
+	test_cm_da_push();
 	test_cm_da_cat_array();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Vector", )
+	test_cm_da_size();
+	test_cm_da_capacity();
+	test_cm_da_front();
+	test_cm_da_back();
+	test_cm_da_reserve();
+	test_cm_da_resize();
+	test_cm_da_insert();
+	test_cm_da_erase();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Grow", )
 	test_cm_da_grow();
@@ -75,7 +86,11 @@ int NO_COV main(void) {
 	test_cm_da_napply();
 	test_cm_da_apply_it();
 	test_cm_da_napply_it();
+	test_cm_da_apply_range();
 	test_cm_da_iter();
+	test_cm_da_iter_rev();
+	test_cm_da_it_advance();
+	test_cm_da_it_back();
 	test_cm_da_map();
 	test_cm_da_nmap();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )

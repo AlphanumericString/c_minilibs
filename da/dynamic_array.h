@@ -58,7 +58,18 @@ void da_destroy(t_cm_da *ret);
 void da_free(t_cm_da *ret);
 
 bool da_add(t_cm_da *da, const void *elem);
+bool da_push(t_cm_da *da, const void *elem);
 bool da_cat_array(t_cm_da *da, const void *arr, size_t nb_e, size_t sz_e);
+
+size_t da_size(const t_cm_da *da);
+size_t da_capacity(const t_cm_da *da);
+void  *da_front(const t_cm_da *da);
+void  *da_back(const t_cm_da *da);
+
+bool da_reserve(t_cm_da *da, size_t n);
+bool da_resize(t_cm_da *da, size_t n, const void *fill);
+bool da_insert(t_cm_da *da, size_t pos, const void *elem);
+bool da_erase(t_cm_da *da, size_t pos);
 
 bool da_grow(t_cm_da *da);
 bool da_grow_for_size(t_cm_da *da, size_t minimal_free_slots);
@@ -92,8 +103,12 @@ void *da_napply(const t_cm_da *da, size_t n, t_cm_callback c, void *u_data);
 void *da_apply_it(const t_cm_da *da, t_cm_callback_it func, void *u_val);
 void *da_napply_it(const t_cm_da *da, size_t n, t_cm_callback_it func,
                    void *u_val);
-void *da_iter(const t_cm_da *da, size_t start, size_t end,
-              t_cm_callback_it func, void *u_val);
+void *da_apply_range(const t_cm_da *da, size_t start, size_t end,
+                     t_cm_callback_it func, void *u_val);
+bool  da_iter(const t_cm_da *da, size_t start, size_t last, void **it_val);
+bool  da_iter_rev(const t_cm_da *da, size_t start, size_t last, void **it_val);
+void *da_it_advance(const t_cm_da *da, void **it);
+void *da_it_back(const t_cm_da *da, void **it);
 
 t_cm_da da_map(const t_cm_da *da, t_cm_mapper fn, size_t out_elem_size);
 t_cm_da da_nmap(const t_cm_da *da, size_t n, t_cm_mapper fn,

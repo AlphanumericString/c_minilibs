@@ -73,8 +73,48 @@ int main(void) {
 	da_apply(&da, print_int, NULL);
 	printf("\n");
 
-	printf("iter [1,4)        :");
-	da_iter(&da, 1, 4, print_it, NULL);
+	printf("apply range [1,4) :");
+	da_apply_range(&da, 1, 4, print_it, NULL);
+	printf("\n");
+
+	printf("iterator [1,4)    :");
+	{
+		void  *it_val = NULL;
+		size_t start  = 1;
+
+		while (da_iter(&da, start, 4, &it_val))
+			printf(" [%zu]=%d", (size_t)((int *)it_val - (int *)da.array),
+			       *(int *)it_val);
+	}
+	printf("\n");
+
+	printf("rev iterator [1,4):");
+	{
+		void  *it_val = NULL;
+		size_t start  = 1;
+
+		while (da_iter_rev(&da, start, 4, &it_val))
+			printf(" [%zu]=%d", (size_t)((int *)it_val - (int *)da.array),
+			       *(int *)it_val);
+	}
+	printf("\n");
+
+	printf("it advance        :");
+	{
+		int *it_val = NULL;
+
+		while (da_it_advance(&da, (void **)&it_val))
+			printf(" %d", *it_val);
+	}
+	printf("\n");
+
+	printf("it back           :");
+	{
+		int *it_val = NULL;
+
+		while (da_it_back(&da, (void **)&it_val))
+			printf(" %d", *it_val);
+	}
 	printf("\n");
 
 	{

@@ -39,6 +39,20 @@ NO_COV void test_cm_da_add(void) {
 	da = (t_cm_da){.array = (void *)0xDEAD, .cap_e = 0, .nb_e = 99, .sz_e = 1};
 	da_add(&da, (void *)0xDEAD);
 }
+NO_COV void test_cm_da_push(void) {
+	t_cm_da da;
+	int     a;
+
+	da_init(&da, sizeof(int));
+	a = 42;
+	assert(da_push(&da, &a) == true);
+	assert(da.nb_e == 1);
+	assert(*(int *)da_at(&da, 0) == 42);
+	da_destroy(&da);
+
+	assert(da_push(NULL, &a) == false);
+	assert(da_push(&da, NULL) == false);
+}
 NO_COV void test_cm_da_cat_array(void) {
 	t_cm_da da;
 	int     arr[]  = {1, 2, 3};
