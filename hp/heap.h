@@ -55,6 +55,18 @@ t_cm_hp *hp_new_from_array(void *arr, size_t nb_elems, size_t sz_elem,
 t_cm_hp *hp_init_from_array(t_cm_hp *hp, void *arr, size_t nb_elems,
                             size_t sz_elem, t_cm_comparator cmp);
 
+t_cm_hp *hp_min_new_from_array(void *arr, size_t nb_elems, size_t sz_elem,
+                               t_cm_comparator cmp);
+t_cm_hp *hp_max_new_from_array(void *arr, size_t nb_elems, size_t sz_elem,
+                               t_cm_comparator cmp);
+t_cm_hp *hp_min_init_from_array(t_cm_hp *hp, void *arr, size_t nb_elems,
+                                size_t sz_elem, t_cm_comparator cmp);
+t_cm_hp *hp_max_init_from_array(t_cm_hp *hp, void *arr, size_t nb_elems,
+                                size_t sz_elem, t_cm_comparator cmp);
+
+t_cm_hp *hp_dup(const t_cm_hp *src);
+t_cm_hp *hp_ndup(const t_cm_hp *src, size_t n);
+
 bool hp_delete(t_cm_hp *hp);
 bool hp_free(t_cm_hp **hp);
 bool hp_clear(t_cm_hp *hp);
@@ -62,6 +74,8 @@ bool hp_clear(t_cm_hp *hp);
 bool hp_is_empty(const t_cm_hp *hp);
 bool hp_is_full(const t_cm_hp *hp);
 bool hp_is_valid(const t_cm_hp *hp);
+bool hp_min_is_valid(const t_cm_hp *hp);
+bool hp_max_is_valid(const t_cm_hp *hp);
 
 t_cm_comparator hp_get_cmp(const t_cm_hp *hp);
 size_t          hp_get_cap(const t_cm_hp *hp);
@@ -79,9 +93,51 @@ bool hp_max_pop(t_cm_hp *h, void *out);
 bool hp_min_rm(t_cm_hp *h, size_t n, void *out);
 bool hp_max_rm(t_cm_hp *h, size_t n, void *out);
 
+bool hp_min_pushpop(t_cm_hp *h, const void *e, void *out);
+bool hp_max_pushpop(t_cm_hp *h, const void *e, void *out);
+bool hp_min_replace(t_cm_hp *h, const void *e, void *out);
+bool hp_max_replace(t_cm_hp *h, const void *e, void *out);
+
 bool hp_foreach(const t_cm_hp *h, t_cm_callback cb, void *u_arg);
-bool hp_foreach_in(t_cm_hp *h, t_cm_callback cb, void *u_arg);
-bool hp_foreach_pre(t_cm_hp *h, t_cm_callback cb, void *u_arg);
-bool hp_foreach_post(t_cm_hp *h, t_cm_callback cb, void *u_arg);
+bool hp_foreach_it(const t_cm_hp *h, t_cm_callback_it cb, void *u_arg);
+bool hp_foreach_in(const t_cm_hp *h, t_cm_callback cb, void *u_arg);
+bool hp_foreach_pre(const t_cm_hp *h, t_cm_callback cb, void *u_arg);
+bool hp_foreach_post(const t_cm_hp *h, t_cm_callback cb, void *u_arg);
+
+void *hp_peek(const t_cm_hp *h);
+void *hp_find(const t_cm_hp *h, t_cm_comparator c, void *u_data);
+bool  hp_find_get(const t_cm_hp *h, t_cm_comparator c, void *u_data,
+                  void *out_buffer);
+void *hp_fold(const t_cm_hp *h, t_cm_merger m, void *start_val);
+void *hp_reduce(const t_cm_hp *h, t_cm_merger m);
+
+void **hp_map(const t_cm_hp *h, t_cm_mapper fn);
+
+bool hp_min_filter(t_cm_hp *h, t_cm_callback keep, void *u_data,
+                   t_cm_callback deletor);
+bool hp_max_filter(t_cm_hp *h, t_cm_callback keep, void *u_data,
+                   t_cm_callback deletor);
+
+bool hp_min_heapify(t_cm_hp *h);
+bool hp_max_heapify(t_cm_hp *h);
+
+bool  hp_iter(const t_cm_hp *h, size_t start, size_t last, void **it_val);
+bool  hp_iter_rev(const t_cm_hp *h, size_t start, size_t last, void **it_val);
+void *hp_it_advance(const t_cm_hp *h, void **it);
+void *hp_it_back(const t_cm_hp *h, void **it);
+
+#ifdef C_MINI__HP_INTERNAL
+
+void *hpi_elem_ptr(const t_cm_hp *h, size_t idx);
+
+void hpi_swap(const t_cm_hp *h, size_t pos1, size_t pos2);
+
+void hpi_sift_up(t_cm_hp *h, size_t idx, bool max);
+void hpi_sift_down(t_cm_hp *h, size_t idx, bool max);
+void hpi_heapify(t_cm_hp *h, bool max);
+
+void hpi_replace_root(t_cm_hp *h, const void *e, void *out, bool max);
+
+#endif // !C_MINI__HP_INTERNAL
 
 #endif // !C_MINI__HP

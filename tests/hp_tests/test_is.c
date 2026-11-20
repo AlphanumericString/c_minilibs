@@ -76,3 +76,79 @@ NO_COV void test_cm_hp_is_full(void) {
 	assert(hp_is_full(&no_elems) == false);
 	assert(hp_is_full(NULL) == false);
 }
+
+NO_COV void test_cm_hp_min_is_valid(void) {
+	int     min_ok[]  = {1, 2, 3, 4, 5};
+	int     max_ok[]  = {5, 4, 3, 2, 1};
+	int     corrupt[] = {2, 1, 3};
+	t_cm_hp ok        = {.nb       = 5,
+	                     .capacity = 5,
+	                     .sz_e     = sizeof(int),
+	                     .elems    = min_ok,
+	                     .cmp      = cb_cmp_int};
+	t_cm_hp is_max    = {.nb       = 5,
+	                     .capacity = 5,
+	                     .sz_e     = sizeof(int),
+	                     .elems    = max_ok,
+	                     .cmp      = cb_cmp_int};
+	t_cm_hp bad       = {.nb       = 3,
+	                     .capacity = 3,
+	                     .sz_e     = sizeof(int),
+	                     .elems    = corrupt,
+	                     .cmp      = cb_cmp_int};
+	t_cm_hp empty     = {.nb       = 0,
+	                     .capacity = 5,
+	                     .sz_e     = sizeof(int),
+	                     .elems    = min_ok,
+	                     .cmp      = cb_cmp_int};
+	t_cm_hp one       = {.nb       = 1,
+	                     .capacity = 5,
+	                     .sz_e     = sizeof(int),
+	                     .elems    = min_ok,
+	                     .cmp      = cb_cmp_int};
+
+	assert(hp_min_is_valid(&ok) == true);
+	assert(hp_min_is_valid(&is_max) == false);
+	assert(hp_min_is_valid(&bad) == false);
+	assert(hp_min_is_valid(&empty) == true);
+	assert(hp_min_is_valid(&one) == true);
+	assert(hp_min_is_valid(NULL) == false);
+}
+
+NO_COV void test_cm_hp_max_is_valid(void) {
+	int     min_ok[]  = {1, 2, 3, 4, 5};
+	int     max_ok[]  = {5, 4, 3, 2, 1};
+	int     corrupt[] = {2, 1, 3};
+	t_cm_hp ok        = {.nb       = 5,
+	                     .capacity = 5,
+	                     .sz_e     = sizeof(int),
+	                     .elems    = max_ok,
+	                     .cmp      = cb_cmp_int};
+	t_cm_hp is_min    = {.nb       = 5,
+	                     .capacity = 5,
+	                     .sz_e     = sizeof(int),
+	                     .elems    = min_ok,
+	                     .cmp      = cb_cmp_int};
+	t_cm_hp bad       = {.nb       = 3,
+	                     .capacity = 3,
+	                     .sz_e     = sizeof(int),
+	                     .elems    = corrupt,
+	                     .cmp      = cb_cmp_int};
+	t_cm_hp empty     = {.nb       = 0,
+	                     .capacity = 5,
+	                     .sz_e     = sizeof(int),
+	                     .elems    = max_ok,
+	                     .cmp      = cb_cmp_int};
+	t_cm_hp one       = {.nb       = 1,
+	                     .capacity = 5,
+	                     .sz_e     = sizeof(int),
+	                     .elems    = max_ok,
+	                     .cmp      = cb_cmp_int};
+
+	assert(hp_max_is_valid(&ok) == true);
+	assert(hp_max_is_valid(&is_min) == false);
+	assert(hp_max_is_valid(&bad) == false);
+	assert(hp_max_is_valid(&empty) == true);
+	assert(hp_max_is_valid(&one) == true);
+	assert(hp_max_is_valid(NULL) == false);
+}

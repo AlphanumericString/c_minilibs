@@ -78,12 +78,24 @@ persistent/undoable structure on top of a destructive one.
 compression + union by rank). Rewind is O(1) per undone operation.
 
 ### `hp` — Heap
-A binary min/max heap driven entirely by a user comparator, supporting create,
-push, pop, push-pop, build-from-array, for-each and validity checks.
-**Skill:** implicit tree layouts in arrays, sift-up/sift-down reasoning, and
-heapify-from-array O(n) construction.
-**Complexity:** push/pop/push-pop O(log n); at/peek O(1); build-from-array O(n)
-(heapify); foreach O(n).
+A fixed-capacity binary min/max heap driven entirely by a user comparator,
+supporting create/init, buffer wrapping (`hp_new_from_array` and
+`hp_init_from_array` take ownership of an empty caller buffer), filled-data
+construction with O(n) heapify (`hp_{min,max}_{new,init}_from_array`),
+push/pop/remove, size-preserving push-pop and replace, peek/at, getters,
+structural and order validity checks, duplicate/prefix-duplicate
+(`hp_dup`/`hp_ndup`), in-place heapify, for-each (array/pre/in/post plus an
+index-aware variant), backing-array iterators (`hp_iter`/`hp_iter_rev` and
+advance/back helpers), linear find, fold/reduce, in-place min/max filter, and
+map to a positional array of user pointers.
+**Skill:** implicit tree layouts in arrays, sift-up/sift-down reasoning,
+heapify-from-array O(n) construction, and designing an iterator whose state
+stays a plain element pointer.
+**Complexity:** push/pop/remove/push-pop/replace O(log n); peek/at O(1);
+heapify, duplicate, map, filter, foreach and iterators O(n); find/fold/reduce
+O(n). `hp_map` returns a `void **` array preserving backing-array positions,
+so `out[i]` is exactly the pointer returned by the mapper for element `i`; it
+does not re-heapify the result.
 
 ### `ill` — Intrusive Linked Lists
 Two variants — singly (`ill`) and doubly (`idl`) linked — where nodes are
