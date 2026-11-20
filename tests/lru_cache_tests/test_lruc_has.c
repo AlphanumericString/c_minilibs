@@ -55,7 +55,7 @@ NO_COV void test_cm_lruc_has_ttl(void) {
 	lruc_put(&c, k1, strlen(k1), strdup("toto_1"));
 	assert(lruc_has_ttl(&c, k1, strlen(k1)) == true);
 
-	usleep(150 * 1000);
+	lruc_test_sleep_ms(150);
 	assert(lruc_has(&c, k1, strlen(k1)) == true);      // has ignores ttl
 	assert(lruc_has_ttl(&c, k1, strlen(k1)) == false); // has_ttl honors it
 	assert(lruc_has_ttl(&c, k2, strlen(k2)) == false); // retroactively ttl'd

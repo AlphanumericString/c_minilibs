@@ -95,7 +95,7 @@ NO_COV void test_cm_lruc_expired(void) {
 	lruc_put_ttl(&c, k3, strlen(k3), v3, LRUC_MS_TO_NS(3000));
 	lruc_put(&c, k4, strlen(k4), v4);
 	assert(c.MRU->kv.key == k4);
-	sleep(1);
+	lruc_test_sleep_ms(1000);
 	lruc_cleanup(&c);
 	assert(lruc_has(&c, k1, strlen(k1)) == false);
 	assert(lruc_has(&c, k2, strlen(k2)) == false);

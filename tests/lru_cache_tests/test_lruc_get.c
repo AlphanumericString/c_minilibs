@@ -56,7 +56,7 @@ NO_COV void test_cm_lruc_get_lru(void) {
 	assert(c.LRU != NULL && c.LRU->kv.key == k4);
 	assert(c.LRU->lru_prev == c.MRU && c.MRU->lru_next == c.LRU);
 	assert(lruc_get_lru(&c, k4, strlen(k4)) == v4);
-	usleep(400 * 1000); // 1ms = 1k us
+	lruc_test_sleep_ms(400);
 	assert(lruc_get_lru(&c, k3, strlen(k3)) == v3);
 	assert(lruc_get_lru(&c, k4, strlen(k4)) == v4);
 	assert(lruc_get_lru(&c, "unknown", 7) == NULL); // present cache, absent key
@@ -95,7 +95,7 @@ NO_COV void test_cm_lruc_try_get(void) {
 	assert(c.MRU->kv.key == k2);
 	assert(lruc_try_get(&c, k1, strlen(k1)) == v1);
 	assert(lruc_try_get(&c, k2, strlen(k2)) == v2);
-	usleep(400 * 1000); // 1ms = 1k us
+	lruc_test_sleep_ms(400);
 	assert(lruc_try_get(&c, k1, strlen(k1)) == NULL);
 	assert(lruc_try_get(&c, k2, strlen(k2)) == NULL);
 	lruc_put(&c, k3, strlen(k3), v3);
@@ -193,7 +193,7 @@ NO_COV void test_cm_lruc_getttl(void) {
 	assert(lruc_isexpired(&c, k1, strlen(k1)) == false);
 
 	// expired -> recompute
-	usleep(250 * 1000);
+	lruc_test_sleep_ms(250);
 	v = lruc_getttl(&c, k1, strlen(k1), gen_count, (void *)k1,
 	                LRUC_MS_TO_NS(200));
 	assert(v == (void *)k1);

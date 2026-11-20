@@ -391,10 +391,10 @@ NO_COV void test_cm_lruc_put_ttl(void) {
 		                    LRUC_MS_TO_NS(900)) == true);
 		assert(lruc_isexpired(&c, k1, strlen(k1)) == false);
 		assert(lruc_isexpired(&c, k2, strlen(k2)) == false);
-		sleep(1);
+		lruc_test_sleep_ms(1000);
 		assert(lruc_isexpired(&c, k1, strlen(k1)) == false);
 		assert(lruc_isexpired(&c, k2, strlen(k2)) == true);
-		sleep(1);
+		lruc_test_sleep_ms(1000);
 		assert(lruc_isexpired(&c, k1, strlen(k1)) == true);
 		assert(lruc_isexpired(&c, k2, strlen(k2)) == true);
 		lruc_clear(&c);

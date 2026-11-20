@@ -20,7 +20,7 @@ NO_COV void test_cm_lruc_isexpired(void) {
 	lruc_put(&c, k1, strlen(k1), v1);
 	assert(lruc_has(&c, k1, strlen(k1)) == true);
 	assert(lruc_isexpired(&c, k1, strlen(k1)) == false);
-	sleep(1);
+	lruc_test_sleep_ms(1000);
 	assert(lruc_has(&c, k1, strlen(k1)) == true);
 	assert(lruc_isexpired(&c, k1, strlen(k1)) == true);
 	lruc_setttl(&c, C_MINI__LRUC_TTL_DFLT);
@@ -48,7 +48,7 @@ NO_COV void test_cm_lruc_cleanup(void) {
 	lruc_put(&c, key2, strlen(key2), strdup("value_2"));
 	lruc_put(&c, key3, strlen(key3), strdup("value_3"));
 	lruc_put(&c, key4, strlen(key4), strdup("value_4"));
-	usleep(300 * 1000); // ms to us ->  us=ms*1k
+	lruc_test_sleep_ms(300);
 	assert(lruc_has(&c, key1, strlen(key1)) == true);
 	assert(lruc_has(&c, key2, strlen(key2)) == true);
 	assert(lruc_has(&c, key3, strlen(key3)) == true);
@@ -73,7 +73,7 @@ NO_COV void test_cm_lruc_cleanup(void) {
 	lruc_put(&c, key2, strlen(key2), v2);
 	lruc_put(&c, key3, strlen(key3), v3);
 	lruc_put(&c, key4, strlen(key4), v4);
-	usleep(300 * 1000); // ms to us ->  us=ms*1k
+	lruc_test_sleep_ms(300);
 	assert(lruc_isexpired(&c, key1, strlen(key1)) == true);
 	assert(lruc_isexpired(&c, key2, strlen(key2)) == true);
 	assert(lruc_isexpired(&c, key3, strlen(key3)) == true);
