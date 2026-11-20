@@ -5,7 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "lru_cache_tests.h"
+#include "lrutc_tests.h"
 
 NO_COV void test_cm_lrutc_isexpired(void) {
 	t_cm_lrutc   c;
@@ -20,7 +20,7 @@ NO_COV void test_cm_lrutc_isexpired(void) {
 	lrutc_put(&c, k1, strlen(k1), v1);
 	assert(lrutc_has(&c, k1, strlen(k1)) == true);
 	assert(lrutc_isexpired(&c, k1, strlen(k1)) == false);
-	lrutc_test_sleep_ms(1000);
+	lruc_test_sleep_ms(1000);
 	assert(lrutc_has(&c, k1, strlen(k1)) == true);
 	assert(lrutc_isexpired(&c, k1, strlen(k1)) == true);
 	lrutc_setttl(&c, C_MINI__LRUTC_TTL_DFLT);
@@ -48,7 +48,7 @@ NO_COV void test_cm_lrutc_cleanup(void) {
 	lrutc_put(&c, key2, strlen(key2), strdup("value_2"));
 	lrutc_put(&c, key3, strlen(key3), strdup("value_3"));
 	lrutc_put(&c, key4, strlen(key4), strdup("value_4"));
-	lrutc_test_sleep_ms(300);
+	lruc_test_sleep_ms(300);
 	assert(lrutc_has(&c, key1, strlen(key1)) == true);
 	assert(lrutc_has(&c, key2, strlen(key2)) == true);
 	assert(lrutc_has(&c, key3, strlen(key3)) == true);
@@ -73,7 +73,7 @@ NO_COV void test_cm_lrutc_cleanup(void) {
 	lrutc_put(&c, key2, strlen(key2), v2);
 	lrutc_put(&c, key3, strlen(key3), v3);
 	lrutc_put(&c, key4, strlen(key4), v4);
-	lrutc_test_sleep_ms(300);
+	lruc_test_sleep_ms(300);
 	assert(lrutc_isexpired(&c, key1, strlen(key1)) == true);
 	assert(lrutc_isexpired(&c, key2, strlen(key2)) == true);
 	assert(lrutc_isexpired(&c, key3, strlen(key3)) == true);

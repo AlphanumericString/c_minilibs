@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "lru_cache_tests.h"
+#include "lrutc_tests.h"
 
 NO_COV void test_cm_lrutci_hp_pop(void) {
 	t_cm_lrutc          c, intact_copy;

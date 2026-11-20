@@ -60,6 +60,9 @@ typedef struct {
 	size_t expired;
 } t_cm_lrutc_stats;
 
+#ifndef CMINI__T_KEYVALUE_DEFINE
+#	define CMINI__T_KEYVALUE_DEFINE
+
 /**
  * \brief the key value pair that lives in the cache
  * \param key pointer to key
@@ -72,6 +75,8 @@ typedef struct {
 	void       *value;
 	size_t      k_len;
 } t_cm_keyvalue;
+
+#endif // !CMINI__T_KEYVALUE_DEFINE
 
 #ifdef C_MINI__LRUTC_INTERNAL
 

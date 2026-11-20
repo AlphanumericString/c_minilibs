@@ -3,7 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "lru_cache_tests.h"
+#include "lrutc_tests.h"
 
 NO_COV void test_cm_lrutc_size(void) {
 	t_cm_lrutc   c;
@@ -95,7 +95,7 @@ NO_COV void test_cm_lrutc_expired(void) {
 	lrutc_put_ttl(&c, k3, strlen(k3), v3, LRUC_MS_TO_NS(3000));
 	lrutc_put(&c, k4, strlen(k4), v4);
 	assert(c.MRU->kv.key == k4);
-	lrutc_test_sleep_ms(1000);
+	lruc_test_sleep_ms(1000);
 	lrutc_cleanup(&c);
 	assert(lrutc_has(&c, k1, strlen(k1)) == false);
 	assert(lrutc_has(&c, k2, strlen(k2)) == false);

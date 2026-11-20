@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <string.h>
 
-#include "lru_cache_tests.h"
+#include "lrutc_tests.h"
 
 NO_COV static void blank(void *t) {
 	(void)t;

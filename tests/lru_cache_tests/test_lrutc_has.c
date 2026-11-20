@@ -3,7 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "lru_cache_tests.h"
+#include "lrutc_tests.h"
 
 NO_COV void test_cm_lrutc_has(void) {
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
@@ -55,7 +55,7 @@ NO_COV void test_cm_lrutc_has_ttl(void) {
 	lrutc_put(&c, k1, strlen(k1), strdup("toto_1"));
 	assert(lrutc_has_ttl(&c, k1, strlen(k1)) == true);
 
-	lrutc_test_sleep_ms(150);
+	lruc_test_sleep_ms(150);
 	assert(lrutc_has(&c, k1, strlen(k1)) == true);      // has ignores ttl
 	assert(lrutc_has_ttl(&c, k1, strlen(k1)) == false); // has_ttl honors it
 	assert(lrutc_has_ttl(&c, k2, strlen(k2)) == false); // retroactively ttl'd

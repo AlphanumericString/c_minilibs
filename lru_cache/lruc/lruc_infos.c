@@ -1,0 +1,85 @@
+#include "least_recently_used_cache.h"
+
+/**
+ * \brief Check if a cache is valid and usable
+ * \param cache cache pointer
+ * \return true if the cache is valid, false otherwise
+ * \ingroup lruc
+**/
+bool lruc_is_valid(const t_cm_lruc *cache) {
+	return (cache && cache->buckets && cache->buckets_nb &&
+	        cache->node_nb <= cache->buckets_nb &&
+	        (!cache->node_nb || (cache->MRU && cache->LRU)));
+}
+/**
+ * \brief Get the size of the cache
+ * \param cache cache pointer
+ * \return size of the cache
+ * \ingroup lruc
+**/
+size_t lruc_size(const t_cm_lruc *cache) {
+	return (cache->node_nb);
+}
+/**
+ * \brief Get the number of hits
+ * \param cache cache pointer
+ * \return number of hits
+ * \ingroup lruc
+**/
+uint64_t lruc_hits(const t_cm_lruc *cache) {
+	return (cache->stats.hit);
+}
+/**
+ * \brief Get the number of misses
+ * \param cache cache pointer
+ * \return number of misses
+ * \ingroup lruc
+**/
+uint64_t lruc_misses(const t_cm_lruc *cache) {
+	return (cache->stats.misses);
+}
+/**
+ * \brief Get the number of entries evicted to make room for a new one
+ * \param cache cache pointer
+ * \return number of evicted entries
+ * \ingroup lruc
+**/
+uint64_t lruc_expired(const t_cm_lruc *cache) {
+	return (cache->stats.expired);
+}
+/**
+ * \brief Get the statistics of the cache
+ * \param cache cache pointer
+ * \return statistics of the cache
+ * \ingroup lruc
+**/
+t_cm_lruc_stats lruc_stats(const t_cm_lruc *cache) {
+	return (cache->stats);
+}
+/**
+ * \brief Get the number of reserved nodes
+ * \param cache cache pointer
+ * \return number of reserved (pre-allocated) nodes
+ * \ingroup lruc
+**/
+size_t lruc_reserved_nb(const t_cm_lruc *cache) {
+	return (cache->reserved_nodes_nb);
+}
+/**
+ * \brief Check whether the cache has reserved nodes
+ * \param cache cache pointer
+ * \return true if at least one reserved node is available, false otherwise
+ * \ingroup lruc
+**/
+bool lruc_has_reserved(const t_cm_lruc *cache) {
+	return (cache->reserved_nodes_nb > 0);
+}
+/**
+ * \brief Get the maximum number of nodes that can still be reserved
+ * \param cache cache pointer
+ * \return maximum number of reservable nodes
+ * \ingroup lruc
+**/
+size_t lruc_max_reserve(const t_cm_lruc *cache) {
+	return (cache->buckets_nb - (cache->node_nb + cache->reserved_nodes_nb));
+}

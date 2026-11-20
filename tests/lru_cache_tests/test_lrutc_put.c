@@ -5,7 +5,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "lru_cache_tests.h"
+#include "lrutc_tests.h"
 
 NO_COV void test_cm_lrutc_put_kv(void) {
 	t_cm_lrutc          c;
@@ -391,10 +391,10 @@ NO_COV void test_cm_lrutc_put_ttl(void) {
 		                    LRUC_MS_TO_NS(900)) == true);
 		assert(lrutc_isexpired(&c, k1, strlen(k1)) == false);
 		assert(lrutc_isexpired(&c, k2, strlen(k2)) == false);
-		lrutc_test_sleep_ms(1000);
+		lruc_test_sleep_ms(1000);
 		assert(lrutc_isexpired(&c, k1, strlen(k1)) == false);
 		assert(lrutc_isexpired(&c, k2, strlen(k2)) == true);
-		lrutc_test_sleep_ms(1000);
+		lruc_test_sleep_ms(1000);
 		assert(lrutc_isexpired(&c, k1, strlen(k1)) == true);
 		assert(lrutc_isexpired(&c, k2, strlen(k2)) == true);
 		lrutc_clear(&c);
@@ -514,7 +514,7 @@ NO_COV void test_cm_lrutc_put_evict_ttl_bucket(void) {
 	assert(lrutc_put_ttl(&c, expired, 1, (void *)expired, LRUC_MS_TO_NS(1)) ==
 	       true);
 	assert(lrutc_put(&c, alive, 1, (void *)alive) == true);
-	lrutc_test_sleep_ms(10);
+	lruc_test_sleep_ms(10);
 	assert(c.minHeap[0]->kv.key == expired);
 	assert(lrutc_put(&c, added, 1, (void *)added) == true);
 	assert(c.node_nb == 2);

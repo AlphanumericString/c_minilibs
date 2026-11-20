@@ -3,7 +3,7 @@
 #include <limits.h>
 #include <string.h>
 
-#include "lru_cache_tests.h"
+#include "lrutc_tests.h"
 
 static void free_function(void *_) {
 	return;

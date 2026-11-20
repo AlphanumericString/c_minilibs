@@ -1,7 +1,7 @@
 #include <assert.h>
 #include <string.h>
 
-#include "lru_cache_tests.h"
+#include "lrutc_tests.h"
 
 NO_COV void test_cm_lrutci_keyinhash(void) {
 	t_cm_lrutc   c;
@@ -215,6 +215,7 @@ NO_COV void test_cm_lrutci_unlink_untracked(void) {
 	assert(c.node_nb == 1);
 	lrutci_unlink_node(&c, popped); // must skip the heap, not pop slot 0
 	assert(c.node_nb == 1);
+	assert(lrutci_rsrvd_push(&c, popped) == true); // hand the detached node back
 	assert(lrutc_has(&c, "a", 1) + lrutc_has(&c, "b", 1) == 1);
 	assert(lrutci_validate(&c) == true);
 	lrutc_destroy(&c);
@@ -228,6 +229,7 @@ NO_COV void test_cm_lrutci_unlink_untracked(void) {
 	popped->heap_index = 0; // valid range, minHeap[0] is the other node
 	lrutci_unlink_node(&c, popped);
 	assert(c.node_nb == 1);
+	assert(lrutci_rsrvd_push(&c, popped) == true); // hand the detached node back
 	assert(lrutci_validate(&c) == true);
 	lrutc_destroy(&c);
 	return;

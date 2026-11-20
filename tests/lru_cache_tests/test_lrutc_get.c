@@ -3,7 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "lru_cache_tests.h"
+#include "lrutc_tests.h"
 
 static int gen_calls = 0;
 
@@ -56,7 +56,7 @@ NO_COV void test_cm_lrutc_get_lru(void) {
 	assert(c.LRU != NULL && c.LRU->kv.key == k4);
 	assert(c.LRU->lru_prev == c.MRU && c.MRU->lru_next == c.LRU);
 	assert(lrutc_get_lru(&c, k4, strlen(k4)) == v4);
-	lrutc_test_sleep_ms(400);
+	lruc_test_sleep_ms(400);
 	assert(lrutc_get_lru(&c, k3, strlen(k3)) == v3);
 	assert(lrutc_get_lru(&c, k4, strlen(k4)) == v4);
 	assert(lrutc_get_lru(&c, "unknown", 7) == NULL); // present cache, absent key
@@ -95,7 +95,7 @@ NO_COV void test_cm_lrutc_try_get(void) {
 	assert(c.MRU->kv.key == k2);
 	assert(lrutc_try_get(&c, k1, strlen(k1)) == v1);
 	assert(lrutc_try_get(&c, k2, strlen(k2)) == v2);
-	lrutc_test_sleep_ms(400);
+	lruc_test_sleep_ms(400);
 	assert(lrutc_try_get(&c, k1, strlen(k1)) == NULL);
 	assert(lrutc_try_get(&c, k2, strlen(k2)) == NULL);
 	lrutc_put(&c, k3, strlen(k3), v3);
@@ -193,7 +193,7 @@ NO_COV void test_cm_lrutc_getttl(void) {
 	assert(lrutc_isexpired(&c, k1, strlen(k1)) == false);
 
 	// expired -> recompute
-	lrutc_test_sleep_ms(250);
+	lruc_test_sleep_ms(250);
 	v = lrutc_getttl(&c, k1, strlen(k1), gen_count, (void *)k1,
 	                LRUC_MS_TO_NS(200));
 	assert(v == (void *)k1);
