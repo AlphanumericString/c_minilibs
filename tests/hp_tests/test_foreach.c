@@ -29,6 +29,29 @@ NO_COV void test_cm_hp_foreach(void) {
 
 	hp_delete(&h);
 }
+NO_COV void test_cm_hp_foreach_it(void) {
+	t_cm_order_ctx ctx = {0};
+	t_cm_hp        h;
+	int            in[] = {0x40, 0x41, 0x42, 0x43, 0x44};
+
+	hp_init(&h, 5, sizeof(int), cb_cmp_int);
+	build_max(&h, in);
+
+	assert(hp_foreach_it(&h, cb_it_log, &ctx) == true);
+	assert(ctx.n == 5);
+	for (size_t i = 0; i < 5; i++) {
+		assert(ctx.pos[i] == i);
+		assert(ctx.last[i] == (i == 4));
+	}
+	assert(hp_foreach_it(&h, cb_it_false, &ctx) == false);
+	assert(hp_foreach_it(NULL, cb_it_log, &ctx) == false);
+	assert(hp_foreach_it(&h, NULL, &ctx) == false);
+
+	hp_clear(&h);
+	assert(hp_foreach_it(&h, cb_it_log, &ctx) == true);
+
+	hp_delete(&h);
+}
 NO_COV void test_cm_hp_foreach_in(void) {
 	t_cm_order_ctx ctx = {0};
 	t_cm_hp        h;

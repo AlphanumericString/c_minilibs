@@ -120,3 +120,91 @@ bool hp_max_rm(t_cm_hp *h, size_t n, void *out) {
 	hpi_swap(h, 0, n);
 	return (hp_max_pop(h, out));
 }
+
+/**
+ * \brief Push then pop in one operation, keeping the heap size unchanged.
+ * The smallest of the root and e is copied at out.
+ * \param h heap pointer
+ * \param e element to push before popping
+ * \param out buffer where the popped element is copied
+ * \return true on success, false otherwise
+ * \note on an empty heap e is copied at out and the heap stays empty
+ * \ingroup hp
+**/
+bool hp_min_pushpop(t_cm_hp *h, const void *e, void *out) {
+	if (!h || !e || !out || !h->sz_e) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
+		return (false);
+	}
+	if (!h->nb || h->cmp(e, hpi_elem_ptr(h, 0)) <= 0) {
+		memcpy(out, e, h->sz_e);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_SUCCESS)
+		return (true);
+	}
+	hpi_replace_root(h, e, out, false);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_SUCCESS)
+	return (true);
+}
+/**
+ * \brief Push then pop in one operation, keeping the heap size unchanged.
+ * The largest of the root and e is copied at out.
+ * \param h heap pointer
+ * \param e element to push before popping
+ * \param out buffer where the popped element is copied
+ * \return true on success, false otherwise
+ * \note on an empty heap e is copied at out and the heap stays empty
+ * \ingroup hp
+**/
+bool hp_max_pushpop(t_cm_hp *h, const void *e, void *out) {
+	if (!h || !e || !out || !h->sz_e) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
+		return (false);
+	}
+	if (!h->nb || h->cmp(e, hpi_elem_ptr(h, 0)) >= 0) {
+		memcpy(out, e, h->sz_e);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_SUCCESS)
+		return (true);
+	}
+	hpi_replace_root(h, e, out, true);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_SUCCESS)
+	return (true);
+}
+
+/**
+ * \brief Pop the root and push e in one operation, keeping the heap size
+ * unchanged. The previous root is copied at out.
+ * \param h heap pointer
+ * \param e element inserted after the pop
+ * \param out buffer where the popped element is copied
+ * \return true on success, false otherwise
+ * \note fails on an empty heap
+ * \ingroup hp
+**/
+bool hp_min_replace(t_cm_hp *h, const void *e, void *out) {
+	if (!h || !e || !out || !h->nb || !h->sz_e) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
+		return (false);
+	}
+	hpi_replace_root(h, e, out, false);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_SUCCESS)
+	return (true);
+}
+/**
+ * \brief Pop the root and push e in one operation, keeping the heap size
+ * unchanged. The previous root is copied at out.
+ * \param h heap pointer
+ * \param e element inserted after the pop
+ * \param out buffer where the popped element is copied
+ * \return true on success, false otherwise
+ * \note fails on an empty heap
+ * \ingroup hp
+**/
+bool hp_max_replace(t_cm_hp *h, const void *e, void *out) {
+	if (!h || !e || !out || !h->nb || !h->sz_e) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
+		return (false);
+	}
+	hpi_replace_root(h, e, out, true);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_SUCCESS)
+	return (true);
+}
