@@ -236,7 +236,7 @@ bool     lruci_expired(const t_cm_lruc_keynode *node, uint64_t now);
 bool lruci_key_eq(const void *k1, size_t k1_len, const void *k2, size_t k2_len);
 bool lruci_node_eq(const t_cm_lruc_keynode *node_1,
                    const t_cm_lruc_keynode *node_2);
-void lruci_unlink_node(t_cm_lruc *c, t_cm_lruc_keynode *node, size_t hash);
+void lruci_unlink_node(t_cm_lruc *c, t_cm_lruc_keynode *node);
 
 size_t lruci_hash_djb2(const void *key, size_t size);
 

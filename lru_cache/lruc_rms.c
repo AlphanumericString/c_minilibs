@@ -115,12 +115,11 @@ void lruc_clear(t_cm_lruc *c) {
 **/
 int lruc_remove(t_cm_lruc *c, const void *key, size_t key_len) {
 	t_cm_lruc_keynode *node;
-	size_t             pos;
 
 	if (!lruc_is_valid(c) || !c->node_nb) return (-1);
-	node = lruci_keyinhash(c, key, key_len, &pos);
+	node = lruci_keyinhash(c, key, key_len, NULL);
 	if (!node) return (-1);
-	lruci_unlink_node(c, node, pos);
+	lruci_unlink_node(c, node);
 	if (c->dtor) c->dtor(node->kv.value);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_DELETEVAL, node->kv.key,
 	       node->kv.k_len)

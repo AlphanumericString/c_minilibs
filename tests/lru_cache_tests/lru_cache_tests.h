@@ -37,6 +37,8 @@ void test_cm_lruc_free(void);
 void test_cm_lruc_put_kv(void);
 void test_cm_lruc_put(void);
 void test_cm_lruc_put_ttl(void);
+void test_cm_lruc_put_evict_lru_bucket(void);
+void test_cm_lruc_put_evict_ttl_bucket(void);
 
 void test_cm_lruc_get(void);
 void test_cm_lruc_getttl(void);
@@ -82,5 +84,6 @@ void test_cm_lruci_hsh_pop(void);
 // void test_cm_lruci_hsh_push(void);// moved to inline
 
 void test_cm_lruc_foreach(void);
+void test_cm_lruc_foreach_collisions(void);
 void test_cm_lruc_foreach_ru_ordered(void);
 void test_cm_lruc_foreach_ttl_ordered(void);

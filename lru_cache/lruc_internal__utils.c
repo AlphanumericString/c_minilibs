@@ -32,9 +32,13 @@ t_cm_lruc_keynode *lruci_keyinhash(const t_cm_lruc *c, const void *key,
 	return (*_out = hash, NULL);
 }
 
-void lruci_unlink_node(t_cm_lruc *c, t_cm_lruc_keynode *n, size_t h) {
+void lruci_unlink_node(t_cm_lruc *c, t_cm_lruc_keynode *n) {
+	// the bucket is derived from the node's own key: callers may hold the hash
+	// of another key (an insertion evicting a node hashes the key it is about
+	// to store), unlinking from that bucket would leave the node aliased in
+	// its real bucket.
 	lruci_lru_pop(c, n);
-	lruci_hsh_pop(c, n, h);
+	lruci_hsh_pop(c, n, lruci_hash_djb2(n->kv.key, n->kv.k_len));
 	if (c->minHeap[0] == n) {
 		lruci_hp_pop(c);
 	} else {

@@ -16,8 +16,8 @@ void lruc_foreach(const t_cm_lruc *c, t_cm_kvcallback fn, void *user_data) {
 		return;
 	}
 	for (size_t i = 0; i < c->buckets_nb; i++)
-		for (const t_cm_lruc_keynode *n = c->buckets[i]; n; n = n->hash_next)
-			fn(&c->buckets[i]->kv, user_data);
+		for (t_cm_lruc_keynode *n = c->buckets[i]; n; n = n->hash_next)
+			fn(&n->kv, user_data);
 }
 /**
  * \brief Iterate over the cache in LRU order

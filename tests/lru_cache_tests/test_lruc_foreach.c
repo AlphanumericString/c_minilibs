@@ -103,3 +103,33 @@ NO_COV void test_cm_lruc_foreach_ttl_ordered(void) {
 	assert(order[4] == NULL);
 	lruc_destroy(&c);
 }
+
+/**
+ * \brief every entry must be yielded exactly once, including the ones sharing a
+ * bucket (collision chains), which a bucket-head walk visits twice while
+ * skipping the rest of the chain
+**/
+NO_COV void test_cm_lruc_foreach_collisions(void) {
+	t_cm_lruc   c;
+	const char *keys[]  = {"a", "e", "b", "f"};
+	const char *seen[5] = {NULL};
+
+	lruc_init(&c, 4, NULL);
+	for (size_t i = 0; i < 4; i++)
+		assert(lruc_put(&c, keys[i], 1, (void *)keys[i]) == true);
+	// premise: two pairs share a bucket, so each chain holds two nodes
+	assert(lruci_hash_djb2(keys[0], 1) % c.buckets_nb ==
+	       lruci_hash_djb2(keys[1], 1) % c.buckets_nb);
+	assert(lruci_hash_djb2(keys[2], 1) % c.buckets_nb ==
+	       lruci_hash_djb2(keys[3], 1) % c.buckets_nb);
+	lruc_foreach(&c, record_order_cb, seen);
+	assert(seen[4] == NULL);
+	for (size_t i = 0; i < 4; i++) {
+		size_t hits = 0;
+		for (size_t j = 0; j < 4; j++)
+			if (seen[j] == keys[i]) hits++;
+		assert(hits == 1);
+	}
+	lruc_destroy(&c);
+	return;
+}

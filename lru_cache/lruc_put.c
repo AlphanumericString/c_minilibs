@@ -24,11 +24,11 @@ static bool insert_to_structs(t_cm_lruc_keynode kv, t_cm_lruc_keynode *node,
 	lruci_hp_push(c, node);
 	return (true);
 }
-static t_cm_lruc_keynode *
-get_node_to_update(t_cm_lruc *c, t_cm_lruc_keynode *node, size_t hash_pos) {
+static t_cm_lruc_keynode *get_node_to_update(t_cm_lruc         *c,
+                                             t_cm_lruc_keynode *node) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_UPDATEVAL, node->kv.key,
 	       node->kv.k_len)
-	lruci_unlink_node(c, node, hash_pos);
+	lruci_unlink_node(c, node);
 	return (node);
 }
 static t_cm_lruc_keynode *create_node(t_cm_lruc *c, t_cm_lruc_keynode *node) {
@@ -42,7 +42,7 @@ static t_cm_lruc_keynode *create_node(t_cm_lruc *c, t_cm_lruc_keynode *node) {
 	c->node_nb++;
 	return (node);
 }
-static t_cm_lruc_keynode *reuse_node(t_cm_lruc *c, size_t hash_pos) {
+static t_cm_lruc_keynode *reuse_node(t_cm_lruc *c) {
 	const uint64_t     now = lruci_timenow();
 	t_cm_lruc_keynode *node;
 
@@ -61,7 +61,7 @@ static t_cm_lruc_keynode *reuse_node(t_cm_lruc *c, size_t hash_pos) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_DELETEVAL,
 	       node ? node->kv.key : NULL, node ? node->kv.k_len : -1)
 	if (c->dtor) c->dtor(node->kv.value);
-	lruci_unlink_node(c, node, hash_pos);
+	lruci_unlink_node(c, node);
 	return (node);
 }
 static t_cm_lruc_keynode *get_node(t_cm_lruc *c, t_cm_lruc_keynode add_val,
@@ -70,14 +70,14 @@ static t_cm_lruc_keynode *get_node(t_cm_lruc *c, t_cm_lruc_keynode add_val,
 
 	node = lruci_keyinhash(c, add_val.kv.key, add_val.kv.k_len, hash_pos);
 	if (node != NULL) {
-		node = get_node_to_update(c, node, *hash_pos);
+		node = get_node_to_update(c, node);
 	} else if (c->reserved_nodes) {
 		node = lruci_rsrvd_pop(c);
 		c->node_nb++;
 	} else if (c->node_nb < c->buckets_nb) {
 		node = create_node(c, node);
 	} else {
-		node = reuse_node(c, *hash_pos);
+		node = reuse_node(c);
 	}
 	return (node);
 }

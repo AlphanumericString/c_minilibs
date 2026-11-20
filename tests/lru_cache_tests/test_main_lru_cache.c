@@ -17,6 +17,8 @@ NO_COV int main(void) {
 	test_cm_lruc_put_kv();
 	test_cm_lruc_put();
 	test_cm_lruc_put_ttl();
+	test_cm_lruc_put_evict_lru_bucket();
+	test_cm_lruc_put_evict_ttl_bucket();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Get", )
 	test_cm_lruc_get();
@@ -66,6 +68,7 @@ NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Foreach", )
 	test_cm_lruc_foreach();
+	test_cm_lruc_foreach_collisions();
 	test_cm_lruc_foreach_ru_ordered();
 	test_cm_lruc_foreach_ttl_ordered();
 

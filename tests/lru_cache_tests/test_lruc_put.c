@@ -440,3 +440,90 @@ NO_COV void test_cm_lruc_put_ttl(void) {
 	lruc_destroy(&c);
 	return;
 }
+
+// number of nodes reachable through the hash buckets
+static size_t bucket_chain_nodes_nb(const t_cm_lruc *c) {
+	t_cm_lruc_keynode *n;
+	size_t             nb = 0;
+
+	for (size_t i = 0; i < c->buckets_nb; i++)
+		for (n = c->buckets[i]; n; n = n->hash_next)
+			nb++;
+	return (nb);
+}
+// number of nodes reachable through the recency list
+static size_t recency_chain_nodes_nb(const t_cm_lruc *c) {
+	t_cm_lruc_keynode *n;
+	size_t             nb = 0;
+
+	for (n = c->MRU; n; n = n->lru_next)
+		nb++;
+	return (nb);
+}
+// every live heap slot must point back to its own index
+static bool heap_is_consistent(const t_cm_lruc *c) {
+	for (size_t i = 0; i < c->node_nb; i++)
+		if (!c->minHeap[i] || c->minHeap[i]->heap_index != i) return (false);
+	return (true);
+}
+/**
+ * \brief eviction must unlink the victim from the victim's own bucket
+ * \note the inserted key and the evicted key are required to live in different
+ * buckets: when they collide a wrong bucket unlink is invisible because the
+ * victim is found anyway. with a full cache and a differing bucket, a wrong
+ * unlink leaves the recycled node aliased in its old bucket, which shows up as
+ * more nodes in the buckets than live entries (and as a double free on
+ * destroy).
+**/
+NO_COV void test_cm_lruc_put_evict_lru_bucket(void) {
+	t_cm_lruc   c;
+	const char *keys[] = {"a", "b", "c", "d", "o"};
+
+	lruc_init(&c, 4, NULL);
+	for (size_t i = 0; i < 4; i++)
+		assert(lruc_put(&c, keys[i], 1, (void *)keys[i]) == true);
+	assert(lruci_hash_djb2(keys[0], 1) % c.buckets_nb !=
+	       lruci_hash_djb2(keys[4], 1) % c.buckets_nb);
+	assert(c.LRU->kv.key == keys[0]);
+	assert(lruc_put(&c, keys[4], 1, (void *)keys[4]) == true);
+	assert(c.node_nb == 4);
+	assert(lruc_has(&c, keys[0], 1) == false);
+	for (size_t i = 1; i < 5; i++)
+		assert(lruc_has(&c, keys[i], 1) == true);
+	assert(bucket_chain_nodes_nb(&c) == c.node_nb);
+	assert(recency_chain_nodes_nb(&c) == c.node_nb);
+	assert(heap_is_consistent(&c));
+	lruc_destroy(&c);
+	return;
+}
+/**
+ * \brief same guarantee when eviction picks the expired node of the min-heap
+ * (the victim is not the LRU and still lives in another bucket than the key
+ * that triggers the eviction)
+**/
+NO_COV void test_cm_lruc_put_evict_ttl_bucket(void) {
+	t_cm_lruc   c;
+	const char *expired = "a"; // bucket 0 for a capacity of 2
+	const char *alive   = "b"; // bucket 1
+	const char *added   = "d"; // bucket 1, same as alive
+
+	lruc_init(&c, 2, NULL);
+	lruc_setttl(&c, LRUC_MS_TO_NS(1000)); // keeps the min-heap eviction path on
+	assert(lruci_hash_djb2(expired, 1) % c.buckets_nb !=
+	       lruci_hash_djb2(added, 1) % c.buckets_nb);
+	assert(lruc_put_ttl(&c, expired, 1, (void *)expired, LRUC_MS_TO_NS(1)) ==
+	       true);
+	assert(lruc_put(&c, alive, 1, (void *)alive) == true);
+	lruc_test_sleep_ms(10);
+	assert(c.minHeap[0]->kv.key == expired);
+	assert(lruc_put(&c, added, 1, (void *)added) == true);
+	assert(c.node_nb == 2);
+	assert(lruc_has(&c, expired, 1) == false);
+	assert(lruc_has(&c, alive, 1) == true);
+	assert(lruc_has(&c, added, 1) == true);
+	assert(bucket_chain_nodes_nb(&c) == c.node_nb);
+	assert(recency_chain_nodes_nb(&c) == c.node_nb);
+	assert(heap_is_consistent(&c));
+	lruc_destroy(&c);
+	return;
+}
