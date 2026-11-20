@@ -33,7 +33,7 @@ general todo for the project
  - [>] code
   - [:] new modules (see bellow)
   - [ ] old module functionalities (detail bellow)
-   - [>] hp-> more funcs, iterators
+   - [x] hp-> more funcs, iterators
    - [ ] lruc->make a separate lru only cache similar to dsu/
    - [ ] ill->circular lists, elem centric funcs (dont take node, but elem containing the ill/idl ptr), iteraors
    - [ ] rb->add functs to module, iterators
@@ -87,9 +87,15 @@ general todo for the project
     - [:] graph display -> readme links to the newly md file created
 
 ### IMPLEMENTATION
-- [>] hp
- - [ ] more funcs (eg map, filter, ...) take example on da
- - [ ] iterator (take example on da)
+- [x] hp
+ - [x] more funcs (eg map, filter, ...) take example on da
+ - [x] iterator (take example on da)
+ - [ ] investigate a binary-search based find (a heap is only partially ordered; would likely need an auxiliary index or another structure)
+ - [ ] map_heap / re-heapified mapping (current hp_map returns a positional void ** array instead)
+ - [ ] tree-order iterators (pre/in/post) on top of hpi_iter_level
+ - [ ] reduce_to: merge into a caller-provided element, no allocation
+- [ ] da
+ - [ ] reduce_to: merge into a caller-provided element, no allocation
 - [:] lru
  - [:] split pure lru from the ttl+lru current setup and exec in a split setup like the rdsu/cdsu setup
  - [:] iterator (take example on da but iterate over ttl min heap, if lru only iterate over lru list)
@@ -203,6 +209,18 @@ sorted by personal familiarity w subject/ ease of project
 ### DSU : ressources
 
 ### HP : ressources
+
+**Reading**
+- CLRS, chapter 6 (heapsort / binary heaps) and chapter 19 (Fibonacci heaps for contrast).
+- Wikipedia: binary heap, d-ary heap, heapify.
+- Boost.Heap docs: pushpop, replace and mutable-heap operations.
+- cppreference `std::priority_queue`: the push/pop interface this module mirrors.
+- Linux kernel `include/linux/minheap.h`: compact min-heap macros.
+
+**Related structures**
+- Fibonacci, pairing, skew and leftist heaps (mergeable alternatives).
+- Binary search trees and indexed skip lists, for order-searchable variants of `hp_find`.
+- Priority-queue-based graph algorithms (Dijkstra, A*, Prim) and top-K selection.
 
 ### ILL : ressources
 
