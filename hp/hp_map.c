@@ -1,6 +1,8 @@
+#define C_MINI__HP_INTERNAL
+
 #include <stdlib.h>
 
-#include "hp_internal.h"
+#include "heap.h"
 
 /**
  * \brief map every element of the heap through a function and store the

@@ -1,4 +1,6 @@
-#include "hp_internal.h"
+#define C_MINI__HP_INTERNAL
+
+#include "heap.h"
 
 /**
  * \brief Rebuild a min heap in place from its current elements

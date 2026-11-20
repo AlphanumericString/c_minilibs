@@ -1,7 +1,9 @@
+#define C_MINI__HP_INTERNAL
+
 #include <stdlib.h>
 #include <string.h>
 
-#include "hp_internal.h"
+#include "heap.h"
 
 /**
  * \brief get the root element of the heap without removing it

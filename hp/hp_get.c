@@ -1,3 +1,5 @@
+#define C_MINI__HP_INTERNAL
+
 #include "heap.h"
 
 /**
@@ -84,5 +86,5 @@ void *hp_at(const t_cm_hp *hp, size_t pos) {
 		return (NULL);
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__HP_LOG_SUCCESS)
-	return ((char *)hp->elems + hp->sz_e * pos);
+	return (hpi_elem_ptr(hp, pos));
 }

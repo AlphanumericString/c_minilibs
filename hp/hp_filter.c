@@ -1,6 +1,8 @@
+#define C_MINI__HP_INTERNAL
+
 #include <string.h>
 
-#include "hp_internal.h"
+#include "heap.h"
 
 /**
  * \brief filter elements of a min heap keeping those that match the condition

@@ -126,4 +126,18 @@ bool  hp_iter_rev(const t_cm_hp *h, size_t start, size_t last, void **it_val);
 void *hp_it_advance(const t_cm_hp *h, void **it);
 void *hp_it_back(const t_cm_hp *h, void **it);
 
+#ifdef C_MINI__HP_INTERNAL
+
+void *hpi_elem_ptr(const t_cm_hp *h, size_t idx);
+
+void hpi_swap(const t_cm_hp *h, size_t pos1, size_t pos2);
+
+void hpi_sift_up(t_cm_hp *h, size_t idx, bool max);
+void hpi_sift_down(t_cm_hp *h, size_t idx, bool max);
+void hpi_heapify(t_cm_hp *h, bool max);
+
+void hpi_replace_root(t_cm_hp *h, const void *e, void *out, bool max);
+
+#endif // !C_MINI__HP_INTERNAL
+
 #endif // !C_MINI__HP
