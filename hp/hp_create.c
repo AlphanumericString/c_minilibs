@@ -13,6 +13,10 @@
 t_cm_hp *hp_create(size_t nb_elems, size_t sz_elem, t_cm_comparator cmp) {
 	t_cm_hp *hp;
 
+	if (!nb_elems || !sz_elem || !cmp) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
+		return (NULL);
+	}
 	hp = malloc(sizeof(t_cm_hp));
 	if (!hp || hp_init(hp, nb_elems, sz_elem, cmp) == NULL) {
 		if (hp) free(hp);
@@ -34,7 +38,7 @@ t_cm_hp *hp_create(size_t nb_elems, size_t sz_elem, t_cm_comparator cmp) {
 **/
 t_cm_hp *hp_init(t_cm_hp *hp, size_t nb_elems, size_t sz_elem,
                  t_cm_comparator cmp) {
-	if (!hp || !sz_elem) {
+	if (!hp || !nb_elems || !sz_elem || !cmp) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_EARG)
 		return (NULL);
 	}

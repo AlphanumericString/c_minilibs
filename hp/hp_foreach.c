@@ -1,8 +1,4 @@
-#include "heap.h"
-
-static void *hp_elem_ptr(const t_cm_hp *h, size_t idx) {
-	return ((char *)h->elems + h->sz_e * idx);
-}
+#include "hp_internal.h"
 
 /**
  * \brief For each element in the heap, apply a callback
@@ -18,7 +14,7 @@ bool hp_foreach(const t_cm_hp *h, t_cm_callback cb, void *data) {
 		return (false);
 	}
 	for (size_t i = 0; i < h->nb; i++)
-		if (cb(hp_elem_ptr(h, i), data) == false) {
+		if (cb(hpi_elem_ptr(h, i), data) == false) {
 			CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_CB_FAIL, i)
 			return (false);
 		}
@@ -26,21 +22,21 @@ bool hp_foreach(const t_cm_hp *h, t_cm_callback cb, void *data) {
 	return (true);
 }
 
-static bool hp_internal_prefix(t_cm_hp *h, size_t i, t_cm_callback cb,
+static bool hp_internal_prefix(const t_cm_hp *h, size_t i, t_cm_callback cb,
                                void *u) {
 	if (i >= h->nb) return (true);
 	if (!hp_internal_prefix(h, i * 2 + 1, cb, u)) return (false);
 	if (!hp_internal_prefix(h, i * 2 + 2, cb, u)) return (false);
-	if (cb(hp_elem_ptr(h, i), u) == false) {
+	if (cb(hpi_elem_ptr(h, i), u) == false) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_CB_FAIL, i)
 		return (false);
 	}
 	return (true);
 }
-static bool hp_internal_postfix(t_cm_hp *h, size_t i, t_cm_callback cb,
+static bool hp_internal_postfix(const t_cm_hp *h, size_t i, t_cm_callback cb,
                                 void *u) {
 	if (i >= h->nb) return (true);
-	if (cb(hp_elem_ptr(h, i), u) == false) {
+	if (cb(hpi_elem_ptr(h, i), u) == false) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_CB_FAIL, i)
 		return (false);
 	}
@@ -48,10 +44,11 @@ static bool hp_internal_postfix(t_cm_hp *h, size_t i, t_cm_callback cb,
 	if (!hp_internal_postfix(h, i * 2 + 2, cb, u)) return (false);
 	return (true);
 }
-static bool hp_internal_infix(t_cm_hp *h, size_t i, t_cm_callback cb, void *u) {
+static bool hp_internal_infix(const t_cm_hp *h, size_t i, t_cm_callback cb,
+                              void *u) {
 	if (i >= h->nb) return (true);
 	if (!hp_internal_infix(h, i * 2 + 1, cb, u)) return (false);
-	if (cb(hp_elem_ptr(h, i), u) == false) {
+	if (cb(hpi_elem_ptr(h, i), u) == false) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__HP_LOG_CB_FAIL, i)
 		return (false);
 	}
@@ -67,7 +64,7 @@ static bool hp_internal_infix(t_cm_hp *h, size_t i, t_cm_callback cb, void *u) {
  * \return true if all callbacks returned true, false otherwise
  * \ingroup hp
 **/
-bool hp_foreach_in(t_cm_hp *h, t_cm_callback cb, void *data) {
+bool hp_foreach_in(const t_cm_hp *h, t_cm_callback cb, void *data) {
 	bool r;
 
 	if (!h || !cb) {
@@ -87,7 +84,7 @@ bool hp_foreach_in(t_cm_hp *h, t_cm_callback cb, void *data) {
  * \return true if all callbacks returned true, false otherwise
  * \ingroup hp
 **/
-bool hp_foreach_pre(t_cm_hp *h, t_cm_callback cb, void *data) {
+bool hp_foreach_pre(const t_cm_hp *h, t_cm_callback cb, void *data) {
 	bool r;
 
 	if (!h || !cb) {
@@ -107,7 +104,7 @@ bool hp_foreach_pre(t_cm_hp *h, t_cm_callback cb, void *data) {
  * \return true if all callbacks returned true, false otherwise
  * \ingroup hp
 **/
-bool hp_foreach_post(t_cm_hp *h, t_cm_callback cb, void *data) {
+bool hp_foreach_post(const t_cm_hp *h, t_cm_callback cb, void *data) {
 	bool r;
 
 	if (!h || !cb) {

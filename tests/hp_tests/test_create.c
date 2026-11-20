@@ -21,6 +21,8 @@ NO_COV void test_cm_hp_create(void) {
 	alloc_set_call_limit(ALLOC_DFT_LIMIT);
 
 	assert(hp_create(32, 0, cb_cmp_int) == NULL);
+	assert(hp_create(0, sizeof(int), cb_cmp_int) == NULL);
+	assert(hp_create(32, sizeof(int), NULL) == NULL);
 }
 NO_COV void test_cm_hp_init(void) {
 	t_cm_hp h;
@@ -38,4 +40,6 @@ NO_COV void test_cm_hp_init(void) {
 
 	assert(hp_init(NULL, 32, sizeof(int), cb_cmp_int) == NULL);
 	assert(hp_init(&h, 32, 0, cb_cmp_int) == NULL);
+	assert(hp_init(&h, 0, sizeof(int), cb_cmp_int) == NULL);
+	assert(hp_init(&h, 32, sizeof(int), NULL) == NULL);
 }
