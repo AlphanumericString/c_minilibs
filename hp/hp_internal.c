@@ -10,8 +10,8 @@
  * \param h heap pointer
  * \param idx index of the element
  * \return pointer to the element
- * \note this is an INTERNAL interface. to use add #define C_MINI__HP_INTERNAL
- * before including heap.h
+ * \note this is an INTERNAL interface. to use add a define to
+ * C_MINI__HP_INTERNAL before including heap.h
  * \ingroup hp
 **/
 void *hpi_elem_ptr(const t_cm_hp *h, size_t idx) {
@@ -35,8 +35,8 @@ static void hpi_swap_bytes(void *a, void *b, size_t n) {
  * \param h heap pointer
  * \param pos1 index of the first element
  * \param pos2 index of the second element
- * \note this is an INTERNAL interface. to use add #define C_MINI__HP_INTERNAL
- * before including heap.h
+ * \note this is an INTERNAL interface. to use add a define to
+ * C_MINI__HP_INTERNAL before including heap.h
  * \ingroup hp
 **/
 void hpi_swap(const t_cm_hp *h, size_t pos1, size_t pos2) {
@@ -50,8 +50,8 @@ void hpi_swap(const t_cm_hp *h, size_t pos1, size_t pos2) {
  * \param h heap pointer
  * \param idx index of the element to sift
  * \param max true for a max heap, false for a min heap
- * \note this is an INTERNAL interface. to use add #define C_MINI__HP_INTERNAL
- * before including heap.h
+ * \note this is an INTERNAL interface. to use add a define to
+ * C_MINI__HP_INTERNAL before including heap.h
  * \ingroup hp
 **/
 void hpi_sift_up(t_cm_hp *h, size_t idx, bool max) {
@@ -73,8 +73,8 @@ void hpi_sift_up(t_cm_hp *h, size_t idx, bool max) {
  * \param h heap pointer
  * \param idx index of the element to sift
  * \param max true for a max heap, false for a min heap
- * \note this is an INTERNAL interface. to use add #define C_MINI__HP_INTERNAL
- * before including heap.h
+ * \note this is an INTERNAL interface. to use add a define to
+ * C_MINI__HP_INTERNAL before including heap.h
  * \ingroup hp
 **/
 void hpi_sift_down(t_cm_hp *h, size_t idx, bool max) {
@@ -105,8 +105,8 @@ void hpi_sift_down(t_cm_hp *h, size_t idx, bool max) {
  * algorithm
  * \param h heap pointer
  * \param max true for a max heap, false for a min heap
- * \note this is an INTERNAL interface. to use add #define C_MINI__HP_INTERNAL
- * before including heap.h
+ * \note this is an INTERNAL interface. to use add a define to
+ * C_MINI__HP_INTERNAL before including heap.h
  * \ingroup hp
 **/
 void hpi_heapify(t_cm_hp *h, bool max) {
@@ -124,8 +124,8 @@ void hpi_heapify(t_cm_hp *h, bool max) {
  * \param e element replacing the root
  * \param out buffer receiving the previous root
  * \param max true for a max heap, false for a min heap
- * \note this is an INTERNAL interface. to use add #define C_MINI__HP_INTERNAL
- * before including heap.h
+ * \note this is an INTERNAL interface. to use add a define to
+ * C_MINI__HP_INTERNAL before including heap.h
  * \ingroup hp
 **/
 void hpi_replace_root(t_cm_hp *h, const void *e, void *out, bool max) {
