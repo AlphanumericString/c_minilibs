@@ -9,12 +9,10 @@ general todo for the project
 
 ## General TODO:
 - [>] refactor
- - [x] lruc-> refactor tests to be faster (dont change tests just change units)
- - [:] ill-> api consistency around head
- - [:] rb->example w producer/consumer setup
- - [:] rptr->package _generic in ifdef blocks and check compile ok for c older version
- - [:] tls->vtls->hmaps
- - [:] tls->vtls->hmaps.
+ - [>] ill-> api consistency around head
+ - [ ] rptr->package _generic in ifdef blocks and check compile ok for c older version
+ - [ ] tls->vtls->hmaps
+ - [ ] tls->vtls->hmaps.
 - [~] coverage
  - [:] multi threaded tests (needs re-comp for #ifdef branches)
   - [ ] sptr
@@ -36,7 +34,7 @@ general todo for the project
   - [~] old module functionalities (detail bellow)
    - [x] hp-> more funcs, iterators
    - [x] lruc->make a separate lru only cache similar to dsu/ (lruc pure + lrutc timed)
-   - [ ] ill->circular lists, elem centric funcs (dont take node, but elem containing the ill/idl ptr), iteraors
+   - [>] ill->circular lists, elem centric funcs (dont take node, but elem containing the ill/idl ptr), iteraors
    - [ ] rb->add functs to module, iterators
    - [ ] tls->ftls->xmacros for more than 1 struct, vtls+ctls iterator
    - [ ] tpm->crash catch, job batching on stress conditions, atomic thrd nb - increase/remove thrd control handle, auto increase thrd nb on stress
@@ -64,6 +62,7 @@ general todo for the project
    - [:] A real example.
   - [:] rb
    - [:] A real example.
+    - [:] rb->example w producer/consumer setup
   - [:] hp
    - [:] A real example.
   - [:] ill
@@ -97,16 +96,16 @@ general todo for the project
  - [ ] reduce_to: merge into a caller-provided element, no allocation
 - [ ] da
  - [ ] reduce_to: merge into a caller-provided element, no allocation
-- [x] lru
+- [~] lru
  - [x] split pure lru from the ttl+lru current setup and exec in a split setup like the rdsu/cdsu setup (lruc pure, lrutc timed)
  - [x] iterator on the pure lru (pull iterator over the recency list, forward/reverse, promote_to_mru boolean)
  - [:] iterator on the timed cache over the ttl min heap (start/last over heap slots like hp_iter, level order, boolean to refresh the ttl clock while walking)
  - [:] conversions between lruc and lrutc (lru_cache/lruc_convert/ like dsu_convert/), dedicated session
  - [x] dtor is called on the replaced value when an existing key is updated (both caches)
 - [:] ill
- - [:] elem based functions
- - [:] set elem based functions as default and node ones as `_node()`
- - [:] circular based functions eg ill_circ_foreach()
+ - [>] elem based functions
+ - [>] set elem based functions as default and node ones as `_node()`
+ - [:] circular based functions eg ill_circ_foreach() - skip for now
 - [:] rb
  - [:] magic rb
  - [:] iterator (take example on da)
