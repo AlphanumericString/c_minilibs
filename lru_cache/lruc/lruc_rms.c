@@ -18,7 +18,7 @@ bool lruc_clear_reserved(t_cm_lruc *cache) {
 	}
 	for (; cache->reserved_nodes;)
 		free(lruci_rsrvd_pop(cache));
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_SUCCESS)
 	return (true);
 }
 
@@ -62,14 +62,13 @@ void lruc_clear_to_reserved(t_cm_lruc *c) {
 		}
 	}
 	bzero(c->buckets, sizeof(*c->buckets) * c->buckets_nb);
-	bzero(c->minHeap, sizeof(*c->minHeap) * c->buckets_nb);
 	c->LRU     = NULL;
 	c->MRU     = NULL;
 	c->node_nb = 0;
 	c->stats   = (t_cm_lruc_stats){0};
 }
 /**
- * \brief Clear the cache (cleared nodes are not push into reserved nodes)
+ * \brief Clear the cache (cleared nodes are not pushed into reserved nodes)
  * \param c cache pointer
  * \ingroup lruc
 **/
@@ -99,14 +98,13 @@ void lruc_clear(t_cm_lruc *c) {
 		}
 	}
 	bzero(c->buckets, sizeof(*c->buckets) * c->buckets_nb);
-	bzero(c->minHeap, sizeof(*c->minHeap) * c->buckets_nb);
 	c->LRU     = NULL;
 	c->MRU     = NULL;
 	c->node_nb = 0;
 	c->stats   = (t_cm_lruc_stats){0};
 }
 /**
- * \brief Remove a key from the cache
+ * \brief Remove a key from the cache, its node is kept for reuse
  * \param c cache pointer
  * \param key key to remove
  * \param key_len key length
@@ -115,16 +113,14 @@ void lruc_clear(t_cm_lruc *c) {
 **/
 int lruc_remove(t_cm_lruc *c, const void *key, size_t key_len) {
 	t_cm_lruc_keynode *node;
-	size_t             pos;
 
 	if (!lruc_is_valid(c) || !c->node_nb) return (-1);
-	node = lruci_keyinhash(c, key, key_len, &pos);
+	node = lruci_keyinhash(c, key, key_len, NULL);
 	if (!node) return (-1);
-	lruci_unlink_node(c, node, pos);
-	if (c->dtor) c->dtor(node->kv.value);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_DELETEVAL, node->kv.key,
 	       node->kv.k_len)
-	c->node_nb--;
+	if (c->dtor) c->dtor(node->kv.value);
+	lruci_unlink_node(c, node);
 	lruci_rsrvd_push(c, node);
 	return (0);
 }

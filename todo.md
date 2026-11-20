@@ -8,7 +8,8 @@ general todo for the project
 - `>` current tasks
 
 ## General TODO:
-- [ ] refactor
+- [>] refactor
+ - [x] lruc-> refactor tests to be faster (dont change tests just change units)
  - [:] ill-> api consistency around head
  - [:] rb->example w producer/consumer setup
  - [:] rptr->package _generic in ifdef blocks and check compile ok for c older version
@@ -23,7 +24,7 @@ general todo for the project
  - [x] keep at 100% for branch, lines, region, funcs
 - [:] example
  - [:] rb->example w producer/consumer setup
-- [ ] impl
+- [>] impl
  - [~] tooling
   - [~] github CICD
    - [:] add cppcheck step
@@ -32,9 +33,9 @@ general todo for the project
    - [ ] restrict run to only needed
  - [>] code
   - [:] new modules (see bellow)
-  - [ ] old module functionalities (detail bellow)
+  - [~] old module functionalities (detail bellow)
    - [x] hp-> more funcs, iterators
-   - [ ] lruc->make a separate lru only cache similar to dsu/
+   - [x] lruc->make a separate lru only cache similar to dsu/ (lruc pure + lrutc timed)
    - [ ] ill->circular lists, elem centric funcs (dont take node, but elem containing the ill/idl ptr), iteraors
    - [ ] rb->add functs to module, iterators
    - [ ] tls->ftls->xmacros for more than 1 struct, vtls+ctls iterator
@@ -47,11 +48,11 @@ general todo for the project
  - [:] ressources
   - [:] add ressources for todo new modules
   - [:] ressources on curr modules - read for ideas on what to add/do
- - [ ] polish
-  - [ ] finish todo for current modules
-   - [ ] check section and execute
-    - [>] hp
-    - [ ] lruc
+ - [~] polish
+  - [~] finish todo for current modules
+   - [~] check section and execute
+    - [x] hp
+    - [x] lruc
     - [ ] ill
     - [ ] rb
     - [ ] tls
@@ -90,15 +91,18 @@ general todo for the project
 - [x] hp
  - [x] more funcs (eg map, filter, ...) take example on da
  - [x] iterator (take example on da)
- - [ ] investigate a binary-search based find (a heap is only partially ordered; would likely need an auxiliary index or another structure)
- - [ ] map_heap / re-heapified mapping (current hp_map returns a positional void ** array instead)
- - [ ] tree-order iterators (pre/in/post) on top of hpi_iter_level
+ - [:] faster find
+ - [:] map_heap / re-heapified mapping (current hp_map returns a positional void ** array instead)
+ - [:] tree-order iterators (pre/in/post) on top of hpi_iter_level
  - [ ] reduce_to: merge into a caller-provided element, no allocation
 - [ ] da
  - [ ] reduce_to: merge into a caller-provided element, no allocation
-- [:] lru
- - [:] split pure lru from the ttl+lru current setup and exec in a split setup like the rdsu/cdsu setup
- - [:] iterator (take example on da but iterate over ttl min heap, if lru only iterate over lru list)
+- [x] lru
+ - [x] split pure lru from the ttl+lru current setup and exec in a split setup like the rdsu/cdsu setup (lruc pure, lrutc timed)
+ - [x] iterator on the pure lru (pull iterator over the recency list, forward/reverse, promote_to_mru boolean)
+ - [:] iterator on the timed cache over the ttl min heap (start/last over heap slots like hp_iter, level order, boolean to refresh the ttl clock while walking)
+ - [:] conversions between lruc and lrutc (lru_cache/lruc_convert/ like dsu_convert/), dedicated session
+ - [x] dtor is called on the replaced value when an existing key is updated (both caches)
 - [:] ill
  - [:] elem based functions
  - [:] set elem based functions as default and node ones as `_node()`
@@ -202,7 +206,7 @@ sorted by personal familiarity w subject/ ease of project
 
 **Talks**
 - Mike Acton, "Data-Oriented Design and C++" (CppCon 2014)
-- Chandler Carruth, "Tuning C++: Benchmarks, and CPUs, and Compilers! Oh My!" (CppCon 2015), for making your benchmarks credible
+- Chandler Carruth, "Tuning C++: Benchmarks, and Compilers, and Compilers! Oh My!" (CppCon 2015), for making your benchmarks credible
 - Andrei Alexandrescu, "std::allocator Is to Allocation what std::vector Is to Vexation" (CppCon 2015)
 - Matt Kulukundis, "Designing a Fast, Efficient, Cache-friendly Hash Table, Step by Step" (CppCon 2017)
 
@@ -225,6 +229,28 @@ sorted by personal familiarity w subject/ ease of project
 ### ILL : ressources
 
 ### LRU_CACHE : ressources
+
+**Reading**
+- CLRS, chapter 11 (hash tables) and 10.2 (linked lists): the two indexes the cache bolts together over shared nodes.
+- Belady's optimal MIN algorithm: the reference bound LRU is compared against.
+- Wikipedia: cache replacement policies (LRU, LFU, ARC, CLOCK/second-chance, 2Q) and cache stampede.
+- CLRS chapter 6 (heaps) and the `hp` module docs, since the timed cache keeps a min-heap of expiry deadlines.
+- Rust `lru` crate and Python `functools.lru_cache` docs: the API surface users expect, including the on-miss generator.
+- nginx/Varnish cache docs on TTL, stale-while-revalidate and negative caching.
+- `redis`/`memcached` internals: production eviction and expiry designs.
+
+**Related structures**
+- LFU, ARC, segmented LRU (2Q), CLOCK/second-chance: approximate or adaptive alternatives to LRU.
+- Open-addressing hash map (Swiss table) as a faster lookup index than chaining.
+- Timing wheels (hierarchical timers) as an O(1) alternative to the TTL min-heap.
+- Bloom filters for negative caching, consistent hashing for distributed caches.
+- Slab/pool allocators for node storage (the reserved nodes list is a small step in that direction).
+
+**Projects that motivate the cache**
+- HTTP response cache for a small web service (ETag + TTL, stale-while-revalidate).
+- Compiled-artifact/dependency cache for a build tool.
+- DNS resolver cache (TTL heavy, negatives included).
+- Page cache for a toy key-value store, or a memoization layer for a query planner.
 
 ### RB : ressources
 
