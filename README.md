@@ -106,16 +106,42 @@ the allocation of the payload and its links, and O(1) splicing.
 **Complexity:** push/pop O(1); insert/remove given a node O(1); reverse O(n);
 search O(n); sort O(n log n).
 
-### `lru_cache` — Least Recently Used Cache (with TTL)
-A cache whose capacity bound is enforced by recency ordering (a doubly linked
-list) and whose entries can also expire by time, using a min-heap indexed by
-TTL; supports hit/miss/expiry statistics and per-entry destructors.
-**Skill:** combining multiple data structures (hash buckets + linked list +
-heap) where each node lives in several indexes at once, and reasoning about
-eviction policy trade-offs.
-**Complexity:** `get`/`put`/`has` expected O(1) (hash bucket lookup); TTL
-insert/update O(log n) (min-heap); cleanup/eviction O(k log n) for k expiries;
+### `lruc` — Least Recently Used Cache
+A capacity-bounded key/value cache whose bound is enforced by recency: a hash
+table for lookup and a doubly linked MRU→LRU list, both pointing at the same
+nodes. Offers create/init, put/put_kv, try_get/get (with an on-miss generator),
+has, remove, clear (optionally recycling nodes into a reserved list for fast
+re-insertion), reserve, stats and hash-order / recency-order for-each. Storing
+an entry in a full cache evicts the least recently used one and counts it in the
+`expired` stat. A pull iterator walks the recency list in either direction, with
+an optional "promote to MRU while walking" mode; both `void *buckets` and the
+node links stay internal.
+**Skill:** keeping one node consistent across several indexes (hash chain and
+recency list), eviction policy, intrusive links and O(1) promotion.
+**Complexity:** `put`/`get`/`has`/`remove` expected O(1) (hash bucket lookup,
+list splice on hit); lookup with k collisions O(k); eviction O(1) (list tail);
+foreach and iterator O(n). Reserve doubles as a node pool to avoid alloc/free
+churn.
+**Where it pays off:** memoized query results, an HTTP response cache for a
+small service, compiled-artifact caches, or the page cache of a toy database.
+
+### `lrutc` — Least Recently Used Timed Cache
+The same recency-bounded cache, plus a per-entry time to live: entries are
+ordered a second time in a min-heap keyed by expiry, so time-expired entries
+can be dropped during `cleanup`, and `has_ttl`/`try_get`/`isexpired` report them
+as misses. Supports a cache-wide default ttl (retroactively applied by
+`setttl`) and per-put ttls; stats distinguish hits, misses and time-expired
+entries. Iteration is offered through hash-order, recency-order and TTL-order
+for-each callbacks.
+**Skill:** combining a hash table, a linked list and a min-heap over shared
+nodes, keeping a second index consistent on insert/remove, and designing around
+a monotonic clock.
+**Complexity:** `get`/`put`/`has` expected O(1) hash lookup, plus O(log n) to
+insert/update/move a node in the TTL heap; `cleanup` O(k log n) for k expiries;
 foreach O(n).
+**Where it pays off:** DNS resolver caches, sessions/token caches, rate-limit
+or negative-cache lookups where stale data must not be served.
+
 
 ### `rb` — Round (Ring) Buffer
 A fixed-capacity FIFO spanning a wrap-around buffer, with an optional

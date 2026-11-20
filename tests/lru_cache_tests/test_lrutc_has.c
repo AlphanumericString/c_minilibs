@@ -8,7 +8,7 @@
 NO_COV void test_cm_lrutc_has(void) {
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
-	t_cm_lrutc   c, intact_copy;
+	t_cm_lrutc  c, intact_copy;
 
 	v1 = strdup("toto_1");
 	v2 = strdup("toto_2");
@@ -42,7 +42,7 @@ NO_COV void test_cm_lrutc_has(void) {
 
 NO_COV void test_cm_lrutc_has_ttl(void) {
 	const char *k1 = "abc", *k2 = "def";
-	t_cm_lrutc   c, intact_copy;
+	t_cm_lrutc  c, intact_copy;
 
 	lrutc_init(&c, 2, free);
 

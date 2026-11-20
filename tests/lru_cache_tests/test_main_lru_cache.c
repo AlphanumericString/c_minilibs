@@ -62,7 +62,8 @@ NO_COV int lruc_main_tests(void) {
 	test_cm_lruc_iter();
 	test_cm_lruc_iter_promote_long();
 
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "All LRU CACHE tests completed successfully.", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS,
+	       "All LRU CACHE tests completed successfully.", )
 	return (EXIT_SUCCESS);
 }
 NO_COV int lrutc_main_tests(void) {
@@ -154,6 +155,7 @@ NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	lrutc_main_tests();
 
-	CM_LOG(C_MINI__LEVEL_ALWAYS, "All lru_cache tests completed successfully.", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS,
+	       "All lru_cache tests completed successfully.", )
 	return (EXIT_SUCCESS);
 }

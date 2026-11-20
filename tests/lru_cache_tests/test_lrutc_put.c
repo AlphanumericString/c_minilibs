@@ -169,7 +169,7 @@ NO_COV void test_cm_lrutc_put_kv(void) {
 	return;
 }
 NO_COV void test_cm_lrutc_put(void) {
-	t_cm_lrutc   c;
+	t_cm_lrutc  c;
 	const char *key1   = "toto";
 	const char *key2   = "titi";
 	const char *key3   = "tutu";
@@ -339,7 +339,7 @@ NO_COV void test_cm_lrutc_put(void) {
 	return;
 }
 NO_COV void test_cm_lrutc_put_ttl(void) {
-	t_cm_lrutc   c;
+	t_cm_lrutc  c;
 	const char *k1 = "luigi au pay des shtroumpfs";
 	const char *k2 = "squalala";
 	const char *k3 = "on attend toujours wtc 38";
@@ -347,13 +347,13 @@ NO_COV void test_cm_lrutc_put_ttl(void) {
 	lrutc_init(&c, 2, free);
 	{ // MRU/LRU and minHeap check
 		assert(lrutc_put_ttl(&c, k2, strlen(k2), strdup("other"),
-		                    LRUC_MS_TO_NS(1000)) == true);
+		                     LRUC_MS_TO_NS(1000)) == true);
 		assert(c.MRU->kv.key == k2);
 		assert(c.LRU->kv.key == k2);
 		assert(c.minHeap[0]->kv.key == k2);
 		assert(c.node_nb == 1);
 		assert(lrutc_put_ttl(&c, k1, strlen(k1), strdup("result"),
-		                    LRUC_MS_TO_NS(2000)) == true);
+		                     LRUC_MS_TO_NS(2000)) == true);
 		assert(c.MRU->kv.key == k1);
 		assert(c.LRU->kv.key == k2);
 		assert(c.minHeap[0]->kv.key == k2);
@@ -361,9 +361,9 @@ NO_COV void test_cm_lrutc_put_ttl(void) {
 		assert(c.node_nb == 2);
 		lrutc_clear(&c);
 		assert(lrutc_put_ttl(&c, k1, strlen(k1), strdup("result"),
-		                    LRUC_MS_TO_NS(2000)) == true);
+		                     LRUC_MS_TO_NS(2000)) == true);
 		assert(lrutc_put_ttl(&c, k2, strlen(k2), strdup("other"),
-		                    LRUC_MS_TO_NS(1000)) == true);
+		                     LRUC_MS_TO_NS(1000)) == true);
 		assert(c.MRU->kv.key == k2);
 		assert(c.LRU->kv.key == k1);
 		assert(c.minHeap[0]->kv.key == k2);
@@ -373,9 +373,9 @@ NO_COV void test_cm_lrutc_put_ttl(void) {
 	{
 		lrutc_setttl(&c, LRUC_MS_TO_NS(10));
 		assert(lrutc_put_ttl(&c, k1, strlen(k1), strdup("result"),
-		                    LRUC_MS_TO_NS(2000)) == true);
+		                     LRUC_MS_TO_NS(2000)) == true);
 		assert(lrutc_put_ttl(&c, k2, strlen(k2), strdup("other"),
-		                    LRUC_MS_TO_NS(1000)) == true);
+		                     LRUC_MS_TO_NS(1000)) == true);
 		uint64_t now_int = lrutci_timenow();
 		assert(now_int != (uint64_t)-1);
 		assert(lrutci_expiry(c.minHeap[0]) - now_int >= LRUC_MS_TO_NS(900));
@@ -386,9 +386,9 @@ NO_COV void test_cm_lrutc_put_ttl(void) {
 	{
 		lrutc_setttl(&c, 0);
 		assert(lrutc_put_ttl(&c, k1, strlen(k1), strdup("result"),
-		                    LRUC_MS_TO_NS(1900)) == true);
+		                     LRUC_MS_TO_NS(1900)) == true);
 		assert(lrutc_put_ttl(&c, k2, strlen(k2), strdup("other"),
-		                    LRUC_MS_TO_NS(900)) == true);
+		                     LRUC_MS_TO_NS(900)) == true);
 		assert(lrutc_isexpired(&c, k1, strlen(k1)) == false);
 		assert(lrutc_isexpired(&c, k2, strlen(k2)) == false);
 		lruc_test_sleep_ms(1000);
@@ -402,9 +402,9 @@ NO_COV void test_cm_lrutc_put_ttl(void) {
 	{
 		lrutc_setttl(&c, LRUC_MS_TO_NS(2000));
 		assert(lrutc_put_ttl(&c, k1, strlen(k1), strdup("result"),
-		                    LRUC_MS_TO_NS(1900)) == true);
+		                     LRUC_MS_TO_NS(1900)) == true);
 		assert(lrutc_put_ttl(&c, k2, strlen(k2), strdup("other"),
-		                    LRUC_MS_TO_NS(900)) == true);
+		                     LRUC_MS_TO_NS(900)) == true);
 		assert(c.LRU->kv.key == k1);
 		assert(c.MRU->kv.key == k2);
 		assert(c.node_nb == 2);
@@ -412,7 +412,7 @@ NO_COV void test_cm_lrutc_put_ttl(void) {
 		// fail, can't set time on node init
 		clock_set_call_limit(0);
 		assert(lrutc_put_ttl(&c, k3, strlen(k3), (void *)0xDEAD,
-		                    LRUC_MS_TO_NS(9000)) == false);
+		                     LRUC_MS_TO_NS(9000)) == false);
 		assert(c.LRU->kv.key == k1);
 		assert(c.MRU->kv.key == k2);
 
@@ -421,7 +421,7 @@ NO_COV void test_cm_lrutc_put_ttl(void) {
 		// 2nd clock call fails and instead taking of ttl/minHeap takes from LRU
 		// doesnt change anything on simple put but changes stuff on ttl side
 		assert(lrutc_put_ttl(&c, k3, strlen(k3), (void *)0xDEAD,
-		                    LRUC_MS_TO_NS(9000)) == false);
+		                     LRUC_MS_TO_NS(9000)) == false);
 		assert(c.LRU->kv.key == k1);
 		assert(c.MRU->kv.key == k2);
 
@@ -431,7 +431,7 @@ NO_COV void test_cm_lrutc_put_ttl(void) {
 		// fell back on lru since ttl wasnt set at global and just discarded
 		// the validity of the minheap
 		assert(lrutc_put_ttl(&c, k3, strlen(k3), strdup("works"),
-		                    LRUC_MS_TO_NS(9000)) == true);
+		                     LRUC_MS_TO_NS(9000)) == true);
 		assert(c.LRU->kv.key == k2);
 		assert(c.MRU->kv.key == k3);
 
@@ -444,7 +444,7 @@ NO_COV void test_cm_lrutc_put_ttl(void) {
 // number of nodes reachable through the hash buckets
 static size_t bucket_chain_nodes_nb(const t_cm_lrutc *c) {
 	t_cm_lrutc_keynode *n;
-	size_t             nb = 0;
+	size_t              nb = 0;
 
 	for (size_t i = 0; i < c->buckets_nb; i++)
 		for (n = c->buckets[i]; n; n = n->hash_next)
@@ -454,7 +454,7 @@ static size_t bucket_chain_nodes_nb(const t_cm_lrutc *c) {
 // number of nodes reachable through the recency list
 static size_t recency_chain_nodes_nb(const t_cm_lrutc *c) {
 	t_cm_lrutc_keynode *n;
-	size_t             nb = 0;
+	size_t              nb = 0;
 
 	for (n = c->MRU; n; n = n->lru_next)
 		nb++;
@@ -476,7 +476,7 @@ static bool heap_is_consistent(const t_cm_lrutc *c) {
  * destroy).
 **/
 NO_COV void test_cm_lrutc_put_evict_lru_bucket(void) {
-	t_cm_lrutc   c;
+	t_cm_lrutc  c;
 	const char *keys[] = {"a", "b", "c", "d", "o"};
 
 	lrutc_init(&c, 4, NULL);
@@ -502,13 +502,14 @@ NO_COV void test_cm_lrutc_put_evict_lru_bucket(void) {
  * that triggers the eviction)
 **/
 NO_COV void test_cm_lrutc_put_evict_ttl_bucket(void) {
-	t_cm_lrutc   c;
+	t_cm_lrutc  c;
 	const char *expired = "a"; // bucket 0 for a capacity of 2
 	const char *alive   = "b"; // bucket 1
 	const char *added   = "d"; // bucket 1, same as alive
 
 	lrutc_init(&c, 2, NULL);
-	lrutc_setttl(&c, LRUC_MS_TO_NS(1000)); // keeps the min-heap eviction path on
+	lrutc_setttl(&c,
+	             LRUC_MS_TO_NS(1000)); // keeps the min-heap eviction path on
 	assert(lrutci_hash_djb2(expired, 1) % c.buckets_nb !=
 	       lrutci_hash_djb2(added, 1) % c.buckets_nb);
 	assert(lrutc_put_ttl(&c, expired, 1, (void *)expired, LRUC_MS_TO_NS(1)) ==

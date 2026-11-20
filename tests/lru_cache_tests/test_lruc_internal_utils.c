@@ -14,11 +14,9 @@ NO_COV void test_cm_lruci_keyinhash(void) {
 	lruc_put(&c, key1, strlen(key1), "door");
 	assert(lruci_keyinhash(&c, key1, strlen(key1), NULL) != NULL);
 	assert(lruci_keyinhash(&c, key1, strlen(key1), &returned_hash) != NULL);
-	assert(returned_hash ==
-	       lruci_hash_djb2(key1, strlen(key1)) % c.buckets_nb);
+	assert(returned_hash == lruci_hash_djb2(key1, strlen(key1)) % c.buckets_nb);
 	assert(lruci_keyinhash(&c, key2, strlen(key2), &returned_hash) == NULL);
-	assert(returned_hash ==
-	       lruci_hash_djb2(key2, strlen(key2)) % c.buckets_nb);
+	assert(returned_hash == lruci_hash_djb2(key2, strlen(key2)) % c.buckets_nb);
 	lruc_destroy(&c);
 	return;
 }
@@ -52,7 +50,7 @@ NO_COV void test_cm_lruci_node_eq(void) {
 	return;
 }
 NO_COV void test_cm_lruci_unlink_node(void) {
-	t_cm_lruc         c;
+	t_cm_lruc          c;
 	t_cm_lruc_keynode *node;
 
 	lruc_init(&c, 3, NULL);
@@ -115,14 +113,14 @@ NO_COV void test_cm_lruci_validate(void) {
 	node->lru_prev  = c.LRU;
 	c.LRU->lru_next = node;
 	assert(lruci_validate(&c) == false);
-	*node = saved;
+	*node           = saved;
 	c.LRU->lru_next = NULL;
 	assert(lruci_validate(&c) == true);
 
 	// a node in the list but not in its bucket
-	h          = lruci_hash_djb2(node->kv.key, node->kv.k_len) % c.buckets_nb;
-	saved_head = c.buckets[h];
-	saved_next = node->hash_next;
+	h            = lruci_hash_djb2(node->kv.key, node->kv.k_len) % c.buckets_nb;
+	saved_head   = c.buckets[h];
+	saved_next   = node->hash_next;
 	c.buckets[h] = saved_next;
 	assert(lruci_validate(&c) == false);
 	c.buckets[h]    = saved_head;

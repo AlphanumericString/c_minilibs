@@ -15,12 +15,12 @@
 #	define C_MINI__LRUC_LOG_EARG     C_MINI__LOG_EARG
 #	define C_MINI__LRUC_LOG_EALLOC   C_MINI__LOG_F_PREFIX "Allocation failure."
 #	define C_MINI__LRUC_LOG_ENODEU   C_MINI__LOG_F_PREFIX "Unknown node"
-#	define C_MINI__LRUC_LOG_EVICTION                                         \
+#	define C_MINI__LRUC_LOG_EVICTION                                          \
 		"Eviction: key=%p, key_len:%zu (cache full)"
 #	define C_MINI__LRUC_LOG_UPDATEVAL "Update: key:%p, key_len:%zu"
 #	define C_MINI__LRUC_LOG_DELETEVAL "Delete: key:%p, key_len:%zu"
-#	define C_MINI__LRUC_LOG_HIT    "Hit: hit=%zu, key:%p, key_len:%zu"
-#	define C_MINI__LRUC_LOG_MISS                                             \
+#	define C_MINI__LRUC_LOG_HIT       "Hit: hit=%zu, key:%p, key_len:%zu"
+#	define C_MINI__LRUC_LOG_MISS                                              \
 		C_MINI__LOG_F_PREFIX "Miss: miss=%zu, key:%p, key_len:%zu"
 
 #	define C_MINI__LRUC_LOG_LFREE "Cleanup via list started"
@@ -122,7 +122,8 @@ typedef struct {
  * \param buckets array of nodes indexed via hash value, collision resolved at
  * node level
  * \param MRU direct pointer to Most Recently Used node
- * \param LRU direct pointer to Least Recently Used node (the eviction candidate)
+ * \param LRU direct pointer to Least Recently Used node (the eviction
+ * candidate)
  * \param reserved_nodes_nb number of pre-allocated nodes currently reserved
  * \param reserved_nodes singly linked list of pre-allocated, reusable nodes
  * \param dtor destructor for stored values. Does not get called on keys. Not

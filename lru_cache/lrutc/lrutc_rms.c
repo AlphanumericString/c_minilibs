@@ -22,8 +22,9 @@ bool lrutc_clear_reserved(t_cm_lrutc *cache) {
 	return (true);
 }
 
-static inline void clear_node(t_cm_lrutc_keynode *node, t_cm_lrutc_keynode **nxt,
-                              void (*dtor)(void *), bool lru) {
+static inline void clear_node(t_cm_lrutc_keynode  *node,
+                              t_cm_lrutc_keynode **nxt, void (*dtor)(void *),
+                              bool lru) {
 	if (dtor) dtor(node->kv.value);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUTC_LOG_DELETEVAL, node->kv.key,
 	       node->kv.k_len)

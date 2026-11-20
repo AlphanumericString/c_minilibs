@@ -12,7 +12,7 @@
  * \ingroup lrutc
 **/
 bool lrutc_has(const t_cm_lrutc *c, const void *key, size_t key_len) {
-	size_t                   pos;
+	size_t                    pos;
 	const t_cm_lrutc_keynode *kv;
 
 	if (!lrutc_is_valid(c) || !c->node_nb) return (false);
@@ -31,7 +31,7 @@ bool lrutc_has(const t_cm_lrutc *c, const void *key, size_t key_len) {
 **/
 bool lrutc_has_ttl(const t_cm_lrutc *c, const void *key, size_t key_len) {
 	const t_cm_lrutc_keynode *node;
-	uint64_t                 now;
+	uint64_t                  now;
 
 	if (!lrutc_is_valid(c) || !c->node_nb) return (false);
 	node = lrutci_keyinhash(c, key, key_len, NULL);

@@ -21,7 +21,7 @@ static bool insert_to_structs(t_cm_lruc_keynode kv, t_cm_lruc_keynode *node,
 	c->node_nb++;
 	return (true);
 }
-static t_cm_lruc_keynode *get_node_to_update(t_cm_lruc *c,
+static t_cm_lruc_keynode *get_node_to_update(t_cm_lruc         *c,
                                              t_cm_lruc_keynode *node) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_UPDATEVAL, node->kv.key,
 	       node->kv.k_len)
@@ -113,11 +113,11 @@ bool lruc_put(t_cm_lruc *cache, const void *key, size_t key_len,
               const void *value) {
 	return (cache_put_internal(
 	    cache, (t_cm_lruc_keynode){
-	               .kv = (t_cm_keyvalue){.key   = (void *)key,
-	                                     .k_len = key_len,
-	                                     .value = (void *)value},
+	               .kv        = (t_cm_keyvalue){.key   = (void *)key,
+	                                            .k_len = key_len,
+	                                            .value = (void *)value},
 	               .lru_next  = NULL,
 	               .lru_prev  = NULL,
 	               .hash_next = NULL,
-	           }));
+    }));
 }

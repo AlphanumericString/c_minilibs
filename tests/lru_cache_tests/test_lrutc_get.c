@@ -19,7 +19,7 @@ static void *gen_null(void *arg) {
 NO_COV void test_cm_lrutc_get_lru(void) {
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
-	t_cm_lrutc   c, intact_copy;
+	t_cm_lrutc  c, intact_copy;
 
 	v1 = strdup("toto_1");
 	v2 = strdup("toto_2");
@@ -59,7 +59,8 @@ NO_COV void test_cm_lrutc_get_lru(void) {
 	lruc_test_sleep_ms(400);
 	assert(lrutc_get_lru(&c, k3, strlen(k3)) == v3);
 	assert(lrutc_get_lru(&c, k4, strlen(k4)) == v4);
-	assert(lrutc_get_lru(&c, "unknown", 7) == NULL); // present cache, absent key
+	assert(lrutc_get_lru(&c, "unknown", 7) ==
+	       NULL); // present cache, absent key
 	intact_copy = c;
 
 	c.MRU = NULL;
@@ -78,7 +79,7 @@ NO_COV void test_cm_lrutc_get_lru(void) {
 NO_COV void test_cm_lrutc_try_get(void) {
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
-	t_cm_lrutc   c, intact_copy;
+	t_cm_lrutc  c, intact_copy;
 
 	v1 = strdup("toto_1");
 	v2 = strdup("toto_2");
@@ -127,7 +128,7 @@ NO_COV void test_cm_lrutc_try_get(void) {
 NO_COV void test_cm_lrutc_get(void) {
 	const char *k1 = "abc", *k2 = "def";
 	void       *v;
-	t_cm_lrutc   c;
+	t_cm_lrutc  c;
 
 	gen_calls = 0;
 	lrutc_init(&c, 2, NULL);
@@ -168,7 +169,7 @@ NO_COV void test_cm_lrutc_get(void) {
 NO_COV void test_cm_lrutc_getttl(void) {
 	const char *k1 = "abc", *k2 = "def";
 	void       *v;
-	t_cm_lrutc   c;
+	t_cm_lrutc  c;
 
 	gen_calls = 0;
 	lrutc_init(&c, 4, NULL);
@@ -181,13 +182,13 @@ NO_COV void test_cm_lrutc_getttl(void) {
 
 	// present but no ttl -> recompute and apply the ttl
 	v = lrutc_getttl(&c, k1, strlen(k1), gen_count, (void *)k1,
-	                LRUC_MS_TO_NS(200));
+	                 LRUC_MS_TO_NS(200));
 	assert(v == (void *)k1);
 	assert(gen_calls == 2);
 
 	// present, has ttl, not expired -> hit, no compute
 	v = lrutc_getttl(&c, k1, strlen(k1), gen_count, (void *)k1,
-	                LRUC_MS_TO_NS(200));
+	                 LRUC_MS_TO_NS(200));
 	assert(v == (void *)k1);
 	assert(gen_calls == 2);
 	assert(lrutc_isexpired(&c, k1, strlen(k1)) == false);
@@ -195,7 +196,7 @@ NO_COV void test_cm_lrutc_getttl(void) {
 	// expired -> recompute
 	lruc_test_sleep_ms(250);
 	v = lrutc_getttl(&c, k1, strlen(k1), gen_count, (void *)k1,
-	                LRUC_MS_TO_NS(200));
+	                 LRUC_MS_TO_NS(200));
 	assert(v == (void *)k1);
 	assert(gen_calls == 3);
 	assert(lrutc_isexpired(&c, k1, strlen(k1)) == false);
@@ -207,24 +208,24 @@ NO_COV void test_cm_lrutc_getttl(void) {
 
 	// miss + generator returning NULL
 	assert(lrutc_getttl(&c, k2, strlen(k2), gen_null, (void *)k2,
-	                   LRUC_MS_TO_NS(200)) == NULL);
+	                    LRUC_MS_TO_NS(200)) == NULL);
 	assert(lrutc_has(&c, k2, strlen(k2)) == false);
 
 	// errors
 	assert(lrutc_getttl(NULL, k1, strlen(k1), gen_count, (void *)k1,
-	                   LRUC_MS_TO_NS(200)) == NULL);
+	                    LRUC_MS_TO_NS(200)) == NULL);
 
 	// clock failure while checking a present, ttl'd entry
 	clock_set_call_limit(0);
 	assert(lrutc_getttl(&c, k1, strlen(k1), gen_count, (void *)k1,
-	                   LRUC_MS_TO_NS(200)) == NULL);
+	                    LRUC_MS_TO_NS(200)) == NULL);
 	clock_set_call_limit(CLOCK_DFT_LIMIT);
 
 	// compute succeeds but storing fails (clock error on put)
 	lrutc_clear(&c);
 	clock_set_call_limit(0);
 	assert(lrutc_getttl(&c, k2, strlen(k2), gen_count, (void *)k2,
-	                   LRUC_MS_TO_NS(200)) == NULL);
+	                    LRUC_MS_TO_NS(200)) == NULL);
 	clock_set_call_limit(CLOCK_DFT_LIMIT);
 
 	lrutc_destroy(&c);

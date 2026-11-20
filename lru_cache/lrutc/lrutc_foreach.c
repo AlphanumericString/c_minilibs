@@ -27,7 +27,7 @@ void lrutc_foreach(const t_cm_lrutc *c, t_cm_kvcallback fn, void *user_data) {
  * \ingroup lrutc
 **/
 void lrutc_foreach_ru_ordered(const t_cm_lrutc *c, t_cm_kvcallback fn,
-                             void *user_data) {
+                              void *user_data) {
 	if (!c || !fn) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUTC_LOG_EARG)
 		return;
@@ -43,7 +43,7 @@ void lrutc_foreach_ru_ordered(const t_cm_lrutc *c, t_cm_kvcallback fn,
  * \ingroup lrutc
 **/
 void lrutc_foreach_ttl_ordered(const t_cm_lrutc *c, t_cm_kvcallback fn,
-                              void *user_data) {
+                               void *user_data) {
 	size_t i;
 	if (!c || !fn) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUTC_LOG_EARG)

@@ -8,7 +8,7 @@
 // is node in list of keys of lruc
 // [very slow] [used for debug] [not production code]
 t_cm_lrutc_keynode *lrutci_keyinlist(const t_cm_lrutc *c, const void *key,
-                                   size_t key_len) {
+                                     size_t key_len) {
 	t_cm_lrutc_keynode *node;
 
 	for (node = c->MRU; node; node = node->lru_next)
@@ -19,8 +19,8 @@ t_cm_lrutc_keynode *lrutci_keyinlist(const t_cm_lrutc *c, const void *key,
 }
 // _out -> bucket offset
 t_cm_lrutc_keynode *lrutci_keyinhash(const t_cm_lrutc *c, const void *key,
-                                   size_t key_len, size_t *_out) {
-	size_t             hash;
+                                     size_t key_len, size_t *_out) {
+	size_t              hash;
 	t_cm_lrutc_keynode *node;
 
 	if (!_out) _out = &hash;
@@ -59,7 +59,8 @@ void lrutci_unlink_node(t_cm_lrutc *c, t_cm_lrutc_keynode *n) {
  * to n
  * \ingroup lrutc
 **/
-static bool lrutci_node_in_heap(const t_cm_lrutc *c, const t_cm_lrutc_keynode *n) {
+static bool lrutci_node_in_heap(const t_cm_lrutc         *c,
+                                const t_cm_lrutc_keynode *n) {
 	return (n->heap_index < c->node_nb && c->minHeap[n->heap_index] == n);
 }
 /**
@@ -74,7 +75,7 @@ static bool lrutci_node_in_heap(const t_cm_lrutc *c, const t_cm_lrutc_keynode *n
 **/
 bool lrutci_validate(const t_cm_lrutc *c) {
 	const t_cm_lrutc_keynode *n, *last;
-	size_t                   seen, i;
+	size_t                    seen, i;
 
 	if (!lrutc_is_valid(c)) return (false);
 	// recency list: bounded walk catches cycles, links are checked in both
@@ -131,12 +132,13 @@ bool lrutci_expired(const t_cm_lrutc_keynode *node, uint64_t now) {
 	        (now - node->time_emitted) > (uint64_t)node->ns_gap);
 }
 bool lrutci_node_eq(const t_cm_lrutc_keynode *node_1,
-                   const t_cm_lrutc_keynode *node_2) {
-	return (node_1 == node_2 || lrutci_key_eq(node_1->kv.key, node_1->kv.k_len,
-	                                         node_2->kv.key, node_2->kv.k_len));
+                    const t_cm_lrutc_keynode *node_2) {
+	return (node_1 == node_2 ||
+	        lrutci_key_eq(node_1->kv.key, node_1->kv.k_len, node_2->kv.key,
+	                      node_2->kv.k_len));
 }
 bool lrutci_key_eq(const void *k1, size_t k1_len, const void *k2,
-                  size_t k2_len) {
+                   size_t k2_len) {
 	return (k1_len == k2_len && memcmp(k1, k2, k2_len) == 0);
 }
 uint64_t lrutci_timenow(void) {

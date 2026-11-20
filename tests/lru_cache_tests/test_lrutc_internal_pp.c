@@ -38,8 +38,8 @@ NO_COV void test_cm_lrutci_rsvrd_pop(void) {
 
 NO_COV void test_cm_lrutci_hsh_pop(void) {
 	t_cm_lrutc          c;
-	const char        *key1 = "hsh_pop key";
-	const char        *key2 = "different key";
+	const char         *key1 = "hsh_pop key";
+	const char         *key2 = "different key";
 	t_cm_lrutc_keynode *kvn_ptr;
 	t_cm_lrutc_keynode  kvn_bad = (t_cm_lrutc_keynode){
 	     .hash_next    = NULL,

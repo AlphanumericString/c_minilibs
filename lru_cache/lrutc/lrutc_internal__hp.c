@@ -82,7 +82,7 @@ t_cm_lrutc_keynode *lrutci_hp_pop_nth(t_cm_lrutc *c, size_t n) {
 }
 
 void lrutci_hp_rebuild(t_cm_lrutc *c) {
-	size_t             i = 0;
+	size_t              i = 0;
 	t_cm_lrutc_keynode *node;
 
 	if (!c->minHeap) return;

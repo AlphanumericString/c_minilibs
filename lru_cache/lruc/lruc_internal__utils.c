@@ -36,7 +36,7 @@ t_cm_lruc_keynode *lruci_keyinhash(const t_cm_lruc *c, const void *key,
  * \return true when n is in the chain of the bucket its key hashes to
  * \ingroup lruc
 **/
-static bool lruci_node_in_buckets(const t_cm_lruc *c,
+static bool lruci_node_in_buckets(const t_cm_lruc         *c,
                                   const t_cm_lruc_keynode *n) {
 	const t_cm_lruc_keynode *it;
 	size_t                   hash;

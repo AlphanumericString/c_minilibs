@@ -8,7 +8,7 @@
 #include "lrutc_tests.h"
 
 NO_COV void test_cm_lrutc_isexpired(void) {
-	t_cm_lrutc   c;
+	t_cm_lrutc  c;
 	const char *k1 = "zod";
 	void       *v1;
 
@@ -38,7 +38,7 @@ NO_COV void test_cm_lrutc_isexpired(void) {
 	return;
 }
 NO_COV void test_cm_lrutc_cleanup(void) {
-	t_cm_lrutc   c, intact_copy;
+	t_cm_lrutc  c, intact_copy;
 	const char *key1 = "abc", *key2 = "def", *key3 = "ghi", *key4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
 

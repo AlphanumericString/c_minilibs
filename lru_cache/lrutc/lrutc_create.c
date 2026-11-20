@@ -106,8 +106,8 @@ void lrutc_free(t_cm_lrutc **cache) {
  * \ingroup lrutc
 **/
 size_t lrutc_reserve(t_cm_lrutc *cache, size_t nb_nodes) {
-	size_t             reserved = 0;
-	size_t             max;
+	size_t              reserved = 0;
+	size_t              max;
 	t_cm_lrutc_keynode *node;
 
 	if (!lrutc_is_valid(cache)) {

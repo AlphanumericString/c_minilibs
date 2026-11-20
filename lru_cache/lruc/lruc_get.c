@@ -21,14 +21,13 @@ void *lruc_try_get(t_cm_lruc *c, const void *key, size_t key_len) {
 	node = lruci_keyinhash(c, key, key_len, NULL);
 	if (!node) {
 		c->stats.misses++;
-		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_MISS, c->stats.misses,
-		       key, key_len)
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_MISS, c->stats.misses, key,
+		       key_len)
 		return (NULL);
 	}
 	lruci_lru_push(c, lruci_lru_pop(c, node));
 	c->stats.hit++;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_HIT, c->stats.hit, key,
-	       key_len)
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUC_LOG_HIT, c->stats.hit, key, key_len)
 	return (node->kv.value);
 }
 /**

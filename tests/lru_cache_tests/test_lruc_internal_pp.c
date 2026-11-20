@@ -5,8 +5,8 @@
 #include "lruc_tests.h"
 
 NO_COV void test_cm_lruci_lru_push_pop(void) {
-	t_cm_lruc          c = {0};
-	t_cm_lruc_keynode  n1 = {0}, n2 = {0}, n3 = {0};
+	t_cm_lruc         c  = {0};
+	t_cm_lruc_keynode n1 = {0}, n2 = {0}, n3 = {0};
 
 	lruci_lru_push(&c, &n1);
 	assert(c.MRU == &n1 && c.LRU == &n1);
@@ -29,11 +29,17 @@ NO_COV void test_cm_lruci_lru_push_pop(void) {
 	return;
 }
 NO_COV void test_cm_lruci_hsh_pop(void) {
-	t_cm_lruc          c = {0};
-	t_cm_lruc_keynode  n1 = {.kv = {.key = "a", .k_len = 1}};
-	t_cm_lruc_keynode  n2 = {.kv = {.key = "b", .k_len = 1}};
-	t_cm_lruc_keynode  n3 = {.kv = {.key = "c", .k_len = 1}};
-	size_t             h1, h2;
+	t_cm_lruc         c  = {0};
+	t_cm_lruc_keynode n1 = {
+	    .kv = {.key = "a", .k_len = 1}
+    };
+	t_cm_lruc_keynode n2 = {
+	    .kv = {.key = "b", .k_len = 1}
+    };
+	t_cm_lruc_keynode n3 = {
+	    .kv = {.key = "c", .k_len = 1}
+    };
+	size_t h1, h2;
 
 	c.buckets_nb = 1;
 	c.buckets    = calloc(1, sizeof(*c.buckets));
@@ -59,8 +65,8 @@ NO_COV void test_cm_lruci_hsh_pop(void) {
 	return;
 }
 NO_COV void test_cm_lruci_rsvrd_push_pop(void) {
-	t_cm_lruc         c = {0};
-	t_cm_lruc_keynode n1 = {.hash_next = (void *)1}, n2 = {0};
+	t_cm_lruc          c  = {0};
+	t_cm_lruc_keynode  n1 = {.hash_next = (void *)1}, n2 = {0};
 	t_cm_lruc_keynode *popped;
 
 	assert(lruci_rsrvd_push(&c, &n1) == true);
@@ -74,7 +80,8 @@ NO_COV void test_cm_lruci_rsvrd_push_pop(void) {
 	popped = lruci_rsrvd_pop(&c);
 	assert(popped == &n2 && c.reserved_nodes_nb == 1);
 	popped = lruci_rsrvd_pop(&c);
-	assert(popped == &n1 && c.reserved_nodes == NULL && c.reserved_nodes_nb == 0);
+	assert(popped == &n1 && c.reserved_nodes == NULL &&
+	       c.reserved_nodes_nb == 0);
 	assert(lruci_rsrvd_pop(&c) == NULL);
 	return;
 }

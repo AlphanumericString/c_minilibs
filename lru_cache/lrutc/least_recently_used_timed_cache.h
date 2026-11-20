@@ -16,16 +16,16 @@
 #	define C_MINI__LRUTC_LOG_EARG     C_MINI__LOG_F_PREFIX "Bad arguments."
 #	define C_MINI__LRUTC_LOG_EALLOC   C_MINI__LOG_F_PREFIX "Allocation failure."
 #	define C_MINI__LRUTC_LOG_ECLOCK   C_MINI__LOG_F_PREFIX "Clock error."
-#	define C_MINI__LRUTC_LOG_EHEAP                                             \
+#	define C_MINI__LRUTC_LOG_EHEAP                                            \
 		C_MINI__LOG_F_PREFIX "Inconsistent heap: node is not tracked."
 #	define C_MINI__LRUTC_LOG_ENODEU C_MINI__LOG_F_PREFIX "Unknown node"
-#	define C_MINI__LRUTC_LOG_EVICTION                                          \
+#	define C_MINI__LRUTC_LOG_EVICTION                                         \
 		"Eviction: key=%p delta (%ld) >= ttl (%lu)"
 #	define C_MINI__LRUTC_LOG_UPDATE "Update ttl: %zu->%zu"
 #	define C_MINI__LRUTC_LOG_HIT    "Hit: hit=%zu, key:%p, key_len:%zu"
-#	define C_MINI__LRUTC_LOG_MISS_LRU                                          \
+#	define C_MINI__LRUTC_LOG_MISS_LRU                                         \
 		C_MINI__LOG_F_PREFIX "LRU-Miss: miss=%zu, key:%p, key_len:%zu"
-#	define C_MINI__LRUTC_LOG_MISS_TTL                                          \
+#	define C_MINI__LRUTC_LOG_MISS_TTL                                         \
 		C_MINI__LOG_F_PREFIX                                                   \
 		"TTL-Miss: miss=%zu, key:%p, key_len:%zu delta(%lu)"
 #	define C_MINI__LRUTC_LOG_UPDATEVAL "Update: key:%p, key_len:%zu"
@@ -139,12 +139,12 @@ typedef struct {
 	t_cm_lrutc_keynode *MRU;
 	t_cm_lrutc_keynode *LRU;
 
-	size_t             reserved_nodes_nb;
+	size_t              reserved_nodes_nb;
 	t_cm_lrutc_keynode *reserved_nodes;
 
 	size_t ns_gap;
 
-	void            (*dtor)(void *);
+	void             (*dtor)(void *);
 	t_cm_lrutc_stats stats;
 } t_cm_lrutc;
 
@@ -188,7 +188,7 @@ typedef struct {
 
 	size_t ns_gap;
 
-	void            (*dtor)(void *);
+	void             (*dtor)(void *);
 	t_cm_lrutc_stats stats;
 } t_cm_lrutc;
 
@@ -211,20 +211,20 @@ typedef bool (*t_cm_kvcallback)(t_cm_keyvalue *elem, void *arg);
 
 t_cm_lrutc *lrutc_create(size_t capacity, void (*free_er)(void *));
 t_cm_lrutc *lrutc_init(t_cm_lrutc *cache, size_t capacity,
-                     void (*free_er)(void *));
-void       lrutc_destroy(t_cm_lrutc *cache);
-void       lrutc_free(t_cm_lrutc **cache);
+                       void (*free_er)(void *));
+void        lrutc_destroy(t_cm_lrutc *cache);
+void        lrutc_free(t_cm_lrutc **cache);
 
 bool lrutc_put_kv(t_cm_lrutc *c, t_cm_keyvalue kv);
 bool lrutc_put(t_cm_lrutc *c, const void *key, size_t k_len, const void *value);
-bool lrutc_put_ttl(t_cm_lrutc *c, const void *key, size_t k_len, const void *val,
-                  size_t ttl_ns);
+bool lrutc_put_ttl(t_cm_lrutc *c, const void *key, size_t k_len,
+                   const void *val, size_t ttl_ns);
 
 void *lrutc_try_get(t_cm_lrutc *cache, const void *key, size_t key_len);
-void *lrutc_get(t_cm_lrutc *cache, const void *key, size_t key_len, t_cm_work fun,
-               void *arg);
+void *lrutc_get(t_cm_lrutc *cache, const void *key, size_t key_len,
+                t_cm_work fun, void *arg);
 void *lrutc_getttl(t_cm_lrutc *cache, const void *key, size_t key_len,
-                  t_cm_work fun, void *arg, size_t ttl_ns);
+                   t_cm_work fun, void *arg, size_t ttl_ns);
 void *lrutc_get_lru(t_cm_lrutc *cache, const void *key, size_t key_len);
 
 void lrutc_clear(t_cm_lrutc *cache);
@@ -243,10 +243,10 @@ void lrutc_setttl(t_cm_lrutc *cache, size_t ttl_ns);
 
 bool lrutc_is_valid(const t_cm_lrutc *cache);
 
-size_t          lrutc_size(const t_cm_lrutc *cache);
-uint64_t        lrutc_hits(const t_cm_lrutc *cache);
-uint64_t        lrutc_misses(const t_cm_lrutc *cache);
-uint64_t        lrutc_expired(const t_cm_lrutc *cache);
+size_t           lrutc_size(const t_cm_lrutc *cache);
+uint64_t         lrutc_hits(const t_cm_lrutc *cache);
+uint64_t         lrutc_misses(const t_cm_lrutc *cache);
+uint64_t         lrutc_expired(const t_cm_lrutc *cache);
 t_cm_lrutc_stats lrutc_stats(const t_cm_lrutc *cache);
 
 size_t lrutc_reserved_nb(const t_cm_lrutc *cache);
@@ -255,19 +255,20 @@ size_t lrutc_max_reserve(const t_cm_lrutc *cache);
 
 void lrutc_foreach(const t_cm_lrutc *cache, t_cm_kvcallback fn, void *u_data);
 void lrutc_foreach_ru_ordered(const t_cm_lrutc *c, t_cm_kvcallback fn,
-                             void *u_data);
-void lrutc_foreach_ttl_ordered(const t_cm_lrutc *c, t_cm_kvcallback fn,
                               void *u_data);
+void lrutc_foreach_ttl_ordered(const t_cm_lrutc *c, t_cm_kvcallback fn,
+                               void *u_data);
 
 #ifdef C_MINI__LRUTC_INTERNAL
 uint64_t lrutci_timeto64(struct timespec t);
 uint64_t lrutci_timenow(void);
 uint64_t lrutci_expiry(const t_cm_lrutc_keynode *node);
 bool     lrutci_expired(const t_cm_lrutc_keynode *node, uint64_t now);
-bool lrutci_key_eq(const void *k1, size_t k1_len, const void *k2, size_t k2_len);
-bool lrutci_node_eq(const t_cm_lrutc_keynode *node_1,
-                   const t_cm_lrutc_keynode *node_2);
-void lrutci_unlink_node(t_cm_lrutc *c, t_cm_lrutc_keynode *node);
+bool     lrutci_key_eq(const void *k1, size_t k1_len, const void *k2,
+                       size_t k2_len);
+bool     lrutci_node_eq(const t_cm_lrutc_keynode *node_1,
+                        const t_cm_lrutc_keynode *node_2);
+void     lrutci_unlink_node(t_cm_lrutc *c, t_cm_lrutc_keynode *node);
 
 /**
  * \brief [INTERNAL] [MAY CHANGE] walk every internal structure and check the
@@ -285,22 +286,22 @@ bool lrutci_validate(const t_cm_lrutc *c);
 size_t lrutci_hash_djb2(const void *key, size_t size);
 
 t_cm_lrutc_keynode *lrutci_keyinhash(const t_cm_lrutc *c, const void *key,
-                                   size_t key_len, size_t *_pos);
+                                     size_t key_len, size_t *_pos);
 t_cm_lrutc_keynode *lrutci_keyinlist(const t_cm_lrutc *c, const void *key,
-                                   size_t key_len);
+                                     size_t key_len);
 
-void               lrutci_lru_push(t_cm_lrutc *c, t_cm_lrutc_keynode *node);
+void                lrutci_lru_push(t_cm_lrutc *c, t_cm_lrutc_keynode *node);
 t_cm_lrutc_keynode *lrutci_lru_pop(t_cm_lrutc *c, t_cm_lrutc_keynode *node);
 
 t_cm_lrutc_keynode *lrutci_hsh_pop(t_cm_lrutc *c, t_cm_lrutc_keynode *n,
-                                 size_t hash);
+                                   size_t hash);
 t_cm_lrutc_keynode *lrutci_rsrvd_pop(t_cm_lrutc *c);
-bool               lrutci_rsrvd_push(t_cm_lrutc *c, t_cm_lrutc_keynode *n);
+bool                lrutci_rsrvd_push(t_cm_lrutc *c, t_cm_lrutc_keynode *n);
 
-void               lrutci_hp_push(t_cm_lrutc *c, t_cm_lrutc_keynode *value);
+void                lrutci_hp_push(t_cm_lrutc *c, t_cm_lrutc_keynode *value);
 t_cm_lrutc_keynode *lrutci_hp_pop(t_cm_lrutc *c);
 t_cm_lrutc_keynode *lrutci_hp_pop_nth(t_cm_lrutc *c, size_t n);
-void               lrutci_hp_rebuild(t_cm_lrutc *c);
+void                lrutci_hp_rebuild(t_cm_lrutc *c);
 
 #endif // !C_MINI__LRUTC_INTERNAL
 

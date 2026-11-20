@@ -34,7 +34,7 @@ NO_COV void test_cm_lruc_try_get(void) {
 	assert(lruc_has(&c, k3, strlen(k3)) == false);
 
 	intact_copy = c;
-	c.MRU = NULL;
+	c.MRU       = NULL;
 	assert(lruc_try_get(&c, k1, strlen(k1)) == NULL);
 	c         = intact_copy;
 	c.node_nb = 0;

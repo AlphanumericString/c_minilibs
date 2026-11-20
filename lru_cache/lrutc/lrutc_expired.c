@@ -20,7 +20,7 @@
 **/
 bool lrutc_isexpired(const t_cm_lrutc *c, const void *key, size_t key_len) {
 	const t_cm_lrutc_keynode *node;
-	uint64_t                 now_uint;
+	uint64_t                  now_uint;
 
 	if (!lrutc_is_valid(c)) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__LRUTC_LOG_EARG)

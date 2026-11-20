@@ -18,7 +18,7 @@
 **/
 void *lrutc_get_lru(t_cm_lrutc *c, const void *key, size_t key_len) {
 	t_cm_lrutc_keynode *node;
-	size_t             pos;
+	size_t              pos;
 
 	if (!lrutc_is_valid(c) || !c->node_nb) return (NULL);
 	node = lrutci_keyinhash(c, key, key_len, &pos);
@@ -30,7 +30,8 @@ void *lrutc_get_lru(t_cm_lrutc *c, const void *key, size_t key_len) {
 	}
 	lrutci_lru_push(c, lrutci_lru_pop(c, node));
 	c->stats.hit++;
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUTC_LOG_HIT, c->stats.hit, key, key_len)
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUTC_LOG_HIT, c->stats.hit, key,
+	       key_len)
 	return (node->kv.value);
 }
 /**
@@ -43,7 +44,7 @@ void *lrutc_get_lru(t_cm_lrutc *c, const void *key, size_t key_len) {
  * \ingroup lrutc
 **/
 void *lrutc_try_get(t_cm_lrutc *c, const void *key, size_t len) {
-	uint64_t           now;
+	uint64_t            now;
 	t_cm_lrutc_keynode *node;
 
 	if (!lrutc_is_valid(c) || !c->node_nb) {
@@ -87,7 +88,7 @@ void *lrutc_try_get(t_cm_lrutc *c, const void *key, size_t len) {
  * \ingroup lrutc
 **/
 void *lrutc_get(t_cm_lrutc *c, const void *key, size_t len, t_cm_work fun,
-               void *arg) {
+                void *arg) {
 	void *v;
 
 	if (!lrutc_is_valid(c)) {
@@ -120,10 +121,10 @@ void *lrutc_get(t_cm_lrutc *c, const void *key, size_t len, t_cm_work fun,
  * \ingroup lrutc
 **/
 void *lrutc_getttl(t_cm_lrutc *c, const void *key, size_t len, t_cm_work fun,
-                  void *arg, size_t ttl_ns) {
+                   void *arg, size_t ttl_ns) {
 	t_cm_lrutc_keynode *node;
-	uint64_t           now;
-	void              *v;
+	uint64_t            now;
+	void               *v;
 
 	if (!ttl_ns) return (lrutc_get(c, key, len, fun, arg));
 	if (!lrutc_is_valid(c)) {

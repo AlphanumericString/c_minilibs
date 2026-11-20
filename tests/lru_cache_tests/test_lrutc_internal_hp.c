@@ -7,8 +7,8 @@
 NO_COV void test_cm_lrutci_hp_pop(void) {
 	t_cm_lrutc          c, intact_copy;
 	t_cm_lrutc_keynode *kv1, *kv2;
-	void              *key  = "quatorze";
-	void              *key2 = "quinze";
+	void               *key  = "quatorze";
+	void               *key2 = "quinze";
 
 	lrutc_init(&c, 2, free);
 	lrutc_put(&c, key, strlen(key), malloc(14));
@@ -69,9 +69,9 @@ NO_COV void test_cm_lrutci_hp_pop_sift_right(void) {
 NO_COV void test_cm_lrutci_hp_pop_nth(void) {
 	t_cm_lrutc          c, intact_copy;
 	t_cm_lrutc_keynode *kv1, *kv2, *kv3;
-	void              *key1 = "quatorze";
-	void              *key2 = "quinze";
-	void              *key3 = "quaize";
+	void               *key1 = "quatorze";
+	void               *key2 = "quinze";
+	void               *key3 = "quaize";
 
 	lrutc_init(&c, 3, free);
 	lrutc_put_ttl(&c, key1, strlen(key1), malloc(14), LRUC_MS_TO_NS(100));
@@ -115,7 +115,7 @@ NO_COV void test_cm_lrutci_hp_pop_nth(void) {
 NO_COV void test_cm_lrutci_hp_rebuild(void) {
 	t_cm_lrutc           c;
 	t_cm_lrutc_keynode **saved;
-	const char         *ka = "a", *kb = "b", *kc = "c", *kd = "d";
+	const char          *ka = "a", *kb = "b", *kc = "c", *kd = "d";
 
 	lrutc_init(&c, 4, NULL);
 	lrutc_put_ttl(&c, ka, 1, "va", LRUC_MS_TO_NS(300));

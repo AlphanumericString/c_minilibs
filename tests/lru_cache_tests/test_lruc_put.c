@@ -10,7 +10,8 @@ static size_t bucket_chain_nodes_nb(const t_cm_lruc *c) {
 	size_t             nb = 0;
 
 	for (size_t i = 0; i < c->buckets_nb; i++)
-		for (n = c->buckets[i]; n; n = n->hash_next) nb++;
+		for (n = c->buckets[i]; n; n = n->hash_next)
+			nb++;
 	return (nb);
 }
 // number of nodes reachable through the recency list
@@ -18,12 +19,13 @@ static size_t recency_chain_nodes_nb(const t_cm_lruc *c) {
 	t_cm_lruc_keynode *n;
 	size_t             nb = 0;
 
-	for (n = c->MRU; n; n = n->lru_next) nb++;
+	for (n = c->MRU; n; n = n->lru_next)
+		nb++;
 	return (nb);
 }
 
 NO_COV void test_cm_lruc_put_kv(void) {
-	t_cm_lruc    c;
+	t_cm_lruc     c;
 	t_cm_keyvalue kv = {.key = "k", .value = (void *)0xDEAD, .k_len = 1};
 
 	lruc_init(&c, 2, NULL);
@@ -111,8 +113,7 @@ NO_COV void test_cm_lruc_put_evict(void) {
 	assert(c.stats.expired == 1);
 	// the evicted node was recycled, not reallocated
 	assert(lruc_has(&c, ka, 1) == false);
-	assert(lruc_has(&c, kb, 1) && lruc_has(&c, "c", 1) &&
-	       lruc_has(&c, "d", 1));
+	assert(lruc_has(&c, kb, 1) && lruc_has(&c, "c", 1) && lruc_has(&c, "d", 1));
 	assert(c.LRU->kv.key == kb);
 	assert(bucket_chain_nodes_nb(&c) == 3);
 	assert(recency_chain_nodes_nb(&c) == 3);

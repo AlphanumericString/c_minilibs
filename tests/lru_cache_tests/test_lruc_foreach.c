@@ -54,7 +54,7 @@ NO_COV void test_cm_lruc_foreach(void) {
 **/
 NO_COV void test_cm_lruc_foreach_collisions(void) {
 	t_cm_lruc   c;
-	const char *keys[] = {"a", "e", "b", "f"};
+	const char *keys[]  = {"a", "e", "b", "f"};
 	const char *seen[5] = {NULL};
 
 	lruc_init(&c, 4, NULL);

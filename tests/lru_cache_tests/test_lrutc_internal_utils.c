@@ -4,7 +4,7 @@
 #include "lrutc_tests.h"
 
 NO_COV void test_cm_lrutci_keyinhash(void) {
-	t_cm_lrutc   c;
+	t_cm_lrutc  c;
 	size_t      returnd_hash, actual_hash;
 	const char *key1 = "big key";
 	const char *key2 = "small key";
@@ -35,7 +35,7 @@ NO_COV void test_cm_lrutci_keyinhash(void) {
 	lrutc_destroy(&c);
 }
 NO_COV void test_cm_lrutci_keyinlist(void) {
-	t_cm_lrutc   c;
+	t_cm_lrutc  c;
 	const char *key1 = "big key";
 	const char *val1 = "big door";
 	const char *key2 = "small key";
@@ -55,8 +55,8 @@ NO_COV void test_cm_lrutci_keyinlist(void) {
 	lrutc_destroy(&c);
 }
 NO_COV void test_cm_lrutci_node_eq(void) {
-	const char       *key1 = "aaaaAAAAAAAAAAAAAAAAa";
-	const char       *key2 = "bbbbBBBBBBBBBBBBBbbbb";
+	const char        *key1 = "aaaaAAAAAAAAAAAAAAAAa";
+	const char        *key2 = "bbbbBBBBBBBBBBBBBbbbb";
 	t_cm_lrutc_keynode kv1  = {0};
 	t_cm_lrutc_keynode kv2  = kv1;
 
@@ -103,7 +103,7 @@ NO_COV void test_cm_lrutci_validate(void) {
 	t_cm_lrutc          c, intact;
 	t_cm_lrutc_keynode  saved, middle_saved, ghost = {0};
 	t_cm_lrutc_keynode *node, *middle, *saved_head, *saved_next, *saved_slot0;
-	size_t             h;
+	size_t              h;
 
 	ghost.heap_index = C_MINI__LRUTC_NO_HEAP_SLOT;
 	lrutc_init(&c, 3, NULL);
@@ -215,7 +215,8 @@ NO_COV void test_cm_lrutci_unlink_untracked(void) {
 	assert(c.node_nb == 1);
 	lrutci_unlink_node(&c, popped); // must skip the heap, not pop slot 0
 	assert(c.node_nb == 1);
-	assert(lrutci_rsrvd_push(&c, popped) == true); // hand the detached node back
+	assert(lrutci_rsrvd_push(&c, popped) ==
+	       true); // hand the detached node back
 	assert(lrutc_has(&c, "a", 1) + lrutc_has(&c, "b", 1) == 1);
 	assert(lrutci_validate(&c) == true);
 	lrutc_destroy(&c);
@@ -229,7 +230,8 @@ NO_COV void test_cm_lrutci_unlink_untracked(void) {
 	popped->heap_index = 0; // valid range, minHeap[0] is the other node
 	lrutci_unlink_node(&c, popped);
 	assert(c.node_nb == 1);
-	assert(lrutci_rsrvd_push(&c, popped) == true); // hand the detached node back
+	assert(lrutci_rsrvd_push(&c, popped) ==
+	       true); // hand the detached node back
 	assert(lrutci_validate(&c) == true);
 	lrutc_destroy(&c);
 	return;

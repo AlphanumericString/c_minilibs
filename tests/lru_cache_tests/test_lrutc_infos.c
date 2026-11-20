@@ -6,7 +6,7 @@
 #include "lrutc_tests.h"
 
 NO_COV void test_cm_lrutc_size(void) {
-	t_cm_lrutc   c;
+	t_cm_lrutc  c;
 	const char *k1 = "titi", *k2 = "toto", *k3 = "tutu";
 
 	lrutc_init(&c, 4, free);
@@ -27,7 +27,7 @@ NO_COV void test_cm_lrutc_size(void) {
 	return;
 }
 NO_COV void test_cm_lrutc_hits(void) {
-	t_cm_lrutc   c;
+	t_cm_lrutc  c;
 	const char *k1 = "titi", *k2 = "toto", *k3 = "tutu";
 
 	lrutc_init(&c, 4, free);
@@ -53,7 +53,7 @@ NO_COV void test_cm_lrutc_hits(void) {
 	return;
 }
 NO_COV void test_cm_lrutc_misses(void) {
-	t_cm_lrutc   c;
+	t_cm_lrutc  c;
 	const char *k1 = "titi", *k2 = "toto", *k3 = "tutu";
 
 	lrutc_init(&c, 4, free);
@@ -80,7 +80,7 @@ NO_COV void test_cm_lrutc_misses(void) {
 }
 
 NO_COV void test_cm_lrutc_expired(void) {
-	t_cm_lrutc   c;
+	t_cm_lrutc  c;
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
 
@@ -109,7 +109,7 @@ NO_COV void test_cm_lrutc_expired(void) {
 NO_COV void test_cm_lrutc_stats(void) {
 	t_cm_lrutc       c;
 	t_cm_lrutc_stats st;
-	const char     *k1 = "titi", *k2 = "toto", *k3 = "tutu";
+	const char      *k1 = "titi", *k2 = "toto", *k3 = "tutu";
 
 	lrutc_init(&c, 4, free);
 	assert(c.node_nb == 0);
@@ -141,7 +141,7 @@ NO_COV void test_cm_lrutc_stats(void) {
 }
 
 NO_COV void test_cm_lrutc_is_valid(void) {
-	t_cm_lrutc   c, intact_copy;
+	t_cm_lrutc  c, intact_copy;
 	const char *k1 = "titi", *k2 = "toto";
 
 	lrutc_init(&c, 4, free);
@@ -184,7 +184,7 @@ NO_COV void test_cm_lrutc_is_valid(void) {
 }
 
 NO_COV void test_cm_lrutc_reserved_nb(void) {
-	t_cm_lrutc   c;
+	t_cm_lrutc  c;
 	const char *k1 = "titi";
 
 	lrutc_init(&c, 4, free);
@@ -202,7 +202,7 @@ NO_COV void test_cm_lrutc_reserved_nb(void) {
 }
 
 NO_COV void test_cm_lrutc_has_reserved(void) {
-	t_cm_lrutc   c;
+	t_cm_lrutc  c;
 	const char *k1 = "titi";
 
 	lrutc_init(&c, 4, free);
@@ -218,7 +218,7 @@ NO_COV void test_cm_lrutc_has_reserved(void) {
 }
 
 NO_COV void test_cm_lrutc_max_reserve(void) {
-	t_cm_lrutc   c;
+	t_cm_lrutc  c;
 	const char *k1 = "titi";
 
 	lrutc_init(&c, 4, free);

@@ -23,7 +23,7 @@ static bool forward_stradd_cache(t_cm_keyvalue *value, void *u_val) {
 NO_COV void test_cm_lrutc_foreach(void) {
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
-	t_cm_lrutc   c;
+	t_cm_lrutc  c;
 
 	v1 = strdup("toto_1");
 	v2 = strdup("toto_2");
@@ -55,7 +55,7 @@ static bool record_order_cb(t_cm_keyvalue *value, void *u_val) {
 NO_COV void test_cm_lrutc_foreach_ru_ordered(void) {
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
-	t_cm_lrutc   c;
+	t_cm_lrutc  c;
 	const char *order[5] = {NULL};
 
 	v1 = strdup("1");
@@ -81,7 +81,7 @@ NO_COV void test_cm_lrutc_foreach_ru_ordered(void) {
 NO_COV void test_cm_lrutc_foreach_ttl_ordered(void) {
 	const char *k1 = "abc", *k2 = "def", *k3 = "ghi", *k4 = "jkl";
 	void       *v1, *v2, *v3, *v4;
-	t_cm_lrutc   c;
+	t_cm_lrutc  c;
 	char       *order[5] = {NULL};
 
 	v1 = strdup("1");
@@ -110,7 +110,7 @@ NO_COV void test_cm_lrutc_foreach_ttl_ordered(void) {
  * skipping the rest of the chain
 **/
 NO_COV void test_cm_lrutc_foreach_collisions(void) {
-	t_cm_lrutc   c;
+	t_cm_lrutc  c;
 	const char *keys[]  = {"a", "e", "b", "f"};
 	const char *seen[5] = {NULL};
 

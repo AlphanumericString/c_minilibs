@@ -8,7 +8,7 @@
 #include "least_recently_used_timed_cache.h"
 
 static inline void lrutci_hsh_push(t_cm_lrutc *c, t_cm_lrutc_keynode *n,
-                                  size_t hash) {
+                                   size_t hash) {
 	hash             = hash % c->buckets_nb;
 	n->hash_next     = c->buckets[hash];
 	c->buckets[hash] = n;
@@ -23,7 +23,7 @@ static bool insert_to_structs(t_cm_lrutc_keynode kv, t_cm_lrutc_keynode *node,
 	return (true);
 }
 static t_cm_lrutc_keynode *get_node_to_update(t_cm_lrutc         *c,
-                                             t_cm_lrutc_keynode *node) {
+                                              t_cm_lrutc_keynode *node) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUTC_LOG_UPDATEVAL, node->kv.key,
 	       node->kv.k_len)
 	lrutci_unlink_node(c, node);
@@ -41,7 +41,7 @@ static t_cm_lrutc_keynode *create_node(void) {
 	return (node);
 }
 static t_cm_lrutc_keynode *reuse_node(t_cm_lrutc *c) {
-	const uint64_t     now = lrutci_timenow();
+	const uint64_t      now = lrutci_timenow();
 	t_cm_lrutc_keynode *node;
 
 	if (now == (uint64_t)-1 && c->ns_gap != C_MINI__LRUTC_TTL_DFLT) {
@@ -63,7 +63,7 @@ static t_cm_lrutc_keynode *reuse_node(t_cm_lrutc *c) {
 	return (node);
 }
 static t_cm_lrutc_keynode *get_node(t_cm_lrutc *c, t_cm_lrutc_keynode add_val,
-                                   size_t *hash_pos) {
+                                    size_t *hash_pos) {
 	t_cm_lrutc_keynode *node;
 
 	node = lrutci_keyinhash(c, add_val.kv.key, add_val.kv.k_len, hash_pos);
@@ -80,7 +80,7 @@ static t_cm_lrutc_keynode *get_node(t_cm_lrutc *c, t_cm_lrutc_keynode add_val,
 }
 static bool cache_put_internal(t_cm_lrutc *c, t_cm_lrutc_keynode to_add) {
 	t_cm_lrutc_keynode *node = NULL;
-	size_t             hash_pos;
+	size_t              hash_pos;
 
 	if (!lrutc_is_valid(c) || !to_add.kv.key || !to_add.kv.k_len ||
 	    to_add.kv.k_len == (size_t)-1) {
@@ -132,7 +132,7 @@ bool lrutc_put_kv(t_cm_lrutc *cache, t_cm_keyvalue kv) {
  * \ingroup lrutc
 **/
 bool lrutc_put(t_cm_lrutc *cache, const void *key, size_t key_len,
-              const void *value) {
+               const void *value) {
 	uint64_t now = 0;
 	size_t   gap = C_MINI__LRUTC_TTL_DFLT;
 
@@ -170,7 +170,7 @@ bool lrutc_put(t_cm_lrutc *cache, const void *key, size_t key_len,
  * \ingroup lrutc
 **/
 bool lrutc_put_ttl(t_cm_lrutc *cache, const void *key, size_t key_len,
-                  const void *value, size_t ttl_ns) {
+                   const void *value, size_t ttl_ns) {
 	uint64_t now;
 
 	now = lrutci_timenow();
