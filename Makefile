@@ -216,7 +216,7 @@ static_analysis:
 			make --no-print-directory analyze_$$m ; \
 		done ; \
 	else \
-		for m in $(MODULES_CL) ; do \
+		for m in $(MODULE_CL) ; do \
 			make --no-print-directory analyze_$$m ; \
 		done ; \
 	fi ;
