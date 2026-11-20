@@ -528,3 +528,64 @@ NO_COV void test_cm_lrutc_put_evict_ttl_bucket(void) {
 	lrutc_destroy(&c);
 	return;
 }
+
+// counts destroyed values and remembers the last one, values are stack
+// variables so the dtor must not free them
+static size_t lrutc_dtor_calls = 0;
+static void  *lrutc_last_freed = NULL;
+static void   lrutc_counting_dtor(void *v) {
+    lrutc_dtor_calls++;
+    lrutc_last_freed = v;
+}
+static void *return_arg(void *arg) {
+	return (arg);
+}
+
+/**
+ * \brief updating a key must destroy the value it replaces (exactly once),
+ * including when getttl recomputes an expired entry
+**/
+NO_COV void test_cm_lrutc_put_update_dtor(void) {
+	t_cm_lrutc c;
+	int        v1 = 1, v2 = 2, v3 = 3, v4 = 4;
+
+	lrutc_dtor_calls = 0;
+	lrutc_last_freed = NULL;
+	lrutc_init(&c, 2, lrutc_counting_dtor);
+
+	// update through put (cache-wide ttl path)
+	assert(lrutc_put(&c, "a", 1, &v1) == true);
+	assert(lrutc_dtor_calls == 0);
+	assert(lrutc_put(&c, "a", 1, &v2) == true);
+	assert(lrutc_dtor_calls == 1 && lrutc_last_freed == &v1);
+	assert(c.MRU->kv.value == &v2 && c.minHeap[0]->kv.value == &v2);
+	assert(lrutci_validate(&c) == true);
+
+	// update through put_ttl
+	assert(lrutc_put_ttl(&c, "a", 1, &v3, LRUC_MS_TO_NS(1000)) == true);
+	assert(lrutc_dtor_calls == 2 && lrutc_last_freed == &v2);
+	assert(c.minHeap[0]->kv.value == &v3);
+	assert(lrutci_validate(&c) == true);
+
+	// getttl recomputing an expired entry replaces (and destroys) the stale one
+	assert(lrutc_put_ttl(&c, "a", 1, &v4, LRUC_MS_TO_NS(10)) == true);
+	assert(lrutc_dtor_calls == 3 && lrutc_last_freed == &v3);
+	lruc_test_sleep_ms(20);
+	assert(lrutc_isexpired(&c, "a", 1) == true);
+	assert(lrutc_getttl(&c, "a", 1, return_arg, &v1, LRUC_MS_TO_NS(1000)) ==
+	       &v1);
+	assert(lrutc_dtor_calls == 4 && lrutc_last_freed == &v4);
+	assert(lrutc_isexpired(&c, "a", 1) == false);
+	assert(lrutci_validate(&c) == true);
+
+	lrutc_destroy(&c);
+	assert(lrutc_dtor_calls == 5 && lrutc_last_freed == &v1);
+
+	// dtor is optional: updating without one must not crash nor leak
+	lrutc_init(&c, 2, NULL);
+	assert(lrutc_put(&c, "a", 1, "1") == true);
+	assert(lrutc_put(&c, "a", 1, "2") == true);
+	assert(lrutc_try_get(&c, "a", 1) != NULL);
+	lrutc_destroy(&c);
+	return;
+}

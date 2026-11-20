@@ -126,8 +126,9 @@ typedef struct {
  * candidate)
  * \param reserved_nodes_nb number of pre-allocated nodes currently reserved
  * \param reserved_nodes singly linked list of pre-allocated, reusable nodes
- * \param dtor destructor for stored values. Does not get called on keys. Not
- * mandatory to set.
+ * \param dtor destructor for stored values. Called when an entry is evicted,
+ * removed, cleared or replaced by an update of its key, never on keys. Not
+ * mandatory to set: when NULL the cache just drops the previous value.
  * \param stats statistics of the lru-cache (see t_cm_lruc_stats for more
  * precisions)
  * \note `node_nb` is the single source of truth for the number of live entries:

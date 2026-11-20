@@ -27,6 +27,7 @@ static t_cm_lrutc_keynode *get_node_to_update(t_cm_lrutc         *c,
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__LRUTC_LOG_UPDATEVAL, node->kv.key,
 	       node->kv.k_len)
 	lrutci_unlink_node(c, node);
+	if (c->dtor) c->dtor(node->kv.value);
 	return (node);
 }
 static t_cm_lrutc_keynode *create_node(void) {

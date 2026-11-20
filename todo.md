@@ -48,9 +48,9 @@ general todo for the project
  - [:] ressources
   - [:] add ressources for todo new modules
   - [:] ressources on curr modules - read for ideas on what to add/do
- - [>] polish
-  - [>] finish todo for current modules
-   - [>] check section and execute
+ - [~] polish
+  - [~] finish todo for current modules
+   - [~] check section and execute
     - [x] hp
     - [x] lruc
     - [ ] ill
@@ -102,7 +102,7 @@ general todo for the project
  - [x] iterator on the pure lru (pull iterator over the recency list, forward/reverse, promote_to_mru boolean)
  - [:] iterator on the timed cache over the ttl min heap (start/last over heap slots like hp_iter, level order, boolean to refresh the ttl clock while walking)
  - [:] conversions between lruc and lrutc (lru_cache/lruc_convert/ like dsu_convert/), dedicated session
- - [:] dtor is not called when an existing key is updated: the previous value is dropped without cleanup (affects both caches)
+ - [x] dtor is called on the replaced value when an existing key is updated (both caches)
 - [:] ill
  - [:] elem based functions
  - [:] set elem based functions as default and node ones as `_node()`

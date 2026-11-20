@@ -149,3 +149,63 @@ NO_COV void test_cm_lruc_put_evict_bucket(void) {
 	lruc_destroy(&c);
 	return;
 }
+
+// counts destroyed values and remembers the last one, values are stack
+// variables so the dtor must not free them
+static size_t dtor_calls = 0;
+static void  *last_freed = NULL;
+static void   counting_dtor(void *v) {
+    dtor_calls++;
+    last_freed = v;
+}
+
+/**
+ * \brief updating a key must destroy the value it replaces (exactly once),
+ * while every other path (eviction, removal, clear) keeps doing so
+**/
+NO_COV void test_cm_lruc_put_update_dtor(void) {
+	t_cm_lruc c;
+	int       v1 = 1, v2 = 2, v3 = 3, v4 = 4;
+
+	dtor_calls = 0;
+	last_freed = NULL;
+	lruc_init(&c, 2, counting_dtor);
+
+	assert(lruc_put(&c, "a", 1, &v1) == true);
+	assert(dtor_calls == 0);
+
+	// update through put: the replaced value is destroyed, the new one is kept
+	assert(lruc_put(&c, "a", 1, &v2) == true);
+	assert(dtor_calls == 1 && last_freed == &v1);
+	assert(lruc_try_get(&c, "a", 1) == &v2);
+	assert(lruc_size(&c) == 1);
+	assert(c.MRU == c.LRU && c.MRU->kv.value == &v2);
+	assert(lruci_validate(&c) == true);
+
+	// second update on the same key
+	assert(lruc_put(&c, "a", 1, &v3) == true);
+	assert(dtor_calls == 2 && last_freed == &v2);
+
+	// update through put_kv as well
+	assert(lruc_put_kv(&c, (t_cm_keyvalue){
+	                           .key = "a", .value = &v4, .k_len = 1}) == true);
+	assert(dtor_calls == 3 && last_freed == &v3);
+	assert(lruc_try_get(&c, "a", 1) == &v4);
+
+	// the other destruction paths are unaffected
+	assert(lruc_put(&c, "b", 1, &v1) == true);
+	assert(lruc_put(&c, "c", 1, &v2) == true); // evicts a
+	assert(dtor_calls == 4 && last_freed == &v4);
+	assert(lruc_remove(&c, "b", 1) == 0);
+	assert(dtor_calls == 5 && last_freed == &v1);
+	lruc_destroy(&c);
+	assert(dtor_calls == 6 && last_freed == &v2);
+
+	// dtor is optional: updating without one must not crash nor leak
+	lruc_init(&c, 2, NULL);
+	assert(lruc_put(&c, "a", 1, "1") == true);
+	assert(lruc_put(&c, "a", 1, "2") == true);
+	assert(lruc_try_get(&c, "a", 1) != NULL);
+	lruc_destroy(&c);
+	return;
+}

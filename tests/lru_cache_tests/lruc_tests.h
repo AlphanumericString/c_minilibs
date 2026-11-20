@@ -15,6 +15,7 @@ void test_cm_lruc_put_kv(void);
 void test_cm_lruc_put(void);
 void test_cm_lruc_put_evict(void);
 void test_cm_lruc_put_evict_bucket(void);
+void test_cm_lruc_put_update_dtor(void);
 
 void test_cm_lruc_try_get(void);
 void test_cm_lruc_get(void);

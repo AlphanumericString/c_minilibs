@@ -18,6 +18,7 @@ NO_COV int lruc_main_tests(void) {
 	test_cm_lruc_put();
 	test_cm_lruc_put_evict();
 	test_cm_lruc_put_evict_bucket();
+	test_cm_lruc_put_update_dtor();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Get", )
 	test_cm_lruc_try_get();
@@ -81,6 +82,7 @@ NO_COV int lrutc_main_tests(void) {
 	test_cm_lrutc_put_ttl();
 	test_cm_lrutc_put_evict_lru_bucket();
 	test_cm_lrutc_put_evict_ttl_bucket();
+	test_cm_lrutc_put_update_dtor();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Get", )
 	test_cm_lrutc_get();

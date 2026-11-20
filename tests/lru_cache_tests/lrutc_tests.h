@@ -15,6 +15,7 @@ void test_cm_lrutc_put(void);
 void test_cm_lrutc_put_ttl(void);
 void test_cm_lrutc_put_evict_lru_bucket(void);
 void test_cm_lrutc_put_evict_ttl_bucket(void);
+void test_cm_lrutc_put_update_dtor(void);
 
 void test_cm_lrutc_get(void);
 void test_cm_lrutc_getttl(void);
