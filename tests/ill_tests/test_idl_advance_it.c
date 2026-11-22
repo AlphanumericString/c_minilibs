@@ -12,9 +12,9 @@ NO_COV void test_cm_idl_advance_it(void) {
 	INIT_DNODE(n1, 10, 1);
 	INIT_DNODE(n2, 20, 2);
 	INIT_DNODE(n3, 30, 3);
-	idl_push_back(&head, &n1.dnode);
-	idl_push_back(&head, &n2.dnode);
-	idl_push_back(&head, &n3.dnode);
+	idl_push_back_node(&head, &n1.dnode);
+	idl_push_back_node(&head, &n2.dnode);
+	idl_push_back_node(&head, &n3.dnode);
 
 	e = idl_advance_it(&n1, off);
 	assert(e == &n2);

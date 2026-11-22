@@ -2,7 +2,7 @@
 
 #include "ill_tests.h"
 
-NO_COV void test_cm_ill_push(void) {
+NO_COV void test_cm_ill_push_node(void) {
 	t_cm_test_node n1, n2, n3, n4;
 	t_cm_ill      *head = NULL;
 
@@ -12,12 +12,12 @@ NO_COV void test_cm_ill_push(void) {
 	INIT_NODE(n4, 4, 4);
 	(void)n4;
 
-	assert(ill_push(&head, &n2.node) != NULL);
+	assert(ill_push_node(&head, &n2.node) != NULL);
 	assert(head == &n2.node);
 
-	assert(ill_push(&head, &n1.node) != NULL);
+	assert(ill_push_node(&head, &n1.node) != NULL);
 	assert(head == &n1.node);
 	ASSERT_ORDER_ILL(&n1.node, &n2.node);
-	assert(ill_push(NULL, &n3.node) == NULL);
-	assert(ill_push(&head, NULL) == NULL);
+	assert(ill_push_node(NULL, &n3.node) == NULL);
+	assert(ill_push_node(&head, NULL) == NULL);
 }

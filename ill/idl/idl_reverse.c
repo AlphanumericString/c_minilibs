@@ -2,26 +2,24 @@
 
 /**
  * \brief Reverses the order of nodes in the list.
- * \param head The head of the list.
- * \return The new head of the reversed list.
+ * \param head Pointer to the head of the list.
  * \ingroup idl
 **/
-t_cm_idl *idl_reverse(t_cm_idl *head) {
+void idl_reverse(t_cm_idl **head) {
 	t_cm_idl *temp;
 	t_cm_idl *curr;
 
-	if (!head) {
+	if (!head || !*head) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
-		return ((t_cm_idl *)NULL);
+		return;
 	}
-	curr = head;
+	curr = *head;
 	while (curr) {
 		temp       = curr->prev;
 		curr->prev = curr->next;
 		curr->next = temp;
-		head       = curr;
+		*head      = curr;
 		curr       = curr->prev;
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
-	return (head);
 }

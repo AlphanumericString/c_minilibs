@@ -12,10 +12,10 @@ NO_COV void test_cm_idl_match_nb(void) {
 	INIT_DNODE(n3, 3, 3);
 	INIT_DNODE(n4, 4, 4);
 
-	idl_push_back(&head, &n1.dnode);
-	idl_push_back(&head, &n2.dnode);
-	idl_push_back(&head, &n3.dnode);
-	idl_push_back(&head, &n4.dnode);
+	idl_push_back_node(&head, &n1.dnode);
+	idl_push_back_node(&head, &n2.dnode);
+	idl_push_back_node(&head, &n3.dnode);
+	idl_push_back_node(&head, &n4.dnode);
 
 	matches = idl_match_nb(head, cb_idl_is_even, NULL);
 	assert(matches == 2);

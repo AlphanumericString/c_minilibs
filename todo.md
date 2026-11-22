@@ -9,7 +9,7 @@ general todo for the project
 
 ## General TODO:
 - [>] refactor
- - [>] ill-> api consistency around head
+ - [x] ill-> api consistency around head
  - [ ] rptr->package _generic in ifdef blocks and check compile ok for c older version
  - [ ] tls->vtls->hmaps
  - [ ] tls->vtls->hmaps.
@@ -34,7 +34,9 @@ general todo for the project
   - [~] old module functionalities (detail bellow)
    - [x] hp-> more funcs, iterators
    - [x] lruc->make a separate lru only cache similar to dsu/ (lruc pure + lrutc timed)
-   - [>] ill->circular lists, elem centric funcs (dont take node, but elem containing the ill/idl ptr), iteraors
+   - [~] ill->circular lists, elem centric funcs (dont take node, but elem containing the ill/idl ptr), iteraors
+    - [x] elem centric funcs, elem default + `_node()` node api
+    - [:] circular lists (`ill_circ_` / `idl_circ_`)
    - [ ] rb->add functs to module, iterators
    - [ ] tls->ftls->xmacros for more than 1 struct, vtls+ctls iterator
    - [ ] tpm->crash catch, job batching on stress conditions, atomic thrd nb - increase/remove thrd control handle, auto increase thrd nb on stress
@@ -51,7 +53,7 @@ general todo for the project
    - [~] check section and execute
     - [x] hp
     - [x] lruc
-    - [ ] ill
+    - [x] ill
     - [ ] rb
     - [ ] tls
     - [ ] tpm
@@ -102,9 +104,10 @@ general todo for the project
  - [:] iterator on the timed cache over the ttl min heap (start/last over heap slots like hp_iter, level order, boolean to refresh the ttl clock while walking)
  - [:] conversions between lruc and lrutc (lru_cache/lruc_convert/ like dsu_convert/), dedicated session
  - [x] dtor is called on the replaced value when an existing key is updated (both caches)
-- [:] ill
- - [>] elem based functions
- - [>] set elem based functions as default and node ones as `_node()`
+- [x] ill
+ - [x] head api consistency (const heads, opaque handle, `_node` for node payloads)
+ - [x] elem based functions
+ - [x] set elem based functions as default and node ones as `_node()`
  - [:] circular based functions eg ill_circ_foreach() - skip for now
 - [:] rb
  - [:] magic rb

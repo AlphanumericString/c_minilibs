@@ -12,9 +12,9 @@ NO_COV void test_cm_idl_foreach(void) {
 	INIT_DNODE(n2, 20, 2);
 	INIT_DNODE(n3, 30, 3);
 
-	idl_push_back(&head, &n1.dnode);
-	idl_push_back(&head, &n2.dnode);
-	idl_push_back(&head, &n3.dnode);
+	idl_push_back_node(&head, &n1.dnode);
+	idl_push_back_node(&head, &n2.dnode);
+	idl_push_back_node(&head, &n3.dnode);
 
 	ret = idl_foreach(head, cb_idl_add_val_as_int_ptr, &to_add);
 	assert(n1.value == (10 + to_add));

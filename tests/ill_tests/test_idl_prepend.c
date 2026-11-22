@@ -2,7 +2,7 @@
 
 #include "ill_tests.h"
 
-NO_COV void test_cm_idl_prepend(void) {
+NO_COV void test_cm_idl_prepend_node(void) {
 	t_cm_test_dnode n0, n1, n2, n3, n4;
 	t_cm_test_dnode n7, n8;
 	t_cm_idl       *head = NULL;
@@ -13,21 +13,21 @@ NO_COV void test_cm_idl_prepend(void) {
 	INIT_DNODE(n3, 3, 3);
 	INIT_DNODE(n4, 4, 4);
 
-	idl_push_back(&head, &n1.dnode);
-	idl_push_back(&head, &n2.dnode);
-	idl_push_back(&head, &n3.dnode);
-	idl_push_back(&head, &n4.dnode);
+	idl_push_back_node(&head, &n1.dnode);
+	idl_push_back_node(&head, &n2.dnode);
+	idl_push_back_node(&head, &n3.dnode);
+	idl_push_back_node(&head, &n4.dnode);
 
 	INIT_DNODE(n7, 46, 7);
 	INIT_DNODE(n8, 47, 8);
 	LINK_UP_DNODES(&n7.dnode, &n8.dnode);
-	idl_npush(&head, &n7.dnode);
+	idl_npush_node(&head, &n7.dnode);
 
-	idl_prepend(&n1.dnode, &n0.dnode);
+	idl_prepend_node(&n1.dnode, &n0.dnode);
 	assert(n8.dnode.next == &n0.dnode);
 	assert(n0.dnode.prev == &n8.dnode);
 	assert(n0.dnode.next == &n1.dnode);
 	assert(n1.dnode.prev == &n0.dnode);
-	idl_prepend(&n1.dnode, NULL);
-	idl_prepend(NULL, &n0.dnode);
+	idl_prepend_node(&n1.dnode, NULL);
+	idl_prepend_node(NULL, &n0.dnode);
 }

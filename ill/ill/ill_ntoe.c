@@ -21,7 +21,7 @@ void *ill_ntoe(const t_cm_ill *node) {
  * \return A pointer to the intrusive node.
  * \ingroup ill
 **/
-t_cm_ill *ill_eton(void *e, size_t offset) {
+t_cm_ill *ill_eton(const void *e, size_t offset) {
 	if (!e) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return (NULL);

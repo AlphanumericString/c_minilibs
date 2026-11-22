@@ -24,7 +24,7 @@ NO_COV void test_cm_idl_rm_if(void) {
 
 	for (i = 0; i < 6; i++) {
 		INIT_DNODE(nodes[i], (int)(i + 1), (int)i);
-		idl_push_back(&head, &nodes[i].dnode);
+		idl_push_back_node(&head, &nodes[i].dnode);
 	}
 
 	g_dtor_hits = 0;
@@ -39,7 +39,7 @@ NO_COV void test_cm_idl_rm_if(void) {
 	head = NULL;
 	for (i = 0; i < 6; i++) {
 		INIT_DNODE(nodes[i], (int)(i + 1), (int)i);
-		idl_push_back(&head, &nodes[i].dnode);
+		idl_push_back_node(&head, &nodes[i].dnode);
 	}
 	assert(idl_rm_if(&head, cb_idl_is_even, NULL, NULL) == 3);
 	assert(idl_length(head) == 3);
@@ -48,7 +48,7 @@ NO_COV void test_cm_idl_rm_if(void) {
 	head = NULL;
 	for (i = 0; i < 6; i++) {
 		INIT_DNODE(nodes[i], (int)(i + 1), (int)i);
-		idl_push_back(&head, &nodes[i].dnode);
+		idl_push_back_node(&head, &nodes[i].dnode);
 	}
 	assert(idl_rm_if(&head, cb_false, NULL, NULL) == 6);
 	assert(head == NULL);

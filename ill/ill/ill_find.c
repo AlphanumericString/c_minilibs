@@ -8,7 +8,7 @@
  * is head.
  * \ingroup ill
 **/
-t_cm_ill *ill_find_prev(const t_cm_ill *head, const t_cm_ill *target) {
+t_cm_ill *ill_find_prev_node(const t_cm_ill *head, const t_cm_ill *target) {
 	t_cm_ill *curr;
 
 	if (!head || head == target) {
@@ -33,7 +33,7 @@ t_cm_ill *ill_find_prev(const t_cm_ill *head, const t_cm_ill *target) {
  * \return A pointer to the target node if found, or NULL otherwise.
  * \ingroup ill
 **/
-t_cm_ill *ill_find(const t_cm_ill *head, const t_cm_ill *target) {
+t_cm_ill *ill_find_node(const t_cm_ill *head, const t_cm_ill *target) {
 	t_cm_ill *curr;
 
 	if (!head || !target) {
@@ -61,8 +61,8 @@ t_cm_ill *ill_find(const t_cm_ill *head, const t_cm_ill *target) {
  * not found.
  * \ingroup ill
 **/
-t_cm_ill *ill_get_prev(const t_cm_ill *head, t_cm_comparator c,
-                       const void *arg) {
+t_cm_ill *ill_get_prev_node(const t_cm_ill *head, t_cm_comparator c,
+                            const void *arg) {
 	t_cm_ill *curr;
 
 	if (!head || !c) {
@@ -89,7 +89,8 @@ t_cm_ill *ill_get_prev(const t_cm_ill *head, t_cm_comparator c,
  * \return A pointer to the matched node, or NULL if not found.
  * \ingroup ill
 **/
-t_cm_ill *ill_get(const t_cm_ill *head, t_cm_comparator c, const void *arg) {
+t_cm_ill *ill_get_node(const t_cm_ill *head, t_cm_comparator c,
+                       const void *arg) {
 	t_cm_ill *curr;
 
 	if (!head || !c) {

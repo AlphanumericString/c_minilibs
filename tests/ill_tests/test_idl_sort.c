@@ -44,7 +44,7 @@ NO_COV void test_cm_idl_sort(void) {
 	head = NULL;
 	for (i = 0; i < 5; i++) {
 		INIT_DNODE(nodes[i], values[i], (int)i);
-		idl_push_back(&head, &nodes[i].dnode);
+		idl_push_back_node(&head, &nodes[i].dnode);
 	}
 	idl_sort(&head, cb_idl_cmp_min_max);
 	assert(idl_length(head) == 5);
@@ -74,8 +74,8 @@ NO_COV void test_cm_idl_sort(void) {
 	for (i = 0; i < 3; i++) {
 		INIT_DNODE(a[i], (int)(i * 2 + 1), (int)i);       // 1 3 5
 		INIT_DNODE(b[i], (int)(i * 2 + 2), (int)(i + 3)); // 2 4 6
-		idl_push_back(&la, &a[i].dnode);
-		idl_push_back(&lb, &b[i].dnode);
+		idl_push_back_node(&la, &a[i].dnode);
+		idl_push_back_node(&lb, &b[i].dnode);
 	}
 	head = idl_sorted_merge(la, lb, cb_idl_cmp_min_max);
 	check_values(head, expm, 6);

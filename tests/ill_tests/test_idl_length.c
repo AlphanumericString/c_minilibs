@@ -10,10 +10,10 @@ NO_COV void test_cm_idl_length(void) {
 
 	assert(idl_length(head) == 0);
 
-	idl_push_back(&head, &n1.dnode);
-	idl_push_back(&head, &n2.dnode);
-	idl_push_back(&head, &n3.dnode);
-	idl_push_back(&head, &n4.dnode);
+	idl_push_back_node(&head, &n1.dnode);
+	idl_push_back_node(&head, &n2.dnode);
+	idl_push_back_node(&head, &n3.dnode);
+	idl_push_back_node(&head, &n4.dnode);
 
 	assert(idl_length(head) == 4);
 }

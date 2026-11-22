@@ -9,22 +9,10 @@
  * \return true if the callback returned true for all elements, false otherwise.
  * \ingroup ill
 **/
-bool ill_foreach(t_cm_ill *head, t_cm_callback c, void *u_data) {
-	t_cm_ill *curr;
-	t_cm_ill *nxt;
-
-	if (!c || !head) {
-		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
+bool ill_foreach(const t_cm_ill *head, t_cm_callback c, void *u_data) {
+	if (ill_for(head, -1, c, u_data) == false) {
+		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__ILL_LOG_ECB)
 		return (false);
-	}
-	curr = head;
-	while (curr) {
-		nxt = curr->next;
-		if (!c(ill_ntoe(curr), u_data)) {
-			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__ILL_LOG_ECB)
-			return (false);
-		}
-		curr = nxt;
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 	return (true);
@@ -40,9 +28,9 @@ bool ill_foreach(t_cm_ill *head, t_cm_callback c, void *u_data) {
  * otherwise.
  * \ingroup ill
 **/
-bool ill_for(t_cm_ill *head, size_t n, t_cm_callback c, void *u_data) {
-	t_cm_ill *curr;
-	t_cm_ill *nxt;
+bool ill_for(const t_cm_ill *head, size_t n, t_cm_callback c, void *u_data) {
+	const t_cm_ill *curr;
+	const t_cm_ill *nxt;
 
 	if (!c || !head) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)

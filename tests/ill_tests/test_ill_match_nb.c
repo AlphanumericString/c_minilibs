@@ -11,10 +11,10 @@ NO_COV void test_cm_ill_match_nb(void) {
 	INIT_NODE(n3, 3, 3);
 	INIT_NODE(n4, 4, 4);
 
-	ill_push_back(&head, &n1.node);
-	ill_push_back(&head, &n2.node);
-	ill_push_back(&head, &n3.node);
-	ill_push_back(&head, &n4.node);
+	ill_push_back_node(&head, &n1.node);
+	ill_push_back_node(&head, &n2.node);
+	ill_push_back_node(&head, &n3.node);
+	ill_push_back_node(&head, &n4.node);
 
 	assert(ill_match_nb(head, cb_ill_is_even, NULL) == 2);
 	assert(ill_match_nb(head, NULL, NULL) == 0);

@@ -29,7 +29,7 @@ NO_COV void test_cm_idl_unique(void) {
 
 	for (i = 0; i < 6; i++) {
 		INIT_DNODE(nodes[i], values[0][i], (int)i);
-		idl_push_back(&head, &nodes[i].dnode);
+		idl_push_back_node(&head, &nodes[i].dnode);
 	}
 	g_dtor_hits = 0;
 	idl_unique(head, cb_idl_cmp_min_max, cb_count_dtor);
@@ -42,7 +42,7 @@ NO_COV void test_cm_idl_unique(void) {
 	head = NULL;
 	for (i = 0; i < 6; i++) {
 		INIT_DNODE(nodes[i], values[1][i], (int)i);
-		idl_push_back(&head, &nodes[i].dnode);
+		idl_push_back_node(&head, &nodes[i].dnode);
 	}
 	g_dtor_hits = 0;
 	idl_unique(head, cb_idl_cmp_min_max, cb_count_dtor);
@@ -56,7 +56,7 @@ NO_COV void test_cm_idl_unique(void) {
 	head = NULL;
 	for (i = 0; i < 6; i++) {
 		INIT_DNODE(nodes[i], values[0][i], (int)i);
-		idl_push_back(&head, &nodes[i].dnode);
+		idl_push_back_node(&head, &nodes[i].dnode);
 	}
 	idl_unique(head, cb_idl_cmp_min_max, NULL);
 	assert(idl_length(head) == 3);
@@ -65,7 +65,7 @@ NO_COV void test_cm_idl_unique(void) {
 	head = NULL;
 	for (i = 0; i < 4; i++) {
 		INIT_DNODE(nodup[i], (int)(i + 1), (int)i);
-		idl_push_back(&head, &nodup[i].dnode);
+		idl_push_back_node(&head, &nodup[i].dnode);
 	}
 	g_dtor_hits = 0;
 	idl_unique(head, cb_idl_cmp_min_max, cb_count_dtor);

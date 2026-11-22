@@ -11,9 +11,9 @@ NO_COV void test_cm_ill_for(void) {
 	INIT_NODE(n2, 20, 2);
 	INIT_NODE(n3, 30, 3);
 
-	ill_push_back(&head, &n1.node);
-	ill_push_back(&head, &n2.node);
-	ill_push_back(&head, &n3.node);
+	ill_push_back_node(&head, &n1.node);
+	ill_push_back_node(&head, &n2.node);
+	ill_push_back_node(&head, &n3.node);
 
 	assert(ill_for(head, 2, cb_ill_add_val_as_int_ptr, &to_add) == true);
 	assert(n1.value == 10 + to_add * 1);

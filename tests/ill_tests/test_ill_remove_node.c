@@ -9,8 +9,8 @@ NO_COV void test_cm_ill_remove_node(void) {
 	INIT_NODE(n2, 42, 2);
 	INIT_NODE(n3, 43, 3);
 
-	ill_push_back(&head, &n2.node);
-	ill_push_back(&head, &n3.node);
+	ill_push_back_node(&head, &n2.node);
+	ill_push_back_node(&head, &n3.node);
 
 	assert(ill_remove_node(NULL, &n3.node) == false);
 	assert(ill_remove_node(&head, NULL) == false);

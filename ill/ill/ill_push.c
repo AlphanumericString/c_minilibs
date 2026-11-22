@@ -7,7 +7,7 @@
  * \return The new head of the list.
  * \ingroup ill
 **/
-t_cm_ill *ill_push(t_cm_ill **head, t_cm_ill *node) {
+t_cm_ill *ill_push_node(t_cm_ill **head, t_cm_ill *node) {
 	if (!head || !node) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return (NULL);
@@ -24,13 +24,13 @@ t_cm_ill *ill_push(t_cm_ill **head, t_cm_ill *node) {
  * \return The new head of the list.
  * \ingroup ill
 **/
-t_cm_ill *ill_npush(t_cm_ill **head, t_cm_ill *nodes) {
+t_cm_ill *ill_npush_node(t_cm_ill **head, t_cm_ill *nodes) {
 	if (!head || !nodes) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return (NULL);
 	}
-	ill_get_tail(nodes)->next = *head;
-	*head                     = nodes;
+	ill_get_tail_node(nodes)->next = *head;
+	*head                          = nodes;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 	return (*head);
 }
@@ -41,18 +41,18 @@ t_cm_ill *ill_npush(t_cm_ill **head, t_cm_ill *nodes) {
  * \return The head of the list.
  * \ingroup ill
 **/
-t_cm_ill *ill_push_back(t_cm_ill **head, t_cm_ill *node) {
+t_cm_ill *ill_push_back_node(t_cm_ill **head, t_cm_ill *node) {
 	if (!head || !node) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return (NULL);
 	}
 	if (!*head) {
-		ill_push(head, node);
+		ill_push_node(head, node);
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 		return (*head);
 	}
-	ill_get_tail(*head)->next = node;
-	node->next                = NULL;
+	ill_get_tail_node(*head)->next = node;
+	node->next                     = NULL;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 	return (*head);
 }

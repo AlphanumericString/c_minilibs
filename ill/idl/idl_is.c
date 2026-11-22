@@ -6,7 +6,7 @@
  * \return true if isolated, false otherwise.
  * \ingroup idl
 **/
-bool idl_is_isolated(const t_cm_idl *node) {
+bool idl_is_isolated_node(const t_cm_idl *node) {
 	if (!node) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return false;

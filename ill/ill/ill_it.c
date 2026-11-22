@@ -7,7 +7,7 @@
  * \return A pointer to the next element, or NULL if there is none.
  * \ingroup ill
 **/
-void *ill_advance_it(void *e, size_t offset) {
+void *ill_advance_it(const void *e, size_t offset) {
 	const t_cm_ill *node;
 
 	if (!e) {

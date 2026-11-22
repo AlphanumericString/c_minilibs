@@ -1,13 +1,13 @@
 #include "intrusive_linked_lists.h"
 
 /**
- * \brief Gets the minimum element in the list according to the comparator.
+ * \brief Gets the minimum node in the list according to the comparator.
  * \param head The head of the list.
  * \param c The comparator function used to determine the minimum.
- * \return A pointer to the minimum element, or NULL if the list is empty.
+ * \return A pointer to the minimum node, or NULL if the list is empty.
  * \ingroup ill
 **/
-void *ill_get_min(const t_cm_ill *head, t_cm_comparator c) {
+t_cm_ill *ill_get_min_node(const t_cm_ill *head, t_cm_comparator c) {
 	const t_cm_ill *curr;
 	const t_cm_ill *min;
 
@@ -22,17 +22,17 @@ void *ill_get_min(const t_cm_ill *head, t_cm_comparator c) {
 		curr = curr->next;
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
-	return ill_ntoe(min);
+	return (t_cm_ill *)min;
 }
 
 /**
- * \brief Gets the maximum element in the list according to the comparator.
+ * \brief Gets the maximum node in the list according to the comparator.
  * \param head The head of the list.
  * \param c The comparator function used to determine the maximum.
- * \return A pointer to the maximum element, or NULL if the list is empty.
+ * \return A pointer to the maximum node, or NULL if the list is empty.
  * \ingroup ill
 **/
-void *ill_get_max(const t_cm_ill *head, t_cm_comparator c) {
+t_cm_ill *ill_get_max_node(const t_cm_ill *head, t_cm_comparator c) {
 	const t_cm_ill *curr;
 	const t_cm_ill *max;
 
@@ -47,17 +47,17 @@ void *ill_get_max(const t_cm_ill *head, t_cm_comparator c) {
 		curr = curr->next;
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
-	return ill_ntoe(max);
+	return (t_cm_ill *)max;
 }
 
 /**
- * \brief Gets the k-th element in the list (0-indexed).
+ * \brief Gets the k-th node in the list (0-indexed).
  * \param head The head of the list.
- * \param k The index of the element to retrieve.
- * \return A pointer to the k-th element, or NULL if the index is out of bounds.
+ * \param k The index of the node to retrieve.
+ * \return A pointer to the k-th node, or NULL if the index is out of bounds.
  * \ingroup ill
 **/
-void *ill_get_kth(const t_cm_ill *head, size_t k) {
+t_cm_ill *ill_get_kth_node(const t_cm_ill *head, size_t k) {
 	const t_cm_ill *curr;
 
 	if (!head) {
@@ -74,5 +74,5 @@ void *ill_get_kth(const t_cm_ill *head, size_t k) {
 		return NULL;
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
-	return ill_ntoe(curr);
+	return (t_cm_ill *)curr;
 }

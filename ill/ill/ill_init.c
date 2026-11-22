@@ -6,7 +6,7 @@
  * \param offset The offset of the node within its container structure.
  * \ingroup ill
 **/
-void ill_init(t_cm_ill *node, size_t offset) {
+void ill_init_node(t_cm_ill *node, size_t offset) {
 	if (!node) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return;

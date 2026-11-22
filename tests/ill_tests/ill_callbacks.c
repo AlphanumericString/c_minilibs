@@ -87,7 +87,7 @@ NO_COV void *cb_idl_duplicate(const void *elem) {
 	if (copy) {
 		copy->id    = src->id;
 		copy->value = src->value;
-		idl_init(&copy->dnode, offsetof(t_cm_test_dnode, dnode));
+		idl_init_node(&copy->dnode, offsetof(t_cm_test_dnode, dnode));
 	}
 	return copy;
 }
@@ -137,7 +137,7 @@ NO_COV void *cb_ill_duplicate(const void *elem) {
 	if (copy) {
 		copy->id    = src->id;
 		copy->value = src->value;
-		ill_init(&copy->node, offsetof(t_cm_test_node, node));
+		ill_init_node(&copy->node, offsetof(t_cm_test_node, node));
 	}
 	return copy;
 }

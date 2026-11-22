@@ -8,8 +8,8 @@
  * is head.
  * \ingroup idl
 **/
-t_cm_idl *idl_find_prev(t_cm_idl *head, const t_cm_idl *target) {
-	t_cm_idl *curr;
+t_cm_idl *idl_find_prev_node(const t_cm_idl *head, const t_cm_idl *target) {
+	const t_cm_idl *curr;
 
 	if (!head || !target || head == target) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -23,7 +23,7 @@ t_cm_idl *idl_find_prev(t_cm_idl *head, const t_cm_idl *target) {
 		return (NULL);
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
-	return curr;
+	return (t_cm_idl *)curr;
 }
 
 /**
@@ -33,8 +33,8 @@ t_cm_idl *idl_find_prev(t_cm_idl *head, const t_cm_idl *target) {
  * \return A pointer to the target node if found, or NULL otherwise.
  * \ingroup idl
 **/
-t_cm_idl *idl_find(t_cm_idl *head, const t_cm_idl *target) {
-	t_cm_idl *curr;
+t_cm_idl *idl_find_node(const t_cm_idl *head, const t_cm_idl *target) {
+	const t_cm_idl *curr;
 
 	if (!head || !target) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -48,7 +48,7 @@ t_cm_idl *idl_find(t_cm_idl *head, const t_cm_idl *target) {
 		return (NULL);
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
-	return curr;
+	return (t_cm_idl *)curr;
 }
 
 /**
@@ -60,8 +60,9 @@ t_cm_idl *idl_find(t_cm_idl *head, const t_cm_idl *target) {
  * not found.
  * \ingroup idl
 **/
-t_cm_idl *idl_get_prev(t_cm_idl *head, t_cm_comparator c, const void *arg) {
-	t_cm_idl *curr;
+t_cm_idl *idl_get_prev_node(const t_cm_idl *head, t_cm_comparator c,
+                            const void *arg) {
+	const t_cm_idl *curr;
 
 	if (!head || !c) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -71,7 +72,7 @@ t_cm_idl *idl_get_prev(t_cm_idl *head, t_cm_comparator c, const void *arg) {
 	while (curr->next) {
 		if (c(idl_ntoe(curr->next), arg) == 0) {
 			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
-			return curr;
+			return (t_cm_idl *)curr;
 		}
 		curr = curr->next;
 	}
@@ -87,8 +88,9 @@ t_cm_idl *idl_get_prev(t_cm_idl *head, t_cm_comparator c, const void *arg) {
  * \return A pointer to the matched node, or NULL if not found.
  * \ingroup idl
 **/
-t_cm_idl *idl_get(t_cm_idl *head, t_cm_comparator c, const void *arg) {
-	t_cm_idl *curr;
+t_cm_idl *idl_get_node(const t_cm_idl *head, t_cm_comparator c,
+                       const void *arg) {
+	const t_cm_idl *curr;
 
 	if (!head || !c) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -98,7 +100,7 @@ t_cm_idl *idl_get(t_cm_idl *head, t_cm_comparator c, const void *arg) {
 	while (curr) {
 		if (c(idl_ntoe(curr), arg) == 0) {
 			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
-			return curr;
+			return (t_cm_idl *)curr;
 		}
 		curr = curr->next;
 	}

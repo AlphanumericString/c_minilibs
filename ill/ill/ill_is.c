@@ -6,7 +6,7 @@
  * \return true if isolated, false otherwise.
  * \ingroup ill
 **/
-bool ill_is_isolated(const t_cm_ill *node) {
+bool ill_is_isolated_node(const t_cm_ill *node) {
 	if (!node) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
 		return (false);

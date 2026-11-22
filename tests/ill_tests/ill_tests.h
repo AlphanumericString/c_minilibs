@@ -24,7 +24,7 @@ typedef struct s_cm_test_dnode {
 	assert((node1)->next == (node2) && (node2)->prev == (node1))
 
 #define INIT_DNODE(n, _val, _id)                                               \
-	idl_init(&((n).dnode), offsetof(t_cm_test_dnode, dnode));                  \
+	idl_init_node(&((n).dnode), offsetof(t_cm_test_dnode, dnode));             \
 	(n).value = (_val);                                                        \
 	(n).id    = (_id);
 
@@ -41,7 +41,7 @@ typedef struct s_cm_test_dnode {
 #define ASSERT_ORDER_ILL(node1, node2) assert((node1)->next == (node2))
 
 #define INIT_NODE(n, _val, _id)                                                \
-	ill_init(&((n).node), offsetof(t_cm_test_node, node));                     \
+	ill_init_node(&((n).node), offsetof(t_cm_test_node, node));                \
 	(n).value = (_val);                                                        \
 	(n).id    = (_id);
 
@@ -85,80 +85,121 @@ NO_COV void *cb_ill_duplicate(const void *elem);
 // --- ILL tests ---
 NO_COV void test_cm_ill_advance_it(void);
 NO_COV void test_cm_ill_append(void);
+NO_COV void test_cm_ill_append_node(void);
 NO_COV void test_cm_ill_copy(void);
 NO_COV void test_cm_ill_eton(void);
 NO_COV void test_cm_ill_find(void);
+NO_COV void test_cm_ill_find_node(void);
 NO_COV void test_cm_ill_find_prev(void);
+NO_COV void test_cm_ill_find_prev_node(void);
 NO_COV void test_cm_ill_filter(void);
 NO_COV void test_cm_ill_filter_out(void);
 NO_COV void test_cm_ill_for(void);
 NO_COV void test_cm_ill_foreach(void);
 NO_COV void test_cm_ill_get(void);
+NO_COV void test_cm_ill_get_node(void);
 NO_COV void test_cm_ill_get_kth(void);
+NO_COV void test_cm_ill_get_kth_node(void);
 NO_COV void test_cm_ill_get_max(void);
+NO_COV void test_cm_ill_get_max_node(void);
 NO_COV void test_cm_ill_get_min(void);
+NO_COV void test_cm_ill_get_min_node(void);
 NO_COV void test_cm_ill_get_prev(void);
+NO_COV void test_cm_ill_get_prev_node(void);
 NO_COV void test_cm_ill_get_tail(void);
+NO_COV void test_cm_ill_get_tail_node(void);
 NO_COV void test_cm_ill_has(void);
 NO_COV void test_cm_ill_init(void);
+NO_COV void test_cm_ill_init_node(void);
 NO_COV void test_cm_ill_is_circular(void);
 NO_COV void test_cm_ill_is_isolated(void);
+NO_COV void test_cm_ill_is_isolated_node(void);
 NO_COV void test_cm_ill_is_sorted(void);
 NO_COV void test_cm_ill_length(void);
 NO_COV void test_cm_ill_match_nb(void);
 NO_COV void test_cm_ill_nappend(void);
+NO_COV void test_cm_ill_nappend_node(void);
 NO_COV void test_cm_ill_nlength(void);
 NO_COV void test_cm_ill_npush(void);
+NO_COV void test_cm_ill_npush_node(void);
 NO_COV void test_cm_ill_ntoe(void);
 NO_COV void test_cm_ill_pop(void);
+NO_COV void test_cm_ill_pop_node(void);
 NO_COV void test_cm_ill_pop_back(void);
+NO_COV void test_cm_ill_pop_back_node(void);
 NO_COV void test_cm_ill_push(void);
+NO_COV void test_cm_ill_push_node(void);
 NO_COV void test_cm_ill_push_back(void);
+NO_COV void test_cm_ill_push_back_node(void);
+NO_COV void test_cm_ill_remove(void);
 NO_COV void test_cm_ill_remove_after(void);
+NO_COV void test_cm_ill_remove_after_node(void);
 NO_COV void test_cm_ill_remove_node(void);
 NO_COV void test_cm_ill_reverse(void);
 NO_COV void test_cm_ill_rm_if(void);
 NO_COV void test_cm_ill_sort(void);
+NO_COV void test_cm_ill_unique(void);
 
 // --- IDL tests ---
 NO_COV void test_cm_idl_advance_it(void);
 NO_COV void test_cm_idl_append(void);
+NO_COV void test_cm_idl_append_node(void);
 NO_COV void test_cm_idl_copy(void);
 NO_COV void test_cm_idl_eton(void);
 NO_COV void test_cm_idl_find(void);
+NO_COV void test_cm_idl_find_node(void);
 NO_COV void test_cm_idl_find_prev(void);
+NO_COV void test_cm_idl_find_prev_node(void);
 NO_COV void test_cm_idl_filter(void);
 NO_COV void test_cm_idl_filter_out(void);
 NO_COV void test_cm_idl_for(void);
 NO_COV void test_cm_idl_foreach(void);
 NO_COV void test_cm_idl_get(void);
+NO_COV void test_cm_idl_get_node(void);
 NO_COV void test_cm_idl_get_head(void);
+NO_COV void test_cm_idl_get_head_node(void);
 NO_COV void test_cm_idl_get_kth(void);
+NO_COV void test_cm_idl_get_kth_node(void);
 NO_COV void test_cm_idl_get_max(void);
+NO_COV void test_cm_idl_get_max_node(void);
 NO_COV void test_cm_idl_get_min(void);
+NO_COV void test_cm_idl_get_min_node(void);
 NO_COV void test_cm_idl_get_prev(void);
+NO_COV void test_cm_idl_get_prev_node(void);
 NO_COV void test_cm_idl_get_tail(void);
+NO_COV void test_cm_idl_get_tail_node(void);
 NO_COV void test_cm_idl_has(void);
 NO_COV void test_cm_idl_init(void);
+NO_COV void test_cm_idl_init_node(void);
 NO_COV void test_cm_idl_is_circular(void);
 NO_COV void test_cm_idl_is_isolated(void);
+NO_COV void test_cm_idl_is_isolated_node(void);
 NO_COV void test_cm_idl_is_sorted(void);
 NO_COV void test_cm_idl_length(void);
 NO_COV void test_cm_idl_match_nb(void);
 NO_COV void test_cm_idl_nappend(void);
+NO_COV void test_cm_idl_nappend_node(void);
 NO_COV void test_cm_idl_nlength(void);
 NO_COV void test_cm_idl_nprepend(void);
+NO_COV void test_cm_idl_nprepend_node(void);
 NO_COV void test_cm_idl_npush(void);
+NO_COV void test_cm_idl_npush_node(void);
 NO_COV void test_cm_idl_ntoe(void);
 NO_COV void test_cm_idl_pop(void);
+NO_COV void test_cm_idl_pop_node(void);
 NO_COV void test_cm_idl_pop_back(void);
+NO_COV void test_cm_idl_pop_back_node(void);
 NO_COV void test_cm_idl_prepend(void);
+NO_COV void test_cm_idl_prepend_node(void);
 NO_COV void test_cm_idl_push(void);
+NO_COV void test_cm_idl_push_node(void);
 NO_COV void test_cm_idl_push_back(void);
+NO_COV void test_cm_idl_push_back_node(void);
+NO_COV void test_cm_idl_remove(void);
 NO_COV void test_cm_idl_remove_after(void);
+NO_COV void test_cm_idl_remove_after_node(void);
 NO_COV void test_cm_idl_remove_node(void);
 NO_COV void test_cm_idl_reverse(void);
 NO_COV void test_cm_idl_rm_if(void);
 NO_COV void test_cm_idl_sort(void);
 NO_COV void test_cm_idl_unique(void);
-NO_COV void test_cm_ill_unique(void);

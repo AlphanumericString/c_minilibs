@@ -2,7 +2,7 @@
 
 #include "ill_tests.h"
 
-NO_COV void test_cm_ill_get_prev(void) {
+NO_COV void test_cm_ill_get_prev_node(void) {
 	t_cm_test_node n1, n2, n3;
 	t_cm_ill      *head  = NULL;
 	int            val20 = 20;
@@ -12,12 +12,12 @@ NO_COV void test_cm_ill_get_prev(void) {
 	INIT_NODE(n2, 20, 2);
 	INIT_NODE(n3, 30, 3);
 
-	ill_push_back(&head, &n1.node);
-	ill_push_back(&head, &n2.node);
-	ill_push_back(&head, &n3.node);
+	ill_push_back_node(&head, &n1.node);
+	ill_push_back_node(&head, &n2.node);
+	ill_push_back_node(&head, &n3.node);
 
-	assert(ill_get_prev(head, cb_ill_cmp_val, &val20) == &n1.node);
-	assert(ill_get_prev(head, cb_ill_cmp_val, &val40) == NULL);
-	assert(ill_get_prev(head, NULL, &val40) == NULL);
-	assert(ill_get_prev(NULL, cb_ill_cmp_val, &val40) == NULL);
+	assert(ill_get_prev_node(head, cb_ill_cmp_val, &val20) == &n1.node);
+	assert(ill_get_prev_node(head, cb_ill_cmp_val, &val40) == NULL);
+	assert(ill_get_prev_node(head, NULL, &val40) == NULL);
+	assert(ill_get_prev_node(NULL, cb_ill_cmp_val, &val40) == NULL);
 }

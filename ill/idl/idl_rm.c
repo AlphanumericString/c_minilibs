@@ -6,7 +6,7 @@
  * \return The removed node, or NULL if 'prev' has no next node.
  * \ingroup idl
 **/
-t_cm_idl *idl_remove_after(t_cm_idl *prev) {
+t_cm_idl *idl_remove_after_node(t_cm_idl *prev) {
 	t_cm_idl *to_remove;
 
 	if (!prev || !prev->next) {
@@ -44,7 +44,7 @@ bool idl_remove_node(t_cm_idl **head, t_cm_idl *target) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 		return (true);
 	}
-	curr = idl_find(*head, target);
+	curr = idl_find_node(*head, target);
 	if (!curr) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_FAIL)
 		return (false);

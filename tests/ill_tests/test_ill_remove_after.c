@@ -2,7 +2,7 @@
 
 #include "ill_tests.h"
 
-NO_COV void test_cm_ill_remove_after(void) {
+NO_COV void test_cm_ill_remove_after_node(void) {
 	t_cm_test_node n2, n3;
 	t_cm_ill      *head = NULL;
 	t_cm_ill      *rm_after;
@@ -10,13 +10,13 @@ NO_COV void test_cm_ill_remove_after(void) {
 	INIT_NODE(n2, 42, 2);
 	INIT_NODE(n3, 43, 3);
 
-	ill_push_back(&head, &n2.node);
-	ill_push_back(&head, &n3.node);
+	ill_push_back_node(&head, &n2.node);
+	ill_push_back_node(&head, &n3.node);
 
-	rm_after = ill_remove_after(&n2.node);
+	rm_after = ill_remove_after_node(&n2.node);
 	assert(rm_after == &n3.node);
 	assert(n2.node.next == NULL);
 	assert(head == &n2.node);
-	assert(ill_remove_after(ill_get_tail(head)) == NULL);
-	assert(ill_remove_after(NULL) == NULL);
+	assert(ill_remove_after_node(ill_get_tail_node(head)) == NULL);
+	assert(ill_remove_after_node(NULL) == NULL);
 }

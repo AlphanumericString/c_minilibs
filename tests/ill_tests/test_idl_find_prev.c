@@ -2,7 +2,7 @@
 
 #include "ill_tests.h"
 
-NO_COV void test_cm_idl_find_prev(void) {
+NO_COV void test_cm_idl_find_prev_node(void) {
 	t_cm_test_dnode n1, n2, n3;
 	t_cm_idl       *head = NULL;
 	t_cm_idl       *prev, *prev_head, *prev_not_found;
@@ -11,18 +11,18 @@ NO_COV void test_cm_idl_find_prev(void) {
 	INIT_DNODE(n2, 43, 2);
 	INIT_DNODE(n3, 44, 3);
 
-	idl_push_back(&head, &n1.dnode);
-	idl_push_back(&head, &n2.dnode);
+	idl_push_back_node(&head, &n1.dnode);
+	idl_push_back_node(&head, &n2.dnode);
 
-	prev = idl_find_prev(head, &n2.dnode);
+	prev = idl_find_prev_node(head, &n2.dnode);
 	assert(prev == &n1.dnode);
 
-	prev_head = idl_find_prev(head, &n1.dnode);
+	prev_head = idl_find_prev_node(head, &n1.dnode);
 	assert(prev_head == NULL);
-	prev_not_found = idl_find_prev(head, &n3.dnode);
+	prev_not_found = idl_find_prev_node(head, &n3.dnode);
 	assert(prev_not_found == NULL);
-	prev_not_found = idl_find_prev(NULL, &n3.dnode);
+	prev_not_found = idl_find_prev_node(NULL, &n3.dnode);
 	assert(prev_not_found == NULL);
-	prev_not_found = idl_find_prev(head, NULL);
+	prev_not_found = idl_find_prev_node(head, NULL);
 	assert(prev_not_found == NULL);
 }

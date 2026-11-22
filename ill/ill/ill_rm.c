@@ -6,7 +6,7 @@
  * \return The removed node, or NULL if 'prev' has no next node.
  * \ingroup ill
 **/
-t_cm_ill *ill_remove_after(t_cm_ill *prev) {
+t_cm_ill *ill_remove_after_node(t_cm_ill *prev) {
 	t_cm_ill *to_remove;
 
 	if (!prev || !prev->next) {
@@ -40,7 +40,7 @@ bool ill_remove_node(t_cm_ill **head, t_cm_ill *target) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 		return true;
 	}
-	prev = ill_find_prev(*head, target);
+	prev = ill_find_prev_node(*head, target);
 	if (prev) {
 		prev->next   = target->next;
 		target->next = NULL;
