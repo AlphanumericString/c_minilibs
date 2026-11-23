@@ -2,7 +2,7 @@
 
 #include "ill_tests.h"
 
-NO_COV void test_cm_ill_foreach(void) {
+NO_COV void test_cm_ill_apply(void) {
 	t_cm_test_node n1, n2, n3;
 	t_cm_ill      *head   = NULL;
 	int            to_add = 5;
@@ -15,14 +15,14 @@ NO_COV void test_cm_ill_foreach(void) {
 	ill_push_back_node(&head, &n2.node);
 	ill_push_back_node(&head, &n3.node);
 
-	assert(ill_foreach(head, cb_ill_add_val_as_int_ptr, &to_add) == true);
+	assert(ill_apply(head, cb_ill_add_val_as_int_ptr, &to_add) == true);
 	assert(n1.value == 10 + to_add);
 	assert(n2.value == 20 + to_add);
 	assert(n3.value == 30 + to_add);
 	n1.value = 10;
 	n2.value = 20;
 	n3.value = 30;
-	assert(ill_foreach(head, cb_ill_stop_at_30, NULL) == false);
-	assert(ill_foreach(head, NULL, &to_add) == false);
-	assert(ill_foreach(NULL, cb_ill_add_val_as_int_ptr, &to_add) == false);
+	assert(ill_apply(head, cb_ill_stop_at_30, NULL) == false);
+	assert(ill_apply(head, NULL, &to_add) == false);
+	assert(ill_apply(NULL, cb_ill_add_val_as_int_ptr, &to_add) == false);
 }

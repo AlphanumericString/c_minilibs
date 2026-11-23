@@ -37,7 +37,7 @@ int main(void) {
 		idl_push_back_node(&head, &items[i].node);
 
 	printf("list (%zu nodes):", idl_length(head));
-	idl_foreach(head, print_cm_item, NULL);
+	idl_apply(head, print_cm_item, NULL);
 	printf("\n");
 	printf("head=%d tail=%d\n",
 	       ((t_cm_item *)idl_ntoe(idl_get_head_node(head)))->value,
@@ -45,7 +45,7 @@ int main(void) {
 
 	idl_sort(&head, cmp_value);
 	printf("sorted:");
-	idl_foreach(head, print_cm_item, NULL);
+	idl_apply(head, print_cm_item, NULL);
 	printf("\n");
 	printf("sorted flag: %s\n",
 	       idl_is_sorted(head, cmp_value) ? "true" : "false");
@@ -57,7 +57,7 @@ int main(void) {
 
 	idl_reverse(&head);
 	printf("reversed:");
-	idl_foreach(head, print_cm_item, NULL);
+	idl_apply(head, print_cm_item, NULL);
 	printf("\n");
 
 	return (0);

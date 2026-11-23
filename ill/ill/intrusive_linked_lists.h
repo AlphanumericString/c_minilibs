@@ -114,10 +114,11 @@ size_t ill_length(const t_cm_ill *head);
 size_t ill_nlength(const t_cm_ill *head, size_t n);
 size_t ill_match_nb(const t_cm_ill *head, t_cm_callback matcher, void *arg);
 
-void     *ill_advance_it(const void *e, size_t offset);
+bool  ill_apply(const t_cm_ill *head, t_cm_callback c, void *u_data);
+bool  ill_napply(const t_cm_ill *head, size_t n, t_cm_callback c, void *u_data);
+bool  ill_iter(t_cm_ill *head, void **iter);
+void *ill_advance_it(const void *e, size_t offset);
 t_cm_ill *ill_advance_it_node(const t_cm_ill *it);
-bool ill_for(const t_cm_ill *head, size_t n, t_cm_callback c, void *u_data);
-bool ill_foreach(const t_cm_ill *head, t_cm_callback c, void *u_data);
 
 void      ill_reverse(t_cm_ill **head);
 t_cm_ill *ill_sorted_merge(t_cm_ill *list1, t_cm_ill *list2,

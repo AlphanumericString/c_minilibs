@@ -2,7 +2,7 @@
 
 #include "ill_tests.h"
 
-NO_COV void test_cm_ill_for(void) {
+NO_COV void test_cm_ill_napply(void) {
 	t_cm_test_node n1, n2, n3;
 	t_cm_ill      *head   = NULL;
 	int            to_add = 5;
@@ -15,23 +15,23 @@ NO_COV void test_cm_ill_for(void) {
 	ill_push_back_node(&head, &n2.node);
 	ill_push_back_node(&head, &n3.node);
 
-	assert(ill_for(head, 2, cb_ill_add_val_as_int_ptr, &to_add) == true);
+	assert(ill_napply(head, 2, cb_ill_add_val_as_int_ptr, &to_add) == true);
 	assert(n1.value == 10 + to_add * 1);
 	assert(n2.value == 20 + to_add * 1);
 	assert(n3.value == 30 + to_add * 0);
-	assert(ill_for(head, 1, cb_ill_add_val_as_int_ptr, &to_add) == true);
+	assert(ill_napply(head, 1, cb_ill_add_val_as_int_ptr, &to_add) == true);
 	assert(n1.value == 10 + to_add * 2);
 	assert(n2.value == 20 + to_add * 1);
 	assert(n3.value == 30 + to_add * 0);
-	assert(ill_for(head, 3, cb_ill_add_val_as_int_ptr, &to_add) == true);
+	assert(ill_napply(head, 3, cb_ill_add_val_as_int_ptr, &to_add) == true);
 	assert(n1.value == 10 + to_add * 3);
 	assert(n2.value == 20 + to_add * 2);
 	assert(n3.value == 30 + to_add * 1);
 	n1.value = 10;
 	n2.value = 20;
 	n3.value = 30;
-	assert(ill_for(head, 2, cb_ill_stop_at_30, NULL) == true);
-	assert(ill_for(head, 3, cb_ill_stop_at_30, NULL) == false);
-	assert(ill_for(NULL, 3, cb_ill_stop_at_30, NULL) == false);
-	assert(ill_for(head, 3, NULL, NULL) == false);
+	assert(ill_napply(head, 2, cb_ill_stop_at_30, NULL) == true);
+	assert(ill_napply(head, 3, cb_ill_stop_at_30, NULL) == false);
+	assert(ill_napply(NULL, 3, cb_ill_stop_at_30, NULL) == false);
+	assert(ill_napply(head, 3, NULL, NULL) == false);
 }

@@ -44,7 +44,7 @@ int main(void) {
 		ill_push_back_node(&head, &tasks[i].node);
 
 	printf("list (%zu nodes):", ill_length(head));
-	ill_foreach(head, print_cm_task, NULL);
+	ill_apply(head, print_cm_task, NULL);
 	printf("\n");
 
 	printf("head is node %d, tail is node %d\n",
@@ -53,7 +53,7 @@ int main(void) {
 
 	ill_sort(&head, cmp_priority);
 	printf("sorted by priority:");
-	ill_foreach(head, print_cm_task, NULL);
+	ill_apply(head, print_cm_task, NULL);
 	printf("\n");
 
 	printf("smallest priority task: %d\n",
@@ -63,15 +63,15 @@ int main(void) {
 
 	ill_filter(&head, is_urgent, NULL, &filtered);
 	printf("urgent (kept):");
-	ill_foreach(head, print_cm_task, NULL);
+	ill_apply(head, print_cm_task, NULL);
 	printf("\n");
 	printf("deferred (filtered out):");
-	ill_foreach(filtered, print_cm_task, NULL);
+	ill_apply(filtered, print_cm_task, NULL);
 	printf("\n");
 
 	ill_reverse(&head);
 	printf("reversed:");
-	ill_foreach(head, print_cm_task, NULL);
+	ill_apply(head, print_cm_task, NULL);
 	printf("\n");
 
 	return (0);

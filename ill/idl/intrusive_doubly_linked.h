@@ -122,12 +122,13 @@ size_t idl_length(const t_cm_idl *head);
 size_t idl_nlength(const t_cm_idl *head, size_t n);
 size_t idl_match_nb(const t_cm_idl *head, t_cm_callback matcher, void *arg);
 
-void     *idl_advance_it(const void *e, size_t offset);
+bool  idl_apply(const t_cm_idl *head, t_cm_callback c, void *u_data);
+bool  idl_napply(const t_cm_idl *head, size_t n, t_cm_callback c, void *u_data);
+bool  idl_iter(t_cm_idl *head, void **iter);
+void *idl_advance_it(const void *e, size_t offset);
 t_cm_idl *idl_advance_it_node(const t_cm_idl *it);
 void     *idl_recede_it(const void *e, size_t offset);
 t_cm_idl *idl_recede_it_node(const t_cm_idl *it);
-bool idl_for(const t_cm_idl *head, size_t n, t_cm_callback c, void *u_data);
-bool idl_foreach(const t_cm_idl *head, t_cm_callback c, void *u_data);
 
 void      idl_reverse(t_cm_idl **head);
 t_cm_idl *idl_sorted_merge(t_cm_idl *list1, t_cm_idl *list2,

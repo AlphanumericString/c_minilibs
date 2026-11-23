@@ -38,3 +38,46 @@ t_cm_ill *ill_advance_it_node(const t_cm_ill *it) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 	return it->next;
 }
+
+/**
+ * \brief Pull iterator over the elements of the list.
+ * \param head The head of the list.
+ * \param iter Element pointer used as the iteration state. It must be
+ * initialized to NULL before the first call; on a true return it holds the
+ * current element.
+ * \return true while an element is available, false once the list is exhausted
+ * or on invalid arguments.
+ * \note typical usage:
+ * \code
+ * void *it = NULL;
+ * while (ill_iter(head, &it))
+ *     do_something(it);
+ * \endcode
+ * \ingroup ill
+**/
+bool ill_iter(t_cm_ill *head, void **iter) {
+	size_t    offset;
+	t_cm_ill *node;
+
+	if (!head || !iter) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
+		if (iter) *iter = NULL;
+		return (false);
+	}
+	offset = head->offset;
+	if (!*iter) {
+		*iter = ill_ntoe(head);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
+		return (true);
+	}
+	node = ill_eton(*iter, offset);
+	node = node->next;
+	if (!node) {
+		*iter = NULL;
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
+		return (false);
+	}
+	*iter = ill_ntoe(node);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
+	return (true);
+}

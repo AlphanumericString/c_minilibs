@@ -9,8 +9,8 @@
  * \return true if the callback returned true for all elements, false otherwise.
  * \ingroup ill
 **/
-bool ill_foreach(const t_cm_ill *head, t_cm_callback c, void *u_data) {
-	if (ill_for(head, -1, c, u_data) == false) {
+bool ill_apply(const t_cm_ill *head, t_cm_callback c, void *u_data) {
+	if (ill_napply(head, -1, c, u_data) == false) {
 		CM_LOG(C_MINI__LEVEL_ERR, C_MINI__ILL_LOG_ECB)
 		return (false);
 	}
@@ -28,7 +28,7 @@ bool ill_foreach(const t_cm_ill *head, t_cm_callback c, void *u_data) {
  * otherwise.
  * \ingroup ill
 **/
-bool ill_for(const t_cm_ill *head, size_t n, t_cm_callback c, void *u_data) {
+bool ill_napply(const t_cm_ill *head, size_t n, t_cm_callback c, void *u_data) {
 	const t_cm_ill *curr;
 	const t_cm_ill *nxt;
 

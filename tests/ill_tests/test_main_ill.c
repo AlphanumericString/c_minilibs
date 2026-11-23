@@ -81,8 +81,9 @@ NO_COV static void ill_node_main(void) {
 	test_cm_ill_match_nb();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Apply", )
-	test_cm_ill_foreach();
-	test_cm_ill_for();
+	test_cm_ill_iter();
+	test_cm_ill_apply();
+	test_cm_ill_napply();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Reverse", )
 	test_cm_ill_reverse();
@@ -194,8 +195,9 @@ NO_COV static void idl_node_main(void) {
 	test_cm_idl_match_nb();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Apply", )
-	test_cm_idl_foreach();
-	test_cm_idl_for();
+	test_cm_idl_iter();
+	test_cm_idl_apply();
+	test_cm_idl_napply();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Reverse", )
 	test_cm_idl_reverse();
