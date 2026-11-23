@@ -22,7 +22,7 @@ static inline void setup_chain(t_cm_ill *to_setup, t_cm_ill *nxt,
 	to_setup->offset = offset;
 }
 
-static void clean_chain(void *nh, size_t offset, t_cm_dtor dtor) {
+static void clean_chain(const void *nh, size_t offset, t_cm_dtor dtor) {
 	t_cm_ill *curr;
 
 	if (!nh || !dtor) return;
@@ -40,7 +40,7 @@ static void clean_chain(void *nh, size_t offset, t_cm_dtor dtor) {
  * \param head The head of the list to copy.
  * \param dupper The duplicator function used to copy each element.
  * \param dtor Optional destructor used to clean-up already copied elements if a
- * later duplication fails.
+ * later duplication fails. A partial copy cannot be released without it.
  * \return A pointer to the head of the new copied list's first element, or NULL
  * on failure.
  * \ingroup ill

@@ -103,13 +103,15 @@ embedded *inside* the user's own structs, addressed via an offset, with
 push/pop/append/prepend/insert/remove/reverse, apply/napply traversal, a pull
 iterator and list predicates. The default API is element centric: it takes and
 returns the payload struct plus the node offset, so callers do not have to
-convert to nodes themselves. The low-level node API is available under the
-`_node` suffix for mixed payload types or manual node management; head pointers
-stay opaque list handles.
+convert to nodes themselves (including `get_head`/`get_tail`). The low-level
+node API is available under the `_node` suffix for mixed payload types or
+manual node management; head pointers stay opaque list handles.
 **Skill:** intrusive containers, `offsetof`-style pointer arithmetic, aliasing
 the allocation of the payload and its links, and O(1) splicing.
-**Complexity:** push/pop O(1); insert/remove given a node O(1); reverse O(n);
-search O(n); sort O(n log n).
+**Complexity:** front push/pop O(1); `push_back`/`pop_back`/`get_tail` O(n)
+without a tail handle; insert O(1); remove given a previously found node O(1)
+for `idl` and O(n) for `ill`; `remove_after` O(1); reverse O(n); search O(n);
+sort O(n log n).
 
 ### `lruc` — Least Recently Used Cache
 A capacity-bounded key/value cache whose bound is enforced by recency: a hash

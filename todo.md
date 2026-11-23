@@ -10,23 +10,11 @@ general todo for the project
 ## General TODO:
 - [>] refactor
  - [x] ill-> api consistency around head
- - [ ] ill-> element wrappers log success even when the underlying node call fails (ill_elem.c/idl_elem.c)
- - [ ] ill-> ill_copy/idl_copy leak partial copies when a duplicator fails and dtor is NULL
- - [x] ill-> idl_remove_node is O(n) remove idl_find_node for O(1)
- - [ ] ill-> README claims remove given a node is O(1) but ill_remove_node is O(n); fix the claim
- - [ ] ill-> rename: ill_rm_if/idl_rm_if -> filter_dt; name->true==rm impl->false==rm; rename so name==impl
- - [ ] ill-> ill_apply/idl_apply/napply return bool->void*; return usr_data;
- - [ ] ill-> ill_napply/idl_napply use a -1 sentinel and decrement n in the loop condition (underflow at n == 0); clean up
- - [ ] ill-> ill_iter/idl_iter -> const head
- - [ ] ill-> ill_iter/idl_iter add 'size_t offset' mixed offsets don't break the iterator state
- - [ ] ill-> ill_filter/idl_filter/filter_out leave *filtered untouched on invalid arguments instead of resetting it
- - [ ] ill-> const-correct element wrappers on input payloads (cppcheck constParameterPointer)
- - [ ] ill-> idl_nappend_node/idl_nprepend_node skip idl_get_head_node
+ - [x] ill-> element wrappers log success even when the underlying node call fails (ill_elem.c/idl_elem.c)
+ - [:] ill-> ill_copy/idl_copy leak partial copies when a duplicator fails and dtor is NULL
+  - note: dtor kept optional per design; partial copies cannot be released without it. docs updated, leak remains when dtor == NULL.
  - [:] ill-> inserting an already linked or anchor-equal node is not detected and creates cycles; document/assert isolated nodes
- - [ ] ill-> ill_advance_it and ill_iter are two overlapping iterator models with different state semantics; unify or document
- - [ ] ill-> idl_get_tail/idl_get_head element wrappers take a node head handle while other element functions take elem + offset
- - [ ] ill-> README says push/pop O(1) but push_back/pop_back/get_tail are O(n) without a tail handle; fix docs
- - [ ] ill-> ill_find_prev/idl_find_prev and get_prev return NULL for both "target is head" and "not found"; document
+  - note: documented in both headers; no runtime assert added (paused item).
  - [ ] rptr->package _generic in ifdef blocks and check compile ok for c older version
  - [ ] tls->vtls->hmaps
  - [ ] tls->vtls->hmaps.
@@ -51,9 +39,20 @@ general todo for the project
   - [~] old module functionalities (detail bellow)
    - [x] hp-> more funcs, iterators
    - [x] lruc->make a separate lru only cache similar to dsu/ (lruc pure + lrutc timed)
-   - [~] ill->circular lists, elem centric funcs (dont take node, but elem containing the ill/idl ptr), iteraors
-    - [x] elem centric funcs, elem default + `_node()` node api
+   - [~] ill->
     - [:] circular lists (`ill_circ_` / `idl_circ_`)
+    - [ ] iters: idl_iter_rev, ill_iter_range/idl_iter_range
+    - [:] ill_apply_it/idl_apply_it and napply_it (da parity) - unsure usefullness
+    - [ ] ill_apply_range/idl_apply_range: apply on subrange
+    - [ ] querries: ill_is_empty/idl_is_empty
+    - [ ] ill_clear/idl_clear: walk, unlink and optionally dtor every element
+    - [ ] ill_move/idl_move: cut and splice a range between lists
+    - [ ] ill_concat/idl_concat: join two lists (add predicate ill_merge+idl_merge for name completeness on idl_sorted_merge/ill_sorted_merge. simple aliasing.)
+    - [:] optional tail handle/list descriptor for O(1) push_back/pop_back/get_tail
+    - [ ] ill_fold/idl_fold and ill_reduce/idl_reduce (da/hp parity)
+    - [ ] ill_nfilter/idl_nfilter and nfilter_out: n-limited filter variants
+    - [:] ill_unique/idl_unique: return the removed count and/or provide a full (non-consecutive) dedup option - use htable using load of .7 so (list_len/.7) = slot nb, store ptr + hit count, in case of miss check (slot+1)%bucket_nb - paused:heavy for litle gains + need semi-dedicated hmap impl to keep separate modules, heavy code for low scope.
+    - [ ] ill_validate/idl_validate: check offsets, prev/next links, cycles and isolation
    - [ ] rb->add functs to module, iterators
    - [ ] tls->ftls->xmacros for more than 1 struct, vtls+ctls iterator
    - [ ] tpm->crash catch, job batching on stress conditions, atomic thrd nb - increase/remove thrd control handle, auto increase thrd nb on stress
@@ -70,7 +69,7 @@ general todo for the project
    - [~] check section and execute
     - [x] hp
     - [x] lruc
-    - [x] ill
+    - [>] ill
     - [ ] rb
     - [ ] tls
     - [ ] tpm

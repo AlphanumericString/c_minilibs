@@ -6,9 +6,8 @@
  * \param offset Offset of the node within the element.
  * \ingroup idl
 **/
-void idl_init(void *elem, size_t offset) {
+void idl_init(const void *elem, size_t offset) {
 	idl_init_node(idl_eton(elem, offset), offset);
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 }
 
 /**
@@ -19,7 +18,6 @@ void idl_init(void *elem, size_t offset) {
  * \ingroup idl
 **/
 bool idl_is_isolated(const void *elem, size_t offset) {
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return idl_is_isolated_node(idl_eton(elem, offset));
 }
 
@@ -30,9 +28,8 @@ bool idl_is_isolated(const void *elem, size_t offset) {
  * \param offset Offset of the node within the elements.
  * \ingroup idl
 **/
-void idl_append(void *anchor_elem, void *elem, size_t offset) {
+void idl_append(const void *anchor_elem, const void *elem, size_t offset) {
 	idl_append_node(idl_eton(anchor_elem, offset), idl_eton(elem, offset));
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 }
 
 /**
@@ -42,9 +39,8 @@ void idl_append(void *anchor_elem, void *elem, size_t offset) {
  * \param offset Offset of the node within the elements.
  * \ingroup idl
 **/
-void idl_nappend(void *anchor_elem, void *elems, size_t offset) {
+void idl_nappend(const void *anchor_elem, const void *elems, size_t offset) {
 	idl_nappend_node(idl_eton(anchor_elem, offset), idl_eton(elems, offset));
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 }
 
 /**
@@ -54,9 +50,8 @@ void idl_nappend(void *anchor_elem, void *elems, size_t offset) {
  * \param offset Offset of the node within the elements.
  * \ingroup idl
 **/
-void idl_prepend(void *anchor_elem, void *elem, size_t offset) {
+void idl_prepend(const void *anchor_elem, const void *elem, size_t offset) {
 	idl_prepend_node(idl_eton(anchor_elem, offset), idl_eton(elem, offset));
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 }
 
 /**
@@ -66,9 +61,8 @@ void idl_prepend(void *anchor_elem, void *elem, size_t offset) {
  * \param offset Offset of the node within the elements.
  * \ingroup idl
 **/
-void idl_nprepend(void *anchor_elem, void *elems, size_t offset) {
+void idl_nprepend(const void *anchor_elem, const void *elems, size_t offset) {
 	idl_nprepend_node(idl_eton(anchor_elem, offset), idl_eton(elems, offset));
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 }
 
 /**
@@ -79,10 +73,9 @@ void idl_nprepend(void *anchor_elem, void *elems, size_t offset) {
  * \return The new head element, or NULL on failure.
  * \ingroup idl
 **/
-void *idl_push(t_cm_idl **head, void *elem, size_t offset) {
-	t_cm_idl *ret = idl_push_node(head, idl_eton(elem, offset));
+void *idl_push(t_cm_idl **head, const void *elem, size_t offset) {
+	const t_cm_idl *ret = idl_push_node(head, idl_eton(elem, offset));
 
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (ret ? idl_ntoe(ret) : NULL);
 }
 
@@ -94,10 +87,9 @@ void *idl_push(t_cm_idl **head, void *elem, size_t offset) {
  * \return The new head element, or NULL on failure.
  * \ingroup idl
 **/
-void *idl_npush(t_cm_idl **head, void *elems, size_t offset) {
-	t_cm_idl *ret = idl_npush_node(head, idl_eton(elems, offset));
+void *idl_npush(t_cm_idl **head, const void *elems, size_t offset) {
+	const t_cm_idl *ret = idl_npush_node(head, idl_eton(elems, offset));
 
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (ret ? idl_ntoe(ret) : NULL);
 }
 
@@ -109,10 +101,9 @@ void *idl_npush(t_cm_idl **head, void *elems, size_t offset) {
  * \return The head element, or NULL on failure.
  * \ingroup idl
 **/
-void *idl_push_back(t_cm_idl **head, void *elem, size_t offset) {
-	t_cm_idl *ret = idl_push_back_node(head, idl_eton(elem, offset));
+void *idl_push_back(t_cm_idl **head, const void *elem, size_t offset) {
+	const t_cm_idl *ret = idl_push_back_node(head, idl_eton(elem, offset));
 
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (ret ? idl_ntoe(ret) : NULL);
 }
 
@@ -123,9 +114,8 @@ void *idl_push_back(t_cm_idl **head, void *elem, size_t offset) {
  * \ingroup idl
 **/
 void *idl_pop(t_cm_idl **head) {
-	t_cm_idl *ret = idl_pop_node(head);
+	const t_cm_idl *ret = idl_pop_node(head);
 
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (ret ? idl_ntoe(ret) : NULL);
 }
 
@@ -136,9 +126,8 @@ void *idl_pop(t_cm_idl **head) {
  * \ingroup idl
 **/
 void *idl_pop_back(t_cm_idl **head) {
-	t_cm_idl *ret = idl_pop_back_node(head);
+	const t_cm_idl *ret = idl_pop_back_node(head);
 
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (ret ? idl_ntoe(ret) : NULL);
 }
 
@@ -149,10 +138,9 @@ void *idl_pop_back(t_cm_idl **head) {
  * \return The removed element, or NULL if the anchor has no successor.
  * \ingroup idl
 **/
-void *idl_remove_after(void *prev_elem, size_t offset) {
-	t_cm_idl *ret = idl_remove_after_node(idl_eton(prev_elem, offset));
+void *idl_remove_after(const void *prev_elem, size_t offset) {
+	const t_cm_idl *ret = idl_remove_after_node(idl_eton(prev_elem, offset));
 
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (ret ? idl_ntoe(ret) : NULL);
 }
 
@@ -165,7 +153,6 @@ void *idl_remove_after(void *prev_elem, size_t offset) {
  * \ingroup idl
 **/
 bool idl_remove(t_cm_idl **head, const void *elem, size_t offset) {
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return idl_remove_node(head, idl_eton(elem, offset));
 }
 
@@ -174,13 +161,13 @@ bool idl_remove(t_cm_idl **head, const void *elem, size_t offset) {
  * \param head The head of the list.
  * \param elem Pointer to the target element.
  * \param offset Offset of the node within the elements.
- * \return A pointer to the preceding element, or NULL if not found.
+ * \return A pointer to the preceding element, or NULL if the target is the head
+ * or is not found.
  * \ingroup idl
 **/
 void *idl_find_prev(const t_cm_idl *head, const void *elem, size_t offset) {
-	t_cm_idl *ret = idl_find_prev_node(head, idl_eton(elem, offset));
+	const t_cm_idl *ret = idl_find_prev_node(head, idl_eton(elem, offset));
 
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (ret ? idl_ntoe(ret) : NULL);
 }
 
@@ -193,9 +180,8 @@ void *idl_find_prev(const t_cm_idl *head, const void *elem, size_t offset) {
  * \ingroup idl
 **/
 void *idl_find(const t_cm_idl *head, const void *elem, size_t offset) {
-	t_cm_idl *ret = idl_find_node(head, idl_eton(elem, offset));
+	const t_cm_idl *ret = idl_find_node(head, idl_eton(elem, offset));
 
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (ret ? idl_ntoe(ret) : NULL);
 }
 
@@ -204,13 +190,13 @@ void *idl_find(const t_cm_idl *head, const void *elem, size_t offset) {
  * \param head The head of the list.
  * \param c The comparator function used for matching.
  * \param arg The argument to pass to the comparator.
- * \return A pointer to the preceding element of the matched element, or NULL.
+ * \return A pointer to the preceding element of the matched element, or NULL if
+ * there is no match or the match is the head.
  * \ingroup idl
 **/
 void *idl_get_prev(const t_cm_idl *head, t_cm_comparator c, const void *arg) {
-	t_cm_idl *ret = idl_get_prev_node(head, c, arg);
+	const t_cm_idl *ret = idl_get_prev_node(head, c, arg);
 
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (ret ? idl_ntoe(ret) : NULL);
 }
 
@@ -223,35 +209,34 @@ void *idl_get_prev(const t_cm_idl *head, t_cm_comparator c, const void *arg) {
  * \ingroup idl
 **/
 void *idl_get(const t_cm_idl *head, t_cm_comparator c, const void *arg) {
-	t_cm_idl *ret = idl_get_node(head, c, arg);
+	const t_cm_idl *ret = idl_get_node(head, c, arg);
 
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (ret ? idl_ntoe(ret) : NULL);
 }
 
 /**
- * \brief Retrieves the tail element of the list.
- * \param head The head of the list.
+ * \brief Retrieves the tail element of the list containing elem.
+ * \param elem Pointer to an element of the list.
+ * \param offset Offset of the node within the element.
  * \return A pointer to the last element, or NULL if the list is empty.
  * \ingroup idl
 **/
-void *idl_get_tail(const t_cm_idl *head) {
-	t_cm_idl *ret = idl_get_tail_node(head);
+void *idl_get_tail(const void *elem, size_t offset) {
+	const t_cm_idl *ret = idl_get_tail_node(idl_eton(elem, offset));
 
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (ret ? idl_ntoe(ret) : NULL);
 }
 
 /**
- * \brief Retrieves the head element of the list.
- * \param head The head of the list.
+ * \brief Retrieves the head element of the list containing elem.
+ * \param elem Pointer to an element of the list.
+ * \param offset Offset of the node within the element.
  * \return A pointer to the first element, or NULL if the list is empty.
  * \ingroup idl
 **/
-void *idl_get_head(const t_cm_idl *head) {
-	t_cm_idl *ret = idl_get_head_node(head);
+void *idl_get_head(const void *elem, size_t offset) {
+	const t_cm_idl *ret = idl_get_head_node(idl_eton(elem, offset));
 
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (ret ? idl_ntoe(ret) : NULL);
 }
 
@@ -263,9 +248,8 @@ void *idl_get_head(const t_cm_idl *head) {
  * \ingroup idl
 **/
 void *idl_get_min(const t_cm_idl *head, t_cm_comparator c) {
-	t_cm_idl *ret = idl_get_min_node(head, c);
+	const t_cm_idl *ret = idl_get_min_node(head, c);
 
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (ret ? idl_ntoe(ret) : NULL);
 }
 
@@ -277,9 +261,8 @@ void *idl_get_min(const t_cm_idl *head, t_cm_comparator c) {
  * \ingroup idl
 **/
 void *idl_get_max(const t_cm_idl *head, t_cm_comparator c) {
-	t_cm_idl *ret = idl_get_max_node(head, c);
+	const t_cm_idl *ret = idl_get_max_node(head, c);
 
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (ret ? idl_ntoe(ret) : NULL);
 }
 
@@ -291,8 +274,7 @@ void *idl_get_max(const t_cm_idl *head, t_cm_comparator c) {
  * \ingroup idl
 **/
 void *idl_get_kth(const t_cm_idl *head, size_t k) {
-	t_cm_idl *ret = idl_get_kth_node(head, k);
+	const t_cm_idl *ret = idl_get_kth_node(head, k);
 
-	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (ret ? idl_ntoe(ret) : NULL);
 }

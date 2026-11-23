@@ -42,9 +42,12 @@ else
 	CFLAGS += -g3 -DC_MINI__TESTS -DC_MINI__DEBUG_LEVEL=$(DEBUG_LVL)
 endif
 
+# tests deliberately hand uninitialized payloads to the *_init() wrappers, so
+# silence clang's const-pointer false positive for this build only.
 TFLAGS	?= $(filter-out -O2 -O3 -O1, $(CFLAGS))	-O0 -I./	\
 			-fprofile-instr-generate -ftest-coverage -fcoverage-mapping \
-			-fno-inline -fno-inline-functions -DC_MINI__TESTS
+			-fno-inline -fno-inline-functions -DC_MINI__TESTS		\
+			-Wno-uninitialized-const-pointer
 # optional compile-time path: set to 1 to build the da tests with auto-shrink on
 DA_AUTO_SHRINK	?= 0
 ifeq ($(DA_AUTO_SHRINK), 1)

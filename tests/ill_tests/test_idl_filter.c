@@ -57,9 +57,15 @@ NO_COV void test_cm_idl_filter(void) {
 		assert(h == NULL);
 	}
 
-	assert(idl_filter(NULL, cb_idl_is_even, NULL, &filtered) == 0);
-	assert(idl_filter(&head, NULL, NULL, &filtered) == 0);
-	assert(idl_filter(&head, cb_idl_is_even, NULL, NULL) == 0);
+	{
+		t_cm_idl *sentinel = &nodes[0].dnode;
+
+		assert(idl_filter(NULL, cb_idl_is_even, NULL, &sentinel) == 0);
+		assert(sentinel == &nodes[0].dnode);
+		assert(idl_filter(&head, NULL, NULL, &sentinel) == 0);
+		assert(sentinel == &nodes[0].dnode);
+		assert(idl_filter(&head, cb_idl_is_even, NULL, NULL) == 0);
+	}
 }
 
 NO_COV void test_cm_idl_filter_out(void) {
@@ -102,7 +108,13 @@ NO_COV void test_cm_idl_filter_out(void) {
 		assert(out[0] == 2 && out[1] == 4);
 	}
 
-	assert(idl_filter_out(NULL, cb_idl_is_even, NULL, &filtered) == 0);
-	assert(idl_filter_out(&head, NULL, NULL, &filtered) == 0);
-	assert(idl_filter_out(&head, cb_idl_is_even, NULL, NULL) == 0);
+	{
+		t_cm_idl *sentinel = &nodes[0].dnode;
+
+		assert(idl_filter_out(NULL, cb_idl_is_even, NULL, &sentinel) == 0);
+		assert(sentinel == &nodes[0].dnode);
+		assert(idl_filter_out(&head, NULL, NULL, &sentinel) == 0);
+		assert(sentinel == &nodes[0].dnode);
+		assert(idl_filter_out(&head, cb_idl_is_even, NULL, NULL) == 0);
+	}
 }

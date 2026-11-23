@@ -137,7 +137,7 @@ NO_COV void test_cm_ill_remove_after(void);
 NO_COV void test_cm_ill_remove_after_node(void);
 NO_COV void test_cm_ill_remove_node(void);
 NO_COV void test_cm_ill_reverse(void);
-NO_COV void test_cm_ill_rm_if(void);
+NO_COV void test_cm_ill_filter_dt(void);
 NO_COV void test_cm_ill_sort(void);
 NO_COV void test_cm_ill_unique(void);
 
@@ -202,6 +202,6 @@ NO_COV void test_cm_idl_remove_after(void);
 NO_COV void test_cm_idl_remove_after_node(void);
 NO_COV void test_cm_idl_remove_node(void);
 NO_COV void test_cm_idl_reverse(void);
-NO_COV void test_cm_idl_rm_if(void);
+NO_COV void test_cm_idl_filter_dt(void);
 NO_COV void test_cm_idl_sort(void);
 NO_COV void test_cm_idl_unique(void);

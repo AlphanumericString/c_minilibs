@@ -269,14 +269,14 @@ NO_COV void test_cm_ill_get_tail(void) {
 	ill_init(&n2, OFF);
 	ill_init(&n3, OFF);
 
-	assert(ill_get_tail(head) == NULL);
+	assert(ill_get_tail(NULL, OFF) == NULL);
 	ill_push_back(&head, &n1, OFF);
-	assert(ill_get_tail(head) == &n1);
+	assert(ill_get_tail(&n1, OFF) == &n1);
 	ill_push_back(&head, &n2, OFF);
-	assert(ill_get_tail(head) == &n2);
+	assert(ill_get_tail(&n1, OFF) == &n2);
 	ill_push_back(&head, &n3, OFF);
-	assert(ill_get_tail(head) == &n3);
-	assert(ill_get_tail(NULL) == NULL);
+	assert(ill_get_tail(&n3, OFF) == &n3);
+	assert(ill_get_tail(NULL, OFF) == NULL);
 }
 
 NO_COV void test_cm_ill_get_min(void) {

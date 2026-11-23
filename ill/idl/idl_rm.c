@@ -27,6 +27,8 @@ t_cm_idl *idl_remove_after_node(t_cm_idl *prev) {
  * \param head Pointer to the head of the list.
  * \param target The node to remove.
  * \return true if the node was successfully removed, false otherwise.
+ * \note O(1) when target is linked. Define C_MINI__IDL_CHECK_STRICT to also
+ * verify membership, at the cost of an O(n) lookup.
  * \ingroup idl
 **/
 bool idl_remove_node(t_cm_idl **head, t_cm_idl *target) {

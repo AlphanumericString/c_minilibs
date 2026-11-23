@@ -35,7 +35,7 @@ static void clean_chain(const void *nh, size_t offset, t_cm_dtor dtor) {
  * \param head The head of the list to copy.
  * \param d The duplicator function used to copy each element.
  * \param dtor Optional destructor used to clean-up already copied elements if a
- * later duplication fails.
+ * later duplication fails. A partial copy cannot be released without it.
  * \return A pointer to the head of the new copied list's first element, or NULL
  * on failure.
  * \ingroup idl

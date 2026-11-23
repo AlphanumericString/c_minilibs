@@ -20,7 +20,7 @@
 
 /**
  * \defgroup ill Intrusive Linked List
-**/
+ **/
 
 /* ************************************************************************* */
 /* api shape                                                                 */
@@ -41,6 +41,19 @@
 /* payload in the chain uses the same offset. use the _node variants when    */
 /* offsets differ.                                                           */
 /*                                                                           */
+/* nodes passed to insert helpers must be isolated (ill_is_isolated()).      */
+/* inserting an already linked node, or an anchor equal to the inserted      */
+/* node, is not detected and can create cycles.                              */
+/*                                                                           */
+/* ill_find_prev()/ill_get_prev() return NULL both when the target is the    */
+/* head (no predecessor) and when it is not found; use ill_find() first to   */
+/* distinguish the two cases.                                                */
+/*                                                                           */
+/* ill_iter() keeps the current element in *iter and uses the offset of the  */
+/* current element to step forward. ill_advance_it() is the stateless        */
+/* equivalent of "it++": it takes the current element and returns the next   */
+/* one. mixing the two is just a manual skip of one element.                 */
+/*                                                                           */
 /* the circular list api is reserved under the ill_circ_ prefix and is not   */
 /* implemented yet.                                                          */
 /* ************************************************************************* */
@@ -51,13 +64,13 @@
  * \param offset offset of the node in the element
  * \param next pointer to the next node
  * \ingroup ill
-**/
+ **/
 typedef struct s_cm_ill {
 	size_t           offset;
 	struct s_cm_ill *next;
 } t_cm_ill;
 
-void  ill_init(void *elem, size_t offset);
+void  ill_init(const void *elem, size_t offset);
 void  ill_init_node(t_cm_ill *node, size_t offset);
 void *ill_copy(const t_cm_ill *head, t_cm_duplicator d, t_cm_dtor dtor);
 
@@ -70,22 +83,24 @@ bool ill_is_circular(const t_cm_ill *head);
 bool ill_is_sorted(const t_cm_ill *head, t_cm_comparator comparator);
 bool ill_has(const t_cm_ill *head, t_cm_callback matcher, void *arg);
 
-void     *ill_push(t_cm_ill **head, void *elem, size_t offset);
+void     *ill_push(t_cm_ill **head, const void *elem, size_t offset);
 t_cm_ill *ill_push_node(t_cm_ill **head, t_cm_ill *node);
-void     *ill_npush(t_cm_ill **head, void *elems, size_t offset);
+void     *ill_npush(t_cm_ill **head, const void *elems, size_t offset);
 t_cm_ill *ill_npush_node(t_cm_ill **head, t_cm_ill *nodes);
-void     *ill_push_back(t_cm_ill **head, void *elem, size_t offset);
+void     *ill_push_back(t_cm_ill **head, const void *elem, size_t offset);
 t_cm_ill *ill_push_back_node(t_cm_ill **head, t_cm_ill *node);
-void      ill_append(void *anchor_elem, void *elem, size_t offset);
-void      ill_append_node(t_cm_ill *anchor, t_cm_ill *node);
-void      ill_nappend(void *anchor_elem, void *elems, size_t offset);
-void      ill_nappend_node(t_cm_ill *anchor, t_cm_ill *nodes);
+
+void ill_append(const void *anchor_elem, const void *elem, size_t offset);
+void ill_append_node(t_cm_ill *anchor, t_cm_ill *node);
+void ill_nappend(const void *anchor_elem, const void *elems, size_t offset);
+void ill_nappend_node(t_cm_ill *anchor, t_cm_ill *nodes);
 
 void     *ill_pop(t_cm_ill **head);
 t_cm_ill *ill_pop_node(t_cm_ill **head);
 void     *ill_pop_back(t_cm_ill **head);
 t_cm_ill *ill_pop_back_node(t_cm_ill **head);
-void     *ill_remove_after(void *prev_elem, size_t offset);
+
+void     *ill_remove_after(const void *prev_elem, size_t offset);
 t_cm_ill *ill_remove_after_node(t_cm_ill *prev);
 bool      ill_remove(t_cm_ill **head, const void *elem, size_t offset);
 bool      ill_remove_node(t_cm_ill **head, t_cm_ill *target);
@@ -100,7 +115,7 @@ t_cm_ill *ill_get_prev_node(const t_cm_ill *head, t_cm_comparator c,
 void     *ill_get(const t_cm_ill *head, t_cm_comparator c, const void *arg);
 t_cm_ill *ill_get_node(const t_cm_ill *head, t_cm_comparator c,
                        const void *arg);
-void     *ill_get_tail(const t_cm_ill *head);
+void     *ill_get_tail(const void *elem, size_t offset);
 t_cm_ill *ill_get_tail_node(const t_cm_ill *head);
 
 void     *ill_get_min(const t_cm_ill *head, t_cm_comparator comp);
@@ -114,10 +129,11 @@ size_t ill_length(const t_cm_ill *head);
 size_t ill_nlength(const t_cm_ill *head, size_t n);
 size_t ill_match_nb(const t_cm_ill *head, t_cm_callback matcher, void *arg);
 
-bool  ill_apply(const t_cm_ill *head, t_cm_callback c, void *u_data);
-bool  ill_napply(const t_cm_ill *head, size_t n, t_cm_callback c, void *u_data);
-bool  ill_iter(t_cm_ill *head, void **iter);
-void *ill_advance_it(const void *e, size_t offset);
+void *ill_apply(const t_cm_ill *head, t_cm_callback c, void *u_data);
+void *ill_napply(const t_cm_ill *head, size_t n, t_cm_callback c, void *u_data);
+
+bool      ill_iter(const t_cm_ill *head, void **iter, size_t offset);
+void     *ill_advance_it(const void *e, size_t offset);
 t_cm_ill *ill_advance_it_node(const t_cm_ill *it);
 
 void      ill_reverse(t_cm_ill **head);
@@ -129,7 +145,7 @@ size_t ill_filter(t_cm_ill **head, t_cm_callback cb, void *arg,
                   t_cm_ill **filtered);
 size_t ill_filter_out(t_cm_ill **head, t_cm_callback cb, void *arg,
                       t_cm_ill **filtered);
-size_t ill_rm_if(t_cm_ill **head, t_cm_callback cb, void *arg, t_cm_dtor d);
+size_t ill_filter_dt(t_cm_ill **head, t_cm_callback cb, void *arg, t_cm_dtor d);
 void   ill_unique(t_cm_ill *head, t_cm_comparator c, t_cm_dtor d);
 
 #endif // !C_MINI__ILL

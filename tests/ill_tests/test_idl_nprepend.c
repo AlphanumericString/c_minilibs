@@ -36,7 +36,7 @@ NO_COV void test_cm_idl_nprepend_node(void) {
 	assert(n_neg2.dnode.next == &n_neg1.dnode && n_neg1.dnode.next == NULL);
 	assert(n_neg2.dnode.prev == NULL && n_neg1.dnode.prev == &n_neg2.dnode);
 	assert(n0.dnode.prev == n0_before_op_prv && n0.dnode.next == &n1.dnode);
-	idl_nprepend_node(&n0.dnode, &n_neg1.dnode);
+	idl_nprepend_node(&n0.dnode, &n_neg2.dnode);
 	// State assert: [ .. n0_before, n-2, n-1, n0, n1 ..]
 	assert(n0_before_op_prv->next == &n_neg2.dnode &&
 	       n_neg2.dnode.next == &n_neg1.dnode &&

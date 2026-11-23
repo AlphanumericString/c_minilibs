@@ -21,22 +21,23 @@ void idl_append_node(t_cm_idl *anchor, t_cm_idl *node) {
  * \brief Appends an entire list of nodes after an anchor node.
  * \param anchor The node after which to insert.
  * \param nodes The head of the list of nodes to insert.
+ * \note nodes must be the head of the chain; the function does not walk back to
+ * find it.
  * \ingroup idl
 **/
 void idl_nappend_node(t_cm_idl *anchor, t_cm_idl *nodes) {
-	t_cm_idl *first_node, *last_node;
+	t_cm_idl *last_node;
 
 	if (!anchor || !nodes) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return;
 	}
-	last_node  = idl_get_tail_node(nodes);
-	first_node = idl_get_head_node(nodes);
+	last_node = idl_get_tail_node(nodes);
 
-	last_node->next  = anchor->next;
-	first_node->prev = anchor;
+	last_node->next = anchor->next;
+	nodes->prev     = anchor;
 	if (anchor->next) anchor->next->prev = last_node;
-	anchor->next = first_node;
+	anchor->next = nodes;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 }
 
@@ -62,21 +63,22 @@ void idl_prepend_node(t_cm_idl *anchor, t_cm_idl *node) {
  * node.
  * \param anchor The node before which to insert.
  * \param nodes The head of the list of nodes to insert.
+ * \note nodes must be the head of the chain; the function does not walk back to
+ * find it.
  * \ingroup idl
 **/
 void idl_nprepend_node(t_cm_idl *anchor, t_cm_idl *nodes) {
-	t_cm_idl *last_node, *first_node;
+	t_cm_idl *last_node;
 
 	if (!anchor || !nodes) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return;
 	}
-	last_node  = idl_get_tail_node(nodes);
-	first_node = idl_get_head_node(nodes);
+	last_node = idl_get_tail_node(nodes);
 
-	first_node->prev = anchor->prev;
-	last_node->next  = anchor;
-	if (anchor->prev) anchor->prev->next = first_node;
+	nodes->prev     = anchor->prev;
+	last_node->next = anchor;
+	if (anchor->prev) anchor->prev->next = nodes;
 	anchor->prev = last_node;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 }

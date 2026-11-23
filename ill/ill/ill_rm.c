@@ -25,6 +25,8 @@ t_cm_ill *ill_remove_after_node(t_cm_ill *prev) {
  * \param head Pointer to the head of the list.
  * \param target The node to remove.
  * \return true if the node was successfully removed, false otherwise.
+ * \note O(n): a singly linked list must first find the predecessor. Use
+ * ill_remove_after_node() when the predecessor is already known.
  * \ingroup ill
 **/
 bool ill_remove_node(t_cm_ill **head, t_cm_ill *target) {

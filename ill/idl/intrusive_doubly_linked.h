@@ -14,13 +14,15 @@
 #	define C_MINI__IDL_LOG_FAIL    C_MINI__LOG_FAIL
 #	define C_MINI__IDL_LOG_SUCCESS C_MINI__LOG_SUCCESS
 
+#	define C_MINI__IDL_CHECK_STRICT
+
 #endif // !C_MINI__TESTS
 
 #include "common_base/fptr.h"
 
 /**
  * \defgroup idl Intrusive Doubly-linked Lists
-**/
+ **/
 
 /* ************************************************************************** */
 /* api shape                                                                  */
@@ -41,6 +43,19 @@
 /* payload in the chain uses the same offset. use the _node variants when     */
 /* offsets differ.                                                            */
 /*                                                                            */
+/* nodes passed to insert helpers must be isolated (idl_is_isolated()).       */
+/* inserting an already linked node, or an anchor equal to the inserted       */
+/* node, is not detected and can create cycles.                               */
+/*                                                                            */
+/* idl_find_prev()/idl_get_prev() return NULL both when the target is the     */
+/* head (no predecessor) and when it is not found; use idl_find() first to    */
+/* distinguish the two cases.                                                 */
+/*                                                                            */
+/* idl_iter() keeps the current element in *iter and uses the offset of the   */
+/* current element to step forward. idl_advance_it() is the stateless         */
+/* equivalent of "it++": it takes the current element and returns the next    */
+/* one. mixing the two is just a manual skip of one element.                  */
+/*                                                                            */
 /* the circular list api is reserved under the idl_circ_ prefix and is not    */
 /* implemented yet.                                                           */
 /* ************************************************************************** */
@@ -52,14 +67,14 @@
  * \param next pointer to the next node
  * \param prev pointer to the previous node
  * \ingroup idl
-**/
+ **/
 typedef struct s_cm_idl {
 	struct s_cm_idl *prev;
 	struct s_cm_idl *next;
 	size_t           offset;
 } t_cm_idl;
 
-void  idl_init(void *elem, size_t offset);
+void  idl_init(const void *elem, size_t offset);
 void  idl_init_node(t_cm_idl *node, size_t offset);
 void *idl_copy(const t_cm_idl *head, t_cm_duplicator d, t_cm_dtor dtor);
 
@@ -72,26 +87,29 @@ bool idl_is_circular(const t_cm_idl *head);
 bool idl_is_sorted(const t_cm_idl *head, t_cm_comparator comparator);
 bool idl_has(const t_cm_idl *head, t_cm_callback matcher, void *arg);
 
-void     *idl_push(t_cm_idl **head, void *elem, size_t offset);
+void     *idl_push(t_cm_idl **head, const void *elem, size_t offset);
 t_cm_idl *idl_push_node(t_cm_idl **head, t_cm_idl *node);
-void     *idl_npush(t_cm_idl **head, void *elems, size_t offset);
+void     *idl_npush(t_cm_idl **head, const void *elems, size_t offset);
 t_cm_idl *idl_npush_node(t_cm_idl **head, t_cm_idl *nodes);
-void     *idl_push_back(t_cm_idl **head, void *elem, size_t offset);
+void     *idl_push_back(t_cm_idl **head, const void *elem, size_t offset);
 t_cm_idl *idl_push_back_node(t_cm_idl **head, t_cm_idl *node);
-void      idl_append(void *anchor_elem, void *elem, size_t offset);
-void      idl_append_node(t_cm_idl *anchor, t_cm_idl *node);
-void      idl_nappend(void *anchor_elem, void *elems, size_t offset);
-void      idl_nappend_node(t_cm_idl *anchor, t_cm_idl *nodes);
-void      idl_prepend(void *anchor_elem, void *elem, size_t offset);
-void      idl_prepend_node(t_cm_idl *anchor, t_cm_idl *node);
-void      idl_nprepend(void *anchor_elem, void *elems, size_t offset);
-void      idl_nprepend_node(t_cm_idl *anchor, t_cm_idl *nodes);
+
+void idl_append(const void *anchor_elem, const void *elem, size_t offset);
+void idl_append_node(t_cm_idl *anchor, t_cm_idl *node);
+void idl_nappend(const void *anchor_elem, const void *elems, size_t offset);
+void idl_nappend_node(t_cm_idl *anchor, t_cm_idl *nodes);
+
+void idl_prepend(const void *anchor_elem, const void *elem, size_t offset);
+void idl_prepend_node(t_cm_idl *anchor, t_cm_idl *node);
+void idl_nprepend(const void *anchor_elem, const void *elems, size_t offset);
+void idl_nprepend_node(t_cm_idl *anchor, t_cm_idl *nodes);
 
 void     *idl_pop(t_cm_idl **head);
 t_cm_idl *idl_pop_node(t_cm_idl **head);
 void     *idl_pop_back(t_cm_idl **head);
 t_cm_idl *idl_pop_back_node(t_cm_idl **head);
-void     *idl_remove_after(void *prev_elem, size_t offset);
+
+void     *idl_remove_after(const void *prev_elem, size_t offset);
 t_cm_idl *idl_remove_after_node(t_cm_idl *prev);
 bool      idl_remove(t_cm_idl **head, const void *elem, size_t offset);
 bool      idl_remove_node(t_cm_idl **head, t_cm_idl *target);
@@ -106,9 +124,9 @@ t_cm_idl *idl_get_prev_node(const t_cm_idl *head, t_cm_comparator c,
 void     *idl_get(const t_cm_idl *head, t_cm_comparator c, const void *arg);
 t_cm_idl *idl_get_node(const t_cm_idl *head, t_cm_comparator c,
                        const void *arg);
-void     *idl_get_tail(const t_cm_idl *head);
+void     *idl_get_tail(const void *elem, size_t offset);
 t_cm_idl *idl_get_tail_node(const t_cm_idl *node);
-void     *idl_get_head(const t_cm_idl *head);
+void     *idl_get_head(const void *elem, size_t offset);
 t_cm_idl *idl_get_head_node(const t_cm_idl *node);
 
 void     *idl_get_min(const t_cm_idl *head, t_cm_comparator c);
@@ -122,10 +140,11 @@ size_t idl_length(const t_cm_idl *head);
 size_t idl_nlength(const t_cm_idl *head, size_t n);
 size_t idl_match_nb(const t_cm_idl *head, t_cm_callback matcher, void *arg);
 
-bool  idl_apply(const t_cm_idl *head, t_cm_callback c, void *u_data);
-bool  idl_napply(const t_cm_idl *head, size_t n, t_cm_callback c, void *u_data);
-bool  idl_iter(t_cm_idl *head, void **iter);
-void *idl_advance_it(const void *e, size_t offset);
+void *idl_apply(const t_cm_idl *head, t_cm_callback c, void *u_data);
+void *idl_napply(const t_cm_idl *head, size_t n, t_cm_callback c, void *u_data);
+
+bool      idl_iter(const t_cm_idl *head, void **iter, size_t offset);
+void     *idl_advance_it(const void *e, size_t offset);
 t_cm_idl *idl_advance_it_node(const t_cm_idl *it);
 void     *idl_recede_it(const void *e, size_t offset);
 t_cm_idl *idl_recede_it_node(const t_cm_idl *it);
@@ -139,7 +158,7 @@ size_t idl_filter(t_cm_idl **head, t_cm_callback cb, void *arg,
                   t_cm_idl **filtered);
 size_t idl_filter_out(t_cm_idl **head, t_cm_callback cb, void *arg,
                       t_cm_idl **filtered);
-size_t idl_rm_if(t_cm_idl **head, t_cm_callback cb, void *arg, t_cm_dtor d);
+size_t idl_filter_dt(t_cm_idl **head, t_cm_callback cb, void *arg, t_cm_dtor d);
 void   idl_unique(t_cm_idl *head, t_cm_comparator c, t_cm_dtor d);
 
 #endif // !C_MINI__IDL

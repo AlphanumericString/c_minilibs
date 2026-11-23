@@ -311,14 +311,14 @@ NO_COV void test_cm_idl_get_tail(void) {
 	idl_init(&n2, OFF);
 	idl_init(&n3, OFF);
 
-	assert(idl_get_tail(head) == NULL);
+	assert(idl_get_tail(NULL, OFF) == NULL);
 	idl_push_back(&head, &n1, OFF);
-	assert(idl_get_tail(head) == &n1);
+	assert(idl_get_tail(&n1, OFF) == &n1);
 	idl_push_back(&head, &n2, OFF);
-	assert(idl_get_tail(head) == &n2);
+	assert(idl_get_tail(&n1, OFF) == &n2);
 	idl_push_back(&head, &n3, OFF);
-	assert(idl_get_tail(head) == &n3);
-	assert(idl_get_tail(NULL) == NULL);
+	assert(idl_get_tail(&n3, OFF) == &n3);
+	assert(idl_get_tail(NULL, OFF) == NULL);
 }
 
 NO_COV void test_cm_idl_get_head(void) {
@@ -329,14 +329,14 @@ NO_COV void test_cm_idl_get_head(void) {
 	idl_init(&n2, OFF);
 	idl_init(&n3, OFF);
 
-	assert(idl_get_head(head) == NULL);
+	assert(idl_get_head(NULL, OFF) == NULL);
 	idl_push(&head, &n1, OFF);
-	assert(idl_get_head(head) == &n1);
+	assert(idl_get_head(&n1, OFF) == &n1);
 	idl_push(&head, &n2, OFF);
-	assert(idl_get_head(head) == &n2);
+	assert(idl_get_head(&n1, OFF) == &n2);
 	idl_push(&head, &n3, OFF);
-	assert(idl_get_head(head) == &n3);
-	assert(idl_get_head(NULL) == NULL);
+	assert(idl_get_head(&n3, OFF) == &n3);
+	assert(idl_get_head(NULL, OFF) == NULL);
 }
 
 NO_COV void test_cm_idl_get_min(void) {

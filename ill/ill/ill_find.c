@@ -4,8 +4,10 @@
  * \brief Finds the node immediately preceding the target node in the list.
  * \param head The head of the list.
  * \param target The target node to find the predecessor for.
- * \return A pointer to the predecessor node, or NULL if not found or if target
- * is head.
+ * \return A pointer to the predecessor node, or NULL if target is the head or
+ * is not found.
+ * \note NULL is ambiguous: use ill_find_node() first to distinguish "head" from
+ * "not found".
  * \ingroup ill
 **/
 t_cm_ill *ill_find_prev_node(const t_cm_ill *head, const t_cm_ill *target) {
@@ -58,7 +60,9 @@ t_cm_ill *ill_find_node(const t_cm_ill *head, const t_cm_ill *target) {
  * \param c The comparator function used for matching.
  * \param arg The argument to pass to the comparator.
  * \return A pointer to the preceding node of the matched element, or NULL if
- * not found.
+ * there is no match or the match is the head.
+ * \note NULL is ambiguous: use ill_get_node() first to distinguish "match is
+ * head" from "no match".
  * \ingroup ill
 **/
 t_cm_ill *ill_get_prev_node(const t_cm_ill *head, t_cm_comparator c,

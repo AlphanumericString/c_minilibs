@@ -54,9 +54,15 @@ NO_COV void test_cm_ill_filter(void) {
 		assert(h == NULL);
 	}
 
-	assert(ill_filter(NULL, cb_ill_is_even, NULL, &filtered) == 0);
-	assert(ill_filter(&head, NULL, NULL, &filtered) == 0);
-	assert(ill_filter(&head, cb_ill_is_even, NULL, NULL) == 0);
+	{
+		t_cm_ill *sentinel = &nodes[0].node;
+
+		assert(ill_filter(NULL, cb_ill_is_even, NULL, &sentinel) == 0);
+		assert(sentinel == &nodes[0].node);
+		assert(ill_filter(&head, NULL, NULL, &sentinel) == 0);
+		assert(sentinel == &nodes[0].node);
+		assert(ill_filter(&head, cb_ill_is_even, NULL, NULL) == 0);
+	}
 }
 
 NO_COV void test_cm_ill_filter_out(void) {
@@ -99,7 +105,13 @@ NO_COV void test_cm_ill_filter_out(void) {
 		assert(out[0] == 2 && out[1] == 4);
 	}
 
-	assert(ill_filter_out(NULL, cb_ill_is_even, NULL, &filtered) == 0);
-	assert(ill_filter_out(&head, NULL, NULL, &filtered) == 0);
-	assert(ill_filter_out(&head, cb_ill_is_even, NULL, NULL) == 0);
+	{
+		t_cm_ill *sentinel = &nodes[0].node;
+
+		assert(ill_filter_out(NULL, cb_ill_is_even, NULL, &sentinel) == 0);
+		assert(sentinel == &nodes[0].node);
+		assert(ill_filter_out(&head, NULL, NULL, &sentinel) == 0);
+		assert(sentinel == &nodes[0].node);
+		assert(ill_filter_out(&head, cb_ill_is_even, NULL, NULL) == 0);
+	}
 }

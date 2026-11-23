@@ -15,14 +15,14 @@ NO_COV void test_cm_ill_apply(void) {
 	ill_push_back_node(&head, &n2.node);
 	ill_push_back_node(&head, &n3.node);
 
-	assert(ill_apply(head, cb_ill_add_val_as_int_ptr, &to_add) == true);
+	assert(ill_apply(head, cb_ill_add_val_as_int_ptr, &to_add) == &to_add);
 	assert(n1.value == 10 + to_add);
 	assert(n2.value == 20 + to_add);
 	assert(n3.value == 30 + to_add);
 	n1.value = 10;
 	n2.value = 20;
 	n3.value = 30;
-	assert(ill_apply(head, cb_ill_stop_at_30, NULL) == false);
-	assert(ill_apply(head, NULL, &to_add) == false);
-	assert(ill_apply(NULL, cb_ill_add_val_as_int_ptr, &to_add) == false);
+	assert(ill_apply(head, cb_ill_stop_at_30, NULL) == NULL);
+	assert(ill_apply(head, NULL, &to_add) == &to_add);
+	assert(ill_apply(NULL, cb_ill_add_val_as_int_ptr, &to_add) == &to_add);
 }

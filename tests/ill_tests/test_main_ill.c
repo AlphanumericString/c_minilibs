@@ -94,7 +94,7 @@ NO_COV static void ill_node_main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Filter", )
 	test_cm_ill_filter();
 	test_cm_ill_filter_out();
-	test_cm_ill_rm_if();
+	test_cm_ill_filter_dt();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Unique", )
 	test_cm_ill_unique();
@@ -208,7 +208,7 @@ NO_COV static void idl_node_main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Filter", )
 	test_cm_idl_filter();
 	test_cm_idl_filter_out();
-	test_cm_idl_rm_if();
+	test_cm_idl_filter_dt();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Unique", )
 	test_cm_idl_unique();

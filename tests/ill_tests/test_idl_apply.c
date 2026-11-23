@@ -5,7 +5,7 @@
 NO_COV void test_cm_idl_apply(void) {
 	t_cm_test_dnode n1, n2, n3;
 	t_cm_idl       *head = NULL;
-	bool            ret;
+	void           *ret;
 	int             to_add = 5;
 
 	INIT_DNODE(n1, 10, 1);
@@ -20,16 +20,16 @@ NO_COV void test_cm_idl_apply(void) {
 	assert(n1.value == (10 + to_add));
 	assert(n2.value == (20 + to_add));
 	assert(n3.value == (30 + to_add));
-	assert(ret == true);
+	assert(ret == &to_add);
 	ret = idl_apply(head, cb_true, NULL);
-	assert(ret == true);
+	assert(ret == NULL);
 
-	ret = idl_apply(head, cb_false, NULL);
-	assert(ret == false);
+	ret = idl_apply(head, cb_false, &to_add);
+	assert(ret == &to_add);
 	ret = idl_apply(head, cb_idl_false_on_arg, NULL);
-	assert(ret == false);
-	ret = idl_apply(head, NULL, NULL);
-	assert(ret == false);
-	ret = idl_apply(NULL, cb_idl_false_on_arg, NULL);
-	assert(ret == false);
+	assert(ret == NULL);
+	ret = idl_apply(head, NULL, &to_add);
+	assert(ret == &to_add);
+	ret = idl_apply(NULL, cb_idl_false_on_arg, &to_add);
+	assert(ret == &to_add);
 }

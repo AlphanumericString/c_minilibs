@@ -15,7 +15,7 @@ NO_COV static size_t collect(t_cm_idl *head, int *out, size_t cap) {
 	return n;
 }
 
-NO_COV void test_cm_idl_rm_if(void) {
+NO_COV void test_cm_idl_filter_dt(void) {
 	t_cm_test_dnode nodes[6];
 	t_cm_idl       *head = NULL;
 	int             out[6];
@@ -28,7 +28,7 @@ NO_COV void test_cm_idl_rm_if(void) {
 	}
 
 	g_dtor_hits = 0;
-	n           = idl_rm_if(&head, cb_idl_is_even, NULL, cb_count_dtor);
+	n           = idl_filter_dt(&head, cb_idl_is_even, NULL, cb_count_dtor);
 	assert(n == 3);
 	assert(g_dtor_hits == 3);
 	assert(collect(head, out, 6) == 3);
@@ -41,7 +41,7 @@ NO_COV void test_cm_idl_rm_if(void) {
 		INIT_DNODE(nodes[i], (int)(i + 1), (int)i);
 		idl_push_back_node(&head, &nodes[i].dnode);
 	}
-	assert(idl_rm_if(&head, cb_idl_is_even, NULL, NULL) == 3);
+	assert(idl_filter_dt(&head, cb_idl_is_even, NULL, NULL) == 3);
 	assert(idl_length(head) == 3);
 
 	// all removed => head becomes NULL
@@ -50,10 +50,10 @@ NO_COV void test_cm_idl_rm_if(void) {
 		INIT_DNODE(nodes[i], (int)(i + 1), (int)i);
 		idl_push_back_node(&head, &nodes[i].dnode);
 	}
-	assert(idl_rm_if(&head, cb_false, NULL, NULL) == 6);
+	assert(idl_filter_dt(&head, cb_false, NULL, NULL) == 6);
 	assert(head == NULL);
 
 	// bad args
-	assert(idl_rm_if(NULL, cb_idl_is_even, NULL, NULL) == 0);
-	assert(idl_rm_if(&head, NULL, NULL, NULL) == 0);
+	assert(idl_filter_dt(NULL, cb_idl_is_even, NULL, NULL) == 0);
+	assert(idl_filter_dt(&head, NULL, NULL, NULL) == 0);
 }
