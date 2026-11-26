@@ -147,6 +147,9 @@ size_t ill_match_nb(const t_cm_ill *head, t_cm_callback matcher, void *arg);
 
 void *ill_apply(const t_cm_ill *head, t_cm_callback c, void *u_data);
 void *ill_napply(const t_cm_ill *head, size_t n, t_cm_callback c, void *u_data);
+void *ill_apply_it(const t_cm_ill *head, t_cm_callback_it func, void *u_data);
+void *ill_napply_it(const t_cm_ill *head, size_t n, t_cm_callback_it func,
+                    void *u_data);
 void *ill_apply_range(const void *head_elem, const void *end_elem,
                       t_cm_callback c, void *u_data, size_t offset);
 

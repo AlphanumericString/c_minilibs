@@ -62,6 +62,32 @@ NO_COV bool cb_idl_add_val_as_int_ptr(void *elem, void *arg) {
 	n->value += *val;
 	return true;
 }
+NO_COV bool cb_idl_it_add_pos(void *elem, void *arg, size_t pos, bool last) {
+	t_cm_test_dnode *n = (t_cm_test_dnode *)elem;
+
+	(void)arg;
+	(void)last;
+	n->value += (int)pos;
+	return true;
+}
+NO_COV bool cb_idl_it_record(void *elem, void *arg, size_t pos, bool last) {
+	t_cm_test_dnode *n = (t_cm_test_dnode *)elem;
+	t_cm_it_state   *s = (t_cm_it_state *)arg;
+
+	if (!s->count) s->first_pos = pos;
+	s->count++;
+	s->last_pos = pos;
+	if (last) s->nb_last++;
+	s->sum += n->value;
+	return true;
+}
+NO_COV bool cb_idl_it_stop(void *elem, void *arg, size_t pos, bool last) {
+	t_cm_test_dnode *n = (t_cm_test_dnode *)elem;
+
+	(void)last;
+	n->value += 100;
+	return pos < *(size_t *)arg;
+}
 NO_COV bool cb_idl_false_on_arg(void *elem, void *arg) {
 	t_cm_test_dnode *n = (t_cm_test_dnode *)elem;
 	int              val;
@@ -113,6 +139,32 @@ NO_COV bool cb_ill_add_val_as_int_ptr(void *elem, void *arg) {
 
 	n->value += *val;
 	return true;
+}
+NO_COV bool cb_ill_it_add_pos(void *elem, void *arg, size_t pos, bool last) {
+	t_cm_test_node *n = (t_cm_test_node *)elem;
+
+	(void)arg;
+	(void)last;
+	n->value += (int)pos;
+	return true;
+}
+NO_COV bool cb_ill_it_record(void *elem, void *arg, size_t pos, bool last) {
+	t_cm_test_node *n = (t_cm_test_node *)elem;
+	t_cm_it_state  *s = (t_cm_it_state *)arg;
+
+	if (!s->count) s->first_pos = pos;
+	s->count++;
+	s->last_pos = pos;
+	if (last) s->nb_last++;
+	s->sum += n->value;
+	return true;
+}
+NO_COV bool cb_ill_it_stop(void *elem, void *arg, size_t pos, bool last) {
+	t_cm_test_node *n = (t_cm_test_node *)elem;
+
+	(void)last;
+	n->value += 100;
+	return pos < *(size_t *)arg;
 }
 NO_COV bool cb_ill_stop_at_30(void *elem, void *arg) {
 	t_cm_test_node *n = (t_cm_test_node *)elem;

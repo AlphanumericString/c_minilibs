@@ -160,6 +160,9 @@ size_t idl_match_nb(const t_cm_idl *head, t_cm_callback matcher, void *arg);
 
 void *idl_apply(const t_cm_idl *head, t_cm_callback c, void *u_data);
 void *idl_napply(const t_cm_idl *head, size_t n, t_cm_callback c, void *u_data);
+void *idl_apply_it(const t_cm_idl *head, t_cm_callback_it func, void *u_data);
+void *idl_napply_it(const t_cm_idl *head, size_t n, t_cm_callback_it func,
+                    void *u_data);
 void *idl_apply_range(const void *head_elem, const void *end_elem,
                       t_cm_callback c, void *u_data, size_t offset);
 

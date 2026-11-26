@@ -20,6 +20,14 @@ typedef struct s_cm_test_dnode {
 	t_cm_idl dnode;
 } t_cm_test_dnode;
 
+typedef struct s_cm_it_state {
+	size_t count;
+	size_t first_pos;
+	size_t last_pos;
+	size_t nb_last;
+	long   sum;
+} t_cm_it_state;
+
 #define ASSERT_ORDER_IDL(node1, node2)                                         \
 	assert((node1)->next == (node2) && (node2)->prev == (node1))
 
@@ -69,6 +77,9 @@ extern int   g_dup_hits;
 extern int   g_dup_fail_at;
 // --idl only callbacks
 NO_COV bool  cb_idl_add_val_as_int_ptr(void *elem, void *arg);
+NO_COV bool  cb_idl_it_add_pos(void *elem, void *arg, size_t pos, bool last);
+NO_COV bool  cb_idl_it_record(void *elem, void *arg, size_t pos, bool last);
+NO_COV bool  cb_idl_it_stop(void *elem, void *arg, size_t pos, bool last);
 NO_COV bool  cb_idl_false_on_arg(void *elem, void *arg);
 NO_COV bool  cb_idl_has_val_42(void *elem, void *arg);
 NO_COV bool  cb_idl_is_even(void *elem, void *arg);
@@ -77,6 +88,9 @@ NO_COV int   cb_idl_cmp_min_max(const void *elem1, const void *elem2);
 NO_COV void *cb_idl_duplicate(const void *elem);
 // --ill only callbacks
 NO_COV bool  cb_ill_add_val_as_int_ptr(void *elem, void *arg);
+NO_COV bool  cb_ill_it_add_pos(void *elem, void *arg, size_t pos, bool last);
+NO_COV bool  cb_ill_it_record(void *elem, void *arg, size_t pos, bool last);
+NO_COV bool  cb_ill_it_stop(void *elem, void *arg, size_t pos, bool last);
 NO_COV bool  cb_ill_stop_at_30(void *elem, void *arg);
 NO_COV bool  cb_ill_has_val_42(void *elem, void *arg);
 NO_COV bool  cb_ill_is_even(void *elem, void *arg);
@@ -144,6 +158,8 @@ NO_COV void test_cm_ill_sort(void);
 NO_COV void test_cm_ill_unique(void);
 
 // --- ILL additions ---
+NO_COV void test_cm_ill_apply_it(void);
+NO_COV void test_cm_ill_napply_it(void);
 NO_COV void test_cm_ill_apply_range(void);
 NO_COV void test_cm_ill_clear(void);
 NO_COV void test_cm_ill_concat(void);
@@ -220,6 +236,8 @@ NO_COV void test_cm_idl_sort(void);
 NO_COV void test_cm_idl_unique(void);
 
 // --- IDL additions ---
+NO_COV void test_cm_idl_apply_it(void);
+NO_COV void test_cm_idl_napply_it(void);
 NO_COV void test_cm_idl_apply_range(void);
 NO_COV void test_cm_idl_clear(void);
 NO_COV void test_cm_idl_concat(void);

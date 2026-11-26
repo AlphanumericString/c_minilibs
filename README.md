@@ -100,8 +100,9 @@ does not re-heapify the result.
 ### `ill` — Intrusive Linked Lists
 Two variants — singly (`ill`) and doubly (`idl`) linked — where nodes are
 embedded *inside* the user's own structs, addressed via an offset, with
-push/pop/append/prepend/insert/remove/reverse, apply/napply traversal, a pull
-iterator and list predicates. The default API is element centric: it takes and
+push/pop/append/prepend/insert/remove/reverse, apply/napply traversal (with
+`_it` variants passing the position and a last-element flag), a pull iterator
+and list predicates. The default API is element centric: it takes and
 returns the payload struct plus the node offset, so callers do not have to
 convert to nodes themselves (including `get_head`/`get_tail`). The low-level
 node API is available under the `_node` suffix for mixed payload types or

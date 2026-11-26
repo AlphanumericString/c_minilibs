@@ -90,6 +90,8 @@ NO_COV static void ill_node_main(void) {
 	test_cm_ill_iter_range();
 	test_cm_ill_apply();
 	test_cm_ill_napply();
+	test_cm_ill_apply_it();
+	test_cm_ill_napply_it();
 	test_cm_ill_apply_range();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Fold", )
@@ -216,6 +218,8 @@ NO_COV static void idl_node_main(void) {
 	test_cm_idl_iter_rev();
 	test_cm_idl_apply();
 	test_cm_idl_napply();
+	test_cm_idl_apply_it();
+	test_cm_idl_napply_it();
 	test_cm_idl_apply_range();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Fold", )

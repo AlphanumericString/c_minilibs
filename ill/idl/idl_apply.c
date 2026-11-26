@@ -46,6 +46,55 @@ void *idl_napply(const t_cm_idl *head, size_t n, t_cm_callback c,
 }
 
 /**
+ * \brief Iterates over the entire list and applies the callback with position
+ * and last-element information.
+ * \param head The head of the list.
+ * \param func The callback function to apply.
+ * \param u_data User data to pass to the callback.
+ * \return The user data pointer, even when the callback fails.
+ * \ingroup idl
+**/
+void *idl_apply_it(const t_cm_idl *head, t_cm_callback_it func, void *u_data) {
+	return (idl_napply_it(head, (size_t)-1, func, u_data));
+}
+
+/**
+ * \brief Iterates over at most n elements and applies the callback with
+ * position and last-element information.
+ * \param head The head of the list.
+ * \param n Maximum number of elements to process. (size_t)-1 means all.
+ * \param func The callback function to apply.
+ * \param u_data User data to pass to the callback.
+ * \return The user data pointer, even when the callback fails.
+ * \note last is true for the final element of the processed range, including
+ * when n exceeds the list length.
+ * \ingroup idl
+**/
+void *idl_napply_it(const t_cm_idl *head, size_t n, t_cm_callback_it func,
+                    void *u_data) {
+	const t_cm_idl *curr;
+	size_t          pos = 0;
+
+	if (!func || !head) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
+		return (u_data);
+	}
+	curr = head;
+	while (curr && n) {
+		const t_cm_idl *nxt = curr->next;
+		if (!func(idl_ntoe(curr), u_data, pos, !nxt || n == 1)) {
+			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__IDL_LOG_ECB)
+			return (u_data);
+		}
+		curr = nxt;
+		n--;
+		pos++;
+	}
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
+	return (u_data);
+}
+
+/**
  * \brief Applies the callback to the elements of a bounded range.
  * \param head_elem The first element of the range.
  * \param end_elem The element ending the range (exclusive). NULL means apply up

@@ -39,7 +39,7 @@ general todo for the project
    - [x] lruc->make a separate lru only cache similar to dsu/ (lruc pure + lrutc timed)
    - [:] ill->circular lists (`ill_circ_` / `idl_circ_`)
    - [:] ill->dedicated handler
-   - [ ] ill->ill_apply_it/idl_apply_it and napply_it (da parity) - unsure usefullness
+   - [x] ill->ill_apply_it/idl_apply_it and napply_it (da parity)
    - [:] ill->ill_unique/idl_unique: return the removed count and/or provide a full (non-consecutive) dedup option - use htable using load of .7 so (list_len/.7) = slot nb, store ptr + hit count, in case of miss check (slot+1)%bucket_nb - paused:heavy for litle gains + need semi-dedicated hmap impl to keep separate modules, heavy code for low scope.
    - [ ] rb->add functs to module, iterators
    - [ ] tls->ftls->xmacros for more than 1 struct, vtls+ctls iterator
