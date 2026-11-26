@@ -7,127 +7,118 @@ general todo for the project
 - ` ` not started, to do
 - `>` current tasks
 
-## General TODO:
-- [~] refactor
- - [:] ill-> ill_copy/idl_copy leak partial copies when a duplicator fails and dtor is NULL
-  - note: dtor kept optional per design; partial copies cannot be released without it. docs updated, leak remains when dtor == NULL.
- - [:] ill-> inserting an already linked or anchor-equal node is not detected and creates cycles; document/assert isolated nodes
-  - note: documented in both headers; no runtime assert added (paused item).
- - [ ] rptr->package _generic in ifdef blocks and check compile ok for c older version
- - [ ] tls->vtls->hmaps
- - [ ] tls->vtls->hmaps.
-- [~] coverage
- - [:] multi threaded tests (needs re-comp for #ifdef branches)
+## Cross-cutting
+
+### Coverage
+- [:] multi-threaded tests (needs re-compilation for `#ifdef` branches)
   - [ ] sptr
   - [ ] rb
- - [:] da
-  - [ ] oscilation around boudary with auto_shrink
- - [x] keep at 100% for branch, lines, region, funcs
-- [:] example
- - [:] rb->example w producer/consumer setup
-- [>] impl
- - [~] tooling
-  - [~] github CICD
-   - [:] add cppcheck step
-   - [ ] add minimum coverage requireemnt before main
-   - [ ] norm
-   - [ ] restrict run to only needed
- - [>] code
-  - [:] new modules (see bellow)
-  - [>] old module functionalities (detail bellow)
-   - [x] hp-> more funcs, iterators
-   - [x] lruc->make a separate lru only cache similar to dsu/ (lruc pure + lrutc timed)
-   - [:] ill->circular lists (`ill_circ_` / `idl_circ_`)
-   - [:] ill->dedicated handler
-   - [x] ill->ill_apply_it/idl_apply_it and napply_it (da parity)
-   - [:] ill->ill_unique/idl_unique: return the removed count and/or provide a full (non-consecutive) dedup option - use htable using load of .7 so (list_len/.7) = slot nb, store ptr + hit count, in case of miss check (slot+1)%bucket_nb - paused:heavy for litle gains + need semi-dedicated hmap impl to keep separate modules, heavy code for low scope.
-   - [ ] rb->add functs to module, iterators
-   - [ ] tls->ftls->xmacros for more than 1 struct, vtls+ctls iterator
-   - [ ] tpm->crash catch, job batching on stress conditions, atomic thrd nb - increase/remove thrd control handle, auto increase thrd nb on stress
- - [:] coverage
-  - [:] add multi threaded tests
-   - [:] restrict to specific modules
-   - [:] add multi thread tests to coverage mapping
-- [:] doc
- - [:] ressources
-  - [:] add ressources for todo new modules
-  - [:] ressources on curr modules - read for ideas on what to add/do
- - [~] polish
-  - [~] finish todo for current modules
-   - [~] check section and execute
-    - [x] hp
-    - [x] lruc
-    - [>] ill
-    - [ ] rb
-    - [ ] tls
-    - [ ] tpm
-  - [:] da
-   - [:] A real example, such as a tokenizer or CSV parser built on the library.
-   - [:] Small-buffer optimization tests/benmarks since it changes the allocation paths.
-  - [:] dsu
-   - [:] A real example.
-  - [:] rb
-   - [:] A real example.
-    - [:] rb->example w producer/consumer setup
-  - [:] hp
-   - [:] A real example.
-  - [:] ill
-   - [:] A real example.
-  - [:] lruc
-   - [:] A real example.
-  - [:] sptr
-   - [:] A real example.
-  - [:] tls
-   - [:] A real example.
-  - [:] tpm
-   - [:] A real example.
- - [:] marketing
-  - [:] da
-   - [:] Growth factor comparison (1.5x, 2x, fixed increment): realloc count and time.
-   - [:] Auto-shrink on vs off in an oscillating workload.
-  - [:] `make bench` that outputs CSV, plus a gnuplot/matplotlib script. Commit the PNGs to a BENCH.md docuement with all the graphs for all modules
-  - [:] Md file with graphs or visible benchmarks.
-   - [:] graphs
-    - [:] graph gen rule `make bench` -> csv + gnuplot script
-    - [:] graph setup -> modular for any module
-    - [:] graph display -> readme links to the newly md file created
+- [:] da -> oscillation around boundary with `auto_shrink`
+- [:] restrict MT tests to specific modules
+- [:] add MT tests to coverage mapping
 
-### IMPLEMENTATION
-- [x] hp
- - [:] faster find
- - [:] map_heap / re-heapified mapping (current hp_map returns a positional void ** array instead)
- - [:] tree-order iterators (pre/in/post) on top of hpi_iter_level
-- [x] da
-- [~] lru
- - [:] iterator on the timed cache over the ttl min heap (start/last over heap slots like hp_iter, level order, boolean to refresh the ttl clock while walking)
- - [:] conversions between lruc and lrutc (lru_cache/lruc_convert/ like dsu_convert/), dedicated session
-- [>] ill
- - [:] circular based functions (eg: ill_circ_foreach(), concat, ... ) - circular only implemented for doubly linked lists, believe in user (if user call circular function we expects no sudden NULL, same if user sends to non-circular function, we expect no loop. no long checks pre-running the functions).
- - [:] list handler struct - (init/create/...) - delegates any call to base or _node function when needed but if any function need to call `_get_tail`/`_get_head` implements a handler version differing from the base/node version where tail/head is provided by the handler. (optional: to reduce surface api coverage implement a function where the logic is implemented spearated from the place where head/tail is gotten.) - at this point this no longer is an intrusive list but just a plain list: theorized names: `t_cm_lh` (lh: list handler). since this also acts as a cover layer, you can have an enum for the type of lists (circular, doubly linked, simply linked, <other added>) and the handler dispatch to correct functions.
- - [ ] ill_apply_it/idl_apply_it and napply_it: callback with position and last flag (da parity)
- - [:] ill_unique/idl_unique: return the removed count and/or provide a full (non-consecutive) dedup option
-- [:] rb
- - [ ] magic rb
+### Tooling / CI
+- [:] GitHub CI
+  - [:] add cppcheck step
+  - [ ] add minimum coverage requirement before main
+  - [ ] norm
+  - [ ] restrict run to only needed
+
+## Documentation
+
+- [:] resources
+  - [:] add resources for new modules
+  - [:] resources on current modules - read for ideas on what to add/do
+- [~] polish current module docs
+  - [>] ill
+  - [ ] rb
+  - [ ] tls
+  - [ ] tpm
+- [:] real-project examples
+  - [:] da -> CSV/TSV parser or JSON tokenizer using a growable token/byte array.
+  - [:] dsu -> Kruskal MST, connected-component labelling on a grid, or image segmentation.
+  - [:] hp -> top-K leaderboard, Dijkstra/A* on a small graph, or a timer/event scheduler.
+  - [:] ill -> intrusive free-list allocator, scheduler task list, or an LRU recency chain.
+  - [:] lruc -> HTTP response cache (ETag + recency eviction) or a memoized query/result cache.
+  - [:] lrutc -> DNS resolver cache or session/token cache with TTL and stale-while-revalidate.
+  - [:] rb -> lock-free SPSC producer/consumer telemetry queue or audio sample buffer.
+  - [:] sptr -> shared config/asset registry, scene-graph ownership, or an observer/subscriber list.
+  - [:] tls -> per-thread scratch arena, error context, RNG state, or request-local allocator.
+  - [:] tpm -> parallel map/word-count, HTTP fetch worker pool, or recurring job scheduler.
+- [:] marketing
+  - [:] da
+    - [:] growth factor comparison (1.5x, 2x, fixed increment): realloc count and time.
+    - [:] auto-shrink on vs off in an oscillating workload.
+  - [:] `make bench` that outputs CSV, plus a gnuplot/matplotlib script.
+  - [:] `BENCH.md` with the graphs for all modules; commit the PNGs and link them from the README.
+    - [:] graph generation rule: `make bench` -> CSV + gnuplot script.
+    - [:] modular graph setup, reusable for any module.
+    - [:] graph display: README links to the generated MD file.
+
+## Module backlog
+
+### da
+- [:] small-buffer optimization tests/benchmarks, since it changes the allocation paths.
+
+### dsu
+- [:] cdsu reserve / up-front growth equivalent (no logs)
+- [:] make `rdsu_grow(..., 0)` a successful no-op like `cdsu_grow`
+- [:] validate the rewind log chain in `rdsu_validate`
+
+### hp
+- [:] faster find
+- [:] `map_heap` / re-heapified mapping (current `hp_map` returns a positional `void **` array instead)
+- [:] tree-order iterators (pre/in/post) on top of `hpi_iter_level`
+
+### ill
+- [:] `ill_copy`/`idl_copy` leak partial copies when a duplicator fails and `dtor` is NULL.
+  - note: `dtor` kept optional per design; partial copies cannot be released without it. Docs updated, leak remains when `dtor == NULL`.
+- [:] inserting an already linked or anchor-equal node is not detected and creates cycles; document/assert isolated nodes.
+  - note: documented in both headers; no runtime assert added (paused item).
+- [:] circular lists (`ill_circ_` / `idl_circ_`)
+  - circular lists are only implemented for doubly linked lists; believe in the user (if a circular function is called we expect no sudden NULL; if a non-circular function receives a circular list, we expect no loop; no long pre-run checks).
+  - functions: `ill_circ_foreach()`, concat, ...
+- [:] dedicated handler
+  - list handler struct (init/create/...) delegates to base or `_node` functions when needed; if any function needs `_get_tail`/`_get_head`, implement a handler version where tail/head is provided by the handler.
+  - optional: reduce surface API coverage by separating the logic from the place where head/tail is obtained.
+  - this is no longer an intrusive list but a plain list; theorized name `t_cm_lh` (lh: list handler).
+  - since it also acts as a cover layer, an enum can select the list type (circular, doubly linked, simply linked, future types) and dispatch to the correct functions.
+- [:] `ill_unique`/`idl_unique`: return the removed count and/or provide a full (non-consecutive) dedup option.
+  - use an htable with load factor .7 so `(list_len / .7) = slot nb`; store ptr + hit count; on a miss check `(slot + 1) % bucket_nb`.
+  - paused: heavy for little gains + needs a semi-dedicated hmap impl to keep modules separate; heavy code for low scope.
+
+### lru_cache
+- [:] iterator on the timed cache over the TTL min-heap (start/last over heap slots like `hp_iter`, level order, boolean to refresh the TTL clock while walking)
+- [:] conversions between `lruc` and `lrutc` (`lruc_convert` like `dsu_convert`), dedicated session
+
+### rb
+- [:] magic rb
   - [ ] memory mapping magic
   - [ ] replace math
- - [ ] iterator (take example on da)
-  - [ ] _iter
-  - [ ] _iter_rev
-  - [ ] _iter_range
-  - [ ] _advance_it / _recede_it
- - [ ] new functions (parity with da module) \[warning: skip in array modifying functions such as filter, we dont want to touch the insertion head nor the output head.\]
-  - [ ] fold - (dont discard the rb)
-  - [ ] reduce - (dont discard the rb)
+- [:] iterator (take example on `da`)
+  - [ ] `_iter`
+  - [ ] `_iter_rev`
+  - [ ] `_iter_range`
+  - [ ] `_advance_it` / `_recede_it`
+- [:] new functions (parity with the `da` module) [warning: skip in-place array-modifying functions such as filter; we don't want to touch the insertion head nor the output head.]
+  - [ ] fold (don't discard the rb)
+  - [ ] reduce (don't discard the rb)
   - [ ] others
-- [:] dsu
- - [:] cdsu reserve/up-front growth equivalent (no logs)
- - [:] make rdsu_grow(..., 0) a successful no-op like cdsu_grow
- - [:] validate the rewind log chain in rdsu_validate
-- [:] tpm
- - [:] crash jobs catch
- - [:] dispatch new thrd on spikes
- - [:] batch jobs on spikes
- - [:] heartbeat system -> every x jobs or x ns/ms, + monitor thrd
+
+### sptr
+- [ ] package `_Generic` in `#ifdef` blocks and check compile ok for older C versions.
+
+### tls
+- [ ] `ftls` -> xmacros for more than 1 struct
+- [ ] `vtls` + `ctls` iterator
+- [ ] `vtls` -> hmaps
+
+### tpm
+- [ ] crash jobs catch
+- [ ] spikes
+  - [:] dispatch new thread on spikes
+  - [:] batch jobs on spikes
+- [:] heartbeat system -> every x jobs or x ns/ms, + monitor thread
 
 ## NEW MODULES - WHOLE MODULE PAUSED
 
@@ -194,8 +185,9 @@ sorted by personal familiarity w subject/ ease of project
  - [ ] branch
  - [ ] minimal header
 
-## Ressources
-### DA : ressources
+## Resources
+
+### DA : resources
 
 **Reading**
 - Rustonomicon, "Implementing Vec": the same problem you solved (growth, alloc failure, ownership), explained well.
@@ -219,9 +211,29 @@ sorted by personal familiarity w subject/ ease of project
 - Andrei Alexandrescu, "std::allocator Is to Allocation what std::vector Is to Vexation" (CppCon 2015)
 - Matt Kulukundis, "Designing a Fast, Efficient, Cache-friendly Hash Table, Step by Step" (CppCon 2017)
 
-### DSU : ressources
+### DSU : resources
 
-### HP : ressources
+**Reading**
+- CLRS, chapter on disjoint sets (union by rank, path compression, amortized analysis).
+- cp-algorithms, "Disjoint Set Union": compact implementation notes and applications.
+- Tarjan, "Efficiency of a Good But Not Linear Set Union Algorithm" (1975): the classic complexity result.
+- Tarjan & van Leeuwen, "Worst-case analysis of set union algorithms": path-compression variants.
+- Wikipedia: disjoint-set data structure, union by rank, path compression, inverse Ackermann.
+- Boost.DisjointSets docs and LLVM/compiler union-find code for production API shape.
+- Competitive-programming notes on rollback DSU for the rewindable `rdsu`.
+
+**Related structures**
+- Union-find with rollback (persistent/undoable DSU).
+- Dynamic connectivity (Holm–de Lichtenberg–Thorup).
+- Binary lifting / LCA; Tarjan's offline LCA uses DSU.
+- Kruskal MST, connected components, image segmentation, clustering.
+- Partition refinement (Hopcroft).
+- Disjoint sparse table for static range queries.
+
+**Talks**
+- MIT 6.046J / 6.006 lectures on union-find and amortized analysis.
+
+### HP : resources
 
 **Reading**
 - CLRS, chapter 6 (heapsort / binary heaps) and chapter 19 (Fibonacci heaps for contrast).
@@ -235,9 +247,28 @@ sorted by personal familiarity w subject/ ease of project
 - Binary search trees and indexed skip lists, for order-searchable variants of `hp_find`.
 - Priority-queue-based graph algorithms (Dijkstra, A*, Prim) and top-K selection.
 
-### ILL : ressources
+### ILL : resources
 
-### LRU_CACHE : ressources
+**Reading**
+- Linux kernel `include/linux/list.h` and `hlist`: intrusive doubly linked lists and hash chains.
+- BSD `queue(3)` / `sys/queue.h`: SLIST, LIST, STAILQ and TAILQ macro families.
+- Boost.Intrusive docs: production intrusive containers and hooks.
+- CLRS 10.2 (linked lists) and 11 (chaining in hash tables).
+- `container_of` / `offsetof` documentation and examples.
+- Wikipedia: linked list, XOR linked list, unrolled linked list, skip list.
+- *The Art of Computer Programming*, vol. 1, section 2.2.5 (linked lists).
+- Lock-free linked-list papers (Harris; Michael) for the concurrency angle.
+
+**Related structures**
+- Singly/doubly linked lists with sentinels vs NULL-terminated lists.
+- Circular lists and list descriptors/handlers.
+- XOR linked list (memory-efficient doubly linked).
+- Unrolled linked list.
+- Skip list (layered linked lists).
+- Intrusive trees (RB/AVL) and `hlist`.
+- Lock-free linked lists and hazard pointers.
+
+### LRU_CACHE (lruc / lrutc) : resources
 
 **Reading**
 - CLRS, chapter 11 (hash tables) and 10.2 (linked lists): the two indexes the cache bolts together over shared nodes.
@@ -255,17 +286,98 @@ sorted by personal familiarity w subject/ ease of project
 - Bloom filters for negative caching, consistent hashing for distributed caches.
 - Slab/pool allocators for node storage (the reserved nodes list is a small step in that direction).
 
-**Projects that motivate the cache**
-- HTTP response cache for a small web service (ETag + TTL, stale-while-revalidate).
-- Compiled-artifact/dependency cache for a build tool.
-- DNS resolver cache (TTL heavy, negatives included).
-- Page cache for a toy key-value store, or a memoization layer for a query planner.
+### RB : resources
 
-### RB : ressources
+**Reading**
+- Wikipedia: circular buffer, ring buffer, producer–consumer problem.
+- Linux kernel `kfifo` (`include/linux/kfifo.h`, `lib/kfifo.c`): compact ring-buffer API and power-of-two indexing.
+- Boost.CircularBuffer docs: iterator and capacity semantics.
+- Lamport, "Proving the Correctness of Multiprocess Programs" (1977): the original SPSC reasoning.
+- Preshing, "Atomic Weapons" and memory-ordering articles.
+- cppreference: `std::atomic`, `memory_order_acquire`/`release`, `stdatomic.h`.
+- Dmitry Vyukov's bounded MPMC queue and intrusive MPSC queue articles.
+- LMAX Disruptor technical paper: ring buffer as a low-latency queue.
+- "Magic ring buffer" / `mmap`-based double-mapping trick (Linux `vmsplice` discussions).
 
-### SPTR : ressources
+**Related structures**
+- Double/triple buffering.
+- Chunked queue / linked-chunk ring.
+- Lock-free SPSC/MPMC queues (Vyukov, Michael–Scott).
+- LMAX Disruptor.
+- Gap buffer (text editors).
+- Pipeline / streaming buffers and `io_uring` submission/completion rings.
 
-### TLS : ressources
+**Talks**
+- Martin Thompson, "LMAX Disruptor" (InfoQ), on ring-buffer design and mechanical sympathy.
+- Herb Sutter, "atomic<> Weapons" (C++ and Beyond 2012), on atomics and memory order.
+- Dmitry Vyukov, talks on lock-free queues and bounded MPMC queues.
 
-### TPM : ressources
+### SPTR : resources
 
+**Reading**
+- cppreference: `std::unique_ptr`, `std::shared_ptr`, `std::weak_ptr`, `std::make_shared`, `enable_shared_from_this`.
+- Boost.SmartPtr docs: `intrusive_ptr`, `shared_ptr`, `weak_ptr` and ownership rules.
+- Rust `Rc`, `Arc` and `Weak` docs: the same model with different ergonomics.
+- *The Rustonomicon*, ownership and `Drop` chapters.
+- Wikipedia: reference counting, weak reference, cycle detection, dangling pointer.
+- libstdc++/libc++ `shared_ptr` control-block implementations: one allocation, atomic counts.
+- Hans Boehm, "Threads Cannot Be Implemented as a Library" (2004), for the memory-model angle.
+- C++ standard atomic memory-order rules for refcount acquire/release.
+
+**Related structures**
+- Garbage collection: mark-sweep, reference counting, cycle collection.
+- Intrusive reference counting (`boost::intrusive_ptr`).
+- Hazard pointers and epoch-based reclamation.
+- Rust `Rc`/`Arc`, C++ `shared_ptr` control block.
+- Arena/pool allocators and ownership handles.
+- Copy-on-write and immutable persistent structures.
+
+**Talks**
+- Herb Sutter, "Leak-Freedom in C++... By Default" (CppCon 2016), on ownership and smart pointers.
+
+### TLS : resources
+
+**Reading**
+- POSIX `pthread_key_create(3)`, `pthread_getspecific(3)`, `pthread_setspecific(3)` man pages.
+- Ulrich Drepper, "ELF Handling For Thread-Local Storage": `__thread`/`_Thread_local` models and relocation types.
+- GCC and Clang docs on `__thread` / `thread_local` storage classes.
+- cppreference: `thread_local`, `std::this_thread`, `std::thread`.
+- Wikipedia: thread-local storage, `errno`, reentrancy.
+- glibc NPTL TLS implementation notes and `pthread_cleanup_push`/`pop` destructor semantics.
+- *Programming with POSIX Threads* (Butenhof), TLS and thread-specific data chapters.
+
+**Related structures**
+- Per-thread arenas/allocators and caches.
+- C++ `thread_local`, Rust `thread_local!`.
+- TLS destructors and cleanup handlers.
+- Coroutine-local / fiber-local storage.
+- Context/error objects such as `errno` and `GetLastError`.
+- OpenMP `threadprivate`; hash maps for keyed TLS (`vtls` upgrade).
+
+### TPM : resources
+
+**Reading**
+- Butenhof, *Programming with POSIX Threads*: mutexes, condition variables, thread lifecycle.
+- Williams, *C++ Concurrency in Action*: thread pools, futures, work stealing.
+- Herlihy & Shavit, *The Art of Multiprocessor Programming*: queues, work stealing, progress guarantees.
+- Blumofe & Leiserson, "Scheduling Multithreaded Computations by Work Stealing" (1999).
+- Wikipedia: thread pool, work stealing, producer–consumer, futex.
+- Drepper, "Futexes Are Tricky": fast userspace locking and wake-up paths.
+- cppreference: `std::thread`, `std::async`, `std::packaged_task`, `std::condition_variable`.
+- Cilk, TBB and Rust Rayon internals: production work-stealing schedulers.
+- Dmitry Vyukov, "Scalable Go Scheduler Design": M:N scheduling and run queues.
+- Linux `io_uring` worker pools and libuv thread pool: real-world designs.
+
+**Related structures**
+- Work-stealing deques (Chase–Lev).
+- Lock-free MPMC queues (Michael–Scott, Vyukov).
+- Fork-join pools (Cilk, TBB, Rayon).
+- Event loops / reactors as an alternative to thread pools.
+- Actor model and message queues.
+- Coroutines, fibers and green threads.
+- Timing wheels for recurring/heartbeat jobs.
+
+**Talks**
+- Dmitry Vyukov, "Go scheduler: Implementing language with lightweight concurrency" (GopherCon 2014).
+- Herb Sutter, "The Free Lunch Is Over" (article and talks).
+- Martin Thompson, "Mechanical Sympathy" talks on queues and latency.
