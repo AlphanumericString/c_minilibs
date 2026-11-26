@@ -48,6 +48,8 @@ NO_COV static void ill_node_main(void) {
 	test_cm_ill_is_isolated_node();
 	test_cm_ill_is_circular();
 	test_cm_ill_is_sorted();
+	test_cm_ill_is_empty();
+	test_cm_ill_validate();
 	test_cm_ill_has();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Insert", )
@@ -56,12 +58,15 @@ NO_COV static void ill_node_main(void) {
 	test_cm_ill_append_node();
 	test_cm_ill_nappend_node();
 	test_cm_ill_npush_node();
+	test_cm_ill_move();
+	test_cm_ill_concat();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Remove", )
 	test_cm_ill_pop_node();
 	test_cm_ill_pop_back_node();
 	test_cm_ill_remove_after_node();
 	test_cm_ill_remove_node();
+	test_cm_ill_clear();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Find", )
 	test_cm_ill_find_node();
@@ -82,8 +87,13 @@ NO_COV static void ill_node_main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Apply", )
 	test_cm_ill_iter();
+	test_cm_ill_iter_range();
 	test_cm_ill_apply();
 	test_cm_ill_napply();
+	test_cm_ill_apply_range();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Fold", )
+	test_cm_ill_fold();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Reverse", )
 	test_cm_ill_reverse();
@@ -94,6 +104,7 @@ NO_COV static void ill_node_main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Filter", )
 	test_cm_ill_filter();
 	test_cm_ill_filter_out();
+	test_cm_ill_nfilter();
 	test_cm_ill_filter_dt();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Unique", )
@@ -159,6 +170,8 @@ NO_COV static void idl_node_main(void) {
 	test_cm_idl_is_isolated_node();
 	test_cm_idl_is_circular();
 	test_cm_idl_is_sorted();
+	test_cm_idl_is_empty();
+	test_cm_idl_validate();
 	test_cm_idl_has();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Insert", )
@@ -169,12 +182,15 @@ NO_COV static void idl_node_main(void) {
 	test_cm_idl_npush_node();
 	test_cm_idl_prepend_node();
 	test_cm_idl_nprepend_node();
+	test_cm_idl_move();
+	test_cm_idl_concat();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Remove", )
 	test_cm_idl_pop_node();
 	test_cm_idl_pop_back_node();
 	test_cm_idl_remove_after_node();
 	test_cm_idl_remove_node();
+	test_cm_idl_clear();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Find", )
 	test_cm_idl_find_node();
@@ -196,8 +212,14 @@ NO_COV static void idl_node_main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Apply", )
 	test_cm_idl_iter();
+	test_cm_idl_iter_range();
+	test_cm_idl_iter_rev();
 	test_cm_idl_apply();
 	test_cm_idl_napply();
+	test_cm_idl_apply_range();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Fold", )
+	test_cm_idl_fold();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Reverse", )
 	test_cm_idl_reverse();
@@ -208,6 +230,7 @@ NO_COV static void idl_node_main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Filter", )
 	test_cm_idl_filter();
 	test_cm_idl_filter_out();
+	test_cm_idl_nfilter();
 	test_cm_idl_filter_dt();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Unique", )

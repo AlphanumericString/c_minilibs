@@ -127,3 +127,97 @@ bool idl_iter(const t_cm_idl *head, void **iter, size_t offset) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (true);
 }
+
+/**
+ * \brief Pull iterator over the elements of a bounded range.
+ * \param head_elem The first element of the range.
+ * \param end_elem The element ending the range (exclusive). NULL means iterate
+ * up to and including the tail.
+ * \param iter Element pointer used as the iteration state. It must be
+ * initialized to NULL before the first call; on a true return it holds the
+ * current element.
+ * \param offset Offset of the node in the current element. On the first call it
+ * describes head_elem and end_elem; afterwards it describes the element stored
+ * in *iter. Mixed-offset lists are supported as long as the caller tracks the
+ * current element type.
+ * \return true while an element is available, false once the range is exhausted
+ * or on invalid arguments.
+ * \note end_elem must belong to the list (or be NULL). An element that is not
+ * found is treated as an end past the tail.
+ * \ingroup idl
+**/
+bool idl_iter_range(const void *head_elem, const void *end_elem, void **iter,
+                    size_t offset) {
+	const t_cm_idl *node;
+	const t_cm_idl *end;
+
+	if (!head_elem || !iter) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
+		if (iter) *iter = NULL;
+		return (false);
+	}
+	end = end_elem ? idl_eton(end_elem, offset) : NULL;
+	if (!*iter) {
+		node = idl_eton(head_elem, offset);
+		if (node == end) {
+			*iter = NULL;
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
+			return (false);
+		}
+		*iter = idl_ntoe(node);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
+		return (true);
+	}
+	node = idl_eton(*iter, offset);
+	node = node->next;
+	if (!node || node == end) {
+		*iter = NULL;
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
+		return (false);
+	}
+	*iter = idl_ntoe(node);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
+	return (true);
+}
+
+/**
+ * \brief Reverse pull iterator over the elements of the list.
+ * \param head_elem An element of the list, used to locate the tail on the first
+ * call.
+ * \param iter Element pointer used as the iteration state. It must be
+ * initialized to NULL before the first call; on a true return it holds the
+ * current element.
+ * \param offset Offset of the node in the current element. On the first call it
+ * describes head_elem; afterwards it describes the element stored in *iter.
+ * Mixed-offset lists are supported as long as the caller tracks the current
+ * element type.
+ * \return true while an element is available, false once the list is exhausted
+ * or on invalid arguments.
+ * \note the elements are yielded from the tail down to the head.
+ * \ingroup idl
+**/
+bool idl_iter_rev(const void *head_elem, void **iter, size_t offset) {
+	const t_cm_idl *node;
+
+	if (!head_elem || !iter) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
+		if (iter) *iter = NULL;
+		return (false);
+	}
+	if (!*iter) {
+		node  = idl_get_tail_node(idl_eton(head_elem, offset));
+		*iter = idl_ntoe(node);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
+		return (true);
+	}
+	node = idl_eton(*iter, offset);
+	node = node->prev;
+	if (!node) {
+		*iter = NULL;
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
+		return (false);
+	}
+	*iter = idl_ntoe(node);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
+	return (true);
+}

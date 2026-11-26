@@ -57,6 +57,8 @@ typedef struct s_cm_test_dnode {
 // --general callbacks
 NO_COV bool  cb_true(void *elem, void *arg);
 NO_COV bool  cb_false(void *elem, void *arg);
+NO_COV void *cb_ill_sum(void *elem, void *arg);
+NO_COV void *cb_idl_sum(void *elem, void *arg);
 NO_COV void *cb_bad_duplicator(const void *elem);
 NO_COV void  cb_free_elem(void *elem);
 NO_COV void  cb_count_dtor(void *elem);
@@ -141,6 +143,17 @@ NO_COV void test_cm_ill_filter_dt(void);
 NO_COV void test_cm_ill_sort(void);
 NO_COV void test_cm_ill_unique(void);
 
+// --- ILL additions ---
+NO_COV void test_cm_ill_apply_range(void);
+NO_COV void test_cm_ill_clear(void);
+NO_COV void test_cm_ill_concat(void);
+NO_COV void test_cm_ill_fold(void);
+NO_COV void test_cm_ill_is_empty(void);
+NO_COV void test_cm_ill_iter_range(void);
+NO_COV void test_cm_ill_move(void);
+NO_COV void test_cm_ill_nfilter(void);
+NO_COV void test_cm_ill_validate(void);
+
 // --- IDL tests ---
 NO_COV void test_cm_idl_advance_it(void);
 NO_COV void test_cm_idl_append(void);
@@ -205,3 +218,15 @@ NO_COV void test_cm_idl_reverse(void);
 NO_COV void test_cm_idl_filter_dt(void);
 NO_COV void test_cm_idl_sort(void);
 NO_COV void test_cm_idl_unique(void);
+
+// --- IDL additions ---
+NO_COV void test_cm_idl_apply_range(void);
+NO_COV void test_cm_idl_clear(void);
+NO_COV void test_cm_idl_concat(void);
+NO_COV void test_cm_idl_fold(void);
+NO_COV void test_cm_idl_is_empty(void);
+NO_COV void test_cm_idl_iter_range(void);
+NO_COV void test_cm_idl_iter_rev(void);
+NO_COV void test_cm_idl_move(void);
+NO_COV void test_cm_idl_nfilter(void);
+NO_COV void test_cm_idl_validate(void);

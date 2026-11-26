@@ -8,9 +8,7 @@ general todo for the project
 - `>` current tasks
 
 ## General TODO:
-- [>] refactor
- - [x] ill-> api consistency around head
- - [x] ill-> element wrappers log success even when the underlying node call fails (ill_elem.c/idl_elem.c)
+- [~] refactor
  - [:] ill-> ill_copy/idl_copy leak partial copies when a duplicator fails and dtor is NULL
   - note: dtor kept optional per design; partial copies cannot be released without it. docs updated, leak remains when dtor == NULL.
  - [:] ill-> inserting an already linked or anchor-equal node is not detected and creates cycles; document/assert isolated nodes
@@ -36,23 +34,13 @@ general todo for the project
    - [ ] restrict run to only needed
  - [>] code
   - [:] new modules (see bellow)
-  - [~] old module functionalities (detail bellow)
+  - [>] old module functionalities (detail bellow)
    - [x] hp-> more funcs, iterators
    - [x] lruc->make a separate lru only cache similar to dsu/ (lruc pure + lrutc timed)
-   - [~] ill->
-    - [:] circular lists (`ill_circ_` / `idl_circ_`)
-    - [ ] iters: idl_iter_rev, ill_iter_range/idl_iter_range
-    - [:] ill_apply_it/idl_apply_it and napply_it (da parity) - unsure usefullness
-    - [ ] ill_apply_range/idl_apply_range: apply on subrange
-    - [ ] querries: ill_is_empty/idl_is_empty
-    - [ ] ill_clear/idl_clear: walk, unlink and optionally dtor every element
-    - [ ] ill_move/idl_move: cut and splice a range between lists
-    - [ ] ill_concat/idl_concat: join two lists (add predicate ill_merge+idl_merge for name completeness on idl_sorted_merge/ill_sorted_merge. simple aliasing.)
-    - [:] optional tail handle/list descriptor for O(1) push_back/pop_back/get_tail
-    - [ ] ill_fold/idl_fold and ill_reduce/idl_reduce (da/hp parity)
-    - [ ] ill_nfilter/idl_nfilter and nfilter_out: n-limited filter variants
-    - [:] ill_unique/idl_unique: return the removed count and/or provide a full (non-consecutive) dedup option - use htable using load of .7 so (list_len/.7) = slot nb, store ptr + hit count, in case of miss check (slot+1)%bucket_nb - paused:heavy for litle gains + need semi-dedicated hmap impl to keep separate modules, heavy code for low scope.
-    - [ ] ill_validate/idl_validate: check offsets, prev/next links, cycles and isolation
+   - [ ] ill->circular lists (`ill_circ_` / `idl_circ_`)
+   - [ ] ill->ill_apply_it/idl_apply_it and napply_it (da parity) - unsure usefullness
+   - [:] ill->optional tail handle/list descriptor for O(1) push_back/pop_back/get_tail
+   - [:] ill->ill_unique/idl_unique: return the removed count and/or provide a full (non-consecutive) dedup option - use htable using load of .7 so (list_len/.7) = slot nb, store ptr + hit count, in case of miss check (slot+1)%bucket_nb - paused:heavy for litle gains + need semi-dedicated hmap impl to keep separate modules, heavy code for low scope.
    - [ ] rb->add functs to module, iterators
    - [ ] tls->ftls->xmacros for more than 1 struct, vtls+ctls iterator
    - [ ] tpm->crash catch, job batching on stress conditions, atomic thrd nb - increase/remove thrd control handle, auto increase thrd nb on stress
@@ -106,8 +94,6 @@ general todo for the project
 
 ### IMPLEMENTATION
 - [x] hp
- - [x] more funcs (eg map, filter, ...) take example on da
- - [x] iterator (take example on da)
  - [:] faster find
  - [:] map_heap / re-heapified mapping (current hp_map returns a positional void ** array instead)
  - [:] tree-order iterators (pre/in/post) on top of hpi_iter_level
@@ -115,29 +101,13 @@ general todo for the project
 - [ ] da
  - [ ] reduce_to: merge into a caller-provided element, no allocation
 - [~] lru
- - [x] split pure lru from the ttl+lru current setup and exec in a split setup like the rdsu/cdsu setup (lruc pure, lrutc timed)
- - [x] iterator on the pure lru (pull iterator over the recency list, forward/reverse, promote_to_mru boolean)
  - [:] iterator on the timed cache over the ttl min heap (start/last over heap slots like hp_iter, level order, boolean to refresh the ttl clock while walking)
  - [:] conversions between lruc and lrutc (lru_cache/lruc_convert/ like dsu_convert/), dedicated session
- - [x] dtor is called on the replaced value when an existing key is updated (both caches)
 - [~] ill
- - [x] head api consistency (const heads, opaque handle, `_node` for node payloads)
- - [x] elem based functions
- - [x] set elem based functions as default and node ones as `_node()`
- - [:] circular based functions eg ill_circ_foreach() - skip for now
- - [ ] idl_iter_rev: reverse pull iterator over prev links
- - [ ] ill_iter_range/idl_iter_range: bounded pull iterator with explicit end
+ - [ ] circular based functions eg ill_circ_foreach() - skip for now
  - [ ] ill_apply_it/idl_apply_it and napply_it: callback with position and last flag (da parity)
- - [ ] ill_apply_range/idl_apply_range: apply over a subrange
- - [ ] ill_is_empty/idl_is_empty predicate
- - [ ] ill_clear/idl_clear: walk, unlink and optionally dtor every element
- - [ ] ill_move/idl_move: cut and splice a range between lists
- - [ ] ill_concat/idl_concat: join two lists
  - [:] optional tail handle/list descriptor for O(1) push_back/pop_back/get_tail
- - [ ] ill_fold/idl_fold and ill_reduce/idl_reduce (da/hp parity)
- - [ ] ill_nfilter/idl_nfilter and nfilter_out: n-limited filter variants
- - [ ] ill_unique/idl_unique: return the removed count and/or provide a full (non-consecutive) dedup option
- - [ ] ill_validate/idl_validate: check offsets, prev/next links, cycles and isolation
+ - [:] ill_unique/idl_unique: return the removed count and/or provide a full (non-consecutive) dedup option
 - [:] rb
  - [:] magic rb
  - [:] iterator (take example on da)

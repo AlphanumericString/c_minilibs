@@ -17,6 +17,20 @@ NO_COV void *cb_bad_duplicator(const void *elem) {
 	(void)elem;
 	return NULL;
 }
+NO_COV void *cb_ill_sum(void *elem, void *arg) {
+	t_cm_test_node *n   = (t_cm_test_node *)elem;
+	int            *acc = (int *)arg;
+
+	*acc += n->value;
+	return (arg);
+}
+NO_COV void *cb_idl_sum(void *elem, void *arg) {
+	t_cm_test_dnode *n   = (t_cm_test_dnode *)elem;
+	int             *acc = (int *)arg;
+
+	*acc += n->value;
+	return (arg);
+}
 
 int g_dtor_hits   = 0;
 int g_dup_hits    = 0;

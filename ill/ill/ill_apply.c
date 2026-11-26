@@ -44,3 +44,38 @@ void *ill_napply(const t_cm_ill *head, size_t n, t_cm_callback c,
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 	return (u_data);
 }
+
+/**
+ * \brief Applies the callback to the elements of a bounded range.
+ * \param head_elem The first element of the range.
+ * \param end_elem The element ending the range (exclusive). NULL means apply up
+ * to and including the tail.
+ * \param c The callback function to apply.
+ * \param u_data User data to pass to the callback.
+ * \param offset Offset of the node in the range boundary elements.
+ * \return The user data pointer, even when the callback fails.
+ * \note stops early if the callback returns false.
+ * \ingroup ill
+**/
+void *ill_apply_range(const void *head_elem, const void *end_elem,
+                      t_cm_callback c, void *u_data, size_t offset) {
+	const t_cm_ill *curr;
+	const t_cm_ill *end;
+
+	if (!head_elem || !c) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
+		return (u_data);
+	}
+	curr = ill_eton(head_elem, offset);
+	end  = end_elem ? ill_eton(end_elem, offset) : NULL;
+	while (curr && curr != end) {
+		const t_cm_ill *nxt = curr->next;
+		if (!c(ill_ntoe(curr), u_data)) {
+			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__ILL_LOG_ECB)
+			return (u_data);
+		}
+		curr = nxt;
+	}
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
+	return (u_data);
+}

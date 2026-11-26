@@ -86,3 +86,55 @@ bool ill_iter(const t_cm_ill *head, void **iter, size_t offset) {
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
 	return (true);
 }
+
+/**
+ * \brief Pull iterator over the elements of a bounded range.
+ * \param head_elem The first element of the range.
+ * \param end_elem The element ending the range (exclusive). NULL means iterate
+ * up to and including the tail.
+ * \param iter Element pointer used as the iteration state. It must be
+ * initialized to NULL before the first call; on a true return it holds the
+ * current element.
+ * \param offset Offset of the node in the current element. On the first call it
+ * describes head_elem and end_elem; afterwards it describes the element stored
+ * in *iter. Mixed-offset lists are supported as long as the caller tracks the
+ * current element type.
+ * \return true while an element is available, false once the range is exhausted
+ * or on invalid arguments.
+ * \note end_elem must belong to the list (or be NULL). An element that is not
+ * found is treated as an end past the tail.
+ * \ingroup ill
+**/
+bool ill_iter_range(const void *head_elem, const void *end_elem, void **iter,
+                    size_t offset) {
+	const t_cm_ill *node;
+	const t_cm_ill *end;
+
+	if (!head_elem || !iter) {
+		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__ILL_LOG_EARG)
+		if (iter) *iter = NULL;
+		return (false);
+	}
+	end = end_elem ? ill_eton(end_elem, offset) : NULL;
+	if (!*iter) {
+		node = ill_eton(head_elem, offset);
+		if (node == end) {
+			*iter = NULL;
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
+			return (false);
+		}
+		*iter = ill_ntoe(node);
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
+		return (true);
+	}
+	node = ill_eton(*iter, offset);
+	node = node->next;
+	if (!node || node == end) {
+		*iter = NULL;
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
+		return (false);
+	}
+	*iter = ill_ntoe(node);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__ILL_LOG_SUCCESS)
+	return (true);
+}

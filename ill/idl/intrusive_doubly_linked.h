@@ -22,7 +22,7 @@
 
 /**
  * \defgroup idl Intrusive Doubly-linked Lists
- **/
+**/
 
 /* ************************************************************************** */
 /* api shape                                                                  */
@@ -56,6 +56,16 @@
 /* equivalent of "it++": it takes the current element and returns the next    */
 /* one. mixing the two is just a manual skip of one element.                  */
 /*                                                                            */
+/* idl_iter_range() and idl_apply_range() take an exclusive end element; a    */
+/* NULL end means the tail. idl_iter_rev() walks from the tail through prev   */
+/* links. idl_move() splices an inclusive [first, last] range to the tail of  */
+/* the destination list. idl_concat() appends a second list to the first,     */
+/* while idl_merge() aliases idl_sorted_merge().                              */
+/*                                                                            */
+/* mixed node offsets are supported by the iterators. validate does not       */
+/* reject them: it checks head/tail isolation, prev/next agreement and that   */
+/* the chain terminates.                                                      */
+/*                                                                            */
 /* the circular list api is reserved under the idl_circ_ prefix and is not    */
 /* implemented yet.                                                           */
 /* ************************************************************************** */
@@ -67,7 +77,7 @@
  * \param next pointer to the next node
  * \param prev pointer to the previous node
  * \ingroup idl
- **/
+**/
 typedef struct s_cm_idl {
 	struct s_cm_idl *prev;
 	struct s_cm_idl *next;
@@ -85,7 +95,9 @@ bool idl_is_isolated(const void *elem, size_t offset);
 bool idl_is_isolated_node(const t_cm_idl *node);
 bool idl_is_circular(const t_cm_idl *head);
 bool idl_is_sorted(const t_cm_idl *head, t_cm_comparator comparator);
+bool idl_is_empty(const t_cm_idl *head);
 bool idl_has(const t_cm_idl *head, t_cm_callback matcher, void *arg);
+bool idl_validate(const t_cm_idl *head);
 
 void     *idl_push(t_cm_idl **head, const void *elem, size_t offset);
 t_cm_idl *idl_push_node(t_cm_idl **head, t_cm_idl *node);
@@ -104,6 +116,11 @@ void idl_prepend_node(t_cm_idl *anchor, t_cm_idl *node);
 void idl_nprepend(const void *anchor_elem, const void *elems, size_t offset);
 void idl_nprepend_node(t_cm_idl *anchor, t_cm_idl *nodes);
 
+bool idl_move(t_cm_idl **from, t_cm_idl **to, const void *first,
+              const void *last, size_t offset);
+bool idl_move_node(t_cm_idl **from, t_cm_idl **to, t_cm_idl *first,
+                   t_cm_idl *last);
+
 void     *idl_pop(t_cm_idl **head);
 t_cm_idl *idl_pop_node(t_cm_idl **head);
 void     *idl_pop_back(t_cm_idl **head);
@@ -113,6 +130,7 @@ void     *idl_remove_after(const void *prev_elem, size_t offset);
 t_cm_idl *idl_remove_after_node(t_cm_idl *prev);
 bool      idl_remove(t_cm_idl **head, const void *elem, size_t offset);
 bool      idl_remove_node(t_cm_idl **head, t_cm_idl *target);
+void      idl_clear(t_cm_idl **head, t_cm_dtor dtor);
 
 void     *idl_find_prev(const t_cm_idl *head, const void *elem, size_t offset);
 t_cm_idl *idl_find_prev_node(const t_cm_idl *head, const t_cm_idl *target);
@@ -142,9 +160,20 @@ size_t idl_match_nb(const t_cm_idl *head, t_cm_callback matcher, void *arg);
 
 void *idl_apply(const t_cm_idl *head, t_cm_callback c, void *u_data);
 void *idl_napply(const t_cm_idl *head, size_t n, t_cm_callback c, void *u_data);
+void *idl_apply_range(const void *head_elem, const void *end_elem,
+                      t_cm_callback c, void *u_data, size_t offset);
 
-bool      idl_iter(const t_cm_idl *head, void **iter, size_t offset);
-void     *idl_advance_it(const void *e, size_t offset);
+void *idl_fold(const t_cm_idl *head, t_cm_merger m, void *u_start);
+void *idl_nfold(const t_cm_idl *head, size_t n, t_cm_merger m, void *u_start);
+void *idl_reduce(const t_cm_idl *head, t_cm_merger m, size_t elem_size);
+void *idl_nreduce(const t_cm_idl *head, size_t n, t_cm_merger m,
+                  size_t elem_size);
+
+bool  idl_iter(const t_cm_idl *head, void **iter, size_t offset);
+bool  idl_iter_range(const void *head_elem, const void *end_elem, void **iter,
+                     size_t offset);
+bool  idl_iter_rev(const void *head_elem, void **iter, size_t offset);
+void *idl_advance_it(const void *e, size_t offset);
 t_cm_idl *idl_advance_it_node(const t_cm_idl *it);
 void     *idl_recede_it(const void *e, size_t offset);
 t_cm_idl *idl_recede_it_node(const t_cm_idl *it);
@@ -152,12 +181,20 @@ t_cm_idl *idl_recede_it_node(const t_cm_idl *it);
 void      idl_reverse(t_cm_idl **head);
 t_cm_idl *idl_sorted_merge(t_cm_idl *list1, t_cm_idl *list2,
                            t_cm_comparator comp);
+t_cm_idl *idl_merge(t_cm_idl *list1, t_cm_idl *list2, t_cm_comparator comp);
 void      idl_sort(t_cm_idl **head, t_cm_comparator comp);
+
+void     *idl_concat(const void *list1, const void *list2, size_t offset);
+t_cm_idl *idl_concat_node(t_cm_idl *list1, t_cm_idl *list2);
 
 size_t idl_filter(t_cm_idl **head, t_cm_callback cb, void *arg,
                   t_cm_idl **filtered);
 size_t idl_filter_out(t_cm_idl **head, t_cm_callback cb, void *arg,
                       t_cm_idl **filtered);
+size_t idl_nfilter(t_cm_idl **head, size_t n, t_cm_callback cb, void *arg,
+                   t_cm_idl **filtered);
+size_t idl_nfilter_out(t_cm_idl **head, size_t n, t_cm_callback cb, void *arg,
+                       t_cm_idl **filtered);
 size_t idl_filter_dt(t_cm_idl **head, t_cm_callback cb, void *arg, t_cm_dtor d);
 void   idl_unique(t_cm_idl *head, t_cm_comparator c, t_cm_dtor d);
 
