@@ -71,21 +71,17 @@ general todo for the project
 - [:] tree-order iterators (pre/in/post) on top of `hpi_iter_level`
 
 ### ill
-- [:] `ill_copy`/`idl_copy` leak partial copies when a duplicator fails and `dtor` is NULL.
-  - note: `dtor` kept optional per design; partial copies cannot be released without it. Docs updated, leak remains when `dtor == NULL`.
-- [:] inserting an already linked or anchor-equal node is not detected and creates cycles; document/assert isolated nodes.
-  - note: documented in both headers; no runtime assert added (paused item).
-- [:] circular lists (`ill_circ_` / `idl_circ_`)
+- [ ] circular lists (`ill_circ_` / `idl_circ_`)
   - circular lists are only implemented for doubly linked lists; believe in the user (if a circular function is called we expect no sudden NULL; if a non-circular function receives a circular list, we expect no loop; no long pre-run checks).
   - functions: `ill_circ_foreach()`, concat, ...
-- [:] dedicated handler
+- [:] `ill_unique`/`idl_unique`: return the removed count and/or provide a full (non-consecutive) dedup option.
+  - use an htable with load factor .7 so `(list_len / .7) = slot nb`; store ptr + hit count; on a miss check `(slot + 1) % bucket_nb`.
+  - heavy for little gains + needs a semi-dedicated hmap impl to keep modules separate; heavy code for low scope.
+- [ ] dedicated handler
   - list handler struct (init/create/...) delegates to base or `_node` functions when needed; if any function needs `_get_tail`/`_get_head`, implement a handler version where tail/head is provided by the handler.
   - optional: reduce surface API coverage by separating the logic from the place where head/tail is obtained.
   - this is no longer an intrusive list but a plain list; theorized name `t_cm_lh` (lh: list handler).
   - since it also acts as a cover layer, an enum can select the list type (circular, doubly linked, simply linked, future types) and dispatch to the correct functions.
-- [:] `ill_unique`/`idl_unique`: return the removed count and/or provide a full (non-consecutive) dedup option.
-  - use an htable with load factor .7 so `(list_len / .7) = slot nb`; store ptr + hit count; on a miss check `(slot + 1) % bucket_nb`.
-  - paused: heavy for little gains + needs a semi-dedicated hmap impl to keep modules separate; heavy code for low scope.
 
 ### lru_cache
 - [:] iterator on the timed cache over the TTL min-heap (start/last over heap slots like `hp_iter`, level order, boolean to refresh the TTL clock while walking)
