@@ -37,9 +37,9 @@ general todo for the project
   - [>] old module functionalities (detail bellow)
    - [x] hp-> more funcs, iterators
    - [x] lruc->make a separate lru only cache similar to dsu/ (lruc pure + lrutc timed)
-   - [ ] ill->circular lists (`ill_circ_` / `idl_circ_`)
+   - [:] ill->circular lists (`ill_circ_` / `idl_circ_`)
+   - [:] ill->dedicated handler
    - [ ] ill->ill_apply_it/idl_apply_it and napply_it (da parity) - unsure usefullness
-   - [:] ill->optional tail handle/list descriptor for O(1) push_back/pop_back/get_tail
    - [:] ill->ill_unique/idl_unique: return the removed count and/or provide a full (non-consecutive) dedup option - use htable using load of .7 so (list_len/.7) = slot nb, store ptr + hit count, in case of miss check (slot+1)%bucket_nb - paused:heavy for litle gains + need semi-dedicated hmap impl to keep separate modules, heavy code for low scope.
    - [ ] rb->add functs to module, iterators
    - [ ] tls->ftls->xmacros for more than 1 struct, vtls+ctls iterator
@@ -97,29 +97,37 @@ general todo for the project
  - [:] faster find
  - [:] map_heap / re-heapified mapping (current hp_map returns a positional void ** array instead)
  - [:] tree-order iterators (pre/in/post) on top of hpi_iter_level
- - [ ] reduce_to: merge into a caller-provided element, no allocation
-- [ ] da
- - [ ] reduce_to: merge into a caller-provided element, no allocation
+- [x] da
 - [~] lru
  - [:] iterator on the timed cache over the ttl min heap (start/last over heap slots like hp_iter, level order, boolean to refresh the ttl clock while walking)
  - [:] conversions between lruc and lrutc (lru_cache/lruc_convert/ like dsu_convert/), dedicated session
-- [~] ill
- - [ ] circular based functions eg ill_circ_foreach() - skip for now
+- [>] ill
+ - [:] circular based functions (eg: ill_circ_foreach(), concat, ... ) - circular only implemented for doubly linked lists, believe in user (if user call circular function we expects no sudden NULL, same if user sends to non-circular function, we expect no loop. no long checks pre-running the functions).
+ - [:] list handler struct - (init/create/...) - delegates any call to base or _node function when needed but if any function need to call `_get_tail`/`_get_head` implements a handler version differing from the base/node version where tail/head is provided by the handler. (optional: to reduce surface api coverage implement a function where the logic is implemented spearated from the place where head/tail is gotten.) - at this point this no longer is an intrusive list but just a plain list: theorized names: `t_cm_lh` (lh: list handler). since this also acts as a cover layer, you can have an enum for the type of lists (circular, doubly linked, simply linked, <other added>) and the handler dispatch to correct functions.
  - [ ] ill_apply_it/idl_apply_it and napply_it: callback with position and last flag (da parity)
- - [:] optional tail handle/list descriptor for O(1) push_back/pop_back/get_tail
  - [:] ill_unique/idl_unique: return the removed count and/or provide a full (non-consecutive) dedup option
 - [:] rb
- - [:] magic rb
- - [:] iterator (take example on da)
+ - [ ] magic rb
+  - [ ] memory mapping magic
+  - [ ] replace math
+ - [ ] iterator (take example on da)
+  - [ ] _iter
+  - [ ] _iter_rev
+  - [ ] _iter_range
+  - [ ] _advance_it / _recede_it
+ - [ ] new functions (parity with da module) \[warning: skip in array modifying functions such as filter, we dont want to touch the insertion head nor the output head.\]
+  - [ ] fold - (dont discard the rb)
+  - [ ] reduce - (dont discard the rb)
+  - [ ] others
 - [:] dsu
  - [:] cdsu reserve/up-front growth equivalent (no logs)
  - [:] make rdsu_grow(..., 0) a successful no-op like cdsu_grow
  - [:] validate the rewind log chain in rdsu_validate
 - [:] tpm
- - [:] carsh jobs catch
- - [:] dispatch new jobs on spikes
+ - [:] crash jobs catch
+ - [:] dispatch new thrd on spikes
  - [:] batch jobs on spikes
- - [:] heartbeat system
+ - [:] heartbeat system -> every x jobs or x ns/ms, + monitor thrd
 
 ## NEW MODULES - WHOLE MODULE PAUSED
 
