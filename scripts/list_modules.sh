@@ -10,5 +10,5 @@ set -eu
 
 makefile=${1:-Makefile}
 
-value=$(sed -n 's/^MODULES[[:space:]]*:=[[:space:]]*//p' "$makefile" | tr -s '[:space:]' ' ')
+value=$(sed -n -E 's/^(override[[:space:]]+)?MODULES[[:space:]]*:=[[:space:]]*//p' "$makefile" | tr -s '[:space:]' ' ')
 printf '%s\n' "${value% }"

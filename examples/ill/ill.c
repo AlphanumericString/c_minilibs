@@ -29,7 +29,7 @@ static void init_cm_tasks(t_cm_task *tasks, size_t n, const int *prio) {
 	for (size_t i = 0; i < n; i++) {
 		tasks[i].id       = (int)i;
 		tasks[i].priority = prio[i];
-		ill_init(&tasks[i].node, offsetof(t_cm_task, node));
+		ill_init_node(&tasks[i].node, offsetof(t_cm_task, node));
 	}
 }
 
@@ -41,37 +41,37 @@ int main(void) {
 
 	init_cm_tasks(tasks, 8, prio);
 	for (size_t i = 0; i < 8; i++)
-		ill_push_back(&head, &tasks[i].node);
+		ill_push_back_node(&head, &tasks[i].node);
 
 	printf("list (%zu nodes):", ill_length(head));
-	ill_foreach(head, print_cm_task, NULL);
+	ill_apply(head, print_cm_task, NULL);
 	printf("\n");
 
 	printf("head is node %d, tail is node %d\n",
 	       ((t_cm_task *)ill_ntoe(head))->id,
-	       ((t_cm_task *)ill_ntoe(ill_get_tail(head)))->id);
+	       ((t_cm_task *)ill_ntoe(ill_get_tail_node(head)))->id);
 
 	ill_sort(&head, cmp_priority);
 	printf("sorted by priority:");
-	ill_foreach(head, print_cm_task, NULL);
+	ill_apply(head, print_cm_task, NULL);
 	printf("\n");
 
 	printf("smallest priority task: %d\n",
-	       ((t_cm_task *)ill_get_min(head, cmp_priority))->id);
+	       ((t_cm_task *)ill_get_min_node(head, cmp_priority))->id);
 	printf("largest priority task: %d\n",
-	       ((t_cm_task *)ill_get_max(head, cmp_priority))->id);
+	       ((t_cm_task *)ill_get_max_node(head, cmp_priority))->id);
 
 	ill_filter(&head, is_urgent, NULL, &filtered);
 	printf("urgent (kept):");
-	ill_foreach(head, print_cm_task, NULL);
+	ill_apply(head, print_cm_task, NULL);
 	printf("\n");
 	printf("deferred (filtered out):");
-	ill_foreach(filtered, print_cm_task, NULL);
+	ill_apply(filtered, print_cm_task, NULL);
 	printf("\n");
 
-	head = ill_reverse(head);
+	ill_reverse(&head);
 	printf("reversed:");
-	ill_foreach(head, print_cm_task, NULL);
+	ill_apply(head, print_cm_task, NULL);
 	printf("\n");
 
 	return (0);

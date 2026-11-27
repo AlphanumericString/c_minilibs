@@ -6,7 +6,7 @@
  * \return A pointer to the last node in the list, or NULL if the list is empty.
  * \ingroup idl
 **/
-t_cm_idl *idl_get_tail(t_cm_idl *node) {
+t_cm_idl *idl_get_tail_node(const t_cm_idl *node) {
 	if (!node) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return NULL;
@@ -14,7 +14,7 @@ t_cm_idl *idl_get_tail(t_cm_idl *node) {
 	for (; node->next; node = node->next)
 		;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
-	return node;
+	return (t_cm_idl *)node;
 }
 /**
  * \brief Retrieves the head (first node) of the list.
@@ -23,7 +23,7 @@ t_cm_idl *idl_get_tail(t_cm_idl *node) {
  * empty.
  * \ingroup idl
 **/
-t_cm_idl *idl_get_head(t_cm_idl *node) {
+t_cm_idl *idl_get_head_node(const t_cm_idl *node) {
 
 	if (!node) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -32,5 +32,5 @@ t_cm_idl *idl_get_head(t_cm_idl *node) {
 	for (; node->prev; node = node->prev)
 		;
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
-	return (node);
+	return (t_cm_idl *)node;
 }

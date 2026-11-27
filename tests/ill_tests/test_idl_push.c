@@ -2,7 +2,7 @@
 
 #include "ill_tests.h"
 
-NO_COV void test_cm_idl_push(void) {
+NO_COV void test_cm_idl_push_node(void) {
 	t_cm_test_dnode n1, n2, n3, n4;
 	t_cm_idl       *head = NULL;
 
@@ -13,12 +13,12 @@ NO_COV void test_cm_idl_push(void) {
 	(void)n3;
 	(void)n4;
 
-	assert(idl_push(&head, &n2.dnode) != NULL);
+	assert(idl_push_node(&head, &n2.dnode) != NULL);
 	assert(head == &n2.dnode);
-	assert(idl_push(NULL, &n2.dnode) == NULL);
-	assert(idl_push(&head, NULL) == NULL);
+	assert(idl_push_node(NULL, &n2.dnode) == NULL);
+	assert(idl_push_node(&head, NULL) == NULL);
 
-	idl_push(&head, &n1.dnode);
+	idl_push_node(&head, &n1.dnode);
 	assert(head == &n1.dnode);
 	assert(n1.dnode.next == &n2.dnode);
 	assert(n2.dnode.prev == &n1.dnode);

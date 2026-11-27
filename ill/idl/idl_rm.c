@@ -6,7 +6,7 @@
  * \return The removed node, or NULL if 'prev' has no next node.
  * \ingroup idl
 **/
-t_cm_idl *idl_remove_after(t_cm_idl *prev) {
+t_cm_idl *idl_remove_after_node(t_cm_idl *prev) {
 	t_cm_idl *to_remove;
 
 	if (!prev || !prev->next) {
@@ -27,10 +27,14 @@ t_cm_idl *idl_remove_after(t_cm_idl *prev) {
  * \param head Pointer to the head of the list.
  * \param target The node to remove.
  * \return true if the node was successfully removed, false otherwise.
+ * \note O(1) when target is linked. Define C_MINI__IDL_CHECK_STRICT to also
+ * verify membership, at the cost of an O(n) lookup.
  * \ingroup idl
 **/
 bool idl_remove_node(t_cm_idl **head, t_cm_idl *target) {
+#ifdef C_MINI__IDL_CHECK_STRICT
 	const t_cm_idl *curr;
+#endif
 
 	if (!head || !target || !*head) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
@@ -44,11 +48,13 @@ bool idl_remove_node(t_cm_idl **head, t_cm_idl *target) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 		return (true);
 	}
-	curr = idl_find(*head, target);
+#ifdef C_MINI__IDL_CHECK_STRICT
+	curr = idl_find_node(*head, target);
 	if (!curr) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_FAIL)
 		return (false);
 	}
+#endif
 
 	if (target->prev) target->prev->next = target->next;
 	if (target->next) target->next->prev = target->prev;

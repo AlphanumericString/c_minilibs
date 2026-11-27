@@ -2,7 +2,7 @@
 
 #include "ill_tests.h"
 
-NO_COV void test_cm_ill_find_prev(void) {
+NO_COV void test_cm_ill_find_prev_node(void) {
 	t_cm_test_node n1, n2, n3;
 	t_cm_ill      *head = NULL;
 
@@ -10,12 +10,12 @@ NO_COV void test_cm_ill_find_prev(void) {
 	INIT_NODE(n2, 43, 2);
 	INIT_NODE(n3, 44, 3);
 
-	ill_push_back(&head, &n1.node);
-	ill_push_back(&head, &n2.node);
+	ill_push_back_node(&head, &n1.node);
+	ill_push_back_node(&head, &n2.node);
 
-	assert(ill_find_prev(head, &n2.node) == &n1.node);
-	assert(ill_find_prev(head, head) == NULL);
-	assert(ill_find_prev(head, &n3.node) == NULL);
-	assert(ill_find_prev(head, NULL) == NULL);
-	assert(ill_find_prev(NULL, &n2.node) == NULL);
+	assert(ill_find_prev_node(head, &n2.node) == &n1.node);
+	assert(ill_find_prev_node(head, head) == NULL);
+	assert(ill_find_prev_node(head, &n3.node) == NULL);
+	assert(ill_find_prev_node(head, NULL) == NULL);
+	assert(ill_find_prev_node(NULL, &n2.node) == NULL);
 }

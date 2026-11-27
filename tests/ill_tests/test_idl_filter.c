@@ -26,7 +26,7 @@ NO_COV void test_cm_idl_filter(void) {
 
 	for (i = 0; i < 6; i++) {
 		INIT_DNODE(nodes[i], (int)(i + 1), (int)i);
-		idl_push_back(&head, &nodes[i].dnode);
+		idl_push_back_node(&head, &nodes[i].dnode);
 	}
 
 	n = idl_filter(&head, cb_idl_is_even, NULL, &filtered);
@@ -46,9 +46,9 @@ NO_COV void test_cm_idl_filter(void) {
 		INIT_DNODE(e1, 1, 1);
 		INIT_DNODE(e2, 3, 2);
 		INIT_DNODE(e3, 5, 3);
-		idl_push_back(&h, &e1.dnode);
-		idl_push_back(&h, &e2.dnode);
-		idl_push_back(&h, &e3.dnode);
+		idl_push_back_node(&h, &e1.dnode);
+		idl_push_back_node(&h, &e2.dnode);
+		idl_push_back_node(&h, &e3.dnode);
 		assert(idl_filter(&h, cb_idl_is_even, NULL, &filtered) == 3);
 		assert(h == NULL);
 		assert(collect(filtered, out, 6) == 3);
@@ -57,9 +57,15 @@ NO_COV void test_cm_idl_filter(void) {
 		assert(h == NULL);
 	}
 
-	assert(idl_filter(NULL, cb_idl_is_even, NULL, &filtered) == 0);
-	assert(idl_filter(&head, NULL, NULL, &filtered) == 0);
-	assert(idl_filter(&head, cb_idl_is_even, NULL, NULL) == 0);
+	{
+		t_cm_idl *sentinel = &nodes[0].dnode;
+
+		assert(idl_filter(NULL, cb_idl_is_even, NULL, &sentinel) == 0);
+		assert(sentinel == &nodes[0].dnode);
+		assert(idl_filter(&head, NULL, NULL, &sentinel) == 0);
+		assert(sentinel == &nodes[0].dnode);
+		assert(idl_filter(&head, cb_idl_is_even, NULL, NULL) == 0);
+	}
 }
 
 NO_COV void test_cm_idl_filter_out(void) {
@@ -73,7 +79,7 @@ NO_COV void test_cm_idl_filter_out(void) {
 
 	for (i = 0; i < 6; i++) {
 		INIT_DNODE(nodes[i], (int)(i + 1), (int)i);
-		idl_push_back(&head, &nodes[i].dnode);
+		idl_push_back_node(&head, &nodes[i].dnode);
 	}
 	n = idl_filter_out(&head, cb_idl_is_even, NULL, &filtered);
 	assert(n == 3);
@@ -92,9 +98,9 @@ NO_COV void test_cm_idl_filter_out(void) {
 		INIT_DNODE(e1, 2, 1);
 		INIT_DNODE(e2, 4, 2);
 		INIT_DNODE(e3, 5, 3);
-		idl_push_back(&h, &e1.dnode);
-		idl_push_back(&h, &e2.dnode);
-		idl_push_back(&h, &e3.dnode);
+		idl_push_back_node(&h, &e1.dnode);
+		idl_push_back_node(&h, &e2.dnode);
+		idl_push_back_node(&h, &e3.dnode);
 		assert(idl_filter_out(&h, cb_idl_is_even, NULL, &filtered) == 2);
 		assert(collect(h, out, 6) == 1);
 		assert(out[0] == 5);
@@ -102,7 +108,13 @@ NO_COV void test_cm_idl_filter_out(void) {
 		assert(out[0] == 2 && out[1] == 4);
 	}
 
-	assert(idl_filter_out(NULL, cb_idl_is_even, NULL, &filtered) == 0);
-	assert(idl_filter_out(&head, NULL, NULL, &filtered) == 0);
-	assert(idl_filter_out(&head, cb_idl_is_even, NULL, NULL) == 0);
+	{
+		t_cm_idl *sentinel = &nodes[0].dnode;
+
+		assert(idl_filter_out(NULL, cb_idl_is_even, NULL, &sentinel) == 0);
+		assert(sentinel == &nodes[0].dnode);
+		assert(idl_filter_out(&head, NULL, NULL, &sentinel) == 0);
+		assert(sentinel == &nodes[0].dnode);
+		assert(idl_filter_out(&head, cb_idl_is_even, NULL, NULL) == 0);
+	}
 }

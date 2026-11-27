@@ -1,35 +1,100 @@
 # define variable for all modules dir
 .DEFAULT_GOAL	:= all
 
-# list of targets / modules
-MODULES		:= da dsu hp ill lru_cache rb sptr tls tpm
+# =============================================================================
+# CONST VARIABLES
+# Owned by the Makefile: not meant to be overridden from the environment or
+# the command line. Use the "USER VARIABLES" section below for configuration.
+# =============================================================================
 
-# module selector
-# when left empty every module is targeted.
-MODULE			?=
-SELECTED_MODULES:=
+# main vars
+override PROJECT_NAME	:= c_mini
 
-MODULE_CL		= $(filter $(MODULES), $(MODULE))
+## list of targets / modules
+override MODULES		:= da dsu hp ill lru_cache rb sptr tls tpm
 
-PROJECT_NAME:= c_mini
-PRD_TARGET	:= $(PROJECT_NAME).profdata
+## TOOLS
+override CC				:= clang
+override AR				:= ar
+override COV			:= llvm-cov
+override PRD			:= llvm-profdata
+override CPPCHECK		:= cppcheck
+override DOXYGEN		:= doxygen
+override CLANG_FORMAT	:= clang-format
+override RM				:= rm -f
+override PRINT			:= printf
 
-# DIRS
-BUILD_DIR	:= build
-DOC_DIR		:= documentation
-TST_DIR		:= tests
-COV_DIR		:= coverage
-SINGLE_DIR	:= single
+## DIRS
+override BUILD_DIR		:= build
+override DOC_DIR		:= documentation
+override TST_DIR		:= tests
+override COV_DIR		:= coverage
+override SINGLE_DIR		:= single
 
-# TOOLS
-CC			:= clang
-COV			:= llvm-cov
-PRD			:= llvm-profdata
-CPPCHECK	:= cppcheck
-RM			:= rm -f
-PRINT		:= printf
+## generated artifacts
+override PRD_TARGET			:= $(PROJECT_NAME).profdata
+override CPPCHECK_LOG_LOC	:= $(BUILD_DIR)/cppcheck_checks_ran.txt
+override DOXYCHECK_LOG_LOC	:= $(BUILD_DIR)/doxygen_check.log
 
-# FLAGS
+## fixed linker flags
+override TLINKER_FLAGS	:= \
+		-Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc \
+		-Wl,--wrap=clock_gettime -Wl,--wrap=pthread_create \
+		-Wl,--wrap=pthread_cond_init
+
+## fixed valgrind flags
+override VFLAGS		:= \
+		--leak-check=full --show-leak-kinds=all --track-fds=yes \
+		--trace-children=yes --track-origins=yes --read-var-info=yes \
+		--show-reachable=yes --undef-value-errors=yes
+
+## TEXT
+### FG COLORS
+override FG_BLACK		:= \033[0;30m
+override FG_RED			:= \033[0;31m
+override FG_GREEN		:= \033[0;32m
+override FG_YELLOW		:= \033[0;33m
+override FG_BLUE		:= \033[0;34m
+override FG_PURPLE		:= \033[0;35m
+override FG_CYAN		:= \033[0;36m
+override FG_WHITE		:= \033[0;37m
+
+### BG COLORS
+override BG_BLACK		:= \033[40m
+override BG_RED			:= \033[41m
+override BG_GREEN		:= \033[42m
+override BG_YELLOW		:= \033[43m
+override BG_BLUE		:= \033[44m
+override BG_PURPLE		:= \033[45m
+override BG_CYAN		:= \033[46m
+override BG_WHITE		:= \033[47m
+
+### EFFECT
+override TXT_BOLD		:= \033[1m
+override TXT_DIM		:= \033[2m
+override TXT_UNDERLINE	:= \033[4m
+override TXT_BLINK		:= \033[5m
+override TXT_REVERSE	:= \033[7m
+override TXT_HIDDEN		:= \033[8m
+
+override TXT_RESET		:= \033[0m
+
+### MESSAGE STYLES
+override DEFAULT		:= $(TXT_RESET)
+override INFO			:= $(TXT_RESET)$(FG_YELLOW)
+override INFO_IMPORTANT	:= $(TXT_RESET)$(FG_YELLOW)$(TXT_UNDERLINE)
+override SUCCESS		:= $(TXT_RESET)$(FG_GREEN)
+override FAIL			:= $(TXT_RESET)$(FG_RED)
+override CRITICAL_FAIL	:= $(TXT_RESET)$(FG_RED)$(TXT_UNDERLINE)
+
+# =============================================================================
+# USER VARIABLES
+# Can be overridden from the environment or the command line.
+# =============================================================================
+
+## module selector (when left empty, every module is targeted)
+MODULE		?=
+
 # Compilation flags
 DEBUG_LVL	?= 0
 STD			?= gnu17
@@ -42,37 +107,47 @@ else
 	CFLAGS += -g3 -DC_MINI__TESTS -DC_MINI__DEBUG_LEVEL=$(DEBUG_LVL)
 endif
 
+# tests deliberately hand uninitialized payloads to the *_init() wrappers, so
+# silence clang's const-pointer false positive for this build only.
 TFLAGS	?= $(filter-out -O2 -O3 -O1, $(CFLAGS))	-O0 -I./	\
 			-fprofile-instr-generate -ftest-coverage -fcoverage-mapping \
-			-fno-inline -fno-inline-functions -DC_MINI__TESTS
+			-fno-inline -fno-inline-functions -DC_MINI__TESTS		\
+			-Wno-uninitialized-const-pointer
 # optional compile-time path: set to 1 to build the da tests with auto-shrink on
 DA_AUTO_SHRINK	?= 0
 ifeq ($(DA_AUTO_SHRINK), 1)
 	TFLAGS += -DC_MINI__DA_AUTO_SHRINK
 endif
-TLINKER_FLAGS = -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc \
-				-Wl,--wrap=clock_gettime -Wl,--wrap=pthread_create \
-				-Wl,--wrap=pthread_cond_init
 VGFLAGS		?= $(filter-out -fprofile-instr-generate -ftest-coverage \
 				-fcoverage-mapping -DC_MINI__DEBUG_LEVEL=0,$(TFLAGS)) \
 				-g3 -DC_MINI__TESTS -DC_MINI__DEBUG_LEVEL=99
 # Tools flags
-CPPCHECK_LOG_LOC=$(BUILD_DIR)/cppcheck_checks_ran.txt
-DOXYCHECK_LOG_LOC=$(BUILD_DIR)/doxygen_check.log
-
 CHECK_FLAGS	?= --enable=all --std=$(CHECK_STD) --language=c --inline-suppr \
 				-I. --suppress=missingIncludeSystem --suppress=unusedFunction \
 				--suppress=staticFunction --suppress=variableScope \
 				--check-level=exhaustive --quiet \
 				--checkers-report=$(CPPCHECK_LOG_LOC)
-VFLAGS		:= --leak-check=full --show-leak-kinds=all --track-fds=yes \
-				--trace-children=yes --track-origins=yes --read-var-info=yes \
-				--show-reachable=yes --undef-value-errors=yes
+
+# =============================================================================
+# DERIVED VARIABLES
+# =============================================================================
+
+## selected modules (fallback to every module when MODULE is empty)
+override MODULE_CL			:= $(filter $(MODULES),$(MODULE))
+override TARGET_MODULES		:= $(if $(strip $(MODULE_CL)),$(MODULE_CL),$(MODULES))
+override TARGET_LIBS		:= $(addprefix lib,$(addsuffix .a,$(TARGET_MODULES)))
+override TARGET_TESTS		:= $(addprefix test_,$(addsuffix .out,$(TARGET_MODULES)))
+override TARGET_VG_TESTS	:= $(addprefix test_,$(addsuffix .vg.out,$(TARGET_MODULES)))
+
+ifneq ($(strip $(MODULE)),)
+ifeq ($(strip $(MODULE_CL)),)
+$(error Unknown module(s) in MODULE="$(MODULE)". Valid modules: $(MODULES))
+endif
+endif
 
 # FILES COLLECTOR
 D_FILES		:=
 LIB_FILES	:=
-OBJ_FILES	:=
 PRD_FILES	:=
 TST_PROGS	:=
 VG_PROGS	:=
@@ -96,7 +171,6 @@ $1_DVG		:=$$(patsubst %.o, %.d, $$($1_TOBJVG)) $$(patsubst %.o, %.d, $$($1_TOBJS
 # var(collectors) update
 D_FILES		+= $$($1_D) $$($1_DVG)
 LIB_FILES	+= lib$1.a
-OBJ_FILES	+= $$($1_OBJ)
 TST_PROGS	+= test_$1.out
 VG_PROGS	+= test_$1.vg.out
 PRD_FILES	+= ./$(BUILD_DIR)/test_$1.profraw
@@ -118,12 +192,12 @@ $(BUILD_DIR)/$(TST_DIR)/$1_tests/%.o: $(TST_DIR)/$1_tests/%.c
 analyze_$1:
 	@mkdir -p $$(dir $(CPPCHECK_LOG_LOC))
 	@$(CPPCHECK) $(CHECK_FLAGS) -I./$1 $1
-	@$(PRINT) "static analysis: $1 done (checks ran disponible at $(CPPCHECK_LOG_LOC))\n"
+	@$(PRINT) "$(SUCCESS)static analysis$(DEFAULT): %s done (checks available at $(CPPCHECK_LOG_LOC))$(TXT_RESET)\n" "$1"
 
 # TARGETS
 # base target
 lib$1.a: $$($1_OBJ)
-	ar rcs $$@ $$^
+	$(AR) rcs $$@ $$^
 # test target
 test_$1.out: $$($1_TOBJSRC) $$($1_TOBJ)
 	$(CC) $(TFLAGS) $$($1_TOBJ) $$($1_TOBJSRC) -o $$@ $$(TLINKER_FLAGS)
@@ -133,7 +207,8 @@ test_$1.vg.out: $$($1_TOBJSRCVG) $$($1_TOBJVG)
 # cov target
 ./$(BUILD_DIR)/test_$1.profraw: test_$1.out
 	@LLVM_PROFILE_FILE=$$@ ./$$^ 1> /dev/null && \
-		$(PRINT) "$$^ ok\n" || $(PRINT) "$$^ failed\n";
+		$(PRINT) "$(SUCCESS)%s ok$(TXT_RESET)\n" "$$^" || \
+		$(PRINT) "$(FAIL)%s failed$(TXT_RESET)\n" "$$^";
 endef
 
 $(BUILD_DIR)/vg/%.o: %.c
@@ -158,118 +233,98 @@ $(COV_DIR)/index.html: $(PRD_TARGET)
 
 # documentation
 $(DOC_DIR)/html/index.html: Doxyfile
-	@DOXYGEN_INPUT="$(MODULES)" doxygen $^ 1> /dev/null &&	\
-	$(PRINT) "\nDocumentation at file://$(shell pwd)/$@\n"
+	@DOXYGEN_INPUT="$(MODULES)" $(DOXYGEN) $^ 1> /dev/null &&	\
+	$(PRINT) "$(INFO)documentation$(DEFAULT): file://$(shell pwd)/$@$(TXT_RESET)\n"
 
 # auto-recompile on change
 -include:$(D_FILES)
 
 
-# RULES
+# The `help` rule reads the documentation block below.
+# Add one `<target>: <description>` line per target; no help rule change needed.
 #
-# DOCUMENTATION
+# RULES DOCUMENTATION
+#
 # all: compiles every module into it's own lib named lib<module_name>.a (debug via DEBUG_LVL=<value>)
 # tests: compiles every module's tests (debug via DEBUG_LVL=<value>)
-# module: compiles specified module's lib (modules aware via MODULE=<name>)
-# test_module: compiles specified module's tests (modules aware via MODULE=<name>)
-# tests_run: build and run every module's tests under valgrind
-# valgrind: build and run tests under valgrind (module aware via MODULE=<name>)
-# static_analysis: run the static analyzer (module aware via MODULE=<name>)
+# module: compiles selected module's lib (defaults to every module via MODULE=<name>)
+# test_module: compiles selected module's tests (defaults to every module via MODULE=<name>)
+# tests_run: build and run selected modules' tests under valgrind (defaults to every module)
+# valgrind: build and run selected modules' tests under valgrind (defaults to every module)
+# static_analysis: run the static analyzer (defaults to every module via MODULE=<name>)
 # norm_check: check that every C/H file is clang-format compliant (file aware via FILES=<name>)
-# doxygen_check: fail on doxygen warnings/errors (module aware via MODULE=<name>, file aware via FILES=<name>)
-# single_file: amalgamate MODULE into a single stb style header (MODULE required)
+# doxygen_check: fail on doxygen warnings/errors (defaults to every module, module aware via MODULE=<name>, file aware via FILES=<name>)
+# single_file: amalgamate selected modules into single stb style headers (defaults to every module)
 # coverage: run coverage pass using llvm tooling (debug via DEBUG_LVL=<value>)
 # documentation: run documentation generation using doxygen
-# examples: compile every example in the examples/ directory
+# examples: compile examples for selected modules (defaults to every module)
 # fclean: rm output dirs and final targets created by makefile
 # clean: rm final targets create by makefile
 # re: re-compile the project using rule fclean and all
-# remove_module: removes a specified module from the project
-#
+# remove_module: removes explicit modules from the project (MODULE required)
+# help: print this help message
+
 all:$(LIB_FILES)
 tests:$(LIB_FILES)
-module:
-	@if [ -z "$(MODULE_CL)" ] ; then \
-		$(PRINT) '$(RED)Invalid$(RESET). Please use `module` rule with a module (eg: `make module "MODULE=module1[ module2...]"`)'; \
-		exit 1 ; \
-	else \
-		make --no-print-directory $(addprefix lib, $(addsuffix .a, $(MODULE_CL))) ; \
-	fi ;
-test_module:
-	@if [ -z "$(MODULE_CL)" ] ; then \
-		$(PRINT) '$(RED)Invalid$(RESET). Please use `test_module` rule with a module (eg: `make test_module "MODULE=module1[ module2...]"`)'; \
-		exit 1 ; \
-	else \
-		make --no-print-directory $(addprefix test_, $(addsuffix .out, $(MODULE_CL))) ; \
-	fi ;
-tests_run: $(VG_PROGS)
+module: $(TARGET_LIBS)
+test_module: $(TARGET_TESTS)
+tests_run: $(TARGET_VG_TESTS)
 	@for t in $^; do \
 		valgrind $(VFLAGS) -q ./$$t; \
 	done
-valgrind: $(addprefix test_,$(addsuffix .vg.out,$(MODULE_CL)))
+valgrind: $(TARGET_VG_TESTS)
 	@for t in $^; do \
 		valgrind $(VFLAGS) -q ./$$t; \
 	done
 static_analysis:
-	@if [ -z "$(MODULE_CL)" ] ; then \
-		for m in $(MODULES) ; do \
-			make --no-print-directory analyze_$$m ; \
-		done ; \
-	else \
-		for m in $(MODULE_CL) ; do \
-			make --no-print-directory analyze_$$m ; \
-		done ; \
-	fi ;
-# file aware via FILES=<list of files> (defaults to every C/H file of the project)
+	@for m in $(TARGET_MODULES) ; do \
+		$(MAKE) --no-print-directory analyze_$$m ; \
+	done ;
 norm_check:
 	@files="$(if $(strip $(FILES)),$(FILES),$$(fd '.*\.[ch]$$' ./ ))" ; \
-	clang-format -i $$files ; \
+	$(CLANG_FORMAT) -i $$files ; \
 	sed 's/^ \*\*\//**\//' -i $$files ; \
 	if ! git diff --quiet --diff-filter=ACMR -- '*.c' '*.h' ; then \
-		$(PRINT) "norm_checking error: the following files are not clang-format compliant:\n" ; \
+		$(PRINT) "$(FAIL)norm_checking error$(DEFAULT): the following files are not clang-format compliant:$(TXT_RESET)\n" ; \
 		git --no-pager diff --name-only --diff-filter=ACMR -- '*.c' '*.h' ; \
 		exit 1 ; \
 	fi
-	@$(PRINT) "norm_checking: all files are clang-format compliant\n"
-# documentation check: fail on any doxygen warning/error (module aware via MODULE=<name>,
-# file aware via FILES=<files>, defaults to every module)
+	@$(PRINT) "$(SUCCESS)norm_checking$(DEFAULT): all files are clang-format compliant$(TXT_RESET)\n"
 doxygen_check:
 	@inputs="$(strip $(FILES))" ; \
 	if [ -z "$$inputs" ] ; then \
-		if [ -n "$(MODULE_CL)" ] ; then inputs="$(MODULE_CL)" ; else inputs="$(MODULES)" ; fi ; \
+		inputs="$(TARGET_MODULES)" ; \
 	fi ; \
 	mkdir -p $(dir $(DOXYCHECK_LOG_LOC)) $(BUILD_DIR)/doxygen_check ; \
-	$(PRINT) "doxygen_check: checking [$$inputs] for documentation errors\n" ; \
+	$(PRINT) "$(INFO)doxygen_check$(DEFAULT): checking [$$inputs] for documentation errors$(TXT_RESET)\n" ; \
 	{ cat Doxyfile ; \
 		$(PRINT) 'WARN_AS_ERROR = FAIL_ON_WARNINGS\n' ; \
 		$(PRINT) 'INPUT = %s\n' "$$inputs" ; \
 		$(PRINT) 'OUTPUT_DIRECTORY = $(BUILD_DIR)/doxygen_check\n' ; \
 		$(PRINT) 'QUIET = YES\n' ; \
-	} | doxygen - > $(DOXYCHECK_LOG_LOC) 2>&1 ; \
+	} | $(DOXYGEN) - > $(DOXYCHECK_LOG_LOC) 2>&1 ; \
 	if [ $$? -ne 0 ] ; then \
-		$(PRINT) "doxygen_check error: documentation issues found:\n" ; \
+		$(PRINT) "$(FAIL)doxygen_check error$(DEFAULT): documentation issues found:$(TXT_RESET)\n" ; \
 		grep -E 'error:|warning:' $(DOXYCHECK_LOG_LOC) || cat $(DOXYCHECK_LOG_LOC) ; \
 		exit 1 ; \
 	fi ; \
-	$(PRINT) "doxygen_check: no documentation errors found\n"
+	$(PRINT) "$(SUCCESS)doxygen_check$(DEFAULT): no documentation errors found$(TXT_RESET)\n"
 single_file:
-	@if [ -z "$(MODULE_CL)" ] ; then \
-		$(PRINT) '$(RED)Invalid$(RESET). Please use `single_file` rule with a module (eg: `make single_file "MODULE=module1[ module2...]"`)'; \
-		exit 1 ; \
-	fi
 	@mkdir -p $(SINGLE_DIR)
-	@sh scripts/amalgamate.sh $(MODULE_CL) $(SINGLE_DIR)/$(MODULE_CL).h $(MODULE_CL)
-	@$(PRINT) "single file: $(SINGLE_DIR)/$(MODULE_CL).h\n"
+	@for m in $(TARGET_MODULES) ; do \
+		sh scripts/amalgamate.sh $$m $(SINGLE_DIR)/$$m.h $$m ; \
+		$(PRINT) "$(SUCCESS)single file$(DEFAULT): $(SINGLE_DIR)/%s.h$(TXT_RESET)\n" "$$m" ; \
+	done
 coverage: $(COV_DIR)/index.html
 documentation:$(DOC_DIR)/html/index.html
-examples: all
+examples: $(TARGET_LIBS)
 	@mkdir -p $(BUILD_DIR)
-	@for m in $(MODULES) ; do \
+	@for m in $(TARGET_MODULES) ; do \
 		for e in $$(find examples/$$m/*.c) ; do \
 			$(CC) -Wall -Wextra -I. $$e \
 				-o $(BUILD_DIR)/"$${m}_$$(basename $$e).example.out" \
 				-L. -l:lib$$m.a ; \
-			echo "made: $(BUILD_DIR)$${m}_$$(basename $$e).example.out" ; \
+			$(PRINT) "$(SUCCESS)made$(DEFAULT): $(BUILD_DIR)/%s.example.out$(TXT_RESET)\n" "$${m}_$$(basename $$e)" ; \
 		done; \
 	done;
 fclean:clean
@@ -277,32 +332,24 @@ fclean:clean
 clean:
 	$(RM) $(LIB_FILES) $(TST_PROGS) $(VG_PROGS) $(PRD_TARGET)
 re:fclean
-	@make --no-print-directory all
+	@$(MAKE) --no-print-directory all
 remove_module:
 	@if [ -z "$(MODULE_CL)" ] ; then \
-		$(PRINT) '$(RED)Invalid$(RESET). Please use `remove_module` rule with a module (eg: `make remove_module "MODULE=module1[ module2...]"`)'; \
+		$(PRINT) '$(FAIL)Invalid$(TXT_RESET). Please use `remove_module` with an explicit module (eg: `make remove_module "MODULE=module1[ module2...]"`)\n'; \
 		exit 1 ; \
 	else \
-		sh scripts/remove_module.sh $(MODULE_CL) ./Makefile ; \
-		$(PRINT) "removed module: $(MODULE_CL)\n" ; \
+		for m in $(MODULE_CL) ; do \
+			sh scripts/remove_module.sh $$m ./Makefile ; \
+			$(PRINT) "$(SUCCESS)removed module$(DEFAULT): %s$(TXT_RESET)\n" "$$m" ; \
+		done ; \
 	fi
 help:
-	$(PRINT) "all: compiles ALL modules into it's own lib named lib<module_name>.a (debug via DEBUG_LVL=<value>)"
-	$(PRINT) "tests: compiles ALL module's tests (debug via DEBUG_LVL=<value>)"
-	$(PRINT) "module: compiles specified module's lib (modules aware via MODULE=<name>)"
-	$(PRINT) "test_module: compiles specified module's tests (modules aware via MODULE=<name>)"
-	$(PRINT) "tests_run: build and run every module's tests under valgrind"
-	$(PRINT) "valgrind: build and run tests under valgrind (module aware via MODULE=<name>)"
-	$(PRINT) "static_analysis: run the static analyzer (module aware via MODULE=<name>)"
-	$(PRINT) "norm_check: check that every C/H file is clang-format compliant (file aware via FILES=<name>)"
-	$(PRINT) "doxygen_check: fail on doxygen warnings/errors (module aware via MODULE=<name>, file aware via FILES=<name>)"
-	$(PRINT) "single_file: amalgamate MODULE into a single stb style header (via MODULE=<name>)"
-	$(PRINT) "coverage: run coverage pass using llvm tooling (debug via DEBUG_LVL=<value>)"
-	$(PRINT) "documentation: run documentation generation using doxygen"
-	$(PRINT) "examples: compile every example in the examples/ directory"
-	$(PRINT) "fclean: rm output dirs and final targets created by makefile"
-	$(PRINT) "clean: rm final targets create by makefile"
-	$(PRINT) "re: re-compile the project using rule fclean and all"
-	$(PRINT) "remove_module: removes a specified module from the project"
-	$(PRINT) "help: print this help message"
-.PHONY: re clean fclean tests tests_run valgrind static_analysis norm_check doxygen_check single_file remove_module help examples
+	@sed -n '/^# RULES DOCUMENTATION$$/,/^[^#]/p' $(firstword $(MAKEFILE_LIST)) \
+		| sed -n 's/^# \([A-Za-z0-9_.-]*:\)/\1/p' \
+		| while IFS= read -r line ; do \
+			entry=$${line%%:*} ; \
+			desc=$${line#*:} ; \
+			desc=$${desc# } ; \
+			$(PRINT) "$(INFO_IMPORTANT)%s$(DEFAULT): %s$(TXT_RESET)\n" "$$entry" "$$desc" ; \
+		done
+.PHONY: all re clean fclean module test_module tests tests_run valgrind static_analysis norm_check doxygen_check single_file remove_module help examples coverage documentation $(addprefix analyze_,$(MODULES))

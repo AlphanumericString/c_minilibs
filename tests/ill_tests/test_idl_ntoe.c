@@ -5,7 +5,7 @@
 NO_COV void test_cm_idl_ntoe(void) {
 	t_cm_test_dnode node;
 
-	idl_init(&node.dnode, offsetof(t_cm_test_dnode, dnode));
+	idl_init_node(&node.dnode, offsetof(t_cm_test_dnode, dnode));
 
 	t_cm_test_dnode *elem = idl_ntoe(&node.dnode);
 

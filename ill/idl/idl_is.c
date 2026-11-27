@@ -6,7 +6,7 @@
  * \return true if isolated, false otherwise.
  * \ingroup idl
 **/
-bool idl_is_isolated(const t_cm_idl *node) {
+bool idl_is_isolated_node(const t_cm_idl *node) {
 	if (!node) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__IDL_LOG_EARG)
 		return false;
@@ -85,6 +85,52 @@ bool idl_is_sorted(const t_cm_idl *head, t_cm_comparator comparator) {
 			return (false);
 		}
 		head = head->next;
+	}
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
+	return (true);
+}
+
+/**
+ * \brief Checks if a list is empty.
+ * \param head The head of the list.
+ * \return true if the head is NULL, false otherwise.
+ * \ingroup idl
+**/
+bool idl_is_empty(const t_cm_idl *head) {
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
+	return (head == NULL);
+}
+
+/**
+ * \brief Validates the structural integrity of a list.
+ * \param head The head of the list.
+ * \return true if the list is valid (including NULL for an empty list), false
+ * otherwise.
+ * \note mixed node offsets are valid by design and are therefore not rejected.
+ * \note checks that the first node has no predecessor, that every next link has
+ * a matching prev link and that the chain terminates (no cycle).
+ * \ingroup idl
+**/
+bool idl_validate(const t_cm_idl *head) {
+	const t_cm_idl *curr;
+
+	if (!head) {
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
+		return (true);
+	}
+	if (idl_is_circular(head)) {
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_FAIL)
+		return (false);
+	}
+	if (head->prev) {
+		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_FAIL)
+		return (false);
+	}
+	for (curr = head; curr->next; curr = curr->next) {
+		if (curr->next->prev != curr) {
+			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_FAIL)
+			return (false);
+		}
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__IDL_LOG_SUCCESS)
 	return (true);

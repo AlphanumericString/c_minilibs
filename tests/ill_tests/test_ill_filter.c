@@ -23,7 +23,7 @@ NO_COV void test_cm_ill_filter(void) {
 
 	for (i = 0; i < 6; i++) {
 		INIT_NODE(nodes[i], (int)(i + 1), (int)i);
-		ill_push_back(&head, &nodes[i].node);
+		ill_push_back_node(&head, &nodes[i].node);
 	}
 
 	n = ill_filter(&head, cb_ill_is_even, NULL, &filtered);
@@ -43,9 +43,9 @@ NO_COV void test_cm_ill_filter(void) {
 		INIT_NODE(e1, 1, 1);
 		INIT_NODE(e2, 3, 2);
 		INIT_NODE(e3, 5, 3);
-		ill_push_back(&h, &e1.node);
-		ill_push_back(&h, &e2.node);
-		ill_push_back(&h, &e3.node);
+		ill_push_back_node(&h, &e1.node);
+		ill_push_back_node(&h, &e2.node);
+		ill_push_back_node(&h, &e3.node);
 		assert(ill_filter(&h, cb_ill_is_even, NULL, &filtered) == 3);
 		assert(h == NULL);
 		assert(collect(filtered, out, 6) == 3);
@@ -54,9 +54,15 @@ NO_COV void test_cm_ill_filter(void) {
 		assert(h == NULL);
 	}
 
-	assert(ill_filter(NULL, cb_ill_is_even, NULL, &filtered) == 0);
-	assert(ill_filter(&head, NULL, NULL, &filtered) == 0);
-	assert(ill_filter(&head, cb_ill_is_even, NULL, NULL) == 0);
+	{
+		t_cm_ill *sentinel = &nodes[0].node;
+
+		assert(ill_filter(NULL, cb_ill_is_even, NULL, &sentinel) == 0);
+		assert(sentinel == &nodes[0].node);
+		assert(ill_filter(&head, NULL, NULL, &sentinel) == 0);
+		assert(sentinel == &nodes[0].node);
+		assert(ill_filter(&head, cb_ill_is_even, NULL, NULL) == 0);
+	}
 }
 
 NO_COV void test_cm_ill_filter_out(void) {
@@ -70,7 +76,7 @@ NO_COV void test_cm_ill_filter_out(void) {
 
 	for (i = 0; i < 6; i++) {
 		INIT_NODE(nodes[i], (int)(i + 1), (int)i);
-		ill_push_back(&head, &nodes[i].node);
+		ill_push_back_node(&head, &nodes[i].node);
 	}
 	n = ill_filter_out(&head, cb_ill_is_even, NULL, &filtered);
 	assert(n == 3);
@@ -89,9 +95,9 @@ NO_COV void test_cm_ill_filter_out(void) {
 		INIT_NODE(e1, 2, 1);
 		INIT_NODE(e2, 4, 2);
 		INIT_NODE(e3, 5, 3);
-		ill_push_back(&h, &e1.node);
-		ill_push_back(&h, &e2.node);
-		ill_push_back(&h, &e3.node);
+		ill_push_back_node(&h, &e1.node);
+		ill_push_back_node(&h, &e2.node);
+		ill_push_back_node(&h, &e3.node);
 		assert(ill_filter_out(&h, cb_ill_is_even, NULL, &filtered) == 2);
 		assert(collect(h, out, 6) == 1);
 		assert(out[0] == 5);
@@ -99,7 +105,13 @@ NO_COV void test_cm_ill_filter_out(void) {
 		assert(out[0] == 2 && out[1] == 4);
 	}
 
-	assert(ill_filter_out(NULL, cb_ill_is_even, NULL, &filtered) == 0);
-	assert(ill_filter_out(&head, NULL, NULL, &filtered) == 0);
-	assert(ill_filter_out(&head, cb_ill_is_even, NULL, NULL) == 0);
+	{
+		t_cm_ill *sentinel = &nodes[0].node;
+
+		assert(ill_filter_out(NULL, cb_ill_is_even, NULL, &sentinel) == 0);
+		assert(sentinel == &nodes[0].node);
+		assert(ill_filter_out(&head, NULL, NULL, &sentinel) == 0);
+		assert(sentinel == &nodes[0].node);
+		assert(ill_filter_out(&head, cb_ill_is_even, NULL, NULL) == 0);
+	}
 }

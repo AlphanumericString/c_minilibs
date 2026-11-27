@@ -11,10 +11,10 @@ NO_COV void test_cm_ill_length(void) {
 	assert(ill_length(head) == 0);
 	assert(ill_length(NULL) == 0);
 
-	ill_push_back(&head, &n1.node);
-	ill_push_back(&head, &n2.node);
-	ill_push_back(&head, &n3.node);
-	ill_push_back(&head, &n4.node);
+	ill_push_back_node(&head, &n1.node);
+	ill_push_back_node(&head, &n2.node);
+	ill_push_back_node(&head, &n3.node);
+	ill_push_back_node(&head, &n4.node);
 
 	assert(ill_length(head) == 4);
 }

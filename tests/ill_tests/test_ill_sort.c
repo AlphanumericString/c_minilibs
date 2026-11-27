@@ -37,7 +37,7 @@ NO_COV void test_cm_ill_sort(void) {
 	head = NULL;
 	for (i = 0; i < 5; i++) {
 		INIT_NODE(nodes[i], values[i], (int)i);
-		ill_push_back(&head, &nodes[i].node);
+		ill_push_back_node(&head, &nodes[i].node);
 	}
 	ill_sort(&head, cb_ill_cmp_min_max);
 	assert(ill_length(head) == 5);
@@ -66,8 +66,8 @@ NO_COV void test_cm_ill_sort(void) {
 	for (i = 0; i < 3; i++) {
 		INIT_NODE(a[i], (int)(i * 2 + 1), (int)i);       // 1 3 5
 		INIT_NODE(b[i], (int)(i * 2 + 2), (int)(i + 3)); // 2 4 6
-		ill_push_back(&la, &a[i].node);
-		ill_push_back(&lb, &b[i].node);
+		ill_push_back_node(&la, &a[i].node);
+		ill_push_back_node(&lb, &b[i].node);
 	}
 	head = ill_sorted_merge(la, lb, cb_ill_cmp_min_max);
 	check_values(head, expm, 6);

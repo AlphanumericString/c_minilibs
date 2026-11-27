@@ -27,7 +27,7 @@ NO_COV void test_cm_ill_unique(void) {
 	head = NULL;
 	for (i = 0; i < 6; i++) {
 		INIT_NODE(nodes[i], values[0][i], (int)i);
-		ill_push_back(&head, &nodes[i].node);
+		ill_push_back_node(&head, &nodes[i].node);
 	}
 	g_dtor_hits = 0;
 	ill_unique(head, cb_ill_cmp_min_max, cb_count_dtor);
@@ -40,7 +40,7 @@ NO_COV void test_cm_ill_unique(void) {
 	head = NULL;
 	for (i = 0; i < 6; i++) {
 		INIT_NODE(nodes[i], values[1][i], (int)i);
-		ill_push_back(&head, &nodes[i].node);
+		ill_push_back_node(&head, &nodes[i].node);
 	}
 	g_dtor_hits = 0;
 	ill_unique(head, cb_ill_cmp_min_max, cb_count_dtor);
@@ -54,7 +54,7 @@ NO_COV void test_cm_ill_unique(void) {
 	head = NULL;
 	for (i = 0; i < 6; i++) {
 		INIT_NODE(nodes[i], values[0][i], (int)i);
-		ill_push_back(&head, &nodes[i].node);
+		ill_push_back_node(&head, &nodes[i].node);
 	}
 	ill_unique(head, cb_ill_cmp_min_max, NULL);
 	assert(ill_length(head) == 3);
@@ -63,7 +63,7 @@ NO_COV void test_cm_ill_unique(void) {
 	head = NULL;
 	for (i = 0; i < 4; i++) {
 		INIT_NODE(nodup[i], (int)(i + 1), (int)i);
-		ill_push_back(&head, &nodup[i].node);
+		ill_push_back_node(&head, &nodup[i].node);
 	}
 	g_dtor_hits = 0;
 	ill_unique(head, cb_ill_cmp_min_max, cb_count_dtor);

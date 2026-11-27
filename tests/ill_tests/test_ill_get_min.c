@@ -2,7 +2,7 @@
 
 #include "ill_tests.h"
 
-NO_COV void test_cm_ill_get_min(void) {
+NO_COV void test_cm_ill_get_min_node(void) {
 	t_cm_test_node n1, n2, n3;
 	t_cm_ill      *head = NULL;
 
@@ -10,16 +10,16 @@ NO_COV void test_cm_ill_get_min(void) {
 	INIT_NODE(n2, 20, 2);
 	INIT_NODE(n3, 30, 3);
 
-	ill_push_back(&head, &n1.node);
-	ill_push_back(&head, &n2.node);
-	ill_push_back(&head, &n3.node);
+	ill_push_back_node(&head, &n1.node);
+	ill_push_back_node(&head, &n2.node);
+	ill_push_back_node(&head, &n3.node);
 
-	assert(ill_get_min(head, cb_ill_cmp_min_max) == &n1);
+	assert(ill_get_min_node(head, cb_ill_cmp_min_max) == &n1.node);
 	n1.value = 30;
 	n2.value = 20;
 	n3.value = 10;
-	assert(ill_get_min(head, cb_ill_cmp_min_max) == &n3);
+	assert(ill_get_min_node(head, cb_ill_cmp_min_max) == &n3.node);
 
-	assert(ill_get_min(NULL, cb_ill_cmp_min_max) == NULL);
-	assert(ill_get_min(head, NULL) == NULL);
+	assert(ill_get_min_node(NULL, cb_ill_cmp_min_max) == NULL);
+	assert(ill_get_min_node(head, NULL) == NULL);
 }
