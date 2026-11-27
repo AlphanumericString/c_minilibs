@@ -20,7 +20,7 @@ rm -rf -- "$name" "tests/${name}_tests" "examples/${name}" "single/${name}.h"
 
 if [ -n "$makefile" ] && [ -f "$makefile" ]; then
 	NAME="$name" perl -i -pe '
-		if (/^(MODULES[ \t]*:=[ \t]*)(.*)$/) {
+		if (/^((?:override[ \t]+)?MODULES[ \t]*:=[ \t]*)(.*)$/) {
 			my ($head, $rest) = ($1, $2);
 			my %seen;
 			my @mods = grep { $_ ne $ENV{NAME} && !$seen{$_}++ } split /\s+/, $rest;

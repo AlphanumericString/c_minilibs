@@ -31,7 +31,8 @@ make documentation   # doxygen HTML in documentation/
 make single_file MODULE=<module>   # amalgamate one module into single/da.h
 ```
 
-Targets are module-aware through `MODULE=<name>`, and debug logging is enabled
+Targets are module-aware through `MODULE=<name>` (or a space-separated list of
+modules); when omitted they run over every module. Debug logging is enabled
 with `DEBUG_LVL=<level>`.
 
 **Skills:** writing a non-trivial Makefile (metaprogramming the module build
