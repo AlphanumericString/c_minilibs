@@ -62,8 +62,12 @@
 /* mixed node offsets are supported by the iterators. validate does not      */
 /* reject them: it only checks that the chain terminates.                    */
 /*                                                                           */
-/* the circular list api is reserved under the ill_circ_ prefix and is not   */
-/* implemented yet.                                                          */
+/* the circular list api is exposed under the ill_circ_ prefix. a circular   */
+/* list has no NULL terminator: the head argument is the last node and       */
+/* head->next is the first node, so push at both ends and pop from the front */
+/* are O(1); pop_back/remove need the predecessor and are O(n). empty lists  */
+/* are NULL. circular functions assume a valid ring and do not run O(n)      */
+/* validation; do not pass a circular list to the non-circular api.          */
 /* ************************************************************************* */
 
 /**
@@ -184,5 +188,44 @@ size_t ill_nfilter_out(t_cm_ill **head, size_t n, t_cm_callback cb, void *arg,
                        t_cm_ill **filtered);
 size_t ill_filter_dt(t_cm_ill **head, t_cm_callback cb, void *arg, t_cm_dtor d);
 void   ill_unique(t_cm_ill *head, t_cm_comparator c, t_cm_dtor d);
+
+/*
+ * circular api: the list handle is the last node, head->next is the first.
+ * the handle is not a sentinel; it is a real payload node.
+ */
+size_t    ill_circ_length(const t_cm_ill *head);
+t_cm_ill *ill_circ_get_head_node(const t_cm_ill *head);
+void     *ill_circ_get_head(const void *head_elem, size_t offset);
+t_cm_ill *ill_circ_get_tail_node(const t_cm_ill *head);
+void     *ill_circ_get_tail(const void *head_elem, size_t offset);
+
+t_cm_ill *ill_circ_push_node(t_cm_ill **head, t_cm_ill *node);
+void     *ill_circ_push(t_cm_ill **head, const void *elem, size_t offset);
+t_cm_ill *ill_circ_push_back_node(t_cm_ill **head, t_cm_ill *node);
+void     *ill_circ_push_back(t_cm_ill **head, const void *elem, size_t offset);
+t_cm_ill *ill_circ_pop_node(t_cm_ill **head);
+void     *ill_circ_pop(t_cm_ill **head);
+t_cm_ill *ill_circ_pop_back_node(t_cm_ill **head);
+void     *ill_circ_pop_back(t_cm_ill **head);
+
+t_cm_ill *ill_circ_concat_node(t_cm_ill *list1, t_cm_ill *list2);
+void     *ill_circ_concat(const void *list1, const void *list2, size_t offset);
+
+bool ill_circ_remove_node(t_cm_ill **head, t_cm_ill *target);
+bool ill_circ_remove(t_cm_ill **head, const void *elem, size_t offset);
+void ill_circ_clear(t_cm_ill **head, t_cm_dtor dtor);
+
+void *ill_circ_foreach(const t_cm_ill *head, t_cm_callback c, void *u_data);
+bool  ill_circ_iter(const t_cm_ill *head, void **iter, size_t offset);
+
+#ifdef C_MINI__ILL_INTERNAL
+
+t_cm_ill *illi_push_back_node(t_cm_ill **head, t_cm_ill **tail, t_cm_ill *node);
+t_cm_ill *illi_pop_back_node(t_cm_ill **head, t_cm_ill **tail);
+t_cm_ill *illi_concat_node(t_cm_ill **h1, t_cm_ill **t1, t_cm_ill **h2,
+                           t_cm_ill **t2);
+t_cm_ill *illi_remove_node(t_cm_ill **head, t_cm_ill **tail, t_cm_ill *target);
+
+#endif // !C_MINI__ILL_INTERNAL
 
 #endif // !C_MINI__ILL

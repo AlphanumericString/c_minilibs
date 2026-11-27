@@ -61,6 +61,12 @@ NO_COV static void ill_node_main(void) {
 	test_cm_ill_move();
 	test_cm_ill_concat();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Circular", )
+	test_cm_ill_circ_init();
+	test_cm_ill_circ_push_pop();
+	test_cm_ill_circ_concat();
+	test_cm_ill_circ_remove_clear();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Remove", )
 	test_cm_ill_pop_node();
 	test_cm_ill_pop_back_node();
@@ -187,6 +193,12 @@ NO_COV static void idl_node_main(void) {
 	test_cm_idl_move();
 	test_cm_idl_concat();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Circular", )
+	test_cm_idl_circ_init();
+	test_cm_idl_circ_push_pop();
+	test_cm_idl_circ_concat();
+	test_cm_idl_circ_remove_clear();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Remove", )
 	test_cm_idl_pop_node();
 	test_cm_idl_pop_back_node();
@@ -250,6 +262,33 @@ NO_COV void idl_main(void) {
 	       "All IDL node tests completed successfully.", );
 }
 
+NO_COV static void lh_main(void) {
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, " handler Create", )
+	test_cm_lh_create();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, " handler Singly", )
+	test_cm_lh_singly();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, " handler Doubly", )
+	test_cm_lh_doubly();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, " handler Circular Singly", )
+	test_cm_lh_circ_singly();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, " handler Circular Doubly", )
+	test_cm_lh_circ_doubly();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, " handler Invalid Type", )
+	test_cm_lh_invalid_type();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, " handler Edges", )
+	test_cm_lh_edges();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, " handler Concat", )
+	test_cm_lh_concat();
+}
+
 NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", );
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", );
@@ -263,6 +302,12 @@ NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", );
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", );
 	idl_main();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", );
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", );
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "\t\tLH", );
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", );
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", );
+	lh_main();
 
 	CM_LOG(C_MINI__LEVEL_ALWAYS,
 	       "All intrusive lists tests completed successfully.", )

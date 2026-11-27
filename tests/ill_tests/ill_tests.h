@@ -6,6 +6,7 @@
 #include "common_base/tests.h"
 #include "ill/idl/intrusive_doubly_linked.h"
 #include "ill/ill/intrusive_linked_lists.h"
+#include "ill/lh/list_handler.h"
 
 // --- Structs for testing ---
 typedef struct s_cm_test_node {
@@ -234,6 +235,28 @@ NO_COV void test_cm_idl_reverse(void);
 NO_COV void test_cm_idl_filter_dt(void);
 NO_COV void test_cm_idl_sort(void);
 NO_COV void test_cm_idl_unique(void);
+
+// --- ILL circular ---
+NO_COV void test_cm_ill_circ_init(void);
+NO_COV void test_cm_ill_circ_push_pop(void);
+NO_COV void test_cm_ill_circ_concat(void);
+NO_COV void test_cm_ill_circ_remove_clear(void);
+
+// --- IDL circular ---
+NO_COV void test_cm_idl_circ_init(void);
+NO_COV void test_cm_idl_circ_push_pop(void);
+NO_COV void test_cm_idl_circ_concat(void);
+NO_COV void test_cm_idl_circ_remove_clear(void);
+
+// --- LH handler ---
+NO_COV void test_cm_lh_create(void);
+NO_COV void test_cm_lh_singly(void);
+NO_COV void test_cm_lh_doubly(void);
+NO_COV void test_cm_lh_circ_singly(void);
+NO_COV void test_cm_lh_circ_doubly(void);
+NO_COV void test_cm_lh_invalid_type(void);
+NO_COV void test_cm_lh_edges(void);
+NO_COV void test_cm_lh_concat(void);
 
 // --- IDL additions ---
 NO_COV void test_cm_idl_apply_it(void);

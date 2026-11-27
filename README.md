@@ -107,12 +107,41 @@ returns the payload struct plus the node offset, so callers do not have to
 convert to nodes themselves (including `get_head`/`get_tail`). The low-level
 node API is available under the `_node` suffix for mixed payload types or
 manual node management; head pointers stay opaque list handles.
+
+A separate circular API (`ill_circ_` / `idl_circ_`) provides the same
+intrusive nodes without a `NULL` terminator. Singly circular lists use the
+last node as the list handle (`head->next` is the first node), so front and
+back insertion are O(1); doubly circular lists keep `head->prev` as the tail.
+The circular API exposes length, head/tail access, push/pop at both ends,
+concat, remove, clear, foreach and pull iterators (including a reverse
+iterator for `idl_circ_`). It deliberately assumes a valid ring and does not
+run O(n) validation; mixing a circular list with the non-circular API is a
+caller error.
 **Skill:** intrusive containers, `offsetof`-style pointer arithmetic, aliasing
-the allocation of the payload and its links, and O(1) splicing.
+the allocation of the payload and its links, O(1) splicing, and ring
+invariants.
 **Complexity:** front push/pop O(1); `push_back`/`pop_back`/`get_tail` O(n)
 without a tail handle; insert O(1); remove given a previously found node O(1)
 for `idl` and O(n) for `ill`; `remove_after` O(1); reverse O(n); search O(n);
-sort O(n log n).
+sort O(n log n). Circular singly: front/back push O(1), front pop O(1),
+get_tail O(1) (the handle is the tail), back pop/remove O(n) without a cached
+predecessor; circular doubly: all end operations O(1).
+
+### `lh` — List Handler
+A facade over the intrusive list types: a `t_cm_lh` stores the first and last
+node, the payload offset and a `t_cm_lh_type` enum (`CM_LH_SINGLY`,
+`CM_LH_DOUBLY`, `CM_LH_CIRC_SINGLY`, `CM_LH_CIRC_DOUBLY`). The same
+`lh_push`/`lh_push_back`/`lh_pop`/`lh_pop_back`/`lh_remove`/`lh_concat`
+calls dispatch to the selected implementation, and the cached tail turns
+`push_back`, `get_tail` and `concat` into O(1) operations even for singly
+linked lists. The handler is element centric and assumes a single node offset
+per list; it does not allocate nodes. A future extension may cache a length
+or a user tag alongside the head/tail pair.
+**Skill:** interface dispatch in C, cached list metadata, and separating
+algorithms from the way head/tail are obtained.
+**Complexity:** push/pop at the front O(1); `push_back`/`get_tail`/`concat`
+O(1) via the cached tail; `pop_back`/`remove` O(1) for doubly and O(n) for
+singly; iteration O(n).
 
 ### `lruc` — Least Recently Used Cache
 A capacity-bounded key/value cache whose bound is enforced by recency: a hash
