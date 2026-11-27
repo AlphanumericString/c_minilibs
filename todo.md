@@ -80,15 +80,15 @@ general todo for the project
 - [:] conversions between `lruc` and `lrutc` (`lruc_convert` like `dsu_convert`), dedicated session
 
 ### rb
-- [:] magic rb
+- [ ] magic rb
   - [ ] memory mapping magic
   - [ ] replace math
-- [:] iterator (take example on `da`)
+- [ ] iterator (take example on `da`)
   - [ ] `_iter`
   - [ ] `_iter_rev`
   - [ ] `_iter_range`
   - [ ] `_advance_it` / `_recede_it`
-- [:] new functions (parity with the `da` module) [warning: skip in-place array-modifying functions such as filter; we don't want to touch the insertion head nor the output head.]
+- [ ] new functions (parity with the `da` module) [warning: skip in-place array-modifying functions such as filter; we don't want to touch the insertion head nor the output head.]
   - [ ] fold (don't discard the rb)
   - [ ] reduce (don't discard the rb)
   - [ ] others
