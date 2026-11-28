@@ -7,8 +7,10 @@ NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Create", )
 	test_cm_rb_create();
+	test_cm_rb_create_magic();
 	test_cm_rb_init();
 	test_cm_rb_from_array();
+	test_cm_rb_from_array_owned();
 	test_cm_rb_new();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Delete", )
@@ -61,6 +63,14 @@ NO_COV int main(void) {
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Grow", )
 	test_cm_rb_grow();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Magic", )
+	test_cm_rb_is_magic();
+	test_cm_rb_magic_alias();
+	test_cm_rb_magic_copy();
+	test_cm_rb_magic_bulk();
+	test_cm_rb_from_array_paths();
+	test_cm_rb_mirror_helpers();
 
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "All RB tests completed successfully.", )
 	return (EXIT_SUCCESS);

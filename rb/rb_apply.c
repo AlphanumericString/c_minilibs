@@ -12,20 +12,19 @@
 **/
 bool rb_napply(const t_cm_rb *rb, size_t n, t_cm_callback cb, const void *arg) {
 	size_t i = 0;
-	size_t current_pos;
+	size_t base;
 
 	if (!rb || !cb) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return false;
 	}
 	if (n > rb_size(*rb)) n = rb_size(*rb);
-	current_pos = rbi_opos_get(rb);
+	base = rbi_opos_get(rb);
 	while (i < n) {
-		if (!cb(rbi_get_pos(rb, current_pos), (void *)arg)) {
+		if (!cb(rbi_get_pos(rb, rbi_off_at(rb, base, i)), (void *)arg)) {
 			CM_LOG(C_MINI__LEVEL_ERR, C_MINI__RB_LOG_ECB)
 			return false;
 		}
-		current_pos = (current_pos + 1) % rb->nb_max;
 		i++;
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)

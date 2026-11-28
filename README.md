@@ -184,10 +184,18 @@ or negative-cache lookups where stale data must not be served.
 ### `rb` — Round (Ring) Buffer
 A fixed-capacity FIFO spanning a wrap-around buffer, with an optional
 `stdatomic` build for lock-free single-producer / single-consumer use.
-**Skill:** modular index arithmetic, wrap-around edge cases, and an
-introduction to atomics and lock-free reasoning.
-**Complexity:** push/pop/peek/at O(1); apply/map/filter O(n); grow O(n) (single
-realloc + copy). Atomics build is lock-free SPSC.
+`rb_create` maps the storage twice back to back (a "magic" ring buffer), so
+wrapped reads and writes stay contiguous and bulk push/pop are single copies;
+the capacity is rounded up to a whole page to make the mirror possible.
+`rb_create_magic` / `rb_init_magic` / `rb_new_magic` fail instead of falling
+back when the mapping is unavailable, and `rb_is_magic` reports which backend a
+buffer uses. `rb_from_array` wraps a caller-provided (and owned) array and
+keeps the two-chunks copy paths.
+**Skill:** virtual memory aliasing, modular index arithmetic, wrap-around edge
+cases, and an introduction to atomics and lock-free reasoning.
+**Complexity:** push/pop/peek/at O(1); npush/npop O(1) bulk copies; apply/map/
+filter O(n); grow O(n) (single copy + new mapping). Atomics build is lock-free
+SPSC.
 
 ### `sptr` — Smart Pointers
 Reference-counted pointer types in the spirit of C++ (`uniq`, `owned`,

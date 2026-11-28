@@ -47,7 +47,7 @@ void *rb_get(const t_cm_rb *rb, t_cm_comparator comp, const void *arg,
 void *rb_nget(const t_cm_rb *rb, size_t n, t_cm_comparator comp,
               const void *arg, void *buffer) {
 	size_t i = 0;
-	size_t pos;
+	size_t base;
 	size_t count;
 	void  *elem;
 
@@ -57,15 +57,14 @@ void *rb_nget(const t_cm_rb *rb, size_t n, t_cm_comparator comp,
 	}
 
 	count = rb_size(*rb);
-	pos   = rbi_opos_get(rb);
+	base  = rbi_opos_get(rb);
 	while (i < count) {
-		elem = rbi_get_pos(rb, pos);
+		elem = rbi_get_pos(rb, rbi_off_at(rb, base, i));
 		if (comp(elem, (void *)arg) == 0) {
 			rb_nat(*rb, i, n, buffer);
 			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 			return buffer;
 		}
-		pos = (pos + 1) % rb->nb_max;
 		i++;
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_FAIL)
@@ -90,7 +89,7 @@ void *rb_nget(const t_cm_rb *rb, size_t n, t_cm_comparator comp,
 void *rb_getn(const t_cm_rb *rb, size_t n, t_cm_comparator comp,
               const void *arg, void *buffer) {
 	size_t i = 0;
-	size_t pos;
+	size_t base;
 	size_t count;
 	size_t found = 0;
 	void  *elem;
@@ -101,15 +100,14 @@ void *rb_getn(const t_cm_rb *rb, size_t n, t_cm_comparator comp,
 	}
 
 	count = rb_size(*rb);
-	pos   = rbi_opos_get(rb);
+	base  = rbi_opos_get(rb);
 	while (i < count && found < n) {
-		elem = rbi_get_pos(rb, pos);
+		elem = rbi_get_pos(rb, rbi_off_at(rb, base, i));
 		if (comp(elem, (void *)arg) == 0) {
 			memcpy((unsigned char *)buffer + (found * rb->sz_e), elem,
 			       rb->sz_e);
 			found++;
 		}
-		pos = (pos + 1) % rb->nb_max;
 		i++;
 	}
 	if (found) {

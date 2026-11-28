@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "rb/round_buffer.h"
 
@@ -25,24 +26,40 @@ static void *dup_int(const void *elem) {
 }
 
 static void dump(const t_cm_rb *rb, const char *label) {
-	printf("%-18s size=%zu cap=%zu free=%zu :", label, rb_size(*rb),
-	       rb_capacity(*rb), rb_remaining_space(*rb));
-	rb_apply(rb, print_int, NULL);
+	size_t n = rb_size(*rb);
+
+	printf("%-18s size=%zu cap=%zu free=%zu :", label, n, rb_capacity(*rb),
+	       rb_remaining_space(*rb));
+	rb_napply(rb, n < 8 ? n : 8, print_int, NULL);
+	if (n > 8) printf(" ...");
 	printf("\n");
 }
 
 int main(void) {
-	t_cm_rb rb     = {0};
-	int     seed[] = {1, 2, 3, 4, 5, 6};
+	t_cm_rb rb = {0};
+	size_t  cap;
+	int     v;
 
+	// the capacity is rounded up to a whole page so the buffer can be
+	// mapped twice, back to back
 	rb_create(&rb, sizeof(int), 4);
-	for (size_t i = 0; i < 3; i++)
-		rb_push(&rb, &seed[i]);
+	cap = rb_capacity(rb);
+	printf("magic=%s cap=%zu\n", rb_is_magic(rb) ? "yes" : "no", cap);
+
+	for (v = 1; v <= 3; v++)
+		rb_push(&rb, &v);
 	dump(&rb, "after 3 pushes");
 
-	for (size_t i = 3; i < 6; i++)
-		rb_push(&rb, &seed[i]);
+	// fill up to the window edge, then a bit more to wrap around
+	for (v = 4; v <= (int)cap + 2; v++)
+		rb_push(&rb, &v);
 	dump(&rb, "after wrap-around");
+
+	// a wrapped window can be filled with a single bulk copy
+	rb_clr(&rb);
+	int seed[] = {1, 2, 3, 4, 5, 6};
+	rb_npush(&rb, seed, sizeof(seed) / sizeof(seed[0]));
+	dump(&rb, "after npush(6)");
 
 	printf("dropped oldest 1: %s\n", rb_drop(&rb, 1) ? "yes" : "no");
 	dump(&rb, "after drop(1)");
@@ -55,11 +72,21 @@ int main(void) {
 
 	printf("push_safe (room left): %s\n",
 	       rb_push_safe(&rb, &popped) ? "ok" : "rejected");
-	int extra = 7;
-	while (rb_push_safe(&rb, &extra))
-		;
-	printf("push_safe while full : rejected (size=%zu cap=%zu)\n", rb_size(rb),
-	       rb_capacity(rb));
+
+	// a non magic buffer (from_array) keeps the exact capacity and rejects a
+	// push once full; from_array takes ownership of the heap array
+	int    *raw          = malloc(4 * sizeof(int));
+	t_cm_rb small        = {0};
+	int     small_vals[] = {1, 2, 3, 4};
+
+	memcpy(raw, small_vals, sizeof(small_vals));
+	rb_from_array(&small, raw, 4, sizeof(int));
+	for (size_t i = 0; i < rb_capacity(small); i++)
+		rb_push(&small, &small_vals[i]);
+	printf("from_array: magic=%s cap=%zu push_safe while full: %s\n",
+	       rb_is_magic(small) ? "yes" : "no", rb_capacity(small),
+	       rb_push_safe(&small, &popped) ? "ok" : "rejected");
+	rb_destroy(&small);
 
 	dump(&rb, "before filter");
 
@@ -80,11 +107,13 @@ int main(void) {
 		printf("\n");
 	}
 
+	// growing always yields a conforming (magic when available) buffer
 	t_cm_rb *bigger = rb_grow(&rb, 4);
 	rb_destroy(&rb);
 	rb = *bigger;
 	free(bigger);
-	printf("after grow: cap=%zu\n", rb_capacity(rb));
+	printf("after grow: cap=%zu magic=%s\n", rb_capacity(rb),
+	       rb_is_magic(rb) ? "yes" : "no");
 
 	rb_destroy(&rb);
 	return (0);

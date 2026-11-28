@@ -40,7 +40,9 @@ override DOXYCHECK_LOG_LOC	:= $(BUILD_DIR)/doxygen_check.log
 override TLINKER_FLAGS	:= \
 		-Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc \
 		-Wl,--wrap=clock_gettime -Wl,--wrap=pthread_create \
-		-Wl,--wrap=pthread_cond_init
+		-Wl,--wrap=pthread_cond_init \
+		-Wl,--wrap=shm_open -Wl,--wrap=ftruncate -Wl,--wrap=mmap \
+		-Wl,--wrap=sysconf
 
 ## fixed valgrind flags
 override VFLAGS		:= \
@@ -228,6 +230,7 @@ $(COV_DIR)/index.html: $(PRD_TARGET)
 	@mkdir -p $(COV_DIR)
 	@$(COV) show -format=html												\
 		-ignore-filename-regex='ss/*' -ignore-filename-regex='$(TST_DIR)/*'	\
+		-ignore-filename-regex='.*\.h$$'										\
 		--show-branches=count	--show-directory-coverage					\
 		-output-dir=$(COV_DIR)	-instr-profile=$^							\
 		$(addprefix -object=, $(TST_PROGS))

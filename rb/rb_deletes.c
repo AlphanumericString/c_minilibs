@@ -7,6 +7,7 @@
  * \brief frees the inner buffer and resets all inner fields to 0. does not free
  * the rb struct itself
  * \param rb the round buffer to destroy
+ * \note arrays given to rb_from_array are freed as well: the buffer owns them
  * \ingroup rb
 **/
 void rb_destroy(t_cm_rb *rb) {
@@ -14,10 +15,15 @@ void rb_destroy(t_cm_rb *rb) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_EARG)
 		return;
 	}
-	if (rb->array) free(rb->array);
-	rb->array  = NULL;
-	rb->nb_max = 0;
-	rb->sz_e   = 0;
+	if (rb->array) {
+		if (rb->mirrored) rbi_unmap_ring(rb->array, rb->map_size);
+		else free(rb->array);
+	}
+	rb->array    = NULL;
+	rb->nb_max   = 0;
+	rb->sz_e     = 0;
+	rb->map_size = 0;
+	rb->mirrored = false;
 	rbi_count_set(rb, 0);
 	rbi_ipos_set(rb, 0);
 	rbi_opos_set(rb, 0);
