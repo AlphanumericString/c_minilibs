@@ -184,4 +184,5 @@ jobs:
         run: make module MODULE="$MODULES" -j
 
       - name: Run tests under valgrind
+        timeout-minutes: 20
         run: make valgrind MODULE="$MODULES" -j
