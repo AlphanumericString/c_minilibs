@@ -170,6 +170,7 @@ NO_COV void test_cm_ill_iter_range(void);
 NO_COV void test_cm_ill_move(void);
 NO_COV void test_cm_ill_nfilter(void);
 NO_COV void test_cm_ill_validate(void);
+NO_COV void test_cm_ill_internal(void);
 
 // --- IDL tests ---
 NO_COV void test_cm_idl_advance_it(void);
@@ -271,3 +272,4 @@ NO_COV void test_cm_idl_iter_rev(void);
 NO_COV void test_cm_idl_move(void);
 NO_COV void test_cm_idl_nfilter(void);
 NO_COV void test_cm_idl_validate(void);
+NO_COV void test_cm_idl_internal(void);

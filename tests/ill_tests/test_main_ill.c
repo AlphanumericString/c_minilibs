@@ -73,6 +73,7 @@ NO_COV static void ill_node_main(void) {
 	test_cm_ill_remove_after_node();
 	test_cm_ill_remove_node();
 	test_cm_ill_clear();
+	test_cm_ill_internal();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Find", )
 	test_cm_ill_find_node();
@@ -205,6 +206,7 @@ NO_COV static void idl_node_main(void) {
 	test_cm_idl_remove_after_node();
 	test_cm_idl_remove_node();
 	test_cm_idl_clear();
+	test_cm_idl_internal();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, " node Find", )
 	test_cm_idl_find_node();
