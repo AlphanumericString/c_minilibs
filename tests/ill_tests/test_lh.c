@@ -22,6 +22,7 @@ NO_COV static bool lh_record(void *elem, void *arg) {
 NO_COV void test_cm_lh_create(void) {
 	t_cm_lh  lh;
 	t_cm_lh *heap;
+	void    *it = (void *)1;
 
 	assert(lh_init(NULL, CM_LH_SINGLY, 0) == NULL);
 	assert(lh_init(&lh, (t_cm_lh_type)99, 0) == NULL);
@@ -42,6 +43,7 @@ NO_COV void test_cm_lh_create(void) {
 	lh_free(&heap);
 	assert(heap == NULL);
 	lh_free(&heap);
+	lh_free(NULL);
 
 	assert(lh_create((t_cm_lh_type)99, 0) == NULL);
 	alloc_set_call_limit(0);
@@ -66,6 +68,8 @@ NO_COV void test_cm_lh_create(void) {
 	assert(lh_foreach(NULL, NULL, NULL) == NULL);
 	assert(lh_foreach(&lh, NULL, NULL) == NULL);
 	assert(lh_iter(NULL, NULL) == false);
+	assert(lh_iter(NULL, &it) == false);
+	assert(it == NULL);
 	assert(lh_iter(&lh, NULL) == false);
 	assert(lh_length(NULL) == 0);
 	assert(lh_get_head(NULL) == NULL);
@@ -99,6 +103,7 @@ NO_COV void test_cm_lh_singly(void) {
 	assert(st.count == 4);
 	assert(st.values[0] == 1 && st.values[1] == 2);
 	assert(st.values[2] == 3 && st.values[3] == 4);
+	assert(lh_foreach(&lh, NULL, &st) == &st);
 
 	st.count = 0;
 	while (lh_iter(&lh, &it)) {
@@ -225,6 +230,7 @@ NO_COV void test_cm_lh_circ_singly(void) {
 	assert(st.count == 4);
 	assert(st.values[0] == 1 && st.values[1] == 2);
 	assert(st.values[2] == 3 && st.values[3] == 4);
+	assert(lh_foreach(&lh, NULL, &st) == &st);
 
 	st.count = 0;
 	while (lh_iter(&lh, &it)) {
@@ -369,6 +375,10 @@ NO_COV void test_cm_lh_edges(void) {
 	// singly: single-node pop_back, tail remove and empty concat
 	lh_init(&lh, CM_LH_SINGLY, off_s);
 	lh_push_back(&lh, &s[0]);
+	assert(lh_pop(&lh) == &s[0]);
+	assert(lh_is_empty(&lh) == true);
+	assert(lh_is_valid(&lh) == true);
+	lh_push_back(&lh, &s[0]);
 	assert(lh_pop_back(&lh) == &s[0]);
 	assert(lh_is_empty(&lh) == true);
 	assert(lh_is_valid(&lh) == true);
@@ -392,6 +402,10 @@ NO_COV void test_cm_lh_edges(void) {
 
 	// doubly: single-node pop_back, tail remove and empty concat
 	lh_init(&lh, CM_LH_DOUBLY, off_d);
+	lh_push_back(&lh, &d[0]);
+	assert(lh_pop(&lh) == &d[0]);
+	assert(lh_is_empty(&lh) == true);
+	assert(lh_is_valid(&lh) == true);
 	lh_push_back(&lh, &d[0]);
 	assert(lh_pop_back(&lh) == &d[0]);
 	assert(lh_is_empty(&lh) == true);
@@ -437,6 +451,110 @@ NO_COV void test_cm_lh_edges(void) {
 	assert(lh_get_tail(&lh) == &d[0]);
 	assert(lh_is_valid(&lh) == true);
 	lh_clear(&lh, NULL);
+
+	// removing a foreign element fails on every list type
+	{
+		t_cm_test_node  fs;
+		t_cm_test_dnode fd;
+
+		INIT_NODE(fs, 99, 9);
+		INIT_DNODE(fd, 99, 9);
+
+		lh_init(&lh, CM_LH_SINGLY, off_s);
+		lh_push_back(&lh, &s[0]);
+		assert(lh_remove(&lh, &fs) == false);
+		lh_clear(&lh, NULL);
+
+		lh_init(&lh, CM_LH_DOUBLY, off_d);
+		lh_push_back(&lh, &d[0]);
+		assert(lh_remove(&lh, &fd) == false);
+		lh_clear(&lh, NULL);
+
+		lh_init(&lh, CM_LH_CIRC_SINGLY, off_s);
+		lh_push_back(&lh, &s[0]);
+		assert(lh_remove(&lh, &fs) == false);
+		lh_clear(&lh, NULL);
+
+		lh_init(&lh, CM_LH_CIRC_DOUBLY, off_d);
+		lh_push_back(&lh, &d[0]);
+		assert(lh_remove(&lh, &fd) == false);
+		lh_clear(&lh, NULL);
+	}
+
+	// empty handlers reject non-null removals
+	INIT_NODE(s[0], 1, 0);
+	INIT_DNODE(d[0], 11, 0);
+	lh_init(&lh, CM_LH_SINGLY, off_s);
+	assert(lh_remove(&lh, &s[0]) == false);
+
+	// circular lists can be emptied through pop, pop_back and remove
+	INIT_NODE(s[0], 1, 0);
+	lh_init(&lh, CM_LH_CIRC_SINGLY, off_s);
+	lh_push_back(&lh, &s[0]);
+	assert(lh_pop(&lh) == &s[0]);
+	assert(lh_is_empty(&lh) == true);
+	INIT_NODE(s[0], 1, 0);
+	lh_push_back(&lh, &s[0]);
+	assert(lh_pop_back(&lh) == &s[0]);
+	assert(lh_is_empty(&lh) == true);
+	INIT_NODE(s[0], 1, 0);
+	lh_push_back(&lh, &s[0]);
+	assert(lh_remove(&lh, &s[0]) == true);
+	assert(lh_is_empty(&lh) == true);
+
+	INIT_DNODE(d[0], 11, 0);
+	lh_init(&lh, CM_LH_CIRC_DOUBLY, off_d);
+	lh_push_back(&lh, &d[0]);
+	assert(lh_pop(&lh) == &d[0]);
+	assert(lh_is_empty(&lh) == true);
+	INIT_DNODE(d[0], 11, 0);
+	lh_push_back(&lh, &d[0]);
+	assert(lh_pop_back(&lh) == &d[0]);
+	assert(lh_is_empty(&lh) == true);
+	INIT_DNODE(d[0], 11, 0);
+	lh_push_back(&lh, &d[0]);
+	assert(lh_remove(&lh, &d[0]) == true);
+	assert(lh_is_empty(&lh) == true);
+
+	// inconsistent cached pointers are rejected by the validity check
+	INIT_NODE(s[0], 1, 0);
+	INIT_DNODE(d[0], 11, 0);
+	lh_init(&lh, CM_LH_SINGLY, off_s);
+	lh_push_back(&lh, &s[0]);
+	lh.head = NULL;
+	assert(lh_is_valid(&lh) == false);
+	lh.head = &s[0].node;
+	lh.tail = NULL;
+	assert(lh_is_valid(&lh) == false);
+
+	INIT_DNODE(d[0], 11, 0);
+	lh_init(&lh, CM_LH_DOUBLY, off_d);
+	lh_push_back(&lh, &d[0]);
+	((t_cm_idl *)lh.head)->prev = lh.tail;
+	assert(lh_is_valid(&lh) == false);
+	((t_cm_idl *)lh.head)->prev = NULL;
+	((t_cm_idl *)lh.tail)->next = lh.head;
+	assert(lh_is_valid(&lh) == false);
+
+	INIT_DNODE(d[0], 11, 0);
+	INIT_DNODE(d[1], 12, 1);
+	lh_init(&lh, CM_LH_CIRC_DOUBLY, off_d);
+	lh_push_back(&lh, &d[0]);
+	lh_push_back(&lh, &d[1]);
+	((t_cm_idl *)lh.head)->prev = lh.head;
+	assert(lh_is_valid(&lh) == false);
+	((t_cm_idl *)lh.head)->prev = lh.tail;
+	((t_cm_idl *)lh.tail)->next = lh.tail;
+	assert(lh_is_valid(&lh) == false);
+
+	// concatenating handlers with an invalid type reports failure
+	lh_init(&lh, CM_LH_SINGLY, off_s);
+	lh_init(&tmp, CM_LH_SINGLY, off_s);
+	lh_push_back(&lh, &s[0]);
+	lh_push_back(&tmp, &s[1]);
+	lh.type  = (t_cm_lh_type)99;
+	tmp.type = (t_cm_lh_type)99;
+	assert(lh_concat(&lh, &tmp) == false);
 }
 
 NO_COV void test_cm_lh_concat(void) {
@@ -464,6 +582,10 @@ NO_COV void test_cm_lh_concat(void) {
 		lh_push_back(&l2, &b[i]);
 	}
 	assert(lh_concat(&l1, &l1) == false);
+	assert(lh_concat(NULL, &l1) == false);
+	assert(lh_concat(&l1, NULL) == false);
+	assert(lh_concat(&l1, &l3) == false);
+	lh_init(&l3, CM_LH_SINGLY, off_s + 1);
 	assert(lh_concat(&l1, &l3) == false);
 	assert(lh_concat(&l1, &l2) == true);
 	assert(lh_length(&l1) == 4);
@@ -475,6 +597,7 @@ NO_COV void test_cm_lh_concat(void) {
 	assert(st.count == 4);
 	assert(st.values[0] == 1 && st.values[1] == 2);
 	assert(st.values[2] == 3 && st.values[3] == 4);
+	assert(lh_foreach(&l1, NULL, &st) == &st);
 
 	assert(lh_concat(&l1, &l2) == true);
 	assert(lh_length(&l1) == 4);
@@ -516,6 +639,7 @@ NO_COV void test_cm_lh_concat(void) {
 	assert(st.count == 4);
 	assert(st.values[0] == 1 && st.values[1] == 2);
 	assert(st.values[2] == 3 && st.values[3] == 4);
+	assert(lh_foreach(&l1, NULL, &st) == &st);
 
 	// circular doubly
 	lh_init(&l1, CM_LH_CIRC_DOUBLY, off_d);

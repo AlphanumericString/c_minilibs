@@ -75,6 +75,8 @@ NO_COV void test_cm_idl_circ_init(void) {
 	assert(st.values[0] == 3 && st.values[1] == 2 && st.values[2] == 1);
 	assert(idl_circ_foreach(head, cb_false, &st) == &st);
 	assert(idl_circ_foreach_rev(head, cb_false, &st) == &st);
+	assert(idl_circ_foreach(head, NULL, &st) == &st);
+	assert(idl_circ_foreach_rev(head, NULL, &st) == &st);
 
 	assert(idl_circ_iter(head, NULL, off) == false);
 	assert(idl_circ_iter_rev(head, NULL, off) == false);
@@ -210,6 +212,7 @@ NO_COV void test_cm_idl_circ_concat(void) {
 	assert(idl_circ_concat(&a[0], &b[0], off) == &a[0]);
 	assert(idl_circ_concat(NULL, &b[0], off) == &b[0]);
 	assert(idl_circ_concat(&a[0], NULL, off) == &a[0]);
+	assert(idl_circ_concat(NULL, NULL, off) == NULL);
 }
 
 NO_COV void test_cm_idl_circ_remove_clear(void) {
@@ -232,6 +235,11 @@ NO_COV void test_cm_idl_circ_remove_clear(void) {
 	assert(idl_circ_remove_node(&head, &n1.dnode) == false);
 
 	idl_circ_push_back_node(&head, &n1.dnode);
+	assert(idl_circ_remove_node(&head, NULL) == false);
+	assert(idl_circ_remove_node(&head, &other.dnode) == false);
+	other.dnode.prev = &n1.dnode;
+	other.dnode.next = NULL;
+	assert(idl_circ_remove_node(&head, &other.dnode) == false);
 	other.dnode.prev = &other.dnode;
 	other.dnode.next = &other.dnode;
 	assert(idl_circ_remove_node(&head, &other.dnode) == false);

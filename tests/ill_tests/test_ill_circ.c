@@ -62,6 +62,7 @@ NO_COV void test_cm_ill_circ_init(void) {
 	assert(st.count == 3);
 	assert(st.values[0] == 1 && st.values[1] == 2 && st.values[2] == 3);
 	assert(ill_circ_foreach(head, cb_false, &st) == &st);
+	assert(ill_circ_foreach(head, NULL, &st) == &st);
 
 	assert(ill_circ_iter(head, NULL, off) == false);
 	st.count = 0;
@@ -180,6 +181,7 @@ NO_COV void test_cm_ill_circ_concat(void) {
 	assert(ill_circ_concat(&a[2], &b[1], off) == &b[1]);
 	assert(ill_circ_concat(NULL, &b[1], off) == &b[1]);
 	assert(ill_circ_concat(&a[2], NULL, off) == &a[2]);
+	assert(ill_circ_concat(NULL, NULL, off) == NULL);
 }
 
 NO_COV void test_cm_ill_circ_remove_clear(void) {
@@ -193,6 +195,8 @@ NO_COV void test_cm_ill_circ_remove_clear(void) {
 	INIT_NODE(other, 4, 4);
 
 	ill_circ_push_back_node(&head, &n1.node);
+	assert(ill_circ_remove_node(&head, NULL) == false);
+	assert(ill_circ_remove_node(&head, &other.node) == false);
 	assert(ill_circ_remove_node(&head, &n1.node) == true);
 	assert(head == NULL);
 	assert(n1.node.next == NULL);

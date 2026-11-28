@@ -18,32 +18,15 @@ bool lh_is_valid(const t_cm_lh *lh) {
 		return (false);
 	}
 	if (!lh->head || !lh->tail) return (lh->head == NULL && lh->tail == NULL);
-	switch (lh->type) {
-	case CM_LH_SINGLY: {
-		const t_cm_ill *tail = lh->tail;
-
-		return (tail->next == NULL);
-	}
-	case CM_LH_DOUBLY: {
-		const t_cm_idl *head = lh->head;
-		const t_cm_idl *tail = lh->tail;
-
-		return (head->prev == NULL && tail->next == NULL);
-	}
-	case CM_LH_CIRC_SINGLY: {
-		const t_cm_ill *tail = lh->tail;
-
-		return (tail->next == lh->head);
-	}
-	case CM_LH_CIRC_DOUBLY: {
-		const t_cm_idl *head = lh->head;
-		const t_cm_idl *tail = lh->tail;
-
-		return (head->prev == tail && tail->next == head);
-	}
-	default:
-		return (false);
-	}
+	if (lh->type == CM_LH_SINGLY)
+		return (((const t_cm_ill *)lh->tail)->next == NULL);
+	if (lh->type == CM_LH_DOUBLY)
+		return (((const t_cm_idl *)lh->head)->prev == NULL &&
+		        ((const t_cm_idl *)lh->tail)->next == NULL);
+	if (lh->type == CM_LH_CIRC_SINGLY)
+		return (((const t_cm_ill *)lh->tail)->next == lh->head);
+	return (((const t_cm_idl *)lh->head)->prev == lh->tail &&
+	        ((const t_cm_idl *)lh->tail)->next == lh->head);
 }
 
 /**
