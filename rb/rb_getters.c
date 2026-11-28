@@ -2,6 +2,16 @@
 #include "round_buffer.h"
 
 /**
+ * \brief true if rb uses a magic (double mapped) backing array
+ * \param rb the round buffer
+ * \return true for a magic buffer, false for a malloc or rb_from_array buffer
+ * \ingroup rb
+**/
+bool rb_is_magic(t_cm_rb rb) {
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
+	return (rb.array && rb.mirrored);
+}
+/**
  * \brief true if rb is full, false otherwise
  * \param rb the round buffer
  * \return true if full, false otherwise (also false if !array)
@@ -34,7 +44,7 @@ size_t rb_size(t_cm_rb rb) {
 /**
  * \brief return max number of elements rb can hold
  * \param rb the round buffer
- * \return the maximum capacity
+ * \return the maximum capacity (magic buffers round it up to a page)
  * \ingroup rb
 **/
 size_t rb_capacity(t_cm_rb rb) {

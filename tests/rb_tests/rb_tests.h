@@ -1,10 +1,20 @@
 #pragma once
 
+#include <sys/mman.h>
+#include <unistd.h>
+
 #ifndef C_MINI__TESTS
 #	define C_MINI__TESTS
 #endif
 #include "common_base/tests.h"
 #include "rb/round_buffer.h"
+
+/* magic buffers round their byte capacity up to a whole page */
+#define RB_TEST_PAGE_SIZE ((size_t)sysconf(_SC_PAGESIZE))
+#define RB_TEST_ROUND_BYTES(nb_bytes)                                          \
+	((((nb_bytes) + RB_TEST_PAGE_SIZE - 1) / RB_TEST_PAGE_SIZE) *              \
+	 RB_TEST_PAGE_SIZE)
+#define RB_TEST_PAGE_CAP(sz, n) (RB_TEST_ROUND_BYTES((sz) * (n)) / (sz))
 
 #define ASSERT_RB_STATE(rb, sz, max, i, o)                                     \
 	do {                                                                       \
@@ -25,8 +35,10 @@ void *cb_dup_fail3(const void *elem);
 void  cb_destroy(void *elem);
 
 void test_cm_rb_create(void);
+void test_cm_rb_create_magic(void);
 void test_cm_rb_init(void);
 void test_cm_rb_from_array(void);
+void test_cm_rb_from_array_owned(void);
 void test_cm_rb_new(void);
 
 void test_cm_rb_free(void);
@@ -68,3 +80,10 @@ void test_cm_rb_map(void);
 void test_cm_rb_nmap(void);
 
 void test_cm_rb_grow(void);
+
+void test_cm_rb_is_magic(void);
+void test_cm_rb_magic_alias(void);
+void test_cm_rb_magic_copy(void);
+void test_cm_rb_magic_bulk(void);
+void test_cm_rb_from_array_paths(void);
+void test_cm_rb_mirror_helpers(void);

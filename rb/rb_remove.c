@@ -20,7 +20,7 @@ bool rb_drop(t_cm_rb *rb, size_t n) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 		return (true);
 	}
-	rbi_opos_set(rb, (rbi_opos_get(rb) + n) % rb->nb_max);
+	rbi_opos_set(rb, rbi_wrap(rb, rbi_opos_get(rb) + n));
 	rbi_count_set(rb, rbi_count_get(rb) - n);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 	return (true);
@@ -42,7 +42,7 @@ void *rb_peek(t_cm_rb rb, void *elem_out) {
 			memcpy(elem_out, pos, rb.sz_e);
 			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 		} else {
-			bzero(elem_out, rb.sz_e);
+			memset(elem_out, 0, rb.sz_e);
 			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_FAIL)
 		}
 	}
@@ -59,7 +59,6 @@ void *rb_peek(t_cm_rb rb, void *elem_out) {
 **/
 void *rb_npeek(t_cm_rb rb, size_t n, void *elem_out) {
 	unsigned char *pos;
-	size_t         left_size;
 
 	if (!rb.array) {
 		CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_EARG)
@@ -71,19 +70,8 @@ void *rb_npeek(t_cm_rb rb, size_t n, void *elem_out) {
 		return (NULL);
 	}
 	pos = rb_at(rb, 0);
-	if (elem_out) {
-		if (rb.nb_max > (rbi_opos_get(&rb) + n)) {
-			memcpy(elem_out, pos, n * rb.sz_e);
-			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
-		} else {
-			left_size = (rb.nb_max - rbi_opos_get(&rb)) * rb.sz_e;
-			memcpy(elem_out, pos, left_size);
-			n -= rb.nb_max - rbi_opos_get(&rb);
-			memcpy((unsigned char *)elem_out + left_size, rb.array,
-			       n * rb.sz_e);
-			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
-		}
-	}
+	if (elem_out) rbi_copy_out(&rb, rbi_head_off(&rb, 0), n, elem_out);
+	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 	return (pos);
 }
 /**
@@ -105,7 +93,7 @@ void *rb_pop(t_cm_rb *rb, void *elem_out) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_FAIL)
 		return (return_val);
 	}
-	rbi_opos_set(rb, (rbi_opos_get(rb) + 1) % rb->nb_max);
+	rbi_opos_set(rb, rbi_wrap(rb, rbi_opos_get(rb) + 1));
 	rbi_count_dec(rb);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 	return (return_val);
@@ -131,7 +119,7 @@ void *rb_npop(t_cm_rb *rb, size_t n, void *elem_out) {
 		CM_LOG(C_MINI__LEVEL_WARN, C_MINI__RB_LOG_FAIL)
 		return (return_val);
 	}
-	rbi_opos_set(rb, (rbi_opos_get(rb) + n) % rb->nb_max);
+	rbi_opos_set(rb, rbi_wrap(rb, rbi_opos_get(rb) + n));
 	rbi_count_set(rb, rbi_count_get(rb) - n);
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 	return (return_val);

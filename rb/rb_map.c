@@ -15,7 +15,7 @@
 bool rb_nmap(const t_cm_rb *rb, size_t n, t_cm_duplicator dup,
              void **out_buff) {
 	size_t      i = 0;
-	size_t      pos;
+	size_t      base;
 	size_t      count;
 	void       *elem;
 	const void *dup_elem;
@@ -28,20 +28,19 @@ bool rb_nmap(const t_cm_rb *rb, size_t n, t_cm_duplicator dup,
 	count = rb_size(*rb);
 	if (n > count) n = count;
 
-	pos = rbi_opos_get(rb);
+	base = rbi_opos_get(rb);
 	while (i < n) {
-		elem     = rbi_get_pos(rb, pos);
+		elem     = rbi_get_pos(rb, rbi_off_at(rb, base, i));
 		dup_elem = dup(elem);
 		if (dup_elem)
 			memcpy(((unsigned char *)out_buff) + (i * sizeof(void *)),
 			       &dup_elem, sizeof(void *));
 		else {
 			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_ECB)
-			return (bzero(((unsigned char *)out_buff) + (i * sizeof(void *)),
-			              sizeof(void *)),
+			return (memset(((unsigned char *)out_buff) + (i * sizeof(void *)),
+			               0, sizeof(void *)),
 			        false);
 		}
-		pos = (pos + 1) % rb->nb_max;
 		i++;
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)

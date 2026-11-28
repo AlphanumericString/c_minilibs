@@ -39,12 +39,12 @@ bool rb_filter(t_cm_rb *rb, t_cm_callback cb, const void *arg,
 		if (cb(elem, (void *)arg)) {
 			if (read_pos != write_pos)
 				memcpy(rbi_get_pos(rb, write_pos), elem, rb->sz_e);
-			write_pos = (write_pos + 1) % rb->nb_max;
+			write_pos = rbi_wrap(rb, write_pos + 1);
 		} else {
 			destroyer(elem);
 			rbi_count_dec(rb);
 		}
-		read_pos = (read_pos + 1) % rb->nb_max;
+		read_pos = rbi_wrap(rb, read_pos + 1);
 		i++;
 	}
 	rbi_ipos_set(rb, write_pos);

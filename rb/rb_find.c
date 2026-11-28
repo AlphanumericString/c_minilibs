@@ -11,7 +11,7 @@
 **/
 void *rb_find(const t_cm_rb *rb, t_cm_comparator c, const void *a) {
 	size_t i = 0;
-	size_t pos;
+	size_t base;
 	size_t count;
 	void  *elem;
 
@@ -20,14 +20,13 @@ void *rb_find(const t_cm_rb *rb, t_cm_comparator c, const void *a) {
 		return (NULL);
 	}
 	count = rb_size(*rb);
-	pos   = rbi_opos_get(rb);
+	base  = rbi_opos_get(rb);
 	while (i < count) {
-		elem = rbi_get_pos(rb, pos);
+		elem = rbi_get_pos(rb, rbi_off_at(rb, base, i));
 		if (c(elem, (void *)a) == 0) {
 			CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_SUCCESS)
 			return elem;
 		}
-		pos = (pos + 1) % rb->nb_max;
 		i++;
 	}
 	CM_LOG(C_MINI__LEVEL_INFO, C_MINI__RB_LOG_FAIL)

@@ -23,6 +23,7 @@ general todo for the project
   - [ ] add minimum coverage requirement before main
   - [x] norm
   - [x] restrict run to only needed
+- [ ] detect glibc < 2.34 and auto-add `-lrt` for `shm_open` (magic `rb` backend).
 
 ## Documentation
 
@@ -80,9 +81,9 @@ general todo for the project
 - [:] conversions between `lruc` and `lrutc` (`lruc_convert` like `dsu_convert`), dedicated session
 
 ### rb
-- [ ] magic rb
-  - [ ] memory mapping magic
-  - [ ] replace math
+- [x] magic rb
+  - [x] memory mapping magic
+  - [x] replace math
 - [ ] iterator (take example on `da`)
   - [ ] `_iter`
   - [ ] `_iter_rev`

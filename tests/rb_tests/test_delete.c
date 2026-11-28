@@ -11,11 +11,17 @@ NO_COV void test_cm_rb_free(void) {
 	rb_free(&rb);
 	assert(rb == NULL);
 	rb_free(NULL);
+
+	rb = rb_new_magic(sizeof(int));
+	assert(rb != NULL && rb_is_magic(*rb) == true);
+	rb_free(&rb);
+	assert(rb == NULL);
 }
 NO_COV void test_cm_rb_destroy(void) {
 	t_cm_rb rb = {0};
 
 	rb_init(&rb, sizeof(int));
+	assert(rb_is_magic(rb) == true);
 
 	rb_destroy(&rb);
 	assert(rb.o_pos == 0);
@@ -23,18 +29,25 @@ NO_COV void test_cm_rb_destroy(void) {
 	assert(rb.array == NULL);
 	assert(rb.nb_max == 0);
 	assert(rb.sz_e == 0);
+	assert(rb.map_size == 0);
+	assert(rb.mirrored == false);
+	assert(rb_is_magic(rb) == false);
 	rb_destroy(&rb);
 	assert(rb.o_pos == 0);
 	assert(rb.i_pos == 0);
 	assert(rb.array == NULL);
 	assert(rb.nb_max == 0);
 	assert(rb.sz_e == 0);
+	assert(rb.map_size == 0);
+	assert(rb.mirrored == false);
 	rb_destroy(&rb);
 	assert(rb.o_pos == 0);
 	assert(rb.i_pos == 0);
 	assert(rb.array == NULL);
 	assert(rb.nb_max == 0);
 	assert(rb.sz_e == 0);
+	assert(rb.map_size == 0);
+	assert(rb.mirrored == false);
 	rb_destroy(NULL);
 }
 
