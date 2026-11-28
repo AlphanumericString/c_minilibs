@@ -115,6 +115,12 @@ int main(void) {
 	printf("after grow: cap=%zu magic=%s\n", rb_capacity(rb),
 	       rb_is_magic(rb) ? "yes" : "no");
 
+	void *it = NULL;
+	printf("iter oldest to newest:");
+	while (rb_iter(&rb, 0, (size_t)-1, &it))
+		printf(" %d", *(int *)it);
+	printf("\n");
+
 	rb_destroy(&rb);
 	return (0);
 }

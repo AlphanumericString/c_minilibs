@@ -26,6 +26,27 @@ NO_COV bool cb_add_one(void *elem, void *arg) {
 	return true;
 }
 
+NO_COV bool cb_it_collect(void *elem, void *arg, size_t pos, bool last) {
+	t_rb_it_ctx *ctx = arg;
+
+	if (!ctx->count) ctx->first_pos = pos;
+	ctx->count++;
+	ctx->sum     += *(int *)elem;
+	ctx->last_pos = pos;
+	if (last) ctx->saw_last = true;
+	return (true);
+}
+
+NO_COV bool cb_it_stop(void *elem, void *arg, size_t pos, bool last) {
+	t_rb_it_ctx *ctx = arg;
+
+	(void)pos;
+	(void)last;
+	ctx->count++;
+	ctx->sum += *(int *)elem;
+	return (ctx->count < ctx->stop_at);
+}
+
 NO_COV int cb_cmp(const void *a, const void *b) {
 	return *(int *)a - *(int *)b;
 }

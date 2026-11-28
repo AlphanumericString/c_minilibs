@@ -44,6 +44,15 @@ NO_COV int main(void) {
 	test_cm_rb_apply();
 	test_cm_rb_naplly();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "Iter", )
+	test_cm_rb_iter();
+	test_cm_rb_iter_rev();
+	test_cm_rb_iter_range();
+	test_cm_rb_advance_it();
+	test_cm_rb_recede_it();
+	test_cm_rb_iter_wrap();
+	test_cm_rb_iter_shift();
+	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "Filter", )
 	test_cm_rb_filter();
 	CM_LOG(C_MINI__LEVEL_ALWAYS, "", )

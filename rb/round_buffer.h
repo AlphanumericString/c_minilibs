@@ -110,6 +110,12 @@ bool   rb_push_safe(t_cm_rb *rb, const void *data);
 bool   rb_npush_safe(t_cm_rb *rb, const void *data, size_t nb_elem);
 bool   rb_apply(const t_cm_rb *rb, t_cm_callback cb, const void *arg);
 bool  rb_napply(const t_cm_rb *rb, size_t n, t_cm_callback cb, const void *arg);
+bool  rb_iter(const t_cm_rb *rb, size_t start, size_t last, void **it_val);
+bool  rb_iter_rev(const t_cm_rb *rb, size_t start, size_t last, void **it_val);
+bool  rb_iter_range(const t_cm_rb *rb, size_t start, size_t last,
+                    t_cm_callback_it cb, void *arg);
+void *rb_advance_it(const t_cm_rb *rb, const void *it);
+void *rb_recede_it(const t_cm_rb *rb, const void *it);
 bool  rb_filter(t_cm_rb *rb, t_cm_callback cb, const void *arg,
                 void (*destroyer)(void *elem));
 void *rb_at(t_cm_rb rb, size_t idx);

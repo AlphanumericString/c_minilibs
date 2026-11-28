@@ -25,10 +25,21 @@
 		assert((rb).array != NULL);                                            \
 	} while (0);
 
+typedef struct s_rb_it_ctx {
+	int    sum;
+	size_t count;
+	size_t first_pos;
+	size_t last_pos;
+	size_t stop_at;
+	bool   saw_last;
+} t_rb_it_ctx;
+
 bool  cb_true(void *elem, void *arg);
 bool  cb_false(void *elem, void *arg);
 bool  cb_add_one(void *elem, void *arg);
 bool  cb_dump_int(void *elem, void *arg);
+bool  cb_it_collect(void *elem, void *arg, size_t pos, bool last);
+bool  cb_it_stop(void *elem, void *arg, size_t pos, bool last);
 int   cb_cmp(const void *a, const void *b);
 void *cb_dup(const void *elem);
 void *cb_dup_fail3(const void *elem);
@@ -64,6 +75,14 @@ void test_cm_rb_npush_safe(void);
 
 void test_cm_rb_apply(void);
 void test_cm_rb_naplly(void);
+
+void test_cm_rb_iter(void);
+void test_cm_rb_iter_rev(void);
+void test_cm_rb_iter_range(void);
+void test_cm_rb_advance_it(void);
+void test_cm_rb_recede_it(void);
+void test_cm_rb_iter_wrap(void);
+void test_cm_rb_iter_shift(void);
 
 void test_cm_rb_filter(void);
 

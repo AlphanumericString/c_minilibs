@@ -84,11 +84,11 @@ general todo for the project
 - [x] magic rb
   - [x] memory mapping magic
   - [x] replace math
-- [ ] iterator (take example on `da`)
-  - [ ] `_iter`
-  - [ ] `_iter_rev`
-  - [ ] `_iter_range`
-  - [ ] `_advance_it` / `_recede_it`
+- [x] iterator (take example on `da`)
+  - [x] `_iter`
+  - [x] `_iter_rev`
+  - [x] `_iter_range`
+  - [x] `_advance_it` / `_recede_it`
 - [ ] new functions (parity with the `da` module) [warning: skip in-place array-modifying functions such as filter; we don't want to touch the insertion head nor the output head.]
   - [ ] fold (don't discard the rb)
   - [ ] reduce (don't discard the rb)
