@@ -121,6 +121,8 @@ endif
 VGFLAGS		?= $(filter-out -fprofile-instr-generate -ftest-coverage \
 				-fcoverage-mapping -DC_MINI__DEBUG_LEVEL=0,$(TFLAGS)) \
 				-g3 -DC_MINI__TESTS -DC_MINI__DEBUG_LEVEL=99
+## per-test valgrind timeout, prevents a stuck threaded test from hanging CI
+VTIMEOUT	?= 10m
 # Tools flags
 CHECK_FLAGS	?= --enable=all --std=$(CHECK_STD) --language=c --inline-suppr \
 				-I. --suppress=missingIncludeSystem --suppress=unusedFunction \
@@ -270,11 +272,11 @@ module: $(TARGET_LIBS)
 test_module: $(TARGET_TESTS)
 tests_run: $(TARGET_VG_TESTS)
 	@for t in $^; do \
-		valgrind $(VFLAGS) -q ./$$t; \
+		timeout $(VTIMEOUT) valgrind $(VFLAGS) -q ./$$t; \
 	done
 valgrind: $(TARGET_VG_TESTS)
 	@for t in $^; do \
-		valgrind $(VFLAGS) -q ./$$t; \
+		timeout $(VTIMEOUT) valgrind $(VFLAGS) -q ./$$t; \
 	done
 static_analysis:
 	@for m in $(TARGET_MODULES) ; do \
@@ -282,11 +284,9 @@ static_analysis:
 	done ;
 norm_check:
 	@files="$(if $(strip $(FILES)),$(FILES),$$(fd '.*\.[ch]$$' ./ ))" ; \
-	$(CLANG_FORMAT) -i $$files ; \
-	sed 's/^ \*\*\//**\//' -i $$files ; \
-	if ! git diff --quiet --diff-filter=ACMR -- '*.c' '*.h' ; then \
+	if ! bad=$$(sh scripts/norm_check.sh "$(CLANG_FORMAT)" $$files) ; then \
 		$(PRINT) "$(FAIL)norm_checking error$(DEFAULT): the following files are not clang-format compliant:$(TXT_RESET)\n" ; \
-		git --no-pager diff --name-only --diff-filter=ACMR -- '*.c' '*.h' ; \
+		printf '%s\n' "$$bad" ; \
 		exit 1 ; \
 	fi
 	@$(PRINT) "$(SUCCESS)norm_checking$(DEFAULT): all files are clang-format compliant$(TXT_RESET)\n"
